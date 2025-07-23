@@ -48,13 +48,23 @@ export default function Header({ className }: { className?: string }) {
         <Light className="absolute top-[0px] left-[50%] translate-x-[-50%] z-[1] pointer-events-none" />
       )}
       <div
-        className="text-[#FFF79E] absolute top-[76px] z-[2] w-full text-center font-[DelaGothicOne]"
+        className={clsx(
+          "absolute top-[76px] z-[2] w-full text-center font-[DelaGothicOne]",
+          pool?.status === 3 ? "text-[#B2B2B2]" : "text-[#FFF79E]"
+        )}
         style={{
           WebkitTextStrokeWidth: "1px",
-          WebkitTextStrokeColor: "#FFF79E"
+          WebkitTextStrokeColor: pool?.status === 3 ? "#B2B2B2" : "#FFF79E"
         }}
       >
-        <div className="bg-clip-text relative inline-block text-[62px] bg-[radial-gradient(50%_50%_at_50%_50%,#FFEF43_0%,#FFC42F_100%)]">
+        <div
+          className={clsx(
+            "bg-clip-text relative inline-block text-[62px]",
+            pool?.status === 3
+              ? "bg-[radial-gradient(50%_50%_at_50%_50%,#C3C3C3_0%,#787878_100%)]"
+              : "bg-[radial-gradient(50%_50%_at_50%_50%,#FFEF43_0%,#FFC42F_100%)]"
+          )}
+        >
           <span
             style={{
               WebkitTextFillColor: "transparent"
@@ -86,7 +96,14 @@ export default function Header({ className }: { className?: string }) {
           )}
         </div>
         <div />
-        <div className="bg-clip-text mt-[-8px] inline-block relative text-[26px] bg-[radial-gradient(50%_50%_at_50%_50%,#FFEF43_0%,#FFC42F_100%)]">
+        <div
+          className={clsx(
+            "bg-clip-text mt-[-8px] inline-block relative text-[26px]",
+            pool?.status === 3
+              ? "bg-[radial-gradient(50%_50%_at_50%_50%,#A3A3A3_0%,#787878_100%)]"
+              : "bg-[radial-gradient(50%_50%_at_50%_50%,#FFEF43_0%,#FFC42F_100%)]"
+          )}
+        >
           <span
             style={{
               WebkitTextFillColor: "transparent"

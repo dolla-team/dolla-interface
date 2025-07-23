@@ -13,6 +13,7 @@ export default function usePoolInfo(chain: string) {
         `/api/v1/pool?pool_id=${poolId}&chain=${chain}`
       );
       setPoolInfo(res.data.data);
+      return res.data.data;
     } catch (err) {
     } finally {
       setLoading(false);

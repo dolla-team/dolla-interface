@@ -20,19 +20,25 @@ export default function FlipCoins() {
     flipComplete,
     bidResult,
     setFlipStatus,
-    onReset
+    onReset,
+    getPoolRecommend
   } = useBtcContext();
 
   const coinContainerRef = useRef<any>(null);
 
   const [points, tickets, sumPoints, sumTickets, isWinner] = useMemo(() => {
     if (!bidResult) {
-      return [[], [], 0, 0];
+      return [[], [], 0, 0, false];
     }
     const _p = bidResult.point
       ? bidResult.point.wild_coin_ev_result.split(",")
       : [];
     const _t = bidResult.ticket ? bidResult.ticket?.result?.split(",") : [];
+
+    if (bidResult.bid.is_winner) {
+      getPoolRecommend();
+    }
+
     return [
       _p,
       _t,

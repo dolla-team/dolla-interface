@@ -2,7 +2,7 @@ import Modal from "@/components/modal";
 import { formatNumber } from "@/utils/format/number";
 import { useMemo } from "react";
 import Big from "big.js";
-import useCancelOrder from "@/hooks/evm/use-cancel-order";
+import useCancel from "@/hooks/solana/use-cancel";
 import ButtonV2 from "@/components/button/v2";
 
 export default function CancelModal({
@@ -19,19 +19,14 @@ export default function CancelModal({
   const rewardTokenInfo = useMemo(() => {
     return order?.reward_token_info?.[0] || {};
   }, [order]);
-  const {
-    cancelling,
-    cancelOrder,
-    penalty: penaltyStr
-  } = useCancelOrder({
-    poolId: order?.pool_id,
-    onSuccess: () => {
+  const { canceling, onCancel } = useCancel({
+    onCancelSuccess: () => {
       onClose();
       onSuccess();
     }
   });
   const [penalty, finalRefund] = useMemo(() => {
-    const _penalty = Big(penaltyStr || 0)
+    const _penalty = Big(0)
       .div(10 ** order?.purchase_token_info?.decimals || 18)
       .toString();
     return [
@@ -40,7 +35,7 @@ export default function CancelModal({
         .minus(_penalty)
         .toString()
     ];
-  }, [penaltyStr, order]);
+  }, [order]);
 
   return (
     <Modal onClose={onClose} open={open}>
@@ -134,8 +129,10 @@ export default function CancelModal({
         <div className="flex justify-center mt-[0px]">
           <ButtonV2
             className="w-[220px] !h-[40px] !text-[16px]"
-            loading={cancelling}
-            onClick={cancelOrder}
+            loading={canceling}
+            onClick={() => {
+              onCancel(order?.pool_id);
+            }}
           >
             Confirm
           </ButtonV2>

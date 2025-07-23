@@ -9,7 +9,8 @@ import {
   getNextOrderId,
   getPool,
   getAccountsInfo,
-  getWrapToSolIx
+  getWrapToSolIx,
+  wrapTxWithBugetFee
 } from "./helpers";
 import {
   ASSOCIATED_TOKEN_PROGRAM_ID,
@@ -108,12 +109,15 @@ export default function useCreate({
       if (poolBaseAccount?.instruction) {
         tx.add(poolBaseAccount.instruction);
       }
-      tx.add(createIx);
+
       tx.feePayer = new PublicKey(import.meta.env.VITE_SOLANA_OPERATOR);
 
-      // Get the latest blockhash
-
       tx.recentBlockhash = "11111111111111111111111111111111";
+
+      const txs = await wrapTxWithBugetFee(tx);
+
+      tx.add(...txs);
+      tx.add(createIx);
 
       const result = await sendSolanaTransaction(tx, "createPool");
 

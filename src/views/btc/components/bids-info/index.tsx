@@ -59,8 +59,8 @@ function BidsInfoInner({ onRefresher }: any) {
             ref={containerRef}
             onUpdate={run}
           >
-            {list.map((item) => (
-              <Item key={item.id} data={item} />
+            {list.map((item, index) => (
+              <Item key={index} data={item} />
             ))}
           </motion.div>
         )}

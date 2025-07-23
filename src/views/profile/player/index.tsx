@@ -14,6 +14,7 @@ import { AnimatePresence } from "framer-motion";
 import Records from "./records";
 import usePlayerHistory from "./hooks/use-player-history";
 import LoadingMore from "@/components/loading/loading-more";
+import { useDebounceFn } from "ahooks";
 
 const TabsList = [
   {
@@ -28,7 +29,6 @@ const TabsList = [
 
 export default function Player() {
   const [tab, setTab] = useState(TabsList[0].key);
-  const [joinedMarketFilter, setJoinedMarketFilter] = useState("1");
 
   const {
     page,
@@ -41,15 +41,16 @@ export default function Player() {
     joinedPoolListPageIndex,
     joinedPoolListLoading,
     joinedPoolListData,
-    joinedPoolsData,
     updateJoinedPoolListData,
-    onJoinedPoolListPageChange
+    onJoinedPoolListPageChange,
+    joinedPoolListStatus,
+    onJoinedPoolListStatusChange,
   } = usePlayerHistory();
 
   const containerRef = useRef<any>(null);
   const marketsBottomRef = useRef<any>(null);
 
-  const handleLoadMore = useCallback(() => {
+  const { run: handleLoadMore } = useDebounceFn(() => {
     if (
       joinedPoolListData.length > 0 &&
       joinedPoolListHasNextPage &&
@@ -57,13 +58,9 @@ export default function Player() {
     ) {
       onJoinedPoolListPageChange(joinedPoolListPageIndex + 1);
     }
-  }, [
-    joinedPoolListData.length,
-    joinedPoolListHasNextPage,
-    joinedPoolListLoading,
-    joinedPoolListPageIndex,
-    onJoinedPoolListPageChange
-  ]);
+  }, {
+    wait: 500
+  });
 
   useEffect(() => {
     if (!marketsBottomRef.current || joinedPoolListData.length === 0) return;
@@ -82,7 +79,7 @@ export default function Player() {
       },
       {
         root: null,
-        rootMargin: "100px",
+        rootMargin: "200px",
         threshold: 0.1
       }
     );
@@ -98,7 +95,7 @@ export default function Player() {
     joinedPoolListData.length,
     joinedPoolListHasNextPage,
     joinedPoolListLoading,
-    handleLoadMore
+    joinedPoolListPageIndex,
   ]);
 
   return (
@@ -122,16 +119,16 @@ export default function Player() {
             {tab === TabsList[0].key && (
               <div className="flex items-center justify-end gap-[15px]">
                 <Radio
-                  checked={joinedMarketFilter === "1"}
-                  onChange={setJoinedMarketFilter}
+                  checked={joinedPoolListStatus === ""}
+                  onChange={onJoinedPoolListStatusChange}
                   name="joinedMarketFilter"
-                  value="1"
+                  value=""
                 />
                 <Radio
-                  checked={joinedMarketFilter === "2"}
-                  onChange={setJoinedMarketFilter}
+                  checked={joinedPoolListStatus === "0,1"}
+                  onChange={onJoinedPoolListStatusChange}
                   name="joinedMarketFilter"
-                  value="2"
+                  value="0,1"
                 >
                   Live only
                 </Radio>
@@ -142,7 +139,6 @@ export default function Player() {
             {tab === TabsList[0].key && (
               <SwitchPanel>
                 <PlayerMarkets
-                  poolsData={joinedPoolsData}
                   orders={joinedPoolListData}
                   loading={joinedPoolListLoading}
                   pageIndex={joinedPoolListPageIndex}
@@ -152,11 +148,13 @@ export default function Player() {
                 />
                 <div
                   ref={marketsBottomRef}
-                  className="h-[20px] flex justify-center items-center"
+                  className="h-[40px] flex justify-center items-center"
                 >
-                  {joinedPoolListLoading && joinedPoolListData.length > 0 && (
-                    <LoadingMore />
-                  )}
+                  {
+                    joinedPoolListData?.length > 0 && (
+                      <LoadingMore loading={joinedPoolListLoading} hasMore={joinedPoolListHasNextPage} />
+                    )
+                  }
                 </div>
               </SwitchPanel>
             )}

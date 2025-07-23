@@ -1,6 +1,7 @@
 import React from "react";
 import useTransfer from "@/hooks/solana/use-transfer";
 import { QUOTE_TOKEN } from "@/config/btc";
+import Winner from "@/views/btc/components/result/winner";
 
 const TempPage: React.FC = () => {
   const { onTransfer } = useTransfer({
@@ -13,11 +14,12 @@ const TempPage: React.FC = () => {
       <button
         className="bg-white text-black button"
         onClick={() =>
-          onTransfer(1, import.meta.env.VITE_SOLANA_TICKET_ACCOUNT)
+          onTransfer(1, "37oSVMX9FKMyCK7zpMUKxmdJECGrYqYKcBEbs5M4fT9L")
         }
       >
         Transfer
       </button>
+      {/* <Winner points={1000} onClose={() => {}} /> */}
     </div>
   );
 };

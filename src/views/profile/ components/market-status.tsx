@@ -51,14 +51,14 @@ interface Props {
 export default MarketStatus;
 
 export enum EMarketStatus {
-  UnDeoposit = 0,
+  Created = 0,
   Live = 1,
   Cancelled = 3,
   Winner = 2,
 }
 
 export const MarketStatusMap = {
-  [EMarketStatus.UnDeoposit]: {
+  [EMarketStatus.Created]: {
     label: "Live",
   },
   [EMarketStatus.Live]: {

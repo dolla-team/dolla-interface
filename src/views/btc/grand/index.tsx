@@ -5,6 +5,7 @@ import { useBtcContext } from "../context";
 import FlippingCoin from "../components/fliping-coin";
 import PreLoading from "./pre-loading";
 import EndPanel from "../detail/end";
+import Cancel from "../detail/cancel";
 
 export default function Grand({ className }: { className?: string }) {
   const { flipStatus, pool, isDetail } = useBtcContext();
@@ -27,6 +28,7 @@ export default function Grand({ className }: { className?: string }) {
         </>
       )}
       {pool?.status === 2 && <EndPanel data={pool} />}
+      {pool?.status === 3 && <Cancel data={pool} />}
     </div>
   );
 }

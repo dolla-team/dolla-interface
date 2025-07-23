@@ -23,7 +23,8 @@ export default function BTCCreate() {
   const [amount, setAmount] = useState(1);
   const { address } = useAuth();
   const { tokenBalance, isLoading, update } = useTokenBalance(BASE_TOKEN);
-  const { data: referenceData, loading: referenceDataLoading } = useReferenceData({ token: BASE_TOKEN, amount });
+  const { data: referenceData, loading: referenceDataLoading } =
+    useReferenceData({ token: BASE_TOKEN, amount });
   const globalConfig = useConfigStore((state) => state.config);
 
   const { prices } = useTokenPrice(BASE_TOKEN);
@@ -57,12 +58,14 @@ export default function BTCCreate() {
       globalConfig?.pool_cash_out_timing?.map((_item: any) => ({
         label: _item.days,
         value: _item.volume,
-        percentage: _item.percentage[0],
+        percentage: _item.percentage[0]
       })) || [],
       globalConfig?.pool_bids_overmarket?.map((_item: any) => ({
-        label: Big(_item.volume || 0).div(10 ** BASE_TOKEN.decimals).toNumber(),
+        label: Big(_item.volume || 0)
+          .div(10 ** BASE_TOKEN.decimals)
+          .toNumber(),
         value: _item.bid,
-        percentage: _item.percentage[0],
+        percentage: _item.percentage[0]
       })) || []
     ];
   }, [globalConfig]);
@@ -134,18 +137,22 @@ export default function BTCCreate() {
                   />
                 </div>
                 <div className="font-[DelaGothicOne] text-[20px]">
-                  {
-                    referenceDataLoading ? (
-                      <Skeleton className="w-[85px] h-[12px] rounded-full" />
-                    ) : formatNumber(referenceData?.top_sale, 2, true, { prefix: "$" })
-                  }
+                  {referenceDataLoading ? (
+                    <Skeleton className="w-[85px] h-[12px] rounded-full" />
+                  ) : (
+                    formatNumber(referenceData?.top_sale, 2, true, {
+                      prefix: "$"
+                    })
+                  )}
                 </div>
                 <div className="text-[#4DD561] text-[12px] mt-[2px]">
-                  {
-                    referenceDataLoading ? (
-                      <Skeleton className="w-[25px] h-[12px] rounded-full" />
-                    ) : formatNumber(referenceData?.top_sale_percentage, 2, true, { prefix: "+" }) + "%"
-                  }
+                  {referenceDataLoading ? (
+                    <Skeleton className="w-[25px] h-[12px] rounded-full" />
+                  ) : (
+                    formatNumber(referenceData?.top_sale_percentage, 2, true, {
+                      prefix: "+"
+                    }) + "%"
+                  )}
                 </div>
               </div>
               <div className="rounded-[10px] border border-[#2B2C2F] h-[93px] flex flex-col justify-center items-center gap-[10px]">
@@ -153,18 +160,26 @@ export default function BTCCreate() {
                   <div className="font-[DelaGothicOne]">Avg. Profit</div>
                 </div>
                 <div className="font-[DelaGothicOne] text-[20px]">
-                  {
-                    referenceDataLoading ? (
-                      <Skeleton className="w-[85px] h-[12px] rounded-full" />
-                    ) : "+" + formatNumber(referenceData?.avg_profit, 2, true, { prefix: "$" })
-                  }
+                  {referenceDataLoading ? (
+                    <Skeleton className="w-[85px] h-[12px] rounded-full" />
+                  ) : (
+                    "+" +
+                    formatNumber(referenceData?.avg_profit, 2, true, {
+                      prefix: "$"
+                    })
+                  )}
                 </div>
                 <div className="text-[#4DD561] text-[12px] mt-[2px]">
-                  {
-                    referenceDataLoading ? (
-                      <Skeleton className="w-[25px] h-[12px] rounded-full" />
-                    ) : formatNumber(referenceData?.avg_profit_percentage, 2, true, { prefix: "+" }) + "%"
-                  }
+                  {referenceDataLoading ? (
+                    <Skeleton className="w-[25px] h-[12px] rounded-full" />
+                  ) : (
+                    formatNumber(
+                      referenceData?.avg_profit_percentage,
+                      2,
+                      true,
+                      { prefix: "+" }
+                    ) + "%"
+                  )}
                 </div>
               </div>
               <div className="rounded-[10px] border border-[#2B2C2F] h-[93px] flex flex-col justify-center items-center gap-[10px]">
@@ -172,18 +187,20 @@ export default function BTCCreate() {
                   <div className="font-[DelaGothicOne]">Live</div>
                 </div>
                 <div className="font-[DelaGothicOne] text-[20px]">
-                  {
-                    referenceDataLoading ? (
-                      <Skeleton className="w-[85px] h-[12px] rounded-full" />
-                    ) : formatNumber(referenceData?.live, 0, true, { prefix: "$" })
-                  }
+                  {referenceDataLoading ? (
+                    <Skeleton className="w-[85px] h-[12px] rounded-full" />
+                  ) : (
+                    formatNumber(referenceData?.live, 0, true, { prefix: "$" })
+                  )}
                 </div>
                 <div className="text-[#4DD561] text-[12px] mt-[2px]">
-                  {
-                    referenceDataLoading ? (
-                      <Skeleton className="w-[25px] h-[12px] rounded-full" />
-                    ) : formatNumber(referenceData?.new_live, 0, true, { prefix: "+" }) + " new"
-                  }
+                  {referenceDataLoading ? (
+                    <Skeleton className="w-[25px] h-[12px] rounded-full" />
+                  ) : (
+                    formatNumber(referenceData?.new_live, 0, true, {
+                      prefix: "+"
+                    }) + " new"
+                  )}
                 </div>
               </div>
             </div>

@@ -5,9 +5,7 @@ import { formatAddress } from "@/utils/format/address";
 import { addThousandSeparator } from "@/utils/format/number";
 import PointIcon from "@/components/icons/point-icon";
 import RedeemSelectionItem from "./item";
-import { useConfigStore } from "@/stores/use-config";
 import { useState } from "react";
-import useUserInfoStore from "@/stores/use-user-info";
 import Redeem from "../redeem";
 import History from "../history";
 

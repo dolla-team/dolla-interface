@@ -13,7 +13,7 @@ export default function Points() {
   const { prize } = useUserInfoStore();
   const { config } = useConfigStore();
   const [items, itemsMap, minPoints] = useMemo(() => {
-    if (!config?.point_withdrawal_config) return [];
+    if (!config?.point_withdrawal_config) return [[], {}, 0];
     let _itemsMap: any = {};
     let min = 0;
     const _items = config.point_withdrawal_config.map((item: any) => {

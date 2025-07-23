@@ -26,25 +26,26 @@ export default function WinnerCard({
             {type === "last" ? "Last Winner" : "Biggest Winner"}
           </div>
           <div className="text-[12px] text-white mt-[4px]">
-            {data.user_name}
+            {data?.user_name}
           </div>
         </div>
         <div className="text-[10px] mt-[18px]">
           <div className="flex items-center justify-between gap-[10px] px-[10px] mt-[4px]">
             <div className="text-[#8C8B8B]">Won</div>
-            <div className="text-white truncate">{data.asset_name}</div>
+            <div className="text-white truncate">{data?.asset_name}</div>
           </div>
           <div className="flex items-center justify-between gap-[10px] px-[10px] mt-[4px]">
             <div className="text-[#8C8B8B]">List Price</div>
             <div className="text-white truncate">
-              {formatNumber(data.prize, 2, true)} {data.currency.toUpperCase()}
+              {formatNumber(data?.prize, 2, true)}{" "}
+              {data?.currency?.toUpperCase()}
             </div>
           </div>
           <div className="flex items-center justify-between gap-[10px] px-[10px] mt-[4px]">
             <div className="text-[#8C8B8B]">Cost</div>
             <div className="text-white truncate">
-              {formatNumber(data.total_spent, 2, true)}{" "}
-              {data.currency.toUpperCase()}
+              {formatNumber(data?.total_spent, 2, true)}{" "}
+              {data?.currency?.toUpperCase()}
             </div>
           </div>
         </div>
@@ -64,7 +65,7 @@ export default function WinnerCard({
       </svg>
       <div className="absolute top-[-14px] right-[-14px] w-[61px] h-[63px]">
         <div className="text-[12px] font-bold text-black relative z-[2] rotate-[15deg] flex flex-col items-center justify-center w-full h-full">
-          <span>{data.multiplier * 100} </span>
+          <span>{data?.multiplier * 100} </span>
           <span>%</span>
         </div>
         <svg

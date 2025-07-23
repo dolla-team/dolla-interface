@@ -19,9 +19,12 @@ const StatisticsPlayer = (props: any) => {
 
   const onSellTotalAmount = useMemo(() => {
     if (!userInfo?.on_sell) {
-      return 0;
+      return Big(0);
     }
-    return userInfo.on_sell.reduce((acc: any, item: any) => acc + item.token_amount, 0);
+    return userInfo
+      .on_sell
+      .filter((item: any) => item.token_info?.symbol === "BTC")
+      .reduce((acc: any, item: any) => Big(acc).plus(Big(item.token_amount || 0).div(10 ** (item.token_info?.decimals || 6))), 0);
   }, [userInfo]);
 
   return (
@@ -72,7 +75,7 @@ const StatisticsPlayer = (props: any) => {
         </LabelValue>
         <LabelValue label="On Sell" className="" valueClassName="flex items-center gap-[13px]">
           <div className="">
-            {formatNumber(onSellTotalAmount, 2, true, { isShort: true, isShortUppercase: true })} BTC
+            {formatNumber(onSellTotalAmount, 3, true, { isShort: true, isShortUppercase: true })} BTC
           </div>
           <ButtonV2
             onClick={() => {

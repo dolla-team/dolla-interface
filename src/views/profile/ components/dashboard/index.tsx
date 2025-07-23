@@ -43,7 +43,7 @@ const Dashboard = (props: any) => {
             <div className="flex flex-col gap-[14px]">
               <div className="font-[DelaGothicOne] text-[20px] flex items-center gap-[9px]">
                 <div className="">
-                  {userInfo?.name || formatAddress(userInfo?.user)}
+                  {userInfo?.name || formatAddress(userInfo?.sol_user)}
                 </div>
                 {tab === "seller" && (
                   <div className="flex items-center gap-[7px]">
@@ -68,7 +68,7 @@ const Dashboard = (props: any) => {
               </div>
               <div className="flex items-center gap-[5px]">
                 <div className="text-[#ADBCCF]">
-                  {formatAddress(userInfo?.user)}
+                  {formatAddress(userInfo?.sol_user)}
                 </div>
                 <button
                   className="cursor-pointer"

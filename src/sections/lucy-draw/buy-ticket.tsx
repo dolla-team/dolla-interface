@@ -2,7 +2,6 @@ import Modal from "@/components/modal";
 import { useMemo, useState } from "react";
 import PointIcon from "@/components/icons/point-icon";
 import clsx from "clsx";
-import useTokenBalance from "@/hooks/solana/use-token-balance";
 import { QUOTE_TOKEN } from "@/config/btc";
 import useTransfer from "@/hooks/solana/use-transfer";
 import Loading from "@/components/icons/loading";
@@ -12,18 +11,19 @@ import AmountInput from "./amount-input";
 
 export default function BuyTicket({
   showBuyTicket,
-  onClose
+  onClose,
+  tokenBalance,
+  update
 }: {
   showBuyTicket: boolean;
   onClose: () => void;
+  tokenBalance: string;
+  update: () => void;
 }) {
   const [ticket, setTicket] = useState(1);
-  const { set, prize } = useUserInfoStore();
+  const userInfoStore = useUserInfoStore();
   const toast = useToast();
-  const { tokenBalance } = useTokenBalance({
-    address: QUOTE_TOKEN.address,
-    decimals: QUOTE_TOKEN.decimals
-  });
+
   const isDisabled = useMemo(() => {
     return ticket > Number(tokenBalance);
   }, [ticket, tokenBalance]);
@@ -31,17 +31,22 @@ export default function BuyTicket({
   const { onTransfer, transferring } = useTransfer({
     token: QUOTE_TOKEN,
     isTicket: true,
-    onTransferSuccess: () => {
-      onClose();
-      set({
+    onTransferSuccess: (amount) => {
+      userInfoStore.set({
         prize: {
-          ...prize,
-          tickets: prize.tickets + ticket
+          ...userInfoStore.prize,
+          tickets: userInfoStore.prize.tickets + amount
         }
       });
+
       toast.success({ title: "Buy ticket successfully" });
+      update();
+      setTimeout(() => {
+        onClose();
+      }, 500);
     }
   });
+
   return (
     <Modal open={showBuyTicket} onClose={onClose}>
       <div className="w-[378px] h-[444px] rounded-[16px] border border-[#6A5D3A] bg-[#35302B]">

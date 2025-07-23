@@ -3,6 +3,7 @@ import ResultBg from "./bg";
 import Modal from "@/components/modal";
 import { useMemo } from "react";
 import PointIcon from "@/components/icons/point-icon";
+import Winner from "./winner";
 
 const Config = {
   0: {
@@ -34,7 +35,7 @@ const Config = {
   }
 };
 
-export default function Result({ points, tickets, onClose }: any) {
+export default function Result({ points, tickets, isWinner, onClose }: any) {
   const config = useMemo(() => {
     if (!points && !tickets) {
       return Config[0];
@@ -46,7 +47,9 @@ export default function Result({ points, tickets, onClose }: any) {
     return points > 10000 ? Config[3] : Config[2];
   }, [points, tickets]);
 
-  return (
+  return isWinner ? (
+    <Winner points={points} onClose={onClose} />
+  ) : (
     <Modal open={true} onClose={() => {}} className="backdrop-blur-[10px]">
       <div className="relative w-[464px] h-[584px]">
         <img

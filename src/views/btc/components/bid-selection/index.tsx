@@ -7,16 +7,16 @@ import { useBtcContext } from "../../context";
 import BidBtn from "../bid-btn";
 import AutoBtn from "./auto-btn";
 import ProvablyFair from "@/sections/provably-fair";
-import { addThousandSeparator } from "@/utils/format/number";
-import { QUOTE_TOKEN } from "@/config/btc";
-import useTokenBalance from "@/hooks/solana/use-token-balance";
+import { formatNumber } from "@/utils/format/number";
 import { useAuth } from "@/contexts/auth";
 
-export default function BidSelection() {
-  const { tokenBalance } = useTokenBalance({
-    address: QUOTE_TOKEN.address,
-    decimals: QUOTE_TOKEN.decimals
-  });
+export default function BidSelection({
+  tokenBalance,
+  update
+}: {
+  tokenBalance: string;
+  update: () => void;
+}) {
   const [showCashier, setShowCashier] = useState(false);
   const [showProvablyFair, setShowProvablyFair] = useState(false);
   const { bids, setBids, flipStatus, pool } = useBtcContext();
@@ -48,13 +48,20 @@ export default function BidSelection() {
         <div className="flex items-center justify-between relative z-[2] mt-[26px] w-[80%] mx-auto">
           <div className="text-white text-[16px]">BALANCE</div>
           <div className="text-white text-[20px] flex items-center gap-[10px]">
-            <span>${addThousandSeparator(tokenBalance || "0")}</span>
+            <span>${formatNumber(tokenBalance || "0", 2, true)}</span>
             {address && <AddBtn onClick={() => setShowCashier(true)} />}
           </div>
         </div>
       </div>
       <div className="mx-[20px] relative flex flex-col items-center justify-center">
-        {flipStatus !== 4 && <BidBtn tokenBalance={tokenBalance} />}
+        {flipStatus !== 4 && (
+          <BidBtn
+            tokenBalance={tokenBalance}
+            onBidSuccess={() => {
+              update();
+            }}
+          />
+        )}
         {flipStatus === 4 && <AutoBtn />}
       </div>
       <div className="flex items-center text-white text-[22px] font-normal leading-[100%] uppercase font-[DelaGothicOne]">

@@ -7,11 +7,18 @@ import BidsInfo from "./components/bids-info";
 import MarketInfo from "./components/market-info";
 import Grand from "./grand";
 import LucyDraw from "../../sections/lucy-draw";
+import { QUOTE_TOKEN } from "@/config/btc";
+import useTokenBalance from "@/hooks/solana/use-token-balance";
+import TopWinner from "@/sections/winners";
 // import ProvablyFair from "@/sections/provably-fair";
 
 // import WildTimeBid from "@/sections/wild-time/bid";
 
 export default function NewBTC() {
+  const { tokenBalance, update } = useTokenBalance({
+    address: QUOTE_TOKEN.address,
+    decimals: QUOTE_TOKEN.decimals
+  });
   return (
     <CannonCoinsProvider>
       <div className="h-screen overflow-hidden bg-[radial-gradient(50%_50%_at_50%_50%,rgba(0,0,0,0)_0%,#000_100%),url('/new-btc/bg.gif')] bg-cover bg-center relative">
@@ -21,11 +28,12 @@ export default function NewBTC() {
         <Players className="h-[148px] mt-[-1px]" />
         <WildTimeBid /> */}
         <Grand className="h-[calc(100vh-416px)] pt-[25px]" />
-        <BidSelection />
+        <BidSelection tokenBalance={tokenBalance} update={update} />
         <BidsInfo />
         <MarketInfo />
         <MoreMarkets />
-        <LucyDraw />
+        <LucyDraw tokenBalance={tokenBalance} update={update} />
+        <TopWinner />
         {/* <ProvablyFair /> */}
       </div>
     </CannonCoinsProvider>

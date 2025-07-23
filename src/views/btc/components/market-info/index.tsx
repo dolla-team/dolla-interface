@@ -5,6 +5,7 @@ import Big from "big.js";
 import { formatAddress } from "@/utils/format/address";
 import { useMemo } from "react";
 import Avatar from "@/components/avatar";
+import clsx from "clsx";
 
 export default function MarketInfo() {
   const { pool } = useBtcContext();
@@ -18,7 +19,7 @@ export default function MarketInfo() {
   }, [pool]);
 
   return (
-    pool?.status === 1 && (
+    pool?.status !== 2 && (
       <div className="absolute left-[20px] bottom-[24%] w-[244px]">
         <div className="flex items-center gap-[50px]">
           <div className="flex items-center gap-[8px]">
@@ -51,7 +52,12 @@ export default function MarketInfo() {
         <div className="mt-[28px] font-[BlackHanSans]">
           <div className="text-[#B9B9B9] text-[14px]">GRAND</div>
           <div
-            className="font-[DelaGothicOne] mt-[-8px] text-[36px] bg-clip-text bg-[linear-gradient(180deg,#FFF698_0%,#FFC42F_100%)]"
+            className={clsx(
+              "font-[DelaGothicOne] mt-[-8px] text-[36px] bg-clip-text",
+              pool?.status === 3
+                ? "bg-[linear-gradient(180deg,#C3C3C3_0%,#787878_100%)]"
+                : "bg-[linear-gradient(180deg,#FFF698_0%,#FFC42F_100%)]"
+            )}
             style={{
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent"
@@ -63,7 +69,12 @@ export default function MarketInfo() {
         <div className="mt-[18px] font-[BlackHanSans]">
           <div className="text-[#B9B9B9] text-[14px]">Valued</div>
           <div
-            className="font-[DelaGothicOne] mt-[-8px] text-[36px] bg-clip-text bg-[linear-gradient(180deg,#FFF698_0%,#FFC42F_100%)]"
+            className={clsx(
+              "font-[DelaGothicOne] mt-[-8px] text-[36px] bg-clip-text",
+              pool?.status === 3
+                ? "bg-[linear-gradient(180deg,#C3C3C3_0%,#787878_100%)]"
+                : "bg-[linear-gradient(180deg,#FFF698_0%,#FFC42F_100%)]"
+            )}
             style={{
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent"

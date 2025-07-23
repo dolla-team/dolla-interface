@@ -4,14 +4,19 @@ import Annotations from "./annotations";
 import { useEffect, useRef, useState } from "react";
 import annotationPlugin from "chartjs-plugin-annotation";
 import { formatNumber } from "@/utils/format/number";
-import { getAnchorPrice } from "@/utils/pool";
 import { motion } from "framer-motion";
 import clsx from "clsx";
 
 Chart.register(annotationPlugin);
 
 let diff = 1;
-export default function PriceChart({ anchorPrice, className }: { anchorPrice?: number; className?: string; }) {
+export default function PriceChart({
+  anchorPrice,
+  className
+}: {
+  anchorPrice: number;
+  className?: string;
+}) {
   const chartRef = useRef<HTMLCanvasElement>(null);
   const chartInstance = useRef<Chart | null>(null);
   const anchorDotRef = useRef<HTMLDivElement>(null);
@@ -25,7 +30,7 @@ export default function PriceChart({ anchorPrice, className }: { anchorPrice?: n
     const maxUsers = Math.floor(prizeCost * 5);
 
     const sigma = 0.6;
-    const desiredMode = getAnchorPrice({ anchor_price: anchorPrice });
+    const desiredMode = anchorPrice * 1.2;
     const mu = Math.log(desiredMode) + sigma ** 2;
 
     function logNormalPDF(n: number, mu: number, sigma: number) {
@@ -77,8 +82,7 @@ export default function PriceChart({ anchorPrice, className }: { anchorPrice?: n
             segment: {
               backgroundColor: (ctx) => {
                 const { p0 } = ctx;
-                return p0.parsed.x >=
-                  (getAnchorPrice({ anchor_price: anchorPrice }) || 0)
+                return p0.parsed.x >= (anchorPrice * 1.2 || 0)
                   ? "#57FF7033"
                   : "#FF5A974D";
               }
@@ -117,12 +121,8 @@ export default function PriceChart({ anchorPrice, className }: { anchorPrice?: n
               },
               line2: {
                 type: "line",
-                xMin: anchorPrice
-                  ? getAnchorPrice({ anchor_price: anchorPrice })
-                  : 0,
-                xMax: anchorPrice
-                  ? getAnchorPrice({ anchor_price: anchorPrice })
-                  : 0,
+                xMin: anchorPrice * 1.2 || 0,
+                xMax: anchorPrice * 1.2 || 0,
                 borderColor: "#8C8B8B",
                 borderWidth: 1,
                 borderDash: [2, 2]
@@ -148,10 +148,11 @@ export default function PriceChart({ anchorPrice, className }: { anchorPrice?: n
             },
             callbacks: {
               title: (items) => {
-                return `Total Sales: ${Number(items[0].parsed.x) > 0
-                  ? `$${items[0].parsed.x}`
-                  : `-$${Math.abs(items[0].parsed.x)}`
-                  }`;
+                return `Total Sales: ${
+                  Number(items[0].parsed.x) > 0
+                    ? `$${items[0].parsed.x}`
+                    : `-$${Math.abs(items[0].parsed.x)}`
+                }`;
               },
               label: (item) => {
                 return `Probability: ${item.parsed.y.toFixed(2)}%`;
@@ -229,7 +230,7 @@ export default function PriceChart({ anchorPrice, className }: { anchorPrice?: n
     if (!chartInstance.current || !anchorPrice) return;
 
     const density = calculateDensity(anchorPrice);
-    const desiredMode = getAnchorPrice({ anchor_price: anchorPrice });
+    const desiredMode = anchorPrice * 1.2;
 
     // Update data
     chartInstance.current.data.datasets[0].data = density;
@@ -275,12 +276,11 @@ export default function PriceChart({ anchorPrice, className }: { anchorPrice?: n
       const p = point as any;
       const pos = p.getProps(["x", "y"], true);
       if (
-        Math.abs(p.raw?.x - getAnchorPrice({ anchor_price: anchorPrice })) <
-        diff &&
+        Math.abs(p.raw?.x - anchorPrice * 1.2) < diff &&
         anchorDotRef.current
       ) {
         anchorDotRef.current.style.left = `${pos.x + 15}px`;
-        anchorDotRef.current.style.top = `${pos.y - 2}px`;
+        anchorDotRef.current.style.top = `${pos.y - 6}px`;
       }
     });
   };
@@ -295,7 +295,7 @@ export default function PriceChart({ anchorPrice, className }: { anchorPrice?: n
         height: isFolded ? 45 : "100%"
       }}
       transition={{
-        duration: 0.3,
+        duration: 0.3
       }}
     >
       <div className="w-full px-[13px] h-[45px] flex justify-between items-center shrink-0">
@@ -321,10 +321,13 @@ export default function PriceChart({ anchorPrice, className }: { anchorPrice?: n
           height: isFolded ? 0 : "calc(100% - 45px)"
         }}
         transition={{
-          duration: 0.3,
+          duration: 0.3
         }}
       >
-        <canvas ref={chartRef} className="w-full h-full relative z-[2]"></canvas>
+        <canvas
+          ref={chartRef}
+          className="w-full h-full relative z-[2]"
+        ></canvas>
         {!anchorPrice && (
           <div className="w-full h-full flex justify-center items-center text-[#ABABAB] text-[14px] absolute top-0 left-0">
             Please set the price first
@@ -348,23 +351,14 @@ export default function PriceChart({ anchorPrice, className }: { anchorPrice?: n
           />
           {anchorPrice && (
             <div className="text-[#57FF70] text-[16px] ml-[10px]">
-              $
-              {formatNumber(
-                getAnchorPrice({ anchor_price: anchorPrice }),
-                2,
-                true
-              )}
+              ${formatNumber(anchorPrice * 1.2, 2, true)}
             </div>
           )}
         </div>
         <Annotations
           className="z-[3] !top-[0px]"
           anchorPrice={anchorPrice}
-          expectedValue={
-            anchorPrice
-              ? getAnchorPrice({ anchor_price: anchorPrice })
-              : undefined
-          }
+          expectedValue={anchorPrice ? anchorPrice * 1.2 : undefined}
         />
       </motion.div>
     </motion.div>

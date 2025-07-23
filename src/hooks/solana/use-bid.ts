@@ -9,7 +9,8 @@ import {
   setupQueue,
   getBidGasFee,
   getWrapToSolIx,
-  getAccountsInfo
+  getAccountsInfo,
+  wrapTxWithBugetFee
 } from "./helpers";
 import * as anchor from "@coral-xyz/anchor";
 import { useSolanaWallets } from "@privy-io/react-auth";
@@ -28,7 +29,6 @@ import { sendSolanaTransaction } from "@/utils/transaction/send-solana-transacti
 import axiosInstance from "@/libs/axios";
 import { useBtcContext } from "@/views/btc/context";
 import { useRandomnessStore } from "@/stores/use-randomness";
-import { useAuth } from "@/contexts/auth";
 
 export default function useBid(
   poolId: number,
@@ -43,7 +43,6 @@ export default function useBid(
   const poolInfoRef = useRef<any>(null);
   const { sbProgramRef } = useBtcContext();
   const randomnessStore: any = useRandomnessStore();
-  const { userInfo } = useAuth();
   const randomnessTimerRef = useRef<any>(null);
 
   const onBid = async (times: number) => {
@@ -112,7 +111,7 @@ export default function useBid(
         systemProgram: anchor.web3.SystemProgram.programId
       };
 
-      const bidIx: TransactionInstruction = await program.methods
+      const bidTx: TransactionInstruction = await program.methods
         .bid(times)
         // @ts-ignore
         .accounts(bidAccounts)
@@ -142,12 +141,14 @@ export default function useBid(
         console.log("randomnessCreateIx:" + randomnessCreateIx[i].programId);
         tx.add(randomnessCreateIx[i]);
       }
-      tx.add(bidIx);
-      tx.feePayer = new PublicKey(import.meta.env.VITE_SOLANA_OPERATOR);
 
-      // Get the latest blockhash
-      // const { blockhash } = await provider.connection.getLatestBlockhash();
+      tx.feePayer = new PublicKey(import.meta.env.VITE_SOLANA_OPERATOR);
       tx.recentBlockhash = "11111111111111111111111111111111";
+
+      const txs = await wrapTxWithBugetFee(tx);
+
+      tx.add(...txs);
+      tx.add(bidTx);
 
       // const simulationResult = await provider.connection.simulateTransaction(
       //   tx
@@ -159,7 +160,6 @@ export default function useBid(
       //   connection: provider.connection
       // });
       console.timeEnd("prepare tx");
-      console.log("tx", tx);
 
       const result = await sendSolanaTransaction(tx, "bid");
       toast.dismiss(toastId);

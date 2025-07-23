@@ -5,7 +5,13 @@ import { useMemo, useState } from "react";
 import useBid from "@/hooks/solana/use-bid";
 import { useAuth } from "@/contexts/auth";
 
-export default function BidBtn({ tokenBalance }: { tokenBalance: string }) {
+export default function BidBtn({
+  tokenBalance,
+  onBidSuccess
+}: {
+  tokenBalance: string;
+  onBidSuccess: () => void;
+}) {
   const { setFlipStatus, flipStatus, setBidResult, bids, onReset, pool } =
     useBtcContext();
   const [isHovered, setIsHovered] = useState(false);
@@ -21,6 +27,7 @@ export default function BidBtn({ tokenBalance }: { tokenBalance: string }) {
     () => {
       console.log("bid success");
       setFlipStatus(2);
+      onBidSuccess();
     },
     () => {
       console.log("bid fail");

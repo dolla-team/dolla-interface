@@ -8,6 +8,8 @@ declare global {
       flip: Howl;
     };
     drawsUpdateTimer: NodeJS.Timeout;
+    poolTimer: NodeJS.Timeout;
+    winnerTimer: NodeJS.Timeout;
   }
 }
 

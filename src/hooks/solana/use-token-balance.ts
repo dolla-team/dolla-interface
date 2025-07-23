@@ -36,6 +36,7 @@ export default function useTokenBalance({ address, decimals }: any) {
         try {
           const accountInfo = await getAccount(connection, tokenAccount);
           const balance = Number(accountInfo.amount) / Math.pow(10, decimals);
+          console.log("balance", balance.toString());
           setTokenBalance(balance.toString());
         } catch (error) {
           setTokenBalance("0");
