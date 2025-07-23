@@ -55,7 +55,7 @@ const StatisticsPlayer = (props: any) => {
             formatNumber(totalBtcAmount, 2, true)
           )}
         </LabelValue>
-        <ButtonV2 className="" onClick={() => { }} disabled>
+        <ButtonV2 className="" onClick={() => { }} disabled soon>
           Share
         </ButtonV2>
       </div>

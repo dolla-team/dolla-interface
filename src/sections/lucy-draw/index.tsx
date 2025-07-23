@@ -103,8 +103,10 @@ export default function LucyDraw({
             </span>
             <Timer
               onTimeUp={() => {
-                setStatus(1);
-                if (currentRound) fetchResult();
+                if (currentRound) {
+                  setStatus(1);
+                  fetchResult();
+                }
               }}
               currentRound={currentRound}
             />
