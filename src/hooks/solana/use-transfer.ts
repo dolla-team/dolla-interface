@@ -77,7 +77,10 @@ export default function useTransfer({
             transferAmount,
             JSON.stringify({ type: "buy_ticket", address: payer.address })
           ]
-        : [transferAmount];
+        : [
+            transferAmount,
+            JSON.stringify({ type: "transfer", address: payer.address })
+          ];
 
       const tx: TransactionInstruction = await program.methods
         .transferHelper(...params)
