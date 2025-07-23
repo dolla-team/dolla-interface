@@ -5,7 +5,7 @@ export default function MoreMarketBtn({
   onClick
 }: {
   className?: string;
-  onClick?: () => void;
+  onClick?: (e: any) => void;
 }) {
   return (
     <button

@@ -50,7 +50,7 @@ export default function MarketInfo() {
           </div>
         </div>
         <div className="mt-[28px] font-[BlackHanSans]">
-          <div className="text-[#B9B9B9] text-[14px]">GRAND</div>
+          <div className="text-[#B9B9B9] text-[14px]">Market Value</div>
           <div
             className={clsx(
               "font-[DelaGothicOne] mt-[-8px] text-[36px] bg-clip-text",
@@ -67,7 +67,7 @@ export default function MarketInfo() {
           </div>
         </div>
         <div className="mt-[18px] font-[BlackHanSans]">
-          <div className="text-[#B9B9B9] text-[14px]">Valued</div>
+          <div className="text-[#B9B9B9] text-[14px]">USD Equivalent</div>
           <div
             className={clsx(
               "font-[DelaGothicOne] mt-[-8px] text-[36px] bg-clip-text",
