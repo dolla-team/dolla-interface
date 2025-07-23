@@ -50,7 +50,7 @@ export const CannonCoinsProvider = ({
     }
 
     if (flipStatus === 5) {
-      coinsRef.current[0].flip();
+      coinsRef.current[0]?.flip();
     }
   }, [flipStatus]);
 
@@ -112,13 +112,13 @@ export const CannonCoinsProvider = ({
             return;
           }
           if (flipStatus === 5 && flipedNumberRef.current < bids && !notAuto) {
-            coinsRef.current[index + 1].flip();
+            coinsRef.current[index + 1]?.flip();
           }
         },
         onReset: () => {
           flipedNumberRef.current = 0;
           for (let i = 0; i < bids; i++) {
-            coinsRef.current[i].flip(true);
+            coinsRef.current[i]?.flip(true);
           }
         },
         getPoolRecommend

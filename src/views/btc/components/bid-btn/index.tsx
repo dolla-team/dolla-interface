@@ -73,6 +73,9 @@ export default function BidBtn({
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         onClick={() => {
+          if (disabled) {
+            return;
+          }
           if (flipStatus === 6) {
             onReset();
           }
