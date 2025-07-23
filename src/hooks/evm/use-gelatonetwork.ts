@@ -2,7 +2,7 @@ import {
   sponsored,
   createGelatoSmartWalletClient
 } from "@gelatonetwork/smartwallet";
-import { useGelatoSmartWalletPrivyContext } from "@/contexts/wallet";
+import { useGelatoSmartWalletPrivyContext } from "@/contexts/wallet/privy";
 import axiosInstance from "@/libs/axios";
 
 import { useAuth } from "@/contexts/auth";

@@ -19,11 +19,11 @@ export default function CashierModal({ open, onClose, defaultTab }: any) {
   return (
     <Modal open={open} onClose={onClose}>
       <div className="w-[526px] rounded-[16px] bg-[#35302B] border border-[#6A5D3A]">
-        <div className="h-[46px] bg-[#191E27] rounded-t-[16px] relative">
+        <div className="h-[46px] bg-[#00000033] rounded-t-[16px] relative">
           <Switch
             tabs={[
-              { label: "Fund", value: "fund" },
-              { label: "Withdraw", value: "withdraw" },
+              { label: "Top Up", value: "fund" },
+              { label: "Withdraw", value: "withdraw" }
               // { label: "Records", value: "records" }
             ]}
             onChange={(value) => {
@@ -39,8 +39,17 @@ export default function CashierModal({ open, onClose, defaultTab }: any) {
               onClose();
             }}
           >
-            <svg width="10" height="9" viewBox="0 0 10 9" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M5 3.375L8 0H10L6 4.5L10 9H8L5 5.625L2 9H0L4 4.5L0 0H2L5 3.375Z" fill="#BBACA6" />
+            <svg
+              width="10"
+              height="9"
+              viewBox="0 0 10 9"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M5 3.375L8 0H10L6 4.5L10 9H8L5 5.625L2 9H0L4 4.5L0 0H2L5 3.375Z"
+                fill="#BBACA6"
+              />
             </svg>
           </button>
         </div>

@@ -28,8 +28,9 @@ export default function Switch({
   return (
     <div
       className={clsx(
-        "h-[36px] bg-[#222A35] rounded-[6px] p-[3px] text-[16px] font-medium flex items-center justify-between",
-        className
+        "h-[36px] rounded-[6px] p-[3px] text-[16px] font-medium flex items-center justify-between",
+        className,
+        className?.includes("bg-") ? "" : "bg-[#222A35]"
       )}
     >
       {tabs.map((item, i) => (

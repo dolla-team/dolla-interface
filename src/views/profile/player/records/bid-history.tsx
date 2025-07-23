@@ -42,13 +42,16 @@ const BidHistory = (props: any) => {
       title: "Market Size",
       width: 160,
       render: (record: any) => {
-        return `${formatNumber(Big(record.reward_amount || 0).div(10 ** record.rewardTokenInfo?.decimals || 1), 4, true)} ${record.rewardTokenInfo?.symbol}`;
+        return `${formatNumber(Big(record.reward_amount || 0).div(10 ** record.rewardTokenInfo?.decimals || 1), 4, true, { isShort: true, isShortUppercase: true })} ${record.rewardTokenInfo?.symbol}`;
       }
     },
     {
       dataIndex: "purchase_amount",
       title: "Bid",
       width: 170,
+      render: (record: any) => {
+        return `${formatNumber(record.purchase_amount, 4, true, { isShort: true, isShortUppercase: true, prefix: "-" })} ${record.purchase_token_info?.symbol}`
+      }
     },
     {
       dataIndex: "prize",
@@ -56,22 +59,20 @@ const BidHistory = (props: any) => {
       render: (record: any) => {
         return (
           <div className="flex items-center gap-[4px]">
-            {record.rewardTokenInfo.icon && (
-              <img
-                className="w-[20px] h-[20px] rounded-[4px]"
-                src={record.rewardTokenInfo.icon}
-                alt="coin"
-              />
-            )}
-            {record.nft_ids ? (
-              <span className="font-semibold">
-                #{record.rewardTokenInfo.token_id}
-              </span>
-            ) : (
-              <span className="font-semibold">
-                {record.rewardTokenInfo.name}
-              </span>
-            )}
+            {
+              !!record.rewardTokenInfo && (
+                <div className={clsx("font-[700] flex items-center gap-[4px]", ["BTC"].includes(record.rewardTokenInfo.symbol) ? "text-[#FFC42F]" : "")}>
+                  <div>{formatNumber(Big(record.reward_amount || 0).div(10 ** record.rewardTokenInfo.decimals), 4, true, { isShort: true, isShortUppercase: true })}</div>
+                  {
+                    record.nft_ids ? (
+                      <div>#{record.rewardTokenInfo.token_id}</div>
+                    ) : (
+                      <div>{record.rewardTokenInfo.symbol}</div>
+                    )
+                  }
+                </div>
+              )
+            }
           </div>
         );
       }

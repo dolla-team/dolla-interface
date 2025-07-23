@@ -2,16 +2,18 @@ import clsx from "clsx";
 import GridTable, { GridTableAlign } from "@/components/grid-table";
 import dayjs from "dayjs";
 import Pagination from "@/components/pagination";
-import useUserRecords from "@/hooks/use-user-records";
+import useUserRecords, { EUserRecordsType } from "@/hooks/use-user-records";
 import { formatNumber } from "@/utils/format/number";
 import { formatAddress } from "@/utils/format/address";
 import chains from "@/config/chains";
+import Big from "big.js";
 
 const Account = (props: any) => {
   const { className } = props;
 
   const {
     userRecords,
+    userRecordsPrices,
     userRecordsLoading,
     userRecordsPageIndex,
     hasNextPage,
@@ -20,21 +22,34 @@ const Account = (props: any) => {
 
   const columns = [
     {
-      dataIndex: "type",
+      dataIndex: "typeName",
       title: "Type",
       width: 150,
-      render: (record: any) => {
-        return record.type === 0 ? "Deposit" : "Withdraw";
-      }
     },
     {
       dataIndex: "assets",
       title: "Assets",
       render: (record: any) => {
         return (
-          <div className="flex items-center gap-[4px]">
-            <div className="">{formatNumber(record.amount, 2, true, { isShort: true, isShortUppercase: true })}</div>
-            <div className="">{record.token_info?.symbol}</div>
+          <div className={clsx("flex items-center gap-[10px]")}>
+            {
+              record.type === EUserRecordsType.Transfer && (
+                <>
+                  <div className="">
+                    {formatNumber(record.pts, 0, true, { isShort: true, isShortUppercase: true })}
+                  </div>
+                  <svg className="shrink-" width="13" height="9" viewBox="0 0 13 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12.3536 4.85355C12.5488 4.65829 12.5488 4.34171 12.3536 4.14645L9.17157 0.964466C8.97631 0.769204 8.65973 0.769204 8.46447 0.964466C8.2692 1.15973 8.2692 1.47631 8.46447 1.67157L11.2929 4.5L8.46447 7.32843C8.2692 7.52369 8.2692 7.84027 8.46447 8.03553C8.65973 8.2308 8.97631 8.2308 9.17157 8.03553L12.3536 4.85355ZM0 4.5V5H12V4.5V4H0V4.5Z" fill="#BBACA6" />
+                  </svg>
+                </>
+              )
+            }
+            <div className={clsx("flex items-center gap-[4px]", ![EUserRecordsType.Deposit].includes(record.type) ? "text-[#54FF59]" : "")}>
+              <div className="">
+                {formatNumber(record.amountBig, 3, true, { isShort: true, isShortUppercase: true })}
+              </div>
+              <div className="">{record.token_info?.symbol}</div>
+            </div>
           </div>
         );
       }
@@ -43,6 +58,9 @@ const Account = (props: any) => {
       dataIndex: "valued",
       title: "Valued",
       width: 110,
+      render: (record: any) => {
+        return formatNumber(Big(record.amountBig).times(userRecordsPrices[record.priceKey] || 0), 3, true, { isShort: true, isShortUppercase: true, prefix: "$" });
+      }
     },
     {
       dataIndex: "wallet",
@@ -57,16 +75,16 @@ const Account = (props: any) => {
         return (
           <div className="flex items-center gap-[7px]">
             <div className="text-[#BBACA6]">
-              {record.type === 0 ? "From" : "To"}
+              {record.type === EUserRecordsType.Deposit ? "From" : "To"}
             </div>
             {
               txUrl ? (
                 <a target="_blank" href={txUrl} className="block">
-                  {record.type === 0 ? formatAddress(record.from) : formatAddress(record.to)}
+                  {record.type === EUserRecordsType.Deposit ? formatAddress(record.from) : formatAddress(record.to)}
                 </a>
               ) : (
                 <div className="block">
-                  {record.type === 0 ? formatAddress(record.from) : formatAddress(record.to)}
+                  {record.type === EUserRecordsType.Deposit ? formatAddress(record.from) : formatAddress(record.to)}
                 </div>
               )
             }
@@ -81,7 +99,7 @@ const Account = (props: any) => {
       width: 160,
       align: GridTableAlign.Right,
       render: (record: any) => {
-        return dayjs(record.date).format("hh:mm D MMM, YYYY");
+        return dayjs(record.updated_at).format("hh:mm D MMM, YYYY");
       },
     },
   ];

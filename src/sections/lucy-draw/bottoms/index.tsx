@@ -29,10 +29,10 @@ export default function Bottoms({
       {status === 2 && (
         <>
           <div className="relative z-[2] w-full h-full flex items-center justify-center">
-            {winningList.map((item) => (
+            {winningList.map((item, index) => (
               <Avatar
                 address={item.user}
-                key={item}
+                key={index}
                 className="border border-[#DD9000] ml-[-10px]"
                 size={30}
                 email={item.user_info?.email}
