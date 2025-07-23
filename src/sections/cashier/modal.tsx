@@ -19,7 +19,7 @@ export default function CashierModal({ open, onClose, defaultTab }: any) {
   return (
     <Modal open={open} onClose={onClose}>
       <div className="w-[526px] rounded-[16px] bg-[#35302B] border border-[#6A5D3A]">
-        <div className="h-[46px] bg-[#191E27] rounded-t-[16px] relative">
+        <div className="h-[46px] bg-[#00000033] rounded-t-[16px] relative">
           <Switch
             tabs={[
               { label: "Fund", value: "fund" },
