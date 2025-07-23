@@ -16,7 +16,7 @@ export default function WalletProvider({
   const selectorRef = useRef<any>(null);
   const modalRef = useRef<any>(null);
   const initNearWallet = async () => {
-    const config = nearChainConfig[import.meta.env.VITE_NEAR_CHAIN];
+    const config = nearChainConfig["testnet"];
     const selector: any = await setupWalletSelector({
       network: {
         networkId: config.networkId as NetworkId,
