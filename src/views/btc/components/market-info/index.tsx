@@ -30,7 +30,7 @@ export default function MarketInfo() {
               className="border border-[2px] border-white/40"
             />
             <div>
-              <div className="text-[#FFE9B2] text-[12px]">Provider</div>
+              <div className="text-[#FFE9B2] text-[12px]">Seller</div>
               <div className="text-white text-[14px]">
                 {pool?.user ? formatAddress(pool.user) : "-"}
               </div>

@@ -113,7 +113,7 @@ export default function EndPanel({ data }: { data: any }) {
                   email={data.user_info?.email}
                 />
                 <div>
-                  <div className="text-[#FFE9B2] text-[12px]">Provider</div>
+                  <div className="text-[#FFE9B2] text-[12px]">Seller</div>
                   <div className="text-white text-[12px] font-[DelaGothicOne]">
                     {data.user_info?.email ||
                       formatAddress(data.user_info?.sol_user)}
