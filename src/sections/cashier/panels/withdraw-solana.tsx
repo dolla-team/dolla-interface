@@ -10,6 +10,7 @@ import useSplWithdraw from "@/hooks/solana/use-spl-withdraw";
 import { useAuth } from "@/contexts/auth";
 import useTokenBalance from "@/hooks/solana/use-token-balance";
 import useTransfer from "@/hooks/solana/use-transfer";
+import { toast } from "react-toastify";
 
 const TOKNES = [
   // {
@@ -32,8 +33,8 @@ const TOKNES = [
   }
 ];
 export default function WithdrawSolana() {
-  const { tokenBalance: usdcBalance } = useTokenBalance(TOKNES[0]);
-  const { tokenBalance: btcBalance } = useTokenBalance(TOKNES[1]);
+  const { tokenBalance: usdcBalance, update: updateUsdcBalance } = useTokenBalance(TOKNES[0]);
+  const { tokenBalance: btcBalance, update: updateBtcBalance } = useTokenBalance(TOKNES[1]);
   const [receiveAddress, setReceiveAddress] = useState("");
   const { address } = useAuth();
   const [amount, setAmount] = useState("");
@@ -62,9 +63,12 @@ export default function WithdrawSolana() {
     token: selectedItem,
     isTicket: false,
     onTransferSuccess: () => {
-      setSelectedItem(null);
-      setReceiveAddress("");
-      setAmount("");
+      toast.success("Transfer success");
+      updateUsdcBalance();
+      updateBtcBalance();
+      // setSelectedItem(null);
+      // setReceiveAddress("");
+      // setAmount("");
     }
   });
 

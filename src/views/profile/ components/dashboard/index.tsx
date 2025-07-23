@@ -115,7 +115,7 @@ const Dashboard = (props: any) => {
                   </div>
                 </div>
               )}
-              <ButtonV2 disabled onClick={() => {}}>
+              <ButtonV2 soon disabled onClick={() => {}}>
                 Invite frenz
               </ButtonV2>
             </div>
