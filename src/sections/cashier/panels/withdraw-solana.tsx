@@ -9,6 +9,7 @@ import useSplWithdraw from "@/hooks/solana/use-spl-withdraw";
 // import Loading from "@/components/icons/loading";
 import { useAuth } from "@/contexts/auth";
 import useTokenBalance from "@/hooks/solana/use-token-balance";
+import useTransfer from "@/hooks/solana/use-transfer";
 
 const TOKNES = [
   // {
@@ -51,12 +52,22 @@ export default function WithdrawSolana() {
   //   setAmount("");
   // });
 
-  const { withdraw } = useSplWithdraw({
+  // const { withdraw } = useSplWithdraw({
+  //   token: selectedItem,
+  //   amount: Number(amount),
+  //   targetAddress: receiveAddress
+  // });
+
+  const { onTransfer } = useTransfer({
     token: selectedItem,
-    amount: Number(amount),
-    targetAddress: receiveAddress
+    isTicket: false,
+    onTransferSuccess: () => {
+      setSelectedItem(null);
+      setReceiveAddress("");
+      setAmount("");
+    }
   });
-  
+
   return (
     <div className="pt-[20px]">
       <div className="flex gap-[15px] min-h-[160px]">
@@ -145,7 +156,7 @@ export default function WithdrawSolana() {
         disabled={!isAddressValid || !amount || !receiveAddress}
         loading={false}
         onClick={() => {
-          withdraw();
+          onTransfer(Number(amount), receiveAddress);
         }}
       >
         {!amount
