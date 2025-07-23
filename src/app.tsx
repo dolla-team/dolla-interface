@@ -5,7 +5,7 @@ import {
 } from "react-router-dom";
 import { Suspense, lazy } from "react";
 import Loading from "./components/loading";
-import PrivyWalletProvider from "./contexts/wallet/privy";
+import WalletProvider from "./contexts/wallet";
 import { AuthProvider } from "./contexts/auth";
 import { ToastContainer } from "react-toastify";
 import Temp from "./views/temp";
@@ -68,11 +68,11 @@ const router = createBrowserRouter([
 function App() {
   return (
     <Suspense fallback={<Loading />}>
-      <PrivyWalletProvider>
+      <WalletProvider>
         <AuthProvider>
           <RouterProvider router={router} />
         </AuthProvider>
-      </PrivyWalletProvider>
+      </WalletProvider>
       <ToastContainer
         position="top-right"
         autoClose={5000}
