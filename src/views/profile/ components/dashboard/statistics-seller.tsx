@@ -17,14 +17,24 @@ const StatisticsPlayer = (props: any) => {
 
   const [claimModalOpen, setClaimModalOpen] = useState(false);
 
-  const onSellTotalAmount = useMemo(() => {
-    if (!userInfo?.on_sell) {
-      return Big(0);
+  const [onSellTotalAmount, claimableValue] = useMemo(() => {
+    const _result: any = [Big(0), Big(0)];
+    if (!userInfo) {
+      return _result;
     }
-    return userInfo
-      .on_sell
-      .filter((item: any) => item.token_info?.symbol === "BTC")
-      .reduce((acc: any, item: any) => Big(acc).plus(Big(item.token_amount || 0).div(10 ** (item.token_info?.decimals || 6))), 0);
+    if (userInfo.on_sell) {
+      _result[0] = userInfo
+        .on_sell
+        .filter((item: any) => item.token_info?.symbol === "BTC")
+        .reduce((acc: any, item: any) => Big(acc).plus(Big(item.token_amount || 0).div(10 ** (item.token_info?.decimals || 6))), 0);
+    }
+    if (userInfo.claim_pool) {
+      _result[1] = userInfo
+        .claim_pool
+        .filter((item: any) => !item.is_claim)
+        .reduce((acc: any, item: any) => Big(acc).plus(Big(item.reward_usd || 0)), 0);
+    }
+    return _result;
   }, [userInfo]);
 
   return (
@@ -35,10 +45,11 @@ const StatisticsPlayer = (props: any) => {
         </LabelValue>
         <LabelValue label="Claimable" className="" valueClassName="flex items-center gap-[13px]">
           <div className="">
-            {formatNumber(Big(userInfo?.seller_profit || 0).gt(0) ? userInfo?.seller_profit : 0, 2, true, { prefix: "$", isShort: true, isShortUppercase: true })}
+            {formatNumber(claimableValue, 2, true, { prefix: "$", isShort: true, isShortUppercase: true })}
           </div>
           <ButtonV2
             className=""
+            disabled={Big(claimableValue || 0).lte(0)}
             onClick={() => {
               setClaimModalOpen(true);
             }}
@@ -57,19 +68,19 @@ const StatisticsPlayer = (props: any) => {
               className="h-[24px] !px-[10px] !text-[14px]"
               icon={(<div className="w-[7px] h-[7px] shrink-0 rounded-full bg-[#57FF70]" />)}
             >
-              0 Live
+               {formatNumber(Big(userInfo?.created || 0).minus(userInfo?.cancel || 0).minus(userInfo?.ended || 0), 0, true, { isShort: true, isShortUppercase: true })} Live
             </Badge>
             <Badge
               className="h-[24px] !px-[10px] !text-[14px]"
               icon={(<div className="w-[7px] h-[7px] shrink-0 rounded-full bg-[#FF399F]" />)}
             >
-              0 Cancelled
+              {formatNumber(userInfo?.cancel, 0, true, { isShort: true, isShortUppercase: true })} Cancelled
             </Badge>
             <Badge
               className="h-[24px] !px-[10px] !text-[14px]"
               icon={(<div className="w-[7px] h-[7px] shrink-0 rounded-full bg-[#FF9F39]" />)}
             >
-              0 Ended
+              {formatNumber(userInfo?.ended, 0, true, { isShort: true, isShortUppercase: true })} Ended
             </Badge>
           </div>
         </LabelValue>
@@ -91,6 +102,7 @@ const StatisticsPlayer = (props: any) => {
         open={claimModalOpen}
         onClose={() => {
           setClaimModalOpen(false);
+          onQueryUserInfo();
         }}
       />
     </div>

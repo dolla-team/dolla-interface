@@ -47,6 +47,7 @@ export const AuthProvider: React.FC<{
 
   const {
     info: userInfo,
+    loading: userInfoLoading,
     onQueryUserInfo,
     setInfo
   } = useUserInfo(privyWallet?.address);
@@ -192,6 +193,7 @@ export const AuthProvider: React.FC<{
         address: privyWallet?.address,
         wallet: privyWallet,
         userInfo,
+        userInfoLoading,
         accountRefresher,
         logining,
         login,

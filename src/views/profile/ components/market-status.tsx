@@ -51,9 +51,13 @@ interface Props {
 export default MarketStatus;
 
 export enum EMarketStatus {
+  // Created
   Created = 0,
+  // sold
   Live = 1,
+  // Closed
   Cancelled = 3,
+  // Ended
   Winner = 2,
 }
 

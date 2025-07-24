@@ -14,6 +14,8 @@ import Popover, {
 import Badge from "../badge";
 import ButtonV2 from "@/components/button/v2";
 import PopoverCard from "../popover-card";
+import { formatNumber } from "@/utils/format/number";
+import Big from "big.js";
 
 const Dashboard = (props: any) => {
   const { className, tab } = props;
@@ -53,7 +55,9 @@ const Dashboard = (props: any) => {
                       trigger={PopoverTrigger.Hover}
                       closeDelayDuration={0}
                     >
-                      <Badge icon="/profile/icon-user.svg">3562</Badge>
+                      <Badge icon="/profile/icon-user.svg">
+                        {formatNumber(userInfo?.player_engagement, 0, true)}
+                      </Badge>
                     </Popover>
                     <Popover
                       content={<PopoverCard>Cancellation Rate</PopoverCard>}
@@ -61,7 +65,13 @@ const Dashboard = (props: any) => {
                       trigger={PopoverTrigger.Hover}
                       closeDelayDuration={0}
                     >
-                      <Badge icon="/profile/icon-cancel.svg">33%</Badge>
+                      <Badge icon="/profile/icon-cancel.svg">
+                        {
+                          (Big(userInfo?.created || 0).gt(0) && Big(userInfo?.cancel || 0).gt(0))
+                            ? formatNumber(Big(userInfo?.cancel).div(userInfo?.created).times(100), 2, true)
+                            : 0
+                        }%
+                      </Badge>
                     </Popover>
                   </div>
                 )}
@@ -115,7 +125,7 @@ const Dashboard = (props: any) => {
                   </div>
                 </div>
               )}
-              <ButtonV2 soon disabled onClick={() => {}}>
+              <ButtonV2 soon disabled onClick={() => { }}>
                 Invite frenz
               </ButtonV2>
             </div>
