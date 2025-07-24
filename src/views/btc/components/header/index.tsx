@@ -70,7 +70,7 @@ export default function Header({ className }: { className?: string }) {
               WebkitTextFillColor: "transparent"
             }}
           >
-            ${formatNumber(pool?.value, 0, true)}
+            ${formatNumber(pool?.reward_usd, 0, true)}
           </span>
           {!!prev && (
             <div className="absolute left-[-180px] top-[-20px] flex items-center gap-[8px]">

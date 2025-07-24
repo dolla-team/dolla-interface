@@ -16,6 +16,7 @@ import {
   TransactionInstruction
 } from "@solana/web3.js";
 import { sendSolanaTransaction } from "@/utils/transaction/send-solana-transaction";
+import config from "@/config/solana";
 
 export default function useTransfer({
   token,
@@ -51,7 +52,7 @@ export default function useTransfer({
         [token.address, payer.address],
         [token.address, to],
         [PAID_TOKEN.address, payer.address],
-        [PAID_TOKEN.address, import.meta.env.VITE_SOLANA_OPERATOR]
+        [PAID_TOKEN.address, config.operator]
       ]);
 
       let transferAccounts = {
@@ -66,7 +67,7 @@ export default function useTransfer({
         associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
         user: new PublicKey(payer.address),
         toUser: new PublicKey(to),
-        operator: new PublicKey(import.meta.env.VITE_SOLANA_OPERATOR),
+        operator: new PublicKey(config.operator),
         systemProgram: anchor.web3.SystemProgram.programId,
         splMemoProgram: new PublicKey(
           "MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr"
@@ -112,7 +113,7 @@ export default function useTransfer({
         batchTx.add(operatorPaidAccount.instruction);
       }
 
-      batchTx.feePayer = new PublicKey(import.meta.env.VITE_SOLANA_OPERATOR);
+      batchTx.feePayer = new PublicKey(config.operator);
       // Get the latest blockhash
       batchTx.recentBlockhash = "11111111111111111111111111111111";
 

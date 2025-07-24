@@ -36,7 +36,7 @@ export default function EndPanel({ data }: { data: any }) {
     const _returnMultiple = Big(data.anchor_price)
       .div(10 ** BASE_TOKEN.decimals)
       .div(_totalBids)
-      .toFixed(0);
+      .toFixed(2);
 
     _bidsProgress.sort((a: number, b: number) => a - b);
     return [

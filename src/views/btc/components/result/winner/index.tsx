@@ -6,6 +6,7 @@ import Confetti from "@/components/confetti";
 import { motion } from "framer-motion";
 import { useAuth } from "@/contexts/auth";
 import CloseIcon from "@/components/icons/close";
+import { formatAddress } from "@/utils/format/address";
 
 export default function Winner({
   points,
@@ -151,7 +152,7 @@ export default function Winner({
             You are the Grand Winner
           </div>
           <div className="text-white text-[26px] font-[DelaGothicOne]">
-            0xdolla
+            {userInfo?.email || formatAddress(userInfo?.sol_user)}
           </div>
           <div className="text-white text-[16px] font-[BlackHanSans] mt-[30px]">
             Also, you’ve got

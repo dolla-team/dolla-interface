@@ -10,6 +10,7 @@ const Config = {
     gifHeight: 210,
     gifSrc: "/btc/level0.gif",
     title: "OPPPS",
+    desc: "Good luck next round",
     key: 0
   },
   1: {
@@ -67,10 +68,10 @@ export default function Result({ points, tickets, isWinner, onClose }: any) {
             }}
           />
           <div className="text-[32px] text-white font-[BlackHanSans] mt-[20px]">
-            OPPPS
+            {config.title}
           </div>
           <div className="text-[16px] text-white font-[DelaGothicOne]">
-            You didn't win this time
+            {config.desc}
           </div>
           {config.key === 1 && (
             <img src="/btc/ticket2.png" className="w-[218px]" />

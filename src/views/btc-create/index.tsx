@@ -18,11 +18,13 @@ import { useReferenceData } from "./hooks/use-reference-data";
 import Skeleton from "@/components/skeleton";
 import { useConfigStore } from "@/stores/use-config";
 import Big from "big.js";
+import { useNavigate } from "react-router-dom";
 
 export default function BTCCreate() {
+  const navigate = useNavigate();
   const [amount, setAmount] = useState(1);
   const { address } = useAuth();
-  const { tokenBalance, isLoading, update } = useTokenBalance(BASE_TOKEN);
+  const { tokenBalance, isLoading } = useTokenBalance(BASE_TOKEN);
   const { data: referenceData, loading: referenceDataLoading } =
     useReferenceData({ token: BASE_TOKEN, amount });
   const globalConfig = useConfigStore((state) => state.config);
@@ -38,8 +40,10 @@ export default function BTCCreate() {
   const { onCreate, creating } = useCreate({
     amount,
     anchorPrice: pricePerBTC,
-    onCreateSuccess: () => {
-      update();
+    onCreateSuccess: (poolId) => {
+      setTimeout(() => {
+        navigate(`/btc/${poolId}`);
+      }, 1000);
     }
   });
 
@@ -118,7 +122,7 @@ export default function BTCCreate() {
               className="mt-[20px] w-full h-[40px]"
               loading={creating}
               onClick={() => {
-                if (errorTips) return;
+                if (errorTips || creating) return;
                 onCreate();
               }}
             >

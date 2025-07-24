@@ -1,11 +1,4 @@
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-  useState
-} from "react";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
 import usePoolRecommend from "@/hooks/use-pool-recommend";
 import useBasicInfo from "@/hooks/solana/use-basic";
 import { useParams } from "react-router-dom";
@@ -66,11 +59,16 @@ export const CannonCoinsProvider = ({
 
   useEffect(() => {
     if (!params?.poolId) return;
+    let count = 0;
     const updatePool = async () => {
       const res = await onQueryPoolInfo(Number(params.poolId));
       if (res) {
         setPool(res);
         loopUpdatePool(res);
+      } else {
+        clearTimeout(window.poolTimer);
+        if (count < 5) updatePool();
+        count++;
       }
     };
     updatePool();
