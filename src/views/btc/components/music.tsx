@@ -1,27 +1,33 @@
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
+import { useGlobalStore } from "@/stores/use-global";
 
 export default function Music() {
-  const [isPlaying, setIsPlaying] = useState(false);
+  const globalStore = useGlobalStore();
+  const [isPlaying, setIsPlaying] = useState(globalStore.playBgm);
+
   useEffect(() => {
-    window.howl.bgm.play();
+    if (isPlaying) {
+      window.howl.bgm.play();
+    } else {
+      window.howl.bgm.stop();
+    }
+
     return () => {
-      window.howl.bgm.pause();
+      window.howl.bgm.stop();
     };
-  }, []);
+  }, [isPlaying]);
   return (
     <div
       className="absolute right-[20px] bottom-[20px] button"
       onClick={() => {
+        globalStore.set({
+          playBgm: !isPlaying
+        });
         setIsPlaying(!isPlaying);
-        if (isPlaying) {
-          window.howl.bgm.play();
-        } else {
-          window.howl.bgm.pause();
-        }
       }}
     >
-      {!isPlaying ? (
+      {isPlaying ? (
         <motion.svg
           xmlns="http://www.w3.org/2000/svg"
           width="32"
