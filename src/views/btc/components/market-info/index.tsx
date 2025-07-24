@@ -83,7 +83,12 @@ export default function MarketInfo() {
             ${formatNumber(pool?.reward_usd, 0, true)}
           </div>
         </div>
-        <Progress data={pool} />
+        <div className="mt-[18px] font-[BlackHanSans]">
+          <div className="text-[#B9B9B9] text-[14px]">USD Equivalent</div>
+          <div className="mt-[10px]">
+            <Progress data={pool} />
+          </div>
+        </div>
       </div>
     )
   );

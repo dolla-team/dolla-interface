@@ -84,7 +84,10 @@ export default function Redeem({
                     WebkitTextStrokeColor: "#5E3737"
                   }}
                 >
-                  x{addThousandSeparator(points.toString())}
+                  x
+                  {data?.number
+                    ? addThousandSeparator((amount * data.number).toString())
+                    : 0}
                 </span>
               </div>
             </div>

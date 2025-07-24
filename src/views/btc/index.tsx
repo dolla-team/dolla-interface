@@ -24,6 +24,10 @@ export default function NewBTC() {
 
   useEffect(() => {
     window.howl.bgm.play();
+
+    return () => {
+      window.howl.bgm.pause();
+    };
   }, []);
 
   return (

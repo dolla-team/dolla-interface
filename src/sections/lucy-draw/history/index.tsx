@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { formatAddress } from "@/utils/format/address";
 import clsx from "clsx";
 import LoadingItem from "./loading-item";
+import Avatar from "@/components/avatar";
 
 export default function LucyDrawHistory({
   open,
@@ -99,9 +100,10 @@ export default function LucyDrawHistory({
             >
               <div className="flex items-center gap-[6px]">
                 <Rank rank={index + 1} />
-                <img
-                  src=""
-                  className="w-[30px] h-[30px] rounded-full border border-[#DD9000]"
+                <Avatar
+                  size={30}
+                  address={item.user_info?.sol_user}
+                  email={item.user_info?.email}
                 />
                 <div className="text-[14px] text-white">
                   {formatAddress(item.user)}
