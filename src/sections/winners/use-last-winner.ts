@@ -22,7 +22,7 @@ export default function useLastWinner() {
     } finally {
       window.winnerTimer = setTimeout(() => {
         fetLastWinner();
-      }, 5000);
+      }, 10000);
     }
   };
 
