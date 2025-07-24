@@ -10,7 +10,7 @@ import LucyDraw from "../../sections/lucy-draw";
 import { QUOTE_TOKEN } from "@/config/btc";
 import useTokenBalance from "@/hooks/solana/use-token-balance";
 import TopWinner from "@/sections/winners";
-import { useEffect } from "react";
+import Music from "./components/music";
 
 // import ProvablyFair from "@/sections/provably-fair";
 
@@ -21,14 +21,6 @@ export default function NewBTC() {
     address: QUOTE_TOKEN.address,
     decimals: QUOTE_TOKEN.decimals
   });
-
-  useEffect(() => {
-    window.howl.bgm.play();
-
-    return () => {
-      window.howl.bgm.pause();
-    };
-  }, []);
 
   return (
     <CannonCoinsProvider>
@@ -45,6 +37,7 @@ export default function NewBTC() {
         <MoreMarkets />
         <LucyDraw tokenBalance={tokenBalance} update={update} />
         <TopWinner />
+        <Music />
         {/* <ProvablyFair /> */}
       </div>
     </CannonCoinsProvider>
