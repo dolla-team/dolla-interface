@@ -77,11 +77,20 @@ export default function useTransfer({
       if (type === "buy_ticket") {
         params = [
           transferAmount,
-          JSON.stringify({ type: "buy_ticket", address: payer.address })
+          JSON.stringify({ type: "dolla_buy_ticket", address: payer.address })
         ];
       }
       if (type === "withdraw") {
-        params = [transferAmount, JSON.stringify({ type: "withdraw" })];
+        params = [
+          transferAmount,
+          JSON.stringify({
+            type: "dolla_withdraw",
+            amount: transferAmount.toString(),
+            token: token.address,
+            from: payer.address,
+            to: to
+          })
+        ];
       }
 
       const tx: TransactionInstruction = await program.methods

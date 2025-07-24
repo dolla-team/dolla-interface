@@ -24,3 +24,5 @@ export const QUOTE_TOKEN: Record<string, any> = {
   name: "USDT",
   pointIcon: "/points/usdt.png"
 };
+
+export const PAID_TOKEN = QUOTE_TOKEN;
