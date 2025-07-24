@@ -30,7 +30,7 @@ export default function BuyTicket({
 
   const { onTransfer, transferring } = useTransfer({
     token: QUOTE_TOKEN,
-    isTicket: true,
+    type: "buy_ticket",
     onTransferSuccess: (amount) => {
       userInfoStore.set({
         prize: {

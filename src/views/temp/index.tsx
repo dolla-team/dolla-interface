@@ -6,7 +6,7 @@ import Winner from "@/views/btc/components/result/winner";
 const TempPage: React.FC = () => {
   const { onTransfer } = useTransfer({
     token: QUOTE_TOKEN,
-    isTicket: false
+    type: "withdraw"
   });
 
   return (
