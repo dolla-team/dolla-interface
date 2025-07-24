@@ -174,12 +174,6 @@ export default function useBid(
       onTxSuccess();
       setBidding(false);
 
-      poolInfoRef.current.userQuoteAccount.instruction = null;
-      poolInfoRef.current.poolQuoteAccount.instruction = null;
-      poolInfoRef.current.protocolQuoteAccount.instruction = null;
-      poolInfoRef.current.userPaidAccount.instruction = null;
-      poolInfoRef.current.operatorPaidAccount.instruction = null;
-
       let bidResponse = null;
       let timer: any = null;
       console.time("bid loop");
@@ -205,6 +199,8 @@ export default function useBid(
         timer = setTimeout(loop, 1000);
       };
       loop();
+
+      fetchPoolInfo();
 
       console.log("bidResponse", bidResponse);
       console.log("receipt:", result);

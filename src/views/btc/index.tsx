@@ -10,6 +10,8 @@ import LucyDraw from "../../sections/lucy-draw";
 import { QUOTE_TOKEN } from "@/config/btc";
 import useTokenBalance from "@/hooks/solana/use-token-balance";
 import TopWinner from "@/sections/winners";
+import { useEffect } from "react";
+
 // import ProvablyFair from "@/sections/provably-fair";
 
 // import WildTimeBid from "@/sections/wild-time/bid";
@@ -19,6 +21,11 @@ export default function NewBTC() {
     address: QUOTE_TOKEN.address,
     decimals: QUOTE_TOKEN.decimals
   });
+
+  useEffect(() => {
+    window.howl.bgm.play();
+  }, []);
+
   return (
     <CannonCoinsProvider>
       <div className="h-screen overflow-hidden bg-[radial-gradient(50%_50%_at_50%_50%,rgba(0,0,0,0)_0%,#000_100%),url('/new-btc/bg.gif')] bg-cover bg-center relative">

@@ -6,6 +6,7 @@ declare global {
   interface Window {
     howl: {
       flip: Howl;
+      bgm: Howl;
     };
     drawsUpdateTimer: NodeJS.Timeout;
     poolTimer: NodeJS.Timeout;
