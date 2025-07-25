@@ -11,10 +11,12 @@ import { useState } from "react";
 
 export default function Winner({
   points,
-  onClose
+  onClose,
+  onAnimationComplete
 }: {
   points: number;
   onClose: () => void;
+  onAnimationComplete: () => void;
 }) {
   const { userInfo } = useAuth();
   const [isAnimationComplete, setIsAnimationComplete] = useState(false);
@@ -69,6 +71,7 @@ export default function Winner({
               }}
               onAnimationComplete={() => {
                 setIsAnimationComplete(true);
+                onAnimationComplete();
               }}
             >
               {/* Front face (Heads) */}

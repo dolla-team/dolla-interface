@@ -115,10 +115,6 @@ export const CannonCoinsProvider = ({
               setTimeout(() => {
                 setFlipStatus(6);
               }, 600);
-
-              setTimeout(() => {
-                getPoolRecommend();
-              }, 4000);
             }
             return;
           }

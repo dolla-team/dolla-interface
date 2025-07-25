@@ -36,7 +36,13 @@ const Config = {
   }
 };
 
-export default function Result({ points, tickets, isWinner, onClose }: any) {
+export default function Result({
+  points,
+  tickets,
+  isWinner,
+  onClose,
+  onAnimationComplete
+}: any) {
   const config = useMemo(() => {
     if (!points && !tickets) {
       return Config[0];
@@ -49,7 +55,11 @@ export default function Result({ points, tickets, isWinner, onClose }: any) {
   }, [points, tickets]);
 
   return isWinner ? (
-    <Winner points={points} onClose={onClose} />
+    <Winner
+      points={points}
+      onClose={onClose}
+      onAnimationComplete={onAnimationComplete}
+    />
   ) : (
     <Modal open={true} onClose={() => {}} className="backdrop-blur-[10px]">
       <div className="relative w-[464px] h-[584px]">

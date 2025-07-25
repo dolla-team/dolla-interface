@@ -20,7 +20,8 @@ export default function FlipCoins() {
     flipComplete,
     bidResult,
     setFlipStatus,
-    onReset
+    onReset,
+    getPoolRecommend
   } = useBtcContext();
 
   const coinContainerRef = useRef<any>(null);
@@ -83,6 +84,11 @@ export default function FlipCoins() {
               onReset();
             }}
             isWinner={isWinner}
+            onAnimationComplete={() => {
+              setTimeout(() => {
+                getPoolRecommend();
+              }, 500);
+            }}
           />
         )}
       </div>
