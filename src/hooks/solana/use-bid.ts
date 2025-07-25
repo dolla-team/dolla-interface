@@ -188,7 +188,7 @@ export default function useBid(
           console.timeEnd("bid time");
           console.timeEnd("bid loop");
           console.log("bidResponse", bidResponse.data.data);
-          // bidResponse.data.data.bid.isWinner === true
+          // bidResponse.data.data.bid.is_winner = true;
           onSuccess(bidResponse.data.data);
 
           return;
@@ -200,7 +200,11 @@ export default function useBid(
       };
       loop();
 
-      fetchPoolInfo();
+      poolInfoRef.current.userQuoteAccount.instruction = null;
+      poolInfoRef.current.poolQuoteAccount.instruction = null;
+      poolInfoRef.current.protocolQuoteAccount.instruction = null;
+      poolInfoRef.current.userPaidAccount.instruction = null;
+      poolInfoRef.current.operatorPaidAccount.instruction = null;
 
       console.log("bidResponse", bidResponse);
       console.log("receipt:", result);
@@ -320,7 +324,9 @@ export default function useBid(
       pool,
       sbProgram
     };
+    window.cachedPoolId = poolId;
     console.timeEnd("fetchPoolInfo");
+    console.log("pool basic info", poolInfoRef.current);
   };
 
   const getRandomnessAccount = async () => {
@@ -380,7 +386,7 @@ export default function useBid(
   };
 
   useEffect(() => {
-    if (poolId && wallets.length) {
+    if (poolId && wallets.length && window.cachedPoolId !== poolId) {
       fetchPoolInfo();
     }
   }, [poolId, wallets]);

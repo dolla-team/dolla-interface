@@ -73,7 +73,7 @@ export default function Header({ className }: { className?: string }) {
       </div>
       <div
         className={clsx(
-          "absolute top-[80px] z-[2] w-full text-center font-[DelaGothicOne]",
+          "absolute top-[80px] z-[2] w-full text-center font-[DelaGothicOne] pointer-events-none",
           pool?.status === 3 ? "text-[#B2B2B2]" : "text-[#FFF79E]"
         )}
         style={{

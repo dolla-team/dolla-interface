@@ -105,8 +105,21 @@ export const CannonCoinsProvider = ({
           if (addNumber) flipedNumberRef.current++;
 
           if (flipedNumberRef.current === bids) {
-            setFlipStatus(flipStatus !== 6 ? 6 : 0);
             flipedNumberRef.current = 0;
+            if (!bidResult.bid.is_winner) {
+              setFlipStatus(flipStatus !== 6 ? 6 : 0);
+            } else {
+              for (let i = 0; i < bids; i++) {
+                coinsRef.current[i].collect();
+              }
+              setTimeout(() => {
+                setFlipStatus(6);
+              }, 600);
+
+              setTimeout(() => {
+                getPoolRecommend();
+              }, 4000);
+            }
             return;
           }
           if (flipStatus === 5 && flipedNumberRef.current < bids && !notAuto) {
