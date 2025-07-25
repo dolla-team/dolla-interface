@@ -79,14 +79,14 @@ const StatisticsPlayer = (props: any) => {
           </LabelValue>
         </div>
         <div className="flex items-center justify-end gap-[8px]">
-          {/* <ButtonV2
+          <ButtonV2
             className=""
             onClick={() => {
               setClaimModalOpen(true);
             }}
           >
             Claim
-          </ButtonV2> */}
+          </ButtonV2>
           <ButtonV2
             className=""
             onClick={() => {
