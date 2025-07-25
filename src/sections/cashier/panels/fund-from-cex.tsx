@@ -14,7 +14,7 @@ export default function FundFromCex({ amount, disabled, setAmount, onBack, onOrd
         </button>
 
         <div className="mt-[40px] mb-[32px] text-[#BBACA6] text-[16px] text-center">
-            Enter an amount ($10 minimum)
+            Enter an amount (${amount} minimum)
         </div>
         <div className="flex flex-col items-center mb-[40px] ">
             <div
