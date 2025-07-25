@@ -18,11 +18,14 @@ const ClaimIndex = (props: any) => {
   const { onQueryUserInfo, userInfo, userInfoLoading } = useAuth();
 
   const list = useMemo(() => {
-    if (!userInfo || !userInfo.claim_pool?.length) {
+    if (!userInfo) {
       return [];
     }
-    return userInfo.claim_pool.filter((item: any) => !item.is_claim);
-  }, [userInfo]);
+    if (type === "player") {
+      return userInfo.claim_winner_pool?.filter?.((item: any) => !item.is_claim) || [];
+    }
+    return userInfo.claim_pool?.filter?.((item: any) => !item.is_claim) || [];
+  }, [userInfo, type]);
 
   useEffect(() => {
     onQueryUserInfo();
