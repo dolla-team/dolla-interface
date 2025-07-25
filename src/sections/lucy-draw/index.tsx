@@ -53,7 +53,7 @@ export default function LucyDraw({
           await getUserPrize();
           await fetchCurrentRound();
           setStatus(0);
-        }, 5 * 1000);
+        }, 10 * 1000);
       } else {
         throw new Error("No winning list");
       }
