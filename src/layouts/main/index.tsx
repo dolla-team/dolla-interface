@@ -13,7 +13,8 @@ export default function MainLayout() {
       {/* header */}
       <>
         <DollaEye
-          className="absolute left-[10px] top-[4px] z-[20] button scale-65 origin-left"
+          className="absolute left-[20px] top-[15px] z-[20] button origin-left"
+          height={32}
           onClick={() => {
             navigate("/");
           }}

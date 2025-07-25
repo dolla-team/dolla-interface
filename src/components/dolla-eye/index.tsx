@@ -2,16 +2,45 @@ import { useDollaEyeContext } from "@/contexts/dolla-eye";
 import { EEyeStatus, EEyeType } from "@/hooks/use-dolla-eye";
 import clsx from "clsx";
 import { motion } from "framer-motion";
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState, useMemo } from "react";
+
+const BASE_HEIGHT = 56;
 
 const DollaEye = (props: any) => {
-  const { className, ...restProps } = props;
+  const { className, height = BASE_HEIGHT, ...restProps } = props;
 
   const { currentEye } = useDollaEyeContext();
 
   const eyeRef = useRef<any>(null);
   const eyePupil = useRef<any>(null);
   const [pupilPosition, setPupilPosition] = useState({ x: 0, y: 0 });
+
+  const [
+    rate,
+    textHeight,
+    textDWidth,
+    textLlaWidth,
+    textLeft,
+    eyeLeft,
+    eyeWidth,
+  ] = useMemo(() => {
+    const textHeight = (46 / BASE_HEIGHT) * height;
+    const textDWidth = (36 / BASE_HEIGHT) * height;
+    const textLlaWidth = (84 / BASE_HEIGHT) * height;
+    const textLeft = (8 / BASE_HEIGHT) * height;
+    const eyeLeft = (11 / BASE_HEIGHT) * height;
+    const eyeWidth = (59 / BASE_HEIGHT) * height;
+
+    return [
+      height / BASE_HEIGHT,
+      textHeight,
+      textDWidth,
+      textLlaWidth,
+      textLeft,
+      eyeLeft,
+      eyeWidth,
+    ];
+  }, [height]);
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -29,7 +58,7 @@ const DollaEye = (props: any) => {
       const distance = Math.sqrt(mouseX * mouseX + mouseY * mouseY);
 
       // Maximum radius for pupil movement (40% of eye radius)
-      const maxRadius = Math.min(eyeRect.width, eyeRect.height) * 0.4;
+      const maxRadius = Math.min(eyeRect.width, eyeRect.height) * 0.3;
 
       // Limit pupil movement range
       let limitedX = mouseX;
@@ -50,6 +79,8 @@ const DollaEye = (props: any) => {
     };
   }, []);
 
+  if (!currentEye) return null;
+
   return (
     <div
       className={clsx("flex items-center flex-nowrap", className)}
@@ -58,11 +89,21 @@ const DollaEye = (props: any) => {
       <img
         src="/logo-eye/d.svg"
         alt="d"
-        className="w-[36px] h-[46px] shrink-0 object-contain object-center relative z-[3]"
+        className="shrink-0 object-contain object-center relative z-[3]"
+        style={{
+          width: textDWidth,
+          height: textHeight,
+        }}
       />
       <div
         ref={eyeRef}
-        className="w-[59px] h-[56px] rounded-[30px] overflow-hidden shrink-0 relative z-[2] ml-[-11px]"
+        className="overflow-hidden shrink-0 relative z-[2]"
+        style={{
+          marginLeft: -eyeLeft,
+          width: eyeWidth,
+          height: height,
+          borderRadius: height / 2,
+        }}
       >
         {/*#region eye socket*/}
         <div className="z-100 absolute w-full h-full left-0 top-0 bg-[url('/logo-eye/eye-socket.svg')] bg-no-repeat bg-contain bg-center" />
@@ -80,17 +121,12 @@ const DollaEye = (props: any) => {
                 ref={eyePupil}
                 className="shrink-0 rounded-full bg-[#000000]"
                 style={{
-                  width: currentEye.pupilSize ?? 20,
-                  height: currentEye.pupilSize ?? 20,
+                  width: (currentEye.pupilSize ?? 20) * rate,
+                  height: (currentEye.pupilSize ?? 20) * rate,
                 }}
                 animate={{
                   x: pupilPosition.x,
                   y: pupilPosition.y,
-                }}
-                transition={{
-                  type: "spring",
-                  stiffness: 300,
-                  damping: 30,
                 }}
               ></motion.div>
             </div>
@@ -228,7 +264,12 @@ const DollaEye = (props: any) => {
       <img
         src="/logo-eye/lla.svg"
         alt="lla"
-        className="w-[84px] h-[46px] shrink-0 object-contain object-center relative z-[1] ml-[-8px]"
+        className="shrink-0 object-contain object-center relative z-[1]"
+        style={{
+          marginLeft: -textLeft,
+          width: textLlaWidth,
+          height: textHeight,
+        }}
       />
     </div>
   );

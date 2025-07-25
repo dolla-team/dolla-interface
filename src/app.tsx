@@ -68,26 +68,26 @@ const router = createBrowserRouter([
 
 function App() {
   return (
-    <Suspense fallback={<Loading />}>
-      <WalletProvider>
-        <AuthProvider>
-          <DollaEyeContextProvider>
+    <DollaEyeContextProvider>
+      <Suspense fallback={<Loading />}>
+        <WalletProvider>
+          <AuthProvider>
             <RouterProvider router={router} />
-          </DollaEyeContextProvider>
-        </AuthProvider>
-      </WalletProvider>
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={true}
-        theme="light"
-        toastStyle={{ backgroundColor: "transparent", boxShadow: "none" }}
-        newestOnTop
-        rtl={false}
-        pauseOnFocusLoss
-        closeButton={false}
-      />
-    </Suspense>
+          </AuthProvider>
+        </WalletProvider>
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={true}
+          theme="light"
+          toastStyle={{ backgroundColor: "transparent", boxShadow: "none" }}
+          newestOnTop
+          rtl={false}
+          pauseOnFocusLoss
+          closeButton={false}
+        />
+      </Suspense>
+    </DollaEyeContextProvider>
   );
 }
 
