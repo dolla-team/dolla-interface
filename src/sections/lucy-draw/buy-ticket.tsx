@@ -8,6 +8,7 @@ import Loading from "@/components/icons/loading";
 import useUserInfoStore from "@/stores/use-user-info";
 import useToast from "@/hooks/use-toast";
 import AmountInput from "./amount-input";
+import config from "@/config/solana";
 
 export default function BuyTicket({
   showBuyTicket,
@@ -30,7 +31,7 @@ export default function BuyTicket({
 
   const { onTransfer, transferring } = useTransfer({
     token: QUOTE_TOKEN,
-    isTicket: true,
+    type: "buy_ticket",
     onTransferSuccess: (amount) => {
       userInfoStore.set({
         prize: {
@@ -99,7 +100,7 @@ export default function BuyTicket({
           )}
           onClick={() => {
             if (isDisabled) return;
-            onTransfer(ticket, import.meta.env.VITE_SOLANA_TICKET_ACCOUNT);
+            onTransfer(ticket, config.ticket_account);
           }}
         >
           {isDisabled ? (

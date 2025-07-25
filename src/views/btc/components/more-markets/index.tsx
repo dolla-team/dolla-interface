@@ -10,7 +10,10 @@ export default function MoreMarkets() {
       {!open && (
         <MoreMarketBtn
           className="absolute left-[50%] translate-x-[-50%] top-0 z-[5]"
-          onClick={() => setOpen(true)}
+          onClick={(e: any) => {
+            e.stopPropagation();
+            setOpen(true);
+          }}
         />
       )}
       <AnimatePresence>

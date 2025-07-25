@@ -23,9 +23,8 @@ export default function useHistory() {
           ? response.data.data.list
           : [...prev, ...response.data.data.list]
       );
+      setHasMore(response.data.data.has_next_page);
       if (response.data.data.has_next_page) {
-        setHasMore(false);
-      } else {
         pageRef.current = pageRef.current + 1;
       }
     } catch (error) {

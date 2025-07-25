@@ -10,6 +10,8 @@ import usePoolRecommend from "@/hooks/use-pool-recommend";
 import useBasicInfo from "@/hooks/solana/use-basic";
 import { useParams } from "react-router-dom";
 import usePoolInfo from "@/hooks/use-pool-info";
+import { formatNumber } from "@/utils/format/number";
+import Big from "big.js";
 
 export const CannonCoinsContext = createContext<any>({});
 
@@ -66,11 +68,16 @@ export const CannonCoinsProvider = ({
 
   useEffect(() => {
     if (!params?.poolId) return;
+    let count = 0;
     const updatePool = async () => {
       const res = await onQueryPoolInfo(Number(params.poolId));
       if (res) {
         setPool(res);
         loopUpdatePool(res);
+      } else {
+        clearTimeout(window.poolTimer);
+        if (count < 5) updatePool();
+        count++;
       }
     };
     updatePool();
@@ -89,6 +96,14 @@ export const CannonCoinsProvider = ({
     };
   }, []);
 
+  const [poolAmount] = useMemo(() => {
+    if (!pool) return ["0"];
+    const reward_amount = pool.reward_amount || 0;
+    const decimals = pool.reward_token_info?.[0]?.decimals || 1;
+    const _a = formatNumber(Big(reward_amount).div(10 ** decimals), 3, true);
+    return [_a];
+  }, [pool]);
+
   return (
     <CannonCoinsContext.Provider
       value={{
@@ -96,6 +111,7 @@ export const CannonCoinsProvider = ({
         flipStatus,
         pool,
         sbProgramRef,
+        poolAmount,
         bids,
         setBids,
         setFlipStatus,
@@ -107,8 +123,17 @@ export const CannonCoinsProvider = ({
           if (addNumber) flipedNumberRef.current++;
 
           if (flipedNumberRef.current === bids) {
-            setFlipStatus(flipStatus !== 6 ? 6 : 0);
             flipedNumberRef.current = 0;
+            if (!bidResult.bid.is_winner) {
+              setFlipStatus(flipStatus !== 6 ? 6 : 0);
+            } else {
+              for (let i = 0; i < bids; i++) {
+                coinsRef.current[i].collect();
+              }
+              setTimeout(() => {
+                setFlipStatus(6);
+              }, 600);
+            }
             return;
           }
           if (flipStatus === 5 && flipedNumberRef.current < bids && !notAuto) {

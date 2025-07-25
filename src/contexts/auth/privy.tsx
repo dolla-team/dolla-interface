@@ -20,14 +20,14 @@ import {
 import useConfig from "@/hooks/use-config";
 import { ethers } from "ethers";
 
-const AuthContext = React.createContext<any | null>(null);
+export const AuthContext = React.createContext<any | null>(null);
 
 export const AuthProvider: React.FC<{
   children: ReactNode;
 }> = ({ children }) => {
   const { logout: privyLogout, login: privyLogin, ready } = usePrivy();
   const { user } = useUser();
-  const config = useConfig();
+  useConfig();
   const { wallets } = useWallets();
   const { wallets: solanaWallets } = useSolanaWallets();
 
@@ -47,6 +47,7 @@ export const AuthProvider: React.FC<{
 
   const {
     info: userInfo,
+    loading: userInfoLoading,
     onQueryUserInfo,
     setInfo
   } = useUserInfo(privyWallet?.address);
@@ -192,6 +193,7 @@ export const AuthProvider: React.FC<{
         address: privyWallet?.address,
         wallet: privyWallet,
         userInfo,
+        userInfoLoading,
         accountRefresher,
         logining,
         login,

@@ -53,7 +53,7 @@ export default function LucyDraw({
           await getUserPrize();
           await fetchCurrentRound();
           setStatus(0);
-        }, 5 * 1000);
+        }, 10 * 1000);
       } else {
         throw new Error("No winning list");
       }
@@ -82,6 +82,7 @@ export default function LucyDraw({
           setIsHistoryOpen(true);
           setHistoryRound(_round);
         }}
+        key={currentRound}
       />
       <div className="w-[248px] border border-[#FFE9B2] rounded-[12px] bg-[#FFFFFF1A] overflow-hidden">
         <div className="z-[5] relative backdrop-filter-[10px] bg-black/50 px-[16px] pt-[2px] pb-[10px] rounded-t-[12px]">

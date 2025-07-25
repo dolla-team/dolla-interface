@@ -69,7 +69,7 @@ export default function History({
               </div>
             ))}
           </div>
-          <div ref={containerRef} className="h-[400px]">
+          <div ref={containerRef} className="h-[400px] overflow-y-auto">
             {loading && (
               <div className="text-[14px] text-[#5E6B7D] w-full h-[50px] flex items-center justify-center">
                 <Loading size={20} />
@@ -117,14 +117,14 @@ export default function History({
                 No data
               </div>
             )}
+            {data.length > 0 && (
+              <LoadingMore
+                loading={isLoading}
+                hasMore={hasMore}
+                className="w-full"
+              />
+            )}
           </div>
-          {data.length > 0 && (
-            <LoadingMore
-              loading={isLoading}
-              hasMore={hasMore}
-              className="w-full"
-            />
-          )}
         </div>
       </div>
     </Modal>

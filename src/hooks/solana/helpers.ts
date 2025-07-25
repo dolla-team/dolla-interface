@@ -21,6 +21,7 @@ import * as sb from "@switchboard-xyz/on-demand";
 import axios from "axios";
 import { bs58 } from "@coral-xyz/anchor/dist/cjs/utils/bytes";
 import Big from "big.js";
+import config from "@/config/solana";
 
 export function getState(program: anchor.Program) {
   const [globalBalPda, bump] = anchor.web3.PublicKey.findProgramAddressSync(
@@ -118,7 +119,7 @@ export async function getAccountsInfo(pairs: string[][]): Promise<any[]> {
     return {
       address: account.toString(),
       instruction: createAssociatedTokenAccountInstruction(
-        new PublicKey(import.meta.env.VITE_SOLANA_OPERATOR),
+        new PublicKey(config.operator),
         account,
         new PublicKey(pairs[i][1]),
         new PublicKey(pairs[i][0])
@@ -245,11 +246,7 @@ export function getRandomnessAccount(payer: any) {
 }
 
 export function setupQueue() {
-  return new PublicKey(
-    import.meta.env.VITE_SOLANA_CLUSTER_NAME === "devnet"
-      ? "EYiAmGSdsQTuCw413V5BzaruWuCCSDgTPtBGvLkXHbe7"
-      : "A43DyUGA7s8eXPxqEjJY6EBu1KKbNgfxF8h17VAHn13w"
-  );
+  return new PublicKey(config.queue);
 }
 
 export async function getBidGasFee(
@@ -259,14 +256,19 @@ export async function getBidGasFee(
 ) {
   // @ts-ignore
   const dollaState = await program.account.dollaState.fetch(state);
-  const allGasFee = dollaState.quoteBidGasFees;
+
+  const allGasFee = dollaState.quoteGasFees;
   const allQuoteTokens = dollaState.quoteTokens;
+  let gasFee = new anchor.BN(0);
   for (let i = 0; i < allQuoteTokens.length; i++) {
     if (tokenMint.toString() == allQuoteTokens[i]) {
-      return new anchor.BN(allGasFee[i]);
+      gasFee = new anchor.BN(allGasFee[i]);
     }
   }
-  return new anchor.BN(0);
+  if (gasFee.eq(0) || gasFee.gt(new anchor.BN(20000))) {
+    gasFee = new anchor.BN(20000);
+  }
+  return gasFee;
 }
 
 export async function getSolanaBalance(

@@ -1,16 +1,10 @@
 import { useState } from "react";
-import { PAID_TOKEN, QUOTE_TOKEN } from "@/config/btc";
+import { BASE_TOKEN, QUOTE_TOKEN } from "@/config/btc";
 import useToast from "@/hooks/use-toast";
 import reportHash from "@/utils/report-hash";
 import * as anchor from "@coral-xyz/anchor";
 import useProgram from "./use-program";
-import {
-  getState,
-  getPool,
-  getBuyState,
-  getAccountsInfo,
-  getBidGasFee
-} from "./helpers";
+import { getState, getPool, getAccountsInfo } from "./helpers";
 import {
   ASSOCIATED_TOKEN_PROGRAM_ID,
   TOKEN_PROGRAM_ID
@@ -24,8 +18,7 @@ import {
 import { sendSolanaTransaction } from "@/utils/transaction/send-solana-transaction";
 import config from "@/config/solana";
 
-// user get quote token from pool when seller cancelled a pool
-export default function useClaimSlash({
+export default function useClaimReward({
   onClaimSuccess
 }: {
   onClaimSuccess?: () => void;
@@ -36,7 +29,6 @@ export default function useClaimSlash({
   const { program, provider } = useProgram();
   const onClaim = async (orderId: number) => {
     if (!wallets.length || !orderId || claiming) {
-      toast.fail({ title: "Please connect your wallet" });
       return;
     }
     const payer = wallets[0];
@@ -44,66 +36,41 @@ export default function useClaimSlash({
     try {
       setClaiming(true);
       const state = getState(program);
-      const gasBidFee = await getBidGasFee(
-        program,
-        state.pda,
-        QUOTE_TOKEN.address
-      );
+      console.log("poolId:", orderId);
       const poolIdBN = new anchor.BN(orderId);
       const pool = await getPool(program, provider, state.pda, poolIdBN);
-      const buyerState = await getBuyState(
-        program,
-        provider,
-        pool.pda,
-        new PublicKey(payer.address)
-      );
-      const [
-        userQuoteAccount,
-        poolQuoteAccount,
-        userPaidAccount,
-        operatorPaidAccount
-      ] = await getAccountsInfo([
-        [QUOTE_TOKEN.address, payer.address],
-        [QUOTE_TOKEN.address, pool.pda.toString()],
-        [PAID_TOKEN.address, payer.address],
-        [PAID_TOKEN.address, config.operator]
+
+      const [userBaseAccount, poolBaseAccount] = await getAccountsInfo([
+        [BASE_TOKEN.address, payer.address],
+        [BASE_TOKEN.address, pool.pda.toString()]
       ]);
 
-      let claimSlashFundsAccounts = {
+      let claimRewardAccounts = {
         dollaState: state.pda,
         poolState: pool.pda,
-        buyerState: buyerState.pda,
-        quoteMint: new PublicKey(QUOTE_TOKEN.address),
-        paidMint: new PublicKey(PAID_TOKEN.address),
-        userQuoteAccount: userQuoteAccount?.address,
-        poolQuoteAccount: poolQuoteAccount?.address,
-        userPaidAccount: userPaidAccount?.address,
-        operatorPaidAccount: operatorPaidAccount?.address,
+        baseMint: new PublicKey(BASE_TOKEN.address),
+        userBaseAccount: userBaseAccount?.address,
+        poolBaseAccount: poolBaseAccount?.address,
         tokenProgram: TOKEN_PROGRAM_ID,
         associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
         user: new PublicKey(payer.address),
-        operator: new PublicKey(config.operator),
         systemProgram: anchor.web3.SystemProgram.programId
       };
-      console.log("gasBidFee:", gasBidFee.toString());
       const tx: TransactionInstruction = await program.methods
-        .claimSlashFunds(gasBidFee)
-        .accounts(claimSlashFundsAccounts)
+        .claimReward()
+        .accounts(claimRewardAccounts)
         .instruction();
       const batchTx = new Transaction();
-      if (userQuoteAccount.instruction) {
-        batchTx.add(userQuoteAccount.instruction);
+
+      if (userBaseAccount?.instruction) {
+        batchTx.add(userBaseAccount.instruction);
       }
-      if (poolQuoteAccount.instruction) {
-        batchTx.add(poolQuoteAccount.instruction);
+      if (poolBaseAccount?.instruction) {
+        batchTx.add(poolBaseAccount.instruction);
       }
-      if (userPaidAccount.instruction) {
-        batchTx.add(userPaidAccount.instruction);
-      }
-      if (operatorPaidAccount.instruction) {
-        batchTx.add(operatorPaidAccount.instruction);
-      }
+
       batchTx.add(tx);
+
       batchTx.feePayer = new PublicKey(config.operator);
       // Get the latest blockhash
       batchTx.recentBlockhash = "11111111111111111111111111111111";
@@ -117,13 +84,7 @@ export default function useClaimSlash({
       //   transaction: batchTx,
       //   connection: provider.connection
       // });
-
-      const simulationResult = await provider.connection.simulateTransaction(
-        batchTx
-      );
-      console.log("claimSlashFunds:", simulationResult);
-
-      const result = await sendSolanaTransaction(batchTx, "claimSlashFunds");
+      const result = await sendSolanaTransaction(batchTx, "claimReward");
       console.log("receipt:", result);
       // Report hash for tracking
       const slot = await provider.connection.getSlot();

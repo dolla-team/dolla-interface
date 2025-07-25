@@ -1,5 +1,7 @@
+import config from "@/config/solana";
+
 export default {
-  address: import.meta.env.VITE_SOLANA_BETTING_CONTRACT,
+  address: config.dolla_contract,
   metadata: {
     name: "dolla",
     version: "0.1.0",
@@ -50,38 +52,6 @@ export default {
         },
         {
           name: "paid_mint"
-        },
-        {
-          name: "protocol_quote_account",
-          writable: true,
-          pda: {
-            seeds: [
-              {
-                kind: "account",
-                path: "dolla_state"
-              },
-              {
-                kind: "const",
-                value: [
-                  6, 221, 246, 225, 215, 101, 161, 147, 217, 203, 225, 70, 206,
-                  235, 121, 172, 28, 180, 133, 237, 95, 91, 55, 145, 58, 140,
-                  245, 133, 126, 255, 0, 169
-                ]
-              },
-              {
-                kind: "account",
-                path: "quote_mint"
-              }
-            ],
-            program: {
-              kind: "const",
-              value: [
-                140, 151, 37, 143, 78, 36, 137, 241, 187, 61, 16, 41, 20, 142,
-                13, 131, 11, 90, 19, 153, 218, 255, 16, 132, 4, 142, 123, 216,
-                219, 233, 248, 89
-              ]
-            }
-          }
         },
         {
           name: "user_quote_account",
@@ -237,6 +207,10 @@ export default {
         {
           name: "bid_count",
           type: "u32"
+        },
+        {
+          name: "gas_amount",
+          type: "u64"
         }
       ]
     },
@@ -298,6 +272,38 @@ export default {
               {
                 kind: "account",
                 path: "user"
+              },
+              {
+                kind: "const",
+                value: [
+                  6, 221, 246, 225, 215, 101, 161, 147, 217, 203, 225, 70, 206,
+                  235, 121, 172, 28, 180, 133, 237, 95, 91, 55, 145, 58, 140,
+                  245, 133, 126, 255, 0, 169
+                ]
+              },
+              {
+                kind: "account",
+                path: "quote_mint"
+              }
+            ],
+            program: {
+              kind: "const",
+              value: [
+                140, 151, 37, 143, 78, 36, 137, 241, 187, 61, 16, 41, 20, 142,
+                13, 131, 11, 90, 19, 153, 218, 255, 16, 132, 4, 142, 123, 216,
+                219, 233, 248, 89
+              ]
+            }
+          }
+        },
+        {
+          name: "protocol_quote_account",
+          writable: true,
+          pda: {
+            seeds: [
+              {
+                kind: "account",
+                path: "dolla_state"
               },
               {
                 kind: "const",
@@ -484,6 +490,232 @@ export default {
           }
         },
         {
+          name: "protocol_quote_account",
+          writable: true,
+          pda: {
+            seeds: [
+              {
+                kind: "account",
+                path: "dolla_state"
+              },
+              {
+                kind: "const",
+                value: [
+                  6, 221, 246, 225, 215, 101, 161, 147, 217, 203, 225, 70, 206,
+                  235, 121, 172, 28, 180, 133, 237, 95, 91, 55, 145, 58, 140,
+                  245, 133, 126, 255, 0, 169
+                ]
+              },
+              {
+                kind: "account",
+                path: "quote_mint"
+              }
+            ],
+            program: {
+              kind: "const",
+              value: [
+                140, 151, 37, 143, 78, 36, 137, 241, 187, 61, 16, 41, 20, 142,
+                13, 131, 11, 90, 19, 153, 218, 255, 16, 132, 4, 142, 123, 216,
+                219, 233, 248, 89
+              ]
+            }
+          }
+        },
+        {
+          name: "token_program"
+        },
+        {
+          name: "associated_token_program",
+          address: "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        },
+        {
+          name: "user",
+          writable: true,
+          signer: true
+        },
+        {
+          name: "system_program",
+          address: "11111111111111111111111111111111"
+        }
+      ],
+      args: []
+    },
+    {
+      name: "claim_pool_fee",
+      discriminator: [201, 205, 15, 168, 196, 41, 123, 175],
+      accounts: [
+        {
+          name: "dolla_state"
+        },
+        {
+          name: "pool_state",
+          writable: true
+        },
+        {
+          name: "quote_mint"
+        },
+        {
+          name: "pool_quote_account",
+          writable: true,
+          pda: {
+            seeds: [
+              {
+                kind: "account",
+                path: "pool_state"
+              },
+              {
+                kind: "const",
+                value: [
+                  6, 221, 246, 225, 215, 101, 161, 147, 217, 203, 225, 70, 206,
+                  235, 121, 172, 28, 180, 133, 237, 95, 91, 55, 145, 58, 140,
+                  245, 133, 126, 255, 0, 169
+                ]
+              },
+              {
+                kind: "account",
+                path: "quote_mint"
+              }
+            ],
+            program: {
+              kind: "const",
+              value: [
+                140, 151, 37, 143, 78, 36, 137, 241, 187, 61, 16, 41, 20, 142,
+                13, 131, 11, 90, 19, 153, 218, 255, 16, 132, 4, 142, 123, 216,
+                219, 233, 248, 89
+              ]
+            }
+          }
+        },
+        {
+          name: "protocol_quote_account",
+          writable: true,
+          pda: {
+            seeds: [
+              {
+                kind: "account",
+                path: "dolla_state"
+              },
+              {
+                kind: "const",
+                value: [
+                  6, 221, 246, 225, 215, 101, 161, 147, 217, 203, 225, 70, 206,
+                  235, 121, 172, 28, 180, 133, 237, 95, 91, 55, 145, 58, 140,
+                  245, 133, 126, 255, 0, 169
+                ]
+              },
+              {
+                kind: "account",
+                path: "quote_mint"
+              }
+            ],
+            program: {
+              kind: "const",
+              value: [
+                140, 151, 37, 143, 78, 36, 137, 241, 187, 61, 16, 41, 20, 142,
+                13, 131, 11, 90, 19, 153, 218, 255, 16, 132, 4, 142, 123, 216,
+                219, 233, 248, 89
+              ]
+            }
+          }
+        },
+        {
+          name: "token_program"
+        },
+        {
+          name: "associated_token_program",
+          address: "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        },
+        {
+          name: "user",
+          writable: true,
+          signer: true
+        },
+        {
+          name: "system_program",
+          address: "11111111111111111111111111111111"
+        }
+      ],
+      args: []
+    },
+    {
+      name: "claim_reward",
+      discriminator: [149, 95, 181, 242, 94, 90, 158, 162],
+      accounts: [
+        {
+          name: "dolla_state"
+        },
+        {
+          name: "pool_state",
+          writable: true
+        },
+        {
+          name: "base_mint"
+        },
+        {
+          name: "user_base_account",
+          writable: true,
+          pda: {
+            seeds: [
+              {
+                kind: "account",
+                path: "user"
+              },
+              {
+                kind: "const",
+                value: [
+                  6, 221, 246, 225, 215, 101, 161, 147, 217, 203, 225, 70, 206,
+                  235, 121, 172, 28, 180, 133, 237, 95, 91, 55, 145, 58, 140,
+                  245, 133, 126, 255, 0, 169
+                ]
+              },
+              {
+                kind: "account",
+                path: "base_mint"
+              }
+            ],
+            program: {
+              kind: "const",
+              value: [
+                140, 151, 37, 143, 78, 36, 137, 241, 187, 61, 16, 41, 20, 142,
+                13, 131, 11, 90, 19, 153, 218, 255, 16, 132, 4, 142, 123, 216,
+                219, 233, 248, 89
+              ]
+            }
+          }
+        },
+        {
+          name: "pool_base_account",
+          writable: true,
+          pda: {
+            seeds: [
+              {
+                kind: "account",
+                path: "pool_state"
+              },
+              {
+                kind: "const",
+                value: [
+                  6, 221, 246, 225, 215, 101, 161, 147, 217, 203, 225, 70, 206,
+                  235, 121, 172, 28, 180, 133, 237, 95, 91, 55, 145, 58, 140,
+                  245, 133, 126, 255, 0, 169
+                ]
+              },
+              {
+                kind: "account",
+                path: "base_mint"
+              }
+            ],
+            program: {
+              kind: "const",
+              value: [
+                140, 151, 37, 143, 78, 36, 137, 241, 187, 61, 16, 41, 20, 142,
+                13, 131, 11, 90, 19, 153, 218, 255, 16, 132, 4, 142, 123, 216,
+                219, 233, 248, 89
+              ]
+            }
+          }
+        },
+        {
           name: "token_program"
         },
         {
@@ -537,6 +769,9 @@ export default {
         },
         {
           name: "quote_mint"
+        },
+        {
+          name: "paid_mint"
         },
         {
           name: "user_quote_account",
@@ -603,6 +838,70 @@ export default {
           }
         },
         {
+          name: "user_paid_account",
+          writable: true,
+          pda: {
+            seeds: [
+              {
+                kind: "account",
+                path: "user"
+              },
+              {
+                kind: "const",
+                value: [
+                  6, 221, 246, 225, 215, 101, 161, 147, 217, 203, 225, 70, 206,
+                  235, 121, 172, 28, 180, 133, 237, 95, 91, 55, 145, 58, 140,
+                  245, 133, 126, 255, 0, 169
+                ]
+              },
+              {
+                kind: "account",
+                path: "paid_mint"
+              }
+            ],
+            program: {
+              kind: "const",
+              value: [
+                140, 151, 37, 143, 78, 36, 137, 241, 187, 61, 16, 41, 20, 142,
+                13, 131, 11, 90, 19, 153, 218, 255, 16, 132, 4, 142, 123, 216,
+                219, 233, 248, 89
+              ]
+            }
+          }
+        },
+        {
+          name: "operator_paid_account",
+          writable: true,
+          pda: {
+            seeds: [
+              {
+                kind: "account",
+                path: "operator"
+              },
+              {
+                kind: "const",
+                value: [
+                  6, 221, 246, 225, 215, 101, 161, 147, 217, 203, 225, 70, 206,
+                  235, 121, 172, 28, 180, 133, 237, 95, 91, 55, 145, 58, 140,
+                  245, 133, 126, 255, 0, 169
+                ]
+              },
+              {
+                kind: "account",
+                path: "paid_mint"
+              }
+            ],
+            program: {
+              kind: "const",
+              value: [
+                140, 151, 37, 143, 78, 36, 137, 241, 187, 61, 16, 41, 20, 142,
+                13, 131, 11, 90, 19, 153, 218, 255, 16, 132, 4, 142, 123, 216,
+                219, 233, 248, 89
+              ]
+            }
+          }
+        },
+        {
           name: "token_program"
         },
         {
@@ -615,11 +914,21 @@ export default {
           signer: true
         },
         {
+          name: "operator",
+          writable: true,
+          signer: true
+        },
+        {
           name: "system_program",
           address: "11111111111111111111111111111111"
         }
       ],
-      args: []
+      args: [
+        {
+          name: "gas_amount",
+          type: "u64"
+        }
+      ]
     },
     {
       name: "create_pool",
@@ -655,6 +964,9 @@ export default {
         },
         {
           name: "quote_mint"
+        },
+        {
+          name: "paid_mint"
         },
         {
           name: "user_base_account",
@@ -708,6 +1020,70 @@ export default {
               {
                 kind: "account",
                 path: "base_mint"
+              }
+            ],
+            program: {
+              kind: "const",
+              value: [
+                140, 151, 37, 143, 78, 36, 137, 241, 187, 61, 16, 41, 20, 142,
+                13, 131, 11, 90, 19, 153, 218, 255, 16, 132, 4, 142, 123, 216,
+                219, 233, 248, 89
+              ]
+            }
+          }
+        },
+        {
+          name: "user_paid_account",
+          writable: true,
+          pda: {
+            seeds: [
+              {
+                kind: "account",
+                path: "user"
+              },
+              {
+                kind: "const",
+                value: [
+                  6, 221, 246, 225, 215, 101, 161, 147, 217, 203, 225, 70, 206,
+                  235, 121, 172, 28, 180, 133, 237, 95, 91, 55, 145, 58, 140,
+                  245, 133, 126, 255, 0, 169
+                ]
+              },
+              {
+                kind: "account",
+                path: "paid_mint"
+              }
+            ],
+            program: {
+              kind: "const",
+              value: [
+                140, 151, 37, 143, 78, 36, 137, 241, 187, 61, 16, 41, 20, 142,
+                13, 131, 11, 90, 19, 153, 218, 255, 16, 132, 4, 142, 123, 216,
+                219, 233, 248, 89
+              ]
+            }
+          }
+        },
+        {
+          name: "operator_paid_account",
+          writable: true,
+          pda: {
+            seeds: [
+              {
+                kind: "account",
+                path: "operator"
+              },
+              {
+                kind: "const",
+                value: [
+                  6, 221, 246, 225, 215, 101, 161, 147, 217, 203, 225, 70, 206,
+                  235, 121, 172, 28, 180, 133, 237, 95, 91, 55, 145, 58, 140,
+                  245, 133, 126, 255, 0, 169
+                ]
+              },
+              {
+                kind: "account",
+                path: "paid_mint"
               }
             ],
             program: {
@@ -809,7 +1185,7 @@ export default {
           }
         },
         {
-          name: "quote_bid_gas_fees",
+          name: "quote_gas_fees",
           type: {
             vec: "u64"
           }
@@ -974,7 +1350,7 @@ export default {
           }
         },
         {
-          name: "quote_bid_gas_fees",
+          name: "quote_gas_fees",
           type: {
             vec: "u64"
           }
@@ -1023,74 +1399,7 @@ export default {
           name: "randomness_account"
         },
         {
-          name: "base_mint"
-        },
-        {
           name: "quote_mint"
-        },
-        {
-          name: "user_base_account",
-          writable: true,
-          pda: {
-            seeds: [
-              {
-                kind: "account",
-                path: "user"
-              },
-              {
-                kind: "const",
-                value: [
-                  6, 221, 246, 225, 215, 101, 161, 147, 217, 203, 225, 70, 206,
-                  235, 121, 172, 28, 180, 133, 237, 95, 91, 55, 145, 58, 140,
-                  245, 133, 126, 255, 0, 169
-                ]
-              },
-              {
-                kind: "account",
-                path: "base_mint"
-              }
-            ],
-            program: {
-              kind: "const",
-              value: [
-                140, 151, 37, 143, 78, 36, 137, 241, 187, 61, 16, 41, 20, 142,
-                13, 131, 11, 90, 19, 153, 218, 255, 16, 132, 4, 142, 123, 216,
-                219, 233, 248, 89
-              ]
-            }
-          }
-        },
-        {
-          name: "pool_base_account",
-          writable: true,
-          pda: {
-            seeds: [
-              {
-                kind: "account",
-                path: "pool_state"
-              },
-              {
-                kind: "const",
-                value: [
-                  6, 221, 246, 225, 215, 101, 161, 147, 217, 203, 225, 70, 206,
-                  235, 121, 172, 28, 180, 133, 237, 95, 91, 55, 145, 58, 140,
-                  245, 133, 126, 255, 0, 169
-                ]
-              },
-              {
-                kind: "account",
-                path: "base_mint"
-              }
-            ],
-            program: {
-              kind: "const",
-              value: [
-                140, 151, 37, 143, 78, 36, 137, 241, 187, 61, 16, 41, 20, 142,
-                13, 131, 11, 90, 19, 153, 218, 255, 16, 132, 4, 142, 123, 216,
-                219, 233, 248, 89
-              ]
-            }
-          }
         },
         {
           name: "user_quote_account",
@@ -1489,8 +1798,16 @@ export default {
       discriminator: [71, 137, 239, 100, 220, 3, 242, 47]
     },
     {
+      name: "ClaimFeeEvent",
+      discriminator: [173, 80, 235, 15, 116, 19, 144, 33]
+    },
+    {
       name: "ClaimFundsEvent",
       discriminator: [112, 97, 127, 107, 254, 149, 241, 18]
+    },
+    {
+      name: "ClaimRewardEvent",
+      discriminator: [207, 16, 14, 170, 176, 71, 40, 53]
     },
     {
       name: "ClaimSlashEvent",
@@ -1580,13 +1897,13 @@ export default {
     },
     {
       code: 6012,
-      name: "UnexpectedAccount",
-      msg: "UnexpectedAccount"
+      name: "InvalidGasAmount",
+      msg: "InvalidGasAmount"
     },
     {
       code: 6013,
-      name: "Initialized",
-      msg: "Initialized"
+      name: "UnexpectedAccount",
+      msg: "UnexpectedAccount"
     },
     {
       code: 6014,
@@ -1595,23 +1912,23 @@ export default {
     },
     {
       code: 6015,
-      name: "InvalidToken",
-      msg: "InvalidToken"
-    },
-    {
-      code: 6016,
       name: "HadShutdown",
       msg: "HadShutdown"
     },
     {
-      code: 6017,
+      code: 6016,
       name: "InvalidFeeRate",
       msg: "InvalidFeeRate"
     },
     {
+      code: 6017,
+      name: "InvalidToken",
+      msg: "InvalidToken"
+    },
+    {
       code: 6018,
-      name: "InvalidTime",
-      msg: "InvalidTime"
+      name: "InvalidUser",
+      msg: "InvalidUser"
     },
     {
       code: 6019,
@@ -1620,56 +1937,6 @@ export default {
     },
     {
       code: 6020,
-      name: "PauseOrShutdown",
-      msg: "PauseOrShutdown"
-    },
-    {
-      code: 6021,
-      name: "InvalidUser",
-      msg: "InvalidUser"
-    },
-    {
-      code: 6022,
-      name: "InvalidName",
-      msg: "InvalidName"
-    },
-    {
-      code: 6023,
-      name: "SlipageError",
-      msg: "SlipageError"
-    },
-    {
-      code: 6024,
-      name: "NotEnoughTokenForSale",
-      msg: "NotEnoughTokenForSale"
-    },
-    {
-      code: 6025,
-      name: "InactivePool",
-      msg: "InactivePool"
-    },
-    {
-      code: 6026,
-      name: "ExceedLimit",
-      msg: "ExceedLimit"
-    },
-    {
-      code: 6027,
-      name: "InvalidSignature",
-      msg: "InvalidSignature"
-    },
-    {
-      code: 6028,
-      name: "InvalidOrcaParam",
-      msg: "InvalidOrcaParam"
-    },
-    {
-      code: 6029,
-      name: "InvalidPda",
-      msg: "InvalidPda"
-    },
-    {
-      code: 6030,
       name: "NumberCastError",
       msg: "Unable to cast number into BigInt"
     }
@@ -1753,6 +2020,10 @@ export default {
             type: "u64"
           },
           {
+            name: "last_fee_amount",
+            type: "u64"
+          },
+          {
             name: "last_sequence_num",
             type: "u64"
           }
@@ -1796,6 +2067,30 @@ export default {
       }
     },
     {
+      name: "ClaimFeeEvent",
+      type: {
+        kind: "struct",
+        fields: [
+          {
+            name: "pool_id",
+            type: "u32"
+          },
+          {
+            name: "user",
+            type: "pubkey"
+          },
+          {
+            name: "fee_amount",
+            type: "u64"
+          },
+          {
+            name: "quote_token",
+            type: "pubkey"
+          }
+        ]
+      }
+    },
+    {
       name: "ClaimFundsEvent",
       type: {
         kind: "struct",
@@ -1813,7 +2108,35 @@ export default {
             type: "u64"
           },
           {
+            name: "fee_amount",
+            type: "u64"
+          },
+          {
             name: "quote_token",
+            type: "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      name: "ClaimRewardEvent",
+      type: {
+        kind: "struct",
+        fields: [
+          {
+            name: "pool_id",
+            type: "u32"
+          },
+          {
+            name: "user",
+            type: "pubkey"
+          },
+          {
+            name: "amount",
+            type: "u64"
+          },
+          {
+            name: "base_token",
             type: "pubkey"
           }
         ]
@@ -1839,6 +2162,14 @@ export default {
           {
             name: "quote_token",
             type: "pubkey"
+          },
+          {
+            name: "gas_token",
+            type: "pubkey"
+          },
+          {
+            name: "gas_fee",
+            type: "u64"
           }
         ]
       }
@@ -1875,6 +2206,14 @@ export default {
           {
             name: "quote_amount_unit",
             type: "u64"
+          },
+          {
+            name: "gas_token",
+            type: "pubkey"
+          },
+          {
+            name: "gas_fee",
+            type: "u64"
           }
         ]
       }
@@ -1890,6 +2229,10 @@ export default {
           },
           {
             name: "expected_quote_amount",
+            type: "u64"
+          },
+          {
+            name: "gas_amount",
             type: "u64"
           }
         ]
@@ -1925,6 +2268,10 @@ export default {
             type: "u16"
           },
           {
+            name: "floating_rate",
+            type: "u16"
+          },
+          {
             name: "status",
             type: {
               defined: {
@@ -1945,7 +2292,7 @@ export default {
             }
           },
           {
-            name: "quote_bid_gas_fees",
+            name: "quote_gas_fees",
             type: {
               vec: "u64"
             }
@@ -2031,6 +2378,10 @@ export default {
             type: "u64"
           },
           {
+            name: "fee_amount",
+            type: "u64"
+          },
+          {
             name: "slash_amount",
             type: "u64"
           },
@@ -2049,6 +2400,10 @@ export default {
           {
             name: "once_win_rate",
             type: "u32"
+          },
+          {
+            name: "floating_rate",
+            type: "u16"
           },
           {
             name: "status",

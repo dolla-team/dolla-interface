@@ -3,6 +3,7 @@ import clsx from "clsx";
 import { BackPointsFace, FrontFace } from "./faces";
 import useUserInfoStore from "@/stores/use-user-info";
 import { motion } from "framer-motion";
+
 import "./index.css";
 
 const Coin = forwardRef<any, any>(
@@ -16,7 +17,8 @@ const Coin = forwardRef<any, any>(
       coinContainerRef,
       ticket,
       bids,
-      setFlipStatus
+      setFlipStatus,
+      isWinner
     },
     ref
   ) => {
@@ -84,8 +86,9 @@ const Coin = forwardRef<any, any>(
       const coinRect = coinRef.current.getBoundingClientRect();
       const targetW = rect.width;
       const targetH = rect.height;
-      const targetLeft = targetW / 2 - coinRect.x + rect.x;
-      const targetTop = targetH / 2 - coinRect.y + rect.y;
+
+      const targetLeft = targetW / 2 + rect.x - coinRect.x - coinRect.width / 2;
+      const targetTop = targetH / 2 + rect.y - coinRect.y - coinRect.height / 2;
       if (bids > 1) {
         coinRef.current.style.transform = `translate(${targetLeft}px, ${targetTop}px)`;
       } else {
@@ -138,30 +141,12 @@ const Coin = forwardRef<any, any>(
             <FrontFace size={size} thickness={thickness} />
 
             {/* Back face (Tails) */}
-            <BackPointsFace size={size} thickness={thickness} points={points} />
-
-            {/* Coin edges container */}
-            {/* <div
-            style={{
-              transformStyle: "preserve-3d",
-              backfaceVisibility: "hidden",
-              transform: `translateX(${size * 0.45}px)`
-            }}
-          >
-            {Array.from({ length: 24 }).map((_, index) => (
-              <div
-                key={index}
-                className="absolute segment"
-                style={{
-                  width: thickness,
-                  height: size,
-                  transformStyle: "preserve-3d",
-                  backfaceVisibility: "hidden",
-                  transform: `rotateY(90deg) rotateX(${(180 / 24) * index}deg)`
-                }}
-              />
-            ))}
-          </div> */}
+            <BackPointsFace
+              size={size}
+              thickness={thickness}
+              points={points}
+              isWinner={isWinner}
+            />
           </div>
         </div>
         {!!showTicket && (

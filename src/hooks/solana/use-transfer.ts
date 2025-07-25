@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { QUOTE_TOKEN } from "@/config/btc";
+import { PAID_TOKEN } from "@/config/btc";
 import useToast from "@/hooks/use-toast";
 import reportHash from "@/utils/report-hash";
 import * as anchor from "@coral-xyz/anchor";
@@ -16,14 +16,15 @@ import {
   TransactionInstruction
 } from "@solana/web3.js";
 import { sendSolanaTransaction } from "@/utils/transaction/send-solana-transaction";
+import config from "@/config/solana";
 
 export default function useTransfer({
   token,
-  isTicket,
+  type,
   onTransferSuccess
 }: {
   token: any;
-  isTicket?: boolean;
+  type?: string;
   onTransferSuccess?: (amount: number) => void;
 }) {
   const [transferring, setTransferring] = useState(false);
@@ -32,11 +33,11 @@ export default function useTransfer({
   const { program, provider } = useProgram();
 
   const onTransfer = async (amount: number, to: string) => {
-    if (!wallets.length || !amount) {
-      toast.fail({ title: "Please connect your wallet" });
+    if (!wallets.length || !amount || transferring) {
       return;
     }
     const payer = wallets[0];
+    let toastId = toast.loading({ title: "Transferring..." });
     try {
       setTransferring(true);
       const transferAmount = new anchor.BN(amount * 10 ** token.decimals);
@@ -50,14 +51,14 @@ export default function useTransfer({
       ] = await getAccountsInfo([
         [token.address, payer.address],
         [token.address, to],
-        [QUOTE_TOKEN.address, payer.address],
-        [QUOTE_TOKEN.address, import.meta.env.VITE_SOLANA_OPERATOR]
+        [PAID_TOKEN.address, payer.address],
+        [PAID_TOKEN.address, config.operator]
       ]);
 
       let transferAccounts = {
         dollaState: state.pda,
         tokenMint: new PublicKey(token.address),
-        paidMint: new PublicKey(QUOTE_TOKEN.address),
+        paidMint: new PublicKey(PAID_TOKEN.address),
         userTokenAccount: userTokenAccount?.address,
         toTokenAccount: toTokenAccount?.address,
         userPaidAccount: userPaidAccount?.address,
@@ -66,21 +67,32 @@ export default function useTransfer({
         associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
         user: new PublicKey(payer.address),
         toUser: new PublicKey(to),
-        operator: new PublicKey(import.meta.env.VITE_SOLANA_OPERATOR),
+        operator: new PublicKey(config.operator),
         systemProgram: anchor.web3.SystemProgram.programId,
         splMemoProgram: new PublicKey(
           "MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr"
         )
       };
-      const params = isTicket
-        ? [
-            transferAmount,
-            JSON.stringify({ type: "buy_ticket", address: payer.address })
-          ]
-        : [
-            transferAmount,
-            JSON.stringify({ type: "transfer", address: payer.address })
-          ];
+
+      let params: any = [];
+      if (type === "buy_ticket") {
+        params = [
+          transferAmount,
+          JSON.stringify({ type: "dolla_buy_ticket", address: payer.address })
+        ];
+      }
+      if (type === "withdraw") {
+        params = [
+          transferAmount,
+          JSON.stringify({
+            type: "dolla_withdraw",
+            amount: transferAmount.toString(),
+            token: token.address,
+            from: payer.address,
+            to: to
+          })
+        ];
+      }
 
       const tx: TransactionInstruction = await program.methods
         .transferHelper(...params)
@@ -101,7 +113,7 @@ export default function useTransfer({
         batchTx.add(operatorPaidAccount.instruction);
       }
 
-      batchTx.feePayer = new PublicKey(import.meta.env.VITE_SOLANA_OPERATOR);
+      batchTx.feePayer = new PublicKey(config.operator);
       // Get the latest blockhash
       batchTx.recentBlockhash = "11111111111111111111111111111111";
 
@@ -112,6 +124,10 @@ export default function useTransfer({
 
       const result = await sendSolanaTransaction(batchTx, "transferHelper");
       console.log("receipt:", result);
+      toast.dismiss(toastId);
+      toast.success({
+        title: "Transfer successfully"
+      });
       // Report hash for tracking
       const slot = await provider.connection.getSlot();
       reportHash({
@@ -124,6 +140,10 @@ export default function useTransfer({
       onTransferSuccess?.(amount);
     } catch (error) {
       console.error("Create error:", error);
+      toast.dismiss(toastId);
+      toast.fail({
+        title: "Transfer failed"
+      });
       throw error;
     } finally {
       setTransferring(false);

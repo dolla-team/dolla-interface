@@ -36,7 +36,7 @@ export default function EndPanel({ data }: { data: any }) {
     const _returnMultiple = Big(data.anchor_price)
       .div(10 ** BASE_TOKEN.decimals)
       .div(_totalBids)
-      .toFixed(0);
+      .toFixed(2);
 
     _bidsProgress.sort((a: number, b: number) => a - b);
     return [
@@ -113,7 +113,7 @@ export default function EndPanel({ data }: { data: any }) {
                   email={data.user_info?.email}
                 />
                 <div>
-                  <div className="text-[#FFE9B2] text-[12px]">Provider</div>
+                  <div className="text-[#FFE9B2] text-[12px]">Seller</div>
                   <div className="text-white text-[12px] font-[DelaGothicOne]">
                     {data.user_info?.email ||
                       formatAddress(data.user_info?.sol_user)}

@@ -22,6 +22,7 @@ import {
   TransactionInstruction
 } from "@solana/web3.js";
 import { sendSolanaTransaction } from "@/utils/transaction/send-solana-transaction";
+import config from "@/config/solana";
 
 export default function useCancel({
   onCancelSuccess
@@ -34,6 +35,9 @@ export default function useCancel({
   const { program, provider } = useProgram();
 
   const onCancel = async (orderId: number) => {
+    if (canceling) {
+      return;
+    }
     if (!wallets.length || !orderId) {
       return;
     }
@@ -50,12 +54,14 @@ export default function useCancel({
         userBaseAccount,
         userQuoteAccount,
         poolBaseAccount,
-        poolQuoteAccount
+        poolQuoteAccount,
+        protocolQuoteAccount
       ] = await getAccountsInfo([
         [BASE_TOKEN.address, payer.address],
         [QUOTE_TOKEN.address, payer.address],
         [BASE_TOKEN.address, pool.pda.toString()],
-        [QUOTE_TOKEN.address, pool.pda.toString()]
+        [QUOTE_TOKEN.address, pool.pda.toString()],
+        [QUOTE_TOKEN.address, state.pda.toString()]
       ]);
 
       const batchTx = new Transaction();
@@ -79,6 +85,7 @@ export default function useCancel({
         userQuoteAccount: userQuoteAccount?.address,
         poolBaseAccount: poolBaseAccount?.address,
         poolQuoteAccount: poolQuoteAccount?.address,
+        protocolQuoteAccount: protocolQuoteAccount?.address,
         tokenProgram: TOKEN_PROGRAM_ID,
         associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
         user: new PublicKey(payer.address),
@@ -104,7 +111,12 @@ export default function useCancel({
       if (poolQuoteAccount?.instruction) {
         batchTx.add(poolQuoteAccount.instruction);
       }
-      batchTx.feePayer = new PublicKey(import.meta.env.VITE_SOLANA_OPERATOR);
+
+      if (protocolQuoteAccount?.instruction) {
+        batchTx.add(protocolQuoteAccount.instruction);
+      }
+
+      batchTx.feePayer = new PublicKey(config.operator);
       batchTx.recentBlockhash = "11111111111111111111111111111111";
 
       const txs = await wrapTxWithBugetFee(batchTx);

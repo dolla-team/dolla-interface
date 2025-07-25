@@ -51,23 +51,31 @@ interface Props {
 export default MarketStatus;
 
 export enum EMarketStatus {
+  // Created
   Created = 0,
+  // sold
   Live = 1,
+  // Closed
   Cancelled = 3,
+  // Ended
   Winner = 2,
 }
 
 export const MarketStatusMap = {
   [EMarketStatus.Created]: {
     label: "Live",
+    name: "Created",
   },
   [EMarketStatus.Live]: {
     label: "Live",
+    name: "Sold",
   },
   [EMarketStatus.Cancelled]: {
     label: "Cancelled",
+    name: "Cancelled",
   },
   [EMarketStatus.Winner]: {
     label: "Winner",
+    name: "Ended",
   },
 }

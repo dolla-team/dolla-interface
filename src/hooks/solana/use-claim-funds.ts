@@ -16,6 +16,7 @@ import {
   TransactionInstruction
 } from "@solana/web3.js";
 import { sendSolanaTransaction } from "@/utils/transaction/send-solana-transaction";
+import config from "@/config/solana";
 
 export default function useClaimFunds({
   onClaimSuccess
@@ -27,7 +28,7 @@ export default function useClaimFunds({
   const toast = useToast();
   const { program, provider } = useProgram();
   const onClaim = async (orderId: number) => {
-    if (!wallets.length || !orderId) {
+    if (!wallets.length || !orderId || claiming) {
       return;
     }
     const payer = wallets[0];
@@ -39,10 +40,12 @@ export default function useClaimFunds({
       const poolIdBN = new anchor.BN(orderId);
       const pool = await getPool(program, provider, state.pda, poolIdBN);
 
-      const [userQuoteAccount, poolQuoteAccount] = await getAccountsInfo([
-        [QUOTE_TOKEN.address, payer.address],
-        [QUOTE_TOKEN.address, pool.pda.toString()]
-      ]);
+      const [userQuoteAccount, poolQuoteAccount, protocolQuoteAccount] =
+        await getAccountsInfo([
+          [QUOTE_TOKEN.address, payer.address],
+          [QUOTE_TOKEN.address, pool.pda.toString()],
+          [QUOTE_TOKEN.address, state.pda.toString()]
+        ]);
 
       let claimFundsAccounts = {
         dollaState: state.pda,
@@ -50,6 +53,7 @@ export default function useClaimFunds({
         quoteMint: new PublicKey(QUOTE_TOKEN.address),
         userQuoteAccount: userQuoteAccount?.address,
         poolQuoteAccount: poolQuoteAccount?.address,
+        protocolQuoteAccount: protocolQuoteAccount?.address,
         tokenProgram: TOKEN_PROGRAM_ID,
         associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
         user: new PublicKey(payer.address),
@@ -67,10 +71,13 @@ export default function useClaimFunds({
       if (poolQuoteAccount.instruction) {
         batchTx.add(poolQuoteAccount.instruction);
       }
+      if (protocolQuoteAccount.instruction) {
+        batchTx.add(protocolQuoteAccount.instruction);
+      }
 
       batchTx.add(tx);
 
-      batchTx.feePayer = new PublicKey(import.meta.env.VITE_SOLANA_OPERATOR);
+      batchTx.feePayer = new PublicKey(config.operator);
       // Get the latest blockhash
       batchTx.recentBlockhash = "11111111111111111111111111111111";
 

@@ -52,7 +52,7 @@ export default function Toast({ type, title, text, closeToast }: any) {
           />
         </svg>
       )}
-      <div className="flex justify-between flex-grow text-white">
+      <div className="flex items-start justify-between flex-grow text-white">
         <div className="flex flex-col gap-[5px]">
           <div className="text-[16px] font-semibold leading-normal items-center">
             {title}
@@ -62,7 +62,7 @@ export default function Toast({ type, title, text, closeToast }: any) {
           )}
         </div>
         <div
-          className="leading-[22px] flex-shrink-0 cursor-pointer"
+          className="mt-[6px] flex-shrink-0 cursor-pointer"
           onClick={closeToast}
         >
           <svg

@@ -15,7 +15,7 @@ export default function usePoolRecommend(
     try {
       setLoading(true);
       const response = await axiosInstance.get(
-        `/api/v1/pool/recommend?token_status=${tokenStatus}&token=${
+        `/api/v1/pool/recommend?token_status=${tokenStatus}&chain=solana&token=${
           BASE_TOKEN.address
         }${volume ? `&volume=${volume}` : ""}`
       );

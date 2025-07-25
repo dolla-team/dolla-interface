@@ -35,10 +35,6 @@ export default function FlipCoins() {
       : [];
     const _t = bidResult.ticket ? bidResult.ticket?.result?.split(",") : [];
 
-    if (bidResult.bid.is_winner) {
-      getPoolRecommend();
-    }
-
     return [
       _p,
       _t,
@@ -75,6 +71,7 @@ export default function FlipCoins() {
             onFlipComplete={flipComplete}
             coinContainerRef={coinContainerRef}
             setFlipStatus={setFlipStatus}
+            isWinner={isWinner}
           />
         ))}
 

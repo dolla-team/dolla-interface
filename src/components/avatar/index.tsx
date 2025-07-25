@@ -26,7 +26,7 @@ export default function Avatar({
 
   return (
     <img
-      src={`https://www.gravatar.com/avatar/${hashedEmail}?d=wavatar`}
+      src={`https://www.gravatar.com/avatar/${hashedEmail}?d=wavatar&s=${size}`}
       alt="avatar"
       className={clsx("relative rounded-[6px]", className)}
       style={{

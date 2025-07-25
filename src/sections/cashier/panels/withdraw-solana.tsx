@@ -33,8 +33,10 @@ const TOKNES = [
   }
 ];
 export default function WithdrawSolana() {
-  const { tokenBalance: usdcBalance, update: updateUsdcBalance } = useTokenBalance(TOKNES[0]);
-  const { tokenBalance: btcBalance, update: updateBtcBalance } = useTokenBalance(TOKNES[1]);
+  const { tokenBalance: usdcBalance, update: updateUsdcBalance } =
+    useTokenBalance(TOKNES[0]);
+  const { tokenBalance: btcBalance, update: updateBtcBalance } =
+    useTokenBalance(TOKNES[1]);
   const [receiveAddress, setReceiveAddress] = useState("");
   const { address } = useAuth();
   const [amount, setAmount] = useState("");
@@ -61,7 +63,7 @@ export default function WithdrawSolana() {
 
   const { onTransfer } = useTransfer({
     token: selectedItem,
-    isTicket: false,
+    type: "withdraw",
     onTransferSuccess: () => {
       toast.success("Transfer success");
       updateUsdcBalance();
@@ -84,9 +86,7 @@ export default function WithdrawSolana() {
               onClick={() => {
                 setSelectedItem(item);
               }}
-              balance={
-                item.symbol === "USDC" ? usdcBalance : btcBalance
-              }
+              balance={item.symbol === "USDC" ? usdcBalance : btcBalance}
             />
           );
         })}

@@ -2,6 +2,9 @@ import { useEffect, useRef, useState } from "react";
 import "./index.scss";
 import clsx from "clsx";
 
+const frontFace = new Image();
+frontFace.src = "/btc/fliping-coin.svg";
+
 export default function FlippingCoin({ start = false }: any) {
   const [flipping, setFlipping] = useState(false);
   const count = useRef(0);

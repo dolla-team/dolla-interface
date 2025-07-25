@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { BASE_TOKEN, QUOTE_TOKEN } from "@/config/btc";
+import { BASE_TOKEN, QUOTE_TOKEN, PAID_TOKEN } from "@/config/btc";
 import useToast from "@/hooks/use-toast";
 import reportHash from "@/utils/report-hash";
 import * as anchor from "@coral-xyz/anchor";
@@ -18,12 +18,12 @@ import {
 } from "@solana/spl-token";
 import { useSolanaWallets } from "@privy-io/react-auth";
 import { sendSolanaTransaction } from "@/utils/transaction/send-solana-transaction";
-
 import {
   PublicKey,
   Transaction,
   TransactionInstruction
 } from "@solana/web3.js";
+import config from "@/config/solana";
 
 export default function useCreate({
   amount,
@@ -40,6 +40,9 @@ export default function useCreate({
   const { program, provider } = useProgram();
 
   const onCreate = async () => {
+    if (creating) {
+      return;
+    }
     if (!wallets.length) {
       toast.fail({ title: "Please connect your wallet" });
       return;
@@ -58,9 +61,16 @@ export default function useCreate({
       console.log("nextOrderId", nextOrderId.toNumber());
       const pool = await getPool(program, provider, state.pda, nextOrderId);
 
-      const [userBaseAccount, poolBaseAccount] = await getAccountsInfo([
+      const [
+        userBaseAccount,
+        poolBaseAccount,
+        userPaidAccount,
+        operatorPaidAccount
+      ] = await getAccountsInfo([
         [BASE_TOKEN.address, payer.address],
-        [BASE_TOKEN.address, pool.pda.toString()]
+        [BASE_TOKEN.address, pool.pda.toString()],
+        [PAID_TOKEN.address, payer.address],
+        [PAID_TOKEN.address, config.operator]
       ]);
 
       // Ensure all accounts are properly defined
@@ -82,13 +92,16 @@ export default function useCreate({
         poolState: pool.pda,
         baseMint: new PublicKey(BASE_TOKEN.address),
         quoteMint: new PublicKey(QUOTE_TOKEN.address),
+        paidMint: new PublicKey(PAID_TOKEN.address),
         userBaseAccount: userBaseAccount.address,
         poolBaseAccount: poolBaseAccount.address,
+        userPaidAccount: userPaidAccount.address,
+        operatorPaidAccount: operatorPaidAccount.address,
         tokenProgram: TOKEN_PROGRAM_ID,
         associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
         user: new PublicKey(payer.address),
         systemProgram: anchor.web3.SystemProgram.programId,
-        operator: new PublicKey(import.meta.env.VITE_SOLANA_OPERATOR)
+        operator: new PublicKey(config.operator)
       };
 
       const createIx: TransactionInstruction = await program.methods
@@ -109,8 +122,14 @@ export default function useCreate({
       if (poolBaseAccount?.instruction) {
         tx.add(poolBaseAccount.instruction);
       }
+      if (userPaidAccount?.instruction) {
+        tx.add(userPaidAccount.instruction);
+      }
+      if (operatorPaidAccount?.instruction) {
+        tx.add(operatorPaidAccount.instruction);
+      }
 
-      tx.feePayer = new PublicKey(import.meta.env.VITE_SOLANA_OPERATOR);
+      tx.feePayer = new PublicKey(config.operator);
 
       tx.recentBlockhash = "11111111111111111111111111111111";
 
