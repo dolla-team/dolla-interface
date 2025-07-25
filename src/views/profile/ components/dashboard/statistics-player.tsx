@@ -10,11 +10,12 @@ import useTokenBalance from "@/hooks/solana/use-token-balance";
 import Loading from "@/components/icons/loading";
 import { QUOTE_TOKEN } from "@/config/btc";
 import useUserWinner from "@/hooks/use-user-winner";
+import ClaimModal from "../claim/modal";
 
 const StatisticsPlayer = (props: any) => {
   const { className } = props;
 
-  const { userInfo } = useAuth();
+  const { userInfo, onQueryUserInfo } = useAuth();
   const { tokenBalance, isLoading } = useTokenBalance({
     address: QUOTE_TOKEN.address,
     decimals: QUOTE_TOKEN.decimals
@@ -22,6 +23,7 @@ const StatisticsPlayer = (props: any) => {
   const { totalBtcAmount, loading: totalBtcLoading } = useUserWinner();
 
   const [cashierModalOpen, setCashierModalOpen] = useState(false);
+  const [claimModalOpen, setClaimModalOpen] = useState(false);
   const [cashierModalTab, setCashierModalTab] = useState("fund");
 
   const wonTotalUsd = useMemo(() => {
@@ -37,7 +39,7 @@ const StatisticsPlayer = (props: any) => {
   return (
     <div
       className={clsx(
-        "w-full mt-[20px] flex items-center justify-between gap-[40px]",
+        "w-full mt-[20px] flex items-center justify-between gap-[30px]",
         className
       )}
     >
@@ -66,17 +68,25 @@ const StatisticsPlayer = (props: any) => {
             {isLoading ? (
               <Loading size={12} />
             ) : (
-              formatNumber(tokenBalance, 2, true, { prefix: "$" })
+              formatNumber(tokenBalance, 2, true, { prefix: "$", isShort: true, isShortUppercase: true })
             )}
           </LabelValue>
           <LabelValue label="Played times" className="whitespace-nowrap">
             {formatNumber(userInfo?.played, 2, true, {
-              isShort: Big(userInfo?.played || 0).gt(1000000),
+              isShort: Big(userInfo?.played || 0).gt(10000),
               isShortUppercase: true
             })}
           </LabelValue>
         </div>
-        <div className="flex items-center justify-end gap-[10px]">
+        <div className="flex items-center justify-end gap-[8px]">
+          {/* <ButtonV2
+            className=""
+            onClick={() => {
+              setClaimModalOpen(true);
+            }}
+          >
+            Claim
+          </ButtonV2> */}
           <ButtonV2
             className=""
             onClick={() => {
@@ -103,6 +113,14 @@ const StatisticsPlayer = (props: any) => {
         defaultTab={cashierModalTab}
         onClose={() => {
           setCashierModalOpen(false);
+        }}
+      />
+      <ClaimModal
+        type="player"
+        open={claimModalOpen}
+        onClose={() => {
+          setClaimModalOpen(false);
+          onQueryUserInfo();
         }}
       />
     </div>

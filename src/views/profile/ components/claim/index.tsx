@@ -10,9 +10,10 @@ import useClaimFunds from "@/hooks/solana/use-claim-funds";
 import { useAuth } from "@/contexts/auth";
 import { useMemo } from "react";
 import chains from "@/config/chains";
+import useClaimReward from "@/hooks/solana/use-claim-reward";
 
 const ClaimIndex = (props: any) => {
-  const { className } = props;
+  const { className, type } = props;
 
   const { onQueryUserInfo, userInfo, userInfoLoading } = useAuth();
 
@@ -80,6 +81,7 @@ const ClaimIndex = (props: any) => {
                     <ClaimButton
                       onQueryUserInfo={onQueryUserInfo}
                       item={item}
+                      type={type}
                     />
                   </div>
                 </div>
@@ -97,13 +99,26 @@ const ClaimIndex = (props: any) => {
 export default ClaimIndex;
 
 const ClaimButton = (props: any) => {
-  const { onQueryUserInfo, item } = props;
+  const { onQueryUserInfo, item, type } = props;
 
-  const { onClaim, claiming } = useClaimFunds({
+  const { onClaim: onSellerClaim, claiming: sellerClaiming } = useClaimFunds({
     onClaimSuccess: () => {
       onQueryUserInfo();
     },
   });
+  const { onClaim: onPlayerClaim, claiming: playerClaiming } = useClaimReward({
+    onClaimSuccess: () => {
+      onQueryUserInfo();
+    },
+  });
+
+  const [onClaim, claiming] = useMemo(() => {
+    const isPlayer = type === "player";
+    if (isPlayer) {
+      return [onPlayerClaim, playerClaiming];
+    }
+    return [onSellerClaim, sellerClaiming];
+  }, [onSellerClaim, sellerClaiming, onPlayerClaim, playerClaiming, type]);
 
   return (
     <ButtonV2

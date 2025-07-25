@@ -24,7 +24,7 @@ export default function usePlayerHistory() {
     if (!userInfo?.user) return [];
     const url = new URL(window.location.href);
     url.searchParams.set("limit", joinedPoolListPageSize + "");
-    url.searchParams.set("offset", (joinedPoolListPageIndex - 1) + "");
+    url.searchParams.set("offset", (joinedPoolListPageIndex - 1) * joinedPoolListPageSize + "");
     url.searchParams.set("pool_status", joinedPoolListStatus);
     try {
       const response = await axiosInstance.get(`/api/v1/user/joined_market?${url.searchParams.toString()}`);
