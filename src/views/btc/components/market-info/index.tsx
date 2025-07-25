@@ -1,21 +1,11 @@
 import Progress from "./progress";
 import { useBtcContext } from "../../context";
 import { formatNumber } from "@/utils/format/number";
-import Big from "big.js";
-import { useMemo } from "react";
 import clsx from "clsx";
 // import ShareBtn from "./share-btn";
 
 export default function MarketInfo() {
-  const { pool } = useBtcContext();
-
-  const [amount] = useMemo(() => {
-    if (!pool) return ["0"];
-    const reward_amount = pool.reward_amount || 0;
-    const decimals = pool.reward_token_info?.[0]?.decimals || 1;
-    const _a = formatNumber(Big(reward_amount).div(10 ** decimals), 3, true);
-    return [_a];
-  }, [pool]);
+  const { poolAmount, pool } = useBtcContext();
 
   return (
     pool?.status !== 2 && (
@@ -157,7 +147,7 @@ export default function MarketInfo() {
                 pool?.status === 3 ? "text-[#C3C3C3]" : "text-[#FFE9B2]"
               )}
             >
-              {amount} BTC
+              {poolAmount} BTC
             </div>
           </div>
           <div className="w-1/2">

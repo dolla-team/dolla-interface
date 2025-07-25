@@ -84,11 +84,6 @@ export default function FlipCoins() {
               onReset();
             }}
             isWinner={isWinner}
-            onAnimationComplete={() => {
-              setTimeout(() => {
-                getPoolRecommend();
-              }, 500);
-            }}
           />
         )}
       </div>

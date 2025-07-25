@@ -1,25 +1,59 @@
 import Avatar from "@/components/avatar";
 import PointIcon from "@/components/icons/point-icon";
-import { addThousandSeparator } from "@/utils/format/number";
+import { addThousandSeparator, formatNumber } from "@/utils/format/number";
 import clsx from "clsx";
 import Confetti from "@/components/confetti";
-import { motion } from "framer-motion";
 import { useAuth } from "@/contexts/auth";
 import CloseIcon from "@/components/icons/close";
 import { formatAddress } from "@/utils/format/address";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
+import gsap from "gsap";
+import { useBtcContext } from "../../../context";
 
 export default function Winner({
   points,
-  onClose,
-  onAnimationComplete
+  onClose
 }: {
   points: number;
   onClose: () => void;
-  onAnimationComplete: () => void;
 }) {
   const { userInfo } = useAuth();
-  const [isAnimationComplete, setIsAnimationComplete] = useState(false);
+  const [animationStatus, setAnimationStatus] = useState(0); // 0: coin rotating, 1: show bg
+  const coinRef = useRef<HTMLDivElement>(null);
+  const bgRef = useRef<HTMLDivElement>(null);
+  const { poolAmount, getPoolRecommend, pool } = useBtcContext();
+
+  useEffect(() => {
+    if (coinRef.current) {
+      gsap
+        .timeline()
+        .to(coinRef.current, {
+          rotateY: 1440, // Rotate 1440 degrees around Y axis
+          duration: 2,
+          ease: "linear",
+          onComplete: () => {
+            setAnimationStatus(1);
+          }
+        })
+        .to(coinRef.current, {
+          rotateY: 1440 + 180,
+          duration: 1,
+          delay: 1,
+          ease: "linear",
+          onComplete: () => {
+            setAnimationStatus(2);
+            setTimeout(() => {
+              getPoolRecommend();
+            }, 2000);
+          }
+        });
+      gsap.to(bgRef.current, {
+        opacity: 1,
+        duration: 0.5,
+        ease: "linear"
+      });
+    }
+  }, []);
   return (
     <>
       <button
@@ -28,118 +62,130 @@ export default function Winner({
       >
         <CloseIcon size={36} />
       </button>
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        className="fixed top-0 left-0 w-full h-full z-[50] flex items-center justify-center"
-      >
-        {isAnimationComplete && (
-          <>
-            <div className="absolute z-[1] left-0 top-0 w-full h-full bg-black/50 backdrop-blur-[10px] bg-[radial-gradient(44.79%_52.28%_at_50%_50%,rgba(255,183,38,0.6)_0%,rgba(0,0,0,0.6)_100%)]" />
-            <img
-              src="/logo.svg"
-              alt="dolla"
-              className="w-[78px] h-[39px] absolute left-[50%] top-[30px] z-[20] -translate-x-1/2"
-            />
-          </>
-        )}
+      <div className="fixed top-0 left-0 w-full h-full z-[50] ">
+        <div className="w-full h-full absolute flex items-center justify-center">
+          <div className="absolute z-[1] left-0 top-0 w-full h-full bg-black/50 backdrop-blur-[10px] bg-[radial-gradient(44.79%_52.28%_at_50%_50%,rgba(255,183,38,0.6)_0%,rgba(0,0,0,0.6)_100%)]" />
+          <img
+            src="/logo.svg"
+            alt="dolla"
+            className="w-[78px] h-[39px] absolute left-[50%] top-[30px] z-[20] -translate-x-1/2"
+            style={{
+              opacity: animationStatus === 2 ? 1 : 0
+            }}
+          />
+          <Confetti />
+        </div>
 
         <div className="relative z-[3] w-full h-full flex flex-col items-center justify-center">
-          {isAnimationComplete && (
-            <div className="text-white text-[32px] font-[BlackHanSans] mb-[30px]">
-              Congrats!
-            </div>
-          )}
           <div
-            className={clsx(
-              "relative z-[3] cursor-pointer perspective-[1000px] w-[310px] h-[310px] rounded-full"
-            )}
+            className="text-white text-[32px] font-[BlackHanSans] mb-[30px] duration-500"
+            style={{
+              opacity: animationStatus === 2 ? 1 : 0
+            }}
           >
-            <motion.div
-              className="relative w-full h-full transition-transform ease-in-out flex items-center justify-center shadow-[0px_0px_30px_6px_rgba(250,252,129,0.30)] rounded-full"
+            Congrats!
+          </div>
+
+          <div
+            className="relative z-[3] cursor-pointer w-[310px] h-[310px] transition-transform ease-in-out flex items-center justify-center shadow-[0px_0px_30px_6px_rgba(250,252,129,0.30)] rounded-full"
+            style={{
+              transformStyle: "preserve-3d"
+            }}
+            ref={coinRef}
+          >
+            {/* Front face (Heads) */}
+            <BtcFace />
+
+            <div
+              className="absolute inset-0 w-full h-full duration-1000 transition-transform ease-in-out rounded-full backface-hidden flex items-center justify-center"
               style={{
-                transformStyle: "preserve-3d"
-              }}
-              animate={{
-                rotateY: 180 + 1440,
-                scale: isAnimationComplete ? [1, 1.1, 1] : 1
-              }}
-              transition={{
-                repeat: isAnimationComplete ? Infinity : 0,
-                duration: 2,
-                ease: "linear"
-              }}
-              onAnimationComplete={() => {
-                setIsAnimationComplete(true);
-                onAnimationComplete();
+                transform: `rotateY(180deg) translateZ(1px)`,
+                opacity: animationStatus === 2 ? 1 : 0
               }}
             >
-              {/* Front face (Heads) */}
-              <BtcFace />
-
-              <div
-                className="absolute inset-0 w-full h-full duration-1000 transition-transform ease-in-out rounded-full backface-hidden flex items-center justify-center"
-                style={{
-                  transform: `rotateY(180deg) translateZ(1px)`,
-                  opacity: isAnimationComplete ? 1 : 0
-                }}
-              >
-                <Avatar
-                  size={240}
-                  address={userInfo?.sol_user}
-                  email={userInfo?.email}
-                  className="rounded-full border-[3px] border-[#DD9000]"
-                />
-              </div>
-              <BtcFace
-                className="backface-hidden"
-                style={{
-                  transform: `rotateY(180deg) translateZ(1px)`,
-                  display: isAnimationComplete ? "none" : "block"
-                }}
+              <Avatar
+                size={240}
+                address={userInfo?.sol_user}
+                email={userInfo?.email}
+                className="rounded-full border-[3px] border-[#DD9000]"
               />
-            </motion.div>
+            </div>
+            <BtcFace
+              className="backface-hidden"
+              style={{
+                transform: `rotateY(180deg) translateZ(1px)`,
+                opacity: animationStatus === 2 ? 0 : 1
+              }}
+            />
           </div>
-          {isAnimationComplete && (
-            <>
-              <div
-                className="text-white mt-[16px] text-shadow-[0px_0px_10px_rgba(255,213,105,0.50)] text-[24px] font-[DelaGothicOne]"
-                style={{
-                  WebkitTextStroke: "1px #EEAF0F"
-                }}
-              >
-                You are the Grand Winner
-              </div>
-              <div className="text-white text-[26px] font-[DelaGothicOne]">
-                {userInfo?.email || formatAddress(userInfo?.sol_user)}
-              </div>
-              <div className="text-white text-[16px] font-[BlackHanSans] mt-[30px]">
-                Also, you’ve got
-              </div>
-              {points > 0 && (
-                <div className="flex items-center gap-[8px] mt-[10px]">
-                  <PointIcon size={60} />
-                  <span
-                    className="text-[#FFEF43] text-[36px] font-bold font-[AlfaSlabOne]"
-                    style={{
-                      WebkitTextStrokeWidth: "1px",
-                      WebkitTextStrokeColor: "#5E3737"
-                    }}
-                  >
-                    x{addThousandSeparator(points.toString())}
-                  </span>
+
+          <div className="text-center h-[120px]">
+            {animationStatus !== 2 && (
+              <>
+                <div
+                  className={clsx(
+                    "font-[DelaGothicOne] text-[62px] bg-clip-text bg-[linear-gradient(180deg,#FFF698_0%,#FFC42F_100%)]"
+                  )}
+                  style={{
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent"
+                  }}
+                >
+                  {poolAmount} BTC
                 </div>
-              )}
-              <img
-                src="/btc/winner.gif"
-                alt="Winner"
-                className="w-[500px] h-[500px] z-[2] absolute right-0 bottom-0"
-              />
-            </>
-          )}
+                <div
+                  className={clsx(
+                    "font-[DelaGothicOne] text-[32px] bg-clip-text bg-[linear-gradient(180deg,#FFF698_0%,#FFC42F_100%)]"
+                  )}
+                  style={{
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent"
+                  }}
+                >
+                  ${formatNumber(pool?.reward_usd, 0, true)}
+                </div>
+              </>
+            )}
+            {animationStatus === 2 && (
+              <>
+                <div
+                  className="text-white mt-[16px] text-shadow-[0px_0px_10px_rgba(255,213,105,0.50)] text-[24px] font-[DelaGothicOne]"
+                  style={{
+                    WebkitTextStroke: "1px #EEAF0F"
+                  }}
+                >
+                  You are the Grand Winner
+                </div>
+                <div className="text-white text-[26px] font-[DelaGothicOne]">
+                  {userInfo?.email || formatAddress(userInfo?.sol_user)}
+                </div>
+                <div className="text-white text-[16px] font-[BlackHanSans] mt-[30px]">
+                  Also, you’ve got
+                </div>
+                {points > 0 && (
+                  <div className="flex items-center gap-[8px] mt-[10px]">
+                    <PointIcon size={60} />
+                    <span
+                      className="text-[#FFEF43] text-[36px] font-bold font-[AlfaSlabOne]"
+                      style={{
+                        WebkitTextStrokeWidth: "1px",
+                        WebkitTextStrokeColor: "#5E3737"
+                      }}
+                    >
+                      x{addThousandSeparator(points.toString())}
+                    </span>
+                  </div>
+                )}
+                <img
+                  src="/btc/winner.gif"
+                  alt="Winner"
+                  className="w-[500px] h-[500px] z-[2] absolute right-0 bottom-0"
+                />
+              </>
+            )}
+          </div>
         </div>
-      </motion.div>
-      {isAnimationComplete && <Confetti />}
+      </div>
     </>
   );
 }

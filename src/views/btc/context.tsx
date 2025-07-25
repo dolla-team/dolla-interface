@@ -1,8 +1,17 @@
-import { createContext, useContext, useEffect, useRef, useState } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState
+} from "react";
 import usePoolRecommend from "@/hooks/use-pool-recommend";
 import useBasicInfo from "@/hooks/solana/use-basic";
 import { useParams } from "react-router-dom";
 import usePoolInfo from "@/hooks/use-pool-info";
+import { formatNumber } from "@/utils/format/number";
+import Big from "big.js";
 
 export const CannonCoinsContext = createContext<any>({});
 
@@ -87,6 +96,14 @@ export const CannonCoinsProvider = ({
     };
   }, []);
 
+  const [poolAmount] = useMemo(() => {
+    if (!pool) return ["0"];
+    const reward_amount = pool.reward_amount || 0;
+    const decimals = pool.reward_token_info?.[0]?.decimals || 1;
+    const _a = formatNumber(Big(reward_amount).div(10 ** decimals), 3, true);
+    return [_a];
+  }, [pool]);
+
   return (
     <CannonCoinsContext.Provider
       value={{
@@ -94,6 +111,7 @@ export const CannonCoinsProvider = ({
         flipStatus,
         pool,
         sbProgramRef,
+        poolAmount,
         bids,
         setBids,
         setFlipStatus,

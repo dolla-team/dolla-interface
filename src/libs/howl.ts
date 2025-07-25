@@ -11,7 +11,7 @@ const bgmSound = new Howl({
   volume: 0.1,
   loop: true,
   preload: true,
-  autoplay: true
+  autoplay: false
 });
 
 window.howl = {
