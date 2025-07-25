@@ -35,6 +35,7 @@ export default function Seller() {
     hasMore,
     poolsData,
     records,
+    recordsPrices,
     recordsLoading,
     onRecordsPrevPage,
     onRecordsNextPage,
@@ -92,6 +93,7 @@ export default function Seller() {
               <SwitchPanel>
                 <Records
                   records={records}
+                  recordsPrices={recordsPrices}
                   loading={recordsLoading}
                   onPrevPage={onRecordsPrevPage}
                   onNextPage={onRecordsNextPage}

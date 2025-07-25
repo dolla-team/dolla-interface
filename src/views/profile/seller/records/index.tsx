@@ -5,10 +5,10 @@ import Pagination from "@/components/pagination";
 import { formatNumber } from "@/utils/format/number";
 import Big from "big.js";
 import chains from "@/config/chains";
-import { MarketStatusMap, EMarketStatus } from "../../ components/market-status";
+import { ESellerRecordsType } from "../hooks/use-create-pool-list";
 
 const Records = (props: any) => {
-  const { className, records, loading, onPrevPage, onNextPage, hasNextPage, currentPage } = props;
+  const { className, records, loading, onPrevPage, onNextPage, hasNextPage, currentPage, recordsPrices } = props;
 
   const columns = [
     {
@@ -19,12 +19,12 @@ const Records = (props: any) => {
         const currentChain = Object.values(chains).find((chain) => chain.name.toLowerCase() === record.chain.toLowerCase());
         return (
           <div
-           className="flex items-center gap-[7px] cursor-pointer"
-           onClick={() => {
-            if (!currentChain) return;
-             window.open(`${currentChain.blockExplorers?.default?.url}/tx/${record.tx_hash}`, "_blank");
-           }}
-           >
+            className="flex items-center gap-[7px] cursor-pointer"
+            onClick={() => {
+              if (!currentChain) return;
+              window.open(`${currentChain.blockExplorers?.default?.url}/tx/${record.tx_hash}`, "_blank");
+            }}
+          >
             <div className="">#{record.id}</div>
             <img src="/profile/icon-share.svg" alt="share" className="w-[9px] h-[9px] shrink-0" />
           </div>
@@ -36,13 +36,7 @@ const Records = (props: any) => {
       title: "Type",
       width: 160,
       render: (record: any) => {
-        const { status, is_claim } = record;
-
-        if (is_claim) {
-          return "Claimed";
-        }
-
-        return MarketStatusMap[status as EMarketStatus]?.name || "";
+        return ESellerRecordsType[record.type] || "";
       }
     },
     {
@@ -51,20 +45,14 @@ const Records = (props: any) => {
       width: 170,
       render: (record: any) => {
         return (
-          <>
-            {record?.nft_ids
-              ? 1
-              : record?.reward_token_info?.[0]?.decimals && record?.reward_amount
-                ? formatNumber(
-                  Big(record.reward_amount || 0).div(
-                    10 ** record?.reward_token_info?.[0].decimals
-                  ),
-                  3,
-                  true
-                )
-                : "-"}{" "}
-            {record?.reward_token_info?.[0].symbol}
-          </>
+          <div className={clsx("flex items-center gap-[4px]", [ESellerRecordsType.Claimed, ESellerRecordsType.Refund].includes(record.type) ? "text-[#54FF59]" : "")}>
+            <div>
+              {formatNumber(record.amountBig, 3, true, { isShort: true, isShortUppercase: true })}
+            </div>
+            <div>
+              {record.token_info?.symbol}
+            </div>
+          </div>
         );
       }
     },
@@ -72,7 +60,7 @@ const Records = (props: any) => {
       dataIndex: "valued",
       title: "Valued",
       render: (record: any) => {
-        return formatNumber(record.reward_usd, 2, true, { prefix: "$" });
+        return formatNumber(Big(record.amountBig || 0).times(recordsPrices[record.priceKey] || 0), 3, true, { isShort: true, isShortUppercase: true, prefix: "$" });
       }
     },
     {
