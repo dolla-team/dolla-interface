@@ -181,7 +181,7 @@ export default function Markets({ onClose }: { onClose: () => void }) {
           </div>
         </div>
         <MoreMarketBtn
-          className="absolute left-[50%] translate-x-[-50%] bottom-[-54px]"
+          className="absolute left-[50%] translate-x-[-50%] bottom-[-34px]"
           onClick={onClose}
         />
       </div>

@@ -7,6 +7,9 @@ import { useMemo } from "react";
 import Big from "big.js";
 import TriIcon from "./tri-icon";
 import { BASE_TOKEN } from "@/config/btc";
+import Avatar from "@/components/avatar";
+import SellerLevel from "@/components/seller-level";
+import { formatAddress } from "@/utils/format/address";
 
 export default function Header({ className }: { className?: string }) {
   const { bids, pool, getPoolRecommend } = useBtcContext();
@@ -47,9 +50,30 @@ export default function Header({ className }: { className?: string }) {
       {bids === 1 && (
         <Light className="absolute top-[0px] left-[50%] translate-x-[-50%] z-[1] pointer-events-none" />
       )}
+      <div className="absolute z-[3] top-[46px] left-[50%] translate-x-[-50%] h-[40px] flex items-center gap-[12px]">
+        <div className="w-[39px] h-[39px] bg-linear-to-b from-[#FFC42F] to-[#99761C] rounded-[12px] p-[2px]">
+          <Avatar
+            size={35}
+            address={pool?.user_info?.address}
+            email={pool?.user_info?.email}
+            className="rounded-[12px]"
+          />
+        </div>
+        <div>
+          <div className="flex items-center gap-[4px]">
+            <span className="text-[16px] text-[#FFE9B2]">Seller</span>
+            <SellerLevel />
+          </div>
+          <div className="">
+            <span className="text-[18px] text-[#FFE9B2] font-[BlackHanSans]">
+              {pool?.user ? formatAddress(pool.user) : "-"}
+            </span>
+          </div>
+        </div>
+      </div>
       <div
         className={clsx(
-          "absolute top-[76px] z-[2] w-full text-center font-[DelaGothicOne]",
+          "absolute top-[80px] z-[2] w-full text-center font-[DelaGothicOne]",
           pool?.status === 3 ? "text-[#B2B2B2]" : "text-[#FFF79E]"
         )}
         style={{
@@ -72,6 +96,7 @@ export default function Header({ className }: { className?: string }) {
           >
             ${formatNumber(pool?.reward_usd, 0, true)}
           </span>
+
           {!!prev && (
             <div className="absolute left-[-180px] top-[-20px] flex items-center gap-[8px]">
               <TriIcon
@@ -98,7 +123,7 @@ export default function Header({ className }: { className?: string }) {
         <div />
         <div
           className={clsx(
-            "bg-clip-text mt-[-8px] inline-block relative text-[26px]",
+            "bg-clip-text top-[-2px] inline-block relative text-[26px]",
             pool?.status === 3
               ? "bg-[radial-gradient(50%_50%_at_50%_50%,#A3A3A3_0%,#787878_100%)]"
               : "bg-[radial-gradient(50%_50%_at_50%_50%,#FFEF43_0%,#FFC42F_100%)]"

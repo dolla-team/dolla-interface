@@ -11,6 +11,7 @@ declare global {
     drawsUpdateTimer: NodeJS.Timeout;
     poolTimer: NodeJS.Timeout;
     winnerTimer: NodeJS.Timeout;
+    cachedPoolId: number;
   }
 }
 
