@@ -5,6 +5,7 @@ import Pagination from "@/components/pagination";
 import { formatNumber } from "@/utils/format/number";
 import Big from "big.js";
 import chains from "@/config/chains";
+import { MarketStatusMap, EMarketStatus } from "../../ components/market-status";
 
 const Records = (props: any) => {
   const { className, records, loading, onPrevPage, onNextPage, hasNextPage, currentPage } = props;
@@ -34,6 +35,15 @@ const Records = (props: any) => {
       dataIndex: "type",
       title: "Type",
       width: 160,
+      render: (record: any) => {
+        const { status, is_claim } = record;
+
+        if (is_claim) {
+          return "Claimed";
+        }
+
+        return MarketStatusMap[status as EMarketStatus]?.name || "";
+      }
     },
     {
       dataIndex: "assets",
