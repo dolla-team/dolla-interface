@@ -64,14 +64,18 @@ export enum EMarketStatus {
 export const MarketStatusMap = {
   [EMarketStatus.Created]: {
     label: "Live",
+    name: "Created",
   },
   [EMarketStatus.Live]: {
     label: "Live",
+    name: "Sold",
   },
   [EMarketStatus.Cancelled]: {
     label: "Cancelled",
+    name: "Cancelled",
   },
   [EMarketStatus.Winner]: {
     label: "Winner",
+    name: "Ended",
   },
 }
