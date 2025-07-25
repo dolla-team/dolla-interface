@@ -62,7 +62,7 @@ export default function Header({ className }: { className?: string }) {
         <div>
           <div className="flex items-center gap-[4px]">
             <span className="text-[16px] text-[#FFE9B2]">Seller</span>
-            <SellerLevel />
+            {/* <SellerLevel /> */}
           </div>
           <div className="">
             <span className="text-[18px] text-[#FFE9B2] font-[BlackHanSans]">
