@@ -13,6 +13,7 @@ import "react-toastify/dist/ReactToastify.css";
 import MainLayout from "./layouts/main";
 import "./libs/howl";
 import Callback from "./views/callback";
+import DollaEyeContextProvider from "./contexts/dolla-eye";
 
 const LazyNewBTC = lazy(() => import("./views/btc"));
 const LazyBtcCreate = lazy(() => import("./views/btc-create"));
@@ -70,7 +71,9 @@ function App() {
     <Suspense fallback={<Loading />}>
       <WalletProvider>
         <AuthProvider>
-          <RouterProvider router={router} />
+          <DollaEyeContextProvider>
+            <RouterProvider router={router} />
+          </DollaEyeContextProvider>
         </AuthProvider>
       </WalletProvider>
       <ToastContainer
