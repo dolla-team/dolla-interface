@@ -103,7 +103,6 @@ const StatisticsPlayer = (props: any) => {
         open={claimModalOpen}
         onClose={() => {
           setClaimModalOpen(false);
-          onQueryUserInfo();
         }}
       />
     </div>
