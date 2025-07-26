@@ -4,7 +4,9 @@ import { BackPointsFace, FrontFace } from "./faces";
 import useUserInfoStore from "@/stores/use-user-info";
 import { motion } from "framer-motion";
 
-import "./index.css";
+// import "./index.css";
+import("./index.css")
+
 
 const Coin = forwardRef<any, any>(
   (

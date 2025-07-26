@@ -1,5 +1,5 @@
-import "./index.css";
-
+// import "./index.css";
+import("./index.css")
 let x: any;
 
 export default function Temp() {

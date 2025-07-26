@@ -9,15 +9,16 @@ import WalletProvider from "./contexts/wallet";
 import { AuthProvider } from "./contexts/auth";
 import { ToastContainer } from "react-toastify";
 import Temp from "./views/temp";
-import "react-toastify/dist/ReactToastify.css";
+// import "react-toastify/dist/ReactToastify.css";
 import MainLayout from "./layouts/main";
 import "./libs/howl";
 import Callback from "./views/callback";
-
 const LazyNewBTC = lazy(() => import("./views/btc"));
 const LazyBtcCreate = lazy(() => import("./views/btc-create"));
 const LazyProfilePlayer = lazy(() => import("./views/profile/player"));
 const LazyProfileSeller = lazy(() => import("./views/profile/seller"));
+
+import("react-toastify/dist/ReactToastify.css")
 
 const router = createBrowserRouter([
   {
