@@ -4,6 +4,7 @@ import Modal from "@/components/modal";
 import { useMemo } from "react";
 import PointIcon from "@/components/icons/point-icon";
 import Winner from "./winner";
+import DollaEye from "@/components/dolla-eye";
 
 const Config = {
   0: {
@@ -53,10 +54,9 @@ export default function Result({ points, tickets, isWinner, onClose }: any) {
   ) : (
     <Modal open={true} onClose={() => {}} className="backdrop-blur-[10px]">
       <div className="relative w-[464px] h-[584px]">
-        <img
-          src="/logo.svg"
-          alt="dolla"
-          className="w-[78px] h-[39px] absolute left-[50%] translate-x-[-50%] top-[20px] z-[20]"
+        <DollaEye
+          className="absolute left-[50%] translate-x-[-50%] top-[10px] z-[20]"
+          height={40}
         />
         <ResultBg />
         <div className="relative z-[2] flex flex-col items-center justify-center pt-[60px]">

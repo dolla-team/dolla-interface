@@ -16,7 +16,7 @@ const Loading = () => {
 
     const animateProgress = () => {
       const elapsed = Date.now() - startTime;
-      const progress = elapsed / 10000;
+      const progress = elapsed / 1000
 
       const easeOutQuart = 1 - Math.pow(1 - Math.min(progress, 0.95), 4);
       const currentWidth = easeOutQuart * maxProgress;
@@ -31,6 +31,7 @@ const Loading = () => {
     requestAnimationFrame(animateProgress);
 
     return () => {
+      setProgressWidth(100);
       setIsLoading(false);
     };
   }, [isLoading]);
