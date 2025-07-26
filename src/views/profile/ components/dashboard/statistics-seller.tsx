@@ -99,10 +99,10 @@ const StatisticsPlayer = (props: any) => {
         </LabelValue>
       </div>
       <ClaimModal
+        type="seller"
         open={claimModalOpen}
         onClose={() => {
           setClaimModalOpen(false);
-          onQueryUserInfo();
         }}
       />
     </div>

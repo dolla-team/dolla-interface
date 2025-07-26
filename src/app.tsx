@@ -10,9 +10,12 @@ import { AuthProvider } from "./contexts/auth";
 import { ToastContainer } from "react-toastify";
 import Temp from "./views/temp";
 // import "react-toastify/dist/ReactToastify.css";
+
 import MainLayout from "./layouts/main";
 import "./libs/howl";
 import Callback from "./views/callback";
+import DollaEyeContextProvider from "./contexts/dolla-eye";
+
 const LazyNewBTC = lazy(() => import("./views/btc"));
 const LazyBtcCreate = lazy(() => import("./views/btc-create"));
 const LazyProfilePlayer = lazy(() => import("./views/profile/player"));
@@ -68,24 +71,26 @@ const router = createBrowserRouter([
 
 function App() {
   return (
-    <Suspense fallback={<Loading />}>
-      <WalletProvider>
-        <AuthProvider>
-          <RouterProvider router={router} />
-        </AuthProvider>
-      </WalletProvider>
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={true}
-        theme="light"
-        toastStyle={{ backgroundColor: "transparent", boxShadow: "none" }}
-        newestOnTop
-        rtl={false}
-        pauseOnFocusLoss
-        closeButton={false}
-      />
-    </Suspense>
+    <DollaEyeContextProvider>
+      <Suspense fallback={<Loading />}>
+        <WalletProvider>
+          <AuthProvider>
+            <RouterProvider router={router} />
+          </AuthProvider>
+        </WalletProvider>
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={true}
+          theme="light"
+          toastStyle={{ backgroundColor: "transparent", boxShadow: "none" }}
+          newestOnTop
+          rtl={false}
+          pauseOnFocusLoss
+          closeButton={false}
+        />
+      </Suspense>
+    </DollaEyeContextProvider>
   );
 }
 

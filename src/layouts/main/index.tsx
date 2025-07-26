@@ -3,6 +3,7 @@ import { Outlet, useNavigate } from "react-router-dom";
 import Button from "@/components/button";
 import { useAuth } from "@/contexts/auth";
 import Points from "@/sections/points";
+import DollaEye from "@/components/dolla-eye";
 
 export default function MainLayout() {
   const { userInfo, login } = useAuth();
@@ -11,10 +12,9 @@ export default function MainLayout() {
     <div className="h-screen overflow-hidden bg-black relative">
       {/* header */}
       <>
-        <img
-          src="/logo.svg"
-          alt="dolla"
-          className="w-[78px] h-[39px] absolute left-[10px] top-[4px] z-[20] button"
+        <DollaEye
+          className="absolute left-[20px] top-[15px] z-[20] button origin-left"
+          height={32}
           onClick={() => {
             navigate("/");
           }}
