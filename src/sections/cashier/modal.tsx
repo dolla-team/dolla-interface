@@ -36,25 +36,41 @@ export default function CashierModal({ open, onClose, defaultTab }: any) {
             className="bg-[#00000033] h-full w-full px-[20px] justify-center gap-[50px] rounded-t-[16px]"
             type="line"
           />
-          <button
-            className="absolute right-[10px] top-[10px] button p-[10px]"
-            onClick={() => {
-              onClose();
-            }}
-          >
-            <svg
-              width="10"
-              height="9"
-              viewBox="0 0 10 9"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
+          {
+            !isMobile && <button
+              className="absolute right-[10px] top-[10px] button p-[10px]"
+              onClick={() => {
+                onClose();
+              }}
             >
-              <path
-                d="M5 3.375L8 0H10L6 4.5L10 9H8L5 5.625L2 9H0L4 4.5L0 0H2L5 3.375Z"
-                fill="#BBACA6"
-              />
-            </svg>
-          </button>
+              <svg
+                width="10"
+                height="9"
+                viewBox="0 0 10 9"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M5 3.375L8 0H10L6 4.5L10 9H8L5 5.625L2 9H0L4 4.5L0 0H2L5 3.375Z"
+                  fill="#BBACA6"
+                />
+              </svg>
+            </button>
+          }
+
+          {
+            isMobile && <button
+              className="absolute left-[10px] top-[10px] button p-[10px]"
+              onClick={() => {
+                onClose();
+              }}
+            >
+              <svg width="6" height="14" viewBox="0 0 6 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M5.40381 0.602797L1.74981 6.6088L5.40381 12.6148L4.01781 13.2168L-0.000191689 6.6088L4.01781 0.000796318L5.40381 0.602797Z" fill="#BBACA6" />
+              </svg>
+            </button>
+          }
+
         </div>
         {tab === "fund" && (
           <PanelWrapper className="px-[14px] pb-[20px]">

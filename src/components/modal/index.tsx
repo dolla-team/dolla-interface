@@ -64,8 +64,6 @@ export const ModalContent = (props: ModalProps) => {
 
   const { isMobile } = useUserAgent();
 
-  console.log('isMobile:', isMobile);
-
   return (
     <AnimatePresence mode="wait">
       <div

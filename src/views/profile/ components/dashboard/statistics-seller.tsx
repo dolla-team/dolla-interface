@@ -32,7 +32,7 @@ const StatisticsPlayer = (props: any) => {
       _result[1] = userInfo
         .claim_pool
         .filter((item: any) => !item.is_claim)
-        .reduce((acc: any, item: any) => Big(acc).plus(Big(item.reward_usd || 0)), 0);
+        .reduce((acc: any, item: any) => Big(acc).plus(Big(item.accumulative_bids || 0)), 0);
     }
     return _result;
   }, [userInfo]);
