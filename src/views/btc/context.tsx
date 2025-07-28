@@ -113,7 +113,10 @@ export const CannonCoinsProvider = ({
         sbProgramRef,
         poolAmount,
         bids,
-        setBids,
+        setBids: (bids: number) => {
+          if (flipStatus !== 0) return;
+          setBids(bids);
+        },
         setFlipStatus,
         coinsRef,
         bidResult,

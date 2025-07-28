@@ -61,7 +61,7 @@ export default function BidSelection({
           <div
             key={`bids-${item}`}
             className={clsx(
-              "relative flex items-center justify-center button",
+              "relative flex items-center justify-center",
               item === 100 && "w-[139px] h-[73px]",
               item === 50 && "w-[133px] h-[68px]",
               item === 10 && "w-[120px] h-[62px]",
