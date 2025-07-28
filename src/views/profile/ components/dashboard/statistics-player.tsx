@@ -36,7 +36,7 @@ const StatisticsPlayer = (props: any) => {
         Big(0)
       ),
       userInfo.claim_winner_pool?.filter?.((item: any) => !item.is_claim)?.reduce(
-        (acc: any, item: any) => Big(acc).plus(item.reward_amount),
+        (acc: any, item: any) => Big(acc).plus(item.accumulative_bids),
         Big(0)
       ),
     ];
