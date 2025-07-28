@@ -2,7 +2,8 @@ import { motion } from "framer-motion";
 import DollaEye from "../dolla-eye";
 import { useRef, useEffect, useState, useMemo } from "react";
 
-const Loading = () => {
+const Loading = (props: Props) => {
+  const { speed = 1000 } = props;
 
   const progressInnerRef = useRef<any>(null);
   const [progressWidth, setProgressWidth] = useState(0);
@@ -16,7 +17,7 @@ const Loading = () => {
 
     const animateProgress = () => {
       const elapsed = Date.now() - startTime;
-      const progress = elapsed / 1000
+      const progress = elapsed / speed
 
       const easeOutQuart = 1 - Math.pow(1 - Math.min(progress, 0.95), 4);
       const currentWidth = easeOutQuart * maxProgress;
@@ -112,8 +113,9 @@ const Loading = () => {
           </motion.div>
         </div>
         <div className="text-[#FFE9B2] text-center font-[DelaGothicOne] text-[20px] font-normal leading-[40px] mt-[20px]">
-          Can one dollar win something big? <br />
-          Something, really big...
+          Can one dollar <span className="text-[30px]">win</span> something big? <br />
+          Something, really
+          <div className="text-[60px] mt-[20px]">big...</div>
         </div>
       </div>
       <div className="w-full h-full pointer-events-none overflow-hidden absolute top-0 left-0 opacity-[0.07]">
@@ -135,3 +137,8 @@ const Loading = () => {
 };
 
 export default Loading;
+
+interface Props {
+  // Loading speed, default is 1000ms
+  speed?: number;
+}
