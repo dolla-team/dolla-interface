@@ -15,6 +15,7 @@ import "./libs/howl";
 import Callback from "./views/callback";
 import DollaEyeContextProvider from "./contexts/dolla-eye";
 import BTC from "./views/btc";
+import { UserAgentProvider } from "./contexts/user-agent";
 
 // const LazyNewBTC = lazy(() => import("./views/btc"));
 const LazyBtcCreate = lazy(() => import("./views/btc-create"));
@@ -86,7 +87,9 @@ function App() {
       <Suspense>
         <WalletProvider>
           <AuthProvider>
-            <RouterProvider router={router} />
+            <UserAgentProvider>
+              <RouterProvider router={router} />
+            </UserAgentProvider>
           </AuthProvider>
         </WalletProvider>
         <ToastContainer
