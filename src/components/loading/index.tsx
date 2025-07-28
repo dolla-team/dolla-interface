@@ -113,8 +113,9 @@ const Loading = (props: Props) => {
           </motion.div>
         </div>
         <div className="text-[#FFE9B2] text-center font-[DelaGothicOne] text-[20px] font-normal leading-[40px] mt-[20px]">
-          Can one dollar win something big? <br />
-          Something, really big...
+          Can one dollar <span className="text-[30px]">win</span> something big? <br />
+          Something, really
+          <div className="text-[60px] mt-[20px]">big...</div>
         </div>
       </div>
       <div className="w-full h-full pointer-events-none overflow-hidden absolute top-0 left-0 opacity-[0.07]">
