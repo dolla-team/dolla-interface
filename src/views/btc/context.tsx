@@ -12,6 +12,7 @@ import { useParams } from "react-router-dom";
 import usePoolInfo from "@/hooks/use-pool-info";
 import { formatNumber } from "@/utils/format/number";
 import Big from "big.js";
+import Loading from "@/components/loading";
 
 export const CannonCoinsContext = createContext<any>({});
 
@@ -153,7 +154,7 @@ export const CannonCoinsProvider = ({
         getPoolRecommend
       }}
     >
-      {children}
+      {pool ? children : <Loading />}
     </CannonCoinsContext.Provider>
   );
 };

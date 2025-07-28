@@ -15,13 +15,14 @@ import MainLayout from "./layouts/main";
 import "./libs/howl";
 import Callback from "./views/callback";
 import DollaEyeContextProvider from "./contexts/dolla-eye";
+import BTC from "./views/btc";
 
-const LazyNewBTC = lazy(() => import("./views/btc"));
+// const LazyNewBTC = lazy(() => import("./views/btc"));
 const LazyBtcCreate = lazy(() => import("./views/btc-create"));
 const LazyProfilePlayer = lazy(() => import("./views/profile/player"));
 const LazyProfileSeller = lazy(() => import("./views/profile/seller"));
 
-import("react-toastify/dist/ReactToastify.css")
+import("react-toastify/dist/ReactToastify.css");
 
 const router = createBrowserRouter([
   {
@@ -35,11 +36,11 @@ const router = createBrowserRouter([
       {
         index: true,
         path: "btc",
-        element: <LazyNewBTC />
+        element: <BTC />
       },
       {
         path: "btc/:poolId",
-        element: <LazyNewBTC />
+        element: <BTC />
       },
       {
         path: "btc/create",
@@ -72,7 +73,7 @@ const router = createBrowserRouter([
 function App() {
   return (
     <DollaEyeContextProvider>
-      <Suspense fallback={<Loading />}>
+      <Suspense>
         <WalletProvider>
           <AuthProvider>
             <RouterProvider router={router} />
