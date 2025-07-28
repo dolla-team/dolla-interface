@@ -1,6 +1,6 @@
 import { useBtcContext } from "../context";
 import FlipCoin from "./flip-coin";
-import { useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import Result from "../components/result";
 import { useDollaEyeContext } from "@/contexts/dolla-eye";
 import { EEyeType, EyeTypeMap } from "@/hooks/use-dolla-eye";
@@ -42,19 +42,27 @@ export default function FlipCoins() {
       0
     );
 
-    // Handle eye type
-    if (_tt === 1 && _pt === 0) {
-      setCurrentEye(EyeTypeMap[EEyeType.PrizeTicket]);
-    } else if (bidResult.bid.is_winner) {
-      setCurrentEye(EyeTypeMap[EEyeType.PrizeBTC]);
-    } else if (_tt === 0 && _pt < 1000) {
-      setCurrentEye(EyeTypeMap[EEyeType.PrizeLowPTS]);
-    } else {
-      setCurrentEye(EyeTypeMap[EEyeType.PrizeBoth]);
-    }
-
     return [_p, _t, _pt, _tt, bidResult.bid.is_winner];
   }, [bidResult]);
+
+  useEffect(() => {
+    // Handle eye type
+
+    if (sumTickets === 1 && sumPoints === 0) {
+      setCurrentEye(EyeTypeMap[EEyeType.PrizeTicket]);
+    } else if (bidResult?.bid?.is_winner) {
+      setCurrentEye(EyeTypeMap[EEyeType.PrizeBTC]);
+    } else if (sumTickets === 0 && sumPoints > 0 && sumPoints < 1000) {
+      setCurrentEye(EyeTypeMap[EEyeType.PrizeLowPTS]);
+    } else if (sumTickets > 0 && sumPoints > 0) {
+      setCurrentEye(EyeTypeMap[EEyeType.PrizeBoth]);
+    } else if (flipStatus > 0) {
+      const eyeType = `Bidding${bids}` as keyof typeof EEyeType;
+      setCurrentEye(EyeTypeMap[EEyeType[eyeType]]);
+    } else {
+      setCurrentEye(EyeTypeMap[EEyeType.Normal]);
+    }
+  }, [flipStatus, sumPoints, sumTickets]);
 
   return (
     pool && (
