@@ -15,4 +15,4 @@ export const INVATE_ACTIVE = false;
 // FIXME
 export const BETTING_CONTRACT_ADDRESS = "";
 
-export const CHAIN = "solana" as "solana" | "near";
+export const CHAIN = "near" as "solana" | "near";

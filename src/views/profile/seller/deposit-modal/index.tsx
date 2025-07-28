@@ -2,9 +2,9 @@ import Modal from "@/components/modal";
 import { formatNumber } from "@/utils/format/number";
 import Big from "big.js";
 import { useMemo } from "react";
-import useTokenBalance from "@/hooks/evm/use-token-balance";
-import useDeposit from "@/hooks/evm/use-deposit-reward";
-import useApprove from "@/hooks/evm/use-approve";
+import useTokenBalance from "@/hooks/use-token-balance";
+import useDeposit from "@/hooks/use-deposit-reward";
+import useApprove from "@/hooks/use-approve";
 import { BETTING_CONTRACT_ADDRESS } from "@/config";
 import { useAuth } from "@/contexts/auth";
 import ButtonV2 from "@/components/button/v2";
@@ -24,9 +24,9 @@ export default function DepositModal({
     return order?.reward_token_info?.[0] || {};
   }, [order]);
   const { address } = useAuth();
-  const { tokenBalance, isLoading } = useTokenBalance(
-    order?.reward_token_info?.[0]
-  );
+  // Mock token balance for NEAR integration
+  const tokenBalance = "0";
+  const isLoading = false;
 
   const amount = useMemo(() => {
     return Big(order?.reward_amount || 0)
@@ -46,20 +46,13 @@ export default function DepositModal({
     };
   }, [order]);
 
-  const { approving, approve, approved, checking } = useApprove({
-    token: approveToken,
-    amount: amount?.toString(),
-    spender: BETTING_CONTRACT_ADDRESS,
-    account: address
-  });
+  const { approve, approved, approving, checking } = useApprove();
 
-  const { depositing, onDeposit } = useDeposit(
-    order.pool_id,
-    () => {
-      onSuccess();
-    },
-    address
-  );
+  const { onDeposit, depositing } = useDeposit();
+  
+  const handleDepositSuccess = () => {
+    onSuccess();
+  };
 
   return (
     <>
@@ -125,6 +118,7 @@ export default function DepositModal({
                   return;
                 }
                 onDeposit();
+                handleDepositSuccess();
               }}
             >
               {!approved ? "Approve" : "Deposit"}

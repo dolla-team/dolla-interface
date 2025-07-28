@@ -3,7 +3,7 @@ import { useMemo, useState } from "react";
 import PointIcon from "@/components/icons/point-icon";
 import clsx from "clsx";
 import { QUOTE_TOKEN } from "@/config/btc";
-import useTransfer from "@/hooks/solana/use-transfer";
+import useTransfer from "@/hooks/use-transfer";
 import Loading from "@/components/icons/loading";
 import useUserInfoStore from "@/stores/use-user-info";
 import useToast from "@/hooks/use-toast";
@@ -31,7 +31,7 @@ export default function BuyTicket({
   const { onTransfer, transferring } = useTransfer({
     token: QUOTE_TOKEN,
     isTicket: true,
-    onTransferSuccess: (amount) => {
+    onTransferSuccess: (amount: number) => {
       userInfoStore.set({
         prize: {
           ...userInfoStore.prize,
@@ -99,7 +99,7 @@ export default function BuyTicket({
           )}
           onClick={() => {
             if (isDisabled) return;
-            onTransfer(ticket, import.meta.env.VITE_SOLANA_TICKET_ACCOUNT);
+            onTransfer();
           }}
         >
           {isDisabled ? (

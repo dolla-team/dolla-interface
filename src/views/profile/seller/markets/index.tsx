@@ -15,7 +15,7 @@ import Loading from "@/components/icons/loading";
 import DepositModal from "../deposit-modal";
 import { formatNumber } from "@/utils/format/number";
 import Big from "big.js";
-import useClaimFunds from "@/hooks/solana/use-claim-funds";
+import useClaimFunds from "@/hooks/use-claim-funds";
 
 const SellerMarkets = (props: any) => {
   const { className, poolsData, orders, loading, updatePoolsData } = props;
@@ -203,7 +203,7 @@ const MarketItem = (props: any) => {
                   type="primary"
                   className="!h-[28px] !rounded-[8px] !text-[14px]"
                   onClick={() => {
-                    onClaim(order.pool_id);
+                    onClaim();
                   }}
                   loading={claiming}
                   disabled={claiming}

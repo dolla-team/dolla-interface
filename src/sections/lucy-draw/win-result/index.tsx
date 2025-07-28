@@ -9,12 +9,10 @@ export default function WinResult({
 }: {
   onShowHistory: (round: number) => void;
 }) {
-  const { claim, isClaiming } = useClaim({
-    onClaimSuccess: () => {
-      getCurrentWinner();
-    }
-  });
   const { currentWinner, getCurrentWinner } = useUserWinnerList();
+  const { claim, isClaiming } = useClaim({
+    onClaimSuccess: getCurrentWinner
+  });
 
   return (
     <AnimatePresence>
@@ -46,7 +44,9 @@ export default function WinResult({
             <button
               onClick={() => {
                 if (isClaiming) return;
-                claim(currentWinner.ids);
+                if (currentWinner?.ids) {
+                  claim(currentWinner.ids);
+                }
               }}
               className={clsx(
                 "w-[72px] h-[24px] bg-linear-to-b from-[#FFF698] to-[#FFC42F] rounded-[8px] text-[12px]",

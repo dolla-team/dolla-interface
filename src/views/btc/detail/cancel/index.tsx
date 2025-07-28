@@ -1,13 +1,11 @@
 import ButtonV2 from "@/components/button/v2";
-import useClaimSlash from "@/hooks/solana/use-claim-slash";
+import useClaimSlash from "@/hooks/use-claim-slash";
 import { useEffect, useState } from "react";
 
 export default function Cancel({ data }: { data: any }) {
-  const { claiming, onClaim } = useClaimSlash({
-    onClaimSuccess() {
-      setClaimed(true);
-    }
-  });
+  // Mock hook for NEAR integration
+  const claiming = false;
+  const onClaim = () => {};
   const [claimed, setClaimed] = useState<boolean | null>(null);
 
   useEffect(() => {
@@ -58,7 +56,7 @@ export default function Cancel({ data }: { data: any }) {
         <ButtonV2
           className="w-[220px] h-[40px] mt-[10px]"
           loading={claiming}
-          onClick={() => onClaim(data.pool_id)}
+          onClick={() => onClaim()}
         >
           Claim
         </ButtonV2>

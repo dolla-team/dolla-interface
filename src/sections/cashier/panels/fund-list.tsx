@@ -2,7 +2,7 @@ import { useState } from "react";
 import Recharge from "./recharge";
 import { PURCHASE_TOKEN } from "@/config";
 import { useAuth } from "@/contexts/auth";
-import useTokenBalance from "@/hooks/solana/use-token-balance";
+import useTokenBalance from "@/hooks/use-token-balance";
 import { formatNumber } from "@/utils/format/number";
 import FundFromCoinbase from "./fund-from-coinbase";
 import FundFromMoonpay from "./fund-from-moonpay";
@@ -21,10 +21,13 @@ const usdc = {
     icon: "/currency/usdc.png",
     symbol: "USDC"
 }
+
 export default function FundList() {
     const [selectedOption, setSelectedOption] = useState<string | null>(null);
     const { address, userInfo } = useAuth();
-    const { tokenBalance, isLoading } = useTokenBalance({ address: usdc.address, decimals: usdc.decimals });
+    // Mock token balance for NEAR integration
+    const tokenBalance = "0";
+    const isLoading = false;
 
     const fundOptions: FundOption[] = [
         {
@@ -154,7 +157,7 @@ export default function FundList() {
                                     />
                                     <div className="flex flex-col">
                                         <span className="text-white text-[16px] leading-[18px]">Your account</span>
-                                        <span className="text-[#BBACA6] text-xs leading-[16px] mt-[2px]">{userInfo?.sol_user.slice(0, 5)}...{userInfo?.sol_user.slice(-4)}</span>
+                                        <span className="text-[#BBACA6] text-xs leading-[16px] mt-[2px]">{userInfo?.sol_user?.slice(0, 5)}...{userInfo?.sol_user?.slice(-4)}</span>
                                     </div>
                                 </div>
                                 <span className="text-white text-[16px]">{formatNumber(tokenBalance, 2, true)} {usdc.symbol}</span>

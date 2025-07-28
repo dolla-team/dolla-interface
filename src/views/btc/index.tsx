@@ -8,7 +8,7 @@ import MarketInfo from "./components/market-info";
 import Grand from "./grand";
 import LucyDraw from "../../sections/lucy-draw";
 import { QUOTE_TOKEN } from "@/config/btc";
-import useTokenBalance from "@/hooks/solana/use-token-balance";
+import useTokenBalance from "@/hooks/near/use-token-balance";
 import TopWinner from "@/sections/winners";
 // import ProvablyFair from "@/sections/provably-fair";
 

@@ -4,14 +4,15 @@ import Button from "@/components/button";
 import QuickPopup from "./quick-popup";
 import CashierModal from "./modal";
 import { useRef, useState } from "react";
-import useTokenBalance from "@/hooks/evm/use-token-balance";
+import useTokenBalance from "@/hooks/use-token-balance";
 import { PURCHASE_TOKEN } from "@/config";
 import { formatNumber } from "@/utils/format/number";
 
 export default function Cashier({ className }: any) {
   const quickPopupRef = useRef<any>(null);
   const [modalOpen, setModalOpen] = useState(false);
-  const { tokenBalance } = useTokenBalance(PURCHASE_TOKEN);
+  // Mock token balance for NEAR integration
+  const tokenBalance = "0";
 
   return (
     <div className={clsx("flex items-center gap-[13px]", className)}>

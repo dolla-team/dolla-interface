@@ -3,7 +3,7 @@ import Button from "@/components/button";
 import dayjs from "dayjs";
 import CancelModal from "./cancel-modal";
 import DepositModal from "./deposit-modal";
-import useClaim from "@/hooks/evm/use-claim";
+import useClaim from "@/hooks/use-claim";
 import { useState } from "react";
 import Loading from "@/components/icons/loading";
 
@@ -103,9 +103,12 @@ const OrderItem = ({
   onClaimSuccess: () => void;
 }) => {
   const order = poolsData[orderId];
-  const { claim, claiming } = useClaim(order.pool_id, () => {
+  const { onClaim, claiming } = useClaim();
+  
+  const handleClaim = () => {
+    onClaim();
     onClaimSuccess();
-  });
+  };
 
   return (
     <Market
@@ -130,7 +133,7 @@ const OrderItem = ({
             {order.status === 2 && !order.is_claim && (
               <Button
                 className="px-[10px] h-[26px] text-[12px]"
-                onClick={() => claim()}
+                onClick={handleClaim}
                 loading={claiming}
               >
                 Claim

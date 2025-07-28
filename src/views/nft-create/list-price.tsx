@@ -50,10 +50,7 @@ export default function ListPrice({
     onSetListPrice(prices[0].floor_price);
     return prices[0];
   }, [prices]);
-  const { mintNft, minting, minted, mintedLoading } = useMintNft(
-    token?.address,
-    onSuccess
-  );
+  const { mintNft, minting, minted, mintedLoading } = useMintNft();
 
   return (
     <div className="mt-[30px]">
@@ -131,7 +128,7 @@ export default function ListPrice({
               address={address}
               anchorPrice={listPrice}
               onSuccess={() => {
-                onSuccess("create");
+                onSuccess();
               }}
             />
           )}

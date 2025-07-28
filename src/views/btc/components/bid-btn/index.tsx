@@ -2,7 +2,7 @@ import { useBtcContext } from "../../context";
 import { motion } from "framer-motion";
 import clsx from "clsx";
 import { useMemo, useState } from "react";
-import useBid from "@/hooks/solana/use-bid";
+import useBid from "@/hooks/near/use-bid";
 import { useAuth } from "@/contexts/auth";
 
 export default function BidBtn({
@@ -19,7 +19,7 @@ export default function BidBtn({
 
   const { onBid } = useBid(
     pool?.pool_id,
-    (result) => {
+    (result: any) => {
       console.log("complete success");
       setFlipStatus(4);
       setBidResult(result);

@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import CreateButton from "./create-button";
 import Button from "@/components/button";
-import useDeposit from "@/hooks/evm/use-deposit-reward";
-import useApprove from "@/hooks/evm/use-approve";
-import useCreate from "@/hooks/evm/use-create";
+import useDeposit from "@/hooks/use-deposit-reward";
+import useApprove from "@/hooks/use-approve";
+import useCreate from "@/hooks/use-create";
 import { BETTING_CONTRACT_ADDRESS } from "@/config";
 import { useAuth } from "@/contexts/auth";
 
@@ -21,45 +21,32 @@ export default function Action({
   //5,6
   const [poolId, setPoolId] = useState(-1);
 
-  const { depositing, onDeposit } = useDeposit(
-    poolId,
-    () => {
-      setStep(0);
-      onSuccess();
-    },
-    walletAddress
-  );
+  const { onDeposit, depositing } = useDeposit();
+  
+  const handleDepositSuccess = () => {
+    setStep(0);
+    onSuccess();
+  };
 
-  const { creating, onCreate } = useCreate({
-    token: token,
-    amount: token.type === "nft" ? 0 : amount,
-    anchorPrice,
-    onCreateSuccess: (poolId) => {
-      setPoolId(poolId);
-      setStep(approved ? 2 : 1);
-      if (Number(tokenBalance) < amount) {
-        setPaymentsModalOpen(true);
-      }
+  const { creating, onCreate } = useCreate();
+  
+  const handleCreateSuccess = (poolId: number) => {
+    setPoolId(poolId);
+    setStep(1); // Skip approval step for NEAR
+    if (Number(tokenBalance) < amount) {
+      setPaymentsModalOpen(true);
     }
-  });
+  };
 
-  const { approving, approve, approved, checking } = useApprove({
-    token: token,
-    amount: amount?.toString(),
-    spender: BETTING_CONTRACT_ADDRESS,
-    account: walletAddress
-  });
+  const { approve, approved, approving, checking } = useApprove();
 
   useEffect(() => {
     if (poolId === -1) {
       setStep(0);
       return;
     }
-    if (approved) {
-      setStep(2);
-    } else {
-      setStep(1);
-    }
+    // For NEAR, we skip the approval step
+    setStep(2);
   }, [approved]);
 
   if (loading) {
@@ -93,6 +80,7 @@ export default function Action({
       className="mt-[20px] w-full h-[40px]"
       onClick={() => {
         onDeposit();
+        handleDepositSuccess();
       }}
       loading={depositing}
     >

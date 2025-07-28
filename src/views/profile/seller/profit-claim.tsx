@@ -1,11 +1,17 @@
 import Button from "@/components/button";
 import { formatNumber } from "@/utils/format/number";
-import useClaim from "@/hooks/evm/use-claim";
+import useClaim from "@/hooks/use-claim";
 import { useAuth } from "@/contexts/auth";
 
 export default function ProfitClaim({ profit }: { profit: number }) {
-  const { onQueryUserInfo, userInfo } = useAuth();
-  const { claim, claiming } = useClaim(userInfo?.claim_pool, onQueryUserInfo);
+  const { onQueryUserInfo } = useAuth();
+  const { onClaim, claiming } = useClaim();
+  
+  const handleClaim = () => {
+    onClaim();
+    onQueryUserInfo();
+  };
+
   return (
     <>
       <div className="text-[#57FF70] text-[20px] font-medium">
@@ -18,7 +24,7 @@ export default function ProfitClaim({ profit }: { profit: number }) {
           className="w-[52px] h-[26px] text-[12px] ml-[6px]"
           loading={claiming}
           onClick={() => {
-            if (!claiming) claim();
+            if (!claiming) handleClaim();
           }}
         >
           Claim

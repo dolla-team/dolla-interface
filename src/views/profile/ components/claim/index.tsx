@@ -7,7 +7,7 @@ import { formatAddress } from "@/utils/format/address";
 import { formatNumber } from "@/utils/format/number";
 import Big from "big.js";
 import clsx from "clsx";
-import useClaimFunds from "@/hooks/solana/use-claim-funds";
+import useClaimFunds from "@/hooks/use-claim-funds";
 
 const ClaimIndex = (props: any) => {
   const { className } = props;
@@ -76,7 +76,7 @@ const ClaimIndex = (props: any) => {
                     loading={claiming}
                     disabled={claiming}
                     onClick={() => {
-                      onClaim(item.id);
+                      onClaim();
                     }}
                   >
                     Claim

@@ -4,7 +4,7 @@ import ButtonV2 from "@/components/button/v2";
 import Empty from "@/components/empty";
 import MarketStatus, { EMarketStatus } from "../../ components/market-status";
 import Loading from "@/components/icons/loading";
-import useClaimSlash from "@/hooks/solana/use-claim-slash";
+import useClaimSlash from "@/hooks/use-claim-slash";
 import { formatNumber } from "@/utils/format/number";
 import Big from "big.js";
 
@@ -88,7 +88,7 @@ const MarketItem = (props: any) => {
                       loading={claiming}
                       disabled={claiming}
                       onClick={() => {
-                        onClaim(order.pool_id);
+                        onClaim();
                       }}
                     >
                       Claim

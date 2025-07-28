@@ -3,7 +3,7 @@ import axiosInstance from "@/libs/axios";
 import { useEffect, useState, useMemo } from "react";
 import { TOKEN } from "@/config/btc";
 import { PURCHASE_TOKEN } from "@/config";
-import useTokenBalance from "./evm/use-token-balance";
+import useTokenBalance from "@/hooks/use-token-balance";
 import Big from "big.js";
 
 export default function useUserWinner() {
@@ -11,8 +11,8 @@ export default function useUserWinner() {
   const [btcs, setBtcs] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const { userInfo } = useAuth();
-  // const { tokenBalance } = useTokenBalance(TOKEN);
-  const { tokenBalance: coinBalance } = useTokenBalance(PURCHASE_TOKEN);
+  // Mock token balance for NEAR integration
+  const coinBalance = "0";
 
   const fetchNfts = async () => {
     try {
@@ -21,15 +21,6 @@ export default function useUserWinner() {
       const _nfts: any = [];
       const _btcs: any = [];
 
-      // if (Number(tokenBalance) > 0) {
-      //   _nfts.push({
-      //     label: TOKEN.symbol,
-      //     address: TOKEN.address,
-      //     amount: tokenBalance,
-      //     icon: TOKEN.icon,
-      //     type: "coin"
-      //   });
-      // }
       const _data = res.data.data || [];
       _data.forEach((item: any) => {
         // nfts
@@ -51,24 +42,6 @@ export default function useUserWinner() {
           _btcs.push(item);
         }
       });
-
-      // Moved to the above 👆
-      // res.data.data
-      //   .filter(
-      //     (item: any) =>
-      //       item.token.toLocaleLowerCase() !==
-      //         PURCHASE_TOKEN.address.toLocaleLowerCase() &&
-      //       item.token.toLocaleLowerCase() !== TOKEN.address.toLocaleLowerCase()
-      //   )
-      //   .forEach((item: any) => {
-      //     _nfts.push({
-      //       label: "NFT Prize",
-      //       address: item.token,
-      //       icon: item.icon,
-      //       type: "nft",
-      //       tokenId: item.token_id
-      //     });
-      //   });
 
       setNfts(_nfts);
       setBtcs(_btcs);

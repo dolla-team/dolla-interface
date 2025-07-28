@@ -9,15 +9,19 @@
     "lint": "eslint .",
     "preview": "vite preview"
   },
+  "resolutions": {
+    "viem": "2.29.4"
+  },
   "dependencies": {
     "@coinbase/onchainkit": "^0.38.17",
     "@coral-xyz/anchor": "0.30.1",
     "@gelatonetwork/smartwallet": "^0.0.18",
     "@gelatonetwork/smartwallet-react-sdk": "^0.0.18",
     "@near-wallet-selector/core": "^9.1.0",
+    "@near-wallet-selector/here-wallet": "^9.1.0",
     "@near-wallet-selector/meteor-wallet": "^9.1.0",
     "@near-wallet-selector/modal-ui": "^9.1.0",
-    "@privy-io/react-auth": "^2.13.8",
+    "@near-wallet-selector/my-near-wallet": "^9.1.0",
     "@rainbow-me/rainbowkit": "^2.2.6",
     "@solana/spl-token": "^0.4.13",
     "@solana/web3.js": "^1.98.2",

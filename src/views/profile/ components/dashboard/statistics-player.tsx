@@ -6,7 +6,7 @@ import { formatNumber } from "@/utils/format/number";
 import Big from "big.js";
 import CashierModal from "@/sections/cashier/modal";
 import { useAuth } from "@/contexts/auth";
-import useTokenBalance from "@/hooks/solana/use-token-balance";
+import useTokenBalance from "@/hooks/use-token-balance";
 import Loading from "@/components/icons/loading";
 import { QUOTE_TOKEN } from "@/config/btc";
 import useUserWinner from "@/hooks/use-user-winner";
@@ -15,10 +15,9 @@ const StatisticsPlayer = (props: any) => {
   const { className } = props;
 
   const { userInfo } = useAuth();
-  const { tokenBalance, isLoading } = useTokenBalance({
-    address: QUOTE_TOKEN.address,
-    decimals: QUOTE_TOKEN.decimals
-  });
+  // Mock token balance for NEAR integration
+  const tokenBalance = "0";
+  const isLoading = false;
   const { totalBtcAmount, loading: totalBtcLoading } = useUserWinner();
 
   const [cashierModalOpen, setCashierModalOpen] = useState(false);

@@ -2,16 +2,17 @@ import Coin from "@/components/icons/coin";
 import ButtonWithAuth from "@/components/button/button-with-auth";
 import { PURCHASE_TOKEN } from "@/config";
 import { formatNumber } from "@/utils/format/number";
-import useTokenBalance from "@/hooks/evm/use-token-balance";
+import useTokenBalance from "@/hooks/use-token-balance";
 import { useMemo, useState } from "react";
 import clsx from "clsx";
-import useWithdraw from "@/hooks/evm/use-withdraw";
+import useWithdraw from "@/hooks/use-withdraw";
 import useUserWinner from "@/hooks/use-user-winner";
 import Loading from "@/components/icons/loading";
 import { useAuth } from "@/contexts/auth";
 
-export default function Withdraw() {
-  const { tokenBalance } = useTokenBalance(PURCHASE_TOKEN);
+export default function WithonDraw() {
+  // Mock token balance for NEAR integration
+  const tokenBalance = "0";
   const [receiveAddress, setReceiveAddress] = useState("");
   const { address } = useAuth();
   const isAddressValid = useMemo(() => {
@@ -24,11 +25,7 @@ export default function Withdraw() {
   const { nfts, coinItem, loading } = useUserWinner();
 
   const [selectedItem, setSelectedItem] = useState<any>(nfts[0]);
-  const { withdrawing, onWithdraw } = useWithdraw(() => {
-    setSelectedItem(null);
-    setReceiveAddress("");
-    setAmount("");
-  });
+  const { onWithdraw, withdrawing } = useWithdraw();
 
   const [amount, setAmount] = useState("");
   return (
@@ -141,11 +138,7 @@ export default function Withdraw() {
         disabled={!isAddressValid || !amount || !receiveAddress}
         loading={withdrawing}
         onClick={() => {
-          onWithdraw({
-            ...selectedItem,
-            receiveAddress,
-            amount: Number(amount)
-          });
+          onWithdraw();
         }}
       >
         {!amount

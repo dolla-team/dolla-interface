@@ -1,16 +1,19 @@
 import { useAuth } from "@/contexts/auth";
 import { useEffect, useImperativeHandle, useState, useMemo } from "react";
-import useClaimPenalty from "@/hooks/evm/use-claim-penalty";
+import useClaimPenalty from "@/hooks/use-claim-penalty";
 import Loading from "../icons/loading";
 
 export default function ClaimHints({ ref }: { ref: any }) {
   const { userInfo } = useAuth();
   const [cancelPools, setCancelPools] = useState<any>([{ a: 1 }]);
 
-  const { claim, claiming } = useClaimPenalty(() => {
+  const { onClaim, claiming } = useClaimPenalty();
+  
+  // Handle claim completion
+  const handleClaimComplete = () => {
     cancelPools.shift();
     setCancelPools(JSON.parse(JSON.stringify(cancelPools)));
-  });
+  };
 
   useImperativeHandle(
     ref,
@@ -19,6 +22,7 @@ export default function ClaimHints({ ref }: { ref: any }) {
     }),
     [cancelPools]
   );
+  
   useEffect(() => {
     setCancelPools(userInfo?.cancel_pool || []);
   }, [userInfo]);
@@ -35,7 +39,10 @@ export default function ClaimHints({ ref }: { ref: any }) {
         <button
           className="button w-[70px] h-[24px] border border-black bg-white rounded-[6px]"
           onClick={() => {
-            if (currentPool?.pool_id) claim(currentPool.pool_id);
+            if (currentPool?.pool_id) {
+              onClaim();
+              handleClaimComplete();
+            }
           }}
         >
           {claiming ? <Loading size={12} /> : "Claim"}

@@ -1,5 +1,5 @@
 import React from "react";
-import useTransfer from "@/hooks/solana/use-transfer";
+import useTransfer from "@/hooks/use-transfer";
 import { QUOTE_TOKEN } from "@/config/btc";
 import Winner from "@/views/btc/components/result/winner";
 // GsJ6qBRNPcdSuAivJ2BQQmbWsEmDSQ8vYajfxUQqnBDj
@@ -13,9 +13,7 @@ const TempPage: React.FC = () => {
     <div className="relative">
       <button
         className="bg-white text-black button"
-        onClick={() =>
-          onTransfer(1, "GsJ6qBRNPcdSuAivJ2BQQmbWsEmDSQ8vYajfxUQqnBDj")
-        }
+        onClick={() => onTransfer()}
       >
         Transfer
       </button>

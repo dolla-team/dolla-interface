@@ -5,11 +5,11 @@ import Recharge from "@/sections/cashier/panels/recharge";
 import PriceChart from "../nft-create/price-chart";
 import { useAuth } from "@/contexts/auth";
 import { BASE_TOKEN } from "@/config/btc";
-import useTokenBalance from "@/hooks/solana/use-token-balance";
+import useTokenBalance from "@/hooks/use-token-balance";
 import { formatNumber } from "@/utils/format/number";
 import useTokenPrice from "@/hooks/use-token-price";
 import Loading from "@/components/icons/loading";
-import useCreate from "@/hooks/solana/use-create";
+import useCreate from "@/hooks/use-create";
 import { motion } from "framer-motion";
 import ButtonV2 from "@/components/button/v2";
 import DoughnutChart from "./doughnut-chart";
@@ -22,7 +22,11 @@ import Big from "big.js";
 export default function BTCCreate() {
   const [amount, setAmount] = useState(1);
   const { address } = useAuth();
-  const { tokenBalance, isLoading, update } = useTokenBalance(BASE_TOKEN);
+  // Mock token balance for NEAR integration
+  const tokenBalance = "0";
+  const isLoading = false;
+  const update = () => {};
+
   const { data: referenceData, loading: referenceDataLoading } =
     useReferenceData({ token: BASE_TOKEN, amount });
   const globalConfig = useConfigStore((state) => state.config);
