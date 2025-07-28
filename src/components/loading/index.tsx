@@ -3,7 +3,7 @@ import DollaEye from "../dolla-eye";
 import { useRef, useEffect, useState, useMemo } from "react";
 
 const Loading = (props: Props) => {
-  const { speed = 1000 } = props;
+  const { speed = 5000 } = props;
 
   const progressInnerRef = useRef<any>(null);
   const [progressWidth, setProgressWidth] = useState(0);
