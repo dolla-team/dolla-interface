@@ -15,13 +15,12 @@ export default function ProvablyFair({ open, onClose }: { open: boolean, onClose
     }
   ];
 
-  const { data: provablyData, loading: provablyLoading } = useProvably();
+  // const { data: provablyData, loading: provablyLoading } = useProvably();
 
-  console.log('provablyData:', provablyData);
 
   return (
     <Modal open={open} onClose={onClose}>
-      <div className="w-[672px] h-[444px] bg-[#35302B] border border-[#6A5D3A] rounded-[16px]">
+      <div className="w-[828px]  bg-[#35302B] border border-[#6A5D3A] rounded-[16px]">
         <div className="flex justify-between items-center rounded-t-[16px] h-[54px] px-[30px] bg-[#00000033]">
           <div className="text-[20px] font-bold text-white">Provably Fair</div>
           <button className="cursor-pointer" onClick={onClose}>
@@ -39,7 +38,7 @@ export default function ProvablyFair({ open, onClose }: { open: boolean, onClose
             </svg>
           </button>
         </div>
-        <div className="p-[30px] pt-[20px]">
+        <div className="p-[30px] pt-[20px] h-[444px] overflow-y-auto">
           <div className="text-[16px] text-[#BBACA6]">Verify</div>
           <div className="flex items-center gap-[18px] mt-[10px]">
             <input
@@ -50,6 +49,34 @@ export default function ProvablyFair({ open, onClose }: { open: boolean, onClose
               Verify
             </button>
           </div>
+
+          <div className="grid grid-cols-3 grid-rows-2 gap-[12px] mt-[20px] w-full">
+            <div className="bg-[#00000033] rounded-[10px] flex items-center justify-center flex-col py-[10px] text-white text-[16px]">
+              <div className="text-[#FFFFFF33]">Market No.</div>
+              <div>11</div>
+            </div>
+            <div className="bg-[#00000033] rounded-[10px] flex items-center justify-center flex-col py-[10px] text-white text-[16px]">
+              <div className="text-[#FFFFFF33]">Market Size</div>
+              <div>11</div>
+            </div>
+            <div className="bg-[#00000033] rounded-[10px] flex items-center justify-center flex-col py-[10px] text-white text-[16px]">
+              <div className="text-[#FFFFFF33]">Bid Amount</div>
+              <div>11</div>
+            </div>
+            <div className="bg-[#00000033] rounded-[10px] flex items-center justify-center flex-col py-[10px] text-white text-[16px]">
+              <div className="text-[#FFFFFF33]">Random No.</div>
+              <div>11</div>
+            </div>
+            <div className="bg-[#00000033] rounded-[10px] flex items-center justify-center flex-col py-[10px] text-white text-[16px]">
+              <div className="text-[#FFFFFF33]">Win No.</div>
+              <div>11</div>
+            </div>
+            <div className="bg-[#00000033] rounded-[10px] flex items-center justify-center flex-col py-[10px] text-white text-[16px]">
+              <div className="text-[#FFFFFF33]">Settle TX</div>
+              <div>11</div>
+            </div>
+          </div>
+
           {/* <div className="w-[544px] flex items-center gap-[12px] mt-[14px] text-white">
             <input
               className="w-1/3 h-[46px] bg-[#00000033] rounded-[10px] p-[15px] text-[16px]"
@@ -76,8 +103,8 @@ export default function ProvablyFair({ open, onClose }: { open: boolean, onClose
                       column.align === "left"
                         ? "flex-start"
                         : column.align === "right"
-                        ? "flex-end"
-                        : "center"
+                          ? "flex-end"
+                          : "center"
                   }}
                 >
                   {column.label}
@@ -108,8 +135,8 @@ export default function ProvablyFair({ open, onClose }: { open: boolean, onClose
                             column.align === "left"
                               ? "flex-start"
                               : column.align === "right"
-                              ? "flex-end"
-                              : "center"
+                                ? "flex-end"
+                                : "center"
                         }}
                       >
                         {column.key === "winner" ? (
