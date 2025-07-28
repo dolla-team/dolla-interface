@@ -23,6 +23,9 @@ const DollaEye = (props: any) => {
     textLeft,
     eyeLeft,
     eyeWidth,
+    currentIconSize,
+    currentPupilSize,
+    sparklingSize,
   ] = useMemo(() => {
     const textHeight = (46 / BASE_HEIGHT) * height;
     const textDWidth = (36 / BASE_HEIGHT) * height;
@@ -30,6 +33,15 @@ const DollaEye = (props: any) => {
     const textLeft = (8 / BASE_HEIGHT) * height;
     const eyeLeft = (11 / BASE_HEIGHT) * height;
     const eyeWidth = (59 / BASE_HEIGHT) * height;
+    let currentIconSize;
+    let currentPupilSize;
+    const sparklingSize = [(7 / BASE_HEIGHT) * height, (15 / BASE_HEIGHT) * height];
+    if (currentEye.iconSize) {
+      currentIconSize = [(currentEye.iconSize[0] / BASE_HEIGHT) * height, (currentEye.iconSize[1] / BASE_HEIGHT) * height];
+    }
+    if (currentEye.pupilSize) {
+      currentPupilSize = (currentEye.pupilSize / BASE_HEIGHT) * height;
+    }
 
     return [
       height / BASE_HEIGHT,
@@ -39,8 +51,11 @@ const DollaEye = (props: any) => {
       textLeft,
       eyeLeft,
       eyeWidth,
+      currentIconSize,
+      currentPupilSize,
+      sparklingSize,
     ];
-  }, [height]);
+  }, [height, currentEye]);
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -106,11 +121,11 @@ const DollaEye = (props: any) => {
         }}
       >
         {/*#region eye socket*/}
-        <div className="z-100 absolute w-full h-full left-0 top-0 bg-[url('/logo-eye/eye-socket.svg')] bg-no-repeat bg-contain bg-center" />
+        <div className="z-100 absolute w-full h-full left-0 top-0 bg-[url('/logo-eye/eye-socket.png')] bg-no-repeat bg-contain bg-center" />
         {/*#endregion*/}
 
         {/*#region eye background layer 1*/}
-        <div className="z-[1] absolute w-full h-full left-0 top-0 bg-[#FFF3D4]" />
+        <div className="z-[1] absolute w-[calc(100%_-_2px)] h-[calc(100%_-_2px)] left-[1px] top-[1px] bg-[#FFF3D4]" style={{ borderRadius: height / 2 }} />
         {/*#endregion*/}
 
         {/*#region eye pupil - EEyeStatus.Normal*/}
@@ -121,8 +136,8 @@ const DollaEye = (props: any) => {
                 ref={eyePupil}
                 className="shrink-0 rounded-full bg-[#000000]"
                 style={{
-                  width: (currentEye.pupilSize ?? 20) * rate,
-                  height: (currentEye.pupilSize ?? 20) * rate,
+                  width: currentPupilSize,
+                  height: currentPupilSize,
                 }}
                 animate={{
                   x: pupilPosition.x,
@@ -143,8 +158,8 @@ const DollaEye = (props: any) => {
                   ref={eyePupil}
                   className="shrink-0 rounded-full bg-[#000000] flex justify-center items-center"
                   style={{
-                    width: currentEye.pupilSize ?? 40,
-                    height: currentEye.pupilSize ?? 40,
+                    width: currentPupilSize ?? 40,
+                    height: currentPupilSize ?? 40,
                   }}
                 >
                   {
@@ -153,6 +168,10 @@ const DollaEye = (props: any) => {
                         <div className="relative w-full h-full flex justify-center items-center flex-col gap-[2px]">
                           <motion.div
                             className="w-[7px] h-[7px] rounded-full bg-white ml-[7px]"
+                            style={{
+                              width: sparklingSize?.[0],
+                              height: sparklingSize?.[0],
+                            }}
                             animate={{
                               scaleX: [0.8, 1.1, 0.8],
                               scaleY: [0.9, 1.05, 0.9],
@@ -167,6 +186,10 @@ const DollaEye = (props: any) => {
                           />
                           <motion.div
                             className="w-[15px] h-[15px] rounded-full bg-white ml-[-7px]"
+                            style={{
+                              width: sparklingSize?.[1],
+                              height: sparklingSize?.[1],
+                            }}
                             animate={{
                               scaleX: [0.9, 1.1, 0.9],
                               scaleY: [0.9, 1.05, 0.9],
@@ -187,8 +210,8 @@ const DollaEye = (props: any) => {
                           alt=""
                           className="shrink-0 object-contain object-center"
                           style={{
-                            width: currentEye.iconSize?.[0] ?? 20,
-                            height: currentEye.iconSize?.[1] ?? 20,
+                            width: currentIconSize?.[0] ?? 20,
+                            height: currentIconSize?.[1] ?? 20,
                           }}
                           {...currentEye.animation}
                         />
@@ -223,8 +246,8 @@ const DollaEye = (props: any) => {
                     alt=""
                     className="shrink-0 object-contain object-center"
                     style={{
-                      width: currentEye.iconSize?.[0] ?? 52,
-                      height: currentEye.iconSize?.[1] ?? 52,
+                      width: currentIconSize?.[0] ?? 52,
+                      height: currentIconSize?.[1] ?? 52,
                     }}
                     {...currentEye.animation}
                   />
@@ -249,8 +272,8 @@ const DollaEye = (props: any) => {
                     alt=""
                     className="shrink-0 object-contain object-center"
                     style={{
-                      width: currentEye.iconSize?.[0] ?? 34,
-                      height: currentEye.iconSize?.[1] ?? 40,
+                      width: currentIconSize?.[0] ?? 34,
+                      height: currentIconSize?.[1] ?? 40,
                     }}
                   />
                 )

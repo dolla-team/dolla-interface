@@ -29,13 +29,13 @@ export const CannonCoinsProvider = ({
   const params = useParams();
   const { onQueryPoolInfo } = usePoolInfo("solana");
   const [pool, setPool] = useState<any>(null);
-
   const { data, getPoolRecommend } = usePoolRecommend(0, !params?.poolId);
 
   useEffect(() => {
     if (flipStatus === 1 || flipStatus === 0) {
       flipedNumberRef.current = 0;
     }
+
     if (flipStatus === 2) {
       for (let i = 0; i < bids; i++) {
         coinsRef.current[i].collect();
@@ -113,7 +113,10 @@ export const CannonCoinsProvider = ({
         sbProgramRef,
         poolAmount,
         bids,
-        setBids,
+        setBids: (bids: number) => {
+          if (flipStatus !== 0) return;
+          setBids(bids);
+        },
         setFlipStatus,
         coinsRef,
         bidResult,
@@ -142,6 +145,7 @@ export const CannonCoinsProvider = ({
         },
         onReset: () => {
           flipedNumberRef.current = 0;
+          setBidResult(null);
           for (let i = 0; i < bids; i++) {
             coinsRef.current[i]?.flip(true);
           }

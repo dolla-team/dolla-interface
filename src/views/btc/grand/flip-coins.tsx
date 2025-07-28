@@ -1,7 +1,9 @@
 import { useBtcContext } from "../context";
 import FlipCoin from "./flip-coin";
-import { useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import Result from "../components/result";
+import { useDollaEyeContext } from "@/contexts/dolla-eye";
+import { EEyeType, EyeTypeMap } from "@/hooks/use-dolla-eye";
 
 const SIZE: Record<number, number> = {
   1: 212,
@@ -20,9 +22,9 @@ export default function FlipCoins() {
     flipComplete,
     bidResult,
     setFlipStatus,
-    onReset,
-    getPoolRecommend
+    onReset
   } = useBtcContext();
+  const { setCurrentEye } = useDollaEyeContext();
 
   const coinContainerRef = useRef<any>(null);
 
@@ -34,18 +36,33 @@ export default function FlipCoins() {
       ? bidResult.point.wild_coin_ev_result.split(",")
       : [];
     const _t = bidResult.ticket ? bidResult.ticket?.result?.split(",") : [];
+    const _pt = _p.reduce((acc: number, curr: string) => acc + Number(curr), 0);
+    const _tt = _t.reduce(
+      (acc: number, curr: string) => acc + Number(curr === "0" ? 1 : 0),
+      0
+    );
 
-    return [
-      _p,
-      _t,
-      _p.reduce((acc: number, curr: string) => acc + Number(curr), 0),
-      _t.reduce(
-        (acc: number, curr: string) => acc + Number(curr === "0" ? 1 : 0),
-        0
-      ),
-      bidResult.bid.is_winner
-    ];
+    return [_p, _t, _pt, _tt, bidResult.bid.is_winner];
   }, [bidResult]);
+
+  useEffect(() => {
+    // Handle eye type
+
+    if (sumTickets === 1 && sumPoints === 0) {
+      setCurrentEye(EyeTypeMap[EEyeType.PrizeTicket]);
+    } else if (bidResult?.bid?.is_winner) {
+      setCurrentEye(EyeTypeMap[EEyeType.PrizeBTC]);
+    } else if (sumTickets === 0 && sumPoints > 0 && sumPoints < 1000) {
+      setCurrentEye(EyeTypeMap[EEyeType.PrizeLowPTS]);
+    } else if (sumTickets > 0 && sumPoints > 0) {
+      setCurrentEye(EyeTypeMap[EEyeType.PrizeBoth]);
+    } else if (flipStatus > 0) {
+      const eyeType = `Bidding${bids}` as keyof typeof EEyeType;
+      setCurrentEye(EyeTypeMap[EEyeType[eyeType]]);
+    } else {
+      setCurrentEye(EyeTypeMap[EEyeType.Normal]);
+    }
+  }, [flipStatus, sumPoints, sumTickets]);
 
   return (
     pool && (

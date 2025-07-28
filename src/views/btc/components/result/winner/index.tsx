@@ -159,23 +159,25 @@ export default function Winner({
                 <div className="text-white text-[26px] font-[DelaGothicOne]">
                   {userInfo?.email || formatAddress(userInfo?.sol_user)}
                 </div>
-                <div className="text-white text-[16px] font-[BlackHanSans] mt-[30px]">
-                  Also, you’ve got
-                </div>
-                {points > 0 && (
-                  <div className="flex items-center gap-[8px] mt-[10px]">
-                    <PointIcon size={60} />
-                    <span
-                      className="text-[#FFEF43] text-[36px] font-bold font-[AlfaSlabOne]"
-                      style={{
-                        WebkitTextStrokeWidth: "1px",
-                        WebkitTextStrokeColor: "#5E3737"
-                      }}
-                    >
-                      x{addThousandSeparator(points.toString())}
-                    </span>
+                <div>
+                  <div className="text-white text-[16px] font-[BlackHanSans] mt-[30px]">
+                    Also, you’ve got
                   </div>
-                )}
+                  {points > 0 && (
+                    <div className="flex items-center justify-center gap-[8px] mt-[10px]">
+                      <PointIcon size={60} />
+                      <span
+                        className="text-[#FFEF43] text-[36px] font-bold font-[AlfaSlabOne]"
+                        style={{
+                          WebkitTextStrokeWidth: "1px",
+                          WebkitTextStrokeColor: "#5E3737"
+                        }}
+                      >
+                        x{addThousandSeparator(points.toString())}
+                      </span>
+                    </div>
+                  )}
+                </div>
                 <img
                   src="/btc/winner.gif"
                   alt="Winner"
