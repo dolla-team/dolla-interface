@@ -54,14 +54,16 @@ export default function Seller() {
 
   return (
     <div
-      className="w-full h-screen overflow-y-auto pb-[30px]"
+      className="w-full h-screen overflow-y-auto pb-[30px] max-md:overflow-x-hidden"
       ref={containerRef}
     >
-      <div className="pt-[30px] w-[933px] mx-auto">
+      <div className="pt-[30px] w-[933px] mx-auto max-md:w-full max-md:pt-[70px]">
         <Header tab="seller" />
-        <SwitchPanel>
-          <Dashboard tab="seller" className="mt-[49px]" />
-          <div className="flex justify-between items-center gap-[10px] mt-[44px]">
+        <SwitchPanel className="max-md:w-full">
+          <div className="max-md:px-[10px]">
+            <Dashboard tab="seller" className="mt-[49px] max-md:mt-[20px]" />
+          </div>
+          <div className="flex justify-between items-center gap-[10px] mt-[44px] max-md:flex-col max-md:mt-[20px]">
             <Tabs
               currentTab={tab}
               onChangeTab={setTab}
@@ -73,7 +75,7 @@ export default function Seller() {
           </div>
           <AnimatePresence>
             {tab === TabsList[0].key && (
-              <SwitchPanel>
+              <SwitchPanel className="max-md:px-[10px]">
                 <SellerMarkets
                   poolsData={poolsData}
                   orders={data}

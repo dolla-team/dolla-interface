@@ -18,7 +18,7 @@ export default function usePlayerHistory() {
   const [joinedPoolListPageIndex, setJoinedPoolListPageIndex] = useState(1);
   const [joinedPoolListPageSize] = useState(10);
   const [joinedPoolListHasNextPage, setJoinedPoolListHasNextPage] = useState(true);
-  const [joinedPoolListStatus, setJoinedPoolListStatus] = useState("");
+  const [joinedPoolListStatus, setJoinedPoolListStatus] = useState("0,1");
 
   const { loading: joinedPoolListLoading } = useRequest(async () => {
     if (!userInfo?.user) return [];
