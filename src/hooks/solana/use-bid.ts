@@ -10,7 +10,7 @@ import {
   getBidGasFee,
   getWrapToSolIx,
   getAccountsInfo,
-  wrapTxWithBugetFee
+  buildTxWithGas
 } from "./helpers";
 import * as anchor from "@coral-xyz/anchor";
 import { useSolanaWallets } from "@privy-io/react-auth";
@@ -19,11 +19,7 @@ import {
   ASSOCIATED_TOKEN_PROGRAM_ID,
   TOKEN_PROGRAM_ID
 } from "@solana/spl-token";
-import {
-  PublicKey,
-  Transaction,
-  TransactionInstruction
-} from "@solana/web3.js";
+import { PublicKey, TransactionInstruction } from "@solana/web3.js";
 import { Randomness } from "@switchboard-xyz/on-demand";
 import { sendSolanaTransaction } from "@/utils/transaction/send-solana-transaction";
 import axiosInstance from "@/libs/axios";
@@ -120,43 +116,49 @@ export default function useBid(
         .accounts(bidAccounts)
         .instruction();
 
-      const tx = new Transaction();
+      const otherTxs: any = [];
       for (let i = 0; i < wrapTx.length; i++) {
-        tx.add(wrapTx[i]);
+        otherTxs.push(wrapTx[i]);
       }
 
       if (poolInfoRef.current.userQuoteAccount?.instruction) {
-        tx.add(poolInfoRef.current.userQuoteAccount.instruction);
+        otherTxs.push(poolInfoRef.current.userQuoteAccount.instruction);
       }
       if (poolInfoRef.current.poolQuoteAccount?.instruction) {
-        tx.add(poolInfoRef.current.poolQuoteAccount.instruction);
+        otherTxs.push(poolInfoRef.current.poolQuoteAccount.instruction);
       }
       if (poolInfoRef.current.protocolQuoteAccount?.instruction) {
-        tx.add(poolInfoRef.current.protocolQuoteAccount.instruction);
+        otherTxs.push(poolInfoRef.current.protocolQuoteAccount.instruction);
       }
       if (poolInfoRef.current.userPaidAccount?.instruction) {
-        tx.add(poolInfoRef.current.userPaidAccount.instruction);
+        otherTxs.push(poolInfoRef.current.userPaidAccount.instruction);
       }
       if (poolInfoRef.current.operatorPaidAccount?.instruction) {
-        tx.add(poolInfoRef.current.operatorPaidAccount.instruction);
+        otherTxs.push(poolInfoRef.current.operatorPaidAccount.instruction);
       }
       for (let i = 0; i < randomnessCreateIx.length; i++) {
         console.log("randomnessCreateIx:" + randomnessCreateIx[i].programId);
-        tx.add(randomnessCreateIx[i]);
+        otherTxs.push(randomnessCreateIx[i]);
       }
-      console.log(poolInfoRef.current);
-      tx.feePayer = new PublicKey(config.operator);
-      tx.recentBlockhash = "11111111111111111111111111111111";
 
-      const txs = await wrapTxWithBugetFee(tx);
+      const { transaction: tx, gas } = await buildTxWithGas({
+        tx: bidTx,
+        otherTxs,
+        action: "bid"
+      });
+      console.log("gas:", gas);
+      const bidTxWithGas: TransactionInstruction = await program.methods
+        .bid(times, new anchor.BN(gas))
+        // @ts-ignore
+        .accounts(bidAccounts)
+        .instruction();
 
-      tx.add(...txs);
-      tx.add(bidTx);
+      tx.add(bidTxWithGas);
 
       const simulationResult = await provider.connection.simulateTransaction(
         tx
       );
-      console.log("create:", simulationResult);
+      console.log("simulation:", simulationResult);
       // const simulationResult = await provider.connection.simulateTransaction(
       //   tx
       // );

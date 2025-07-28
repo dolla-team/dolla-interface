@@ -6,7 +6,9 @@ const config: Record<string, any> = {
     base_contract: "G5aHXkUgD4NnBbTZcKf7aQP2hXGw5bTVotcUc7wS8FVV",
     quote_contract: "ADo4M7ZEZwDKNP1k8dic26TBrftX6mix9sGMntkq6Tp4",
     host_api: "https://test-api.dolla.market",
-    queue: "EYiAmGSdsQTuCw413V5BzaruWuCCSDgTPtBGvLkXHbe7"
+    queue: "EYiAmGSdsQTuCw413V5BzaruWuCCSDgTPtBGvLkXHbe7",
+    base_token_decimals: 6,
+    quote_token_decimals: 6
   },
   "mainnet-beta": {
     operator: "GZQUBKGeH4zcmQ751rnWHzDRJKAPmdRLwe2t4jxxHZPR",
@@ -15,7 +17,9 @@ const config: Record<string, any> = {
     base_contract: "4SpgfEwaxdyZRv9aKiCuk4PgLct5Eg1mGvbF7Jh8Zray",
     quote_contract: "FphwBryo4cauKUBtLQLrp2mEr5e4PZat2RMfDJCtQray",
     host_api: "https://stg-api.dolla.market",
-    queue: "A43DyUGA7s8eXPxqEjJY6EBu1KKbNgfxF8h17VAHn13w"
+    queue: "A43DyUGA7s8eXPxqEjJY6EBu1KKbNgfxF8h17VAHn13w",
+    base_token_decimals: 6,
+    quote_token_decimals: 6
   }
 };
 

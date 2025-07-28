@@ -13,7 +13,8 @@ import {
   PublicKey,
   SystemProgram,
   LAMPORTS_PER_SOL,
-  ComputeBudgetProgram
+  ComputeBudgetProgram,
+  Transaction
 } from "@solana/web3.js";
 import { createHash } from "crypto";
 import { Buffer } from "buffer";
@@ -22,6 +23,8 @@ import axios from "axios";
 import { bs58 } from "@coral-xyz/anchor/dist/cjs/utils/bytes";
 import Big from "big.js";
 import config from "@/config/solana";
+import axiosInstance from "@/libs/axios";
+import { PAID_TOKEN } from "@/config/btc";
 
 export function getState(program: anchor.Program) {
   const [globalBalPda, bump] = anchor.web3.PublicKey.findProgramAddressSync(
@@ -353,4 +356,38 @@ export async function wrapTxWithBugetFee(transaction: any) {
   });
 
   return [priorityFeeInstruction, computeUnitLimitInstruction];
+}
+
+export async function buildTxWithGas({ tx, otherTxs, action }: any) {
+  const transaction = new Transaction();
+  transaction.feePayer = new PublicKey(config.operator);
+  transaction.recentBlockhash = "11111111111111111111111111111111";
+  transaction.add(...otherTxs);
+  const bugetFeeTxs = await wrapTxWithBugetFee(transaction);
+  transaction.add(...bugetFeeTxs);
+  transaction.add(tx);
+
+  const txBuffer = transaction.serialize({ requireAllSignatures: false });
+  const transactionStr = txBuffer.toString("base64");
+
+  const response = await axiosInstance.post(`/api/v1/paygas/sol/estimate`, {
+    operator_key: config.operator,
+    action,
+    tx: transactionStr
+  });
+
+  const gas =
+    Big(response.data?.data?.gas_amount)
+      .mul(10 ** PAID_TOKEN.decimals)
+      .toFixed(0) || "1000000";
+
+  const newTranscation = new Transaction();
+  newTranscation.feePayer = new PublicKey(config.operator);
+  newTranscation.recentBlockhash = "11111111111111111111111111111111";
+  newTranscation.add(...otherTxs, ...bugetFeeTxs);
+
+  return {
+    transaction: newTranscation,
+    gas
+  };
 }

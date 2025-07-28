@@ -10,7 +10,7 @@ import {
   getPool,
   getAccountsInfo,
   getWrapToSolIx,
-  wrapTxWithBugetFee
+  buildTxWithGas
 } from "./helpers";
 import {
   ASSOCIATED_TOKEN_PROGRAM_ID,
@@ -18,11 +18,7 @@ import {
 } from "@solana/spl-token";
 import { useSolanaWallets } from "@privy-io/react-auth";
 import { sendSolanaTransaction } from "@/utils/transaction/send-solana-transaction";
-import {
-  PublicKey,
-  Transaction,
-  TransactionInstruction
-} from "@solana/web3.js";
+import { PublicKey, TransactionInstruction } from "@solana/web3.js";
 import config from "@/config/solana";
 
 export default function useCreate({
@@ -104,7 +100,7 @@ export default function useCreate({
         operator: new PublicKey(config.operator)
       };
 
-      const createIx: TransactionInstruction = await program.methods
+      const createTx: TransactionInstruction = await program.methods
         .createPool({
           baseAmount: baseAmount,
           expectedQuoteAmount: expectedQuoteAmount
@@ -112,31 +108,44 @@ export default function useCreate({
         .accounts(createPoolAccounts as any)
         .instruction();
 
-      const tx = new Transaction();
+      const otherTxs: any = [];
       for (let i = 0; i < wrapTx.length; i++) {
-        tx.add(wrapTx[i]);
+        otherTxs.push(wrapTx[i]);
       }
       if (userBaseAccount?.instruction) {
-        tx.add(userBaseAccount.instruction);
+        otherTxs.push(userBaseAccount.instruction);
       }
       if (poolBaseAccount?.instruction) {
-        tx.add(poolBaseAccount.instruction);
+        otherTxs.push(poolBaseAccount.instruction);
       }
       if (userPaidAccount?.instruction) {
-        tx.add(userPaidAccount.instruction);
+        otherTxs.push(userPaidAccount.instruction);
       }
       if (operatorPaidAccount?.instruction) {
-        tx.add(operatorPaidAccount.instruction);
+        otherTxs.push(operatorPaidAccount.instruction);
       }
 
-      tx.feePayer = new PublicKey(config.operator);
+      const { transaction: tx, gas } = await buildTxWithGas({
+        tx: createTx,
+        otherTxs,
+        action: "createPool"
+      });
 
-      tx.recentBlockhash = "11111111111111111111111111111111";
+      console.log("gas:", gas);
+      const createTxWithGas: TransactionInstruction = await program.methods
+        .createPool({
+          baseAmount: baseAmount,
+          expectedQuoteAmount: expectedQuoteAmount
+        })
+        .accounts(createPoolAccounts as any)
+        .instruction();
 
-      const txs = await wrapTxWithBugetFee(tx);
+      tx.add(createTxWithGas);
 
-      tx.add(...txs);
-      tx.add(createIx);
+      const simulationResult = await provider.connection.simulateTransaction(
+        tx
+      );
+      console.log("simulation:", simulationResult);
 
       const result = await sendSolanaTransaction(tx, "createPool");
 
