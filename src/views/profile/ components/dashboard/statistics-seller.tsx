@@ -25,8 +25,8 @@ const StatisticsPlayer = (props: any) => {
     if (userInfo.on_sell) {
       _result[0] = userInfo
         .on_sell
-        .filter((item: any) => item.token_info?.symbol === "BTC")
-        .reduce((acc: any, item: any) => Big(acc).plus(Big(item.token_amount || 0).div(10 ** (item.token_info?.decimals || 6))), 0);
+        .filter((item: any) => item.reward_token_info?.symbol === "BTC")
+        .reduce((acc: any, item: any) => Big(acc).plus(Big(item.reward_amount || 0).div(10 ** (item.reward_token_info?.decimals || 6))), 0);
     }
     if (userInfo.claim_pool) {
       _result[1] = userInfo
