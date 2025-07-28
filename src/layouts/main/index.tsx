@@ -20,7 +20,7 @@ export default function MainLayout() {
           }}
         />
         <div className="absolute right-[10px] top-[10px] z-[20] flex items-center gap-[36px]">
-          <Points />
+          {/* <Points /> */}
           {/* <div className="flex items-center gap-[8px]">
             <TicketIcon />
             <span

@@ -9,6 +9,7 @@ import AutoBtn from "./auto-btn";
 import ProvablyFair from "@/sections/provably-fair";
 import { formatNumber } from "@/utils/format/number";
 import { useAuth } from "@/contexts/auth";
+import CashierEntry from "../cashier-entery";
 
 export default function BidSelection({
   tokenBalance,
@@ -49,7 +50,7 @@ export default function BidSelection({
           <div className="text-white text-[16px]">BALANCE</div>
           <div className="text-white text-[20px] flex items-center gap-[10px]">
             <span>${formatNumber(tokenBalance || "0", 2, true)}</span>
-            {address && <AddBtn onClick={() => setShowCashier(true)} />}
+            {/* {address && <AddBtn onClick={() => setShowCashier(true)} />} */}
           </div>
         </div>
       </div>
@@ -63,6 +64,7 @@ export default function BidSelection({
           />
         )}
         {flipStatus === 4 && <AutoBtn />}
+        {address && <CashierEntry onClick={() => setShowCashier(true)} tokenBalance={tokenBalance} />}
       </div>
       <div className="flex items-center text-white text-[22px] font-normal leading-[100%] uppercase font-[DelaGothicOne]">
         {[100, 50, 10, 5, 1].map((item) => (

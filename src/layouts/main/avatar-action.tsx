@@ -6,6 +6,11 @@ import { useNavigate } from "react-router-dom";
 import { INVATE_ACTIVE } from "@/config";
 import useCopy from "@/hooks/use-copy";
 import { useUser } from "@privy-io/react-auth";
+import AvatarCashier from "./avatar-cashier";
+import { QUOTE_TOKEN } from "@/config/btc";
+import useTokenBalance from "@/hooks/solana/use-token-balance";
+import { useState } from "react";
+import Cashier from "@/sections/cashier/modal";
 
 const MENU = [
   {
@@ -93,8 +98,16 @@ export default function AvatarAction() {
   const { onCopy } = useCopy();
   const { user } = useUser();
 
+  const { tokenBalance, update } = useTokenBalance({
+    address: QUOTE_TOKEN.address,
+    decimals: QUOTE_TOKEN.decimals
+  });
+  const [showCashier, setShowCashier] = useState(false);
+ 
+
   return (
-    <div className="relative group">
+    <div className="relative group flex items-center gap-[10px]">
+      {user?.wallet?.address && <AvatarCashier onClick={() => setShowCashier(true)} tokenBalance={tokenBalance} />}
       {userInfo?.icon && (
         <Avatar
           size={32}
@@ -175,6 +188,8 @@ export default function AvatarAction() {
           </div>
         ))}
       </div>
+
+      <Cashier open={showCashier} onClose={() => setShowCashier(false)} />
     </div>
   );
 }
