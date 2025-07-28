@@ -26,14 +26,20 @@ const StatisticsPlayer = (props: any) => {
   const [claimModalOpen, setClaimModalOpen] = useState(false);
   const [cashierModalTab, setCashierModalTab] = useState("fund");
 
-  const wonTotalUsd = useMemo(() => {
+  const [wonTotalUsd, claimableAmount] = useMemo(() => {
     if (!userInfo) {
-      return 0;
+      return [Big(0), Big(0)];
     }
-    return userInfo.you_won.reduce(
-      (acc: any, item: any) => acc + item.token_usd,
-      0
-    );
+    return [
+      userInfo.you_won?.reduce(
+        (acc: any, item: any) => Big(acc).plus(item.token_usd),
+        Big(0)
+      ),
+      userInfo.claim_winner_pool?.filter?.((item: any) => !item.is_claim)?.reduce(
+        (acc: any, item: any) => Big(acc).plus(item.reward_amount),
+        Big(0)
+      ),
+    ];
   }, [userInfo]);
 
   return (
@@ -81,6 +87,7 @@ const StatisticsPlayer = (props: any) => {
         <div className="flex items-center justify-end gap-[8px]">
           <ButtonV2
             className=""
+            disabled={Big(claimableAmount || 0).lte(0)}
             onClick={() => {
               setClaimModalOpen(true);
             }}
