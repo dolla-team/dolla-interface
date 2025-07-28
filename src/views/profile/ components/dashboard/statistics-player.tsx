@@ -45,11 +45,11 @@ const StatisticsPlayer = (props: any) => {
   return (
     <div
       className={clsx(
-        "w-full mt-[20px] flex items-center justify-between gap-[30px]",
+        "w-full mt-[20px] flex items-center justify-between gap-[30px] max-md:flex-col max-md:mt-[13px]",
         className
       )}
     >
-      <div className="flex items-center justify-between gap-[10px] flex-1">
+      <div className="flex items-center justify-between gap-[10px] flex-1 max-md:justify-between max-md:w-full max-md:pl-[4px] max-md:pr-[10px]">
         <div className="flex flex-col justify-center items-center gap-[15px] p-[20px_32px_33px] bg-[#22201D] border border-[#6A5D3A] rounded-[16px] shrink-0">
           <div className="">Wins</div>
           <div className="font-[DelaGothicOne] text-[36px]">
@@ -67,9 +67,9 @@ const StatisticsPlayer = (props: any) => {
           Share
         </ButtonV2>
       </div>
-      <div className="w-[1px] h-[70px] shrink-0 bg-[#423930]"></div>
-      <div className="flex items-center justify-between gap-[10px] flex-1">
-        <div className="flex items-center gap-[10px]">
+      <div className="w-[1px] h-[70px] shrink-0 bg-[#423930] max-md:hidden"></div>
+      <div className="flex items-center justify-between gap-[10px] flex-1 max-md:flex-col max-md:w-full max-md:gap-[15px]">
+        <div className="flex items-center gap-[10px] max-md:w-full max-md:justify-between max-md:pr-[30px] max-md:pl-[7px]">
           <LabelValue label="Your Balance" className="whitespace-nowrap">
             {isLoading ? (
               <Loading size={12} />
@@ -84,9 +84,9 @@ const StatisticsPlayer = (props: any) => {
             })}
           </LabelValue>
         </div>
-        <div className="flex items-center justify-end gap-[8px]">
+        <div className="flex items-center justify-end gap-[8px] max-md:w-full max-md:justify-between max-md:gap-[10px]">
           <ButtonV2
-            className=""
+            className="max-md:flex-1"
             disabled={Big(claimableAmount || 0).lte(0)}
             onClick={() => {
               setClaimModalOpen(true);
@@ -95,7 +95,7 @@ const StatisticsPlayer = (props: any) => {
             Claim
           </ButtonV2>
           <ButtonV2
-            className=""
+            className="max-md:flex-1"
             onClick={() => {
               setCashierModalTab("fund");
               setCashierModalOpen(true);
@@ -104,7 +104,7 @@ const StatisticsPlayer = (props: any) => {
             Fund
           </ButtonV2>
           <ButtonV2
-            className=""
+            className="max-md:flex-1"
             type="default"
             onClick={() => {
               setCashierModalTab("withdraw");

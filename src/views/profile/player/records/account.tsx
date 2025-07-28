@@ -7,6 +7,7 @@ import { formatNumber } from "@/utils/format/number";
 import { formatAddress } from "@/utils/format/address";
 import chains from "@/config/chains";
 import Big from "big.js";
+import useIsMobile from "@/hooks/use-is-mobile";
 
 const Account = (props: any) => {
   const { className } = props;
@@ -19,12 +20,14 @@ const Account = (props: any) => {
     hasNextPage,
     onUserRecordsPageChange,
   } = useUserRecords({ isSinglePage: true });
+  const isMobile = useIsMobile();
 
   const columns = [
     {
       dataIndex: "typeName",
       title: "Type",
       width: 150,
+      fixed: true,
       render: (record: any) => {
         if (record.type === EUserRecordsType.Refund) {
           return (
@@ -48,6 +51,7 @@ const Account = (props: any) => {
     {
       dataIndex: "assets",
       title: "Assets",
+      width: isMobile ? 170 : void 0,
       render: (record: any) => {
         return (
           <div className={clsx("flex items-center gap-[10px]")}>
@@ -115,7 +119,7 @@ const Account = (props: any) => {
     {
       dataIndex: "date",
       title: "Date",
-      width: 160,
+      width: isMobile ? 180 : 160,
       align: GridTableAlign.Right,
       render: (record: any) => {
         return dayjs(record.updated_at).format("hh:mm D MMM, YYYY");
@@ -129,8 +133,12 @@ const Account = (props: any) => {
         data={userRecords}
         columns={columns}
         loading={userRecordsLoading}
+        className="max-md:w-full max-md:overflow-x-auto"
+        rowClassName="max-md:px-0 max-md:gap-x-0"
+        colClassName="max-md:px-[10px] max-md:bg-[#22201D]"
+        bodyColClassName="max-md:first:border-r max-md:border-[#423930]"
       />
-      <div className="flex justify-end items-center pt-[18px]">
+      <div className="flex justify-end items-center pt-[18px] max-md:justify-center">
         <Pagination
           current={userRecordsPageIndex}
           hasNextPage={hasNextPage}

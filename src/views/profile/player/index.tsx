@@ -100,24 +100,26 @@ export default function Player() {
 
   return (
     <div
-      className="w-full h-screen overflow-y-auto pb-[30px]"
+      className="w-full h-screen overflow-y-auto pb-[30px] max-md:overflow-x-hidden"
       ref={containerRef}
     >
-      <div className="pt-[30px] w-[933px] mx-auto">
+      <div className="pt-[30px] w-[933px] mx-auto max-md:w-full max-md:pt-[70px]">
         <Header tab="player" />
-        <SwitchPanel>
-          <Dashboard tab="player" className="mt-[49px]" />
-          <div className="flex justify-between items-center gap-[10px] mt-[44px]">
+        <SwitchPanel className="max-md:w-full">
+          <div className="max-md:px-[10px]">
+            <Dashboard tab="player" className="mt-[49px] max-md:mt-[20px]" />
+          </div>
+          <div className="flex justify-between items-center gap-[10px] mt-[44px] max-md:flex-col max-md:mt-[20px]">
             <Tabs
               currentTab={tab}
               onChangeTab={setTab}
               tabs={TabsList}
-              className="!gap-[62px]"
+              className="!gap-[62px] max-md:!gap-[42px]"
               tabClassName="!text-[18px] !pb-[14px] font-[SpaceGrotesk]"
               cursorClassName="!w-[30px] !bg-[#FFC42F] left-1/2 -translate-x-1/2"
             />
             {tab === TabsList[0].key && (
-              <div className="flex items-center justify-end gap-[15px]">
+              <div className="flex items-center justify-end gap-[15px] max-md:ml-auto">
                 <Radio
                   checked={joinedPoolListStatus === "0,1"}
                   onChange={(_value: any) => {
@@ -137,7 +139,7 @@ export default function Player() {
           </div>
           <AnimatePresence>
             {tab === TabsList[0].key && (
-              <SwitchPanel>
+              <SwitchPanel className="max-md:px-[10px]">
                 <PlayerMarkets
                   orders={joinedPoolListData}
                   loading={joinedPoolListLoading}

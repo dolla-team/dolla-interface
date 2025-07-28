@@ -30,6 +30,7 @@ const SellerMarkets = (props: any) => {
       className={clsx(
         "w-full grid gap-x-[15px] gap-y-[20px] mt-[25px]",
         orders?.length > 0 ? "grid-cols-3" : "grid-cols-1",
+        "max-md:grid-cols-1 max-md:gap-y-[14px] max-md:mt-[14px]",
         className
       )}
     >
