@@ -4,11 +4,14 @@ import Button from "@/components/button";
 import { useAuth } from "@/contexts/auth";
 import DollaEye from "@/components/dolla-eye";
 import EstGas from "@/sections/est-gas";
+import Loading from "@/components/loading";
 
 export default function MainLayout() {
   const { userInfo, login } = useAuth();
   const navigate = useNavigate();
-  return (
+  return !userInfo?.user ? (
+    <Loading />
+  ) : (
     <div className="h-screen overflow-hidden bg-black relative">
       {/* header */}
       <>
