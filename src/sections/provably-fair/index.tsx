@@ -1,6 +1,7 @@
 import Loading from "@/components/icons/loading";
 import Modal from "@/components/modal";
 import clsx from "clsx";
+import useProvably from "./use-provably";
 
 export default function ProvablyFair({ open, onClose }: { open: boolean, onClose: () => void }) {
   const loading = false;
@@ -13,6 +14,11 @@ export default function ProvablyFair({ open, onClose }: { open: boolean, onClose
       status: "123456789"
     }
   ];
+
+  const { data: provablyData, loading: provablyLoading } = useProvably();
+
+  console.log('provablyData:', provablyData);
+
   return (
     <Modal open={open} onClose={onClose}>
       <div className="w-[672px] h-[444px] bg-[#35302B] border border-[#6A5D3A] rounded-[16px]">
@@ -141,13 +147,25 @@ const COLUMNS = [
   },
   {
     key: "winner",
-    label: "Winner",
+    label: "Random No.",
     width: "25%",
     align: "left"
   },
   {
     key: "status",
-    label: "EOS Block",
+    label: "Win No.",
+    width: "25%",
+    align: "left"
+  },
+  {
+    key: "status",
+    label: "Settle Tx",
+    width: "25%",
+    align: "left"
+  },
+  {
+    key: "status",
+    label: "Winner",
     width: "25%",
     align: "left"
   }
