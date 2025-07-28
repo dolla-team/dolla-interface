@@ -313,7 +313,7 @@ export async function wrapTxWithBugetFee(transaction: any) {
   const defaultPriorityFee = 300000;
   const multiplier = 10;
   let priorityFee = defaultPriorityFee;
-  if (import.meta.env.VITE_SOLANA_CLUSTER_NAME === "mainnet-beta") {
+  if (config.chain === "mainnet-beta") {
     try {
       const res = await fetch(import.meta.env.VITE_SOLANA_RPC_URL, {
         method: "POST",
@@ -362,7 +362,9 @@ export async function buildTxWithGas({ tx, otherTxs, action }: any) {
   const transaction = new Transaction();
   transaction.feePayer = new PublicKey(config.operator);
   transaction.recentBlockhash = "11111111111111111111111111111111";
-  transaction.add(...otherTxs);
+  if (otherTxs.length > 0) {
+    transaction.add(...otherTxs);
+  }
   const bugetFeeTxs = await wrapTxWithBugetFee(transaction);
   transaction.add(...bugetFeeTxs);
   transaction.add(tx);
@@ -384,7 +386,7 @@ export async function buildTxWithGas({ tx, otherTxs, action }: any) {
   const newTranscation = new Transaction();
   newTranscation.feePayer = new PublicKey(config.operator);
   newTranscation.recentBlockhash = "11111111111111111111111111111111";
-  newTranscation.add(...otherTxs, ...bugetFeeTxs);
+  newTranscation.add(...[...otherTxs, ...bugetFeeTxs]);
 
   return {
     transaction: newTranscation,

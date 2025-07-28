@@ -4,17 +4,13 @@ import useToast from "@/hooks/use-toast";
 import reportHash from "@/utils/report-hash";
 import * as anchor from "@coral-xyz/anchor";
 import useProgram from "./use-program";
-import { getState, getAccountsInfo, wrapTxWithBugetFee } from "./helpers";
+import { getState, getAccountsInfo, buildTxWithGas } from "./helpers";
 import {
   ASSOCIATED_TOKEN_PROGRAM_ID,
   TOKEN_PROGRAM_ID
 } from "@solana/spl-token";
 import { useSolanaWallets } from "@privy-io/react-auth";
-import {
-  PublicKey,
-  Transaction,
-  TransactionInstruction
-} from "@solana/web3.js";
+import { PublicKey, TransactionInstruction } from "@solana/web3.js";
 import { sendSolanaTransaction } from "@/utils/transaction/send-solana-transaction";
 import config from "@/config/solana";
 
@@ -73,17 +69,20 @@ export default function useTransfer({
           "MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr"
         )
       };
-
-      let params: any = [];
-      if (type === "buy_ticket") {
-        params = [
+      const getParams = (_gas: string) => {
+        if (type === "buy_ticket") {
+          return [
+            transferAmount,
+            new anchor.BN(_gas),
+            JSON.stringify({
+              type: "dolla_buy_ticket",
+              address: payer.address
+            })
+          ];
+        }
+        return [
           transferAmount,
-          JSON.stringify({ type: "dolla_buy_ticket", address: payer.address })
-        ];
-      }
-      if (type === "withdraw") {
-        params = [
-          transferAmount,
+          new anchor.BN(_gas),
           JSON.stringify({
             type: "dolla_withdraw",
             amount: transferAmount.toString(),
@@ -92,37 +91,43 @@ export default function useTransfer({
             to: to
           })
         ];
-      }
+      };
 
-      const tx: TransactionInstruction = await program.methods
-        .transferHelper(...params)
+      const transferTx: TransactionInstruction = await program.methods
+        .transferHelper(...getParams("100000"))
         .accounts(transferAccounts)
         .instruction();
-      const batchTx = new Transaction();
+
+      const otherTxs: any = [];
 
       if (userTokenAccount?.instruction) {
-        batchTx.add(userTokenAccount.instruction);
+        otherTxs.push(userTokenAccount.instruction);
       }
       if (toTokenAccount?.instruction) {
-        batchTx.add(toTokenAccount.instruction);
+        otherTxs.push(toTokenAccount.instruction);
       }
       if (userPaidAccount?.instruction) {
-        batchTx.add(userPaidAccount.instruction);
+        otherTxs.push(userPaidAccount.instruction);
       }
       if (operatorPaidAccount?.instruction) {
-        batchTx.add(operatorPaidAccount.instruction);
+        otherTxs.push(operatorPaidAccount.instruction);
       }
 
-      batchTx.feePayer = new PublicKey(config.operator);
-      // Get the latest blockhash
-      batchTx.recentBlockhash = "11111111111111111111111111111111";
+      const { transaction: tx, gas } = await buildTxWithGas({
+        tx: transferTx,
+        otherTxs,
+        action: "transferHelper"
+      });
 
-      const txs = await wrapTxWithBugetFee(batchTx);
+      const transferTxWithGas: TransactionInstruction = await program.methods
+        .transferHelper(...getParams(gas))
+        // @ts-ignore
+        .accounts(transferAccounts)
+        .instruction();
 
-      batchTx.add(...txs);
-      batchTx.add(tx);
+      tx.add(transferTxWithGas);
 
-      const result = await sendSolanaTransaction(batchTx, "transferHelper");
+      const result = await sendSolanaTransaction(tx, "transferHelper");
       console.log("receipt:", result);
       toast.dismiss(toastId);
       toast.success({

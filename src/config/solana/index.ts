@@ -1,5 +1,6 @@
 const config: Record<string, any> = {
-  devnet: {
+  testnet: {
+    chain: "devnet",
     operator: "GZQUBKGeH4zcmQ751rnWHzDRJKAPmdRLwe2t4jxxHZPR",
     ticket_account: "9Rny1dwV3TvSvx9sxif2pdZJgFFTThg1riPNzNMVGRsP",
     dolla_contract: "2EthyEtqB67wheAFjFVFCsZBTjETGQUaMtbuEEi36VfJ",
@@ -10,7 +11,8 @@ const config: Record<string, any> = {
     base_token_decimals: 6,
     quote_token_decimals: 6
   },
-  "mainnet-beta": {
+  stg: {
+    chain: "mainnet-beta",
     operator: "GZQUBKGeH4zcmQ751rnWHzDRJKAPmdRLwe2t4jxxHZPR",
     ticket_account: "GZQUBKGeH4zcmQ751rnWHzDRJKAPmdRLwe2t4jxxHZPR",
     dolla_contract: "3tzKcqsc6BrFVAgyw9Jp32z18rmTh47E2rYvcabE7uNJ",
@@ -23,4 +25,4 @@ const config: Record<string, any> = {
   }
 };
 
-export default config[import.meta.env.VITE_SOLANA_CLUSTER_NAME];
+export default config[import.meta.env.VITE_SOLANA_ENV || "stg"];
