@@ -342,7 +342,7 @@ export default function useBid(
     // }
     console.time("randomness");
     const randomnessAccountResult = await axiosInstance.get(
-      `/api/v1/paygas/sol/randomnessaccount`
+      `/api/v1/paygas/sol/randomnessaccount?pool=${poolInfoRef.current.pool.pda.toString()}`
     );
 
     const randomnessAccount = randomnessAccountResult.data.data;
