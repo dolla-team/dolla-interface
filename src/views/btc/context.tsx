@@ -11,6 +11,8 @@ import useBasicInfo from "@/hooks/solana/use-basic";
 import { useParams } from "react-router-dom";
 import usePoolInfo from "@/hooks/use-pool-info";
 import { formatNumber } from "@/utils/format/number";
+import { useDollaEyeContext } from "@/contexts/dolla-eye";
+import { EEyeType, EyeTypeMap } from "@/hooks/use-dolla-eye";
 import Big from "big.js";
 
 export const CannonCoinsContext = createContext<any>({});
@@ -29,7 +31,7 @@ export const CannonCoinsProvider = ({
   const params = useParams();
   const { onQueryPoolInfo } = usePoolInfo("solana");
   const [pool, setPool] = useState<any>(null);
-
+  const { setCurrentEye } = useDollaEyeContext();
   const { data, getPoolRecommend } = usePoolRecommend(0, !params?.poolId);
 
   useEffect(() => {
@@ -104,6 +106,11 @@ export const CannonCoinsProvider = ({
     return [_a];
   }, [pool]);
 
+  useEffect(() => {
+    const eyeType = `Bidding${bids}` as keyof typeof EEyeType;
+    setCurrentEye(EyeTypeMap[EEyeType[eyeType]]);
+  }, [bids]);
+
   return (
     <CannonCoinsContext.Provider
       value={{
@@ -142,6 +149,7 @@ export const CannonCoinsProvider = ({
         },
         onReset: () => {
           flipedNumberRef.current = 0;
+          setBidResult(null);
           for (let i = 0; i < bids; i++) {
             coinsRef.current[i]?.flip(true);
           }

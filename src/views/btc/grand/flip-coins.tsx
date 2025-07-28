@@ -2,6 +2,8 @@ import { useBtcContext } from "../context";
 import FlipCoin from "./flip-coin";
 import { useMemo, useRef } from "react";
 import Result from "../components/result";
+import { useDollaEyeContext } from "@/contexts/dolla-eye";
+import { EEyeType, EyeTypeMap } from "@/hooks/use-dolla-eye";
 
 const SIZE: Record<number, number> = {
   1: 212,
@@ -20,9 +22,9 @@ export default function FlipCoins() {
     flipComplete,
     bidResult,
     setFlipStatus,
-    onReset,
-    getPoolRecommend
+    onReset
   } = useBtcContext();
+  const { setCurrentEye } = useDollaEyeContext();
 
   const coinContainerRef = useRef<any>(null);
 
@@ -34,17 +36,24 @@ export default function FlipCoins() {
       ? bidResult.point.wild_coin_ev_result.split(",")
       : [];
     const _t = bidResult.ticket ? bidResult.ticket?.result?.split(",") : [];
+    const _pt = _p.reduce((acc: number, curr: string) => acc + Number(curr), 0);
+    const _tt = _t.reduce(
+      (acc: number, curr: string) => acc + Number(curr === "0" ? 1 : 0),
+      0
+    );
 
-    return [
-      _p,
-      _t,
-      _p.reduce((acc: number, curr: string) => acc + Number(curr), 0),
-      _t.reduce(
-        (acc: number, curr: string) => acc + Number(curr === "0" ? 1 : 0),
-        0
-      ),
-      bidResult.bid.is_winner
-    ];
+    // Handle eye type
+    if (_tt === 1 && _pt === 0) {
+      setCurrentEye(EyeTypeMap[EEyeType.PrizeTicket]);
+    } else if (bidResult.bid.is_winner) {
+      setCurrentEye(EyeTypeMap[EEyeType.PrizeBTC]);
+    } else if (_tt === 0 && _pt < 1000) {
+      setCurrentEye(EyeTypeMap[EEyeType.PrizeLowPTS]);
+    } else {
+      setCurrentEye(EyeTypeMap[EEyeType.PrizeBoth]);
+    }
+
+    return [_p, _t, _pt, _tt, bidResult.bid.is_winner];
   }, [bidResult]);
 
   return (
