@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import ReactDOM from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import clsx from "clsx";
-import { useUserAgent } from "@/contexts/user-agent";
+import useIsMobile from "@/hooks/use-is-mobile";
 
 interface ModalProps {
   open?: boolean;
@@ -62,13 +62,13 @@ export const ModalContent = (props: ModalProps) => {
     };
   }, [open]);
 
-  const { isMobile } = useUserAgent();
+  const isMobile = useIsMobile();
 
   return (
     <AnimatePresence mode="wait">
       <div
         className={clsx(
-          'fixed inset-0 bg-black/50 flex lg:items-center lg:justify-center z-[200]',
+          "fixed inset-0 bg-black/50 flex lg:items-center lg:justify-center z-[200]",
           className
         )}
         style={style}
