@@ -96,7 +96,9 @@ export default function LucyDraw({
             >
               Lucky Draw
             </span>
-            <span className="text-[#FFE9B2] text-[12px]">#{currentRound}</span>
+            <div className="text-black text-[14px] px-[8px] bg-[#FFE9B2] rounded-[12px] font-semibold bg-linear-to-r from-[#FFE9B2] to-[#FFC42F]">
+              #{currentRound}
+            </div>
           </div>
           <div className="flex items-center justify-between mt-[4px]">
             <span className="text-[20px] font-[DelaGothicOne] text-white">
