@@ -71,7 +71,7 @@ export default function History({
           </div>
           <div ref={containerRef} className="h-[400px] overflow-y-auto">
             {loading && (
-              <div className="text-[14px] text-[#5E6B7D] w-full h-[50px] flex items-center justify-center">
+              <div className="text-[14px] text-[#5E6B7D] w-full h-[300px] flex items-center justify-center">
                 <Loading size={20} />
               </div>
             )}
@@ -112,7 +112,7 @@ export default function History({
                 ))}
               </div>
             )}
-            {data.length === 0 && (
+            {data.length === 0 && !loading && (
               <div className="text-[14px] text-[#BBACA6] w-full h-[300px] flex items-center justify-center">
                 No data
               </div>

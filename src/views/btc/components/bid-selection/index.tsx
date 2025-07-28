@@ -1,14 +1,11 @@
 import clsx from "clsx";
-import AddBtn from "./add-btn";
 import { BalanceBg, Bg1, Bg100, Bg10, Bg5, Bg50, ProvablyFairBg } from "./bgs";
-import Cashier from "@/sections/cashier/modal";
 import { useMemo, useState } from "react";
 import { useBtcContext } from "../../context";
 import BidBtn from "../bid-btn";
 import AutoBtn from "./auto-btn";
 import ProvablyFair from "@/sections/provably-fair";
-import { formatNumber } from "@/utils/format/number";
-import { useAuth } from "@/contexts/auth";
+import Points from "@/sections/points";
 
 export default function BidSelection({
   tokenBalance,
@@ -17,10 +14,8 @@ export default function BidSelection({
   tokenBalance: string;
   update: () => void;
 }) {
-  const [showCashier, setShowCashier] = useState(false);
   const [showProvablyFair, setShowProvablyFair] = useState(false);
   const { bids, setBids, flipStatus, pool } = useBtcContext();
-  const { address } = useAuth();
   const onChangeBids = (bids: number) => {
     if (flipStatus === 1) return;
     setBids(bids);
@@ -46,11 +41,8 @@ export default function BidSelection({
       <div className="w-[333px] h-[73px] relative font-[BlackHanSans]">
         <BalanceBg />
         <div className="flex items-center justify-between relative z-[2] mt-[26px] w-[80%] mx-auto">
-          <div className="text-white text-[16px]">BALANCE</div>
-          <div className="text-white text-[20px] flex items-center gap-[10px]">
-            <span>${formatNumber(tokenBalance || "0", 2, true)}</span>
-            {address && <AddBtn onClick={() => setShowCashier(true)} />}
-          </div>
+          <div className="text-white text-[16px]">PTS</div>
+          <Points />
         </div>
       </div>
       <div className="mx-[20px] relative flex flex-col items-center justify-center">
@@ -99,7 +91,7 @@ export default function BidSelection({
           </div>
         ))}
       </div>
-      <Cashier open={showCashier} onClose={() => setShowCashier(false)} />
+
       <ProvablyFair
         open={showProvablyFair}
         onClose={() => setShowProvablyFair(false)}
