@@ -2,7 +2,8 @@ import { motion } from "framer-motion";
 import DollaEye from "../dolla-eye";
 import { useRef, useEffect, useState, useMemo } from "react";
 
-const Loading = () => {
+const Loading = (props: Props) => {
+  const { speed = 1000 } = props;
 
   const progressInnerRef = useRef<any>(null);
   const [progressWidth, setProgressWidth] = useState(0);
@@ -16,7 +17,7 @@ const Loading = () => {
 
     const animateProgress = () => {
       const elapsed = Date.now() - startTime;
-      const progress = elapsed / 1000
+      const progress = elapsed / speed
 
       const easeOutQuart = 1 - Math.pow(1 - Math.min(progress, 0.95), 4);
       const currentWidth = easeOutQuart * maxProgress;
@@ -135,3 +136,8 @@ const Loading = () => {
 };
 
 export default Loading;
+
+interface Props {
+  // Loading speed, default is 1000ms
+  speed?: number;
+}
