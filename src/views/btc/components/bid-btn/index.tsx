@@ -122,6 +122,7 @@ export default function BidBtn({
           </defs>
         </svg>
       </div>
+      
     </div>
   );
 }

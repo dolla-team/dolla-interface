@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import ReactDOM from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import clsx from "clsx";
+import { useUserAgent } from "@/contexts/user-agent";
 
 interface ModalProps {
   open?: boolean;
@@ -44,8 +45,6 @@ export const ModalContent = (props: ModalProps) => {
     isMaskClose = true
   } = props;
 
-  const isMobile = false;
-
   const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!isMaskClose) return;
     if (e.target === e.currentTarget || isMobile) {
@@ -63,11 +62,15 @@ export const ModalContent = (props: ModalProps) => {
     };
   }, [open]);
 
+  const { isMobile } = useUserAgent();
+
+  console.log('isMobile:', isMobile);
+
   return (
     <AnimatePresence mode="wait">
       <div
         className={clsx(
-          "fixed inset-0 bg-black/50 flex lg:items-center lg:justify-center z-[200]",
+          'fixed inset-0 bg-black/50 flex lg:items-center lg:justify-center z-[200]',
           className
         )}
         style={style}

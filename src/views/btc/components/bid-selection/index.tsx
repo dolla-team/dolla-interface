@@ -6,6 +6,10 @@ import BidBtn from "../bid-btn";
 import AutoBtn from "./auto-btn";
 import ProvablyFair from "@/sections/provably-fair";
 import Points from "@/sections/points";
+import useUserInfo from "@/hooks/use-user-info";
+import { useAuth } from "@/contexts/auth";
+import Cashier from "@/sections/cashier/modal";
+import CashierEntry from "../cashier-entery";
 
 export default function BidSelection({
   tokenBalance,
@@ -16,6 +20,8 @@ export default function BidSelection({
 }) {
   const [showProvablyFair, setShowProvablyFair] = useState(false);
   const { bids, setBids, flipStatus, pool } = useBtcContext();
+  const { userInfo } = useAuth();
+  const [showCashier, setShowCashier] = useState(false)
   const onChangeBids = (bids: number) => {
     if (flipStatus === 1) return;
     setBids(bids);
@@ -55,6 +61,7 @@ export default function BidSelection({
           />
         )}
         {flipStatus === 4 && <AutoBtn />}
+        {userInfo && <CashierEntry onClick={() => setShowCashier(true)} tokenBalance={tokenBalance} />}
       </div>
       <div className="flex items-center text-white text-[22px] font-normal leading-[100%] uppercase font-[DelaGothicOne]">
         {[100, 50, 10, 5, 1].map((item) => (
@@ -96,6 +103,8 @@ export default function BidSelection({
         open={showProvablyFair}
         onClose={() => setShowProvablyFair(false)}
       />
+
+      <Cashier open={showCashier} onClose={() => setShowCashier(false)} />
     </div>
   );
 }

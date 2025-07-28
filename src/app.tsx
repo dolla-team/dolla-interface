@@ -4,7 +4,6 @@ import {
   Navigate
 } from "react-router-dom";
 import { Suspense, lazy } from "react";
-import Loading from "./components/loading";
 import WalletProvider from "./contexts/wallet";
 import { AuthProvider } from "./contexts/auth";
 import { ToastContainer } from "react-toastify";
@@ -16,6 +15,7 @@ import "./libs/howl";
 import Callback from "./views/callback";
 import DollaEyeContextProvider from "./contexts/dolla-eye";
 import BTC from "./views/btc";
+import { UserAgentProvider } from "./contexts/user-agent";
 
 // const LazyNewBTC = lazy(() => import("./views/btc"));
 const LazyBtcCreate = lazy(() => import("./views/btc-create"));
@@ -24,10 +24,21 @@ const LazyProfileSeller = lazy(() => import("./views/profile/seller"));
 
 import("react-toastify/dist/ReactToastify.css");
 
+const ErrorPage = () => {
+  return <div style={{ color: "white", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: "100vh" }}>
+    <div>
+      <h1>Oops! Something went wrong.</h1>
+      <p>We're sorry, but an unexpected error occurred.</p>
+    </div>
+    <button style={{ padding: "10px 20px", backgroundColor: "rgb(221, 144, 0)", color: "white", border: "none", borderRadius: "5px", cursor: "pointer", marginTop: "20px" }} onClick={() => window.location.reload()}>Reload Page</button>
+  </div>
+}
+
 const router = createBrowserRouter([
   {
     path: "/",
     element: <MainLayout />,
+    errorElement: <ErrorPage />,
     children: [
       {
         index: true,
@@ -76,7 +87,9 @@ function App() {
       <Suspense>
         <WalletProvider>
           <AuthProvider>
-            <RouterProvider router={router} />
+            <UserAgentProvider>
+              <RouterProvider router={router} />
+            </UserAgentProvider>
           </AuthProvider>
         </WalletProvider>
         <ToastContainer

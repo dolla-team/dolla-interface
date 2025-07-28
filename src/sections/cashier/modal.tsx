@@ -4,9 +4,12 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import FundList from "./panels/fund-list";
 import WithdrawSolana from "./panels/withdraw-solana";
+import { useUserAgent } from "@/contexts/user-agent";
+import clsx from "clsx";
 
 export default function CashierModal({ open, onClose, defaultTab }: any) {
   const [tab, setTab] = useState("fund");
+  const { isMobile } = useUserAgent();
 
   useEffect(() => {
     if (!defaultTab) {
@@ -18,7 +21,7 @@ export default function CashierModal({ open, onClose, defaultTab }: any) {
 
   return (
     <Modal open={open} onClose={onClose}>
-      <div className="w-[526px] rounded-[16px] bg-[#35302B] border border-[#6A5D3A]">
+      <div className={clsx("bg-[#35302B] border border-[#6A5D3A]", isMobile ? 'w-full rounded-t-[16px] ' : 'w-[526px] rounded-[16px] ')}>
         <div className="h-[46px] bg-[#00000033] rounded-t-[16px] relative">
           <Switch
             tabs={[
