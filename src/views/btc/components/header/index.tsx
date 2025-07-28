@@ -73,7 +73,7 @@ export default function Header({ className }: { className?: string }) {
       </div>
       <div
         className={clsx(
-          "absolute top-[80px] z-[2] w-full text-center font-[DelaGothicOne] pointer-events-none",
+          "absolute top-[80px] z-[2] w-full text-center font-[DelaGothicOne]",
           pool?.status === 3 ? "text-[#B2B2B2]" : "text-[#FFF79E]"
         )}
         style={{
@@ -123,7 +123,7 @@ export default function Header({ className }: { className?: string }) {
         <div />
         <div
           className={clsx(
-            "bg-clip-text top-[-2px] inline-block relative text-[26px]",
+            "bg-clip-text top-[-6px] inline-block relative text-[26px]",
             pool?.status === 3
               ? "bg-[radial-gradient(50%_50%_at_50%_50%,#A3A3A3_0%,#787878_100%)]"
               : "bg-[radial-gradient(50%_50%_at_50%_50%,#FFEF43_0%,#FFC42F_100%)]"

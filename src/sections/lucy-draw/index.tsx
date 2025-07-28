@@ -76,7 +76,7 @@ export default function LucyDraw({
   }, []);
 
   return (
-    <div className="absolute top-[14%] right-[20px]">
+    <div className="absolute top-[14%] right-[20px] z-[10]">
       <WinResult
         onShowHistory={(_round: number) => {
           setIsHistoryOpen(true);
