@@ -3,6 +3,7 @@ import { Outlet, useNavigate } from "react-router-dom";
 import Button from "@/components/button";
 import { useAuth } from "@/contexts/auth";
 import DollaEye from "@/components/dolla-eye";
+import EstGas from "@/sections/est-gas";
 
 export default function MainLayout() {
   const { userInfo, login } = useAuth();
@@ -11,13 +12,17 @@ export default function MainLayout() {
     <div className="h-screen overflow-hidden bg-black relative">
       {/* header */}
       <>
-        <DollaEye
-          className="absolute left-[20px] top-[15px] z-[20] button origin-left"
-          height={32}
-          onClick={() => {
-            navigate("/");
-          }}
-        />
+        <div className="absolute left-[20px] top-[15px] z-[20] flex items-center gap-[30px]">
+          <DollaEye
+            className="button origin-left"
+            height={32}
+            onClick={() => {
+              navigate("/");
+            }}
+          />
+          <EstGas />
+        </div>
+
         <div className="absolute right-[10px] top-[10px] z-[20] flex items-center gap-[36px]">
           {/* <div className="flex items-center gap-[8px]">
             <TicketIcon />
