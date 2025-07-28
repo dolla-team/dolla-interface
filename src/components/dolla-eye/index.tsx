@@ -106,11 +106,11 @@ const DollaEye = (props: any) => {
         }}
       >
         {/*#region eye socket*/}
-        <div className="z-100 absolute w-full h-full left-0 top-0 bg-[url('/logo-eye/eye-socket.svg')] bg-no-repeat bg-contain bg-center" />
+        <div className="z-100 absolute w-full h-full left-0 top-0 bg-[url('/logo-eye/eye-socket.png')] bg-no-repeat bg-contain bg-center" />
         {/*#endregion*/}
 
         {/*#region eye background layer 1*/}
-        <div className="z-[1] absolute w-full h-full left-0 top-0 bg-[#FFF3D4]" />
+        <div className="z-[1] absolute w-[calc(100%_-_2px)] h-[calc(100%_-_2px)] left-[1px] top-[1px] bg-[#FFF3D4]" style={{ borderRadius: height / 2 }} />
         {/*#endregion*/}
 
         {/*#region eye pupil - EEyeStatus.Normal*/}
