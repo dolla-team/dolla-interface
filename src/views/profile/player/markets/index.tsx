@@ -7,6 +7,7 @@ import Loading from "@/components/icons/loading";
 import useClaimSlash from "@/hooks/solana/use-claim-slash";
 import { formatNumber } from "@/utils/format/number";
 import Big from "big.js";
+import { useNavigate } from "react-router-dom";
 
 const PlayerMarkets = (props: any) => {
   const { className, orders, loading, updatePoolsData } = props;
@@ -53,6 +54,7 @@ const MarketItem = (props: any) => {
   const { claiming, onClaim } = useClaimSlash({
     onClaimSuccess,
   });
+  const navigate = useNavigate();
 
   return (
     <Market
@@ -61,18 +63,18 @@ const MarketItem = (props: any) => {
       data={order}
       header={
         <MarketStatus
-          value={order.status}
-          market={order}
+          value={order.pool_status}
+          market={order.pool_info}
           className="absolute z-[2] left-1/2 -translate-x-1/2 top-[-12px]"
         />
       }
       footer={
         <div className="w-full px-[13px] bg-black/20 py-[17px] mt-[20px] relative z-[2] text-white text-center font-[SpaceGrotesk] text-[14px] font-normal leading-[100%]">
           <div className="flex justify-between items-center gap-[10px]">
-            <div className="text-[#BBACA6]">You bid{order.status === EMarketStatus.Cancelled ? " / Refund" : ""}</div>
+            <div className="text-[#BBACA6]">You bid{order.pool_status === EMarketStatus.Cancelled ? " / Refund" : ""}</div>
             <div className="flex items-center justify-end gap-[7px]">
               {
-                order.status === EMarketStatus.Cancelled && (
+                order.pool_status === EMarketStatus.Cancelled && (
                   order.is_claim ? (
                     <ButtonV2
                       type="default"
@@ -87,7 +89,8 @@ const MarketItem = (props: any) => {
                       className="!h-[24px] !rounded-[12px] !px-[10px] !text-[#BBACA6]"
                       loading={claiming}
                       disabled={claiming}
-                      onClick={() => {
+                      onClick={(e: any) => {
+                        e.stopPropagation();
                         onClaim(order.pool_id);
                       }}
                     >
@@ -99,7 +102,7 @@ const MarketItem = (props: any) => {
               <div className="">
                 {
                   formatNumber(
-                    Big(order.purchase_amount || 0).div(10 ** (order.purchase_token_info?.decimals || 6)).times(order.purchase_token_price?.last_price),
+                    order.purchase_usd,
                     2,
                     true,
                     { isShort: true, isShortUppercase: true, prefix: "$" }
@@ -110,6 +113,9 @@ const MarketItem = (props: any) => {
           </div>
         </div>
       }
+      onClick={() => {
+        navigate(`/btc/${order.pool_id}`);
+      }}
     />
   );
 };

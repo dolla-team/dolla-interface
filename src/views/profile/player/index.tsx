@@ -119,14 +119,14 @@ export default function Player() {
             {tab === TabsList[0].key && (
               <div className="flex items-center justify-end gap-[15px]">
                 <Radio
-                  checked={joinedPoolListStatus === ""}
-                  onChange={onJoinedPoolListStatusChange}
-                  name="joinedMarketFilter"
-                  value=""
-                />
-                <Radio
                   checked={joinedPoolListStatus === "0,1"}
-                  onChange={onJoinedPoolListStatusChange}
+                  onChange={(_value: any) => {
+                    if (_value === joinedPoolListStatus) {
+                      onJoinedPoolListStatusChange("");
+                      return;
+                    }
+                    onJoinedPoolListStatusChange(_value);
+                  }}
                   name="joinedMarketFilter"
                   value="0,1"
                 >

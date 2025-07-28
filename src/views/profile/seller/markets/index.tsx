@@ -16,6 +16,7 @@ import DepositModal from "../deposit-modal";
 import { formatNumber } from "@/utils/format/number";
 import Big from "big.js";
 import useClaimFunds from "@/hooks/solana/use-claim-funds";
+import { useNavigate } from "react-router-dom";
 
 const SellerMarkets = (props: any) => {
   const { className, poolsData, orders, loading, updatePoolsData } = props;
@@ -110,6 +111,7 @@ const MarketItem = (props: any) => {
       onClaimSuccess();
     }
   });
+  const navigate = useNavigate();
 
   return (
     <Market
@@ -134,7 +136,10 @@ const MarketItem = (props: any) => {
                 <ButtonV2
                   type="primary"
                   className="!h-[28px] !rounded-[8px] !text-[14px] !px-[5px] !font-[400]"
-                  onClick={onDeposit}
+                  onClick={(e: any) => {
+                    e.stopPropagation();
+                    onDeposit(e);
+                  }}
                 >
                   Deposit
                 </ButtonV2>
@@ -186,7 +191,10 @@ const MarketItem = (props: any) => {
                   <ButtonV2
                     type="default"
                     className="!h-[28px] !px-[7px] !rounded-[8px] !text-[14px] flex items-center gap-[3px]"
-                    onClick={onCancel}
+                    onClick={(e: any) => {
+                      e.stopPropagation();
+                      onCancel(e);
+                    }}
                   >
                     <div className="">Cancel</div>
                     <img
@@ -202,7 +210,8 @@ const MarketItem = (props: any) => {
                 <ButtonV2
                   type="primary"
                   className="!h-[28px] !rounded-[8px] !text-[14px]"
-                  onClick={() => {
+                  onClick={(e: any) => {
+                    e.stopPropagation();
                     onClaim(order.pool_id);
                   }}
                   loading={claiming}
@@ -231,6 +240,9 @@ const MarketItem = (props: any) => {
           </div>
         </div>
       }
+      onClick={() => {
+        navigate(`/btc/${order.pool_id}`);
+      }}
     />
   );
 };

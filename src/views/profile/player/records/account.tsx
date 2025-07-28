@@ -25,6 +25,25 @@ const Account = (props: any) => {
       dataIndex: "typeName",
       title: "Type",
       width: 150,
+      render: (record: any) => {
+        if (record.type === EUserRecordsType.Refund) {
+          return (
+            <div className="flex items-center gap-[4px]">
+              <div className="">{record.typeName}</div>
+              <div className="">#{record.pool_id}</div>
+            </div>
+          );
+        }
+        if (record.type === EUserRecordsType.LuckyDraw) {
+          return (
+            <div className="flex items-center gap-[4px]">
+              <div className="">{record.typeName}</div>
+              <div className="">#{record.pool_id}</div>
+            </div>
+          );
+        }
+        return record.typeName;
+      } 
     },
     {
       dataIndex: "assets",

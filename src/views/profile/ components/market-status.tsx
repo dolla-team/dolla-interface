@@ -24,14 +24,14 @@ const MarketStatus = (props: Props) => {
         value === EMarketStatus.Winner && (
           <>
             {
-              market?.avatar && (
-                <img src={market?.avatar} className="w-[20px] h-[20px] rounded-full shrink-0 border-[2px] border-[#131417] object-center object-cover" />
+              market?.winner_user_info?.avatar && (
+                <img src={market?.winner_user_info.avatar} className="w-[20px] h-[20px] rounded-full shrink-0 border-[2px] border-[#131417] object-center object-cover" />
               )
             }
             {
-              market?.account && (
+              market?.winner_user && (
                 <div className="text-[#BBACA6]">
-                  {formatAddress(market?.account)}
+                  {formatAddress(market?.winner_user)}
                 </div>
               )
             }
