@@ -71,7 +71,7 @@ const ClaimIndex = (props: any) => {
                     <img src="/profile/icon-share.svg" className="w-[9px] h-[9px] shrink-0" />
                   </a>
                   <div className="py-[10px] flex items-center">
-                    {formatNumber(Big(item.reward_amount || 0).div(10 ** item.rewardTokenInfo?.decimals || 1), 4, true, { isShort: true, isShortUppercase: true })} {item.rewardTokenInfo?.symbol}
+                    {formatNumber(Big(item.reward_amount || 0).div(10 ** (item.reward_token_info?.[0]?.decimals  || 6)), 4, true, { isShort: true, isShortUppercase: true })} {item.reward_token_info?.[0]?.symbol || "BTC"}
                   </div>
                   <div className="py-[10px] flex items-center gap-[5px]">
                     {/* <img
@@ -143,12 +143,12 @@ const ClaimButton = (props: any) => {
     <ButtonV2
       className="!w-[69px] !px-[unset]"
       loading={claiming}
-      disabled={claiming}
+      disabled={claiming || item.is_claim}
       onClick={() => {
         onClaim(item.pool_id);
       }}
     >
-      Claim
+      {item.is_claim ? "Claimed" : "Claim"}
     </ButtonV2>
   );
 };
