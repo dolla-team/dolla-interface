@@ -21,6 +21,7 @@ import Big from "big.js";
 import { useNavigate } from "react-router-dom";
 import { TOKNES } from "@/sections/cashier/panels/withdraw-solana";
 import useIsMobile from "@/hooks/use-is-mobile";
+import Modal from "@/components/modal";
 
 export default function BTCCreate() {
   const navigate = useNavigate();
@@ -33,6 +34,7 @@ export default function BTCCreate() {
   const isMobile = useIsMobile();
 
   const { prices } = useTokenPrice(TOKNES[1]);
+  const [depositModalOpen, setDepositModalOpen] = useState(false);
 
   const pricePerBTC = useMemo(() => {
     if (!prices || prices?.length === 0) return 0;
@@ -85,7 +87,21 @@ export default function BTCCreate() {
       <div className="w-[894px] mx-auto flex justify-between items-start gap-[15px] pt-[42px] max-md:w-full max-md:pt-[40px]">
         <div className="flex-1 w-0">
           <div className="w-full max-md:px-[12px]">
-            <div className="text-[#BBACA6]">Amount</div>
+            <div className="text-[#BBACA6] flex justify-between items-center">
+              <div className="">Amount</div>
+              {
+                isMobile && (
+                  <div
+                    className="underline underline-offset-2 text-white text-[16px] font-[600]"
+                    onClick={() => {
+                      setDepositModalOpen(true);
+                    }}
+                  >
+                    Deposit BTC
+                  </div>
+                )
+              }
+            </div>
             <div className="mt-[13px] flex items-center gap-[10px] h-[97px] max-md:grid max-md:grid-cols-2 max-md:h-[unset]">
               {[1, 0.1, 0.01, 0.001].map((item, index) => {
                 const isActive = amount === item;
@@ -294,33 +310,76 @@ export default function BTCCreate() {
             />
           </div>
         </div>
-        <div className="w-[316px] shrink-0">
-          <div className="text-[#BBACA6]">Account</div>
-          <div className="w-full rounded-[16px] border border-[#6A5D3A] bg-[#35302B] mt-[10px]">
-            <div className="w-full rounded-t-[16px] bg-black/20 p-[18px_15px]">
-              <div className="">{formatAddress(userInfo?.sol_user)}</div>
-              <div className="text-center text-[#BBACA6] mt-[17px]">
-                Balance
-              </div>
-              <div className="mt-[13px] text-center text-[16px] font-[DelaGothicOne]">
-                {isLoading ? (
-                  <Loading size={12} />
-                ) : (
-                  `${formatNumber(tokenBalance, 2, true)} BTC`
-                )}
-              </div>
-            </div>
-            <div className="w-full p-[30px_15px]">
-              <div className="text-center font-[700] text-[16px]">Recharge</div>
-              <Recharge
-                token={TOKNES[1]}
-                className="mt-[7px]"
-                tokenPanelClassName="!bg-black/20 !rounded-[10px]"
-              />
-            </div>
-          </div>
-        </div>
+        {
+          !isMobile && (
+            <DepositBTC
+              userInfo={userInfo}
+              isLoading={isLoading}
+              tokenBalance={tokenBalance}
+              isMobile={isMobile}
+            />
+          )
+        }
+        <Modal
+          open={depositModalOpen}
+          onClose={() => {
+            setDepositModalOpen(false);
+          }}
+        >
+          <button
+            type="button"
+            className="absolute right-[17px] top-[18px] w-[10px] h-[11px] shrink-0"
+            onClick={() => {
+              setDepositModalOpen(false);
+            }}
+          >
+            <img src="/icon-close.svg" className="w-full h-full object-center object-contain" />
+          </button>
+          <DepositBTC
+            userInfo={userInfo}
+            isLoading={isLoading}
+            tokenBalance={tokenBalance}
+            isMobile={isMobile}
+          />
+        </Modal>
       </div>
     </div>
   );
 }
+
+const DepositBTC = (props: any) => {
+  const { userInfo, isLoading, tokenBalance, isMobile } = props;
+
+  return (
+    <div className="w-[316px] shrink-0 max-md:w-full">
+      {
+        !isMobile && (
+          <div className="text-[#BBACA6]">Account</div>
+        )
+      }
+      <div className="w-full rounded-[16px] border border-[#6A5D3A] bg-[#35302B] mt-[10px] max-md:rounded-b-[0] max-md:mt-0">
+        <div className="w-full rounded-t-[16px] bg-black/20 p-[18px_15px]">
+          <div className="max-md:text-white">{formatAddress(userInfo?.sol_user)}</div>
+          <div className="text-center text-[#BBACA6] mt-[17px]">
+            Balance
+          </div>
+          <div className="mt-[13px] text-center text-[16px] font-[DelaGothicOne] max-md:text-white">
+            {isLoading ? (
+              <Loading size={12} />
+            ) : (
+              `${formatNumber(tokenBalance, 2, true)} BTC`
+            )}
+          </div>
+        </div>
+        <div className="w-full p-[30px_15px]">
+          <div className="text-center font-[700] text-[16px] max-md:text-white">Recharge</div>
+          <Recharge
+            token={TOKNES[1]}
+            className="mt-[7px]"
+            tokenPanelClassName="!bg-black/20 !rounded-[10px]"
+          />
+        </div>
+      </div>
+    </div>
+  );
+};
