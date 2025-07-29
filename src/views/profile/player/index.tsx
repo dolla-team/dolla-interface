@@ -100,7 +100,7 @@ export default function Player() {
 
   return (
     <div
-      className="w-full h-screen overflow-y-auto pb-[30px] max-md:overflow-x-hidden"
+      className="w-full h-screen overflow-y-auto pb-[30px] max-md:overflow-x-hidden max-md:pb-[70px]"
       ref={containerRef}
     >
       <div className="pt-[30px] w-[933px] mx-auto max-md:w-full max-md:pt-[70px]">
@@ -119,7 +119,7 @@ export default function Player() {
               cursorClassName="!w-[30px] !bg-[#FFC42F] left-1/2 -translate-x-1/2"
             />
             {tab === TabsList[0].key && (
-              <div className="flex items-center justify-end gap-[15px] max-md:ml-auto">
+              <div className="flex items-center justify-end gap-[15px] max-md:ml-auto max-md:mr-[10px]">
                 <Radio
                   checked={joinedPoolListStatus === "0,1"}
                   onChange={(_value: any) => {
