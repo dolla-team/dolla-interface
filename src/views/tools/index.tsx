@@ -2,13 +2,10 @@ import { Link } from "react-router-dom";
 
 export default function ToolsPage() {
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="h-screen bg-black text-white overflow-y-auto">
       <div className="max-w-6xl mx-auto p-6 pb-20">
         <div className="mb-12 text-center">
           <h1 className="text-4xl font-bold mb-4">NEAR 游戏工具集</h1>
-          <p className="text-gray-300 text-lg">
-            专为 NEAR 区块链游戏开发的完整工具套件
-          </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
