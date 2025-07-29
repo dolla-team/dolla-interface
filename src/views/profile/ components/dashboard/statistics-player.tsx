@@ -60,7 +60,7 @@ const StatisticsPlayer = (props: any) => {
           {totalBtcLoading ? (
             <Loading size={12} />
           ) : (
-            formatNumber(totalBtcAmount, 2, true)
+            formatNumber(totalBtcAmount, 3, true)
           )}
         </LabelValue>
         <ButtonV2 className="" onClick={() => { }} disabled soon>

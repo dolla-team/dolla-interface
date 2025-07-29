@@ -24,5 +24,17 @@ export default function useProvably() {
         console.log('signedData:', signedData);
     }, [])
 
-    return { data, loading };
+    const verifySolana = useCallback(async (query: any) => {
+        const signedData = await axiosInstance.post(
+            `/api/v1/verify/sol`,
+            {
+                'settle_hash': query.settle_hash,
+                'id': query.id,
+            }
+        )
+
+        console.log('signedData:', signedData);
+    }, [])
+
+    return { data, loading, verifySolana };
 }

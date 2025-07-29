@@ -7,8 +7,8 @@ import useTokenPrice from "./use-token-price";
 
 const LIMIT = 20;
 
-export default function useUserRecords(props?: { isSinglePage?: boolean; }) {
-  const { isSinglePage } = props ?? {};
+export default function useUserRecords(props?: { isSinglePage?: boolean; pageLimit?: number; }) {
+  const { isSinglePage, pageLimit = LIMIT } = props ?? {};
 
   const [records, setRecords] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
@@ -20,7 +20,7 @@ export default function useUserRecords(props?: { isSinglePage?: boolean; }) {
     try {
       setLoading(true);
       const res = await axiosInstance.get(
-        `/api/v1/user/records?limit=${LIMIT}&offset=${pageRef.current * LIMIT}`
+        `/api/v1/user/records?limit=${pageLimit}&offset=${pageRef.current * pageLimit}`
       );
 
       setRecords((prev) =>
@@ -28,8 +28,8 @@ export default function useUserRecords(props?: { isSinglePage?: boolean; }) {
           ? res.data.data.list
           : [...prev, ...res.data.data.list]
       );
-      setHasMore(res.data.data.list.length === LIMIT);
-      if (res.data.data.list.length === LIMIT) {
+      setHasMore(res.data.data.list.length === pageLimit);
+      if (res.data.data.list.length === pageLimit) {
         pageRef.current++;
       }
     } catch (err) {
@@ -54,7 +54,7 @@ export default function useUserRecords(props?: { isSinglePage?: boolean; }) {
     }
     try {
       const res = await axiosInstance.get(
-        `/api/v1/user/records?limit=${20}&offset=${(userRecordsPageIndex - 1) * 20}`
+        `/api/v1/user/records?limit=${pageLimit}&offset=${(userRecordsPageIndex - 1) * pageLimit}`
       );
 
       setHasNextPage(res.data.data.has_next_page);

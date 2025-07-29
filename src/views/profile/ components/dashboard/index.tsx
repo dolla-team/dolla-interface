@@ -36,7 +36,7 @@ const Dashboard = (props: any) => {
       )}
     >
       <div className="w-full pl-[13px] max-md:pl-0">
-        <div className="w-full flex justify-between items-center gap-[10px]">
+        <div className="w-full flex justify-between items-center gap-[10px] max-md:relative">
           {/*#region User Info*/}
           <div className="flex items-center gap-[20px] max-md:gap-[10px]">
             <Avatar
@@ -51,7 +51,7 @@ const Dashboard = (props: any) => {
                   {formatAddress(userInfo?.name || userInfo?.sol_user, 3)}
                 </div>
                 {tab === "seller" && (
-                  <div className="flex items-center gap-[7px] max-md:absolute max-md:right-[-110px] max-md:top-[1px]">
+                  <div className="flex items-center gap-[7px]">
                     <Popover
                       content={<PopoverCard>Player Engagement</PopoverCard>}
                       placement={PopoverPlacement.Top}
@@ -136,7 +136,7 @@ const Dashboard = (props: any) => {
                 </div>
               )
             }
-            <div className="max-md:text-[12px] max-md:translate-y-[15px]">
+            <div className="max-md:text-[12px] max-md:translate-y-[15px] max-md:absolute max-md:right-[0px] max-md:bottom-[20px]">
               Joined{" "}
               {userInfo?.created_at
                 ? dayjs(userInfo.created_at).format("MMMM D, YYYY")
