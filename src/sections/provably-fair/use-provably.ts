@@ -18,7 +18,7 @@ export default function useProvably() {
         const x = new URLSearchParams(query)
 
         const signedData = await axiosInstance.get(
-            `/api/v1/bid/list?${x.toString()}`,
+            `/api/v1/pool/ended_market?${x.toString()}`,
         )
 
         console.log('signedData:', signedData);
