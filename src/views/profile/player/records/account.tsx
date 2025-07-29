@@ -19,7 +19,7 @@ const Account = (props: any) => {
     userRecordsPageIndex,
     hasNextPage,
     onUserRecordsPageChange,
-  } = useUserRecords({ isSinglePage: true });
+  } = useUserRecords({ isSinglePage: true, pageLimit: 10 });
   const isMobile = useIsMobile();
 
   const columns = [

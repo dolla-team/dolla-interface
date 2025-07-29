@@ -11,7 +11,7 @@ export default function usePlayerHistory() {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<any[]>([]);
   const [page, setPage] = useState(1);
-  const { userInfo } = useAuth();
+  const { userInfo, onQueryUserInfo } = useAuth();
   const [hasMore, setHasMore] = useState(true);
 
   const [joinedPoolListData, setJoinedPoolListData] = useState<any>([]);
@@ -74,8 +74,7 @@ export default function usePlayerHistory() {
     setLoading(true);
     try {
       const response = await axiosInstance.get(
-        `/api/v1/user/player/history?limit=${pageSize}&offset=${
-          (_page - 1) * pageSize
+        `/api/v1/user/player/history?limit=${pageSize}&offset=${(_page - 1) * pageSize
         }`
       );
 
@@ -103,6 +102,10 @@ export default function usePlayerHistory() {
       getRecords(1);
     }
   }, [userInfo]);
+
+  useEffect(() => {
+    onQueryUserInfo();
+  }, []);
 
   const onPageChange = (_page: number) => {
     setPage(_page);
