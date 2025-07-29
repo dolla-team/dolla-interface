@@ -56,7 +56,7 @@ export default function History({
             </svg>
           </button>
         </div>
-        <div className="p-[18px] pt-[0px]">
+        <div className={clsx("pt-[0px]", isMobile ? "p-0" : "p-[18px]")}>
           <div className="px-[12px] h-[45px] flex items-center text-[14px] text-[#BBACA6]">
             {COLUMNS.map((column) => (
               <div
@@ -115,7 +115,9 @@ export default function History({
                           dayjs(record.updated_at).format("hh:mm D MMM, YYYY")}
                         {column.key === "volume" &&
                           `${record.volume} ${
-                            itemsMap[record.token + "_" + record.volume]?.name
+                            itemsMap[
+                              record.token + "_" + record.config?.token_volume
+                            ]?.name
                           }`}
                         {["number", "reward"].includes(column.key) &&
                           record[column.key]}
@@ -148,7 +150,7 @@ const COLUMNS = [
   {
     key: "date",
     label: "Date",
-    width: "30%",
+    width: "35%",
     align: "left"
   },
   {
@@ -160,7 +162,7 @@ const COLUMNS = [
   {
     key: "number",
     label: "Amount",
-    width: "20%",
+    width: "15%",
     align: "center"
   },
   {

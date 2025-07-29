@@ -32,10 +32,10 @@ export default function MobileBidSelection({
           <div className="h-[38px] w-full mt-[10px] bg-[#FFFFFF1A] rounded-[12px] border border-[#3B3951] backdrop-blur-[25px] p-[4px] flex items-center">
             <Tabs
               tabs={[
-                { label: "100", key: 100 },
-                { label: "50", key: 50 },
-                { label: "10", key: 10 },
-                { label: "1", key: 1 }
+                { label: "$100", key: 100 },
+                { label: "$50", key: 50 },
+                { label: "$10", key: 10 },
+                { label: "$1", key: 1 }
               ]}
               currentTab={bids}
               onChangeTab={(key: number) => {

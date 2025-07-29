@@ -33,7 +33,7 @@ export default function LucyDrawMobile(props: any) {
       <div
         className={clsx(
           "fixed bottom-[30px] left-0 z-[10] w-[159px] h-[57px] duration-300",
-          open ? "translate-x-[0px]" : "translate-x-[-70px]",
+          open ? "translate-x-[0px]" : "translate-x-[-68px]",
           className
         )}
         onClick={() => {
@@ -50,7 +50,7 @@ export default function LucyDrawMobile(props: any) {
               }
             }}
             currentRound={currentRound}
-            className="absolute top-[-20px] right-[-30px] !border-[#7348FF]"
+            className="absolute top-[-20px] right-[-30px] !border-[#7348FF] !backdrop-blur-[25px]"
             key={currentRound}
           />
         )}

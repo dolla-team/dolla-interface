@@ -12,6 +12,10 @@ export default function PlayerDistribution({
 }) {
   const { distributed } = usePoolDistributed(data);
 
+  const total = useMemo(() => {
+    return Object.values(distributed).reduce((acc, curr) => acc + curr, 0);
+  }, [distributed]);
+
   return (
     <div className="w-full h-full rounded-[10px] bg-[#00000033] mt-[10px]">
       <div className="h-full pt-[12px] px-[18px] pb-[20px] flex flex-col justify-between">
@@ -20,7 +24,7 @@ export default function PlayerDistribution({
             data={item}
             key={item.value}
             number={distributed[item.value as keyof typeof distributed]}
-            total={data.accumulative_bids}
+            total={total}
             winner={data.winner_user_info}
             bidsDistribution={bidsDistribution[item.value]}
           />
@@ -35,6 +39,7 @@ const Item = ({ data, number, total, winner, bidsDistribution }: any) => {
     if (total === 0) return 0;
     return (number / total) * 100;
   }, [number, total]);
+
   return (
     <div className="flex items-center">
       <div className="text-[14px] text-[#FFE9B2] w-[58px] mr-[11px]">
