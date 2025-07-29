@@ -180,7 +180,7 @@ export default function BTCCreate() {
                     })
                   )}
                 </div>
-                <div className="text-[#4DD561] text-[12px] mt-[2px]">
+                {/* <div className="text-[#4DD561] text-[12px] mt-[2px]">
                   {referenceDataLoading ? (
                     <Skeleton className="w-[25px] h-[12px] rounded-full" />
                   ) : (
@@ -188,7 +188,7 @@ export default function BTCCreate() {
                       prefix: "+"
                     }) + "%"
                   )}
-                </div>
+                </div> */}
               </div>
               <div className="rounded-[10px] border border-[#2B2C2F] h-[93px] flex flex-col justify-center items-center gap-[10px]">
                 <div className="flex justify-center items-center gap-[7px]">
@@ -204,7 +204,7 @@ export default function BTCCreate() {
                     })
                   )}
                 </div>
-                <div className="text-[#4DD561] text-[12px] mt-[2px]">
+                {/* <div className="text-[#4DD561] text-[12px] mt-[2px]">
                   {referenceDataLoading ? (
                     <Skeleton className="w-[25px] h-[12px] rounded-full" />
                   ) : (
@@ -215,7 +215,7 @@ export default function BTCCreate() {
                       { prefix: "+" }
                     ) + "%"
                   )}
-                </div>
+                </div> */}
               </div>
               <div className="rounded-[10px] border border-[#2B2C2F] h-[93px] flex flex-col justify-center items-center gap-[10px]">
                 <div className="flex justify-center items-center gap-[7px]">
@@ -228,7 +228,7 @@ export default function BTCCreate() {
                     formatNumber(referenceData?.live, 0, true, { prefix: "$" })
                   )}
                 </div>
-                <div className="text-[#4DD561] text-[12px] mt-[2px]">
+                {/* <div className="text-[#4DD561] text-[12px] mt-[2px]">
                   {referenceDataLoading ? (
                     <Skeleton className="w-[25px] h-[12px] rounded-full" />
                   ) : (
@@ -236,7 +236,7 @@ export default function BTCCreate() {
                       prefix: "+"
                     }) + " new"
                   )}
-                </div>
+                </div> */}
               </div>
             </div>
             <div className="w-full mt-[30px] grid grid-cols-2 h-[210px] place-items-center max-md:grid-cols-1 max-md:mt-[28px] max-md:h-[unset]">
