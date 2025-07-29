@@ -28,7 +28,7 @@ const TOKNES = [
   {
     // address: "zBTCug3er3tLyffELcvDNrKkCymbPWysGcWihESYfLg",
     address: 'G5aHXkUgD4NnBbTZcKf7aQP2hXGw5bTVotcUc7wS8FVV',
-    decimals: 9,
+    decimals: 6,
     icon: "/btc.png",
     symbol: "BTC"
   }
