@@ -6,19 +6,7 @@ import { useMemo } from "react";
 import { useAuth } from "@/contexts/auth";
 import useBid from "@/hooks/solana/use-bid";
 
-<<<<<<< HEAD
-export default function BidSelection({
-  tokenBalance,
-  update
-}: {
-  tokenBalance: string;
-  update: () => void;
-}) {
-  const [showProvablyFair, setShowProvablyFair] = useState(true);
-  const { bids, setBids, flipStatus, pool } = useBtcContext();
-=======
 export default function BidSelection({ tokenBalance, update }: any) {
->>>>>>> 5752cd775d6fa706197139ff1857bd1bdd181659
   const { userInfo } = useAuth();
   const isMobile = useIsMobile();
   const {
