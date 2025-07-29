@@ -165,11 +165,19 @@ const Popover = forwardRef((props: Props, ref: any) => {
 
               // edge
               if (targetX < 0) targetX = 0;
-              if (targetX > window.innerWidth - w)
+              if (targetX > window.innerWidth - w) {
                 targetX = window.innerWidth - w;
+                if ([PopoverPlacement.RightTop, PopoverPlacement.Right, PopoverPlacement.RightBottom].includes(placement)) {
+                  targetX = triggerX - w - offset;
+                }
+              }
               if (targetY < 0) targetY = 0;
-              if (targetY > window.innerHeight - h)
+              if (targetY > window.innerHeight - h) {
                 targetY = window.innerHeight - h;
+                if ([PopoverPlacement.BottomRight, PopoverPlacement.Bottom, PopoverPlacement.BottomLeft].includes(placement)) {
+                  targetY = triggerY - offset - h;
+                }
+              }
 
               setX(targetX);
               setY(targetY);
