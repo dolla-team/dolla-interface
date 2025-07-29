@@ -19,17 +19,18 @@ import Skeleton from "@/components/skeleton";
 import { useConfigStore } from "@/stores/use-config";
 import Big from "big.js";
 import { useNavigate } from "react-router-dom";
+import { TOKNES } from "@/sections/cashier/panels/withdraw-solana";
 
 export default function BTCCreate() {
   const navigate = useNavigate();
   const [amount, setAmount] = useState(1);
-  const { address } = useAuth();
-  const { tokenBalance, isLoading } = useTokenBalance(BASE_TOKEN);
+  const { address, userInfo } = useAuth();
+  const { tokenBalance, isLoading } = useTokenBalance(TOKNES[1]);
   const { data: referenceData, loading: referenceDataLoading } =
     useReferenceData({ token: BASE_TOKEN, amount });
   const globalConfig = useConfigStore((state) => state.config);
 
-  const { prices } = useTokenPrice(BASE_TOKEN);
+  const { prices } = useTokenPrice(TOKNES[1]);
 
   const pricePerBTC = useMemo(() => {
     if (!prices || prices?.length === 0) return 0;
@@ -73,6 +74,8 @@ export default function BTCCreate() {
       })) || []
     ];
   }, [globalConfig]);
+
+  console.log('userInfo:', userInfo);
 
   return (
     <div className="w-full h-screen overflow-y-auto font-[SpaceGrotesk] text-[14px] font-[400] leading-[100%] text-white pt-[60px] pb-[60px]">
@@ -261,7 +264,7 @@ export default function BTCCreate() {
           <div className="text-[#BBACA6]">Account</div>
           <div className="w-full rounded-[16px] border border-[#6A5D3A] bg-[#35302B] mt-[10px]">
             <div className="w-full rounded-t-[16px] bg-black/20 p-[18px_15px]">
-              <div className="">{formatAddress(address)}</div>
+              <div className="">{formatAddress(userInfo?.sol_user)}</div>
               <div className="text-center text-[#BBACA6] mt-[17px]">
                 Balance
               </div>
@@ -276,7 +279,7 @@ export default function BTCCreate() {
             <div className="w-full p-[30px_15px]">
               <div className="text-center font-[700] text-[16px]">Recharge</div>
               <Recharge
-                token={BASE_TOKEN}
+                token={TOKNES[1]}
                 className="mt-[7px]"
                 tokenPanelClassName="!bg-black/20 !rounded-[10px]"
               />

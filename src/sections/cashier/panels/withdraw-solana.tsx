@@ -12,7 +12,7 @@ import useTokenBalance from "@/hooks/solana/use-token-balance";
 import useTransfer from "@/hooks/solana/use-transfer";
 import { toast } from "react-toastify";
 
-const TOKNES = [
+export const TOKNES = [
   // {
   //   address: "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
   //   decimals: 6,
