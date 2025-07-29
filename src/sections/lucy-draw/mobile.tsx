@@ -26,7 +26,7 @@ export default function LucyDrawMobile(props: any) {
     setOpen(true);
     setTimeout(() => {
       setOpen(false);
-    }, 2000);
+    }, 3000);
   }, [currentRound]);
   return (
     <>
