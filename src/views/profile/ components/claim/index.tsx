@@ -11,11 +11,14 @@ import { useAuth } from "@/contexts/auth";
 import { useMemo } from "react";
 import chains from "@/config/chains";
 import useClaimReward from "@/hooks/solana/use-claim-reward";
+import { useNavigate } from "react-router-dom";
+import { getProfitFee } from "@/utils/pool";
 
 const ClaimIndex = (props: any) => {
   const { className, type } = props;
 
   const { onQueryUserInfo, userInfo, userInfoLoading } = useAuth();
+  const navigate = useNavigate();
 
   const list = useMemo(() => {
     if (!userInfo) {
@@ -48,17 +51,19 @@ const ClaimIndex = (props: any) => {
             </div>
           ) : (
             (list && list.length > 0) ? list.map((item: any, index: number) => {
-              const currentChain = Object.values(chains).find((it: any) => it.name.toLowerCase() === item.chain?.toLowerCase());
-              let txUrl: any;
-              if (currentChain) {
-                txUrl = `${currentChain?.blockExplorers?.default?.url}/tx/${item.result_tx_hash || item.tx_hash}`;
-              }
+              // const currentChain = Object.values(chains).find((it: any) => it.name.toLowerCase() === item.chain?.toLowerCase());
+              // let txUrl: any;
+              // if (currentChain) {
+              //   txUrl = `${currentChain?.blockExplorers?.default?.url}/tx/${item.result_tx_hash || item.tx_hash}`;
+              // }
               return (
                 <div key={index} className="w-full bg-black/20 rounded-[10px] grid grid-cols-[120px_120px_auto_110px_70px] gap-x-[5px] pl-[8px] pr-[17px]">
                   <a
                     className="py-[10px] flex items-center gap-[7px]"
-                    target="_blank"
-                    href={txUrl || "javascript: void(0);"}
+                    href={"javascript: void(0);"}
+                    onClick={() => {
+                      navigate(`/btc/${item.pool_id}`);
+                    }}
                   >
                     <div>
                       #{item.id}
@@ -78,7 +83,18 @@ const ClaimIndex = (props: any) => {
                     </div>
                   </div>
                   <div className="py-[10px] flex items-center">
-                    {formatNumber(item.reward_usd, 2, true, { prefix: "$", isShort: Big(item.reward_usd || 0).gt(100000), isShortUppercase: true })}
+                    {
+                      formatNumber(
+                        Big(item.accumulative_bids || 0).minus(getProfitFee(item)),
+                        2,
+                        true,
+                        {
+                          prefix: "$",
+                          isShort: Big(item.accumulative_bids || 0).minus(getProfitFee(item)).gt(100000),
+                          isShortUppercase: true
+                        }
+                      )
+                    }
                   </div>
                   <div className="py-[10px] flex items-center">
                     <ClaimButton
