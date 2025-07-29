@@ -1,6 +1,8 @@
+import clsx from "clsx";
 import StarBg from "../star-bg";
 import TicketBottom from "./ticket";
 import Avatar from "@/components/avatar";
+import useIsMobile from "@/hooks/use-is-mobile";
 
 export default function Bottoms({
   status,
@@ -13,12 +15,24 @@ export default function Bottoms({
   onBuyTicket: () => void;
   winningList: any[];
 }) {
+  const isMobile = useIsMobile();
   return (
     <>
-      <div className="flex absolute z-[1] bottom-0">
-        <StarBg />
-        <StarBg className="ml-[-50px]" />
-        <StarBg className="ml-[-50px]" />
+      <div
+        className={clsx(
+          "flex absolute z-[1] bottom-0",
+          isMobile ? "w-full" : ""
+        )}
+      >
+        <StarBg size={isMobile ? 180 : 119} />
+        <StarBg
+          className={isMobile ? "ml-[-50px]" : "ml-[-50px]"}
+          size={isMobile ? 180 : 119}
+        />
+        <StarBg
+          className={isMobile ? "ml-[-50px]" : "ml-[-50px]"}
+          size={isMobile ? 180 : 119}
+        />
       </div>
       {status === 0 && (
         <TicketBottom tickets={tickets} onBuyTicket={onBuyTicket} />

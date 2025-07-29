@@ -1,21 +1,24 @@
-import { useEffect, useMemo, useRef, useState } from "react";
-import Timer from "./timer";
-import useUserInfoStore from "@/stores/use-user-info";
-import LucyDrawHistory from "./history";
-import WinResult from "./win-result";
+import useIsMobile from "@/hooks/use-is-mobile";
+import LucyDrawMobile from "./mobile";
+import LucyDrawLaptop from "./laptop";
+import useUserPrize from "@/hooks/use-user-prize";
 import useLucyDraw from "./use-lucky-draw";
 import { useConfigStore } from "@/stores/use-config";
-import Bottoms from "./bottoms";
+import useUserInfoStore from "@/stores/use-user-info";
+import { useEffect, useMemo, useRef, useState } from "react";
+import LucyDrawHistory from "./history";
 import BuyTicket from "./buy-ticket";
-import useUserPrize from "@/hooks/use-user-prize";
 
 export default function LucyDraw({
   tokenBalance,
-  update
+  update,
+  className
 }: {
   tokenBalance: string;
   update: () => void;
+  className?: string;
 }) {
+  const isMobile = useIsMobile();
   const userInfoStore = useUserInfoStore();
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
   const [historyRound, setHistoryRound] = useState(0);
@@ -74,71 +77,27 @@ export default function LucyDraw({
       }
     };
   }, []);
-
+  const params = {
+    setIsHistoryOpen,
+    setHistoryRound,
+    currentRound,
+    prizeAmount,
+    status,
+    tickets,
+    winningList,
+    setShowBuyTicket,
+    userInfoStore,
+    fetchResult,
+    setStatus,
+    className
+  };
   return (
-    <div className="absolute top-[14%] right-[20px] z-[10]">
-      <WinResult
-        onShowHistory={(_round: number) => {
-          setIsHistoryOpen(true);
-          setHistoryRound(_round);
-        }}
-        key={currentRound}
-      />
-      <div className="w-[248px] border border-[#FFE9B2] rounded-[12px] bg-[#FFFFFF1A] overflow-hidden">
-        <div className="z-[5] relative backdrop-filter-[10px] bg-black/50 px-[16px] pt-[2px] pb-[10px] rounded-t-[12px]">
-          <div className="flex items-center justify-between">
-            <span
-              className="text-white font-[DelaGothicOne] text-[24px]"
-              style={{
-                textShadow: "0px 0px 30px #8465FF",
-                WebkitTextStroke: "1px #3A3A3A"
-              }}
-            >
-              Lucky Draw
-            </span>
-            <div className="text-black text-[14px] px-[8px] bg-[#FFE9B2] rounded-[12px] font-semibold bg-linear-to-r from-[#FFE9B2] to-[#FFC42F]">
-              #{currentRound}
-            </div>
-          </div>
-          <div className="flex items-center justify-between mt-[4px]">
-            <span className="text-[20px] font-[DelaGothicOne] text-white">
-              ${prizeAmount.toLocaleString()}
-            </span>
-            <Timer
-              onTimeUp={() => {
-                if (currentRound) {
-                  setStatus(1);
-                  fetchResult();
-                }
-              }}
-              currentRound={currentRound}
-            />
-          </div>
-          <div className="flex items-center justify-between mt-[10px] text-[12px] text-[#FFE9B2]">
-            <span>
-              <span>Total Tickets</span>{" "}
-              <span className="text-white">
-                {userInfoStore?.prize?.tickets}
-              </span>
-            </span>
-            <button
-              className="button underline"
-              onClick={() => setIsHistoryOpen(true)}
-            >
-              History
-            </button>
-          </div>
-        </div>
-
-        <div className="h-[60px] relative">
-          <Bottoms
-            status={status}
-            tickets={tickets}
-            onBuyTicket={() => setShowBuyTicket(true)}
-            winningList={winningList}
-          />
-        </div>
-      </div>
+    <>
+      {isMobile ? (
+        <LucyDrawMobile {...params} />
+      ) : (
+        <LucyDrawLaptop {...params} />
+      )}
       <LucyDrawHistory
         open={isHistoryOpen}
         onClose={() => setIsHistoryOpen(false)}
@@ -154,6 +113,6 @@ export default function LucyDraw({
         tokenBalance={tokenBalance}
         update={update}
       />
-    </div>
+    </>
   );
 }

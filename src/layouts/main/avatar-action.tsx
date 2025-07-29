@@ -9,8 +9,9 @@ import { useUser } from "@privy-io/react-auth";
 import AvatarCashier from "./avatar-cashier";
 import { QUOTE_TOKEN } from "@/config/btc";
 import useTokenBalance from "@/hooks/solana/use-token-balance";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Cashier from "@/sections/cashier/modal";
+import { AnimatePresence, motion } from "framer-motion";
 
 const MENU = [
   {
@@ -97,98 +98,136 @@ export default function AvatarAction() {
   const navigate = useNavigate();
   const { onCopy } = useCopy();
   const { user } = useUser();
+  const [showMenu, setShowMenu] = useState(false);
 
-  const { tokenBalance, update } = useTokenBalance({
+  const { tokenBalance } = useTokenBalance({
     address: QUOTE_TOKEN.address,
     decimals: QUOTE_TOKEN.decimals
   });
   const [showCashier, setShowCashier] = useState(false);
- 
+
+  useEffect(() => {
+    const handleClickOutside = () => {
+      setShowMenu(false);
+    };
+
+    document.addEventListener("click", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
 
   return (
     <div className="relative group flex items-center gap-[10px]">
-      {user?.wallet?.address && <AvatarCashier onClick={() => setShowCashier(true)} tokenBalance={tokenBalance} />}
+      {user?.wallet?.address && (
+        <AvatarCashier
+          onClick={() => setShowCashier(true)}
+          tokenBalance={tokenBalance}
+        />
+      )}
       {userInfo?.icon && (
         <Avatar
           size={32}
           address={userInfo.sol_user}
           email={userInfo?.email}
           className="shrink-0 button"
+          onClick={(e: any) => {
+            e.stopPropagation();
+            setShowMenu(!showMenu);
+          }}
         />
       )}
-      <div className="w-[208px] rounded-[10px] bg-[#35302B] border border-[#6A5D3A] absolute right-0 top-[40px] text-white invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
-        <div className="p-[10px] flex gap-[8px] items-center border-b border-[#423930]">
-          <Avatar
-            size={32}
-            address={userInfo.sol_user}
-            email={userInfo?.email}
-            className="shrink-0"
-          />
-          <div className="flex-1 w-0 whitespace-nowrap overflow-hidden text-ellipsis">
-            <span className="text-[16px] font-medium">
-              {user?.email?.address}
-            </span>
-            <div className="flex items-center gap-[3px]">
-              <span className="text-[12px]">
-                {formatAddress(userInfo?.sol_user)}
-              </span>
-              <button
-                className="button"
+
+      <AnimatePresence>
+        {showMenu && (
+          <motion.div
+            initial={{ opacity: 0, y: 10, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 10, scale: 0.95 }}
+            transition={{
+              duration: 0.2,
+              ease: "easeOut",
+              opacity: { duration: 0.15 },
+              scale: { duration: 0.2 }
+            }}
+            className={clsx(
+              "w-[208px] rounded-[10px] bg-[#35302B] border border-[#6A5D3A] absolute right-0 top-[40px] text-white"
+            )}
+          >
+            <div className="p-[10px] flex gap-[8px] items-center border-b border-[#423930]">
+              <Avatar
+                size={32}
+                address={userInfo.sol_user}
+                email={userInfo?.email}
+                className="shrink-0"
+              />
+              <div className="flex-1 w-0 whitespace-nowrap overflow-hidden text-ellipsis">
+                <span className="text-[16px] font-medium">
+                  {user?.email?.address}
+                </span>
+                <div className="flex items-center gap-[3px]">
+                  <span className="text-[12px]">
+                    {formatAddress(userInfo?.sol_user)}
+                  </span>
+                  <button
+                    className="button"
+                    onClick={() => {
+                      onCopy(userInfo?.sol_user);
+                    }}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="10"
+                      height="10"
+                      viewBox="0 0 10 10"
+                      fill="none"
+                    >
+                      <path
+                        d="M6.03809 2.28809C6.25541 2.28784 6.47105 2.33102 6.67188 2.41406C6.87262 2.49713 7.05537 2.61884 7.20899 2.77246C7.36262 2.92613 7.48434 3.10877 7.56739 3.30957C7.65044 3.51046 7.69265 3.72598 7.69239 3.94336V8.34473C7.70966 9.26031 6.95367 9.99987 6.03809 10H1.6543C1.43696 10.0003 1.22136 9.95805 1.02051 9.875C0.819663 9.79193 0.637089 9.66932 0.483401 9.51562C0.329807 9.36195 0.20802 9.1793 0.125002 8.97852C0.0419817 8.77766 -0.000273377 8.56207 2.37201e-06 8.34473V3.94434C-0.000365337 3.72693 0.0420218 3.51149 0.125002 3.31055C0.208028 3.10956 0.329669 2.92626 0.483401 2.77246C0.637051 2.61879 0.819711 2.49714 1.02051 2.41406C1.22141 2.33097 1.4369 2.28783 1.6543 2.28809H6.03809ZM1.6543 3.34473C1.57566 3.3441 1.4976 3.35892 1.42481 3.38867C1.35188 3.41853 1.28522 3.46283 1.22949 3.51855C1.1738 3.57426 1.12946 3.64096 1.09961 3.71387C1.06988 3.78666 1.05502 3.86473 1.05567 3.94336V8.34473C1.05506 8.42334 1.06985 8.50145 1.09961 8.57422C1.12947 8.64715 1.17377 8.71381 1.22949 8.76953C1.2852 8.82521 1.35192 8.8686 1.42481 8.89844C1.49767 8.92826 1.57557 8.94399 1.6543 8.94336H6.03809C6.11681 8.94398 6.19473 8.92826 6.26758 8.89844C6.34048 8.86859 6.40719 8.82523 6.46289 8.76953C6.51858 8.71384 6.56195 8.64709 6.5918 8.57422C6.62161 8.5014 6.63733 8.42341 6.63672 8.34473V3.94336C6.63736 3.86462 6.62162 3.78675 6.5918 3.71387C6.56196 3.64098 6.51857 3.57426 6.46289 3.51855C6.40717 3.46283 6.34051 3.41853 6.26758 3.38867C6.19479 3.35891 6.11672 3.34411 6.03809 3.34473H1.6543ZM8.37988 0C8.79501 0.000995696 9.19276 0.166432 9.48633 0.459961C9.77986 0.753496 9.94524 1.1513 9.94629 1.56641V6.14355C9.94537 6.55883 9.77997 6.95733 9.48633 7.25098C9.19277 7.54445 8.79498 7.70994 8.37988 7.71094C8.23982 7.71094 8.1049 7.65471 8.00586 7.55566C7.90706 7.45666 7.85156 7.32251 7.85156 7.18262C7.85157 7.04272 7.90704 6.90857 8.00586 6.80957C8.1049 6.71053 8.23982 6.6543 8.37988 6.6543C8.51513 6.65422 8.64456 6.60047 8.74024 6.50488C8.836 6.40912 8.89063 6.27899 8.89063 6.14355V1.56641C8.8905 1.43115 8.83589 1.30171 8.74024 1.20605C8.64455 1.11041 8.51517 1.05671 8.37988 1.05664H3.80274C3.66731 1.05664 3.53717 1.11029 3.44141 1.20605C3.34591 1.30168 3.29212 1.43126 3.29199 1.56641C3.29199 1.70643 3.23668 1.8414 3.1377 1.94043C3.03866 2.03947 2.90374 2.09473 2.76367 2.09473C2.62377 2.09465 2.48959 2.03934 2.39063 1.94043C2.29159 1.84139 2.23633 1.70647 2.23633 1.56641C2.23738 1.1513 2.40276 0.753496 2.69629 0.459961C2.98991 0.16646 3.38758 0.000922396 3.80274 0H8.37988Z"
+                        fill="#ADBCCF"
+                      />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+            {MENU.map((item: any, index: number) => (
+              <div
+                key={item.key + index}
+                className={clsx(
+                  "px-[20px] py-[12px] flex items-center justify-between text-[16px] font-medium",
+                  item.isActive ? "hover:bg-[#00000033] button" : "opacity-50"
+                )}
                 onClick={() => {
-                  onCopy(userInfo?.sol_user);
+                  if (item.key === "logout") {
+                    logout();
+                    return;
+                  } else if (item.key === "invite") {
+                    return;
+                  } else if (item.key === "portfolio") {
+                    navigate("/portfolio/player");
+                    return;
+                  } else if (item.key === "create-market") {
+                    navigate("/btc/create");
+                    return;
+                  }
                 }}
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="10"
-                  height="10"
-                  viewBox="0 0 10 10"
-                  fill="none"
-                >
-                  <path
-                    d="M6.03809 2.28809C6.25541 2.28784 6.47105 2.33102 6.67188 2.41406C6.87262 2.49713 7.05537 2.61884 7.20899 2.77246C7.36262 2.92613 7.48434 3.10877 7.56739 3.30957C7.65044 3.51046 7.69265 3.72598 7.69239 3.94336V8.34473C7.70966 9.26031 6.95367 9.99987 6.03809 10H1.6543C1.43696 10.0003 1.22136 9.95805 1.02051 9.875C0.819663 9.79193 0.637089 9.66932 0.483401 9.51562C0.329807 9.36195 0.20802 9.1793 0.125002 8.97852C0.0419817 8.77766 -0.000273377 8.56207 2.37201e-06 8.34473V3.94434C-0.000365337 3.72693 0.0420218 3.51149 0.125002 3.31055C0.208028 3.10956 0.329669 2.92626 0.483401 2.77246C0.637051 2.61879 0.819711 2.49714 1.02051 2.41406C1.22141 2.33097 1.4369 2.28783 1.6543 2.28809H6.03809ZM1.6543 3.34473C1.57566 3.3441 1.4976 3.35892 1.42481 3.38867C1.35188 3.41853 1.28522 3.46283 1.22949 3.51855C1.1738 3.57426 1.12946 3.64096 1.09961 3.71387C1.06988 3.78666 1.05502 3.86473 1.05567 3.94336V8.34473C1.05506 8.42334 1.06985 8.50145 1.09961 8.57422C1.12947 8.64715 1.17377 8.71381 1.22949 8.76953C1.2852 8.82521 1.35192 8.8686 1.42481 8.89844C1.49767 8.92826 1.57557 8.94399 1.6543 8.94336H6.03809C6.11681 8.94398 6.19473 8.92826 6.26758 8.89844C6.34048 8.86859 6.40719 8.82523 6.46289 8.76953C6.51858 8.71384 6.56195 8.64709 6.5918 8.57422C6.62161 8.5014 6.63733 8.42341 6.63672 8.34473V3.94336C6.63736 3.86462 6.62162 3.78675 6.5918 3.71387C6.56196 3.64098 6.51857 3.57426 6.46289 3.51855C6.40717 3.46283 6.34051 3.41853 6.26758 3.38867C6.19479 3.35891 6.11672 3.34411 6.03809 3.34473H1.6543ZM8.37988 0C8.79501 0.000995696 9.19276 0.166432 9.48633 0.459961C9.77986 0.753496 9.94524 1.1513 9.94629 1.56641V6.14355C9.94537 6.55883 9.77997 6.95733 9.48633 7.25098C9.19277 7.54445 8.79498 7.70994 8.37988 7.71094C8.23982 7.71094 8.1049 7.65471 8.00586 7.55566C7.90706 7.45666 7.85156 7.32251 7.85156 7.18262C7.85157 7.04272 7.90704 6.90857 8.00586 6.80957C8.1049 6.71053 8.23982 6.6543 8.37988 6.6543C8.51513 6.65422 8.64456 6.60047 8.74024 6.50488C8.836 6.40912 8.89063 6.27899 8.89063 6.14355V1.56641C8.8905 1.43115 8.83589 1.30171 8.74024 1.20605C8.64455 1.11041 8.51517 1.05671 8.37988 1.05664H3.80274C3.66731 1.05664 3.53717 1.11029 3.44141 1.20605C3.34591 1.30168 3.29212 1.43126 3.29199 1.56641C3.29199 1.70643 3.23668 1.8414 3.1377 1.94043C3.03866 2.03947 2.90374 2.09473 2.76367 2.09473C2.62377 2.09465 2.48959 2.03934 2.39063 1.94043C2.29159 1.84139 2.23633 1.70647 2.23633 1.56641C2.23738 1.1513 2.40276 0.753496 2.69629 0.459961C2.98991 0.16646 3.38758 0.000922396 3.80274 0H8.37988Z"
-                    fill="#ADBCCF"
-                  />
-                </svg>
-              </button>
-            </div>
-          </div>
-        </div>
-        {MENU.map((item: any, index: number) => (
-          <div
-            key={item.key + index}
-            className={clsx(
-              "px-[20px] py-[12px] flex items-center justify-between text-[16px] font-medium",
-              item.isActive ? "hover:bg-[#00000033] button" : "opacity-50"
-            )}
-            onClick={() => {
-              if (item.key === "logout") {
-                logout();
-                return;
-              } else if (item.key === "invite") {
-                return;
-              } else if (item.key === "portfolio") {
-                navigate("/portfolio/player");
-                return;
-              } else if (item.key === "create-market") {
-                navigate("/btc/create");
-                return;
-              }
-            }}
-          >
-            <div className="flex items-center gap-[16px]">
-              <div className="w-[20px]">{item.icon}</div>
-              <span>{item.label}</span>
-            </div>
-            {!item.isActive && (
-              <div className="w-[38px] h-[20px] rounded-[6px] bg-[#4C4C4C] text-[12px] text-center leading-[20px]">
-                soon
+                <div className="flex items-center gap-[16px]">
+                  <div className="w-[20px]">{item.icon}</div>
+                  <span>{item.label}</span>
+                </div>
+                {!item.isActive && (
+                  <div className="w-[38px] h-[20px] rounded-[6px] bg-[#4C4C4C] text-[12px] text-center leading-[20px]">
+                    soon
+                  </div>
+                )}
               </div>
-            )}
-          </div>
-        ))}
-      </div>
-
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
       <Cashier open={showCashier} onClose={() => setShowCashier(false)} />
     </div>
   );

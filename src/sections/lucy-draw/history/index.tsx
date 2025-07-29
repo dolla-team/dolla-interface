@@ -5,6 +5,7 @@ import { formatAddress } from "@/utils/format/address";
 import clsx from "clsx";
 import LoadingItem from "./loading-item";
 import Avatar from "@/components/avatar";
+import useIsMobile from "@/hooks/use-is-mobile";
 
 export default function LucyDrawHistory({
   open,
@@ -28,6 +29,7 @@ export default function LucyDrawHistory({
 }) {
   const [round, setRound] = useState(1);
   const [winningList, setWinningList] = useState<any[]>([]);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     if (!historyRound && !currentRound) return;
@@ -44,7 +46,12 @@ export default function LucyDrawHistory({
 
   return (
     <Modal open={open} onClose={onClose}>
-      <div className="w-[496px] rounded-[16px] border border-[#6A5D3A] bg-[#1D1A16]">
+      <div
+        className={clsx(
+          "border border-[#6A5D3A] bg-[#1D1A16]",
+          isMobile ? "w-full rounded-t-[16px]" : "w-[496px] rounded-[16px]"
+        )}
+      >
         <div className="h-[160px] bg-black/80 backdrop-blur-[10px] rounded-t-[18px]">
           <div className="h-full relative z-[2] flex flex-col justify-center items-center">
             <div

@@ -6,6 +6,7 @@ import useInfiniteScroll from "@/hooks/use-infinite-scroll";
 import LoadingMore from "@/components/loading/loading-more";
 import { useEffect } from "react";
 import dayjs from "dayjs";
+import useIsMobile from "@/hooks/use-is-mobile";
 
 export default function History({
   showHistory,
@@ -16,6 +17,7 @@ export default function History({
   onClose: () => void;
   itemsMap: any;
 }) {
+  const isMobile = useIsMobile();
   const { data, loading, hasMore, getHistory } = useHistory();
   const { containerRef, isLoading } = useInfiniteScroll(getHistory, {
     loading,
@@ -31,7 +33,12 @@ export default function History({
 
   return (
     <Modal open={showHistory} onClose={onClose}>
-      <div className="w-[618px] rounded-[16px] border border-[#6A5D3A] bg-[#35302B]">
+      <div
+        className={clsx(
+          "rounded-[16px] border border-[#6A5D3A] bg-[#35302B]",
+          isMobile ? "w-full" : "w-[618px]"
+        )}
+      >
         <div className="h-[54px] bg-[#00000033] rounded-t-[16px] flex items-center justify-between px-[16px]">
           <div className="text-[20px] text-white">Points Redemption</div>
           <button className="w-[24px] h-[24px] button" onClick={onClose}>
@@ -69,7 +76,13 @@ export default function History({
               </div>
             ))}
           </div>
-          <div ref={containerRef} className="h-[400px] overflow-y-auto">
+          <div
+            ref={containerRef}
+            className={clsx(
+              "overflow-y-auto",
+              isMobile ? "max-h-[70vh] min-h-[400px]" : "h-[400px]"
+            )}
+          >
             {loading && (
               <div className="text-[14px] text-[#5E6B7D] w-full h-[300px] flex items-center justify-center">
                 <Loading size={20} />

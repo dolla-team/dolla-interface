@@ -1,110 +1,91 @@
-import clsx from "clsx";
-import { BalanceBg, Bg1, Bg100, Bg10, Bg5, Bg50, ProvablyFairBg } from "./bgs";
-import { useMemo, useState } from "react";
+import useIsMobile from "@/hooks/use-is-mobile";
+import MobileBidSelection from "./mobile";
+import LaptopBidSelection from "./laptop";
 import { useBtcContext } from "../../context";
-import BidBtn from "../bid-btn";
-import AutoBtn from "./auto-btn";
-import ProvablyFair from "@/sections/provably-fair";
-import Points from "@/sections/points";
-import useUserInfo from "@/hooks/use-user-info";
+import { useMemo } from "react";
 import { useAuth } from "@/contexts/auth";
-import Cashier from "@/sections/cashier/modal";
-import CashierEntry from "../cashier-entery";
+import useBid from "@/hooks/solana/use-bid";
 
-export default function BidSelection({
-  tokenBalance,
-  update
-}: {
-  tokenBalance: string;
-  update: () => void;
-}) {
-  const [showProvablyFair, setShowProvablyFair] = useState(false);
-  const { bids, setBids, flipStatus, pool } = useBtcContext();
+export default function BidSelection({ tokenBalance, update }: any) {
   const { userInfo } = useAuth();
-  const [showCashier, setShowCashier] = useState(false)
+  const isMobile = useIsMobile();
+  const {
+    bids,
+    setBids,
+    flipStatus,
+    pool,
+    setFlipStatus,
+    setBidResult,
+    onReset
+  } = useBtcContext();
+
+  const disabled = useMemo(() => {
+    if (pool?.status !== 1) {
+      return true;
+    }
+    if (!userInfo?.user) {
+      return true;
+    }
+    if (Number(tokenBalance) < bids) {
+      return true;
+    }
+    if (flipStatus === 0 || flipStatus === 6) {
+      return false;
+    }
+    return true;
+  }, [flipStatus, userInfo, tokenBalance, bids, pool]);
+
+  const { onBid } = useBid(
+    pool?.pool_id,
+    (result) => {
+      console.log("complete success");
+      setFlipStatus(4);
+      setBidResult(result);
+    },
+    () => {
+      console.log("bid success");
+      setFlipStatus(2);
+      update();
+    },
+    () => {
+      console.log("bid fail");
+      setTimeout(() => {
+        setFlipStatus(0);
+      }, 30);
+    }
+  );
+
   const onChangeBids = (bids: number) => {
     if (flipStatus === 1) return;
     setBids(bids);
   };
 
-  const isDisabled = useMemo(() => {
-    if (flipStatus !== 0 && flipStatus !== 6) return true;
-    if (pool?.status !== 1) return true;
-    return false;
-  }, [flipStatus, pool]);
+  const onBidClick = () => {
+    console.log("onBidClick", disabled);
+    if (disabled) {
+      return;
+    }
+    if (flipStatus === 6) {
+      onReset();
+    }
+    setBidResult(null);
+    setFlipStatus(1);
+    onBid(bids);
+  };
 
-  return (
-    <div className="absolute bottom-0 left-[3%] w-full h-[202px] flex items-center justify-center">
-      <div
-        onClick={() => setShowProvablyFair(true)}
-        className="w-[192px] cursor-pointer h-[53px] relative top-[10px] flex items-center justify-center font-[BlackHanSans]"
-      >
-        <ProvablyFairBg />
-        <span className="text-white text-[16px] mt-[10px] leading-[16px]">
-          Provably fair
-        </span>
-      </div>
-      <div className="w-[333px] h-[73px] relative font-[BlackHanSans]">
-        <BalanceBg />
-        <div className="flex items-center justify-between relative z-[2] mt-[26px] w-[80%] mx-auto">
-          <div className="text-white text-[16px]">PTS</div>
-          <Points />
-        </div>
-      </div>
-      <div className="mx-[20px] relative flex flex-col items-center justify-center">
-        {flipStatus !== 4 && (
-          <BidBtn
-            tokenBalance={tokenBalance}
-            onBidSuccess={() => {
-              update();
-            }}
-          />
-        )}
-        {flipStatus === 4 && <AutoBtn />}
-        {userInfo && <CashierEntry onClick={() => setShowCashier(true)} tokenBalance={tokenBalance} />}
-      </div>
-      <div className="flex items-center text-white text-[22px] font-normal leading-[100%] uppercase font-[DelaGothicOne]">
-        {[100, 50, 10, 5, 1].map((item) => (
-          <div
-            key={`bids-${item}`}
-            className={clsx(
-              "relative flex items-center justify-center",
-              item === 100 && "w-[139px] h-[73px]",
-              item === 50 && "w-[133px] h-[68px]",
-              item === 10 && "w-[120px] h-[62px]",
-              item === 5 && "w-[118px] h-[56px]",
-              item === 1 && "w-[110px] h-[47px]",
-              isDisabled ? "opacity-50" : "button"
-            )}
-            onClick={() => onChangeBids(item)}
-          >
-            {item === 100 && <Bg100 />}
-            {item === 50 && <Bg50 />}
-            {item === 10 && <Bg10 />}
-            {item === 5 && <Bg5 />}
-            {item === 1 && <Bg1 />}
-            {/* {bids === 1 ? <Bg1 /> : <Bg1 />} */}
-            <span
-              className={clsx(
-                "relative z-[2]",
-                bids === item && "text-[#FFEF43]"
-              )}
-              style={{
-                WebkitTextStroke: bids === item ? "2px #5E3737" : "none"
-              }}
-            >
-              ${item}
-            </span>
-          </div>
-        ))}
-      </div>
+  const props = {
+    tokenBalance,
+    disabled,
+    bids,
+    flipStatus,
+    onChangeBids,
+    onBidClick,
+    pool
+  };
 
-      <ProvablyFair
-        open={showProvablyFair}
-        onClose={() => setShowProvablyFair(false)}
-      />
-
-      <Cashier open={showCashier} onClose={() => setShowCashier(false)} />
-    </div>
+  return isMobile ? (
+    <MobileBidSelection {...props} />
+  ) : (
+    <LaptopBidSelection {...props} />
   );
 }

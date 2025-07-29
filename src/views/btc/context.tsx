@@ -38,7 +38,7 @@ export const CannonCoinsProvider = ({
 
     if (flipStatus === 2) {
       for (let i = 0; i < bids; i++) {
-        coinsRef.current[i].collect();
+        coinsRef.current[i]?.collect();
       }
       setTimeout(() => {
         setFlipStatus(3);

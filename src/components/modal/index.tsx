@@ -22,8 +22,6 @@ interface ModalProps {
 const Modal: React.FC<ModalProps> = (props) => {
   const { children, ...restProps } = props;
 
-  if (!props.open) return null;
-
   return ReactDOM.createPortal(
     (<ModalContent {...restProps}>{children}</ModalContent>) as any,
     document.body
@@ -66,54 +64,60 @@ export const ModalContent = (props: ModalProps) => {
 
   return (
     <AnimatePresence mode="wait">
-      <div
-        className={clsx(
-          "fixed inset-0 bg-black/50 flex lg:items-center lg:justify-center z-[200]",
-          className
-        )}
-        style={style}
-        onClick={handleBackdropClick}
-      >
+      {props.open && (
         <div
-          className={`rounded-lg relative ${innerClassName}`}
-          style={innerStyle}
-        >
-          {isMobile && !isForceNormal ? (
-            <motion.div
-              animate={{
-                y: [100, 0],
-                transition: {
-                  duration: 0.3
-                }
-              }}
-              exit={{
-                y: [0, 100]
-              }}
-              className="w-screen absolute bottom-0 left-0 rounded-t-[20px]"
-              onClick={(e) => {
-                e.stopPropagation();
-              }}
-            >
-              {children}
-            </motion.div>
-          ) : (
-            <motion.div
-              animate={{
-                opacity: 1,
-                transition: {
-                  duration: 0.3
-                }
-              }}
-              exit={{
-                opacity: 0
-              }}
-              className="w-full h-full"
-            >
-              {children}
-            </motion.div>
+          className={clsx(
+            "fixed inset-0 bg-black/50 flex z-[200]",
+            (!isMobile || isForceNormal) && "items-center justify-center",
+            className
           )}
+          style={style}
+          onClick={handleBackdropClick}
+        >
+          <div
+            className={`rounded-lg relative ${innerClassName}`}
+            style={innerStyle}
+          >
+            {isMobile && !isForceNormal ? (
+              <motion.div
+                animate={{
+                  y: ["100%", 0],
+                  transition: {
+                    duration: 0.3
+                  }
+                }}
+                exit={{
+                  y: [0, "100%"],
+                  transition: {
+                    duration: 0.3
+                  }
+                }}
+                className="w-screen absolute bottom-0 left-0 rounded-t-[20px]"
+                onClick={(e) => {
+                  e.stopPropagation();
+                }}
+              >
+                {children}
+              </motion.div>
+            ) : (
+              <motion.div
+                animate={{
+                  opacity: 1,
+                  transition: {
+                    duration: 0.3
+                  }
+                }}
+                exit={{
+                  opacity: 0
+                }}
+                className="w-full h-full"
+              >
+                {children}
+              </motion.div>
+            )}
+          </div>
         </div>
-      </div>
+      )}
     </AnimatePresence>
   );
 };
