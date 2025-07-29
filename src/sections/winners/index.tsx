@@ -11,12 +11,13 @@ export default function TopWinner() {
 
   const [amount, rewardInfo, multiple] = useMemo(() => {
     if (!data) return ["", {}, 0];
+
     const _rewardInfo = data.reward_token_info[0];
     const _a = Big(data.reward_amount)
       .div(10 ** _rewardInfo.decimals)
       .toString();
 
-    const _returnMultiple = Big(data.pool_info.anchor_price)
+    const _returnMultiple = Big(data?.pool_info?.anchor_price)
       .div(10 ** _rewardInfo.decimals)
       .div(data.times)
       .toString();
@@ -31,7 +32,7 @@ export default function TopWinner() {
     multiple
   };
   return isMobile ? (
-    <MWinnerCard key={data.pool_info?.winner_user} {...params} />
+    <MWinnerCard key={data?.pool_info?.winner_user} {...params} />
   ) : (
     <div className="absolute top-[14%] left-[20px]">
       <WinnerCard {...params} />
