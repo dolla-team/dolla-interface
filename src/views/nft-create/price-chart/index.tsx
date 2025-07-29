@@ -335,7 +335,7 @@ export default function PriceChart({
           )}
           <div
             ref={anchorDotRef}
-            className="absolute z-[20] flex items-center"
+            className="absolute z-[1] flex items-center"
             style={{
               opacity: isInit ? 1 : 0
             }}
