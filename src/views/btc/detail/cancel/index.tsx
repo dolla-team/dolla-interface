@@ -1,6 +1,8 @@
 import ButtonV2 from "@/components/button/v2";
 import useClaimSlash from "@/hooks/solana/use-claim-slash";
+import useIsMobile from "@/hooks/use-is-mobile";
 import { useEffect, useState } from "react";
+import clsx from "clsx";
 
 export default function Cancel({ data }: { data: any }) {
   const { claiming, onClaim } = useClaimSlash({
@@ -10,12 +12,21 @@ export default function Cancel({ data }: { data: any }) {
   });
   const [claimed, setClaimed] = useState<boolean | null>(null);
 
+  const isMobile = useIsMobile();
+
   useEffect(() => {
     setClaimed(data.is_claim);
   }, [data]);
 
   return !data.user_draw_attempt ? (
-    <div className="w-[403px] h-[224px] rounded-[20px] border border-[#605D55] bg-[rgba(0,0,0,0.5)] backdrop-blur-[25px] flex flex-col items-center justify-center">
+    <div
+      className={clsx(
+        "rounded-[20px] border border-[#605D55] backdrop-blur-[25px] flex flex-col items-center justify-center",
+        isMobile
+          ? "w-[calc(100%-24px)] h-[254px] bg-[#FFFFFF1A] ml-[12px] mt-[12px]"
+          : "w-[403px] h-[224px] bg-[rgba(0,0,0,0.5)]"
+      )}
+    >
       <div className="text-white text-[16px] font-[DelaGothicOne]">
         This market has been cancelled
       </div>
@@ -24,7 +35,14 @@ export default function Cancel({ data }: { data: any }) {
       </div>
     </div>
   ) : (
-    <div className="w-[403px] h-[254px] rounded-[20px] border border-[#605D55] bg-[rgba(0,0,0,0.5)] backdrop-blur-[25px] flex flex-col items-center justify-center">
+    <div
+      className={clsx(
+        "rounded-[20px] border border-[#605D55] backdrop-blur-[25px] flex flex-col items-center justify-center",
+        isMobile
+          ? "w-[calc(100%-24px)] h-[254px] bg-[#FFFFFF1A] ml-[12px] mt-[12px]"
+          : "w-[403px] h-[224px] bg-[rgba(0,0,0,0.5)]"
+      )}
+    >
       <div className="text-white text-[16px] font-[DelaGothicOne]">
         This market has been cancelled
       </div>

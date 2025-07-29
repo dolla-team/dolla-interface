@@ -23,14 +23,16 @@ export const TOKNES = [
     address: "ADo4M7ZEZwDKNP1k8dic26TBrftX6mix9sGMntkq6Tp4",
     decimals: 6,
     icon: "/currency/usdc.png",
-    symbol: "USDC"
+    symbol: "USDC",
+    chain: "solana"
   },
   {
     // address: "zBTCug3er3tLyffELcvDNrKkCymbPWysGcWihESYfLg",
     address: 'G5aHXkUgD4NnBbTZcKf7aQP2hXGw5bTVotcUc7wS8FVV',
     decimals: 6,
     icon: "/btc.png",
-    symbol: "BTC"
+    symbol: "BTC",
+    chain: "solana"
   }
 ];
 export default function WithdrawSolana() {

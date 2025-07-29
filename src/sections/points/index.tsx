@@ -1,6 +1,6 @@
 import PointIcon from "@/components/icons/point-icon";
 import useUserInfoStore from "@/stores/use-user-info";
-import { addThousandSeparator } from "@/utils/format/number";
+import { formatNumber } from "@/utils/format/number";
 import Big from "big.js";
 import { motion } from "framer-motion";
 import { useMemo, useState } from "react";
@@ -8,10 +8,12 @@ import RedeemSelection from "./redeem-selection";
 import clsx from "clsx";
 import { useConfigStore } from "@/stores/use-config";
 import { BASE_TOKEN, QUOTE_TOKEN } from "@/config/btc";
+import useIsMobile from "@/hooks/use-is-mobile";
 
-export default function Points() {
+export default function Points({ className }: { className?: string }) {
   const { prize } = useUserInfoStore();
   const { config } = useConfigStore();
+  const isMobile = useIsMobile();
   const [items, itemsMap, minPoints] = useMemo(() => {
     if (!config?.point_withdrawal_config) return [[], {}, 0];
     let _itemsMap: any = {};
@@ -71,7 +73,12 @@ export default function Points() {
       <div
         className={clsx(
           "flex items-center gap-[8px]",
-          progress >= 1 ? "button" : ""
+          progress >= 1 ? "button" : "",
+          isMobile &&
+            "p-[4px] border border-[#7C68FF] rounded-l-[40px] fixed right-[-2px] bottom-[30px] duration-300",
+          isMobile &&
+            (prize.points > 0 ? "!translate-x-[0]" : "translate-x-[100%]"),
+          className
         )}
         onClick={() => {
           if (progress >= 1) {
@@ -140,18 +147,24 @@ export default function Points() {
           </motion.svg>
           <PointIcon
             className="w-[30px] h-[30px] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
-            size={30}
+            size={isMobile ? 26 : 30}
           />
         </div>
 
         <span
-          className="text-[#FFEF43] text-[20px] font-bold font-[AlfaSlabOne]"
+          className={clsx(
+            "text-[#FFEF43] font-bold font-[DelaGothicOne]",
+            isMobile ? "text-[18px]" : "text-[20px]"
+          )}
           style={{
             WebkitTextStrokeWidth: "1px",
             WebkitTextStrokeColor: "#5E3737"
           }}
         >
-          x{addThousandSeparator(prize.points.toString())}
+          x
+          {isMobile
+            ? formatNumber(prize.points, 0, true, { isShort: true })
+            : formatNumber(prize.points, 0, true)}
         </span>
       </div>
       <RedeemSelection

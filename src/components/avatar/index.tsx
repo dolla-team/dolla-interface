@@ -7,7 +7,8 @@ export default function Avatar({
   src,
   email = "",
   className,
-  address
+  address,
+  onClick
 }: {
   size: number;
   src?: string;
@@ -15,6 +16,7 @@ export default function Avatar({
   active?: boolean;
   className?: string;
   address?: string;
+  onClick?: (e: any) => void;
 }) {
   const hashedEmail =
     email || address
@@ -33,6 +35,7 @@ export default function Avatar({
         width: size,
         height: size
       }}
+      onClick={onClick}
     />
   );
 }

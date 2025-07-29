@@ -9,6 +9,7 @@ import useUserInfoStore from "@/stores/use-user-info";
 import useToast from "@/hooks/use-toast";
 import AmountInput from "./amount-input";
 import config from "@/config/solana";
+import useIsMobile from "@/hooks/use-is-mobile";
 
 export default function BuyTicket({
   showBuyTicket,
@@ -21,6 +22,7 @@ export default function BuyTicket({
   tokenBalance: string;
   update: () => void;
 }) {
+  const isMobile = useIsMobile();
   const [ticket, setTicket] = useState(1);
   const userInfoStore = useUserInfoStore();
   const toast = useToast();
@@ -49,8 +51,13 @@ export default function BuyTicket({
   });
 
   return (
-    <Modal open={showBuyTicket} onClose={onClose}>
-      <div className="w-[378px] h-[444px] rounded-[16px] border border-[#6A5D3A] bg-[#35302B]">
+    <Modal open={showBuyTicket} onClose={onClose} isForceNormal={isMobile}>
+      <div
+        className={clsx(
+          "rounded-[16px] border border-[#6A5D3A] bg-[#35302B] h-[444px]",
+          isMobile ? "max-w-[100vw]" : "w-[378px]"
+        )}
+      >
         <div className="h-[54px] bg-[#00000033] rounded-t-[16px] flex items-center justify-between px-[16px]">
           <div className="text-[20px] text-white">Buy Ticket</div>
           <button className="w-[24px] h-[24px] button" onClick={onClose}>
@@ -75,7 +82,12 @@ export default function BuyTicket({
           </span>
           <PointIcon />
         </div>
-        <div className="w-[338px] mx-auto mt-[40px]">
+        <div
+          className={clsx(
+            "mx-auto mt-[40px]",
+            isMobile ? "w-[calc(100%-40px)]" : "w-[338px]"
+          )}
+        >
           <div className="flex items-center justify-between text-[14px] text-[#BBACA6]">
             <span>Amount</span>
             <span
@@ -95,8 +107,9 @@ export default function BuyTicket({
         </div>
         <button
           className={clsx(
-            "w-[338px] h-[40px] bg-linear-to-b from-[#FFF698] to-[#FFC42F] rounded-[8px] text-[14px] font-[DelaGothicOne] text-black ml-[20px] mt-[30px]",
-            isDisabled ? "opacity-50" : "button"
+            "h-[40px] bg-linear-to-b from-[#FFF698] to-[#FFC42F] rounded-[8px] text-[14px] font-[DelaGothicOne] text-black ml-[20px] mt-[30px]",
+            isDisabled ? "opacity-50" : "button",
+            isMobile ? "w-[calc(100%-40px)]" : "w-[338px]"
           )}
           onClick={() => {
             if (isDisabled) return;

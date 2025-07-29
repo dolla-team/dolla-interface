@@ -1,4 +1,4 @@
-import { useBtcContext } from "../../context";
+import { useBtcContext } from "../../../context";
 import { motion, AnimatePresence } from "framer-motion";
 import clsx from "clsx";
 import { useState } from "react";

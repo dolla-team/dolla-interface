@@ -7,6 +7,7 @@ import PointIcon from "@/components/icons/point-icon";
 import clsx from "clsx";
 import useRedeem from "../use-redeem";
 import Loading from "@/components/icons/loading";
+import useIsMobile from "@/hooks/use-is-mobile";
 
 export default function Redeem({
   data,
@@ -22,6 +23,7 @@ export default function Redeem({
   onSuccess: () => void;
 }) {
   const [amount, setAmount] = useState(1);
+  const isMobile = useIsMobile();
   const { redeem, loading } = useRedeem({
     token: data,
     onSuccess: () => {
@@ -34,7 +36,12 @@ export default function Redeem({
   }, [points, data]);
   return (
     <Modal open={showRedeem} onClose={onClose}>
-      <div className="w-[618px] rounded-[16px] border border-[#6A5D3A] bg-[#35302B]">
+      <div
+        className={clsx(
+          "rounded-[16px] border border-[#6A5D3A] bg-[#35302B]",
+          isMobile ? "w-full" : "w-[618px]"
+        )}
+      >
         <div className="h-[54px] bg-[#00000033] rounded-t-[16px] flex items-center justify-between px-[16px]">
           <div className="text-[20px] text-white">Points Redemption</div>
           <button className="w-[24px] h-[24px] button" onClick={onClose}>
@@ -53,8 +60,8 @@ export default function Redeem({
           </button>
         </div>
         <div className="p-[20px] flex gap-[40px]">
-          <Item data={data} className="w-[180px]" />
-          <div className="grow">
+          {!isMobile && <Item data={data} className="w-[180px]" />}
+          <div className={!isMobile ? "grow" : "w-full"}>
             <div className="flex items-center justify-between text-[14px] text-[#BBACA6]">
               <span>Amount</span>
               <span

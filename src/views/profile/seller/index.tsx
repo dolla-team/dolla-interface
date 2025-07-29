@@ -54,7 +54,7 @@ export default function Seller() {
 
   return (
     <div
-      className="w-full h-screen overflow-y-auto pb-[30px] max-md:overflow-x-hidden"
+      className="w-full h-screen overflow-y-auto pb-[30px] max-md:overflow-x-hidden max-md:pb-[70px] max-md:bg-[url('/profile/bg.png')] max-md:bg-contain max-md:bg-no-repeat max-md:bg-[position:center_top_-44px]"
       ref={containerRef}
     >
       <div className="pt-[30px] w-[933px] mx-auto max-md:w-full max-md:pt-[70px]">

@@ -1,57 +1,15 @@
-import { useBtcContext } from "../../context";
 import { motion } from "framer-motion";
 import clsx from "clsx";
-import { useMemo, useState } from "react";
-import useBid from "@/hooks/solana/use-bid";
-import { useAuth } from "@/contexts/auth";
+import { useState } from "react";
 
 export default function BidBtn({
-  tokenBalance,
-  onBidSuccess
+  disabled,
+  onClick
 }: {
-  tokenBalance: string;
-  onBidSuccess: () => void;
+  disabled: boolean;
+  onClick: () => void;
 }) {
-  const { setFlipStatus, flipStatus, setBidResult, bids, onReset, pool } =
-    useBtcContext();
   const [isHovered, setIsHovered] = useState(false);
-  const { userInfo } = useAuth();
-
-  const { onBid } = useBid(
-    pool?.pool_id,
-    (result) => {
-      console.log("complete success");
-      setFlipStatus(4);
-      setBidResult(result);
-    },
-    () => {
-      console.log("bid success");
-      setFlipStatus(2);
-      onBidSuccess();
-    },
-    () => {
-      console.log("bid fail");
-      setTimeout(() => {
-        setFlipStatus(0);
-      }, 30);
-    }
-  );
-
-  const disabled = useMemo(() => {
-    if (pool?.status !== 1) {
-      return true;
-    }
-    if (!userInfo?.user) {
-      return true;
-    }
-    if (Number(tokenBalance) < bids) {
-      return true;
-    }
-    if (flipStatus === 0 || flipStatus === 6) {
-      return false;
-    }
-    return true;
-  }, [flipStatus, userInfo, tokenBalance, bids, pool]);
 
   return (
     <div
@@ -72,17 +30,7 @@ export default function BidBtn({
       <div
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
-        onClick={() => {
-          if (disabled) {
-            return;
-          }
-          if (flipStatus === 6) {
-            onReset();
-          }
-          setBidResult(null);
-          setFlipStatus(1);
-          onBid(bids);
-        }}
+        onClick={onClick}
         className="cursor-pointer w-full h-full flex items-center justify-center absolute top-[50%] translate-y-[-50%] left-[50%] translate-x-[-50%]"
       >
         <span
@@ -122,7 +70,6 @@ export default function BidBtn({
           </defs>
         </svg>
       </div>
-      
     </div>
   );
 }

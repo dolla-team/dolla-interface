@@ -1,4 +1,3 @@
-import Loading from "@/components/icons/loading";
 import Modal from "@/components/modal";
 import clsx from "clsx";
 import useProvably from "./use-provably";
@@ -19,7 +18,7 @@ export default function ProvablyFair({ open, onClose, defaultTab }: { open: bool
     }
   }, [defaultTab]);
 
-  // const { data: provablyData, loading: provablyLoading } = useProvably();
+  const { data: provablyData, loading: provablyLoading } = useProvably();
 
   return (
     <Modal open={open} onClose={onClose}>

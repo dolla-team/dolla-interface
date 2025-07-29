@@ -1,3 +1,4 @@
+import useIsMobile from "@/hooks/use-is-mobile";
 import { formatNumber } from "@/utils/format/number";
 import { getAnchorPrice } from "@/utils/pool";
 import clsx from "clsx";
@@ -44,7 +45,7 @@ export default function Progress({ data }: any) {
     <div
       className={clsx(
         "w-full h-[12px] rounded-[30px] border bg-[#FFFFFF1A]",
-        data?.status === 3 ? "border-[#4E4E4E]" : "border-[#FFE9B2]"
+        data?.status === 3 ? "border-[#4E4E4E]" : "border-[#757395]"
       )}
     >
       <div className="h-[10px] rounded-[10px] p-[1px]">
@@ -105,13 +106,15 @@ export default function Progress({ data }: any) {
 }
 
 const Label = ({ amount, disabled }: { amount: number; disabled: boolean }) => {
+  const isMobile = useIsMobile();
   return (
     <div
       className={clsx(
-        "absolute top-[16px] p-[4px] h-[24px] leading-[14px] text-[14px] text-center font-[DelaGothicOne] rounded-[6px]",
+        "absolute p-[4px] h-[24px] leading-[14px] text-[14px] text-center font-[DelaGothicOne] rounded-[6px]",
         !disabled
           ? "bg-[linear-gradient(180deg,#FFF698_0%,#FFC42F_100%)] border-[#4E4E4E]"
-          : "bg-[linear-gradient(180deg,#FFF698_0%,#FFC42F_100%)]"
+          : "bg-[linear-gradient(180deg,#FFF698_0%,#FFC42F_100%)]",
+        isMobile ? "top-[12px]" : "top-[16px]"
       )}
     >
       ${formatNumber(amount, 2, true)}

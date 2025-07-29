@@ -5,6 +5,8 @@ import { useMemo } from "react";
 import PointIcon from "@/components/icons/point-icon";
 import Winner from "./winner";
 import DollaEye from "@/components/dolla-eye";
+import clsx from "clsx";
+import useIsMobile from "@/hooks/use-is-mobile";
 
 const Config = {
   0: {
@@ -38,6 +40,7 @@ const Config = {
 };
 
 export default function Result({ points, tickets, isWinner, onClose }: any) {
+  const isMobile = useIsMobile();
   const config = useMemo(() => {
     if (!points && !tickets) {
       return Config[0];
@@ -53,7 +56,12 @@ export default function Result({ points, tickets, isWinner, onClose }: any) {
     <Winner points={points} onClose={onClose} />
   ) : (
     <Modal open={true} onClose={() => {}} className="backdrop-blur-[10px]">
-      <div className="relative w-[464px] h-[584px]">
+      <div
+        className={clsx(
+          "relative h-[584px]",
+          isMobile ? "w-full" : "w-[464px]"
+        )}
+      >
         <DollaEye
           className="absolute left-[50%] translate-x-[-50%] top-[10px] z-[20]"
           height={40}

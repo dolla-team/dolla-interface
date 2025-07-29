@@ -1,17 +1,12 @@
-import { useBtcContext } from "../context";
-import FlipCoin from "./flip-coin";
+import { useBtcContext } from "../../context";
+import FlipCoin from "../flip-coin";
 import { useEffect, useMemo, useRef } from "react";
-import Result from "../components/result";
+import Result from "../../components/result";
 import { useDollaEyeContext } from "@/contexts/dolla-eye";
 import { EEyeType, EyeTypeMap } from "@/hooks/use-dolla-eye";
-
-const SIZE: Record<number, number> = {
-  1: 212,
-  5: 140,
-  10: 130,
-  50: 62,
-  100: 62
-};
+import useIsMobile from "@/hooks/use-is-mobile";
+import clsx from "clsx";
+import Coins from "./coins";
 
 export default function FlipCoins() {
   const {
@@ -24,6 +19,22 @@ export default function FlipCoins() {
     setFlipStatus,
     onReset
   } = useBtcContext();
+  const isMobile = useIsMobile();
+
+  const SIZE: Record<number, number> = isMobile
+    ? {
+        1: 212,
+        10: 80,
+        50: 60,
+        100: 60
+      }
+    : {
+        1: 212,
+        5: 140,
+        10: 130,
+        50: 62,
+        100: 62
+      };
   const { setCurrentEye } = useDollaEyeContext();
 
   const coinContainerRef = useRef<any>(null);
@@ -67,30 +78,31 @@ export default function FlipCoins() {
   return (
     pool && (
       <div
-        className="flex items-center justify-center w-full gap-[10px_30px] flex-wrap overflow-y-auto overflow-x-hidden h-full"
+        className={clsx(
+          "w-full overflow-y-auto overflow-x-hidden h-full flex items-center",
+          isMobile
+            ? "justify-around py-[10px]"
+            : "flex-wrap gap-[10px_30px] justify-center",
+          isMobile && bids > 10 && "flex-col"
+        )}
         style={{
-          maxWidth: (SIZE[bids] + 20) * (bids > 10 ? 11 : 6)
+          maxWidth: isMobile ? "100%" : (SIZE[bids] + 20) * (bids > 10 ? 11 : 6)
         }}
         ref={coinContainerRef}
       >
-        {new Array(bids).fill(0).map((_, index) => (
-          <FlipCoin
-            key={pool.id + "_" + index + "_" + bids}
-            size={SIZE[bids]}
-            points={points[index] || 0}
-            ticket={tickets[index] || 0}
-            disabled={flipStatus !== 4 && flipStatus !== 5}
-            bids={bids}
-            index={index}
-            ref={(el) => {
-              coinsRef.current[index] = el;
-            }}
-            onFlipComplete={flipComplete}
-            coinContainerRef={coinContainerRef}
-            setFlipStatus={setFlipStatus}
-            isWinner={isWinner}
-          />
-        ))}
+        <Coins
+          bids={bids}
+          pool={pool}
+          points={points}
+          tickets={tickets}
+          flipStatus={flipStatus}
+          isWinner={isWinner}
+          flipComplete={flipComplete}
+          coinContainerRef={coinContainerRef}
+          setFlipStatus={setFlipStatus}
+          coinsRef={coinsRef}
+          SIZE={SIZE}
+        />
 
         {flipStatus === 6 && (
           <Result

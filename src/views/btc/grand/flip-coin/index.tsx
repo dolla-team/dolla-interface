@@ -5,8 +5,7 @@ import useUserInfoStore from "@/stores/use-user-info";
 import { motion } from "framer-motion";
 
 // import "./index.css";
-import("./index.css")
-
+import("./index.css");
 
 const Coin = forwardRef<any, any>(
   (
@@ -33,7 +32,7 @@ const Coin = forwardRef<any, any>(
     // Check if element is in viewport
     const isElementInViewport = (element: HTMLElement) => {
       return (
-        element.offsetTop <
+        element.offsetTop + element.offsetHeight <
           coinContainerRef.current?.clientHeight +
             coinContainerRef.current?.scrollTop &&
         element.offsetTop > coinContainerRef.current?.scrollTop - 10

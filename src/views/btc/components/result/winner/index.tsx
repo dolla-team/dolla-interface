@@ -9,6 +9,8 @@ import { formatAddress } from "@/utils/format/address";
 import { useState, useEffect, useRef } from "react";
 import gsap from "gsap";
 import { useBtcContext } from "../../../context";
+import useIsMobile from "@/hooks/use-is-mobile";
+import DollaEye from "@/components/dolla-eye";
 
 export default function Winner({
   points,
@@ -22,6 +24,7 @@ export default function Winner({
   const coinRef = useRef<HTMLDivElement>(null);
   const bgRef = useRef<HTMLDivElement>(null);
   const { poolAmount, getPoolRecommend, pool } = useBtcContext();
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     if (coinRef.current) {
@@ -65,10 +68,9 @@ export default function Winner({
       <div className="fixed top-0 left-0 w-full h-full z-[50] ">
         <div className="w-full h-full absolute flex items-center justify-center">
           <div className="absolute z-[1] left-0 top-0 w-full h-full bg-black/50 backdrop-blur-[10px] bg-[radial-gradient(44.79%_52.28%_at_50%_50%,rgba(255,183,38,0.6)_0%,rgba(0,0,0,0.6)_100%)]" />
-          <img
-            src="/logo.svg"
-            alt="dolla"
-            className="w-[78px] h-[39px] absolute left-[50%] top-[30px] z-[20] -translate-x-1/2"
+
+          <DollaEye
+            className="absolute left-[50%] top-[40px] -translate-x-1/2 z-[20]"
             style={{
               opacity: animationStatus === 2 ? 1 : 0
             }}
@@ -178,11 +180,13 @@ export default function Winner({
                     </div>
                   )}
                 </div>
-                <img
-                  src="/btc/winner.gif"
-                  alt="Winner"
-                  className="w-[500px] h-[500px] z-[2] absolute right-0 bottom-0"
-                />
+                {!isMobile && (
+                  <img
+                    src="/btc/winner.gif"
+                    alt="Winner"
+                    className="w-[500px] h-[500px] z-[2] absolute right-0 bottom-0"
+                  />
+                )}
               </>
             )}
           </div>

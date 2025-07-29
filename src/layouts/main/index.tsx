@@ -5,9 +5,11 @@ import { useAuth } from "@/contexts/auth";
 import DollaEye from "@/components/dolla-eye";
 import EstGas from "@/sections/est-gas";
 import Loading from "@/components/loading";
+import useIsMobile from "@/hooks/use-is-mobile";
 
 export default function MainLayout() {
   const { userInfo, login } = useAuth();
+  const isMobile = useIsMobile();
   const navigate = useNavigate();
   return !userInfo?.user ? (
     <Loading />
@@ -23,7 +25,7 @@ export default function MainLayout() {
               navigate("/");
             }}
           />
-          <EstGas />
+          {!isMobile && <EstGas />}
         </div>
 
         <div className="absolute right-[10px] top-[10px] z-[20] flex items-center gap-[36px]">

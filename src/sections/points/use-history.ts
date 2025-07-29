@@ -1,13 +1,14 @@
 import axiosInstance from "@/libs/axios";
 import { useState, useRef } from "react";
-
-const pageSize = 10;
+import useIsMobile from "@/hooks/use-is-mobile";
 
 export default function useHistory() {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<any[]>([]);
   const [hasMore, setHasMore] = useState(true);
   const pageRef = useRef(0);
+  const isMobile = useIsMobile();
+  const pageSize = isMobile ? 20 : 10;
 
   const getHistory = async () => {
     setLoading(true);
