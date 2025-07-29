@@ -5,6 +5,7 @@ import { useMemo } from "react";
 import Big from "big.js";
 import { getAnchorPrice } from "@/utils/pool";
 import MarketActiveBg from "./market-active-bg";
+import useIsMobile from "@/hooks/use-is-mobile";
 
 export default function Market({
   data,
@@ -12,7 +13,7 @@ export default function Market({
   footer,
   header,
   isAcitveBg = true,
-  onClick = () => {}
+  onClick = () => { }
 }: {
   data: any;
   className?: string;
@@ -30,6 +31,8 @@ export default function Market({
     return data?.reward_token_info?.[0] || {};
   }, [data]);
 
+  const isMobile = useIsMobile();
+
   return (
     <div
       className={clsx(
@@ -41,26 +44,36 @@ export default function Market({
       {header}
       {isAcitveBg && <MarketActiveBg />}
       <div className="relative z-[2]">
-        <div className="flex items-center justify-between pt-[14px] px-[12px]">
-          <div className="flex items-center gap-[6px]">
-            {rewardTokenInfo?.icon && (
-              <img
-                src={rewardTokenInfo.icon}
-                className="w-[20px] h-[20px] rounded-[4px] border border-white/80"
-              />
-            )}
+        <div className="max-md:flex max-md:justify-between max-md:p-[23px_16px_0_12px]">
+          <div className="pt-[14px] px-[12px] max-md:px-0 max-md:pt-0">
+            {
+              isMobile && (
+                <div className="text-[14px] font-[400] text-white">
+                  Market #{data?.pool_id}
+                </div>
+              )
+            }
+            <div className="flex items-center justify-between max-md:mt-[9px]">
+              <div className="flex items-center gap-[6px]">
+                {rewardTokenInfo?.icon && (
+                  <img
+                    src={rewardTokenInfo.icon}
+                    className="w-[20px] h-[20px] rounded-[4px] border border-white/80"
+                  />
+                )}
 
-            <span className="text-[14px] text-white">
-              {rewardTokenInfo?.name}
-            </span>
+                <span className="text-[14px] text-white">
+                  {rewardTokenInfo?.name}
+                </span>
+              </div>
+              {data?.nft_ids && (
+                <span className="text-[12px] text-[#ADBCCF]">#{data?.nft_ids}</span>
+              )}
+            </div>
           </div>
-          {data?.nft_ids && (
-            <span className="text-[12px] text-[#ADBCCF]">#{data?.nft_ids}</span>
-          )}
-        </div>
-        <div className="mt-[16px] mx-[6px] h-[40px] rounded-[6px] flex flex-col items-center justify-center px-[6px]">
-          <span
-            className="
+          <div className="mt-[16px] mx-[6px] h-[40px] rounded-[6px] flex flex-col items-center justify-center px-[6px] max-md:pt-[10px] max-md:px-0 max-md:mx-0 max-md:mt-0 max-md:items-end">
+            <span
+              className="
             font-bold
             text-[26px]
             leading-[90%]
@@ -69,30 +82,31 @@ export default function Market({
             text-[#FFF79E]
             font-[DelaGothicOne]
           "
-            style={{
-              WebkitTextFillColor: "transparent",
-              WebkitTextStrokeWidth: "1px",
-              WebkitTextStrokeColor: "#FFF79E"
-            }}
-          >
-            {data?.nft_ids
-              ? 1
-              : rewardTokenInfo?.decimals && data?.reward_amount
-              ? formatNumber(
-                  Big(data.reward_amount || 0).div(
-                    10 ** rewardTokenInfo.decimals
-                  ),
-                  3,
-                  true
-                )
-              : "-"}{" "}
-            {rewardTokenInfo.symbol}{" "}
-          </span>
-          <span className="text-[16px] mt-[8px] font-semibold text-transparent bg-clip-text bg-[radial-gradient(50%_50%_at_50%_50%,#FFEF43_0%,#FFC42F_100%)]">
-            {formatNumber(data?.value || 0, 0, true, {
-              prefix: "$"
-            })}
-          </span>
+              style={{
+                WebkitTextFillColor: "transparent",
+                WebkitTextStrokeWidth: "1px",
+                WebkitTextStrokeColor: "#FFF79E"
+              }}
+            >
+              {data?.nft_ids
+                ? 1
+                : rewardTokenInfo?.decimals && data?.reward_amount
+                  ? formatNumber(
+                    Big(data.reward_amount || 0).div(
+                      10 ** rewardTokenInfo.decimals
+                    ),
+                    3,
+                    true
+                  )
+                  : "-"}{" "}
+              {rewardTokenInfo.symbol}{" "}
+            </span>
+            <span className="text-[16px] mt-[8px] font-semibold text-transparent bg-clip-text bg-[radial-gradient(50%_50%_at_50%_50%,#FFEF43_0%,#FFC42F_100%)]">
+              {formatNumber(data?.value || 0, 0, true, {
+                prefix: "$"
+              })}
+            </span>
+          </div>
         </div>
         <div className="px-[12px] mt-[16px] flex items-center justify-between text-[14px] text-white">
           <div className="flex items-center gap-[5px]">
