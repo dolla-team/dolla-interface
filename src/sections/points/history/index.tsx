@@ -115,7 +115,7 @@ export default function History({
                           dayjs(record.updated_at).format("hh:mm D MMM, YYYY")}
                         {column.key === "volume" &&
                           `${record.volume} ${
-                            itemsMap[record.token + "_" + record.volume].name
+                            itemsMap[record.token + "_" + record.volume]?.name
                           }`}
                         {["number", "reward"].includes(column.key) &&
                           record[column.key]}

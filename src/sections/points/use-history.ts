@@ -12,6 +12,9 @@ export default function useHistory() {
 
   const getHistory = async () => {
     setLoading(true);
+    if (pageRef.current === 0) {
+      setData([]);
+    }
     try {
       const response = await axiosInstance.get(
         `/api/v1/user/point/withdrawals?limit=${pageSize}&offset=${

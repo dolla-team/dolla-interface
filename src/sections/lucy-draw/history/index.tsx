@@ -6,6 +6,7 @@ import clsx from "clsx";
 import LoadingItem from "./loading-item";
 import Avatar from "@/components/avatar";
 import useIsMobile from "@/hooks/use-is-mobile";
+import { useDebounceFn } from "ahooks";
 
 export default function LucyDrawHistory({
   open,
@@ -36,12 +37,21 @@ export default function LucyDrawHistory({
     setRound(historyRound || currentRound - 1);
   }, [historyRound, currentRound]);
 
+  const { run: fetchCurrentRoundDebounce } = useDebounceFn(
+    () => {
+      setWinningList([]);
+      fetchCurrentRound(round).then((res) => {
+        setWinningList(res.winningList);
+      });
+    },
+    {
+      wait: 500
+    }
+  );
+
   useEffect(() => {
     if (!open) return;
-    setWinningList([]);
-    fetchCurrentRound(round).then((res) => {
-      setWinningList(res.winningList);
-    });
+    fetchCurrentRoundDebounce();
   }, [round, open]);
 
   return (
@@ -82,7 +92,7 @@ export default function LucyDrawHistory({
                   }
                 }}
               />
-              <div className="w-[120px] h-[32px] rounded-[12px] bg-linear-to-r from-[#FFC42F] to-[#FFF698] leading-[32px] text-center">
+              <div className="w-[120px] h-[32px] rounded-[12px] bg-linear-to-r from-[#FFC42F] to-[#FFF698] leading-[32px] text-center pointer-events-none">
                 Round #{round}
               </div>
               <CircleArrow
@@ -102,7 +112,7 @@ export default function LucyDrawHistory({
         <div className="py-[8px] h-[476px]">
           {winningList.map((item, index) => (
             <div
-              key={item.tx_hash}
+              key={item.tx_hash + index}
               className="px-[20px] py-[8px] flex items-center justify-between"
             >
               <div className="flex items-center gap-[6px]">

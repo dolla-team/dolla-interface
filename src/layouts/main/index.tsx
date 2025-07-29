@@ -6,12 +6,30 @@ import DollaEye from "@/components/dolla-eye";
 import EstGas from "@/sections/est-gas";
 import Loading from "@/components/loading";
 import useIsMobile from "@/hooks/use-is-mobile";
+import { useEffect, useState } from "react";
 
 export default function MainLayout() {
-  const { userInfo, login } = useAuth();
+  const { userInfo, login, ready, user } = useAuth();
   const isMobile = useIsMobile();
   const navigate = useNavigate();
-  return !userInfo?.user ? (
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    if (!ready) {
+      return;
+    }
+
+    if (!user) {
+      setIsLoading(false);
+      return;
+    }
+
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
+  }, [ready, user]);
+
+  return isLoading ? (
     <Loading />
   ) : (
     <div className="h-screen overflow-hidden bg-black relative">

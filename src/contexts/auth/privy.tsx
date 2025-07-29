@@ -18,6 +18,7 @@ import {
   useSolanaWallets
 } from "@privy-io/react-auth";
 import useConfig from "@/hooks/use-config";
+import useUserInfoStore from "@/stores/use-user-info";
 import { ethers } from "ethers";
 
 export const AuthContext = React.createContext<any | null>(null);
@@ -35,6 +36,7 @@ export const AuthProvider: React.FC<{
   const [logining, setLogining] = useState(false);
   const [accountRefresher, setAccountRefresher] = useState(-1);
   const [isLoggedOut, setIsLoggedOut] = useState(false);
+  const { set: setUserInfoStore } = useUserInfoStore();
 
   const privyWallet = useMemo(() => {
     if (isLoggedOut) return { address: "" };
@@ -158,6 +160,12 @@ export const AuthProvider: React.FC<{
     localStorage.removeItem("_AK_TOKEN_");
     setInfo(null);
     setAccountRefresher(0);
+    setUserInfoStore({
+      prize: {
+        points: 0,
+        tickets: 0
+      }
+    });
   }, [privyWallet?.address, privyLogout, wallets, solanaWallets]);
 
   useEffect(() => {
@@ -196,6 +204,8 @@ export const AuthProvider: React.FC<{
         userInfoLoading,
         accountRefresher,
         logining,
+        ready,
+        user,
         login,
         logout,
         onQueryUserInfo

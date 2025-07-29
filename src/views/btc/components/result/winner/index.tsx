@@ -23,7 +23,7 @@ export default function Winner({
   const [animationStatus, setAnimationStatus] = useState(0); // 0: coin rotating, 1: show bg
   const coinRef = useRef<HTMLDivElement>(null);
   const bgRef = useRef<HTMLDivElement>(null);
-  const { poolAmount, getPoolRecommend, pool } = useBtcContext();
+  const { poolAmount, getPoolRecommend, pool, bids } = useBtcContext();
   const isMobile = useIsMobile();
 
   useEffect(() => {
@@ -156,7 +156,7 @@ export default function Winner({
                     WebkitTextStroke: "1px #EEAF0F"
                   }}
                 >
-                  You are the Grand Winner
+                  You won {poolAmount} BTC by only ${bids}
                 </div>
                 <div className="text-white text-[26px] font-[DelaGothicOne]">
                   {userInfo?.email || formatAddress(userInfo?.sol_user)}

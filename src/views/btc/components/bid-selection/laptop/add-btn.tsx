@@ -12,8 +12,8 @@ export default function AddBtn({
   return (
     <button
       className={clsx(
-        "w-[24px] h-[24px] bg-[#FFEA00] rounded-full button flex items-center justify-center",
-        disabled && "opacity-50"
+        "w-[24px] h-[24px] bg-[#FFEA00] rounded-full flex items-center justify-center",
+        disabled ? "opacity-50" : "button"
       )}
       onClick={onClick}
     >
