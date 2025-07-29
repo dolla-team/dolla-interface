@@ -2,6 +2,11 @@
 
 ## 功能页面
 
+### 🛠️ 工具集合页面
+访问：http://localhost:3000/tools
+
+**综合导航页面，包含所有工具的介绍和快速访问链接**
+
 ### NEAR 合约测试页面
 访问：http://localhost:3000/near-test
 
@@ -19,6 +24,41 @@
 2. 设置游戏参数（投注金额、BTC 奖励等值）
 3. 获取 BTC 存款地址
 4. 向地址发送 BTC 后填写交易信息进行验证
+
+### 玩家存款下注工具
+访问：http://localhost:3000/player-betting
+
+**功能特点：**
+- **三步式流程** - Step 1: 查看账户信息，Step 2: 存款代币，Step 3: 下注游戏
+- **智能合约交互** - 直接通过 NEAR 钱包执行区块链交易
+- **实时交易状态** - 显示交易进度和结果反馈
+- **参数自定义** - 支持自定义存款金额、游戏ID和下注数量
+
+**使用流程：**
+1. 连接 NEAR 钱包（如未连接会自动引导）
+2. 查看您在游戏合约中的账户状态
+3. **重要**: 检查并完成存储注册（首次使用必需）
+4. 存入 USDC 代币到游戏合约
+5. 选择游戏并执行下注操作
+
+**常见问题解决：**
+
+如果遇到 `"The account xxx is not registered"` 错误，说明您的账户还未在代币合约上注册存储。请按以下步骤解决：
+
+1. 在玩家下注工具中点击 "查看账户信息"
+2. 系统会自动检查存储注册状态
+3. 如未注册，点击 "💡 获取存储注册命令" 按钮
+4. 复制显示的命令到终端执行
+5. 注册完成后重新检查状态
+
+**手动注册命令示例：**
+```bash
+# 注册投注代币存储
+near call usdcc.fakes.testnet storage_deposit '{"account_id": "你的账户.testnet", "registration_only": true}' --accountId=你的账户.testnet --amount=0.01
+
+# 注册奖励代币存储  
+near call wbtc.fakes.testnet storage_deposit '{"account_id": "你的账户.testnet", "registration_only": true}' --accountId=你的账户.testnet --amount=0.01
+```
 
 ## NEAR 合约测试功能
 

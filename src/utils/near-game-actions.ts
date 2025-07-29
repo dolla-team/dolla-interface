@@ -205,35 +205,51 @@ export function generateCreateGameCall(bidUnit: string, bep: string) {
 }
 
 /**
- * 生成充值调用参数
+ * 生成存款调用参数 (ft_transfer_call)
  */
-export function generateDepositCall(amount: string) {
+export function generateDepositCall(amount: string): {
+  contractId: string;
+  methodName: string;
+  args: Record<string, unknown>;
+  gas: string;
+  deposit: string;
+} {
+  const config = getContractConfig();
+  
   return {
-    contractId: BET_TOKEN,
+    contractId: config.betToken,
     methodName: "ft_transfer_call",
     args: {
-      receiver_id: CONTRACT_ID,
+      receiver_id: config.mainContract,
       amount: amount,
-      msg: "\"Deposit\""
+      msg: JSON.stringify("Deposit")
     },
-    attachedDeposit: "1", // 1 yoctoNEAR
-    gas: "200000000000000" // 200 TGAS
+    gas: "200000000000000", // 200 TGAS
+    deposit: "1" // 1 yoctoNEAR
   };
 }
 
 /**
- * 生成游戏投注调用参数
+ * 生成游戏下注调用参数 (play_game)
  */
-export function generatePlayGameCall(gameId: number, bets: number) {
+export function generatePlayGameCall(gameId: number, bets: number): {
+  contractId: string;
+  methodName: string;
+  args: Record<string, unknown>;
+  gas: string;
+  deposit: string;
+} {
+  const config = getContractConfig();
+  
   return {
-    contractId: CONTRACT_ID,
+    contractId: config.mainContract,
     methodName: "play_game",
     args: {
       game_id: gameId,
       bets: bets
     },
-    attachedDeposit: "0",
-    gas: "200000000000000" // 200 TGAS
+    gas: "200000000000000", // 200 TGAS
+    deposit: "0"
   };
 }
 
