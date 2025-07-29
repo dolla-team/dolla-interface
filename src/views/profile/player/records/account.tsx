@@ -33,7 +33,11 @@ const Account = (props: any) => {
           return (
             <div className="flex items-center gap-[4px]">
               <div className="">{record.typeName}</div>
-              <div className="">#{record.pool_id}</div>
+              {
+                Big(record.pool_id || 0).gt(0) && (
+                  <div className="">#{record.pool_id}</div>
+                )
+              }
             </div>
           );
         }
@@ -41,12 +45,16 @@ const Account = (props: any) => {
           return (
             <div className="flex items-center gap-[4px]">
               <div className="">{record.typeName}</div>
-              <div className="">#{record.pool_id}</div>
+              {
+                Big(record.prize_draw_id || 0).gt(0) && (
+                  <div className="">#{record.prize_draw_id}</div>
+                )
+              }
             </div>
           );
         }
         return record.typeName;
-      } 
+      }
     },
     {
       dataIndex: "assets",
