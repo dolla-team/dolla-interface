@@ -18,6 +18,8 @@ const LazyNewBTC = lazy(() => import("./views/btc"));
 const LazyBtcCreate = lazy(() => import("./views/btc-create"));
 const LazyProfilePlayer = lazy(() => import("./views/profile/player"));
 const LazyProfileSeller = lazy(() => import("./views/profile/seller"));
+const LazyNearTest = lazy(() => import("./views/near-test"));
+const LazyBtcCreator = lazy(() => import("./views/btc-creator"));
 
 const router = createBrowserRouter([
   {
@@ -48,6 +50,14 @@ const router = createBrowserRouter([
       {
         path: "portfolio/seller",
         element: <LazyProfileSeller />
+      },
+      {
+        path: "near-test",
+        element: <LazyNearTest />
+      },
+      {
+        path: "btc-creator",
+        element: <LazyBtcCreator />
       }
     ]
   },
