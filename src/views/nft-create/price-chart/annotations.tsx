@@ -11,7 +11,13 @@ export default function Annotations({
   className?: string;
 }) {
   return (
-    <div className={clsx("absolute z-[1] right-[12px] top-0 bg-[#1F1E1E] rounded-[6px] py-[12px] pl-[8px] pr-[3px] font-[SpaceGrotesk] font-[400] leading-[100%] text-[12px] text-[#BBACA6]", className)}>
+    <div
+      className={clsx(
+        "absolute z-[1] right-[12px] top-0 bg-[#1F1E1E] rounded-[6px] py-[12px] pl-[8px] pr-[3px] font-[SpaceGrotesk] font-[400] leading-[100%] text-[12px] text-[#BBACA6]",
+        "max-md:w-[calc(100%_-_20px)] max-md:left-[10px]",
+        className
+      )}
+    >
       <div className="flex items-center gap-[5px]">
         <div className="w-[14px] h-[2px] bg-[#57FF70] rounded-[2px]" />
         <span>Probability Weighted Return</span>
