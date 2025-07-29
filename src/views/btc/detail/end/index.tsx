@@ -102,7 +102,7 @@ export default function EndPanel({ data }: { data: any }) {
                 )}
               >
                 <MultiIcon className="absolute top-0 left-0 w-full h-full" />
-                <div className="text-black text-[24px] font-[DelaGothicOne] relative z-[1] rotate-[8deg]">
+                <div className="text-black text-[24px] font-[DelaGothicOne] relative z-[1] rotate-[15deg]">
                   {returnMultiple}x
                 </div>
               </div>

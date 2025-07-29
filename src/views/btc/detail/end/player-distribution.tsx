@@ -50,7 +50,7 @@ const Item = ({ data, number, total, winner, bidsDistribution }: any) => {
           className="h-full rounded-[6px] mr-[16px]"
           style={{ width: `${width}%`, backgroundColor: data.color }}
         />
-        {!!number && (
+        {!!bidsDistribution && (
           <>
             <div className="text-[14px] text-[#ADBCCF]">{number}</div>
             <div className="flex items-center gap-[6px] ml-[10px]">

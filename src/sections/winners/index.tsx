@@ -4,7 +4,6 @@ import WinnerCard from "./winner-card";
 import Big from "big.js";
 import MWinnerCard from "./m-winner-card";
 import useIsMobile from "@/hooks/use-is-mobile";
-import { AnimatePresence } from "framer-motion";
 
 export default function TopWinner() {
   const { lastWinner: data } = useLastWinner();
@@ -32,9 +31,7 @@ export default function TopWinner() {
     multiple
   };
   return isMobile ? (
-    <AnimatePresence>
-      {data && <MWinnerCard key={data.pool_info?.winner_user} {...params} />}
-    </AnimatePresence>
+    <MWinnerCard key={data.pool_info?.winner_user} {...params} />
   ) : (
     <div className="absolute top-[14%] left-[20px]">
       <WinnerCard {...params} />
