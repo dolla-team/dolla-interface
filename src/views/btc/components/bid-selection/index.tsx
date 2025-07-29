@@ -18,7 +18,7 @@ export default function BidSelection({
   tokenBalance: string;
   update: () => void;
 }) {
-  const [showProvablyFair, setShowProvablyFair] = useState(false);
+  const [showProvablyFair, setShowProvablyFair] = useState(true);
   const { bids, setBids, flipStatus, pool } = useBtcContext();
   const { userInfo } = useAuth();
   const [showCashier, setShowCashier] = useState(false)
