@@ -106,7 +106,9 @@ export default function WinnerCard({
           <div className="absolute top-[-14px] right-[-14px] w-[61px] h-[63px]">
             <div className="text-black relative z-[2] rotate-[15deg] flex flex-col items-center justify-center w-full h-full  font-[DelaGothicOne]">
               <span className="font-bold text-[20px]">
-                {multiple ? formatNumber(multiple, 2, true) : 0}{" "}
+                {multiple
+                  ? formatNumber(multiple, 0, true, { isShort: true })
+                  : 0}{" "}
               </span>
               <span className="text-[12px] mt-[-8px]">X</span>
             </div>

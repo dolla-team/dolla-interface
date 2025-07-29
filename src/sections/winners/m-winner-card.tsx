@@ -39,7 +39,9 @@ export default function MWinnerCard({
               <div className="absolute top-[-18px] right-[-18px] w-[34px] h-[38px]">
                 <div className="text-black relative z-[2] rotate-[15deg] flex flex-col items-center justify-center w-full h-full  font-[DelaGothicOne]">
                   <span className="font-bold text-[10px]">
-                    {multiple ? formatNumber(multiple, 2, true) : 0}{" "}
+                    {multiple
+                      ? formatNumber(multiple, 0, true, { isShort: true })
+                      : 0}{" "}
                   </span>
                   <span className="text-[8px] mt-[-2px]">X</span>
                 </div>

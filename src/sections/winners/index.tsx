@@ -17,10 +17,16 @@ export default function TopWinner() {
       .div(10 ** _rewardInfo.decimals)
       .toString();
 
+    let lastBids = 0;
+    data.bid_list.forEach((item: any) => {
+      if (item.is_winner) {
+        lastBids = item.times;
+      }
+    });
     const _returnMultiple = Big(data?.pool_info?.anchor_price)
       .div(10 ** _rewardInfo.decimals)
-      .div(data.times)
-      .toString();
+      .div(lastBids)
+      .toFixed(0);
 
     return [_a, _rewardInfo, _returnMultiple];
   }, [data]);

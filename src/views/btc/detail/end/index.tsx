@@ -3,7 +3,7 @@ import MultiIcon from "./multi-icon";
 import PlayerDistribution from "./player-distribution";
 import { formatAddress } from "@/utils/format/address";
 import dayjs from "@/libs/dayjs";
-import { addThousandSeparator } from "@/utils/format/number";
+import { addThousandSeparator, formatNumber } from "@/utils/format/number";
 import useWinnerBidList from "../use-winner-bid-list";
 import { useMemo } from "react";
 import Big from "big.js";
@@ -28,17 +28,22 @@ export default function EndPanel({ data }: { data: any }) {
     let _bidsProgress: any = [];
     const startTime = new Date(data.created_at).getTime();
     const endTime = new Date(data.updated_at).getTime();
+
+    let lastBids = 0;
     winnerBidList.forEach((item: any) => {
       _totalBids += item.times;
       _bidsDistribution[item.times] = (_bidsDistribution[item.times] || 0) + 1;
       const bidTime = new Date(item.updated_at).getTime();
       _bidsProgress.push((bidTime - startTime) / (endTime - startTime));
+      if (item.is_winner) {
+        lastBids = item.times;
+      }
     });
 
     const _returnMultiple = Big(data.anchor_price)
       .div(10 ** BASE_TOKEN.decimals)
-      .div(_totalBids)
-      .toFixed(2);
+      .div(lastBids || 1)
+      .toFixed(0);
 
     _bidsProgress.sort((a: number, b: number) => a - b);
     return [
@@ -102,8 +107,11 @@ export default function EndPanel({ data }: { data: any }) {
                 )}
               >
                 <MultiIcon className="absolute top-0 left-0 w-full h-full" />
-                <div className="text-black text-[24px] font-[DelaGothicOne] relative z-[1] rotate-[15deg]">
-                  {returnMultiple}x
+                <div className="text-black text-center font-[DelaGothicOne] relative z-[1] rotate-[15deg]">
+                  <div className="text-[24px]">
+                    {formatNumber(returnMultiple, 0, true, { isShort: true })}
+                  </div>
+                  <div className="mt-[-8px] text-[18px]">X</div>
                 </div>
               </div>
               <Avatar
