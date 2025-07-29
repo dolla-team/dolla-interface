@@ -45,3 +45,6 @@ export const getProfitFee = (pool: any) => {
   }
   return netProfit.mul(0.35);
 };
+
+// 8% penalty
+export const penaltyPercent = 0.08;
