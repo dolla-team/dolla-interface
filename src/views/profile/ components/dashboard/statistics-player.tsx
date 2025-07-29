@@ -53,7 +53,7 @@ const StatisticsPlayer = (props: any) => {
         <div className="flex flex-col justify-center items-center gap-[15px] p-[20px_32px_33px] bg-[#22201D] border border-[#6A5D3A] rounded-[16px] shrink-0">
           <div className="">Wins</div>
           <div className="font-[DelaGothicOne] text-[36px]">
-            {formatNumber(userInfo?.you_won?.length, 2, true)}
+            {formatNumber(userInfo?.winner, 2, true)}
           </div>
         </div>
         <LabelValue label="#BTC" className="">
