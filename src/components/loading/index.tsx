@@ -1,13 +1,74 @@
 import { motion } from "framer-motion";
 import DollaEye from "../dolla-eye";
 import { useRef, useEffect, useState, useMemo } from "react";
+import useIsMobile from "@/hooks/use-is-mobile";
+
+// Custom hook for typewriter effect
+const useTypewriter = (text: string, speed: number = 100) => {
+  const [displayText, setDisplayText] = useState("");
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  useEffect(() => {
+    if (currentIndex < text.length) {
+      // Calculate dynamic speed - start fast, gradually slow down
+      const progress = currentIndex / text.length;
+      const dynamicSpeed = speed + (progress * 100); // Start at speed, end at speed + 100ms
+      
+      const timer = setTimeout(() => {
+        setDisplayText(text.slice(0, currentIndex + 1));
+        setCurrentIndex(currentIndex + 1);
+      }, dynamicSpeed);
+
+      return () => clearTimeout(timer);
+    }
+  }, [currentIndex, text, speed]);
+
+  return displayText;
+};
+
+// Function to render text with special styling
+const renderStyledText = (text: string, isMobile?: boolean) => {
+  return text.split('').map((char, charIndex) => {
+    const isQuestionMark = char === '?';
+    const isSpace = char === ' ';
+
+    // Hardcode font sizes based on character positions
+    let fontSize = isMobile ? "text-[16px]" : 'text-[20px]';
+    let marginClass = '-mr-[2px]';
+
+    // "Can one dollar win something big? Something, really big..."
+    // Positions for "win"
+    if (charIndex >= 15 && charIndex <= 17) {
+      fontSize = 'text-[30px]';
+      marginClass = '-mr-[6px]';
+    }
+    // Positions for "big..."
+    else if ((charIndex >= 51 && charIndex <= 57)) {
+      fontSize = 'text-[60px]';
+      marginClass = '-mr-[12px]';
+    }
+
+    return (
+      <span key={charIndex} className={`${fontSize} leading-none ${marginClass}`}>
+        {isSpace ? '\u00A0' : char}
+        {isQuestionMark && <br />}
+        {charIndex === 50 && <div className="mt-[10px]"><br /></div>} {/* After "really" */}
+      </span>
+    );
+  });
+};
 
 const Loading = (props: Props) => {
   const { speed = 5000 } = props;
+  const isMobile = useIsMobile();
 
   const progressInnerRef = useRef<any>(null);
   const [progressWidth, setProgressWidth] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+
+  // Typewriter text content
+  const typewriterText = "Can one dollar win something big? Something, really big...";
+  const displayText = useTypewriter(typewriterText, 50);
 
   useEffect(() => {
     if (!isLoading) return;
@@ -113,11 +174,10 @@ const Loading = (props: Props) => {
             </div>
           </motion.div>
         </div>
-        <div className="text-[#FFE9B2] text-center font-[DelaGothicOne] text-[20px] font-normal leading-[40px] mt-[20px]">
-          Can one dollar <span className="text-[30px]">win</span> something big?{" "}
-          <br />
-          Something, really
-          <div className="text-[60px] mt-[20px]">big...</div>
+        <div className="text-[#FFE9B2] text-center font-[DelaGothicOne] font-normal leading-[40px] mt-[20px] min-h-[120px] flex flex-col items-center justify-center">
+          <div className="whitespace-pre-wrap">
+            {renderStyledText(displayText, isMobile)}
+          </div>
         </div>
       </div>
       <div className="w-full h-full pointer-events-none overflow-hidden absolute top-0 left-0 opacity-[0.07]">
