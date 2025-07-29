@@ -24,6 +24,7 @@ import {
 import * as chains from "viem/chains";
 import { extractChain } from "viem/utils";
 import { prepareAuthorization } from "viem/actions";
+import config from "@/config/solana";
 
 export default function WalletProvider({
   children
@@ -60,7 +61,7 @@ export default function WalletProvider({
         },
         solanaClusters: [
           {
-            name: import.meta.env.VITE_SOLANA_CLUSTER_NAME,
+            name: config.chain,
             rpcUrl: import.meta.env.VITE_SOLANA_RPC_URL
           }
         ]

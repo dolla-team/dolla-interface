@@ -1700,6 +1700,10 @@ export default {
           type: "u64"
         },
         {
+          name: "gas_amount",
+          type: "u64"
+        },
+        {
           name: "memo",
           type: {
             option: "string"

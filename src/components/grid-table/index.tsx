@@ -68,7 +68,7 @@ const GridTable = (props: Props, ref: any) => {
         className
       )}
     >
-      <div className={clsx("border-b border-[#423930]", headerClassName)}>
+      <div className={clsx("border-b border-[#423930] max-md:min-w-fit", headerClassName)}>
         <div
           className={clsx(
             "grid gap-x-[10px] px-[5px]",
@@ -87,6 +87,7 @@ const GridTable = (props: Props, ref: any) => {
                   "flex items-center text-[#BBACA6] text-[14px] py-[10px]",
                   col.align === "center" ? "justify-center" : col.align === "right" ? "justify-end" : "justify-start",
                   col.sort && !loading ? "cursor-pointer" : "cursor-default",
+                  col.fixed ? "sticky left-0" : "",
                   colClassName,
                   headerColClassName
                 )}
@@ -139,7 +140,7 @@ const GridTable = (props: Props, ref: any) => {
           }
         </div>
       </div>
-      <div className={clsx("border-b border-[#423930]", bodyClassName)}>
+      <div className={clsx("border-b border-[#423930] max-md:min-w-fit", bodyClassName)}>
         {
           loading ? (
             <div className="flex justify-center items-center min-h-[150px]">
@@ -165,6 +166,7 @@ const GridTable = (props: Props, ref: any) => {
                       className={clsx(
                         "flex items-center py-[17px]",
                         col.align === "center" ? "justify-center" : col.align === "right" ? "justify-end" : "justify-start",
+                        col.fixed ? "sticky left-0" : "",
                         colClassName,
                         bodyColClassName
                       )}

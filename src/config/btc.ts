@@ -12,7 +12,7 @@ export const TOKEN = {
 // btc
 export const BASE_TOKEN: Record<string, any> = {
   address: config.base_contract,
-  decimals: 6,
+  decimals: config.base_token_decimals,
   chain: "solana",
   name: "BTC",
   symbol: "BTC",
@@ -21,7 +21,7 @@ export const BASE_TOKEN: Record<string, any> = {
 // usdc
 export const QUOTE_TOKEN: Record<string, any> = {
   address: config.quote_contract,
-  decimals: 6,
+  decimals: config.quote_token_decimals,
   chain: "solana",
   name: "USDT",
   pointIcon: "/points/usdt.png"

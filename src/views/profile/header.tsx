@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 export default function Header({ tab }: any) {
   const navigate = useNavigate();
   return (
-    <div className="flex items-center justify-center gap-[16px]">
+    <div className="flex items-center justify-center gap-[16px] max-md:flex-col-reverse max-md:gap-[20px]">
       <Switch
         tab={tab}
         tabs={[

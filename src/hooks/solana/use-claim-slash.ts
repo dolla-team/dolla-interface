@@ -9,18 +9,14 @@ import {
   getPool,
   getBuyState,
   getAccountsInfo,
-  getBidGasFee
+  buildTxWithGas
 } from "./helpers";
 import {
   ASSOCIATED_TOKEN_PROGRAM_ID,
   TOKEN_PROGRAM_ID
 } from "@solana/spl-token";
 import { useSolanaWallets } from "@privy-io/react-auth";
-import {
-  PublicKey,
-  Transaction,
-  TransactionInstruction
-} from "@solana/web3.js";
+import { PublicKey, TransactionInstruction } from "@solana/web3.js";
 import { sendSolanaTransaction } from "@/utils/transaction/send-solana-transaction";
 import config from "@/config/solana";
 
@@ -44,11 +40,7 @@ export default function useClaimSlash({
     try {
       setClaiming(true);
       const state = getState(program);
-      const gasBidFee = await getBidGasFee(
-        program,
-        state.pda,
-        QUOTE_TOKEN.address
-      );
+
       const poolIdBN = new anchor.BN(orderId);
       const pool = await getPool(program, provider, state.pda, poolIdBN);
       const buyerState = await getBuyState(
@@ -85,45 +77,46 @@ export default function useClaimSlash({
         operator: new PublicKey(config.operator),
         systemProgram: anchor.web3.SystemProgram.programId
       };
-      console.log("gasBidFee:", gasBidFee.toString());
-      const tx: TransactionInstruction = await program.methods
-        .claimSlashFunds(gasBidFee)
+
+      const claimSlashFundsTx: TransactionInstruction = await program.methods
+        .claimSlashFunds(new anchor.BN(10000))
         .accounts(claimSlashFundsAccounts)
         .instruction();
-      const batchTx = new Transaction();
+      const otherTxs: any = [];
       if (userQuoteAccount.instruction) {
-        batchTx.add(userQuoteAccount.instruction);
+        otherTxs.push(userQuoteAccount.instruction);
       }
       if (poolQuoteAccount.instruction) {
-        batchTx.add(poolQuoteAccount.instruction);
+        otherTxs.push(poolQuoteAccount.instruction);
       }
       if (userPaidAccount.instruction) {
-        batchTx.add(userPaidAccount.instruction);
+        otherTxs.push(userPaidAccount.instruction);
       }
       if (operatorPaidAccount.instruction) {
-        batchTx.add(operatorPaidAccount.instruction);
+        otherTxs.push(operatorPaidAccount.instruction);
       }
-      batchTx.add(tx);
-      batchTx.feePayer = new PublicKey(config.operator);
-      // Get the latest blockhash
-      batchTx.recentBlockhash = "11111111111111111111111111111111";
 
-      // const signedTx = await signTransaction({
-      //   transaction: tx,
-      //   connection: provider.connection
-      // });
+      const { transaction: tx, gas } = await buildTxWithGas({
+        tx: claimSlashFundsTx,
+        otherTxs,
+        action: "claimSlashFunds"
+      });
 
-      // const receipt = await sendTransaction({
-      //   transaction: batchTx,
-      //   connection: provider.connection
-      // });
+      const claimSlashFundsTxWithGas: TransactionInstruction =
+        await program.methods
+          .claimSlashFunds(new anchor.BN(gas))
+          // @ts-ignore
+          .accounts(claimSlashFundsAccounts)
+          .instruction();
+
+      tx.add(claimSlashFundsTxWithGas);
 
       const simulationResult = await provider.connection.simulateTransaction(
-        batchTx
+        tx
       );
       console.log("claimSlashFunds:", simulationResult);
 
-      const result = await sendSolanaTransaction(batchTx, "claimSlashFunds");
+      const result = await sendSolanaTransaction(tx, "claimSlashFunds");
       console.log("receipt:", result);
       // Report hash for tracking
       const slot = await provider.connection.getSlot();

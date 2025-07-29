@@ -38,8 +38,13 @@ const StatisticsPlayer = (props: any) => {
   }, [userInfo]);
 
   return (
-    <div className={clsx("flex justify-between items-center gap-[40px] pl-[13px] mt-[40px] pb-[16px]", className)}>
-      <div className="flex items-center gap-[10px] flex-1 justify-between">
+    <div
+      className={clsx(
+        "flex justify-between items-center gap-[40px] pl-[13px] mt-[40px] pb-[16px] max-md:mt-[13px] max-md:flex-col max-md:gap-[20px] max-md:pl-0 max-md:pb-0",
+        className
+      )}
+    >
+      <div className="flex items-center gap-[10px] flex-1 justify-between max-md:w-full">
         <LabelValue label="PnL" className="" valueClassName={clsx(Big(userInfo?.seller_profit || 0).lt(0) ? "text-[#FF399F]" : "text-[#57FF70]")}>
           {Big(userInfo?.seller_profit || 0).lt(0) ? "-" : "+"}{formatNumber(Big(userInfo?.seller_profit || 0).abs(), 2, true, { prefix: "$", isShort: true, isShortUppercase: true })}
         </LabelValue>
@@ -58,8 +63,8 @@ const StatisticsPlayer = (props: any) => {
           </ButtonV2>
         </LabelValue>
       </div>
-      <div className="flex items-center gap-[10px] flex-2 justify-between">
-        <LabelValue label="Created Market" className="" valueClassName="flex items-center gap-[13px]">
+      <div className="flex items-center gap-[10px] flex-2 justify-between max-md:flex-col max-md:w-full">
+        <LabelValue label="Created Market" className="max-md:w-full" valueClassName="flex items-center gap-[13px]">
           <div className="">
             {formatNumber(userInfo?.created, 0, true, { isShort: true, isShortUppercase: true })}
           </div>
@@ -68,7 +73,7 @@ const StatisticsPlayer = (props: any) => {
               className="h-[24px] !px-[10px] !text-[14px]"
               icon={(<div className="w-[7px] h-[7px] shrink-0 rounded-full bg-[#57FF70]" />)}
             >
-               {formatNumber(Big(userInfo?.created || 0).minus(userInfo?.cancel || 0).minus(userInfo?.ended || 0), 0, true, { isShort: true, isShortUppercase: true })} Live
+              {formatNumber(Big(userInfo?.created || 0).minus(userInfo?.cancel || 0).minus(userInfo?.ended || 0), 0, true, { isShort: true, isShortUppercase: true })} Live
             </Badge>
             <Badge
               className="h-[24px] !px-[10px] !text-[14px]"
@@ -84,7 +89,7 @@ const StatisticsPlayer = (props: any) => {
             </Badge>
           </div>
         </LabelValue>
-        <LabelValue label="On Sell" className="" valueClassName="flex items-center gap-[13px]">
+        <LabelValue label="On Sell" className="max-md:w-full max-md:mt-[10px] max-md:gap-[8px]" valueClassName="flex items-center gap-[13px]">
           <div className="">
             {formatNumber(onSellTotalAmount, 3, true, { isShort: true, isShortUppercase: true })} BTC
           </div>
