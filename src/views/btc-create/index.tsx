@@ -75,8 +75,6 @@ export default function BTCCreate() {
     ];
   }, [globalConfig]);
 
-  console.log('userInfo:', userInfo);
-
   return (
     <div className="w-full h-screen overflow-y-auto font-[SpaceGrotesk] text-[14px] font-[400] leading-[100%] text-white pt-[60px] pb-[60px]">
       <div className="text-[20px] font-[DelaGothicOne] text-center">

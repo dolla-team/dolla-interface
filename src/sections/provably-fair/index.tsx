@@ -42,10 +42,10 @@ export default function ProvablyFair({ open, onClose }: { open: boolean, onClose
           <div className="text-[16px] text-[#BBACA6]">Verify</div>
           <div className="flex items-center gap-[18px] mt-[10px]">
             <input
-              className="w-[544px] h-[46px] bg-black/20 rounded-[10px] p-[15px] text-[16px] text-white"
+              className="flex-1 h-[46px] bg-black/20 rounded-[10px] p-[15px] text-[16px] text-white"
               placeholder="Enter Market ID"
             />
-            <button className="w-[68px] h-[28px] rounded-[8px] bg-linear-to-b from-[#FFF698] to-[#FFC42F] text-[16px] text-black">
+            <button className="w-[108px] cursor-pointer h-[46px] rounded-[8px] bg-linear-to-b from-[#FFF698] to-[#FFC42F] text-[16px] text-black">
               Verify
             </button>
           </div>
