@@ -68,6 +68,7 @@ export default function LucyDrawCard({
               isMobile ? "w-[180px] h-[46px] px-[26px] text-[16px]" : ""
             }
             size={isMobile ? 22 : 14}
+            key={currentRound}
           />
         </div>
         <div

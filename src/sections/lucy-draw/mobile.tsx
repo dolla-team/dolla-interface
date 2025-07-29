@@ -51,6 +51,7 @@ export default function LucyDrawMobile(props: any) {
             }}
             currentRound={currentRound}
             className="absolute top-[-20px] right-[-30px] !border-[#7348FF]"
+            key={currentRound}
           />
         )}
         {status !== 0 && (

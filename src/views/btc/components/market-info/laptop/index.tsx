@@ -3,6 +3,7 @@ import { useBtcContext } from "../../../context";
 import { formatNumber } from "@/utils/format/number";
 import clsx from "clsx";
 import { PlayerIcon, BidsIcon } from "../icons";
+import RollingDigitDisplay from "@/components/rolling-digit";
 // import ShareBtn from "./share-btn";
 
 export default function MarketInfo() {
@@ -88,7 +89,10 @@ export default function MarketInfo() {
                 WebkitTextFillColor: "transparent"
               }}
             >
-              ${formatNumber(pool?.accumulative_bids, 0, true)}
+              <RollingDigitDisplay
+                prefixSymbol="$"
+                value={String(pool?.accumulative_bids || 0)}
+              />
             </div>
           </div>
         </div>

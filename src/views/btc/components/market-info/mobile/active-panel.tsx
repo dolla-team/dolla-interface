@@ -2,7 +2,7 @@ import clsx from "clsx";
 import MSellerInfo from "./m-seller-info";
 import { PlayerIcon, BidsIcon } from "../icons";
 import Progress from "../progress";
-import { formatNumber } from "@/utils/format/number";
+import RollingDigitDisplay from "@/components/rolling-digit";
 
 export default function ActivePanel({ pool }: { pool: any }) {
   return (
@@ -55,7 +55,10 @@ export default function ActivePanel({ pool }: { pool: any }) {
                 WebkitTextFillColor: "transparent"
               }}
             >
-              ${formatNumber(pool?.accumulative_bids, 0, true)}
+              <RollingDigitDisplay
+                prefixSymbol="$"
+                value={String(pool?.accumulative_bids || 0)}
+              />
             </div>
           </div>
         </div>
