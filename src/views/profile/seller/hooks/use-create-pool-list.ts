@@ -13,7 +13,7 @@ export default function useCreatePoolList() {
   const [data, setData] = useState<any[]>([]);
   const [hasMore, setHasMore] = useState(true);
   const pageRef = useRef(0);
-  const { userInfo } = useAuth();
+  const { userInfo, onQueryUserInfo } = useAuth();
   const poolsData = useRef<any>({});
 
   const [recordsPageIndex, setRecordsPageIndex] = useState(1);
@@ -24,8 +24,7 @@ export default function useCreatePoolList() {
     setLoading(true);
     try {
       const response = await axiosInstance.get(
-        `/api/v1/user/create/pool/list?limit=${pageSize}&offset=${
-          pageRef.current * pageSize
+        `/api/v1/user/create/pool/list?limit=${pageSize}&offset=${pageRef.current * pageSize
         }`
       );
       const poolIds: number[] = [];
@@ -58,8 +57,7 @@ export default function useCreatePoolList() {
       if (!userInfo?.user) return [];
       try {
         const response = await axiosInstance.get(
-          `/api/v1/user/records/seller?limit=${recordsPageSize}&offset=${
-            (recordsPageIndex - 1) * pageSize
+          `/api/v1/user/records/seller?limit=${recordsPageSize}&offset=${(recordsPageIndex - 1) * pageSize
           }`
         );
         setRecordsPageHasNextPage(response.data.data.has_next_page);
@@ -131,6 +129,10 @@ export default function useCreatePoolList() {
       getCreatePoolList();
     }
   }, [userInfo]);
+
+  useEffect(() => {
+    onQueryUserInfo();
+  }, []);
 
   return {
     data,
