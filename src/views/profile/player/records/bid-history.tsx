@@ -4,8 +4,8 @@ import dayjs from "dayjs";
 import Pagination from "@/components/pagination";
 import { formatNumber } from "@/utils/format/number";
 import Big from "big.js";
-import chains from "@/config/chains";
 import useIsMobile from "@/hooks/use-is-mobile";
+import { useNavigate } from "react-router-dom";
 
 const BidHistory = (props: any) => {
   const {
@@ -18,6 +18,7 @@ const BidHistory = (props: any) => {
   } = props;
 
   const isMobile = useIsMobile();
+  const navigate = useNavigate();
 
   const columns = [
     {
@@ -26,13 +27,11 @@ const BidHistory = (props: any) => {
       width: isMobile ? 100 : 130,
       fixed: true,
       render: (record: any) => {
-        const currentChain = Object.values(chains).find((chain) => chain.name.toLowerCase() === record.chain.toLowerCase());
         return (
           <div
            className="flex items-center gap-[7px] cursor-pointer"
            onClick={() => {
-            if (!currentChain) return;
-             window.open(`${currentChain.blockExplorers?.default?.url}/tx/${record.tx_hash}`, "_blank");
+            navigate(`/btc/${record.pool_id}`);
            }}
            >
             <div className="">#{record.pool_id}</div>
