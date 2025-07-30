@@ -162,6 +162,9 @@ export default function Markets({ onClose }: { onClose: () => void }) {
             )}
             <NextBtn
               onClick={() => {
+                if (pageRef.current === 0) {
+                  return;
+                }
                 onQueryPoolList(-1);
               }}
               className={clsx(
@@ -171,6 +174,9 @@ export default function Markets({ onClose }: { onClose: () => void }) {
             />
             <NextBtn
               onClick={() => {
+                if (!hasMore) {
+                  return;
+                }
                 onQueryPoolList(1);
               }}
               className={clsx(
