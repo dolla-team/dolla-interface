@@ -1,24 +1,100 @@
-import Empty from "@/components/empty";
-import Loading from "@/components/icons/loading";
 import { useEffect } from "react";
 import ButtonV2 from "@/components/button/v2";
 import { formatAddress } from "@/utils/format/address";
 import { formatNumber } from "@/utils/format/number";
 import Big from "big.js";
-import clsx from "clsx";
 import useClaimFunds from "@/hooks/solana/use-claim-funds";
 import { useAuth } from "@/contexts/auth";
 import { useMemo } from "react";
-import chains from "@/config/chains";
 import useClaimReward from "@/hooks/solana/use-claim-reward";
 import { useNavigate } from "react-router-dom";
 import { getProfitFee } from "@/utils/pool";
+import GridTable from "@/components/grid-table";
+import useIsMobile from "@/hooks/use-is-mobile";
+import clsx from "clsx";
 
 const ClaimIndex = (props: any) => {
   const { className, type } = props;
 
   const { onQueryUserInfo, userInfo, userInfoLoading } = useAuth();
   const navigate = useNavigate();
+  const isMobile = useIsMobile();
+
+  const columns = [
+    {
+      dataIndex: "pool_id",
+      title: "Market ID",
+      width: isMobile ? 90 : 120,
+      fixed: true,
+      render: (record: any) => {
+        return (
+          <a
+            className="py-[10px] flex items-center gap-[7px]"
+            href={"javascript: void(0);"}
+            onClick={() => {
+              navigate(`/btc/${record.pool_id}`);
+            }}
+          >
+            <div>
+              #{record.pool_id}
+            </div>
+            <img src="/profile/icon-share.svg" className="w-[9px] h-[9px] shrink-0" />
+          </a>
+        );
+      }
+    },
+    {
+      dataIndex: "marketSize",
+      title: "Market Size",
+      width: 120,
+      render: (record: any) => {
+        return (
+          <>
+            {formatNumber(Big(record.reward_amount || 0).div(10 ** (record.reward_token_info?.[0]?.decimals || 6)), 4, true, { isShort: true, isShortUppercase: true })} {record.reward_token_info?.[0]?.symbol || "BTC"}
+          </>
+        );
+      }
+    },
+    {
+      dataIndex: "winner",
+      title: "Winner",
+      width: isMobile ? 150 : void 0,
+      render: (record: any) => {
+        return formatAddress(record.winner_user);
+      }
+    },
+    {
+      dataIndex: "claimable",
+      title: "Claimable",
+      width: 110,
+      render: (record: any) => {
+        return formatNumber(
+          type === "player" ? record.accumulative_bids : Big(record.accumulative_bids || 0).minus(getProfitFee(record)),
+          2,
+          true,
+          {
+            prefix: "$",
+            isShort: type === "player" ? Big(record.accumulative_bids || 0).gt(100000) : Big(record.accumulative_bids || 0).minus(getProfitFee(record)).gt(100000),
+            isShortUppercase: true
+          }
+        );
+      }
+    },
+    {
+      dataIndex: "action",
+      title: "Action",
+      width: isMobile ? 100 : 70,
+      render: (record: any) => {
+        return (
+          <ClaimButton
+            onQueryUserInfo={onQueryUserInfo}
+            item={record}
+            type={type}
+          />
+        );
+      }
+    },
+  ];
 
   const list = useMemo(() => {
     if (!userInfo) {
@@ -35,83 +111,16 @@ const ClaimIndex = (props: any) => {
   }, []);
 
   return (
-    <div className={clsx("w-full h-full flex flex-col items-stretch font-[SpaceGrotesk] text-white text-[16px] font-[400] leading-[100%]", className)}>
-      <div className="w-full shrink-0 grid grid-cols-[120px_120px_auto_110px_70px] gap-x-[5px] pl-[8px] pr-[17px] text-[14px] text-[#BBACA6]">
-        <div className="py-[10px]">Market ID</div>
-        <div className="py-[10px]">Market Size</div>
-        <div className="py-[10px]">Winner</div>
-        <div className="py-[10px]">Claimable</div>
-        <div className="py-[10px]">Action</div>
-      </div>
-      <div className="w-full mt-[9px] flex flex-col gap-y-[10px] items-stretch flex-1 h-0 overflow-y-auto">
-        {
-          userInfoLoading ? (
-            <div className="w-full py-[100px] flex justify-center items-center">
-              <Loading size={16} />
-            </div>
-          ) : (
-            (list && list.length > 0) ? list.map((item: any, index: number) => {
-              // const currentChain = Object.values(chains).find((it: any) => it.name.toLowerCase() === item.chain?.toLowerCase());
-              // let txUrl: any;
-              // if (currentChain) {
-              //   txUrl = `${currentChain?.blockExplorers?.default?.url}/tx/${item.result_tx_hash || item.tx_hash}`;
-              // }
-              return (
-                <div key={index} className="w-full bg-black/20 rounded-[10px] grid grid-cols-[120px_120px_auto_110px_70px] gap-x-[5px] pl-[8px] pr-[17px]">
-                  <a
-                    className="py-[10px] flex items-center gap-[7px]"
-                    href={"javascript: void(0);"}
-                    onClick={() => {
-                      navigate(`/btc/${item.pool_id}`);
-                    }}
-                  >
-                    <div>
-                      #{item.id}
-                    </div>
-                    <img src="/profile/icon-share.svg" className="w-[9px] h-[9px] shrink-0" />
-                  </a>
-                  <div className="py-[10px] flex items-center">
-                    {formatNumber(Big(item.reward_amount || 0).div(10 ** (item.reward_token_info?.[0]?.decimals  || 6)), 4, true, { isShort: true, isShortUppercase: true })} {item.reward_token_info?.[0]?.symbol || "BTC"}
-                  </div>
-                  <div className="py-[10px] flex items-center gap-[5px]">
-                    {/* <img
-                      src="/avatar/1.svg"
-                      className="w-[20px] h-[20px] shrink-0 rounded-full border-[2px] border-[#131417] object-center object-cover"
-                    /> */}
-                    <div className="">
-                      {formatAddress(item.winner_user)}
-                    </div>
-                  </div>
-                  <div className="py-[10px] flex items-center">
-                    {
-                      formatNumber(
-                        type === "player" ? item.accumulative_bids : Big(item.accumulative_bids || 0).minus(getProfitFee(item)),
-                        2,
-                        true,
-                        {
-                          prefix: "$",
-                          isShort: type === "player" ? Big(item.accumulative_bids || 0).gt(100000) : Big(item.accumulative_bids || 0).minus(getProfitFee(item)).gt(100000),
-                          isShortUppercase: true
-                        }
-                      )
-                    }
-                  </div>
-                  <div className="py-[10px] flex items-center">
-                    <ClaimButton
-                      onQueryUserInfo={onQueryUserInfo}
-                      item={item}
-                      type={type}
-                    />
-                  </div>
-                </div>
-              )
-            }) : (
-              <Empty />
-            )
-          )
-        }
-      </div>
-    </div>
+    <GridTable
+      columns={columns}
+      data={list}
+      loading={userInfoLoading}
+      className={clsx("h-full max-md:w-full max-md:overflow-x-auto", className)}
+      rowClassName="max-md:px-0 max-md:gap-x-0"
+      colClassName="max-md:px-[10px] max-md:bg-[#35302B]"
+      bodyColClassName="max-md:first:border-r max-md:border-[#423930]"
+      bodyClassName="md:overflow-y-auto md:h-[320px]"
+    />
   );
 };
 

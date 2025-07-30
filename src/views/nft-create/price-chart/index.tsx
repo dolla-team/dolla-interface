@@ -22,6 +22,7 @@ export default function PriceChart({
   const anchorDotRef = useRef<HTMLDivElement>(null);
   const [isInit, setIsInit] = useState(false);
   const [isFolded, setIsFolded] = useState(true);
+  const [isAnimationComplete, setIsAnimationComplete] = useState(false);
 
   // Function to calculate probability density data
   const calculateDensity = (anchorPrice: number) => {
@@ -59,9 +60,9 @@ export default function PriceChart({
     }));
   };
 
-  // Initialize chart - only executed once when component mounts
+  // Initialize chart - only executed once when component mounts and animation is complete
   useEffect(() => {
-    if (!chartRef.current) return;
+    if (!chartRef.current || !isAnimationComplete) return;
 
     const ctx = chartRef.current.getContext("2d");
     if (!ctx) return;
@@ -222,11 +223,11 @@ export default function PriceChart({
         chartInstance.current = null;
       }
     };
-  }, []); // Empty dependency array, only executes on mount
+  }, [isAnimationComplete]); // Execute when animation is complete
 
-  // Update chart data - only executed when anchorPrice changes
+  // Update chart data - only executed when anchorPrice changes and chart is initialized
   useEffect(() => {
-    if (!chartInstance.current || !anchorPrice) return;
+    if (!chartInstance.current || !anchorPrice || !isAnimationComplete) return;
 
     const density = calculateDensity(anchorPrice);
     const desiredMode = anchorPrice * 1.2;
@@ -261,7 +262,7 @@ export default function PriceChart({
       updateAnchorPlace();
       setIsInit(true);
     }, 100);
-  }, [anchorPrice]);
+  }, [anchorPrice, isAnimationComplete]);
 
   const updateAnchorPlace = () => {
     const chart = chartInstance.current;
@@ -302,7 +303,13 @@ export default function PriceChart({
         <button
           type="button"
           className="button shrink-0 w-[14px] h-[14px]"
-          onClick={() => setIsFolded(!isFolded)}
+          onClick={() => {
+            setIsFolded(!isFolded);
+            if (isFolded) {
+              // Reset animation state when folding
+              setIsAnimationComplete(false);
+            }
+          }}
         >
           <motion.img
             src="/new-btc/icon-fold-arrow.svg"
@@ -321,6 +328,13 @@ export default function PriceChart({
         }}
         transition={{
           duration: 0.3
+        }}
+        onAnimationComplete={() => {
+          if (!isFolded) {
+            setIsAnimationComplete(true);
+          } else {
+            setIsAnimationComplete(false);
+          }
         }}
       >
         <div className="relative w-full h-full">
