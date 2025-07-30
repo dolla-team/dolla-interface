@@ -33,8 +33,6 @@ export default function useTokenBalance({ address, decimals }: any) {
           walletPublicKey
         );
 
-        console.log(333)
-
         try {
           const accountInfo = await getAccount(connection, tokenAccount);
           const balance = Number(accountInfo.amount) / Math.pow(10, decimals);

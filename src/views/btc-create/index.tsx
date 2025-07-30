@@ -45,9 +45,9 @@ export default function BTCCreate() {
   const { onCreate, creating } = useCreate({
     amount,
     anchorPrice: pricePerBTC,
-    onCreateSuccess: (poolId) => {
+    onCreateSuccess: () => {
       setTimeout(() => {
-        navigate(`/btc/${poolId}`);
+        navigate(`/portfolio/seller`);
       }, 1000);
     }
   });
@@ -89,18 +89,16 @@ export default function BTCCreate() {
           <div className="w-full max-md:px-[12px]">
             <div className="text-[#BBACA6] flex justify-between items-center">
               <div className="">Amount</div>
-              {
-                isMobile && (
-                  <div
-                    className="underline underline-offset-2 text-white text-[16px] font-[600]"
-                    onClick={() => {
-                      setDepositModalOpen(true);
-                    }}
-                  >
-                    Deposit BTC
-                  </div>
-                )
-              }
+              {isMobile && (
+                <div
+                  className="underline underline-offset-2 text-white text-[16px] font-[600]"
+                  onClick={() => {
+                    setDepositModalOpen(true);
+                  }}
+                >
+                  Deposit BTC
+                </div>
+              )}
             </div>
             <div className="mt-[13px] flex items-center gap-[10px] h-[97px] max-md:grid max-md:grid-cols-2 max-md:h-[unset]">
               {[1, 0.1, 0.01, 0.001].map((item, index) => {
@@ -116,32 +114,37 @@ export default function BTCCreate() {
                     onClick={() => setAmount(item)}
                     initial={{ width: "25%" }}
                     animate={{
-                      width: !isMobile ? (
-                        isActive
+                      width: !isMobile
+                        ? isActive
                           ? "calc(25% + 34px)"
                           : "calc(25% - 11.33px)"
-                      ) : "100%",
-                      height: !isMobile ? (
-                        isActive ? 97 : 78
-                      ) : 78,
-                      borderColor: !isMobile ? (isActive ? "#FFE9B2" : "transparent") : "#605D55",
-                      backgroundColor: !isMobile ? (
-                        isActive
+                        : "100%",
+                      height: !isMobile ? (isActive ? 97 : 78) : 78,
+                      borderColor: !isMobile
+                        ? isActive
+                          ? "#FFE9B2"
+                          : "transparent"
+                        : "#605D55",
+                      backgroundColor: !isMobile
+                        ? isActive
                           ? "rgba(255, 255, 255, 0.1)"
                           : "#2B2C2F"
-                      ) : (
-                        isActive
-                          ? "#FFC42F"
-                          : "rgba(255, 255, 255, 0.1)"
-                      ),
-                      color: !isMobile ? "#FFF" : (isActive ? "#000" : "#FFF")
+                        : isActive
+                        ? "#FFC42F"
+                        : "rgba(255, 255, 255, 0.1)",
+                      color: !isMobile ? "#FFF" : isActive ? "#000" : "#FFF"
                     }}
                     style={{
                       fontSize: isActive ? 20 : 16
                     }}
                   >
                     <div className="font-[DelaGothicOne]">{item} BTC</div>
-                    <div className={clsx("text-[#BBACA6] text-[14px]", isActive ? "max-md:text-black" : "")}>
+                    <div
+                      className={clsx(
+                        "text-[#BBACA6] text-[14px]",
+                        isActive ? "max-md:text-black" : ""
+                      )}
+                    >
                       ~${formatNumber(item * pricePerBTC, 0, true)}
                     </div>
                   </motion.div>
@@ -240,24 +243,20 @@ export default function BTCCreate() {
               </div>
             </div>
             <div className="w-full mt-[30px] grid grid-cols-2 h-[210px] place-items-center max-md:grid-cols-1 max-md:mt-[28px] max-md:h-[unset]">
-              {
-                isMobile && (
-                  <div className="text-[#FFE9B2] font-[SpaceGrotesk] text-[16px] text-left w-full">
-                    Cash out timing
-                  </div>
-                )
-              }
+              {isMobile && (
+                <div className="text-[#FFE9B2] font-[SpaceGrotesk] text-[16px] text-left w-full">
+                  Cash out timing
+                </div>
+              )}
               <DoughnutChart
                 className="!w-[210px] !h-[210px] max-md:mt-[12px]"
                 data={poolCashOutTiming}
                 formatLabel={(record: any) => {
                   return (
                     <div className="flex flex-col items-center justify-center gap-[5px]">
-                      {
-                        !isMobile && (
-                          <div className="text-[#BBACA6]">Cash out timing</div>
-                        )
-                      }
+                      {!isMobile && (
+                        <div className="text-[#BBACA6]">Cash out timing</div>
+                      )}
                       <div className="font-[DelaGothicOne] text-[20px]">
                         in {record.label} days
                       </div>
@@ -268,13 +267,11 @@ export default function BTCCreate() {
                   );
                 }}
               />
-              {
-                isMobile && (
-                  <div className="text-[#FFE9B2] font-[SpaceGrotesk] text-[16px] text-left w-full mt-[30px]">
-                    Bids overmarket
-                  </div>
-                )
-              }
+              {isMobile && (
+                <div className="text-[#FFE9B2] font-[SpaceGrotesk] text-[16px] text-left w-full mt-[30px]">
+                  Bids overmarket
+                </div>
+              )}
               <DoughnutChart
                 className="!w-[210px] !h-[210px] max-md:mt-[12px]"
                 data={poolBidsOvermarket}
@@ -282,13 +279,11 @@ export default function BTCCreate() {
                   return (
                     <div className="flex flex-col items-center justify-center gap-[5px]">
                       <div className="text-[16px]">{record.label} BTC</div>
-                      {
-                        !isMobile && (
-                          <div className="text-[#BBACA6] mt-[4px]">
-                            Bids overmarket
-                          </div>
-                        )
-                      }
+                      {!isMobile && (
+                        <div className="text-[#BBACA6] mt-[4px]">
+                          Bids overmarket
+                        </div>
+                      )}
                       <div className="font-[DelaGothicOne] text-[20px] mt-[1px]">
                         {formatNumber(record.value, 2, true, {
                           isShort: true,
@@ -310,16 +305,14 @@ export default function BTCCreate() {
             />
           </div>
         </div>
-        {
-          !isMobile && (
-            <DepositBTC
-              userInfo={userInfo}
-              isLoading={isLoading}
-              tokenBalance={tokenBalance}
-              isMobile={isMobile}
-            />
-          )
-        }
+        {!isMobile && (
+          <DepositBTC
+            userInfo={userInfo}
+            isLoading={isLoading}
+            tokenBalance={tokenBalance}
+            isMobile={isMobile}
+          />
+        )}
         <Modal
           open={depositModalOpen}
           onClose={() => {
@@ -333,7 +326,10 @@ export default function BTCCreate() {
               setDepositModalOpen(false);
             }}
           >
-            <img src="/icon-close.svg" className="w-full h-full object-center object-contain" />
+            <img
+              src="/icon-close.svg"
+              className="w-full h-full object-center object-contain"
+            />
           </button>
           <DepositBTC
             userInfo={userInfo}
@@ -352,17 +348,13 @@ const DepositBTC = (props: any) => {
 
   return (
     <div className="w-[316px] shrink-0 max-md:w-full">
-      {
-        !isMobile && (
-          <div className="text-[#BBACA6]">Account</div>
-        )
-      }
+      {!isMobile && <div className="text-[#BBACA6]">Account</div>}
       <div className="w-full rounded-[16px] border border-[#6A5D3A] bg-[#35302B] mt-[10px] max-md:rounded-b-[0] max-md:mt-0">
         <div className="w-full rounded-t-[16px] bg-black/20 p-[18px_15px]">
-          <div className="max-md:text-white">{formatAddress(userInfo?.sol_user)}</div>
-          <div className="text-center text-[#BBACA6] mt-[17px]">
-            Balance
+          <div className="max-md:text-white">
+            {formatAddress(userInfo?.sol_user)}
           </div>
+          <div className="text-center text-[#BBACA6] mt-[17px]">Balance</div>
           <div className="mt-[13px] text-center text-[16px] font-[DelaGothicOne] max-md:text-white">
             {isLoading ? (
               <Loading size={12} />
@@ -372,7 +364,9 @@ const DepositBTC = (props: any) => {
           </div>
         </div>
         <div className="w-full p-[30px_15px]">
-          <div className="text-center font-[700] text-[16px] max-md:text-white">Recharge</div>
+          <div className="text-center font-[700] text-[16px] max-md:text-white">
+            Recharge
+          </div>
           <Recharge
             token={TOKNES[1]}
             className="mt-[7px]"

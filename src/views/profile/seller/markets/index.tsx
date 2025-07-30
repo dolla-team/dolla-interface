@@ -3,14 +3,14 @@ import Market from "@/views/btc/components/more-markets/market";
 import ButtonV2 from "@/components/button/v2";
 import Empty from "@/components/empty";
 import MarketStatus, { EMarketStatus } from "../../ components/market-status";
-import dayjs from "dayjs";
+import dayjs from "@/libs/dayjs";
 import Popover, {
   PopoverPlacement,
   PopoverTrigger
 } from "@/components/popover";
 import PopoverCard from "../../ components/popover-card";
 import CancelModal from "../cancel-modal";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import Loading from "@/components/icons/loading";
 import DepositModal from "../deposit-modal";
 import { formatNumber } from "@/utils/format/number";
@@ -115,6 +115,15 @@ const MarketItem = (props: any) => {
   });
   const navigate = useNavigate();
 
+  const time = useMemo(() => {
+    if (!order.created_at) return "-";
+    const diff = dayjs().diff(dayjs(order.created_at), "hours");
+    if (diff < 24) {
+      return dayjs(order.created_at).toNow();
+    }
+    return dayjs(order.created_at).format("hh:mm D MMM, YYYY");
+  }, [order]);
+
   return (
     <Market
       isAcitveBg={false}
@@ -130,9 +139,7 @@ const MarketItem = (props: any) => {
       footer={
         <div className="w-full px-[13px] bg-black/20 py-[12px] mt-[20px] relative z-[2] text-white text-center font-[SpaceGrotesk] text-[14px] font-normal leading-[100%]">
           <div className="flex justify-between items-center gap-[10px]">
-            <div className="text-[#BBACA6] whitespace-nowrap">
-              {dayjs(order.updated_at).format("hh:mm D MMM, YYYY")}
-            </div>
+            <div className="text-[#BBACA6] whitespace-nowrap">{time}</div>
             <div className="flex items-center justify-end gap-[7px]">
               {order.status === EMarketStatus.Created && (
                 <ButtonV2
@@ -150,58 +157,68 @@ const MarketItem = (props: any) => {
               {![EMarketStatus.Cancelled, EMarketStatus.Winner].includes(
                 order.status
               ) && (
-                  <Popover
-                    content={
-                      <PopoverCard className="!w-[300px] text-[#BBACA6] font-[SpaceGrotesk] text-[12px] leading-[120%] font-[400]">
-                        <div className="flex items-center gap-[3px]">
-                          <img
-                            src="/profile/icon-warning.svg"
-                            alt="warning"
-                            className="w-[13px] h-[11px] shrink-0"
-                          />
-                          <div className="text-[#FFC42F] leading-[100%]">
-                            Early Closure Penalty
-                          </div>
+                <Popover
+                  content={
+                    <PopoverCard className="!w-[300px] text-[#BBACA6] font-[SpaceGrotesk] text-[12px] leading-[120%] font-[400]">
+                      <div className="flex items-center gap-[3px]">
+                        <img
+                          src="/profile/icon-warning.svg"
+                          alt="warning"
+                          className="w-[13px] h-[11px] shrink-0"
+                        />
+                        <div className="text-[#FFC42F] leading-[100%]">
+                          Early Closure Penalty
                         </div>
-                        <div className="mt-[7px]">
-                          If a seller decides to close the market <span className="text-[#FFC42F] font-[600]">after the 72-hour</span> lock period without a winner:<br />
-                          <ul className="list-disc pl-[20px]">
-                            <li>
-                              The seller must pay an additional <span className="text-[#FFC42F] font-[600]">{formatNumber(penaltyPercent * 100, 2, true)}% penalty</span> based on the total funds collected from bids.
-                            </li>
-                            <li>
-                              Upon payment, the market will be closed.
-                            </li>
-                            <li>
-                              All collected funds will be fully refunded to participating bidders’ platform balances.
-                            </li>
-                          </ul>
-                          This mechanism ensures fairness to bidders while giving sellers the flexibility to manage inactive markets.
-                        </div>
-                      </PopoverCard>
-                    }
-                    placement={PopoverPlacement.BottomLeft}
-                    trigger={PopoverTrigger.Hover}
-                    closeDelayDuration={0}
-                    offset={30}
+                      </div>
+                      <div className="mt-[7px]">
+                        If a seller decides to close the market{" "}
+                        <span className="text-[#FFC42F] font-[600]">
+                          after the 72-hour
+                        </span>{" "}
+                        lock period without a winner:
+                        <br />
+                        <ul className="list-disc pl-[20px]">
+                          <li>
+                            The seller must pay an additional{" "}
+                            <span className="text-[#FFC42F] font-[600]">
+                              {formatNumber(penaltyPercent * 100, 2, true)}%
+                              penalty
+                            </span>{" "}
+                            based on the total funds collected from bids.
+                          </li>
+                          <li>Upon payment, the market will be closed.</li>
+                          <li>
+                            All collected funds will be fully refunded to
+                            participating bidders’ platform balances.
+                          </li>
+                        </ul>
+                        This mechanism ensures fairness to bidders while giving
+                        sellers the flexibility to manage inactive markets.
+                      </div>
+                    </PopoverCard>
+                  }
+                  placement={PopoverPlacement.BottomLeft}
+                  trigger={PopoverTrigger.Hover}
+                  closeDelayDuration={0}
+                  offset={30}
+                >
+                  <ButtonV2
+                    type="default"
+                    className="!h-[28px] !px-[7px] !rounded-[8px] !text-[14px] flex items-center gap-[3px]"
+                    onClick={(e: any) => {
+                      e.stopPropagation();
+                      onCancel(e);
+                    }}
                   >
-                    <ButtonV2
-                      type="default"
-                      className="!h-[28px] !px-[7px] !rounded-[8px] !text-[14px] flex items-center gap-[3px]"
-                      onClick={(e: any) => {
-                        e.stopPropagation();
-                        onCancel(e);
-                      }}
-                    >
-                      <div className="">Cancel</div>
-                      <img
-                        src="/profile/icon-warning.svg"
-                        alt="warning"
-                        className="w-[13px] h-[11px] shrink-0"
-                      />
-                    </ButtonV2>
-                  </Popover>
-                )}
+                    <div className="">Cancel</div>
+                    <img
+                      src="/profile/icon-warning.svg"
+                      alt="warning"
+                      className="w-[13px] h-[11px] shrink-0"
+                    />
+                  </ButtonV2>
+                </Popover>
+              )}
 
               {order.status === EMarketStatus.Winner && !claimed && (
                 <ButtonV2
