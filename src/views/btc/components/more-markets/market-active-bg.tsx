@@ -1,4 +1,8 @@
-export default function MarketActiveBg() {
+import clsx from "clsx";
+
+export default function MarketActiveBg(props?: { className?: string; }) {
+  const { className } = props ?? {};
+
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -6,7 +10,7 @@ export default function MarketActiveBg() {
       height="100%"
       viewBox="0 0 340 218"
       fill="none"
-      className="absolute top-0 left-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+      className={clsx("absolute top-0 left-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300", className)}
     >
       <mask
         id="mask0_56_17"

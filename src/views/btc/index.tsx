@@ -13,6 +13,7 @@ import TopWinner from "@/sections/winners";
 import Music from "./components/music";
 import useIsMobile from "@/hooks/use-is-mobile";
 import clsx from "clsx";
+import MarketsModal from "./components/more-markets/mobile/modal";
 
 // import ProvablyFair from "@/sections/provably-fair";
 
@@ -56,6 +57,7 @@ const Content = () => {
       {!isMobile && <LucyDraw tokenBalance={tokenBalance} update={update} />}
       {!isMobile && <TopWinner />}
       {!isMobile && <Music />}
+      {isMobile && <MarketsModal />}
     </div>
   );
 };

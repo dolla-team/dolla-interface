@@ -4,7 +4,9 @@ import { HOST_API } from "@/config";
 import { useAuth } from "@/contexts/auth";
 import { BASE_TOKEN } from "@/config/btc";
 
-export default function usePoolList() {
+export default function usePoolList(props?: { pageLimit?: number; isScrollList?: boolean; onFirstPageLoad?(list: any): void; }) {
+  const { pageLimit, isScrollList, onFirstPageLoad } = props ?? {};
+
   const [poolList, setPoolList] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [sortField, setSortField] = useState("time");
@@ -13,7 +15,7 @@ export default function usePoolList() {
   const [hasMore, setHasMore] = useState(true);
   const pageRef = useRef(0);
   const { userInfo } = useAuth();
-  const LIMIT = Math.floor(window.innerWidth / 300);
+  const LIMIT = typeof pageLimit === "number" ? pageLimit : Math.floor(window.innerWidth / 300);
 
   const cachedList = useRef<any[]>([]);
 
@@ -24,7 +26,7 @@ export default function usePoolList() {
     ) {
       setPoolList(
         cachedList.current.slice(
-          (step + pageRef.current) * LIMIT,
+          isScrollList ? 0 : (step + pageRef.current) * LIMIT,
           (step + pageRef.current + 1) * LIMIT
         )
       );
@@ -37,25 +39,31 @@ export default function usePoolList() {
       return;
     }
     pageRef.current += step;
-    setPoolList([]);
+    if (!isScrollList) {
+      setPoolList([]);
+    }
     try {
       setLoading(true);
       const res = await axiosInstance.get(
-        `${HOST_API}/api/v1/pool/list?limit=${LIMIT}&offset=${
-          pageRef.current * LIMIT
-        }&sort_field=${sortField}&sort_order=${sortOrder}&status=1&token_status=0&chain=${
-          BASE_TOKEN.chain
-        }&token=${BASE_TOKEN.address}${
-          volume > 0 ? "&volume=" + volume * 10 ** BASE_TOKEN.decimals : ""
+        `${HOST_API}/api/v1/pool/list?limit=${LIMIT}&offset=${pageRef.current * LIMIT
+        }&sort_field=${sortField}&sort_order=${sortOrder}&status=1&token_status=0&chain=${BASE_TOKEN.chain
+        }&token=${BASE_TOKEN.address}${volume > 0 ? "&volume=" + volume * 10 ** BASE_TOKEN.decimals : ""
         }`
       );
 
-      // setPoolList((prev) =>
-      //   pageRef.current === 0
-      //     ? res.data.data.list
-      //     : [...prev, ...res.data.data.list]
-      // );
-      setPoolList(res.data.data.list);
+      if (isScrollList) {
+        setPoolList((prev) =>
+          pageRef.current === 0
+            ? res.data.data.list
+            : [...prev, ...res.data.data.list]
+        );
+      } else {
+        setPoolList(res.data.data.list);
+      }
+      if (pageRef.current === 0) {
+        onFirstPageLoad?.(res.data.data.list);
+      }
+
       cachedList.current =
         pageRef.current === 0
           ? res.data.data.list
