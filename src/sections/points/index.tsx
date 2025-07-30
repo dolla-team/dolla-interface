@@ -75,7 +75,7 @@ export default function Points({ className }: { className?: string }) {
           "flex items-center gap-[8px]",
           progress >= 1 ? "button" : "",
           isMobile &&
-            "p-[4px] border border-[#7C68FF] rounded-l-[40px] fixed right-[-2px] bottom-[30px] duration-300 backdrop-blur-[25px]",
+            "p-[4px] border border-[#7C68FF] rounded-l-[40px] fixed right-[-2px] bottom-[30px] duration-300 backdrop-blur-[25px] scale-[0.76] origin-right",
           isMobile &&
             (prize.points > 0 ? "!translate-x-[0]" : "translate-x-[100%]"),
           className
