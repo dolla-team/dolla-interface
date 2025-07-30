@@ -27,7 +27,10 @@ export default function EndPanel({ data }: { data: any }) {
     let _bidsDistribution: any = {};
     let _bidsProgress: any = [];
     const startTime = new Date(data.created_at).getTime();
-    const endTime = new Date(data.updated_at).getTime();
+    const endTime = new Date(
+      winnerBidList.find((item: any) => item.is_winner)?.updated_at ||
+        data.updated_at
+    ).getTime();
 
     let lastBids = 0;
     winnerBidList.forEach((item: any) => {

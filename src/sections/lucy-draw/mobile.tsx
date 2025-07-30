@@ -91,7 +91,7 @@ export default function LucyDrawMobile(props: any) {
           </div>
         )}
         {status !== 2 && (
-          <div className="absolute top-[16px] right-[26px]">
+          <div className="absolute top-[16px] right-[30px]">
             <img className="w-[58px] h-[34px]" src="/btc/ticket4.png" />
             <div className="absolute top-[-2px] right-[-20px] min-w-[30px] px-[5px] py-[2px] border border-black rounded-[16px] bg-[#FF0A7C] text-white text-[12px] font-[DelaGothicOne]">
               x{tickets}
