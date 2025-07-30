@@ -75,7 +75,7 @@ export default function Points({ className }: { className?: string }) {
           "flex items-center gap-[8px]",
           progress >= 1 ? "button" : "",
           isMobile &&
-            "p-[4px] border border-[#7C68FF] rounded-l-[40px] fixed right-[-2px] bottom-[30px] duration-300 backdrop-blur-[25px]",
+            "p-[4px] border border-[#7C68FF] rounded-l-[40px] fixed right-[-2px] bottom-[30px] duration-300 bg-[#000]/30",
           isMobile &&
             (prize.points > 0 ? "!translate-x-[0]" : "translate-x-[100%]"),
           className
@@ -147,7 +147,7 @@ export default function Points({ className }: { className?: string }) {
           </motion.svg>
           <PointIcon
             className="w-[30px] h-[30px] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
-            size={isMobile ? 26 : 30}
+            size={26}
           />
         </div>
 
@@ -156,9 +156,6 @@ export default function Points({ className }: { className?: string }) {
             "text-[#FFEF43] font-bold font-[DelaGothicOne]",
             isMobile ? "text-[18px]" : "text-[20px]"
           )}
-          style={{
-            WebkitTextStroke: isMobile ? "0px #FFEF43" : "1px #5E3737"
-          }}
         >
           x
           {isMobile

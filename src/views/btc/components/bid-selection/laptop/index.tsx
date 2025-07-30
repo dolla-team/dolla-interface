@@ -41,7 +41,7 @@ export default function BidSelection({
       </div>
       <div className="w-[333px] h-[73px] relative font-[BlackHanSans]">
         <BalanceBg />
-        <div className="flex items-center justify-between relative z-[2] mt-[26px] w-[80%] mx-auto">
+        <div className="flex items-center justify-between relative z-[2] mt-[26px] w-[84%] mx-auto">
           <div className="text-white text-[16px]">PTS</div>
           <Points />
         </div>

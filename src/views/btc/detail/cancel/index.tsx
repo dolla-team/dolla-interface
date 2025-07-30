@@ -21,10 +21,10 @@ export default function Cancel({ data }: { data: any }) {
   return !data.user_draw_attempt ? (
     <div
       className={clsx(
-        "rounded-[20px] border border-[#605D55] backdrop-blur-[25px] flex flex-col items-center justify-center",
+        "rounded-[20px] border border-[#605D55] flex flex-col items-center justify-center",
         isMobile
-          ? "w-[calc(100%-24px)] h-[254px] bg-[#FFFFFF1A] ml-[12px] mt-[12px]"
-          : "w-[403px] h-[224px] bg-[rgba(0,0,0,0.5)]"
+          ? "w-[calc(100%-24px)] h-[254px] ml-[12px] mt-[12px] bg-[#000]/50"
+          : "w-[403px] h-[224px] bg-[rgba(0,0,0,0.5)] backdrop-blur-[25px]"
       )}
     >
       <div className="text-white text-[16px] font-[DelaGothicOne]">
@@ -37,10 +37,10 @@ export default function Cancel({ data }: { data: any }) {
   ) : (
     <div
       className={clsx(
-        "rounded-[20px] border border-[#605D55] backdrop-blur-[25px] flex flex-col items-center justify-center",
+        "rounded-[20px] border border-[#605D55] flex flex-col items-center justify-center",
         isMobile
-          ? "w-[calc(100%-24px)] h-[254px] bg-[#FFFFFF1A] ml-[12px] mt-[12px]"
-          : "w-[403px] h-[224px] bg-[rgba(0,0,0,0.5)]"
+          ? "w-[calc(100%-24px)] h-[254px] bg-[#000]/50 ml-[12px] mt-[12px]"
+          : "w-[403px] h-[224px] bg-[rgba(0,0,0,0.5)] backdrop-blur-[25px]"
       )}
     >
       <div className="text-white text-[16px] font-[DelaGothicOne]">

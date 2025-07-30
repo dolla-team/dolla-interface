@@ -50,12 +50,12 @@ export default function LucyDrawMobile(props: any) {
               }
             }}
             currentRound={currentRound}
-            className="absolute top-[-20px] right-[-30px] !border-[#7348FF] !backdrop-blur-[25px]"
+            className="absolute top-[-20px] right-[-30px] !border-[#7348FF] !bg-[#000]"
             key={currentRound}
           />
         )}
         {status !== 0 && (
-          <div className="absolute top-[-20px] right-[-30px] border border-[#7348FF] rounded-[20px] w-[91px] h-[30px] bg-[#00000080] backdrop-blur-[5px] text-white text-[12px] flex items-center justify-center">
+          <div className="absolute top-[-20px] right-[-30px] border border-[#7348FF] rounded-[20px] w-[91px] h-[30px] bg-[#000]/30 text-white text-[12px] flex items-center justify-center">
             {status === 1 ? "Drawing..." : "Congrats!"}
           </div>
         )}

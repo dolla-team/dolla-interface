@@ -54,8 +54,8 @@ export default function BuyTicket({
     <Modal open={showBuyTicket} onClose={onClose} isForceNormal={isMobile}>
       <div
         className={clsx(
-          "rounded-[16px] border border-[#6A5D3A] bg-[#35302B] h-[444px]",
-          isMobile ? "max-w-[100vw]" : "w-[378px]"
+          "rounded-[16px] border border-[#6A5D3A] bg-[#35302B] h-[444px] w-[378px]",
+          isMobile && "max-w-[90vw]"
         )}
       >
         <div className="h-[54px] bg-[#00000033] rounded-t-[16px] flex items-center justify-between px-[16px]">
