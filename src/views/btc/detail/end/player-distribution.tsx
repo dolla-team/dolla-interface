@@ -2,6 +2,8 @@ import Avatar from "@/components/avatar";
 import config from "@/components/bid/config";
 import { usePoolDistributed } from "@/hooks/use-pool-distributed";
 import { useMemo } from "react";
+import useIsMobile from "@/hooks/use-is-mobile";
+import clsx from "clsx";
 
 export default function PlayerDistribution({
   data,
@@ -11,6 +13,7 @@ export default function PlayerDistribution({
   bidsDistribution: any;
 }) {
   const { distributed } = usePoolDistributed(data);
+  const isMobile = useIsMobile();
 
   const total = useMemo(() => {
     return Object.values(distributed).reduce((acc, curr) => acc + curr, 0);
@@ -18,7 +21,12 @@ export default function PlayerDistribution({
 
   return (
     <div className="w-full h-full rounded-[10px] bg-[#00000033] mt-[10px]">
-      <div className="h-full pt-[12px] px-[18px] pb-[20px] flex flex-col justify-between">
+      <div
+        className={clsx(
+          "h-full pt-[12px] pb-[20px] flex flex-col justify-between",
+          isMobile ? "px-[0px]" : "px-[18px]"
+        )}
+      >
         {config.map((item) => (
           <Item
             data={item}
@@ -42,10 +50,10 @@ const Item = ({ data, number, total, winner, bidsDistribution }: any) => {
 
   return (
     <div className="flex items-center">
-      <div className="text-[14px] text-[#FFE9B2] w-[58px] mr-[11px]">
+      <div className="text-[14px] text-[#FFE9B2] w-[60px] mr-[11px] shrink-0">
         BID x{data.value}
       </div>
-      <div className="h-[12px] w-[294px] rounded-[6px] flex items-center">
+      <div className="h-[12px] w-[292px] rounded-[6px] flex items-center">
         <div
           className="h-full rounded-[6px] mr-[16px]"
           style={{ width: `${width}%`, backgroundColor: data.color }}
