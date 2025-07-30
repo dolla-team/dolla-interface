@@ -35,7 +35,7 @@ const ErrorPage = () => {
         height: "100vh"
       }}
     >
-      <div>
+      <div style={{ textAlign: "center" }}>
         <h1>Oops! Something went wrong.</h1>
         <p>We're sorry, but an unexpected error occurred.</p>
       </div>

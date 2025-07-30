@@ -25,9 +25,9 @@ const ClaimIndex = (props: any) => {
       return [];
     }
     if (type === "player") {
-      return userInfo.claim_winner_pool?.filter?.((item: any) => !item.is_claim) || [];
+      return userInfo.claim_winner_pool || [];
     }
-    return userInfo.claim_pool?.filter?.((item: any) => !item.is_claim) || [];
+    return userInfo.claim_pool || [];
   }, [userInfo, type]);
 
   useEffect(() => {
@@ -71,7 +71,7 @@ const ClaimIndex = (props: any) => {
                     <img src="/profile/icon-share.svg" className="w-[9px] h-[9px] shrink-0" />
                   </a>
                   <div className="py-[10px] flex items-center">
-                    {formatNumber(Big(item.reward_amount || 0).div(10 ** item.rewardTokenInfo?.decimals || 1), 4, true, { isShort: true, isShortUppercase: true })} {item.rewardTokenInfo?.symbol}
+                    {formatNumber(Big(item.reward_amount || 0).div(10 ** (item.reward_token_info?.[0]?.decimals  || 6)), 4, true, { isShort: true, isShortUppercase: true })} {item.reward_token_info?.[0]?.symbol || "BTC"}
                   </div>
                   <div className="py-[10px] flex items-center gap-[5px]">
                     {/* <img
@@ -85,12 +85,12 @@ const ClaimIndex = (props: any) => {
                   <div className="py-[10px] flex items-center">
                     {
                       formatNumber(
-                        Big(item.accumulative_bids || 0).minus(getProfitFee(item)),
+                        type === "player" ? item.accumulative_bids : Big(item.accumulative_bids || 0).minus(getProfitFee(item)),
                         2,
                         true,
                         {
                           prefix: "$",
-                          isShort: Big(item.accumulative_bids || 0).minus(getProfitFee(item)).gt(100000),
+                          isShort: type === "player" ? Big(item.accumulative_bids || 0).gt(100000) : Big(item.accumulative_bids || 0).minus(getProfitFee(item)).gt(100000),
                           isShortUppercase: true
                         }
                       )
@@ -143,12 +143,12 @@ const ClaimButton = (props: any) => {
     <ButtonV2
       className="!w-[69px] !px-[unset]"
       loading={claiming}
-      disabled={claiming}
+      disabled={claiming || item.is_claim}
       onClick={() => {
         onClaim(item.pool_id);
       }}
     >
-      Claim
+      {item.is_claim ? "Claimed" : "Claim"}
     </ButtonV2>
   );
 };

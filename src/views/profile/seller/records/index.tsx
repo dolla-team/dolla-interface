@@ -4,14 +4,15 @@ import dayjs from "dayjs";
 import Pagination from "@/components/pagination";
 import { formatNumber } from "@/utils/format/number";
 import Big from "big.js";
-import chains from "@/config/chains";
 import { ESellerRecordsType } from "../hooks/use-create-pool-list";
 import useIsMobile from "@/hooks/use-is-mobile";
+import { useNavigate } from "react-router-dom";
 
 const Records = (props: any) => {
   const { className, records, loading, onPrevPage, onNextPage, hasNextPage, currentPage, recordsPrices } = props;
 
   const isMobile = useIsMobile();
+  const navigate = useNavigate();
 
   const columns = [
     {
@@ -20,16 +21,14 @@ const Records = (props: any) => {
       width: 130,
       fixed: true,
       render: (record: any) => {
-        const currentChain = Object.values(chains).find((chain) => chain.name.toLowerCase() === record.chain.toLowerCase());
         return (
           <div
             className="flex items-center gap-[7px] cursor-pointer"
             onClick={() => {
-              if (!currentChain) return;
-              window.open(`${currentChain.blockExplorers?.default?.url}/tx/${record.tx_hash}`, "_blank");
+              navigate(`/btc/${record.pool_id}`);
             }}
           >
-            <div className="">#{record.id}</div>
+            <div className="">#{record.pool_id}</div>
             <img src="/profile/icon-share.svg" alt="share" className="w-[9px] h-[9px] shrink-0" />
           </div>
         );

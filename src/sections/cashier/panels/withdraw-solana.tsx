@@ -47,7 +47,7 @@ export default function WithdrawSolana() {
     return (
       // receiveAddress.length === 42 &&
       // receiveAddress.startsWith("0x") &&
-      receiveAddress !== address
+      receiveAddress && receiveAddress !== address
     );
   }, [receiveAddress]);
 
@@ -64,6 +64,7 @@ export default function WithdrawSolana() {
   //   targetAddress: receiveAddress
   // });
 
+
   const { onTransfer } = useTransfer({
     token: selectedItem,
     type: "withdraw",
@@ -71,6 +72,11 @@ export default function WithdrawSolana() {
       toast.success("Transfer success");
       updateUsdcBalance();
       updateBtcBalance();
+      setTimeout(() => {
+        updateUsdcBalance();
+        updateBtcBalance();
+      }, 15000);
+
       // setSelectedItem(null);
       // setReceiveAddress("");
       // setAmount("");
@@ -210,7 +216,7 @@ const Item = ({
       <div className="text-white text-[16px]">{data.symbol}</div>
       {balance ? (
         <div className="text-white text-[20px]">
-          {formatNumber(balance, 0, true, { isShort: true })}
+          {formatNumber(balance, 0, true, { isShort: false })}
         </div>
       ) : (
         <div></div>
