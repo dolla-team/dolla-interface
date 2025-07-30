@@ -18,7 +18,16 @@ export default function ProvablyFair({ open, onClose, defaultTab }: { open: bool
     }
   }, [defaultTab]);
 
-  const { data: provablyData, loading: provablyLoading, hasNext, verifySolana, setYouParticipateOnly, youParticipateOnly, offset, setOffset } = useProvably();
+  const { 
+    data: provablyData, 
+    loading: provablyLoading, 
+    hasNext, verifySolana, 
+    setYouParticipateOnly, 
+    youParticipateOnly, 
+    offset, 
+    setOffset, 
+    setPoolId 
+  } = useProvably();
 
   return (
     <Modal open={open} onClose={onClose}>
@@ -67,7 +76,7 @@ export default function ProvablyFair({ open, onClose, defaultTab }: { open: bool
             <div className={clsx("pt-[20px] pb-[30px] pl-[20px] pr-[30px]")}>
               <div className="pl-[10px]">
                 <VerifiForm handleVerify={verifySolana} onPoolIdChange={(value) => {
-                  
+                  setPoolId(value)
                 }} />
               </div>
 
@@ -105,7 +114,7 @@ export default function ProvablyFair({ open, onClose, defaultTab }: { open: bool
               {
                 tab === "verify" && (
                   <VerifiForm handleVerify={verifySolana} onPoolIdChange={(value) => {
-                    
+                    setPoolId(value)
                   }} />
                 )
               }
