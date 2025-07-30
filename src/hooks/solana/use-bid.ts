@@ -328,7 +328,6 @@ export default function useBid(
     };
     window.cachedPoolId = poolId;
     console.timeEnd("fetchPoolInfo");
-    console.log("pool basic info", poolInfoRef.current);
   };
 
   const getRandomnessAccount = async () => {

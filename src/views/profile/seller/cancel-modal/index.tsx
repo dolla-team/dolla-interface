@@ -1,9 +1,10 @@
 import Modal from "@/components/modal";
 import { formatNumber } from "@/utils/format/number";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import Big from "big.js";
 import useCancel from "@/hooks/solana/use-cancel";
 import ButtonV2 from "@/components/button/v2";
+import { penaltyPercent } from "@/utils/pool";
 
 export default function CancelModal({
   open,
@@ -26,8 +27,8 @@ export default function CancelModal({
     }
   });
   const [penalty, finalRefund] = useMemo(() => {
-    const _penalty = Big(0)
-      .div(10 ** order?.purchase_token_info?.decimals || 18)
+    const _penalty = Big(order?.value || 0)
+      .times(penaltyPercent)
       .toString();
     return [
       _penalty,
@@ -36,6 +37,8 @@ export default function CancelModal({
         .toString()
     ];
   }, [order]);
+
+  const [penaltyPaid, setPenaltyPaid] = useState(false);
 
   return (
     <Modal onClose={onClose} open={open}>
@@ -95,7 +98,7 @@ export default function CancelModal({
               ${formatNumber(order?.accumulative_bids, 0, true)}
             </span>
           </div>
-          <div className="w-full h-[86px] p-[10px] mt-[20px] mx-auto bg-[#FFC42F1A] rounded-[4px] border border-[#FFC42F]">
+          <div className="w-full h-[72px] p-[10px] mt-[20px] mx-auto bg-[#FFC42F1A] rounded-[4px] border border-[#FFC42F]">
             <div className="flex items-center gap-[2px]">
               <img
                 src="/profile/icon-warning.svg"
@@ -105,8 +108,7 @@ export default function CancelModal({
               <span className="text-[#FFC42F]">Be careful!</span>
             </div>
             <div className="text-[12px] font-[400] leading-[120%] mt-[7px]">
-              If you cancel, platform will refund the bid amount of the player
-              who has already participated, and you need to pay 20% in demages.
+              The seller must pay an additional <span className="text-[#FFC42F] font-[600]">{formatNumber(penaltyPercent * 100, 2, true)}% penalty</span> based on the total funds collected from bids.
             </div>
           </div>
           <div className="mt-[10px]">
@@ -126,10 +128,29 @@ export default function CancelModal({
             </div>
           </div>
         </div>
-        <div className="flex justify-center mt-[0px]">
+        <div className="grid grid-cols-2 gap-[20px] mt-[0px] px-[20px]">
+          {
+            penaltyPaid ? (
+              <div className="h-[40px] text-[#75FF4A] text-[16px] font-[500] flex items-center justify-center gap-[6px]">
+                <img src="/icon-done.svg" alt="done" className="w-[17px] h-[17px]" />
+                <span>Penalty Paid</span>
+              </div>
+            ) : (
+              <ButtonV2
+                className="!h-[40px] !text-[16px]"
+                loading={canceling}
+                onClick={() => {
+                  setPenaltyPaid(true);
+                }}
+              >
+                Pay Penalty
+              </ButtonV2>
+            )
+          }
           <ButtonV2
-            className="w-[220px] !h-[40px] !text-[16px]"
+            className="!h-[40px] !text-[16px]"
             loading={canceling}
+            disabled={!penaltyPaid || canceling}
             onClick={() => {
               onCancel(order?.pool_id);
             }}

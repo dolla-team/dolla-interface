@@ -75,7 +75,7 @@ export default function Points({ className }: { className?: string }) {
           "flex items-center gap-[8px]",
           progress >= 1 ? "button" : "",
           isMobile &&
-            "p-[4px] border border-[#7C68FF] rounded-l-[40px] fixed right-[-2px] bottom-[30px] duration-300",
+            "p-[4px] border border-[#7C68FF] rounded-l-[40px] fixed right-[-2px] bottom-[30px] duration-300 backdrop-blur-[25px] scale-[0.76] origin-right",
           isMobile &&
             (prize.points > 0 ? "!translate-x-[0]" : "translate-x-[100%]"),
           className
@@ -157,13 +157,12 @@ export default function Points({ className }: { className?: string }) {
             isMobile ? "text-[18px]" : "text-[20px]"
           )}
           style={{
-            WebkitTextStrokeWidth: "1px",
-            WebkitTextStrokeColor: "#5E3737"
+            WebkitTextStroke: isMobile ? "0px #FFEF43" : "1px #5E3737"
           }}
         >
           x
           {isMobile
-            ? formatNumber(prize.points, 0, true, { isShort: true })
+            ? formatNumber(prize.points, 0, true, { isShort: false })
             : formatNumber(prize.points, 0, true)}
         </span>
       </div>

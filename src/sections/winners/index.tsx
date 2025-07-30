@@ -4,7 +4,6 @@ import WinnerCard from "./winner-card";
 import Big from "big.js";
 import MWinnerCard from "./m-winner-card";
 import useIsMobile from "@/hooks/use-is-mobile";
-import { AnimatePresence } from "framer-motion";
 
 export default function TopWinner() {
   const { lastWinner: data } = useLastWinner();
@@ -12,15 +11,22 @@ export default function TopWinner() {
 
   const [amount, rewardInfo, multiple] = useMemo(() => {
     if (!data) return ["", {}, 0];
+
     const _rewardInfo = data.reward_token_info[0];
     const _a = Big(data.reward_amount)
       .div(10 ** _rewardInfo.decimals)
       .toString();
 
-    const _returnMultiple = Big(data.pool_info.anchor_price)
+    let lastBids = 0;
+    data.bid_list.forEach((item: any) => {
+      if (item.is_winner) {
+        lastBids = item.times;
+      }
+    });
+    const _returnMultiple = Big(data?.pool_info?.anchor_price)
       .div(10 ** _rewardInfo.decimals)
-      .div(data.times)
-      .toString();
+      .div(lastBids)
+      .toFixed(0);
 
     return [_a, _rewardInfo, _returnMultiple];
   }, [data]);
@@ -32,9 +38,7 @@ export default function TopWinner() {
     multiple
   };
   return isMobile ? (
-    <AnimatePresence>
-      {data && <MWinnerCard key={data.pool_info?.winner_user} {...params} />}
-    </AnimatePresence>
+    <MWinnerCard key={data?.pool_info?.winner_user} {...params} />
   ) : (
     <div className="absolute top-[14%] left-[20px]">
       <WinnerCard {...params} />

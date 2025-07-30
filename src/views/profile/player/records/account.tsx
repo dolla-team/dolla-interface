@@ -101,7 +101,7 @@ const Account = (props: any) => {
         const currentChain = Object.values(chains).find((it: any) => it.name.toLowerCase() === record.chain?.toLowerCase());
         let txUrl: any;
         if (currentChain) {
-          txUrl = `${currentChain?.blockExplorers?.default?.url}/tx/${record.tx_hash}`;
+          txUrl = `${currentChain?.blockExplorers?.default?.url}/tx/${record.tx_hash}?cluster=${import.meta.env.VITE_SOLANA_CLUSTER_NAME}`;
         }
         return (
           <div className="flex items-center gap-[7px]">

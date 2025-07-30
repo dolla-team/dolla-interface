@@ -56,7 +56,7 @@ export default function BidSelection({ tokenBalance, update }: any) {
   );
 
   const onChangeBids = (bids: number) => {
-    if (flipStatus === 1) return;
+    if (flipStatus === 1 || disabled) return;
     setBids(bids);
   };
 

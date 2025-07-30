@@ -26,20 +26,27 @@ export default function LucyDrawMobile(props: any) {
     setOpen(true);
     setTimeout(() => {
       setOpen(false);
-    }, 2000);
+    }, 3000);
   }, [currentRound]);
   return (
     <>
       <div
         className={clsx(
           "fixed bottom-[30px] left-0 z-[10] w-[159px] h-[57px] duration-300",
-          open ? "translate-x-[0px]" : "translate-x-[-70px]",
+          open ? "translate-x-[0px]" : "translate-x-[-68px]",
           className
         )}
         onClick={() => {
           setShowCard(true);
         }}
       >
+        <div className="h-[12px] z-[1] flex justify-center items-center text-white text-[10px] font-[600] leading-[100%] font-[SpaceGrotesk] absolute top-[-8px] left-[10px]">
+          <div className="w-[6px] h-full bg-[url('/btc/bg-round-left.svg')] bg-[length:6px_12px] bg-right bg-no-repeat shrink-0 translate-x-[1px]"></div>
+          <div className="h-full min-w-[22px] flex-1 bg-[linear-gradient(270deg,_#2F1C99_0%,_#4E2FFF_100%)] flex justify-center items-center">
+            #{currentRound}
+          </div>
+          <div className="w-[6px] h-full bg-[url('/btc/bg-round-right.svg')] bg-[length:6px_12px] bg-left bg-no-repeat shrink-0 translate-x-[-1px]"></div>
+        </div>
         <Bg />
         {status === 0 && (
           <Timer
@@ -50,7 +57,8 @@ export default function LucyDrawMobile(props: any) {
               }
             }}
             currentRound={currentRound}
-            className="absolute top-[-20px] right-[-30px] !border-[#7348FF]"
+            className="absolute top-[-20px] right-[-30px] !border-[#7348FF] !backdrop-blur-[25px]"
+            key={currentRound}
           />
         )}
         {status !== 0 && (

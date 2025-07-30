@@ -8,6 +8,7 @@ import { useAuth } from "@/contexts/auth";
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ClaimModal from "../claim/modal";
+import { getProfitFee } from "@/utils/pool";
 
 const StatisticsPlayer = (props: any) => {
   const { className } = props;
@@ -32,7 +33,7 @@ const StatisticsPlayer = (props: any) => {
       _result[1] = userInfo
         .claim_pool
         .filter((item: any) => !item.is_claim)
-        .reduce((acc: any, item: any) => Big(acc).plus(Big(item.accumulative_bids || 0)), 0);
+        .reduce((acc: any, item: any) => Big(acc).plus(Big(item.accumulative_bids || 0).minus(getProfitFee(item))), 0);
     }
     return _result;
   }, [userInfo]);
