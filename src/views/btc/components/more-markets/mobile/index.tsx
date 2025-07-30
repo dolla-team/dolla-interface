@@ -5,6 +5,7 @@ import usePoolList from "@/hooks/use-pool-list";
 import Market from "../market";
 import MarketLoading from "../market-loading";
 import InfiniteScrollContainer from "@/components/infinite-scroll-container";
+import { useRef, useEffect, useCallback, useState } from "react";
 
 const Markets = (props: any) => {
   const { } = props;
@@ -27,9 +28,54 @@ const Markets = (props: any) => {
     pageLimit: 10,
     isScrollList: true,
     onFirstPageLoad: (_poolList) => {
-      setSelectedMarket(_poolList[0]);
+      setActiveMarketIndex(0);
     }
   });
+
+  const [activeMarketIndex, setActiveMarketIndex] = useState(0);
+  const containerRef = useRef<HTMLDivElement | null>(null);
+
+  // Function to check which Market should be active based on scroll position
+  const checkActiveMarket = useCallback(() => {
+    if (!containerRef.current) return;
+
+    const containerTop = containerRef.current.getBoundingClientRect().top;
+    const threshold = 160; // 120px from container top
+
+    const scrollTop = containerRef.current.scrollTop;
+    if (scrollTop < 80) {
+      setActiveMarketIndex(0);
+      return;
+    }
+
+    let closestMarket: number = -1;
+    let minDistance = Infinity;
+
+    // Check each Market element
+    const marketsEle = containerRef.current.querySelectorAll(".markets-list-market-item");
+    for (let i = 0; i < marketsEle.length; i++) {
+      const element = marketsEle[i];
+      const rect = element.getBoundingClientRect();
+      const distance = Math.abs(rect.top - containerTop - threshold);
+      if (distance < minDistance) {
+        minDistance = distance;
+        closestMarket = i;
+      }
+    }
+
+    // Set the closest Market as active if it's different from current
+    if (closestMarket > -1 && closestMarket !== activeMarketIndex) {
+      setActiveMarketIndex(closestMarket);
+    }
+  }, [poolList, activeMarketIndex]);
+
+  // Scroll event handler
+  const handleScroll = useCallback((e: any) => {
+    // Get the container element from the event target
+    const container = e.target as HTMLDivElement;
+    containerRef.current = container;
+    checkActiveMarket();
+  }, [checkActiveMarket]);
 
   return (
     <div className="relative w-full h-screen bg-[#1A191D] text-[14px] leading-[100%] font-[400] font-[SpaceGrotesk]">
@@ -95,19 +141,28 @@ const Markets = (props: any) => {
         }}
         loading={loading}
         hasMore={hasMore}
-        className="pt-[150px] w-full h-full flex flex-col items-center gap-[12px] pb-[70px] overflow-y-auto"
+        className={clsx(
+          "pt-[150px] w-full h-full flex flex-col items-center gap-[12px] pb-[70px]",
+          (loading && !poolList.length) ? "overflow-y-hidden" : "overflow-y-auto"
+        )}
         threshold={50}
+        onScroll={handleScroll}
       >
-        {poolList.map((item: any) => (
+        {poolList.map((item: any, index: number) => (
           <Market
-            key={item.id}
+            key={index}
             data={item}
             onClick={() => {
+              if (activeMarketIndex !== index) {
+                setActiveMarketIndex(index);
+                return;
+              }
               setSelectedMarket(item);
               onMobileMarketsClose();
             }}
             isForceNormal
-            isActive={item.id === selectedMarket?.id}
+            isActive={activeMarketIndex === index}
+            className={clsx("markets-list-market-item", `market-item-${index}`)}
           />
         ))}
         {(loading && !poolList.length) && (
