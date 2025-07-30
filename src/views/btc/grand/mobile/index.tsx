@@ -12,7 +12,10 @@ export default function GrandMobile({ tokenBalance, update }: any) {
   const { flipStatus, pool } = useBtcContext();
   return (
     <div
-      className={clsx("relative grow", pool?.status === 1 && "overflow-hidden")}
+      className={clsx(
+        "relative grow",
+        pool?.status === 1 && "overflow-hidden h-[calc(100vh-444px)]"
+      )}
     >
       {pool?.status === 1 && (
         <>
