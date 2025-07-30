@@ -13,9 +13,12 @@ export default function GrandMobile({ tokenBalance, update }: any) {
   return (
     <div
       className={clsx(
-        "relative grow",
-        pool?.status === 1 && "overflow-hidden h-[calc(100vh-444px)]"
+        "relative",
+        pool?.status === 1 ? "overflow-hidden" : "grow"
       )}
+      style={{
+        height: pool?.status === 1 ? window.innerHeight - 444 : "auto"
+      }}
     >
       {pool?.status === 1 && (
         <>

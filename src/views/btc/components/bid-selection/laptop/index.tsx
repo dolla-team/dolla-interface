@@ -73,11 +73,11 @@ export default function BidSelection({
             )}
             onClick={() => onChangeBids(item)}
           >
-            {item === 100 && <Bg100 />}
-            {item === 50 && <Bg50 />}
-            {item === 10 && <Bg10 />}
-            {item === 5 && <Bg5 />}
-            {item === 1 && <Bg1 />}
+            {item === 100 && <Bg100 active={bids === 100} />}
+            {item === 50 && <Bg50 active={bids === 50} />}
+            {item === 10 && <Bg10 active={bids === 10} />}
+            {item === 5 && <Bg5 active={bids === 5} />}
+            {item === 1 && <Bg1 active={bids === 1} />}
             {/* {bids === 1 ? <Bg1 /> : <Bg1 />} */}
             <span
               className={clsx(

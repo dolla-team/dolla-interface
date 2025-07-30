@@ -30,6 +30,11 @@ export const CannonCoinsProvider = ({
   const { onQueryPoolInfo } = usePoolInfo("solana");
   const [pool, setPool] = useState<any>(null);
   const { data, getPoolRecommend } = usePoolRecommend(0, !params?.poolId);
+  const [mobileMarketsOpen, setMobileMarketsOpen] = useState(false);
+
+  const onMobileMarketsClose = () => {
+    setMobileMarketsOpen(false);
+  };
 
   useEffect(() => {
     if (flipStatus === 1 || flipStatus === 0) {
@@ -153,7 +158,10 @@ export const CannonCoinsProvider = ({
             coinsRef.current[i]?.flip(true);
           }
         },
-        getPoolRecommend
+        getPoolRecommend,
+        mobileMarketsOpen,
+        setMobileMarketsOpen,
+        onMobileMarketsClose,
       }}
     >
       {children}

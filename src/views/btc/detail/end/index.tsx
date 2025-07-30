@@ -64,7 +64,7 @@ export default function EndPanel({ data }: { data: any }) {
         className={clsx(
           "border",
           isMobile
-            ? "w-screen mt-[12px] p-[20px] border-t-[#605D55] rounded-t-[20px] bg-[#000]/50"
+            ? "w-screen mt-[12px] p-[20px] border-t-[#605D55] rounded-t-[20px] bg-[#000]/50 pb-[80px]"
             : "w-[815px] h-full overflow-y-auto p-[20px] border-[#605D55] rounded-[20px] bg-[#FFFFFF1A] backdrop-blur-[10px]"
         )}
       >

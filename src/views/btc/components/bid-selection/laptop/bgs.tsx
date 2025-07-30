@@ -96,8 +96,42 @@ export const BalanceBg = () => {
   );
 };
 
-export const Bg100 = () => {
-  return (
+export const Bg100 = ({ active }: { active: boolean }) => {
+  return active ? (
+    <>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="135"
+        height="73"
+        viewBox="0 0 135 73"
+        fill="none"
+        className="absolute top-0 left-0"
+      >
+        <path
+          d="M19.1724 5.8008C20.2524 2.37269 23.4862 0.0857307 27.0783 0.209596L126.589 3.64101C131.844 3.82219 135.498 8.93586 133.967 13.9656L117.726 67.3293C116.701 70.6978 113.594 73 110.072 73H8.90822C3.50327 73 -0.346234 67.7511 1.27799 62.596L19.1724 5.8008Z"
+          fill="url(#paint0_linear_2716_3526)"
+        />
+        <defs>
+          <linearGradient
+            id="paint0_linear_2716_3526"
+            x1="63.5"
+            y1="0"
+            x2="63.5"
+            y2="73"
+            gradientUnits="userSpaceOnUse"
+          >
+            <stop stopColor="#FFF698" />
+            <stop offset="1" stopColor="#FFC42F" />
+          </linearGradient>
+        </defs>
+      </svg>
+      <img
+        className="absolute bottom-[-10px] left-0"
+        src="/btc/bid100.gif"
+        alt="bid 100"
+      />
+    </>
+  ) : (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width="139"
@@ -145,8 +179,42 @@ export const Bg100 = () => {
   );
 };
 
-export const Bg50 = () => {
-  return (
+export const Bg50 = ({ active }: { active: boolean }) => {
+  return active ? (
+    <>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="129"
+        height="68"
+        viewBox="0 0 129 68"
+        fill="none"
+        className="absolute top-0 left-0"
+      >
+        <path
+          d="M16.2318 6.01187C17.2703 2.48109 20.5836 0.11432 24.2604 0.277007L120.878 4.55212C126.042 4.7806 129.636 9.7723 128.217 14.7421L114.658 62.1978C113.677 65.6322 110.537 68 106.966 68H8.69178C3.35092 68 -0.490149 62.8665 1.01686 57.7427L16.2318 6.01187Z"
+          fill="url(#paint0_linear_2716_3477)"
+        />
+        <defs>
+          <linearGradient
+            id="paint0_linear_2716_3477"
+            x1="60.6727"
+            y1="0"
+            x2="60.6727"
+            y2="68"
+            gradientUnits="userSpaceOnUse"
+          >
+            <stop stopColor="#FFF698" />
+            <stop offset="1" stopColor="#FFC42F" />
+          </linearGradient>
+        </defs>
+      </svg>
+      <img
+        className="absolute bottom-0 left-0"
+        src="/btc/bid50.gif"
+        alt="bid 50"
+      />
+    </>
+  ) : (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width="133"
@@ -194,8 +262,42 @@ export const Bg50 = () => {
   );
 };
 
-export const Bg10 = () => {
-  return (
+export const Bg10 = ({ active }: { active: boolean }) => {
+  return active ? (
+    <>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="116"
+        height="62"
+        viewBox="0 0 116 62"
+        fill="none"
+        className="absolute top-0 left-0"
+      >
+        <path
+          d="M13.3038 6.18614C14.295 2.57129 17.6631 0.129275 21.4069 0.311016L108.139 4.5213C113.218 4.76789 116.782 9.62958 115.487 14.5478L104.569 56.0359C103.645 59.5505 100.467 62 96.8329 62H8.48883C3.20932 62 -0.622485 56.9761 0.773596 51.8845L13.3038 6.18614Z"
+          fill="url(#paint0_linear_2716_3456)"
+        />
+        <defs>
+          <linearGradient
+            id="paint0_linear_2716_3456"
+            x1="54.5468"
+            y1="0"
+            x2="54.5468"
+            y2="62"
+            gradientUnits="userSpaceOnUse"
+          >
+            <stop stopColor="#FFF698" />
+            <stop offset="1" stopColor="#FFC42F" />
+          </linearGradient>
+        </defs>
+      </svg>
+      <img
+        className="absolute bottom-0 left-0"
+        src="/btc/bid10.gif"
+        alt="bid 10"
+      />
+    </>
+  ) : (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width="120"
@@ -243,8 +345,42 @@ export const Bg10 = () => {
   );
 };
 
-export const Bg5 = () => {
-  return (
+export const Bg5 = ({ active }: { active: boolean }) => {
+  return active ? (
+    <>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="114"
+        height="56"
+        viewBox="0 0 114 56"
+        fill="none"
+        className="absolute top-0 left-0"
+      >
+        <path
+          d="M11.297 6.358C12.2864 2.66412 15.7517 0.187008 19.567 0.4463L106.323 6.34231C111.34 6.68331 114.802 11.5145 113.513 16.3754L104.578 50.0515C103.648 53.5583 100.474 56 96.8457 56H8.42488C3.16494 56 -0.663643 51.0109 0.697292 45.9301L11.297 6.358Z"
+          fill="url(#paint0_linear_2716_3441)"
+        />
+        <defs>
+          <linearGradient
+            id="paint0_linear_2716_3441"
+            x1="53.6043"
+            y1="0"
+            x2="53.6043"
+            y2="56"
+            gradientUnits="userSpaceOnUse"
+          >
+            <stop stopColor="#FFF698" />
+            <stop offset="1" stopColor="#FFC42F" />
+          </linearGradient>
+        </defs>
+      </svg>
+      <img
+        className="absolute bottom-0 left-0"
+        src="/btc/bid5.gif"
+        alt="bid 5"
+      />
+    </>
+  ) : (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width="118"
@@ -292,8 +428,35 @@ export const Bg5 = () => {
   );
 };
 
-export const Bg1 = () => {
-  return (
+export const Bg1 = ({ active }: { active: boolean }) => {
+  return active ? (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="108"
+      height="47"
+      viewBox="0 0 108 47"
+      fill="none"
+      className="absolute top-0 left-0"
+    >
+      <path
+        d="M9.23401 6.38474C10.2585 2.68076 13.772 0.228619 17.6021 0.5445L100.658 7.39444C104.807 7.73664 108 11.204 108 15.3674V39C108 43.4183 104.418 47 100 47H8.51314C3.22621 47 -0.606763 41.9629 0.802659 36.8673L9.23401 6.38474Z"
+        fill="url(#paint0_linear_1771_2006)"
+      />
+      <defs>
+        <linearGradient
+          id="paint0_linear_1771_2006"
+          x1="49.8345"
+          y1="0"
+          x2="49.8345"
+          y2="47"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop stopColor="#FFF698" />
+          <stop offset="1" stopColor="#FFC42F" />
+        </linearGradient>
+      </defs>
+    </svg>
+  ) : (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width="112"

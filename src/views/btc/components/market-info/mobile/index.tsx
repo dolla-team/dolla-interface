@@ -10,7 +10,7 @@ import Info from "./info";
 // import ShareBtn from "./share-btn";
 
 export default function MobileMarketInfo() {
-  const { poolAmount, pool } = useBtcContext();
+  const { poolAmount, pool, setMobileMarketsOpen } = useBtcContext();
 
   const [expand, setExpand] = useState(true);
   return (
@@ -39,7 +39,10 @@ export default function MobileMarketInfo() {
               {" "}
               #{pool?.pool_id}
             </span>
-            <MArrowBtn expand={expand} onClick={() => setExpand(!expand)} />
+            <MArrowBtn
+              expand={expand}
+              onClick={() => setMobileMarketsOpen(true)}
+            />
           </div>
           {/* <ShareBtn /> */}
         </div>
