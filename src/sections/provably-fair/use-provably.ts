@@ -10,7 +10,8 @@ export default function useProvably() {
     useEffect(() => {
         getProvablyData({
             limit: LIMIT,
-            offset: offset
+            offset: offset,
+            // you_participate_only: true
         });
     }, [offset]);
 

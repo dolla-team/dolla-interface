@@ -18,7 +18,7 @@ export default function ProvablyFair({ open, onClose, defaultTab }: { open: bool
     }
   }, [defaultTab]);
 
-  // const { data: provablyData, loading: provablyLoading } = useProvably();
+  const { data: provablyData, loading: provablyLoading } = useProvably();
 
   return (
     <Modal open={open} onClose={onClose}>
