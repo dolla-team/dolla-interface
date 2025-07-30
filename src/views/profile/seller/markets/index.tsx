@@ -119,7 +119,7 @@ const MarketItem = (props: any) => {
     if (!order.created_at) return "-";
     const diff = dayjs().diff(dayjs(order.created_at), "hours");
     if (diff < 24) {
-      return dayjs(order.created_at).toNow();
+      return dayjs(order.created_at).toNow(true) + " ago";
     }
     return dayjs(order.created_at).format("hh:mm D MMM, YYYY");
   }, [order]);
