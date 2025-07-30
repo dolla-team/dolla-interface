@@ -18,7 +18,7 @@ export default function ProvablyFair({ open, onClose, defaultTab }: { open: bool
     }
   }, [defaultTab]);
 
-  const { data: provablyData, loading: provablyLoading } = useProvably();
+  const { data: provablyData, loading: provablyLoading, hasNext, verifySolana, setYouParticipateOnly, youParticipateOnly, offset, setOffset } = useProvably();
 
   return (
     <Modal open={open} onClose={onClose}>
@@ -64,9 +64,21 @@ export default function ProvablyFair({ open, onClose, defaultTab }: { open: bool
 
         {
           !isMobile && (
-            <div className={clsx("pt-[20px] h-[444px] overflow-y-auto p-[30px]")}>
-              <VerifiForm />
-              <VerifyList />
+            <div className={clsx("pt-[20px] pb-[30px] pl-[20px] pr-[30px]")}>
+              <div className="pl-[10px]">
+                <VerifiForm handleVerify={verifySolana} onPoolIdChange={(value) => {
+                  
+                }} />
+              </div>
+
+              <VerifyList
+                hasNext={hasNext}
+                list={provablyData}
+                loading={provablyLoading}
+                setYouParticipateOnly={setYouParticipateOnly}
+                youParticipateOnly={youParticipateOnly}
+                offset={offset}
+                setOffset={setOffset} />
 
               {/* <div className="w-[544px] flex items-center gap-[12px] mt-[14px] text-white">
             <input
@@ -92,12 +104,21 @@ export default function ProvablyFair({ open, onClose, defaultTab }: { open: bool
             <div className="p-[10px] pt-[20px]">
               {
                 tab === "verify" && (
-                  <VerifiForm />
+                  <VerifiForm handleVerify={verifySolana} onPoolIdChange={(value) => {
+                    
+                  }} />
                 )
               }
               {
                 tab === "markets" && (
-                  <VerifyList />
+                  <VerifyList
+                    hasNext={hasNext}
+                    list={provablyData}
+                    loading={provablyLoading}
+                    setYouParticipateOnly={setYouParticipateOnly}
+                    youParticipateOnly={youParticipateOnly}
+                    offset={offset}
+                    setOffset={setOffset} />
                 )
               }
             </div>
