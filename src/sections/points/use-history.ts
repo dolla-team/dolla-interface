@@ -10,9 +10,10 @@ export default function useHistory() {
   const isMobile = useIsMobile();
   const pageSize = isMobile ? 20 : 10;
 
-  const getHistory = async () => {
+  const getHistory = async (isFirst = false) => {
     setLoading(true);
-    if (pageRef.current === 0) {
+    if (isFirst) {
+      pageRef.current = 0;
       setData([]);
     }
     try {

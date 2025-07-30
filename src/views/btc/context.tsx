@@ -76,7 +76,10 @@ export const CannonCoinsProvider = ({
         loopUpdatePool(res);
       } else {
         clearTimeout(window.poolTimer);
-        if (count < 5) updatePool();
+        if (count < 5) {
+          await new Promise((resolve) => setTimeout(resolve, 1000));
+          updatePool();
+        }
         count++;
       }
     };

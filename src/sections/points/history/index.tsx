@@ -27,7 +27,7 @@ export default function History({
 
   useEffect(() => {
     if (showHistory) {
-      getHistory();
+      getHistory(true);
     }
   }, [showHistory]);
 
