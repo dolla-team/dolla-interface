@@ -68,8 +68,9 @@ export default function VerifyList({ hasNext, list, loading, setYouParticipateOn
                                                     }}
                                                 >
                                                     {column.key === "winner" ? (
+
                                                         <div className="flex items-center gap-[4px]">
-                                                            <img src="/avatar/avatar-default.png" className="w-[16px] h-[16px]" />
+                                                            {record[column.key] && <img src="/avatar/avatar-default.png" className="w-[16px] h-[16px]" />}
                                                             {record[column.key]}
                                                         </div>
                                                     ) : (

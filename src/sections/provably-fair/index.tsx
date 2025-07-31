@@ -26,7 +26,8 @@ export default function ProvablyFair({ open, onClose, defaultTab }: { open: bool
     youParticipateOnly, 
     offset, 
     setOffset, 
-    setPoolId 
+    setPoolId,
+    setChain,
   } = useProvably();
 
   return (
@@ -75,8 +76,9 @@ export default function ProvablyFair({ open, onClose, defaultTab }: { open: bool
           !isMobile && (
             <div className={clsx("pt-[20px] pb-[30px] pl-[20px] pr-[30px]")}>
               <div className="pl-[10px]">
-                <VerifiForm handleVerify={verifySolana} onPoolIdChange={(value) => {
-                  setPoolId(value)
+                <VerifiForm handleVerify={verifySolana} onPoolIdChange={(value: any) => {
+                  setPoolId(value.pool_id)
+                  setChain(value.chain || 'solana')
                 }} />
               </div>
 
@@ -113,8 +115,10 @@ export default function ProvablyFair({ open, onClose, defaultTab }: { open: bool
             <div className="p-[10px] pt-[20px]">
               {
                 tab === "verify" && (
-                  <VerifiForm handleVerify={verifySolana} onPoolIdChange={(value) => {
-                    setPoolId(value)
+                  <VerifiForm handleVerify={verifySolana} onPoolIdChange={(value: any) => {
+                    console.log('value:', value);
+                    setPoolId(value.pool_id)
+                    setChain(value.chain || 'solana')
                   }} />
                 )
               }

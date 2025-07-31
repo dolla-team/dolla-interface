@@ -11,6 +11,7 @@ export default function useProvably() {
     const [youParticipateOnly, setYouParticipateOnly] = useState(false)
     const [hasNext, setHasNext] = useState(false)
     const [poolId, setPoolId] = useState('')
+    const [chain, setChain] = useState('solana')
 
     useEffect(() => {
         getProvablyDataThrottled()
@@ -63,6 +64,7 @@ export default function useProvably() {
         }
         if (poolId) {
             params.pool_id = poolId
+            params.chain = chain
         } else {
             params.you_participate_only = youParticipateOnly
         }
@@ -111,6 +113,8 @@ export default function useProvably() {
             setOffset(pageNo * LIMIT)
         }, 
         setPoolId, 
-        poolId
+        poolId,
+        setChain,
+        chain
     };
 }

@@ -20,7 +20,7 @@ export default function VerifiForm({ handleVerify, onPoolIdChange }: { handleVer
     const result: any = await handleVerify(value);
     setResult(result);
     if (result?.pool_id) {
-      onPoolIdChange(result?.pool_id)
+      onPoolIdChange(result)
     } else {
       onPoolIdChange('')
     }
