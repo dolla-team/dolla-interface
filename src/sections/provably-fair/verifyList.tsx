@@ -33,15 +33,15 @@ export default function VerifyList({ hasNext, list, loading, setYouParticipateOn
                 <div onScroll={handleScroll} className="w-full overflow-x-scroll pl-[10px] relative mt-[10px]">
                     <div className={clsx("", isMobile ? "w-[800px]" : "w-full ")}>
                         <table className="sticky-table w-full">
-                            <thead>
-                                <tr className="text-[14px] relative text-[#BBACA6]">
+                            <thead className="">
+                                <tr className="text-[14px] relative text-[#BBACA6] sticky-column">
                                     {
                                         COLUMNS.map((column, idx) => (
                                             <th style={{
                                                 width: column.width,
-                                            }} className={clsx('text-left pb-[10px]', column.isFloat ? "sticky-column pl-2" : "", column.isFloat && isScroll ? "shadow-[2px_2px_8px_0px_rgba(0,0,0,0.2)] bg-[#35302B]" : "")} key={column.key}>
+                                            }} className={clsx('text-left pb-[10px]', column.isFloat ? "sticky-column" : "", column.isFloat && isScroll ? "shadow-[2px_2px_8px_0px_rgba(0,0,0,0.2)] bg-[#35302B]" : "")} key={column.key}>
                                                 {column.label}
-                                                { idx === 0 && <div className="absolute h-full w-[30px] z-1 top-0 bg-[#35302B] left-[-12px]"></div>}
+                                                { idx === 0 && isScroll && <div className="absolute h-full w-[15px] z-1 top-0 bg-[#35302B] left-[-15px]"></div>}
                                             </th>
                                         ))
                                     }
@@ -96,7 +96,7 @@ export default function VerifyList({ hasNext, list, loading, setYouParticipateOn
                                                     }
 
                                                     {
-                                                        idx === 0 && isScroll && <div className="absolute h-full w-[30px] z-1 top-0 bg-[#35302B] left-[-12px]"></div>
+                                                        idx === 0 && isScroll && <div className="absolute h-full w-[20px] z-1 top-0 bg-[#35302B] left-[-12px]"></div>
                                                     }
                                                 </td>
                                             ))}
