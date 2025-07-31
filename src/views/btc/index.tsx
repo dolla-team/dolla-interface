@@ -38,7 +38,7 @@ const Content = () => {
   return (
     <div
       className={clsx(
-        "h-screen relative",
+        "h-[100dvh] relative",
         isMobile && "flex flex-col",
         isMobile && pool?.status !== 1 ? "overflow-y-auto" : "overflow-hidden"
       )}

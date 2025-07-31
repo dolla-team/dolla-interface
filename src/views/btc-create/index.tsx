@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import Recharge from "@/sections/cashier/panels/recharge";
 import PriceChart from "../nft-create/price-chart";
@@ -22,6 +22,7 @@ import { useNavigate } from "react-router-dom";
 import { TOKNES } from "@/sections/cashier/panels/withdraw-solana";
 import useIsMobile from "@/hooks/use-is-mobile";
 import Modal from "@/components/modal";
+import useConfig from "@/hooks/use-config";
 
 export default function BTCCreate() {
   const navigate = useNavigate();
@@ -32,6 +33,7 @@ export default function BTCCreate() {
     useReferenceData({ token: BASE_TOKEN, amount });
   const globalConfig = useConfigStore((state) => state.config);
   const isMobile = useIsMobile();
+  const { getConfig } = useConfig();
 
   const { prices } = useTokenPrice(TOKNES[1]);
   const [depositModalOpen, setDepositModalOpen] = useState(false);
@@ -78,6 +80,10 @@ export default function BTCCreate() {
       })) || []
     ];
   }, [globalConfig]);
+
+  useEffect(() => {
+    getConfig();
+  }, []);
 
   return (
     <div className="w-full h-screen overflow-y-auto font-[SpaceGrotesk] text-[14px] font-[400] leading-[100%] text-white pt-[60px] pb-[60px] max-md:pt-[80px]">

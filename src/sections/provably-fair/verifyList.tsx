@@ -14,12 +14,10 @@ export default function VerifyList({ hasNext, list, loading, setYouParticipateOn
         }
     }, [isMobile]);
 
-    console.log('list:', list);
-
     return (
         <div>
             <div className="mt-[20px] h-[444px] overflow-y-auto text-white pb-[20px]">
-                <div className="flex items-center justify-between pl-[10px]">
+                <div className="flex items-center justify-between px-[10px]">
                     <div>Ended Market</div>
                     <div onClick={() => setYouParticipateOnly(!youParticipateOnly)} className="flex items-center justify-between cursor-pointer">
                         <div className="border border-[#6A5D3A] rounded-full w-[15px] h-[15px] flex items-center justify-center mr-2">
@@ -30,21 +28,24 @@ export default function VerifyList({ hasNext, list, loading, setYouParticipateOn
                         <div>You participate only</div>
                     </div>
                 </div>
-                <div onScroll={handleScroll} className="w-full overflow-x-scroll relative mt-[10px]">
-                    <div className={clsx("", isMobile ? "w-[800px]" : "w-full pl-[10px]")}>
+                <div onScroll={handleScroll} className="w-full overflow-x-scroll pl-[10px] relative mt-[10px]">
+                    <div className={clsx("", isMobile ? "w-[800px]" : "w-full ")}>
                         <table className="sticky-table w-full">
-                            <thead>
-                                <tr className="text-[14px] text-[#BBACA6] ">
+                            <thead className="">
+                                <tr className="text-[14px] relative text-[#BBACA6] sticky-column">
                                     {
-                                        COLUMNS.map((column) => (
+                                        COLUMNS.map((column, idx) => (
                                             <th style={{
                                                 width: column.width,
-                                            }} className={clsx('text-left pb-[10px]', column.isFloat ? "sticky-column pl-2" : "", column.isFloat && isScroll ? "shadow-[2px_2px_8px_0px_rgba(0,0,0,0.2)] bg-[#35302B]" : "")} key={column.key}>{column.label}</th>
+                                            }} className={clsx('text-left pb-[10px]', column.isFloat ? "sticky-column" : "", column.isFloat && isScroll ? "shadow-[2px_2px_8px_0px_rgba(0,0,0,0.2)] bg-[#35302B]" : "")} key={column.key}>
+                                                {column.label}
+                                                { idx === 0 && isScroll && <div className="absolute h-full w-[15px] z-1 top-0 bg-[#35302B] left-[-15px]"></div>}
+                                            </th>
                                         ))
                                     }
                                 </tr>
                             </thead>
-                            <tbody >
+                            <tbody>
                                 {!loading && list?.length > 0 && list?.map((record: any) => (
                                     <>
                                         <tr
@@ -68,22 +69,32 @@ export default function VerifyList({ hasNext, list, loading, setYouParticipateOn
                                                     }}
                                                 >
                                                     {column.key === "winner" ? (
+
                                                         <div className="flex items-center gap-[4px]">
-                                                            <img src="/avatar/avatar-default.png" className="w-[16px] h-[16px]" />
+                                                            {record[column.key] && <img src="/avatar/avatar-default.png" className="w-[16px] h-[16px]" />}
                                                             {record[column.key]}
                                                         </div>
                                                     ) : (
-                                                        record[column.key]
+                                                        column.key === "marketId"
+                                                            ? <div className="flex items-center gap-[4px]"># {record[column.key]} <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                <path d="M1 9.5L9.5 1M9.5 1H1M9.5 1V9.5" stroke="white" />
+                                                            </svg>
+                                                            </div>
+                                                            : record[column.key]
                                                     )}
 
                                                     {
                                                         record.userDrawAttempt && idx === 0 && (
-                                                            <div className="absolute top-[50%] -translate-y-[50%] left-[-10px]">
+                                                            <div className="absolute top-[50%] -translate-y-[50%] z-2 left-[-10px]">
                                                                 <svg width="12" height="14" viewBox="0 0 12 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                                     <path d="M11 5.26795C12.3333 6.03775 12.3333 7.96225 11 8.73205L3.5 13.0622C2.16666 13.832 0.499999 12.8697 0.499999 11.3301L0.5 2.66987C0.5 1.13027 2.16667 0.168021 3.5 0.937822L11 5.26795Z" fill="#FFC42F" />
                                                                 </svg>
                                                             </div>
                                                         )
+                                                    }
+
+                                                    {
+                                                        idx === 0 && isScroll && <div className="absolute h-full w-[20px] z-1 top-0 bg-[#35302B] left-[-12px]"></div>
                                                     }
                                                 </td>
                                             ))}
@@ -106,7 +117,7 @@ export default function VerifyList({ hasNext, list, loading, setYouParticipateOn
                     </div>
                 </div>
             </div>
-            <div className="flex justify-center py-[5px]">
+            <div className={clsx("flex py-[5px]", isMobile ? "justify-center" : "justify-end")}>
                 <Pagination hasNextPage={hasNext} current={offset + 1} onNext={() => { setOffset(offset + 1) }} onPrev={() => { setOffset(offset - 1) }} />
             </div>
         </div>

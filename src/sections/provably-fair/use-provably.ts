@@ -10,10 +10,12 @@ export default function useProvably() {
     const [offset, setOffset] = useState(0)
     const [youParticipateOnly, setYouParticipateOnly] = useState(false)
     const [hasNext, setHasNext] = useState(false)
+    const [poolId, setPoolId] = useState('')
+    const [chain, setChain] = useState('solana')
 
     useEffect(() => {
         getProvablyDataThrottled()
-    }, [offset, youParticipateOnly]);
+    }, [offset, youParticipateOnly, poolId]);
 
     const getProvablyData = useCallback(async (query: any) => {
         try {
@@ -55,11 +57,19 @@ export default function useProvably() {
     }, [youParticipateOnly])
 
     const { run: getProvablyDataThrottled } = useDebounceFn(() => {
-        getProvablyData({
+
+        const params: any = {
             limit: LIMIT,
             offset,
-            you_participate_only: youParticipateOnly,
-        });
+        }
+        if (poolId) {
+            params.pool_id = poolId
+            params.chain = chain
+        } else {
+            params.you_participate_only = youParticipateOnly
+        }
+
+        getProvablyData(params);
     }, { wait: 500 })
 
 
@@ -91,5 +101,20 @@ export default function useProvably() {
 
     }, [])
 
-    return { data, loading, hasNext, verifySolana, setYouParticipateOnly, youParticipateOnly, offset, setOffset };
+    return {
+        data, 
+        loading, 
+        hasNext, 
+        verifySolana, 
+        setYouParticipateOnly, 
+        youParticipateOnly, 
+        offset: offset / LIMIT, 
+        setOffset: (pageNo: number) => {
+            setOffset(pageNo * LIMIT)
+        }, 
+        setPoolId, 
+        poolId,
+        setChain,
+        chain
+    };
 }
