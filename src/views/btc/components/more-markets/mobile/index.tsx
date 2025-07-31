@@ -78,7 +78,7 @@ const Markets = (props: any) => {
   }, [checkActiveMarket]);
 
   return (
-    <div className="relative w-full h-screen bg-[#1A191D] text-[14px] leading-[100%] font-[400] font-[SpaceGrotesk]">
+    <div className="relative w-full h-[100dvh] bg-[#1A191D] text-[14px] leading-[100%] font-[400] font-[SpaceGrotesk]">
       <div className="fixed bg-[#1A191D] left-0 top-0 z-[22] w-full pt-[10px] shadow-[0px_16px_32px_0px_#1A191D]">
         <div className="relative w-full flex justify-center items-center gap-[10px] px-[13px]">
           <button
