@@ -23,18 +23,18 @@ export default function FlipCoins() {
 
   const SIZE: Record<number, number> = isMobile
     ? {
-        1: 212,
-        10: 80,
-        50: 60,
-        100: 60
-      }
+      1: 212,
+      10: 80,
+      50: 60,
+      100: 60
+    }
     : {
-        1: 212,
-        5: 140,
-        10: 130,
-        50: 62,
-        100: 62
-      };
+      1: 212,
+      5: 140,
+      10: 130,
+      50: 62,
+      100: 62
+    };
   const { setCurrentEye } = useDollaEyeContext();
 
   const coinContainerRef = useRef<any>(null);
@@ -78,31 +78,33 @@ export default function FlipCoins() {
   return (
     pool && (
       <div
-        className={clsx(
-          "w-full overflow-y-auto overflow-x-hidden h-full flex items-center",
-          isMobile
-            ? "justify-around py-[10px]"
-            : "flex-wrap gap-[10px_30px] justify-center",
-          isMobile && bids > 10 && "flex-col"
-        )}
+        className="w-full overflow-y-auto overflow-x-hidden h-full flex justify-center items-start"
         style={{
           maxWidth: isMobile ? "100%" : (SIZE[bids] + 20) * (bids > 10 ? 11 : 6)
         }}
         ref={coinContainerRef}
       >
-        <Coins
-          bids={bids}
-          pool={pool}
-          points={points}
-          tickets={tickets}
-          flipStatus={flipStatus}
-          isWinner={isWinner}
-          flipComplete={flipComplete}
-          coinContainerRef={coinContainerRef}
-          setFlipStatus={setFlipStatus}
-          coinsRef={coinsRef}
-          SIZE={SIZE}
-        />
+        <div
+          className={clsx(
+            "flex items-center",
+            "max-md:py-[10px] md:flex-wrap md:gap-[10px_30px] md:justify-center",
+            isMobile && bids > 10 && "flex-col"
+          )}
+        >
+          <Coins
+            bids={bids}
+            pool={pool}
+            points={points}
+            tickets={tickets}
+            flipStatus={flipStatus}
+            isWinner={isWinner}
+            flipComplete={flipComplete}
+            coinContainerRef={coinContainerRef}
+            setFlipStatus={setFlipStatus}
+            coinsRef={coinsRef}
+            SIZE={SIZE}
+          />
+        </div>
 
         {flipStatus === 6 && (
           <Result

@@ -72,7 +72,7 @@ export function MobileCoins({
         (bids === 50 || bids === 100) &&
           "gap-[10px] mb-[10px] w-full px-[12px] max-w-[390px]",
         (bids === 50 || bids === 100) &&
-          (colI % 2 === 0 ? "justify-start" : "justify-end")
+          (colI % 2 === 0 ? "pr-[37px]" : "pl-[37px]")
       )}
       key={colI}
     >
