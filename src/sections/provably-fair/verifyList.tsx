@@ -14,8 +14,6 @@ export default function VerifyList({ hasNext, list, loading, setYouParticipateOn
         }
     }, [isMobile]);
 
-    console.log('list:', list);
-
     return (
         <div>
             <div className="mt-[20px] h-[444px] overflow-y-auto text-white pb-[20px]">

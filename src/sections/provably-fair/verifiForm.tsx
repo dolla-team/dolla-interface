@@ -84,13 +84,13 @@ export default function VerifiForm({ handleVerify, onPoolIdChange }: { handleVer
         <div className={panel_cls}>
           <div className="text-[#FFFFFF33]">Random No.</div>
           {
-            result?.pool_id && <div className={clsx("text-white", result?.is_winner ? "text-[#E13535]" : "text-[#FFFFFF33]")}>{result?.random_number}</div>
+            result?.pool_id && <div className={clsx("text-white", !result?.is_winner ? "text-[#E13535]" : "text-[#3AE135]")}>{result?.random_number}</div>
           }
         </div>
         <div className={panel_cls}>
-          <div className="text-[#FFFFFF33]">Win No.</div>
+          <div className="text-[#FFFFFF33]">Win No. Range</div>
           {
-            result?.pool_id && <div>{result?.win_number}</div>
+            result?.pool_id && <div>0-{result?.win_number}</div>
           }
         </div>
         <div className={panel_cls}>
