@@ -106,7 +106,7 @@ export default function VerifyList({ hasNext, list, loading, setYouParticipateOn
                     </div>
                 </div>
             </div>
-            <div className="flex justify-center py-[5px]">
+            <div className={clsx("flex py-[5px]", isMobile ? "justify-center" : "justify-end")}>
                 <Pagination hasNextPage={hasNext} current={offset + 1} onNext={() => { setOffset(offset + 1) }} onPrev={() => { setOffset(offset - 1) }} />
             </div>
         </div>
