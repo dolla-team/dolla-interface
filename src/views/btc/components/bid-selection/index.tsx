@@ -41,11 +41,11 @@ export default function BidSelection({ tokenBalance, update }: any) {
       console.log("complete success");
       setFlipStatus(4);
       setBidResult(result);
+      update();
     },
     () => {
       console.log("bid success");
       setFlipStatus(2);
-      update();
     },
     () => {
       console.log("bid fail");
@@ -61,7 +61,6 @@ export default function BidSelection({ tokenBalance, update }: any) {
   };
 
   const onBidClick = () => {
-    console.log("onBidClick", disabled);
     if (disabled) {
       return;
     }
