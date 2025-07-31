@@ -7,13 +7,12 @@ import BidsInfo from "./components/bids-info";
 import MarketInfo from "./components/market-info";
 import Grand from "./grand";
 import LucyDraw from "../../sections/lucy-draw";
-import { QUOTE_TOKEN } from "@/config/btc";
-import useTokenBalance from "@/hooks/solana/use-token-balance";
 import TopWinner from "@/sections/winners";
 import Music from "./components/music";
 import useIsMobile from "@/hooks/use-is-mobile";
 import clsx from "clsx";
 import MarketsModal from "./components/more-markets/mobile/modal";
+import { useAuth } from "@/contexts/auth";
 
 // import ProvablyFair from "@/sections/provably-fair";
 
@@ -28,10 +27,7 @@ export default function NewBTC() {
 }
 
 const Content = () => {
-  const { tokenBalance, update } = useTokenBalance({
-    address: QUOTE_TOKEN.address,
-    decimals: QUOTE_TOKEN.decimals
-  });
+  const { quoteTokenBalance, updateQuoteTokenBalance } = useAuth();
 
   const isMobile = useIsMobile();
   const { pool } = useBtcContext();
@@ -50,11 +46,22 @@ const Content = () => {
     >
       {!isMobile && <Header className="h-[214px]" />}
       <MarketInfo />
-      <Grand tokenBalance={tokenBalance} update={update} />
-      <BidSelection tokenBalance={tokenBalance} update={update} />
+      <Grand
+        tokenBalance={quoteTokenBalance}
+        update={updateQuoteTokenBalance}
+      />
+      <BidSelection
+        tokenBalance={quoteTokenBalance}
+        update={updateQuoteTokenBalance}
+      />
       {!isMobile && <BidsInfo />}
       {!isMobile && <MoreMarkets />}
-      {!isMobile && <LucyDraw tokenBalance={tokenBalance} update={update} />}
+      {!isMobile && (
+        <LucyDraw
+          tokenBalance={quoteTokenBalance}
+          update={updateQuoteTokenBalance}
+        />
+      )}
       {!isMobile && <TopWinner />}
       {!isMobile && <Music />}
       {isMobile && <MarketsModal />}

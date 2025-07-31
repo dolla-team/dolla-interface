@@ -102,16 +102,12 @@ const MENU = [
 ];
 
 export default function AvatarAction() {
-  const { userInfo, logout } = useAuth();
+  const { userInfo, logout, quoteTokenBalance } = useAuth();
   const navigate = useNavigate();
   const { onCopy } = useCopy();
   const { user } = useUser();
   const [showMenu, setShowMenu] = useState(false);
 
-  const { tokenBalance } = useTokenBalance({
-    address: QUOTE_TOKEN.address,
-    decimals: QUOTE_TOKEN.decimals
-  });
   const [showCashier, setShowCashier] = useState(false);
   const { claiming, claimTestCoin } = useClaimTestCoin();
 
@@ -132,7 +128,7 @@ export default function AvatarAction() {
       {user?.wallet?.address && (
         <AvatarCashier
           onClick={() => setShowCashier(true)}
-          tokenBalance={tokenBalance}
+          tokenBalance={quoteTokenBalance}
         />
       )}
       {userInfo?.icon && (

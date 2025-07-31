@@ -4,8 +4,13 @@ import { useSolanaWallets } from "@privy-io/react-auth";
 import { Connection, PublicKey, LAMPORTS_PER_SOL } from "@solana/web3.js";
 import { getAccount, getAssociatedTokenAddressSync } from "@solana/spl-token";
 
-export default function useTokenBalance({ address, decimals }: any) {
-  const { userInfo } = useAuth();
+export default function useTokenBalance({
+  address,
+  decimals,
+  userInfo: userInfoParam
+}: any) {
+  const authData = useAuth();
+  const userInfo = authData?.userInfo || userInfoParam;
   const [tokenBalance, setTokenBalance] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
