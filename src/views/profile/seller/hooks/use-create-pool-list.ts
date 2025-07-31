@@ -25,7 +25,7 @@ export default function useCreatePoolList() {
     try {
       const response = await axiosInstance.get(
         `/api/v1/user/create/pool/list?limit=${pageSize}&offset=${pageRef.current * pageSize
-        }`
+        }&status=-1`
       );
       const poolIds: number[] = [];
       response.data.data.list.forEach((item: any) => {
