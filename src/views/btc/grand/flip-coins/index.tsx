@@ -1,6 +1,6 @@
 import { useBtcContext } from "../../context";
 import FlipCoin from "../flip-coin";
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Result from "../../components/result";
 import { useDollaEyeContext } from "@/contexts/dolla-eye";
 import { EEyeType, EyeTypeMap } from "@/hooks/use-dolla-eye";
@@ -38,6 +38,8 @@ export default function FlipCoins() {
   const { setCurrentEye } = useDollaEyeContext();
 
   const coinContainerRef = useRef<any>(null);
+  const contentRef = useRef<any>(null);
+  const [shouldCenter, setShouldCenter] = useState(false);
 
   const [points, tickets, sumPoints, sumTickets, isWinner] = useMemo(() => {
     if (!bidResult) {
@@ -75,16 +77,44 @@ export default function FlipCoins() {
     }
   }, [flipStatus, sumPoints, sumTickets]);
 
+  useEffect(() => {
+    const checkHeightAndCenter = () => {
+      if (contentRef.current && coinContainerRef.current) {
+        const contentHeight = contentRef.current.offsetHeight;
+        const containerHeight = coinContainerRef.current.offsetHeight;
+        
+        setShouldCenter(contentHeight < containerHeight);
+      }
+    };
+
+    checkHeightAndCenter();
+
+    const resizeObserver = new ResizeObserver(checkHeightAndCenter);
+    
+    if (contentRef.current) {
+      resizeObserver.observe(contentRef.current);
+    }
+    if (coinContainerRef.current) {
+      resizeObserver.observe(coinContainerRef.current);
+    }
+
+    return () => {
+      resizeObserver.disconnect();
+    };
+  }, [bids, flipStatus, pool]);
+
   return (
     pool && (
       <div
-        className="w-full overflow-y-auto overflow-x-hidden h-full flex justify-center items-start"
+        className="w-full overflow-y-auto overflow-x-hidden h-full flex justify-center"
         style={{
-          maxWidth: isMobile ? "100%" : (SIZE[bids] + 20) * (bids > 10 ? 11 : 6)
+          maxWidth: isMobile ? "100%" : (SIZE[bids] + 20) * (bids > 10 ? 11 : 6),
+          alignItems: shouldCenter ? "center" : "flex-start"
         }}
         ref={coinContainerRef}
       >
         <div
+          ref={contentRef}
           className={clsx(
             "flex items-center",
             "max-md:py-[10px] md:flex-wrap md:gap-[10px_30px] md:justify-center",
