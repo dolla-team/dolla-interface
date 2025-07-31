@@ -3,7 +3,6 @@ import { useCallback, useEffect, useState } from "react";
 import clsx from "clsx";
 import { formatAddress } from "@/utils/format/address";
 import { TOKNES } from '@/sections/cashier/panels/withdraw-solana'
-import { on } from "process";
 
 const panel_cls = 'bg-[#00000033] rounded-[10px] flex items-center justify-center flex-col py-[10px] text-white text-[16px]'
 

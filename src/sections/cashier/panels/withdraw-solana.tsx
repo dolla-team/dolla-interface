@@ -10,7 +10,7 @@ import useSplWithdraw from "@/hooks/solana/use-spl-withdraw";
 import { useAuth } from "@/contexts/auth";
 import useTokenBalance from "@/hooks/solana/use-token-balance";
 import useTransfer from "@/hooks/solana/use-transfer";
-import { toast } from "react-toastify";
+import useToast from "@/hooks/use-toast";
 
 export const TOKNES = [
   // {
@@ -43,6 +43,7 @@ export default function WithdrawSolana() {
   const [receiveAddress, setReceiveAddress] = useState("");
   const { address } = useAuth();
   const [amount, setAmount] = useState("");
+  const toast = useToast();
   const isAddressValid = useMemo(() => {
     return (
       // receiveAddress.length === 42 &&
@@ -69,7 +70,6 @@ export default function WithdrawSolana() {
     token: selectedItem,
     type: "withdraw",
     onTransferSuccess: () => {
-      toast.success("Transfer success");
       updateUsdcBalance();
       updateBtcBalance();
       setTimeout(() => {
