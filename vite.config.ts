@@ -1,3 +1,4 @@
+import fs from "fs";
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
@@ -27,5 +28,16 @@ export default defineConfig({
       }
     },
     include: ["buffer", "process", "https-browserify", "stream-http"]
-  }
+  },
+  server: {
+    host: '0.0.0.0',
+    port: 5173,
+    // https: {
+    //   // mkcert 192.168.130.20 localhost
+    //   // mv 192.168.130.20+1.pem certs/
+    //   // mv 192.168.130.20+1-key.pem certs/
+    //   key: fs.readFileSync('./certs/192.168.130.20+1-key.pem'),
+    //   cert: fs.readFileSync('./certs/192.168.130.20+1.pem'),
+    // },
+  },
 });
