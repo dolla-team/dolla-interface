@@ -10,7 +10,7 @@ import useSplWithdraw from "@/hooks/solana/use-spl-withdraw";
 import { useAuth } from "@/contexts/auth";
 import useTokenBalance from "@/hooks/solana/use-token-balance";
 import useTransfer from "@/hooks/solana/use-transfer";
-import { toast } from "react-toastify";
+import useToast from "@/hooks/use-toast";
 
 export const TOKNES = [
   // {
@@ -43,6 +43,7 @@ export default function WithdrawSolana() {
   const [receiveAddress, setReceiveAddress] = useState("");
   const { address } = useAuth();
   const [amount, setAmount] = useState("");
+  const toast = useToast();
   const isAddressValid = useMemo(() => {
     return (
       // receiveAddress.length === 42 &&
@@ -69,7 +70,6 @@ export default function WithdrawSolana() {
     token: selectedItem,
     type: "withdraw",
     onTransferSuccess: () => {
-      toast.success("Transfer success");
       updateUsdcBalance();
       updateBtcBalance();
       setTimeout(() => {
@@ -106,7 +106,7 @@ export default function WithdrawSolana() {
           Withdraw Amount
         </div>
         <div className="flex items-center mt-[6px] gap-[12px]">
-          <div className="w-full h-[47px] rounded-[6px] bg-[#191E27] px-[12px] flex items-center">
+          <div className="w-full h-[47px] rounded-[6px] bg-[#00000033] px-[12px] flex items-center">
             <input
               className="w-full text-[14px] text-white"
               value={amount}
@@ -154,7 +154,7 @@ export default function WithdrawSolana() {
         </div>
         <input
           className={clsx(
-            "h-[47px] w-full rounded-[6px] !bg-[#191E27] leading-[47px] px-[12px] text-[#ADBCCF] mt-[6px]",
+            "h-[47px] w-full rounded-[6px] bg-[#00000033] leading-[47px] px-[12px] text-[#ADBCCF] mt-[6px]",
             !isAddressValid && receiveAddress && "border border-[#FF5A974D]"
           )}
           value={receiveAddress}
@@ -199,7 +199,7 @@ const Item = ({
     <div
       onClick={onClick}
       className={clsx(
-        "button flex-1 border border-[#191E27] w-[142px] h-[159px] pt-[20px] shrink-0 bg-[#191E27] rounded-[6px] flex flex-col items-center text-[14px]",
+        "button flex-1 border border-[#191E27] w-[142px] h-[159px] pt-[20px] shrink-0 bg-[#00000033] rounded-[6px] flex flex-col items-center text-[14px]",
         active && "border-[#FFC42F]"
       )}
     >

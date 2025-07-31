@@ -256,21 +256,25 @@ export default function BTCCreate() {
               )}
               <DoughnutChart
                 className="!w-[210px] !h-[210px] max-md:mt-[12px]"
-                data={poolCashOutTiming}
+                // data={poolCashOutTiming}
+                data={[]}
                 formatLabel={(record: any) => {
                   return (
-                    <div className="flex flex-col items-center justify-center gap-[5px]">
-                      {!isMobile && (
-                        <div className="text-[#BBACA6]">Cash out timing</div>
-                      )}
-                      <div className="font-[DelaGothicOne] text-[20px]">
-                        in {record.label} days
-                      </div>
-                      <div className="text-[16px] mt-[10px] text-[#BBACA6]">
-                        {record.percentage}%
-                      </div>
-                    </div>
+                    <div className="text-[#BBACA6]">Comming soon...</div>
                   );
+                  // return (
+                  //   <div className="flex flex-col items-center justify-center gap-[5px]">
+                  //     {!isMobile && (
+                  //       <div className="text-[#BBACA6]">Cash out timing</div>
+                  //     )}
+                  //     <div className="font-[DelaGothicOne] text-[20px]">
+                  //       in {record.label} days
+                  //     </div>
+                  //     <div className="text-[16px] mt-[10px] text-[#BBACA6]">
+                  //       {record.percentage}%
+                  //     </div>
+                  //   </div>
+                  // );
                 }}
               />
               {isMobile && (
