@@ -11,11 +11,9 @@ import BuyTicket from "./buy-ticket";
 
 export default function LucyDraw({
   tokenBalance,
-  update,
   className
 }: {
   tokenBalance: string;
-  update: () => void;
   className?: string;
 }) {
   const isMobile = useIsMobile();
@@ -111,7 +109,6 @@ export default function LucyDraw({
         showBuyTicket={showBuyTicket}
         onClose={() => setShowBuyTicket(false)}
         tokenBalance={tokenBalance}
-        update={update}
       />
     </>
   );

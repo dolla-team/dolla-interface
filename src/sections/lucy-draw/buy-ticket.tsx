@@ -14,13 +14,11 @@ import useIsMobile from "@/hooks/use-is-mobile";
 export default function BuyTicket({
   showBuyTicket,
   onClose,
-  tokenBalance,
-  update
+  tokenBalance
 }: {
   showBuyTicket: boolean;
   onClose: () => void;
   tokenBalance: string;
-  update: () => void;
 }) {
   const isMobile = useIsMobile();
   const [ticket, setTicket] = useState(1);
@@ -43,7 +41,6 @@ export default function BuyTicket({
       });
 
       toast.success({ title: "Buy ticket successfully" });
-      update();
       setTimeout(() => {
         onClose();
       }, 500);

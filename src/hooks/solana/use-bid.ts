@@ -10,7 +10,8 @@ import {
   getBidGasFee,
   getWrapToSolIx,
   getAccountsInfo,
-  buildTxWithGas
+  buildTxWithGas,
+  confirmHash
 } from "./helpers";
 import * as anchor from "@coral-xyz/anchor";
 import { useSolanaWallets } from "@privy-io/react-auth";
@@ -26,6 +27,7 @@ import axiosInstance from "@/libs/axios";
 import { useBtcContext } from "@/views/btc/context";
 import { useRandomnessStore } from "@/stores/use-randomness";
 import config from "@/config/solana";
+import { useAuth } from "@/contexts/auth";
 
 export default function useBid(
   poolId: number,
@@ -34,6 +36,7 @@ export default function useBid(
   onTxFail: () => void
 ) {
   const [bidding, setBidding] = useState(false);
+  const { updateQuoteTokenBalance } = useAuth();
   const toast = useToast();
   const { wallets } = useSolanaWallets();
   const { program, provider } = useProgram();
@@ -175,6 +178,12 @@ export default function useBid(
       toastId = toast.success({ title: "Bid placed successfully!" });
       onTxSuccess();
       setBidding(false);
+
+      confirmHash(provider, result.data.data.hash, () => {
+        setTimeout(() => {
+          updateQuoteTokenBalance();
+        }, 5000);
+      });
 
       let bidResponse = null;
       let timer: any = null;

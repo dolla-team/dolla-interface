@@ -80,13 +80,7 @@ export default function BidSelection({
             {item === 1 && <Bg1 active={bids === 1} />}
             {/* {bids === 1 ? <Bg1 /> : <Bg1 />} */}
             <span
-              className={clsx(
-                "relative z-[2]",
-                bids === item && "text-[#FFEF43]"
-              )}
-              style={{
-                WebkitTextStroke: bids === item ? "2px #5E3737" : "none"
-              }}
+              className={clsx("relative z-[2]", bids === item && "text-[#000]")}
             >
               ${item}
             </span>

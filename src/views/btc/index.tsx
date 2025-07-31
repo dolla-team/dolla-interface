@@ -46,22 +46,11 @@ const Content = () => {
     >
       {!isMobile && <Header className="h-[214px]" />}
       <MarketInfo />
-      <Grand
-        tokenBalance={quoteTokenBalance}
-        update={updateQuoteTokenBalance}
-      />
-      <BidSelection
-        tokenBalance={quoteTokenBalance}
-        update={updateQuoteTokenBalance}
-      />
+      <Grand tokenBalance={quoteTokenBalance} />
+      <BidSelection tokenBalance={quoteTokenBalance} />
       {!isMobile && <BidsInfo />}
       {!isMobile && <MoreMarkets />}
-      {!isMobile && (
-        <LucyDraw
-          tokenBalance={quoteTokenBalance}
-          update={updateQuoteTokenBalance}
-        />
-      )}
+      {!isMobile && <LucyDraw tokenBalance={quoteTokenBalance} />}
       {!isMobile && <TopWinner />}
       {!isMobile && <Music />}
       {isMobile && <MarketsModal />}

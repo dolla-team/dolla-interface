@@ -393,3 +393,19 @@ export async function buildTxWithGas({ tx, otherTxs, action }: any) {
     gas
   };
 }
+
+export async function confirmHash(
+  provider: any,
+  hash: string,
+  callback: () => void
+) {
+  const status = await provider.connection.getSignatureStatus(hash);
+
+  if (status?.value?.confirmationStatus === "confirmed") {
+    callback();
+  } else {
+    setTimeout(() => {
+      confirmHash(provider, hash, callback);
+    }, 500);
+  }
+}

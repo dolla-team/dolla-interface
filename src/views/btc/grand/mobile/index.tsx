@@ -8,7 +8,7 @@ import Cancel from "../../detail/cancel";
 import Points from "@/sections/points";
 import LucyDraw from "@/sections/lucy-draw";
 
-export default function GrandMobile({ tokenBalance, update }: any) {
+export default function GrandMobile({ tokenBalance }: any) {
   const { flipStatus, pool } = useBtcContext();
   return (
     <div
@@ -35,7 +35,6 @@ export default function GrandMobile({ tokenBalance, update }: any) {
             className={pool?.status === 1 ? "bottom-[260px]" : "!bottom-[30px]"}
           />
           <LucyDraw
-            update={update}
             tokenBalance={tokenBalance}
             className={pool?.status === 1 ? "bottom-[260px]" : "!bottom-[30px]"}
           />

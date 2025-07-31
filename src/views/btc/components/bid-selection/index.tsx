@@ -6,7 +6,7 @@ import { useMemo } from "react";
 import { useAuth } from "@/contexts/auth";
 import useBid from "@/hooks/solana/use-bid";
 
-export default function BidSelection({ tokenBalance, update }: any) {
+export default function BidSelection({ tokenBalance }: any) {
   const { userInfo } = useAuth();
   const isMobile = useIsMobile();
   const {
@@ -41,7 +41,6 @@ export default function BidSelection({ tokenBalance, update }: any) {
       console.log("complete success");
       setFlipStatus(4);
       setBidResult(result);
-      update();
     },
     () => {
       console.log("bid success");
