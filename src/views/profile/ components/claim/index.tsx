@@ -1,10 +1,9 @@
-import { useEffect } from "react";
+import { useState } from "react";
 import ButtonV2 from "@/components/button/v2";
 import { formatAddress } from "@/utils/format/address";
 import { formatNumber } from "@/utils/format/number";
 import Big from "big.js";
 import useClaimFunds from "@/hooks/solana/use-claim-funds";
-import { useAuth } from "@/contexts/auth";
 import { useMemo } from "react";
 import useClaimReward from "@/hooks/solana/use-claim-reward";
 import { useNavigate } from "react-router-dom";
@@ -12,6 +11,10 @@ import { getProfitFee } from "@/utils/pool";
 import GridTable from "@/components/grid-table";
 import useIsMobile from "@/hooks/use-is-mobile";
 import clsx from "clsx";
+import { useRequest } from "ahooks";
+import axiosInstance from "@/libs/axios";
+import { useAuth } from "@/contexts/auth";
+import Pagination from "@/components/pagination";
 
 const ClaimIndex = (props: any) => {
   const { className, type } = props;
@@ -19,6 +22,52 @@ const ClaimIndex = (props: any) => {
   const { onQueryUserInfo, userInfo, userInfoLoading } = useAuth();
   const navigate = useNavigate();
   const isMobile = useIsMobile();
+
+  const [pageIndex, setPageIndex] = useState(0);
+  const [pageSize] = useState(10);
+  const [pageHasNextPage, setPageHasNextPage] = useState(true);
+
+  const { runAsync: getClaimList, data: claimList, loading: claimListLoading } = useRequest(async () => {
+    let url: string = "/user/player/history";
+    const params = new URLSearchParams();
+    params.set("limit", pageSize + "");
+    params.set("offset", (pageIndex * pageSize) + "");
+    if (type === "player") {
+      // 0: ALl
+      // 1: Winner
+      // 2: Loser
+      params.set("winner", "1");
+    }
+    else {
+      url = "/user/create/pool/list";
+      // -1: All
+      // 0: Created
+      // 1: Sold
+      // 2: Ended
+      // 3: Cancelled
+      params.set("status", "2");
+    }
+    const response = await axiosInstance.get(`/api/v1${url}?${params.toString()}`);
+    const _list = response.data.data.list || [];
+    _list.forEach((item: any) => {
+      if (type === "seller") {
+        item.pool_info = item;
+      }
+    });
+    setPageHasNextPage(response.data.data.has_next_page);
+    return _list;
+  }, {
+    refreshDeps: [pageIndex, pageSize],
+  });
+
+  const onPageChange = (page: number) => {
+    setPageIndex(page - 1);
+  };
+
+  const onAfterSuccess = () => {
+    onQueryUserInfo();
+    getClaimList();
+  };
 
   const columns = [
     {
@@ -60,6 +109,9 @@ const ClaimIndex = (props: any) => {
       title: "Winner",
       width: isMobile ? 150 : void 0,
       render: (record: any) => {
+        if (type === "player") {
+          return formatAddress(userInfo?.sol_user || "");
+        }
         return formatAddress(record.winner_user);
       }
     },
@@ -69,7 +121,7 @@ const ClaimIndex = (props: any) => {
       width: 110,
       render: (record: any) => {
         return formatNumber(
-          type === "player" ? record.accumulative_bids : Big(record.accumulative_bids || 0).minus(getProfitFee(record)),
+          type === "player" ? record.pool_info?.accumulative_bids : Big(record.pool_info?.accumulative_bids || 0).minus(getProfitFee(record.pool_info)),
           2,
           true,
           {
@@ -87,7 +139,7 @@ const ClaimIndex = (props: any) => {
       render: (record: any) => {
         return (
           <ClaimButton
-            onQueryUserInfo={onQueryUserInfo}
+            onAfterSuccess={onAfterSuccess}
             item={record}
             type={type}
           />
@@ -96,47 +148,44 @@ const ClaimIndex = (props: any) => {
     },
   ];
 
-  const list = useMemo(() => {
-    if (!userInfo) {
-      return [];
-    }
-    if (type === "player") {
-      return userInfo.claim_winner_pool || [];
-    }
-    return userInfo.claim_pool || [];
-  }, [userInfo, type]);
-
-  useEffect(() => {
-    onQueryUserInfo();
-  }, []);
-
   return (
-    <GridTable
-      columns={columns}
-      data={list}
-      loading={userInfoLoading}
-      className={clsx("h-full max-md:w-full max-md:overflow-x-auto", className)}
-      rowClassName="max-md:px-0 max-md:gap-x-0"
-      colClassName="max-md:px-[10px] max-md:bg-[#35302B]"
-      bodyColClassName="max-md:first:border-r max-md:border-[#423930]"
-      bodyClassName="md:overflow-y-auto md:h-[320px]"
-    />
+    <div className="">
+      <GridTable
+        columns={columns}
+        data={claimList}
+        loading={claimListLoading}
+        className={clsx("h-full max-md:w-full max-md:overflow-x-auto", className)}
+        rowClassName="max-md:px-0 max-md:gap-x-0"
+        colClassName="max-md:px-[10px] max-md:bg-[#35302B]"
+        bodyColClassName="max-md:first:border-r max-md:border-[#423930]"
+        bodyClassName="md:overflow-y-auto md:h-[320px]"
+      />
+      <div className="flex justify-end items-center pt-[8px] max-md:justify-center">
+        <Pagination
+          current={pageIndex + 1}
+          hasNextPage={pageHasNextPage}
+          size={pageSize}
+          onPrev={onPageChange}
+          onNext={onPageChange}
+        />
+      </div>
+    </div>
   );
 };
 
 export default ClaimIndex;
 
 const ClaimButton = (props: any) => {
-  const { onQueryUserInfo, item, type } = props;
+  const { onAfterSuccess, item, type } = props;
 
   const { onClaim: onSellerClaim, claiming: sellerClaiming } = useClaimFunds({
     onClaimSuccess: () => {
-      onQueryUserInfo();
+      onAfterSuccess();
     },
   });
   const { onClaim: onPlayerClaim, claiming: playerClaiming } = useClaimReward({
     onClaimSuccess: () => {
-      onQueryUserInfo();
+      onAfterSuccess();
     },
   });
 
@@ -152,12 +201,12 @@ const ClaimButton = (props: any) => {
     <ButtonV2
       className="!w-[69px] !px-[unset]"
       loading={claiming}
-      disabled={claiming || item.is_claim}
+      disabled={claiming || item.pool_info?.is_claim}
       onClick={() => {
         onClaim(item.pool_id);
       }}
     >
-      {item.is_claim ? "Claimed" : "Claim"}
+      {item.pool_info?.is_claim ? "Claimed" : "Claim"}
     </ButtonV2>
   );
 };
