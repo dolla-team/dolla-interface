@@ -36,8 +36,8 @@ export default defineConfig({
     //   // mkcert 192.168.130.20 localhost
     //   // mv 192.168.130.20+1.pem certs/
     //   // mv 192.168.130.20+1-key.pem certs/
-    //   key: fs.readFileSync('./certs/192.168.130.20+1-key.pem'),
-    //   cert: fs.readFileSync('./certs/192.168.130.20+1.pem'),
+    //   key: fs.readFileSync('./certs/192.168.31.155+1-key.pem'),
+    //   cert: fs.readFileSync('./certs/192.168.31.155+1.pem'),
     // },
   },
 });
