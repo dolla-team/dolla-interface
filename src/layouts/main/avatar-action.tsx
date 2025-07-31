@@ -10,8 +10,10 @@ import AvatarCashier from "./avatar-cashier";
 import { QUOTE_TOKEN } from "@/config/btc";
 import useTokenBalance from "@/hooks/solana/use-token-balance";
 import { useEffect, useState } from "react";
+import useClaimTestCoin from "@/hooks/solana/use-claim-test-coin";
 import Cashier from "@/sections/cashier/modal";
 import { AnimatePresence, motion } from "framer-motion";
+import Loading from "@/components/icons/loading";
 
 const MENU = [
   {
@@ -32,6 +34,12 @@ const MENU = [
         />
       </svg>
     )
+  },
+  {
+    key: "claim",
+    label: "Airdrop",
+    isActive: true,
+    icon: <span className="text-[20px]">$</span>
   },
   {
     key: "portfolio",
@@ -105,6 +113,7 @@ export default function AvatarAction() {
     decimals: QUOTE_TOKEN.decimals
   });
   const [showCashier, setShowCashier] = useState(false);
+  const { claiming, claimTestCoin } = useClaimTestCoin();
 
   useEffect(() => {
     const handleClickOutside = () => {
@@ -117,7 +126,7 @@ export default function AvatarAction() {
       document.removeEventListener("click", handleClickOutside);
     };
   }, []);
-
+  console.log(claiming);
   return (
     <div className="relative group flex items-center gap-[10px]">
       {user?.wallet?.address && (
@@ -199,7 +208,7 @@ export default function AvatarAction() {
                   "px-[20px] py-[12px] flex items-center justify-between text-[16px] font-medium",
                   item.isActive ? "hover:bg-[#00000033] button" : "opacity-50"
                 )}
-                onClick={() => {
+                onClick={(e) => {
                   if (item.key === "logout") {
                     logout();
                     return;
@@ -210,6 +219,10 @@ export default function AvatarAction() {
                     return;
                   } else if (item.key === "create-market") {
                     navigate("/btc/create");
+                    return;
+                  } else if (item.key === "claim") {
+                    e.stopPropagation();
+                    claimTestCoin();
                     return;
                   }
                 }}
@@ -223,6 +236,7 @@ export default function AvatarAction() {
                     soon
                   </div>
                 )}
+                {item.key === "claim" && claiming && <Loading size={16} />}
               </div>
             ))}
           </motion.div>
