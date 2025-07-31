@@ -39,14 +39,14 @@ export default function VerifiForm({ handleVerify, onPoolIdChange }: { handleVer
       <div className={clsx("flex gap-[18px] mt-[10px]", isMobile ? "flex-col" : "flex-row items-center")}>
         <div className={clsx("flex-1 relative h-[46px] bg-black/20 rounded-[10px] text-[16px] text-white", isMobile ? "w-full" : "flex-1")}>
           <input
-            className={clsx("w-full h-[46px] bg-transparent p-[15px] text-white")}
+            className={clsx("w-[calc(100%-30px)] h-[46px] bg-transparent p-[15px] text-white")}
             placeholder="Bid TX"
             value={value}
             onChange={(e) => setValue(e.target.value)}
           />
           {
             value && (
-              <div className="absolute right-[15px] top-[50%] translate-y-[-50%] cursor-pointer" onClick={() => setValue('')}>
+              <div className="absolute z-10 right-[15px] top-[50%] translate-y-[-50%] cursor-pointer" onClick={() => setValue('')}>
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M10 0C15.5228 0 20 4.47715 20 10C20 15.5228 15.5228 20 10 20C4.47715 20 0 15.5228 0 10C0 4.47715 4.47715 0 10 0ZM5 5L9 10.3086L5 15.6172H7L10 11.6357L13 15.6172H15L11 10.3086L15 5H13L10 8.98145L7 5H5Z" fill="#BBACA6" />
                 </svg>
