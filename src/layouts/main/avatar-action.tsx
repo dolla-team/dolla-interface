@@ -126,7 +126,7 @@ export default function AvatarAction() {
       document.removeEventListener("click", handleClickOutside);
     };
   }, []);
-  console.log(claiming);
+
   return (
     <div className="relative group flex items-center gap-[10px]">
       {user?.wallet?.address && (

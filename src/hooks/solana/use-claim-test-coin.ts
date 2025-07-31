@@ -25,7 +25,7 @@ export default function useClaimTestCoin() {
       setClaiming(false);
     }
   };
-  console.log(14, claiming);
+
   return {
     claiming,
     claimTestCoin
