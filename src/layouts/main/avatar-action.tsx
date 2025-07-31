@@ -36,12 +36,6 @@ const MENU = [
     )
   },
   {
-    key: "claim",
-    label: "Airdrop",
-    isActive: true,
-    icon: <span className="text-[20px]">$</span>
-  },
-  {
     key: "portfolio",
     label: "Portfolio",
     isActive: true,
@@ -78,6 +72,12 @@ const MENU = [
         />
       </svg>
     )
+  },
+  {
+    key: "claim",
+    label: "Airdrop",
+    isActive: true,
+    icon: <span className="text-[20px]">$</span>
   },
   {
     key: "logout",
