@@ -53,6 +53,9 @@ const ClaimIndex = (props: any) => {
       if (type === "seller") {
         item.pool_info = item;
       }
+      if (type === "player") {
+        item.is_claim = item.status === 6;
+      }
     });
     setPageHasNextPage(response.data.data.has_next_page);
     return _list;
@@ -201,12 +204,12 @@ const ClaimButton = (props: any) => {
     <ButtonV2
       className="!w-[69px] !px-[unset]"
       loading={claiming}
-      disabled={claiming || item.pool_info?.is_claim}
+      disabled={claiming || item.is_claim}
       onClick={() => {
         onClaim(item.pool_id);
       }}
     >
-      {item.pool_info?.is_claim ? "Claimed" : "Claim"}
+      {item.is_claim ? "Claimed" : "Claim"}
     </ButtonV2>
   );
 };
