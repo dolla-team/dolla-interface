@@ -47,7 +47,7 @@ export default function VerifyList({ hasNext, list, loading, setYouParticipateOn
                                     }
                                 </tr>
                             </thead>
-                            <tbody className="h-[400px] overflow-scroll">
+                            <tbody>
                                 {!loading && list?.length > 0 && list?.map((record: any) => (
                                     <>
                                         <tr
