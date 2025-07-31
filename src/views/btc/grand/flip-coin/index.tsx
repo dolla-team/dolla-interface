@@ -53,7 +53,19 @@ const Coin = forwardRef<any, any>(
 
       // Only scroll into view if element is not in viewport
       if (coinRef.current && !isElementInViewport(coinRef.current)) {
-        coinRef.current.scrollIntoView({ behavior: "smooth" });
+        // Scroll within the container instead of the entire document
+        const container = coinContainerRef.current;
+        const coinElement = coinRef.current;
+        const containerRect = container.getBoundingClientRect();
+        const coinRect = coinElement.getBoundingClientRect();
+        
+        // Calculate the scroll position to bring the coin into view
+        const scrollTop = container.scrollTop + (coinRect.top - containerRect.top) - (containerRect.height / 2) + (coinRect.height / 2);
+        
+        container.scrollTo({
+          top: scrollTop,
+          behavior: "smooth"
+        });
       }
 
       setIsAnimating(true);
