@@ -99,5 +99,18 @@ export default function useProvably() {
 
     }, [])
 
-    return { data, loading, hasNext, verifySolana, setYouParticipateOnly, youParticipateOnly, offset, setOffset, setPoolId };
+    return {
+        data, 
+        loading, 
+        hasNext, 
+        verifySolana, 
+        setYouParticipateOnly, 
+        youParticipateOnly, 
+        offset: offset / LIMIT, 
+        setOffset: (pageNo: number) => {
+            setOffset(pageNo * LIMIT)
+        }, 
+        setPoolId, 
+        poolId
+    };
 }
