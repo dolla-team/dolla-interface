@@ -10,8 +10,10 @@ import AvatarCashier from "./avatar-cashier";
 import { QUOTE_TOKEN } from "@/config/btc";
 import useTokenBalance from "@/hooks/solana/use-token-balance";
 import { useEffect, useState } from "react";
+import useClaimTestCoin from "@/hooks/solana/use-claim-test-coin";
 import Cashier from "@/sections/cashier/modal";
 import { AnimatePresence, motion } from "framer-motion";
+import Loading from "@/components/icons/loading";
 
 const MENU = [
   {
@@ -72,6 +74,12 @@ const MENU = [
     )
   },
   {
+    key: "claim",
+    label: "Airdrop",
+    isActive: true,
+    icon: <span className="text-[20px]">$</span>
+  },
+  {
     key: "logout",
     label: "Disconnect",
     isActive: true,
@@ -94,17 +102,14 @@ const MENU = [
 ];
 
 export default function AvatarAction() {
-  const { userInfo, logout } = useAuth();
+  const { userInfo, logout, quoteTokenBalance } = useAuth();
   const navigate = useNavigate();
   const { onCopy } = useCopy();
   const { user } = useUser();
   const [showMenu, setShowMenu] = useState(false);
 
-  const { tokenBalance } = useTokenBalance({
-    address: QUOTE_TOKEN.address,
-    decimals: QUOTE_TOKEN.decimals
-  });
   const [showCashier, setShowCashier] = useState(false);
+  const { claiming, claimTestCoin } = useClaimTestCoin();
 
   useEffect(() => {
     const handleClickOutside = () => {
@@ -123,7 +128,7 @@ export default function AvatarAction() {
       {user?.wallet?.address && (
         <AvatarCashier
           onClick={() => setShowCashier(true)}
-          tokenBalance={tokenBalance}
+          tokenBalance={quoteTokenBalance}
         />
       )}
       {userInfo?.icon && (
@@ -199,7 +204,7 @@ export default function AvatarAction() {
                   "px-[20px] py-[12px] flex items-center justify-between text-[16px] font-medium",
                   item.isActive ? "hover:bg-[#00000033] button" : "opacity-50"
                 )}
-                onClick={() => {
+                onClick={(e) => {
                   if (item.key === "logout") {
                     logout();
                     return;
@@ -210,6 +215,10 @@ export default function AvatarAction() {
                     return;
                   } else if (item.key === "create-market") {
                     navigate("/btc/create");
+                    return;
+                  } else if (item.key === "claim") {
+                    e.stopPropagation();
+                    claimTestCoin();
                     return;
                   }
                 }}
@@ -223,6 +232,7 @@ export default function AvatarAction() {
                     soon
                   </div>
                 )}
+                {item.key === "claim" && claiming && <Loading size={16} />}
               </div>
             ))}
           </motion.div>

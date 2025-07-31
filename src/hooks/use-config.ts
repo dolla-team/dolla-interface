@@ -4,10 +4,19 @@ import { useEffect } from "react";
 
 export default function useConfig() {
   const configStore = useConfigStore();
-  useEffect(() => {
-    if (configStore.config) return;
+
+  const getConfig = async () => {
     axiosInstance.get("/api/v1/config").then((res) => {
       configStore.set({ config: res.data.data });
     });
+  };
+
+  useEffect(() => {
+    if (configStore.config) return;
+    getConfig();
   }, []);
+
+  return {
+    getConfig,
+  };
 }

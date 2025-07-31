@@ -20,6 +20,8 @@ import {
 import useConfig from "@/hooks/use-config";
 import useUserInfoStore from "@/stores/use-user-info";
 import { ethers } from "ethers";
+import useTokenBalance from "@/hooks/solana/use-token-balance";
+import { QUOTE_TOKEN } from "@/config/btc";
 
 export const AuthContext = React.createContext<any | null>(null);
 
@@ -53,6 +55,13 @@ export const AuthProvider: React.FC<{
     onQueryUserInfo,
     setInfo
   } = useUserInfo(privyWallet?.address);
+
+  const { tokenBalance: quoteTokenBalance, update: updateQuoteTokenBalance } =
+    useTokenBalance({
+      address: QUOTE_TOKEN.address,
+      decimals: QUOTE_TOKEN.decimals,
+      userInfo
+    });
   const { signMessage } = useSignMessage();
   const { onLogin } = useLogin();
 
@@ -206,6 +215,8 @@ export const AuthProvider: React.FC<{
         logining,
         ready,
         user,
+        quoteTokenBalance,
+        updateQuoteTokenBalance,
         login,
         logout,
         onQueryUserInfo
@@ -218,10 +229,10 @@ export const AuthProvider: React.FC<{
 
 export function useAuth() {
   const context = useContext(AuthContext);
-
+  console.log("context", context);
   if (!context) {
     throw new Error("");
   }
 
-  return context;
+  return context || {};
 }
