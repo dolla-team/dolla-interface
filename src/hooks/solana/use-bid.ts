@@ -180,9 +180,7 @@ export default function useBid(
       setBidding(false);
 
       confirmHash(provider, result.data.data.hash, () => {
-        setTimeout(() => {
-          updateQuoteTokenBalance();
-        }, 5000);
+        updateQuoteTokenBalance();
       });
 
       let bidResponse = null;

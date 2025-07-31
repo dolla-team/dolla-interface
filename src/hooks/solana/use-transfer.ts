@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { PAID_TOKEN } from "@/config/btc";
+import { PAID_TOKEN, QUOTE_TOKEN } from "@/config/btc";
 import useToast from "@/hooks/use-toast";
 import reportHash from "@/utils/report-hash";
 import * as anchor from "@coral-xyz/anchor";
@@ -13,6 +13,7 @@ import { useSolanaWallets } from "@privy-io/react-auth";
 import { PublicKey, TransactionInstruction } from "@solana/web3.js";
 import { sendSolanaTransaction } from "@/utils/transaction/send-solana-transaction";
 import config from "@/config/solana";
+import { useAuth } from "@/contexts/auth";
 
 export default function useTransfer({
   token,
@@ -27,6 +28,7 @@ export default function useTransfer({
   const { wallets } = useSolanaWallets();
   const toast = useToast();
   const { program, provider } = useProgram();
+  const { updateQuoteTokenBalance } = useAuth();
 
   const onTransfer = async (amount: number, to: string) => {
     if (!wallets.length || !amount || transferring) {
@@ -129,10 +131,19 @@ export default function useTransfer({
 
       const result = await sendSolanaTransaction(tx, "transferHelper");
       console.log("receipt:", result);
+
       toast.dismiss(toastId);
       toast.success({
-        title: "Transfer successfully"
+        title:
+          type === "buy_ticket"
+            ? "Buy ticket successfully"
+            : "Transfer successfully"
       });
+
+      if (type === "buy_ticket" || token.address === QUOTE_TOKEN.address) {
+        updateQuoteTokenBalance();
+      }
+
       // Report hash for tracking
       const slot = await provider.connection.getSlot();
       reportHash({

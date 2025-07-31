@@ -6,7 +6,6 @@ import { QUOTE_TOKEN } from "@/config/btc";
 import useTransfer from "@/hooks/solana/use-transfer";
 import Loading from "@/components/icons/loading";
 import useUserInfoStore from "@/stores/use-user-info";
-import useToast from "@/hooks/use-toast";
 import AmountInput from "./amount-input";
 import config from "@/config/solana";
 import useIsMobile from "@/hooks/use-is-mobile";
@@ -23,7 +22,6 @@ export default function BuyTicket({
   const isMobile = useIsMobile();
   const [ticket, setTicket] = useState(1);
   const userInfoStore = useUserInfoStore();
-  const toast = useToast();
 
   const isDisabled = useMemo(() => {
     return ticket > Number(tokenBalance);
@@ -39,8 +37,6 @@ export default function BuyTicket({
           tickets: userInfoStore.prize.tickets + amount
         }
       });
-
-      toast.success({ title: "Buy ticket successfully" });
       setTimeout(() => {
         onClose();
       }, 500);
