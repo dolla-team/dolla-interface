@@ -2,7 +2,7 @@ import Modal from "@/components/modal";
 import Avatar from "@/components/avatar";
 import { useAuth } from "@/contexts/auth";
 import { formatAddress } from "@/utils/format/address";
-import { addThousandSeparator } from "@/utils/format/number";
+import { formatNumber } from "@/utils/format/number";
 import PointIcon from "@/components/icons/point-icon";
 import RedeemSelectionItem from "./item";
 import { useState } from "react";
@@ -62,14 +62,19 @@ export default function RedeemSelection({
           </div>
           <div className="p-[20px]">
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-[16px]">
+              <div
+                className={clsx(
+                  "flex items-center",
+                  isMobile ? "gap-[8px]" : "gap-[16px]"
+                )}
+              >
                 <Avatar
                   size={46}
                   address={userInfo?.sol_user}
                   email={userInfo?.email}
                 />
                 <div className="font-[DelaGothicOne] text-white flex items-center">
-                  <div className="text-[20px]">
+                  <div className={isMobile ? "text-[16px]" : "text-[20px]"}>
                     {userInfo?.name || formatAddress(userInfo?.sol_user)}
                   </div>
                 </div>
@@ -84,7 +89,10 @@ export default function RedeemSelection({
                       WebkitTextStrokeColor: "#5E3737"
                     }}
                   >
-                    x{addThousandSeparator(points.toString())}
+                    x
+                    {formatNumber(points.toString(), 0, true, {
+                      isShort: isMobile
+                    })}
                   </span>
                 </div>
                 <button
