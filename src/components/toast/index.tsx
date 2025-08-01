@@ -1,16 +1,20 @@
+import clsx from "clsx";
 import Loading from "../icons/loading";
-import { supportsBackdropFilter } from "../../utils/support-backdrop-filter";
+
+const isAndroid = () => {
+  if (typeof window === 'undefined') return false;
+  return /Android/i.test(navigator.userAgent);
+};
 
 export default function Toast({ type, title, text, closeToast }: any) {
-  const supportsBackdrop = supportsBackdropFilter();
-  
-  // Choose background style based on browser support
-  const backgroundClass = supportsBackdrop 
-    ? "bg-[#35302B]/30 backdrop-blur-[10px]" 
-    : "bg-[#35302B]";
-
+  const isAndroidDevice = isAndroid();
   return (
-    <div className={`rounded-[12px] border border-[#FFE9B2] ${backgroundClass} px-[12px] py-[8px] flex gap-[10px] w-[288px] items-center md:w-[288px] max-md:w-[calc(100vw-32px)]`}>
+    <div
+      className={clsx(
+        "rounded-[12px] border border-[#FFE9B2] px-[12px] py-[8px] flex gap-[10px] w-[288px] items-center md:w-[288px] max-md:w-[calc(100vw-32px)]",
+        isAndroidDevice ? "bg-[#35302B]" : "bg-[#35302B]/30 backdrop-blur-[10px]"
+      )}
+    >
       {type === "success" && (
         <svg
           xmlns="http://www.w3.org/2000/svg"
