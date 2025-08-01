@@ -70,7 +70,9 @@ export const CannonCoinsProvider = ({
     if (_pool?.status === 1) {
       const res = await onQueryPoolInfo(_pool?.pool_id);
       if (res) setPool(res);
-      window.poolTimer = setTimeout(loopUpdatePool, 10000);
+      window.poolTimer = setTimeout(() => {
+        loopUpdatePool(res || _pool);
+      }, 10000);
     } else {
       clearTimeout(window.poolTimer);
     }
