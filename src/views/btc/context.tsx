@@ -37,6 +37,10 @@ export const CannonCoinsProvider = ({
   };
 
   useEffect(() => {
+    if (flipStatus === 0) {
+      window.howl.bgm.fade(0.1, 0.2, 1000);
+    }
+
     if (flipStatus === 1 || flipStatus === 0) {
       flipedNumberRef.current = 0;
     }
@@ -51,6 +55,7 @@ export const CannonCoinsProvider = ({
     }
 
     if (flipStatus === 4) {
+      window.howl.bgm.fade(0.2, 0, 1000);
       for (let i = 0; i < bids; i++) {
         coinsRef.current[i].revert();
       }
@@ -161,7 +166,7 @@ export const CannonCoinsProvider = ({
         getPoolRecommend,
         mobileMarketsOpen,
         setMobileMarketsOpen,
-        onMobileMarketsClose,
+        onMobileMarketsClose
       }}
     >
       {children}
