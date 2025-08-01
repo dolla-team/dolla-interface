@@ -23,10 +23,7 @@ export default function TopWinner() {
         lastBids = item.times;
       }
     });
-    const _returnMultiple = Big(data?.pool_info?.anchor_price)
-      .div(10 ** _rewardInfo.decimals)
-      .div(lastBids)
-      .toFixed(0);
+    const _returnMultiple = Big(data?.reward_usd).div(lastBids).toFixed(0);
 
     return [_a, _rewardInfo, _returnMultiple];
   }, [data]);
