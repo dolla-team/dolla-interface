@@ -45,9 +45,6 @@ export default function Winner({
           ease: "linear",
           onComplete: () => {
             setAnimationStatus(2);
-            setTimeout(() => {
-              getPoolRecommend();
-            }, 2000);
           }
         });
       gsap.to(bgRef.current, {
@@ -61,7 +58,10 @@ export default function Winner({
     <>
       <button
         className="fixed right-[20px] top-[20px] z-[110] button"
-        onClick={onClose}
+        onClick={() => {
+          onClose();
+          getPoolRecommend();
+        }}
       >
         <CloseIcon size={36} />
       </button>
