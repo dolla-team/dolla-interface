@@ -1,8 +1,16 @@
 import Loading from "../icons/loading";
+import { supportsBackdropFilter } from "../../utils/support-backdrop-filter";
 
 export default function Toast({ type, title, text, closeToast }: any) {
+  const supportsBackdrop = supportsBackdropFilter();
+  
+  // Choose background style based on browser support
+  const backgroundClass = supportsBackdrop 
+    ? "bg-[#35302B]/30 backdrop-blur-[10px]" 
+    : "bg-[#35302B]";
+
   return (
-    <div className="rounded-[12px] border border-[#FFE9B2] bg-[#35302B]/30 backdrop-blur-[10px] px-[12px] py-[8px] flex gap-[10px] w-[288px] items-center md:w-[288px] max-md:w-[calc(100vw-32px)]">
+    <div className={`rounded-[12px] border border-[#FFE9B2] ${backgroundClass} px-[12px] py-[8px] flex gap-[10px] w-[288px] items-center md:w-[288px] max-md:w-[calc(100vw-32px)]`}>
       {type === "success" && (
         <svg
           xmlns="http://www.w3.org/2000/svg"
