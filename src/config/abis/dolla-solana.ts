@@ -215,12 +215,118 @@ export default {
       ]
     },
     {
+      name: "cancel_cancel_pool",
+      discriminator: [26, 31, 104, 230, 254, 183, 100, 153],
+      accounts: [
+        {
+          name: "dolla_state"
+        },
+        {
+          name: "pool_state",
+          writable: true
+        },
+        {
+          name: "paid_mint"
+        },
+        {
+          name: "user_paid_account",
+          writable: true,
+          pda: {
+            seeds: [
+              {
+                kind: "account",
+                path: "user"
+              },
+              {
+                kind: "const",
+                value: [
+                  6, 221, 246, 225, 215, 101, 161, 147, 217, 203, 225, 70, 206,
+                  235, 121, 172, 28, 180, 133, 237, 95, 91, 55, 145, 58, 140,
+                  245, 133, 126, 255, 0, 169
+                ]
+              },
+              {
+                kind: "account",
+                path: "paid_mint"
+              }
+            ],
+            program: {
+              kind: "const",
+              value: [
+                140, 151, 37, 143, 78, 36, 137, 241, 187, 61, 16, 41, 20, 142,
+                13, 131, 11, 90, 19, 153, 218, 255, 16, 132, 4, 142, 123, 216,
+                219, 233, 248, 89
+              ]
+            }
+          }
+        },
+        {
+          name: "operator_paid_account",
+          writable: true,
+          pda: {
+            seeds: [
+              {
+                kind: "account",
+                path: "operator"
+              },
+              {
+                kind: "const",
+                value: [
+                  6, 221, 246, 225, 215, 101, 161, 147, 217, 203, 225, 70, 206,
+                  235, 121, 172, 28, 180, 133, 237, 95, 91, 55, 145, 58, 140,
+                  245, 133, 126, 255, 0, 169
+                ]
+              },
+              {
+                kind: "account",
+                path: "paid_mint"
+              }
+            ],
+            program: {
+              kind: "const",
+              value: [
+                140, 151, 37, 143, 78, 36, 137, 241, 187, 61, 16, 41, 20, 142,
+                13, 131, 11, 90, 19, 153, 218, 255, 16, 132, 4, 142, 123, 216,
+                219, 233, 248, 89
+              ]
+            }
+          }
+        },
+        {
+          name: "token_program"
+        },
+        {
+          name: "associated_token_program",
+          address: "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        },
+        {
+          name: "user",
+          writable: true,
+          signer: true
+        },
+        {
+          name: "operator",
+          writable: true,
+          signer: true
+        },
+        {
+          name: "system_program",
+          address: "11111111111111111111111111111111"
+        }
+      ],
+      args: [
+        {
+          name: "gas_amount",
+          type: "u64"
+        }
+      ]
+    },
+    {
       name: "cancel_pool",
       discriminator: [211, 11, 27, 100, 252, 115, 57, 77],
       accounts: [
         {
-          name: "dolla_state",
-          writable: true
+          name: "dolla_state"
         },
         {
           name: "pool_state",
@@ -747,6 +853,7 @@ export default {
         },
         {
           name: "buyer_state",
+          writable: true,
           pda: {
             seeds: [
               {
@@ -1193,6 +1300,29 @@ export default {
       ]
     },
     {
+      name: "mark_cancel_pool",
+      discriminator: [43, 100, 135, 214, 226, 208, 49, 231],
+      accounts: [
+        {
+          name: "dolla_state"
+        },
+        {
+          name: "pool_state",
+          writable: true
+        },
+        {
+          name: "user",
+          writable: true,
+          signer: true
+        },
+        {
+          name: "system_program",
+          address: "11111111111111111111111111111111"
+        }
+      ],
+      args: []
+    },
+    {
       name: "pause",
       discriminator: [211, 22, 221, 251, 74, 121, 193, 47],
       accounts: [
@@ -1211,6 +1341,31 @@ export default {
         }
       ],
       args: []
+    },
+    {
+      name: "set_cancel_keep_time",
+      discriminator: [152, 196, 32, 10, 121, 7, 248, 159],
+      accounts: [
+        {
+          name: "dolla_state",
+          writable: true
+        },
+        {
+          name: "user",
+          writable: true,
+          signer: true
+        },
+        {
+          name: "system_program",
+          address: "11111111111111111111111111111111"
+        }
+      ],
+      args: [
+        {
+          name: "cancel_keep_time",
+          type: "u64"
+        }
+      ]
     },
     {
       name: "set_cancel_slash_rate",
@@ -1267,6 +1422,10 @@ export default {
           type: {
             vec: "u16"
           }
+        },
+        {
+          name: "float_fee_rate",
+          type: "u16"
         }
       ]
     },
@@ -1798,6 +1957,10 @@ export default {
       discriminator: [244, 161, 131, 196, 237, 176, 164, 118]
     },
     {
+      name: "CancelCancelEvent",
+      discriminator: [179, 177, 50, 249, 69, 177, 203, 152]
+    },
+    {
       name: "CancelEvent",
       discriminator: [71, 137, 239, 100, 220, 3, 242, 47]
     },
@@ -1820,6 +1983,10 @@ export default {
     {
       name: "CreateEvent",
       discriminator: [27, 114, 169, 77, 222, 235, 99, 118]
+    },
+    {
+      name: "MarkCancelEvent",
+      discriminator: [226, 28, 96, 179, 157, 75, 96, 47]
     },
     {
       name: "SettleEvent",
@@ -1941,6 +2108,11 @@ export default {
     },
     {
       code: 6020,
+      name: "InvalidTime",
+      msg: "InvalidTime"
+    },
+    {
+      code: 6021,
       name: "NumberCastError",
       msg: "Unable to cast number into BigInt"
     }
@@ -2029,6 +2201,30 @@ export default {
           },
           {
             name: "last_sequence_num",
+            type: "u64"
+          }
+        ]
+      }
+    },
+    {
+      name: "CancelCancelEvent",
+      type: {
+        kind: "struct",
+        fields: [
+          {
+            name: "pool_id",
+            type: "u32"
+          },
+          {
+            name: "creator",
+            type: "pubkey"
+          },
+          {
+            name: "gas_token",
+            type: "pubkey"
+          },
+          {
+            name: "gas_fee",
             type: "u64"
           }
         ]
@@ -2218,6 +2414,10 @@ export default {
           {
             name: "gas_fee",
             type: "u64"
+          },
+          {
+            name: "origin_quote_amount",
+            type: "u64"
           }
         ]
       }
@@ -2310,6 +2510,10 @@ export default {
             type: "u64"
           },
           {
+            name: "cancel_keep_time",
+            type: "u64"
+          },
+          {
             name: "bump",
             type: {
               array: ["u8", 1]
@@ -2334,6 +2538,22 @@ export default {
           },
           {
             name: "Shutdown"
+          }
+        ]
+      }
+    },
+    {
+      name: "MarkCancelEvent",
+      type: {
+        kind: "struct",
+        fields: [
+          {
+            name: "pool_id",
+            type: "u32"
+          },
+          {
+            name: "creator",
+            type: "pubkey"
           }
         ]
       }
@@ -2374,6 +2594,10 @@ export default {
             type: "u64"
           },
           {
+            name: "origin_quote_amount",
+            type: "u64"
+          },
+          {
             name: "expected_quote_amount",
             type: "u64"
           },
@@ -2391,6 +2615,10 @@ export default {
           },
           {
             name: "quote_amount_unit",
+            type: "u64"
+          },
+          {
+            name: "create_time",
             type: "u64"
           },
           {
@@ -2442,6 +2670,9 @@ export default {
           },
           {
             name: "Finalized"
+          },
+          {
+            name: "Cancelling"
           }
         ]
       }

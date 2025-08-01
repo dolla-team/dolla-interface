@@ -75,10 +75,9 @@ const SellerMarkets = (props: any) => {
               setCancelMarketVisible(false);
               setCurrentOrder(void 0);
             }}
-            onSuccess={() => {
-              updatePoolsData(currentOrder.pool_id, {
-                status: EMarketStatus.Cancelled
-              });
+            onSuccess={(params: any) => {
+              console.log("params", params);
+              updatePoolsData(currentOrder.pool_id, params);
               setCancelMarketVisible(false);
               setCurrentOrder(void 0);
             }}
