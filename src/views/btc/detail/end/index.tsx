@@ -43,8 +43,7 @@ export default function EndPanel({ data }: { data: any }) {
       }
     });
 
-    const _returnMultiple = Big(data.anchor_price)
-      .div(10 ** BASE_TOKEN.decimals)
+    const _returnMultiple = Big(data.value)
       .div(lastBids || 1)
       .toFixed(0);
 
