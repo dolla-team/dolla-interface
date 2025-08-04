@@ -89,10 +89,14 @@ export default function MarketInfo() {
                 WebkitTextFillColor: "transparent"
               }}
             >
-              <RollingDigitDisplay
-                prefixSymbol="$"
-                value={String(pool?.accumulative_bids || 0)}
-              />
+              {pool?.status !== 3 ? (
+                <RollingDigitDisplay
+                  prefixSymbol="$"
+                  value={String(pool?.accumulative_bids || 0)}
+                />
+              ) : (
+                `$${formatNumber(pool?.accumulative_bids || 0, 0, true)}`
+              )}
             </div>
           </div>
         </div>

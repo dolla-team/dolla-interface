@@ -28,7 +28,7 @@ export default function GrandMobile({ tokenBalance }: any) {
         </>
       )}
       {pool?.status === 2 && <EndPanel data={pool} />}
-      {pool?.status === 3 && <Cancel data={pool} />}
+      {(pool?.status === 3 || pool?.status === 5) && <Cancel data={pool} />}
       {flipStatus === 0 && (
         <>
           <Points
