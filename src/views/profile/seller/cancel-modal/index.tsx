@@ -33,7 +33,8 @@ export default function CancelModal({
   const { canceling: cancelingMark, onMarkCancel } = useMarkCancel({
     onCancelSuccess: () => {
       onSuccess({
-        status: 5
+        status: 5,
+        skipClose: true
       });
       onClose();
     }
