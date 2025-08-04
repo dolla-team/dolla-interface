@@ -76,8 +76,14 @@ const SellerMarkets = (props: any) => {
               setCurrentOrder(void 0);
             }}
             onSuccess={(params: any) => {
-              console.log("params", params);
               updatePoolsData(currentOrder.pool_id, params);
+              if (params.skipClose) {
+                setCurrentOrder({
+                  ...currentOrder,
+                  status: params.status
+                });
+                return;
+              }
               setCancelMarketVisible(false);
               setCurrentOrder(void 0);
             }}
