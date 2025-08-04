@@ -207,7 +207,6 @@ export default function BTCCreate() {
                   {referenceDataLoading ? (
                     <Skeleton className="w-[85px] h-[12px] rounded-full" />
                   ) : (
-                    (Big(referenceData?.avg_profit || 0).gt(0) ? "+" : "") +
                     formatNumber(referenceData?.avg_profit, 2, true, {
                       prefix: "$"
                     })
