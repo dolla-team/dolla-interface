@@ -114,13 +114,23 @@ const MarketItem = (props: any) => {
   });
   const navigate = useNavigate();
 
-  const time = useMemo(() => {
-    if (!order.created_at) return "-";
-    const diff = dayjs().diff(dayjs(order.created_at), "hours");
-    if (diff < 24) {
-      return dayjs(order.created_at).toNow(true) + " ago";
+  const [time, cancelValid] = useMemo(() => {
+    let _time = "-";
+    let _cancelValid = false;
+
+    if (!order.time) {
+      _time = "-";
+    } else {
+      const diff = dayjs().diff(dayjs(order.time), "hours");
+      if (diff < 24) {
+        _time = dayjs(order.time).toNow(true) + " ago";
+      } else {
+        _time = dayjs(order.time).format("hh:mm D MMM, YYYY");
+      }
+      _cancelValid = dayjs().isAfter(dayjs(order.time).add(72, "hours"));
     }
-    return dayjs(order.created_at).format("hh:mm D MMM, YYYY");
+
+    return [_time, _cancelValid];
   }, [order]);
 
   return (
@@ -156,68 +166,69 @@ const MarketItem = (props: any) => {
               {![EMarketStatus.Cancelled, EMarketStatus.Winner].includes(
                 order.status
               ) && (
-                <Popover
-                  content={
-                    <PopoverCard className="!w-[300px] text-[#BBACA6] font-[SpaceGrotesk] text-[12px] leading-[120%] font-[400]">
-                      <div className="flex items-center gap-[3px]">
-                        <img
-                          src="/profile/icon-warning.svg"
-                          alt="warning"
-                          className="w-[13px] h-[11px] shrink-0"
-                        />
-                        <div className="text-[#FFC42F] leading-[100%]">
-                          Early Closure Penalty
+                  <Popover
+                    content={
+                      <PopoverCard className="!w-[300px] text-[#BBACA6] font-[SpaceGrotesk] text-[12px] leading-[120%] font-[400]">
+                        <div className="flex items-center gap-[3px]">
+                          <img
+                            src="/profile/icon-warning.svg"
+                            alt="warning"
+                            className="w-[13px] h-[11px] shrink-0"
+                          />
+                          <div className="text-[#FFC42F] leading-[100%]">
+                            Early Closure Penalty
+                          </div>
                         </div>
-                      </div>
-                      <div className="mt-[7px]">
-                        If a seller decides to close the market{" "}
-                        <span className="text-[#FFC42F] font-[600]">
-                          after the 72-hour
-                        </span>{" "}
-                        lock period without a winner:
-                        <br />
-                        <ul className="list-disc pl-[20px]">
-                          <li>
-                            The seller must pay an additional{" "}
-                            <span className="text-[#FFC42F] font-[600]">
-                              {formatNumber(penaltyPercent * 100, 2, true)}%
-                              penalty
-                            </span>{" "}
-                            based on the total funds collected from bids.
-                          </li>
-                          <li>Upon payment, the market will be closed.</li>
-                          <li>
-                            All collected funds will be fully refunded to
-                            participating bidders’ platform balances.
-                          </li>
-                        </ul>
-                        This mechanism ensures fairness to bidders while giving
-                        sellers the flexibility to manage inactive markets.
-                      </div>
-                    </PopoverCard>
-                  }
-                  placement={PopoverPlacement.BottomLeft}
-                  trigger={PopoverTrigger.Hover}
-                  closeDelayDuration={0}
-                  offset={30}
-                >
-                  <ButtonV2
-                    type="default"
-                    className="!h-[28px] !px-[7px] !rounded-[8px] !text-[14px] flex items-center gap-[3px]"
-                    onClick={(e: any) => {
-                      e.stopPropagation();
-                      onCancel(e);
-                    }}
+                        <div className="mt-[7px]">
+                          If a seller decides to close the market{" "}
+                          <span className="text-[#FFC42F] font-[600]">
+                            after the 72-hour
+                          </span>{" "}
+                          lock period without a winner:
+                          <br />
+                          <ul className="list-disc pl-[20px]">
+                            <li>
+                              The seller must pay an additional{" "}
+                              <span className="text-[#FFC42F] font-[600]">
+                                {formatNumber(penaltyPercent * 100, 2, true)}%
+                                penalty
+                              </span>{" "}
+                              based on the total funds collected from bids.
+                            </li>
+                            <li>Upon payment, the market will be closed.</li>
+                            <li>
+                              All collected funds will be fully refunded to
+                              participating bidders’ platform balances.
+                            </li>
+                          </ul>
+                          This mechanism ensures fairness to bidders while giving
+                          sellers the flexibility to manage inactive markets.
+                        </div>
+                      </PopoverCard>
+                    }
+                    placement={PopoverPlacement.BottomLeft}
+                    trigger={PopoverTrigger.Hover}
+                    closeDelayDuration={0}
+                    offset={30}
                   >
-                    <div className="">Cancel</div>
-                    <img
-                      src="/profile/icon-warning.svg"
-                      alt="warning"
-                      className="w-[13px] h-[11px] shrink-0"
-                    />
-                  </ButtonV2>
-                </Popover>
-              )}
+                    <ButtonV2
+                      type="default"
+                      className="!h-[28px] !px-[7px] !rounded-[8px] !text-[14px] flex items-center gap-[3px]"
+                      disabled={!cancelValid}
+                      onClick={(e: any) => {
+                        e.stopPropagation();
+                        onCancel(e);
+                      }}
+                    >
+                      <div className="">Cancel</div>
+                      <img
+                        src="/profile/icon-warning.svg"
+                        alt="warning"
+                        className="w-[13px] h-[11px] shrink-0"
+                      />
+                    </ButtonV2>
+                  </Popover>
+                )}
 
               {order.status === EMarketStatus.Winner && !claimed && (
                 <ButtonV2

@@ -162,6 +162,7 @@ export default function CancelModal({
               <ButtonV2
                 className="!h-[40px] !text-[16px]"
                 loading={cancelingMark}
+                disabled={cancelingMark}
                 onClick={() => {
                   if (cancelingMark) {
                     return;
@@ -178,6 +179,7 @@ export default function CancelModal({
               <ButtonV2
                 className="!h-[40px] !text-[16px]"
                 loading={cancelingRevert}
+                disabled={cancelingRevert}
                 type="default"
                 onClick={() => {
                   if (cancelingRevert) {
@@ -191,6 +193,7 @@ export default function CancelModal({
               <ButtonV2
                 className="!h-[40px] !text-[16px]"
                 loading={canceling}
+                disabled={canceling}
                 onClick={() => {
                   if (canceling) {
                     return;
