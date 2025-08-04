@@ -107,19 +107,6 @@ export async function getUserAccount(accountId: string) {
   });
 }
 
-export async function getGamesList(fromIndex: number = 0, limit: number = 100) {
-  return callContractView(CONTRACT_ID, "list_games", {
-    from_index: fromIndex,
-    limit
-  });
-}
-
-export async function getGameDetails(gameId: number) {
-  return callContractView(CONTRACT_ID, "get_game", {
-    game_id: gameId
-  });
-}
-
 export async function getUserGameBets(gameId: number, accountId: string) {
   return callContractView(CONTRACT_ID, "get_game_bets_by_account", {
     game_id: gameId,

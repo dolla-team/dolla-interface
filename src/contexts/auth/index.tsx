@@ -11,7 +11,7 @@ export const useAuth = () => {
 };
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const { accountId, connectWallet, disconnectWallet, loading } = useNearWallet();
+  const { accountId, connectWallet, disconnectWallet } = useNearWallet();
   const [address, setAddress] = useState("");
   const { onLogin, loging } = useLogin();
   const { info: userInfo, onQueryUserInfo, setInfo } = useUserInfo(address);

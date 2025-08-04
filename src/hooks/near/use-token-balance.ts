@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
 import { useNearWallet } from "@/contexts/wallet/near";
+import {
+  getUserBetTokenBalance,
+  getUserPrizeTokenBalance
+} from "@/utils/near-game-actions";
 
-export default function useTokenBalance({ address, decimals }: { address: string; decimals: number }) {
+export default function useTokenBalance({ token }: { token: any }) {
   const [tokenBalance, setTokenBalance] = useState("0");
   const { accountId } = useNearWallet();
   const [loading, setLoading] = useState(false);
@@ -14,10 +18,21 @@ export default function useTokenBalance({ address, decimals }: { address: string
 
     setLoading(true);
     try {
-      // For now, we'll just return a mock balance
-      // In a real implementation, you would query the NEAR contract for the user's token balance
-      // This would depend on how tokens are implemented in your NEAR contract
-      setTokenBalance("1000"); // Mock balance
+      // Query real token balance from NEAR contract
+      let balance = "0";
+
+      if (token?.type === "bet") {
+        // Query bet token balance (USDC)
+        balance = await getUserBetTokenBalance(accountId);
+      } else if (token?.type === "prize") {
+        // Query prize token balance (WBTC)
+        balance = await getUserPrizeTokenBalance(accountId);
+      } else {
+        // Default to bet token balance
+        balance = await getUserBetTokenBalance(accountId);
+      }
+
+      setTokenBalance(balance);
     } catch (error) {
       console.error("Error fetching token balance:", error);
       setTokenBalance("0");
@@ -28,7 +43,7 @@ export default function useTokenBalance({ address, decimals }: { address: string
 
   useEffect(() => {
     update();
-  }, [accountId]);
+  }, [accountId, token]);
 
   return {
     tokenBalance,

@@ -3,5 +3,7 @@ export default {
   networkId: "testnet",
   nodeUrl: "https://rpc.testnet.near.org",
   baseToken: "wbtc.fakes.testnet",
-  quoteToken: "usdcc.fakes.testnet"
+  baseTokenDecimals: 8,
+  quoteToken: "usdcc.fakes.testnet",
+  quoteTokenDecimals: 6
 };

@@ -17,6 +17,7 @@ interface NearWalletContextType {
   connectWallet: () => void;
   disconnectWallet: () => void;
   loading: boolean;
+  wallet: any;
 }
 
 const NearWalletContext = createContext<NearWalletContextType | undefined>(
@@ -38,12 +39,6 @@ export default function WalletProvider({
       setLoading(true);
       const networkId = nearChainConfig.networkId || "testnet";
       const contractId = nearChainConfig.contractAddress;
-
-      console.log("Initializing NEAR wallet", {
-        networkId,
-        contractId,
-        env: import.meta.env
-      });
 
       const selector = await setupWalletSelector({
         network: networkId as NetworkId,
@@ -122,7 +117,8 @@ export default function WalletProvider({
         modal: modalRef.current,
         connectWallet,
         disconnectWallet,
-        loading
+        loading,
+        wallet: selectorRef.current?.wallet()
       }}
     >
       {children}
