@@ -7,22 +7,25 @@ export default function useLastWinner() {
   const isVisible = useIsWindowVisible();
   const prevId = useRef<string | null>(null);
 
-  const fetLastWinner = async () => {
+  const fetchLastWinner = async () => {
     try {
       const res = await axiosInstance.get(`/api/v1/pool/winner/bid/last`);
-
       if (res.data.data?.id !== prevId.current) {
         setLastWinner(null);
         prevId.current = res.data.data?.id;
+        const bidList = await axiosInstance.get(
+          `/api/v1/pool/winner/bid/list?chain=${res.data.data.chain}&pool_id=${res.data.data.pool_id}`
+        );
+
         setTimeout(() => {
-          setLastWinner(res.data.data);
+          setLastWinner({ ...res.data.data, bid_list: bidList.data.data });
         }, 1000);
       }
     } catch (err) {
     } finally {
       window.winnerTimer = setTimeout(() => {
-        fetLastWinner();
-      }, 5000);
+        fetchLastWinner();
+      }, 30000);
     }
   };
 
@@ -31,7 +34,7 @@ export default function useLastWinner() {
       clearTimeout(window.winnerTimer);
       return;
     }
-    fetLastWinner();
+    fetchLastWinner();
 
     return () => {
       clearTimeout(window.winnerTimer);

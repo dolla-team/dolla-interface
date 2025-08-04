@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
 import useInfiniteScroll from "@/hooks/use-infinite-scroll";
 import LoadingMore from "@/components/loading/loading-more";
 
@@ -10,6 +10,7 @@ interface InfiniteScrollContainerProps {
   threshold?: number;
   className?: string;
   loadingMoreClassName?: string;
+  onScroll?(e: any): void;
 }
 
 export default function InfiniteScrollContainer({
@@ -19,13 +20,26 @@ export default function InfiniteScrollContainer({
   hasMore = true,
   threshold = 100,
   className = "",
-  loadingMoreClassName = ""
+  loadingMoreClassName = "",
+  onScroll
 }: InfiniteScrollContainerProps) {
   const { containerRef, isLoading } = useInfiniteScroll(onLoadMore, {
     loading,
     hasMore,
     threshold
   });
+
+  useEffect(() => {
+    const _onScroll = (e: any) => {
+      onScroll?.(e);
+    };
+
+    containerRef.current?.addEventListener("scroll", _onScroll);
+
+    return () => {
+      containerRef.current?.removeEventListener("scroll", _onScroll);
+    };
+  }, []);
 
   return (
     <div ref={containerRef} className={className}>

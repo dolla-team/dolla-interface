@@ -8,6 +8,7 @@ import { useAuth } from "@/contexts/auth";
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ClaimModal from "../claim/modal";
+import { getProfitFee } from "@/utils/pool";
 
 const StatisticsPlayer = (props: any) => {
   const { className } = props;
@@ -17,28 +18,43 @@ const StatisticsPlayer = (props: any) => {
 
   const [claimModalOpen, setClaimModalOpen] = useState(false);
 
-  const onSellTotalAmount = useMemo(() => {
-    if (!userInfo?.on_sell) {
-      return Big(0);
+  const [onSellTotalAmount, claimableValue] = useMemo(() => {
+    const _result: any = [Big(0), Big(0)];
+    if (!userInfo) {
+      return _result;
     }
-    return userInfo
-      .on_sell
-      .filter((item: any) => item.token_info?.symbol === "BTC")
-      .reduce((acc: any, item: any) => Big(acc).plus(Big(item.token_amount || 0).div(10 ** (item.token_info?.decimals || 6))), 0);
+    if (userInfo.on_sell) {
+      _result[0] = userInfo
+        .on_sell
+        .filter((item: any) => item.reward_token_info?.[0]?.symbol === "BTC")
+        .reduce((acc: any, item: any) => Big(acc).plus(Big(item.reward_amount || 0).div(10 ** (item.reward_token_info?.[0]?.decimals || 6))), 0);
+    }
+    if (userInfo.claim_pool) {
+      _result[1] = userInfo
+        .claim_pool
+        .reduce((acc: any, item: any) => Big(acc).plus(Big(item.accumulative_bids || 0).minus(getProfitFee(item))), 0);
+    }
+    return _result;
   }, [userInfo]);
 
   return (
-    <div className={clsx("flex justify-between items-center gap-[40px] pl-[13px] mt-[40px] pb-[16px]", className)}>
-      <div className="flex items-center gap-[10px] flex-1 justify-between">
+    <div
+      className={clsx(
+        "flex justify-between items-center gap-[40px] pl-[13px] mt-[40px] pb-[16px] max-md:mt-[13px] max-md:flex-col max-md:gap-[20px] max-md:pl-0 max-md:pb-0",
+        className
+      )}
+    >
+      <div className="flex items-center gap-[10px] flex-1 justify-between max-md:w-full">
         <LabelValue label="PnL" className="" valueClassName={clsx(Big(userInfo?.seller_profit || 0).lt(0) ? "text-[#FF399F]" : "text-[#57FF70]")}>
           {Big(userInfo?.seller_profit || 0).lt(0) ? "-" : "+"}{formatNumber(Big(userInfo?.seller_profit || 0).abs(), 2, true, { prefix: "$", isShort: true, isShortUppercase: true })}
         </LabelValue>
         <LabelValue label="Claimable" className="" valueClassName="flex items-center gap-[13px]">
           <div className="">
-            {formatNumber(Big(userInfo?.seller_profit || 0).gt(0) ? userInfo?.seller_profit : 0, 2, true, { prefix: "$", isShort: true, isShortUppercase: true })}
+            {formatNumber(claimableValue, 2, true, { prefix: "$", isShort: true, isShortUppercase: true })}
           </div>
           <ButtonV2
             className=""
+            disabled={Big(claimableValue || 0).lte(0)}
             onClick={() => {
               setClaimModalOpen(true);
             }}
@@ -47,8 +63,8 @@ const StatisticsPlayer = (props: any) => {
           </ButtonV2>
         </LabelValue>
       </div>
-      <div className="flex items-center gap-[10px] flex-2 justify-between">
-        <LabelValue label="Created Market" className="" valueClassName="flex items-center gap-[13px]">
+      <div className="flex items-center gap-[10px] flex-2 justify-between max-md:flex-col max-md:w-full">
+        <LabelValue label="Created Market" className="max-md:w-full" valueClassName="flex items-center gap-[13px]">
           <div className="">
             {formatNumber(userInfo?.created, 0, true, { isShort: true, isShortUppercase: true })}
           </div>
@@ -57,23 +73,23 @@ const StatisticsPlayer = (props: any) => {
               className="h-[24px] !px-[10px] !text-[14px]"
               icon={(<div className="w-[7px] h-[7px] shrink-0 rounded-full bg-[#57FF70]" />)}
             >
-              0 Live
+              {formatNumber(Big(userInfo?.created || 0).minus(userInfo?.cancel || 0).minus(userInfo?.ended || 0), 0, true, { isShort: true, isShortUppercase: true })} Live
             </Badge>
             <Badge
               className="h-[24px] !px-[10px] !text-[14px]"
               icon={(<div className="w-[7px] h-[7px] shrink-0 rounded-full bg-[#FF399F]" />)}
             >
-              0 Cancelled
+              {formatNumber(userInfo?.cancel, 0, true, { isShort: true, isShortUppercase: true })} Cancelled
             </Badge>
             <Badge
               className="h-[24px] !px-[10px] !text-[14px]"
               icon={(<div className="w-[7px] h-[7px] shrink-0 rounded-full bg-[#FF9F39]" />)}
             >
-              0 Ended
+              {formatNumber(userInfo?.ended, 0, true, { isShort: true, isShortUppercase: true })} Ended
             </Badge>
           </div>
         </LabelValue>
-        <LabelValue label="On Sell" className="" valueClassName="flex items-center gap-[13px]">
+        <LabelValue label="On Sell" className="max-md:w-full max-md:mt-[10px] max-md:gap-[8px]" valueClassName="flex items-center gap-[13px]">
           <div className="">
             {formatNumber(onSellTotalAmount, 3, true, { isShort: true, isShortUppercase: true })} BTC
           </div>
@@ -88,6 +104,7 @@ const StatisticsPlayer = (props: any) => {
         </LabelValue>
       </div>
       <ClaimModal
+        type="seller"
         open={claimModalOpen}
         onClose={() => {
           setClaimModalOpen(false);

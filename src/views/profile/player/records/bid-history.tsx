@@ -4,7 +4,8 @@ import dayjs from "dayjs";
 import Pagination from "@/components/pagination";
 import { formatNumber } from "@/utils/format/number";
 import Big from "big.js";
-import chains from "@/config/chains";
+import useIsMobile from "@/hooks/use-is-mobile";
+import { useNavigate } from "react-router-dom";
 
 const BidHistory = (props: any) => {
   const {
@@ -16,19 +17,21 @@ const BidHistory = (props: any) => {
     onPageChange
   } = props;
 
+  const isMobile = useIsMobile();
+  const navigate = useNavigate();
+
   const columns = [
     {
       dataIndex: "marketId",
       title: "Market ID",
-      width: 130,
+      width: isMobile ? 100 : 130,
+      fixed: true,
       render: (record: any) => {
-        const currentChain = Object.values(chains).find((chain) => chain.name.toLowerCase() === record.chain.toLowerCase());
         return (
           <div
            className="flex items-center gap-[7px] cursor-pointer"
            onClick={() => {
-            if (!currentChain) return;
-             window.open(`${currentChain.blockExplorers?.default?.url}/tx/${record.tx_hash}`, "_blank");
+            navigate(`/btc/${record.pool_id}`);
            }}
            >
             <div className="">#{record.pool_id}</div>
@@ -56,6 +59,7 @@ const BidHistory = (props: any) => {
     {
       dataIndex: "prize",
       title: "Prize",
+      width: isMobile ? 140 : void 0,
       render: (record: any) => {
         return (
           <div className="flex items-center gap-[4px]">
@@ -80,7 +84,7 @@ const BidHistory = (props: any) => {
     {
       dataIndex: "date",
       title: "Date",
-      width: 160,
+      width: isMobile ? 180 : 160,
       align: GridTableAlign.Right,
       render: (record: any) => {
         return dayjs(record.updated_at).format("hh:mm D MMM, YYYY");
@@ -94,8 +98,12 @@ const BidHistory = (props: any) => {
         data={data}
         columns={columns}
         loading={loading}
+        className="max-md:w-full max-md:overflow-x-auto"
+        rowClassName="max-md:px-0 max-md:gap-x-0"
+        colClassName="max-md:px-[10px] max-md:bg-[#22201D]"
+        bodyColClassName="max-md:first:border-r max-md:border-[#423930]"
       />
-      <div className="flex justify-end items-center pt-[18px]">
+      <div className="flex justify-end items-center pt-[18px] max-md:justify-center">
         <Pagination
           current={page}
           hasNextPage={hasMore}

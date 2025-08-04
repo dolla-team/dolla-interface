@@ -2,8 +2,9 @@ import useToast from "@/hooks/use-toast";
 import { useState, useEffect, useRef } from "react";
 import { useNearWallet } from "@/contexts/wallet/near";
 import axiosInstance from "@/libs/axios";
-import { transactions, utils } from "near-api-js";
+import { transactions } from "near-api-js";
 import reportHash from "@/utils/report-hash";
+import nearChainConfig from "@/config/near";
 
 export default function useBid(
   poolId: number,
@@ -23,7 +24,7 @@ export default function useBid(
         walletRef.current = wallet;
       }
     };
-    
+
     initWallet();
   }, [selector]);
 
@@ -43,8 +44,8 @@ export default function useBid(
 
     try {
       // Get the contract address from environment variables
-      const contractAddress = import.meta.env.VITE_NEAR_CONTRACT_ADDRESS;
-      
+      const contractAddress = nearChainConfig.contractAddress;
+
       // Construct the transaction
       const actions = [
         transactions.functionCall(
@@ -60,10 +61,12 @@ export default function useBid(
 
       // Sign and send the transaction
       const result = await walletRef.current.signAndSendTransactions({
-        transactions: [{
-          receiverId: contractAddress,
-          actions
-        }]
+        transactions: [
+          {
+            receiverId: contractAddress,
+            actions
+          }
+        ]
       });
 
       toast.dismiss(toastId);
@@ -75,7 +78,7 @@ export default function useBid(
       let bidResponse = null;
       let timer: any = null;
       console.time("bid loop");
-      
+
       const loop = async () => {
         try {
           // Assuming you have an API endpoint to check bid status
@@ -85,11 +88,11 @@ export default function useBid(
             console.warn("Transaction hash is missing");
             return;
           }
-          
+
           bidResponse = await axiosInstance.get(
             `/api/v1/user/prize/bid?hash=${hash}`
           );
-          
+
           if (
             bidResponse.data.data.bid !== null &&
             bidResponse.data.data.bid.status !== 0
@@ -99,11 +102,11 @@ export default function useBid(
             onSuccess(bidResponse.data.data);
             return;
           }
-          
+
           if (timer) {
             clearTimeout(timer);
           }
-          
+
           timer = setTimeout(loop, 1000);
         } catch (error) {
           console.error("Error polling for bid result:", error);
@@ -112,14 +115,14 @@ export default function useBid(
           }
         }
       };
-      
+
       loop();
 
       // Report hash for tracking
       // Fallback values for hash and block_number if they're missing
       const hash = result?.transaction?.hash || "";
       const blockNumber = result?.transaction_outcome?.block_hash || "";
-      
+
       if (hash && blockNumber) {
         reportHash({
           chain: "near",
@@ -128,7 +131,6 @@ export default function useBid(
           block_number: blockNumber
         });
       }
-
     } catch (error) {
       console.error("Bid error:", error);
       setBidding(false);

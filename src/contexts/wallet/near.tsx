@@ -1,10 +1,14 @@
-import { NetworkId, setupWalletSelector, WalletSelector } from "@near-wallet-selector/core";
+import {
+  NetworkId,
+  setupWalletSelector,
+  WalletSelector
+} from "@near-wallet-selector/core";
 import { setupModal } from "@near-wallet-selector/modal-ui";
 import { setupMeteorWallet } from "@near-wallet-selector/meteor-wallet";
 import { setupHereWallet } from "@near-wallet-selector/here-wallet";
 import { setupMyNearWallet } from "@near-wallet-selector/my-near-wallet";
 import { createContext, useContext, useEffect, useRef, useState } from "react";
-import nearChainConfig from "@/config/near-chain";
+import nearChainConfig from "@/config/near";
 
 interface NearWalletContextType {
   accountId: string | null;
@@ -15,7 +19,9 @@ interface NearWalletContextType {
   loading: boolean;
 }
 
-const NearWalletContext = createContext<NearWalletContextType | undefined>(undefined);
+const NearWalletContext = createContext<NearWalletContextType | undefined>(
+  undefined
+);
 
 export default function WalletProvider({
   children
@@ -30,29 +36,19 @@ export default function WalletProvider({
   const initNearWallet = async () => {
     try {
       setLoading(true);
-      const networkId = import.meta.env.VITE_NEAR_NETWORK_ID || "testnet";
-      const contractId = import.meta.env.VITE_NEAR_CONTRACT_ADDRESS;
-      
-      console.log("Initializing NEAR wallet", { 
-        networkId, 
+      const networkId = nearChainConfig.networkId || "testnet";
+      const contractId = nearChainConfig.contractAddress;
+
+      console.log("Initializing NEAR wallet", {
+        networkId,
         contractId,
-        env: import.meta.env 
+        env: import.meta.env
       });
-      
-      const config = nearChainConfig[networkId];
-      
-      if (!config) {
-        throw new Error(`No config found for network: ${networkId}`);
-      }
-      
+
       const selector = await setupWalletSelector({
-        network: config.networkId as NetworkId,
+        network: networkId as NetworkId,
         debug: true, // Enable debug mode
-        modules: [
-          setupMyNearWallet(),
-          setupMeteorWallet(),
-          setupHereWallet()
-        ]
+        modules: [setupMyNearWallet(), setupMeteorWallet(), setupHereWallet()]
       });
 
       console.log("Wallet selector created", selector);
@@ -86,10 +82,10 @@ export default function WalletProvider({
   };
 
   const connectWallet = () => {
-    console.log("connectWallet called", { 
+    console.log("connectWallet called", {
       modal: modalRef.current,
       loading,
-      selector: selectorRef.current 
+      selector: selectorRef.current
     });
     if (modalRef.current) {
       console.log("Showing wallet modal");

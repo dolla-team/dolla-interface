@@ -22,6 +22,7 @@ export default function PriceChart({
   const anchorDotRef = useRef<HTMLDivElement>(null);
   const [isInit, setIsInit] = useState(false);
   const [isFolded, setIsFolded] = useState(true);
+  const [isAnimationComplete, setIsAnimationComplete] = useState(false);
 
   // Function to calculate probability density data
   const calculateDensity = (anchorPrice: number) => {
@@ -59,9 +60,9 @@ export default function PriceChart({
     }));
   };
 
-  // Initialize chart - only executed once when component mounts
+  // Initialize chart - only executed once when component mounts and animation is complete
   useEffect(() => {
-    if (!chartRef.current) return;
+    if (!chartRef.current || !isAnimationComplete) return;
 
     const ctx = chartRef.current.getContext("2d");
     if (!ctx) return;
@@ -148,11 +149,10 @@ export default function PriceChart({
             },
             callbacks: {
               title: (items) => {
-                return `Total Sales: ${
-                  Number(items[0].parsed.x) > 0
+                return `Total Sales: ${Number(items[0].parsed.x) > 0
                     ? `$${items[0].parsed.x}`
                     : `-$${Math.abs(items[0].parsed.x)}`
-                }`;
+                  }`;
               },
               label: (item) => {
                 return `Probability: ${item.parsed.y.toFixed(2)}%`;
@@ -223,11 +223,11 @@ export default function PriceChart({
         chartInstance.current = null;
       }
     };
-  }, []); // Empty dependency array, only executes on mount
+  }, [isAnimationComplete]); // Execute when animation is complete
 
-  // Update chart data - only executed when anchorPrice changes
+  // Update chart data - only executed when anchorPrice changes and chart is initialized
   useEffect(() => {
-    if (!chartInstance.current || !anchorPrice) return;
+    if (!chartInstance.current || !anchorPrice || !isAnimationComplete) return;
 
     const density = calculateDensity(anchorPrice);
     const desiredMode = anchorPrice * 1.2;
@@ -262,7 +262,7 @@ export default function PriceChart({
       updateAnchorPlace();
       setIsInit(true);
     }, 100);
-  }, [anchorPrice]);
+  }, [anchorPrice, isAnimationComplete]);
 
   const updateAnchorPlace = () => {
     const chart = chartInstance.current;
@@ -303,7 +303,13 @@ export default function PriceChart({
         <button
           type="button"
           className="button shrink-0 w-[14px] h-[14px]"
-          onClick={() => setIsFolded(!isFolded)}
+          onClick={() => {
+            setIsFolded(!isFolded);
+            if (isFolded) {
+              // Reset animation state when folding
+              setIsAnimationComplete(false);
+            }
+          }}
         >
           <motion.img
             src="/new-btc/icon-fold-arrow.svg"
@@ -315,7 +321,7 @@ export default function PriceChart({
         </button>
       </div>
       <motion.div
-        className="w-full relative shrink-0 h-[calc(100%_-_45px)] px-[20px]"
+        className="w-full relative shrink-0 h-[calc(100%_-_45px)] px-[20px] max-md:px-[10px] max-md:pt-[100px]"
         animate={{
           opacity: isFolded ? 0 : 1,
           height: isFolded ? 0 : "calc(100% - 45px)"
@@ -323,37 +329,46 @@ export default function PriceChart({
         transition={{
           duration: 0.3
         }}
+        onAnimationComplete={() => {
+          if (!isFolded) {
+            setIsAnimationComplete(true);
+          } else {
+            setIsAnimationComplete(false);
+          }
+        }}
       >
-        <canvas
-          ref={chartRef}
-          className="w-full h-full relative z-[2]"
-        ></canvas>
-        {!anchorPrice && (
-          <div className="w-full h-full flex justify-center items-center text-[#ABABAB] text-[14px] absolute top-0 left-0">
-            Please set the price first
-          </div>
-        )}
-        <div
-          ref={anchorDotRef}
-          className="absolute z-[20] flex items-center"
-          style={{
-            opacity: isInit ? 1 : 0
-          }}
-        >
-          <div
-            style={{
-              width: 10,
-              height: 10,
-              borderRadius: 8,
-              background: "#57FF70",
-              pointerEvents: "none"
-            }}
-          />
-          {anchorPrice && (
-            <div className="text-[#57FF70] text-[16px] ml-[10px]">
-              ${formatNumber(anchorPrice * 1.2, 2, true)}
+        <div className="relative w-full h-full">
+          <canvas
+            ref={chartRef}
+            className="w-full h-full relative z-[2]"
+          ></canvas>
+          {!anchorPrice && (
+            <div className="w-full h-full flex justify-center items-center text-[#ABABAB] text-[14px] absolute top-0 left-0">
+              Please set the price first
             </div>
           )}
+          <div
+            ref={anchorDotRef}
+            className="absolute z-[1] flex items-center"
+            style={{
+              opacity: isInit ? 1 : 0
+            }}
+          >
+            <div
+              style={{
+                width: 10,
+                height: 10,
+                borderRadius: 8,
+                background: "#57FF70",
+                pointerEvents: "none"
+              }}
+            />
+            {anchorPrice && (
+              <div className="text-[#57FF70] text-[16px] ml-[10px]">
+                ${formatNumber(anchorPrice * 1.2, 2, true)}
+              </div>
+            )}
+          </div>
         </div>
         <Annotations
           className="z-[3] !top-[0px]"

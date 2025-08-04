@@ -26,6 +26,7 @@ export default function useInfiniteScroll(
     if (!containerRef.current || loading || isLoading || !hasMore) return;
 
     const { scrollTop, scrollHeight, clientHeight } = containerRef.current;
+
     const isNearBottom = scrollHeight - scrollTop - clientHeight <= threshold;
 
     if (isNearBottom) {
@@ -42,13 +43,14 @@ export default function useInfiniteScroll(
 
   useEffect(() => {
     const container = containerRef.current;
+
     if (!container) return;
 
     container.addEventListener("scroll", debouncedHandleScroll);
     return () => {
       container.removeEventListener("scroll", debouncedHandleScroll);
     };
-  }, [debouncedHandleScroll]);
+  }, [containerRef.current]);
 
   return {
     containerRef,

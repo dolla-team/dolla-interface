@@ -2,10 +2,8 @@ import Modal from "@/components/modal";
 import { formatNumber } from "@/utils/format/number";
 import Big from "big.js";
 import { useMemo } from "react";
-import useTokenBalance from "@/hooks/use-token-balance";
-import useDeposit from "@/hooks/use-deposit-reward";
-import useApprove from "@/hooks/use-approve";
-import { BETTING_CONTRACT_ADDRESS } from "@/config";
+import useDeposit from "@/hooks/evm/use-deposit-reward";
+import useApprove from "@/hooks/evm/use-approve";
 import { useAuth } from "@/contexts/auth";
 import ButtonV2 from "@/components/button/v2";
 
@@ -49,7 +47,7 @@ export default function DepositModal({
   const { approve, approved, approving, checking } = useApprove();
 
   const { onDeposit, depositing } = useDeposit();
-  
+
   const handleDepositSuccess = () => {
     onSuccess();
   };

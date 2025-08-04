@@ -63,10 +63,8 @@ export default function OrderList({
             open={cancelModal}
             onClose={() => setCancelModal(false)}
             order={currentOrder}
-            onSuccess={() => {
-              updatePoolsData(currentOrder.pool_id, {
-                status: 3
-              });
+            onSuccess={(params: any) => {
+              updatePoolsData(currentOrder.pool_id, params);
               setCurrentOrder(null);
               setCancelModal(false);
             }}

@@ -2,12 +2,14 @@ import Modal from "@/components/modal";
 import Avatar from "@/components/avatar";
 import { useAuth } from "@/contexts/auth";
 import { formatAddress } from "@/utils/format/address";
-import { addThousandSeparator } from "@/utils/format/number";
+import { formatNumber } from "@/utils/format/number";
 import PointIcon from "@/components/icons/point-icon";
 import RedeemSelectionItem from "./item";
 import { useState } from "react";
 import Redeem from "../redeem";
 import History from "../history";
+import clsx from "clsx";
+import useIsMobile from "@/hooks/use-is-mobile";
 
 export default function RedeemSelection({
   points,
@@ -25,7 +27,7 @@ export default function RedeemSelection({
   const { userInfo } = useAuth();
   const [selectedItem, setSelectedItem] = useState<any>(null);
   const [showHistory, setShowHistory] = useState(false);
-
+  const isMobile = useIsMobile();
   const close = () => {
     onClose();
     setSelectedItem(null);
@@ -35,7 +37,12 @@ export default function RedeemSelection({
   return (
     <>
       <Modal open={showRedeemSelection} onClose={close}>
-        <div className="w-[814px] h-[422px] rounded-[16px] border border-[#6A5D3A] bg-[#35302B]">
+        <div
+          className={clsx(
+            " rounded-[16px] border border-[#6A5D3A] bg-[#35302B]",
+            isMobile ? "w-full" : "w-[814px] h-[422px]"
+          )}
+        >
           <div className="h-[54px] bg-[#00000033] rounded-t-[16px] flex items-center justify-between px-[16px]">
             <div className="text-[20px] text-white">Points Redemption</div>
             <button className="w-[24px] h-[24px] button" onClick={close}>
@@ -55,14 +62,19 @@ export default function RedeemSelection({
           </div>
           <div className="p-[20px]">
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-[16px]">
+              <div
+                className={clsx(
+                  "flex items-center",
+                  isMobile ? "gap-[8px]" : "gap-[16px]"
+                )}
+              >
                 <Avatar
                   size={46}
                   address={userInfo?.sol_user}
                   email={userInfo?.email}
                 />
                 <div className="font-[DelaGothicOne] text-white flex items-center">
-                  <div className="text-[20px]">
+                  <div className={isMobile ? "text-[16px]" : "text-[20px]"}>
                     {userInfo?.name || formatAddress(userInfo?.sol_user)}
                   </div>
                 </div>
@@ -77,7 +89,10 @@ export default function RedeemSelection({
                       WebkitTextStrokeColor: "#5E3737"
                     }}
                   >
-                    x{addThousandSeparator(points.toString())}
+                    x
+                    {formatNumber(points.toString(), 0, true, {
+                      isShort: isMobile
+                    })}
                   </span>
                 </div>
                 <button
@@ -88,7 +103,12 @@ export default function RedeemSelection({
                 </button>
               </div>
             </div>
-            <div className="flex gap-[16px] mt-[20px]">
+            <div
+              className={clsx(
+                "flex gap-[16px] mt-[20px]",
+                isMobile ? "flex-wrap" : "flex-nowrap"
+              )}
+            >
               {items.map((item: any, index: number) => (
                 <RedeemSelectionItem
                   key={index}
@@ -96,7 +116,7 @@ export default function RedeemSelection({
                   onClick={() => {
                     setSelectedItem(item);
                   }}
-                  className="w-1/4"
+                  className={isMobile ? "w-[calc(50%-8px)]" : "w-1/4"}
                 />
               ))}
             </div>

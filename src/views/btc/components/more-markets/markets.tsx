@@ -6,6 +6,7 @@ import MarketLoading from "./market-loading";
 import usePoolList from "@/hooks/use-pool-list";
 import { useBtcContext } from "../../context";
 import { useEffect } from "react";
+import { MarketFilters, MarketSizes } from "./config";
 
 export default function Markets({ onClose }: { onClose: () => void }) {
   const {
@@ -58,13 +59,7 @@ export default function Markets({ onClose }: { onClose: () => void }) {
             <div className="flex items-center gap-[46px] text-[#ADBCCF] text-[12px]">
               <div className="flex items-center gap-[8px]">
                 <div className="mr-[5px]">Market Size</div>
-                {[
-                  { label: "ALL", key: 0 },
-                  { label: "1 BTC", key: 1 },
-                  { label: "0.1 BTC", key: 0.1 },
-                  { label: "0.01 BTC", key: 0.01 },
-                  { label: "0.001 BTC", key: 0.001 }
-                ].map((item: { label: string; key: number }) => (
+                {MarketSizes.map((item: { label: string; key: number }) => (
                   <button
                     key={item.key}
                     className={clsx(
@@ -116,11 +111,7 @@ export default function Markets({ onClose }: { onClose: () => void }) {
                     )}
                   </button>
                 </div>
-                {[
-                  { label: "Trending", key: "hitting" },
-                  { label: "Popularity", key: "participants" },
-                  { label: "Newest", key: "time" }
-                ].map((item: { label: string; key: string }) => (
+                {MarketFilters.map((item: { label: string; key: string }) => (
                   <button
                     key={item.key}
                     className={clsx(
@@ -162,6 +153,9 @@ export default function Markets({ onClose }: { onClose: () => void }) {
             )}
             <NextBtn
               onClick={() => {
+                if (pageRef.current === 0) {
+                  return;
+                }
                 onQueryPoolList(-1);
               }}
               className={clsx(
@@ -171,6 +165,9 @@ export default function Markets({ onClose }: { onClose: () => void }) {
             />
             <NextBtn
               onClick={() => {
+                if (!hasMore) {
+                  return;
+                }
                 onQueryPoolList(1);
               }}
               className={clsx(
@@ -181,7 +178,7 @@ export default function Markets({ onClose }: { onClose: () => void }) {
           </div>
         </div>
         <MoreMarketBtn
-          className="absolute left-[50%] translate-x-[-50%] bottom-[-54px]"
+          className="absolute left-[50%] translate-x-[-50%] bottom-[-34px]"
           onClick={onClose}
         />
       </div>

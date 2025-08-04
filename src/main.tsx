@@ -3,5 +3,6 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import "@near-wallet-selector/modal-ui/styles.css";
 import App from "./app.tsx";
+// import("./index.css")
 
 createRoot(document.getElementById("root")!).render(<App />);

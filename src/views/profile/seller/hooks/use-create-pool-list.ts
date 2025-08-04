@@ -1,8 +1,10 @@
 import axiosInstance from "@/libs/axios";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import { useAuth } from "@/contexts/auth";
 import { getPoolInfo } from "@/utils/pool";
 import { useRequest } from "ahooks";
+import useTokenPrice from "@/hooks/use-token-price";
+import Big from "big.js";
 
 const pageSize = 10;
 
@@ -11,7 +13,7 @@ export default function useCreatePoolList() {
   const [data, setData] = useState<any[]>([]);
   const [hasMore, setHasMore] = useState(true);
   const pageRef = useRef(0);
-  const { userInfo } = useAuth();
+  const { userInfo, onQueryUserInfo } = useAuth();
   const poolsData = useRef<any>({});
 
   const [recordsPageIndex, setRecordsPageIndex] = useState(1);
@@ -22,9 +24,8 @@ export default function useCreatePoolList() {
     setLoading(true);
     try {
       const response = await axiosInstance.get(
-        `/api/v1/user/create/pool/list?limit=${pageSize}&offset=${
-          pageRef.current * pageSize
-        }`
+        `/api/v1/user/create/pool/list?limit=${pageSize}&offset=${pageRef.current * pageSize
+        }&status=-1`
       );
       const poolIds: number[] = [];
       response.data.data.list.forEach((item: any) => {
@@ -56,12 +57,16 @@ export default function useCreatePoolList() {
       if (!userInfo?.user) return [];
       try {
         const response = await axiosInstance.get(
-          `/api/v1/user/create/pool/list?limit=${recordsPageSize}&offset=${
-            (recordsPageIndex - 1) * pageSize
+          `/api/v1/user/records/seller?limit=${recordsPageSize}&offset=${(recordsPageIndex - 1) * pageSize
           }`
         );
         setRecordsPageHasNextPage(response.data.data.has_next_page);
-        return response.data.data.list || [];
+        const _list = response.data.data.list || [];
+        return _list.map((item: any) => {
+          item.amountBig = Big(item.amount || 0).div(10 ** (item.token_info?.decimals || 6));
+          item.priceKey = `${item.token_info?.chain}:${item.token_info?.address}`;
+          return item;
+        });
       } catch (err: any) {
         console.log(err);
       }
@@ -71,6 +76,27 @@ export default function useCreatePoolList() {
       refreshDeps: [recordsPageIndex, recordsPageSize, userInfo]
     }
   );
+  const recordsTokens = useMemo(() => {
+    if (!records) return [];
+    const _tokens: any = new Map();
+    records.forEach((item: any) => {
+      const _key = `${item.token_info?.chain}:${item.token_info?.address}`;
+      if (_tokens.has(_key)) {
+        return;
+      }
+      _tokens.set(_key, item.token_info);
+    });
+    return Array.from(_tokens.values());
+  }, [records]);
+  const { prices: _recordsPrices, loading: recordsPricesLoading } = useTokenPrice(recordsTokens);
+  const recordsPrices = useMemo(() => {
+    if (!_recordsPrices) return {};
+    const _prices: any = {};
+    _recordsPrices.forEach((item: any) => {
+      _prices[`${item.chain}:${item.address}`] = item.last_price;
+    });
+    return _prices;
+  }, [_recordsPrices]);
 
   const updatePoolsData = async (poolId: number, data?: any) => {
     if (data) {
@@ -104,6 +130,10 @@ export default function useCreatePoolList() {
     }
   }, [userInfo]);
 
+  useEffect(() => {
+    onQueryUserInfo();
+  }, []);
+
   return {
     data,
     loading,
@@ -117,6 +147,15 @@ export default function useCreatePoolList() {
     onRecordsNextPage,
     recordsPageIndex,
     recordsPageHasNextPage,
-    getRecords
+    getRecords,
+    recordsPrices,
+    recordsPricesLoading,
   };
+}
+
+export enum ESellerRecordsType {
+  Created = 1,
+  Claimed = 2,
+  Refund = 3,
+  Demage = 4,
 }

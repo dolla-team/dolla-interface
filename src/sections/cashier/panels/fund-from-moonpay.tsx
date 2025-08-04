@@ -4,6 +4,7 @@ import { useAuth } from "@/contexts/auth";
 import useBroadcatChannel from "@/hooks/use-broadcat-channel";
 import { toast } from "react-toastify";
 import useMoonpay from "@/hooks/use-moonpay";
+import { getWindowSize } from "../utils/getWindowSize";
 
 export default function FundFromCoinbase({ onBack }: { onBack: () => void }) {
     const { address, userInfo } = useAuth();
@@ -38,7 +39,8 @@ export default function FundFromCoinbase({ onBack }: { onBack: () => void }) {
     return <div>
         <FundFromCex amount={amount} disabled={!amount || Number(amount) < 20 || !moonpayUrl} setAmount={setAmount} onBack={onBack} onOrderIdCreated={() => {
             if (moonpayUrl) {
-                window.open(moonpayUrl, '_blank', 'width=800,height=600,left=100,top=100');
+                const features = getWindowSize(800, 600);
+                window.open(moonpayUrl, '_blank', features);
             }
         }} />
     </div>

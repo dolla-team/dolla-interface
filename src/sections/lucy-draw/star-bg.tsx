@@ -1,9 +1,15 @@
-export default function StarBg({ className }: { className?: string }) {
+export default function StarBg({
+  className,
+  size = 119
+}: {
+  className?: string;
+  size?: number;
+}) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="119"
-      height="97"
+      width={size}
+      height={size * 0.8152515723270423}
       viewBox="0 0 119 97"
       fill="none"
       className={className}

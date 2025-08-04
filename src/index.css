@@ -2,12 +2,6 @@
 
 @font-face {
   font-family: "SpaceGrotesk";
-  src: url("/fonts/SpaceGrotesk-Light.ttf");
-  font-weight: 300;
-}
-
-@font-face {
-  font-family: "SpaceGrotesk";
   src: url("/fonts/SpaceGrotesk-Regular.ttf");
   font-weight: 400;
 }
@@ -16,12 +10,6 @@
   font-family: "SpaceGrotesk";
   src: url("/fonts/SpaceGrotesk-Medium.ttf");
   font-weight: 500;
-}
-
-@font-face {
-  font-family: "SpaceGrotesk";
-  src: url("/fonts/SpaceGrotesk-SemiBold.ttf");
-  font-weight: 600;
 }
 
 @font-face {
@@ -168,4 +156,28 @@ div::-webkit-scrollbar-thumb:hover {
     transform: scale(50) rotate(45deg);
     opacity: 0;
   }
+}
+
+
+ .table-container {
+  width: 100%;
+  max-height: 400px; 
+  overflow: auto; 
+}
+
+.sticky-table {
+  border-collapse: collapse;
+}
+
+.sticky-table th,
+.sticky-table td {
+  border: none;
+}
+
+
+.sticky-column {
+  position: sticky; 
+  left: 0; 
+  top: 0; 
+  z-index: 1;
 }

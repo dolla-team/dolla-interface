@@ -5,6 +5,12 @@ import clsx from "clsx";
 import { useNavigate } from "react-router-dom";
 import { INVATE_ACTIVE } from "@/config";
 import useCopy from "@/hooks/use-copy";
+import AvatarCashier from "./avatar-cashier";
+import { useEffect, useState } from "react";
+// import useClaimTestCoin from "@/hooks/near/use-claim-test-coin";
+import Cashier from "@/sections/cashier/modal";
+import { AnimatePresence, motion } from "framer-motion";
+import Loading from "@/components/icons/loading";
 
 const MENU = [
   {
@@ -65,6 +71,12 @@ const MENU = [
     )
   },
   {
+    key: "claim",
+    label: "Airdrop",
+    isActive: true,
+    icon: <span className="text-[20px]">$</span>
+  },
+  {
     key: "logout",
     label: "Disconnect",
     isActive: true,
@@ -87,92 +99,142 @@ const MENU = [
 ];
 
 export default function AvatarAction() {
-  const { userInfo, logout } = useAuth();
+  const { userInfo, logout, quoteTokenBalance } = useAuth();
   const navigate = useNavigate();
   const { onCopy } = useCopy();
+  const [showMenu, setShowMenu] = useState(false);
+
+  const [showCashier, setShowCashier] = useState(false);
+  // const { claiming, claimTestCoin } = useClaimTestCoin();
+
+  useEffect(() => {
+    const handleClickOutside = () => {
+      setShowMenu(false);
+    };
+
+    document.addEventListener("click", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
 
   return (
-    <div className="relative group">
+    <div className="relative group flex items-center gap-[10px]">
+      {userInfo?.user && (
+        <AvatarCashier
+          onClick={() => setShowCashier(true)}
+          tokenBalance={quoteTokenBalance}
+        />
+      )}
       {userInfo?.icon && (
         <Avatar
           size={32}
           address={userInfo.sol_user}
           email={userInfo?.email}
           className="shrink-0 button"
+          onClick={(e: any) => {
+            e.stopPropagation();
+            setShowMenu(!showMenu);
+          }}
         />
       )}
-      <div className="w-[208px] rounded-[10px] bg-[#35302B] border border-[#6A5D3A] absolute right-0 top-[40px] text-white invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
-        <div className="p-[10px] flex gap-[8px] items-center border-b border-[#423930]">
-          <Avatar
-            size={32}
-            address={userInfo.sol_user}
-            email={userInfo?.email}
-            className="shrink-0"
-          />
-          <div className="flex-1 w-0 whitespace-nowrap overflow-hidden text-ellipsis">
-            <span className="text-[16px] font-medium">
-              {userInfo?.email}
-            </span>
-            <div className="flex items-center gap-[3px]">
-              <span className="text-[12px]">
-                {formatAddress(userInfo?.sol_user)}
-              </span>
-              <button
-                className="button"
-                onClick={() => {
-                  onCopy(userInfo?.sol_user);
+
+      <AnimatePresence>
+        {showMenu && (
+          <motion.div
+            initial={{ opacity: 0, y: 10, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 10, scale: 0.95 }}
+            transition={{
+              duration: 0.2,
+              ease: "easeOut",
+              opacity: { duration: 0.15 },
+              scale: { duration: 0.2 }
+            }}
+            className={clsx(
+              "w-[208px] rounded-[10px] bg-[#35302B] border border-[#6A5D3A] absolute right-0 top-[40px] text-white"
+            )}
+          >
+            <div className="p-[10px] flex gap-[8px] items-center border-b border-[#423930]">
+              <Avatar
+                size={32}
+                address={userInfo.sol_user}
+                email={userInfo?.email}
+                className="shrink-0"
+              />
+              <div className="flex-1 w-0 whitespace-nowrap overflow-hidden text-ellipsis">
+                <span className="text-[16px] font-medium">
+                  {userInfo?.email}
+                </span>
+                <div className="flex items-center gap-[3px]">
+                  <span className="text-[12px]">
+                    {formatAddress(userInfo?.sol_user)}
+                  </span>
+                  <button
+                    className="button"
+                    onClick={() => {
+                      onCopy(userInfo?.sol_user);
+                    }}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="10"
+                      height="10"
+                      viewBox="0 0 10 10"
+                      fill="none"
+                    >
+                      <path
+                        d="M6.03809 2.28809C6.25541 2.28784 6.47105 2.33102 6.67188 2.41406C6.87262 2.49713 7.05537 2.61884 7.20899 2.77246C7.36262 2.92613 7.48434 3.10877 7.56739 3.30957C7.65044 3.51046 7.69265 3.72598 7.69239 3.94336V8.34473C7.70966 9.26031 6.95367 9.99987 6.03809 10H1.6543C1.43696 10.0003 1.22136 9.95805 1.02051 9.875C0.819663 9.79193 0.637089 9.66932 0.483401 9.51562C0.329807 9.36195 0.20802 9.1793 0.125002 8.97852C0.0419817 8.77766 -0.000273377 8.56207 2.37201e-06 8.34473V3.94434C-0.000365337 3.72693 0.0420218 3.51149 0.125002 3.31055C0.208028 3.10956 0.329669 2.92626 0.483401 2.77246C0.637051 2.61879 0.819711 2.49714 1.02051 2.41406C1.22141 2.33097 1.4369 2.28783 1.6543 2.28809H6.03809ZM1.6543 3.34473C1.57566 3.3441 1.4976 3.35892 1.42481 3.38867C1.35188 3.41853 1.28522 3.46283 1.22949 3.51855C1.1738 3.57426 1.12946 3.64096 1.09961 3.71387C1.06988 3.78666 1.05502 3.86473 1.05567 3.94336V8.34473C1.05506 8.42334 1.06985 8.50145 1.09961 8.57422C1.12947 8.64715 1.17377 8.71381 1.22949 8.76953C1.2852 8.82521 1.35192 8.8686 1.42481 8.89844C1.49767 8.92826 1.57557 8.94399 1.6543 8.94336H6.03809C6.11681 8.94398 6.19473 8.92826 6.26758 8.89844C6.34048 8.86859 6.40719 8.82523 6.46289 8.76953C6.51858 8.71384 6.56195 8.64709 6.5918 8.57422C6.62161 8.5014 6.63733 8.42341 6.63672 8.34473V3.94336C6.63736 3.86462 6.62162 3.78675 6.5918 3.71387C6.56196 3.64098 6.51857 3.57426 6.46289 3.51855C6.40717 3.46283 6.34051 3.41853 6.26758 3.38867C6.19479 3.35891 6.11672 3.34411 6.03809 3.34473H1.6543ZM8.37988 0C8.79501 0.000995696 9.19276 0.166432 9.48633 0.459961C9.77986 0.753496 9.94524 1.1513 9.94629 1.56641V6.14355C9.94537 6.55883 9.77997 6.95733 9.48633 7.25098C9.19277 7.54445 8.79498 7.70994 8.37988 7.71094C8.23982 7.71094 8.1049 7.65471 8.00586 7.55566C7.90706 7.45666 7.85156 7.32251 7.85156 7.18262C7.85157 7.04272 7.90704 6.90857 8.00586 6.80957C8.1049 6.71053 8.23982 6.6543 8.37988 6.6543C8.51513 6.65422 8.64456 6.60047 8.74024 6.50488C8.836 6.40912 8.89063 6.27899 8.89063 6.14355V1.56641C8.8905 1.43115 8.83589 1.30171 8.74024 1.20605C8.64455 1.11041 8.51517 1.05671 8.37988 1.05664H3.80274C3.66731 1.05664 3.53717 1.11029 3.44141 1.20605C3.34591 1.30168 3.29212 1.43126 3.29199 1.56641C3.29199 1.70643 3.23668 1.8414 3.1377 1.94043C3.03866 2.03947 2.90374 2.09473 2.76367 2.09473C2.62377 2.09465 2.48959 2.03934 2.39063 1.94043C2.29159 1.84139 2.23633 1.70647 2.23633 1.56641C2.23738 1.1513 2.40276 0.753496 2.69629 0.459961C2.98991 0.16646 3.38758 0.000922396 3.80274 0H8.37988Z"
+                        fill="#ADBCCF"
+                      />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+            {MENU.map((item: any, index: number) => (
+              <div
+                key={item.key + index}
+                className={clsx(
+                  "px-[20px] py-[12px] flex items-center justify-between text-[16px] font-medium",
+                  item.isActive ? "hover:bg-[#00000033] button" : "opacity-50"
+                )}
+                onClick={(e) => {
+                  if (item.key === "logout") {
+                    logout();
+                    return;
+                  } else if (item.key === "invite") {
+                    return;
+                  } else if (item.key === "portfolio") {
+                    navigate("/portfolio/player");
+                    return;
+                  } else if (item.key === "create-market") {
+                    navigate("/btc/create");
+                    return;
+                  } else if (item.key === "claim") {
+                    e.stopPropagation();
+                    // claimTestCoin();
+                    return;
+                  }
                 }}
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="10"
-                  height="10"
-                  viewBox="0 0 10 10"
-                  fill="none"
-                >
-                  <path
-                    d="M6.03809 2.28809C6.25541 2.28784 6.47105 2.33102 6.67188 2.41406C6.87262 2.49713 7.05537 2.61884 7.20899 2.77246C7.36262 2.92613 7.48434 3.10877 7.56739 3.30957C7.65044 3.51046 7.69265 3.72598 7.69239 3.94336V8.34473C7.70966 9.26031 6.95367 9.99987 6.03809 10H1.6543C1.43696 10.0003 1.22136 9.95805 1.02051 9.875C0.819663 9.79193 0.637089 9.66932 0.483401 9.51562C0.329807 9.36195 0.20802 9.1793 0.125002 8.97852C0.0419817 8.77766 -0.000273377 8.56207 2.37201e-06 8.34473V3.94434C-0.000365337 3.72693 0.0420218 3.51149 0.125002 3.31055C0.208028 3.10956 0.329669 2.92626 0.483401 2.77246C0.637051 2.61879 0.819711 2.49714 1.02051 2.41406C1.22141 2.33097 1.4369 2.28783 1.6543 2.28809H6.03809ZM1.6543 3.34473C1.57566 3.3441 1.4976 3.35892 1.42481 3.38867C1.35188 3.41853 1.28522 3.46283 1.22949 3.51855C1.1738 3.57426 1.12946 3.64096 1.09961 3.71387C1.06988 3.78666 1.05502 3.86473 1.05567 3.94336V8.34473C1.05506 8.42334 1.06985 8.50145 1.09961 8.57422C1.12947 8.64715 1.17377 8.71381 1.22949 8.76953C1.2852 8.82521 1.35192 8.8686 1.42481 8.89844C1.49767 8.92826 1.57557 8.94399 1.6543 8.94336H6.03809C6.11681 8.94398 6.19473 8.92826 6.26758 8.89844C6.34048 8.86859 6.40719 8.82523 6.46289 8.76953C6.51858 8.71384 6.56195 8.64709 6.5918 8.57422C6.62161 8.5014 6.63733 8.42341 6.63672 8.34473V3.94336C6.63736 3.86462 6.62162 3.78675 6.5918 3.71387C6.56196 3.64098 6.51857 3.57426 6.46289 3.51855C6.40717 3.46283 6.34051 3.41853 6.26758 3.38867C6.19479 3.35891 6.11672 3.34411 6.03809 3.34473H1.6543ZM8.37988 0C8.79501 0.000995696 9.19276 0.166432 9.48633 0.459961C9.77986 0.753496 9.94524 1.1513 9.94629 1.56641V6.14355C9.94537 6.55883 9.77997 6.95733 9.48633 7.25098C9.19277 7.54445 8.79498 7.70994 8.37988 7.71094C8.23982 7.71094 8.1049 7.65471 8.00586 7.55566C7.90706 7.45666 7.85156 7.32251 7.85156 7.18262C7.85157 7.04272 7.90704 6.90857 8.00586 6.80957C8.1049 6.71053 8.23982 6.6543 8.37988 6.6543C8.51513 6.65422 8.64456 6.60047 8.74024 6.50488C8.836 6.40912 8.89063 6.27871 8.89219 6.14355V1.56641C8.89063 1.43124 8.836 1.30084 8.74024 1.20508C8.64456 1.1095 8.51513 1.05574 8.37988 1.05566C8.24472 1.05574 8.11431 1.11037 8.01856 1.20612C7.92299 1.30179 7.86924 1.43122 7.86915 1.56641V5.08203H6.8125C6.67259 5.08203 6.53833 5.13751 6.43934 5.2365C6.34034 5.3355 6.28487 5.46976 6.28487 5.60967C6.28487 5.74958 6.34034 5.88383 6.43934 5.98283C6.53833 6.08183 6.67259 6.1373 6.8125 6.1373H7.86915V7.19395C7.86924 7.32913 7.92299 7.45955 8.01856 7.55521C8.11422 7.65099 8.24463 7.70562 8.37988 7.70719C8.51505 7.70562 8.64546 7.65099 8.74112 7.55521C8.83669 7.45955 8.89044 7.32913 8.89053 7.19395V6.1373H9.94717C10.0871 6.1373 10.2213 6.08183 10.3203 5.98283C10.4193 5.88383 10.4748 5.74958 10.4748 5.60967C10.4748 5.46976 10.4193 5.3355 10.3203 5.2365C10.2213 5.13751 10.0871 5.08203 9.94717 5.08203H8.89053V1.56641C8.89158 1.1513 8.7262 0.753496 8.43267 0.459961C8.13914 0.166432 7.74139 0.000995696 7.32626 0H7.32511C6.91018 0.000936508 6.51286 0.166775 6.21954 0.461338C5.92622 0.755901 5.76289 1.15319 5.76289 1.56641V5.08203H4.70624C4.56634 5.08203 4.43208 5.13751 4.33308 5.2365C4.23408 5.3355 4.17861 5.46976 4.17861 5.60967C4.17861 5.74958 4.23408 5.88383 4.33308 5.98283C4.43208 6.08183 4.56634 6.1373 4.70624 6.1373H5.76289V7.19395C5.76289 7.60716 5.92622 8.00446 6.21954 8.29902C6.51286 8.59358 6.91018 8.75942 7.32511 8.76036H7.32626C7.74139 8.75942 8.13871 8.59358 8.43203 8.29902C8.72535 8.00446 8.88868 7.60716 8.88868 7.19395V6.1373H9.94533C10.3599 6.1383 10.7571 5.97336 11.0506 5.67822C11.3442 5.38308 11.5089 4.98275 11.5089 4.56465V1.56641C11.5079 1.1513 11.3425 0.753496 11.049 0.459961C10.7554 0.166432 10.3577 0.000995696 9.94254 0H9.94139C9.52646 0.000936508 9.12914 0.166775 8.83582 0.461338C8.5425 0.755901 8.37917 1.15319 8.37917 1.56641V5.08203H7.32252C6.90795 5.08104 6.51074 5.24597 6.2172 5.54111C5.92365 5.83625 5.75895 6.23659 5.75895 6.65468V7.71133C5.75895 8.12943 5.92365 8.52976 6.2172 8.8249C6.51074 9.12004 6.90795 9.28498 7.32252 9.28597H7.32367C7.73859 9.28503 8.13591 9.11919 8.42924 8.82463C8.72256 8.53007 8.88589 8.13276 8.88589 7.71955V6.6629C9.29987 6.66389 9.69661 6.49846 9.98975 6.20234C10.2829 5.90623 10.4468 5.50536 10.4468 5.08418V1.56641C10.4478 1.15258 10.2835 0.755073 9.99053 0.462891C9.69758 0.170708 9.30059 0.00600052 8.88731 0.00508499L8.88616 0H8.37988Z"
-                    fill="#ADBCCF"
-                  />
-                </svg>
-              </button>
-            </div>
-          </div>
-        </div>
-        {MENU.map((item: any, index: number) => (
-          <div
-            key={item.key + index}
-            className={clsx(
-              "px-[20px] py-[12px] flex items-center justify-between text-[16px] font-medium",
-              item.isActive ? "hover:bg-[#00000033] button" : "opacity-50"
-            )}
-            onClick={() => {
-              if (item.key === "logout") {
-                logout();
-                return;
-              } else if (item.key === "invite") {
-                return;
-              } else if (item.key === "portfolio") {
-                navigate("/portfolio/player");
-                return;
-              } else if (item.key === "create-market") {
-                navigate("/btc/create");
-                return;
-              }
-            }}
-          >
-            <div className="flex items-center gap-[16px]">
-              <div className="w-[20px]">{item.icon}</div>
-              <span>{item.label}</span>
-            </div>
-            {!item.isActive && (
-              <div className="w-[38px] h-[20px] rounded-[6px] bg-[#4C4C4C] text-[12px] text-center leading-[20px]">
-                soon
+                <div className="flex items-center gap-[16px]">
+                  <div className="w-[20px]">{item.icon}</div>
+                  <span>{item.label}</span>
+                </div>
+                {!item.isActive && (
+                  <div className="w-[38px] h-[20px] rounded-[6px] bg-[#4C4C4C] text-[12px] text-center leading-[20px]">
+                    soon
+                  </div>
+                )}
+                {item.key === "claim" && false && <Loading size={16} />}
               </div>
-            )}
-          </div>
-        ))}
-      </div>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
+      <Cashier open={showCashier} onClose={() => setShowCashier(false)} />
     </div>
   );
 }

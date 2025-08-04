@@ -1,6 +1,13 @@
-
+import { useEffect, useRef } from "react";
 
 export default function FundFromCex({ amount, disabled, setAmount, onBack, onOrderIdCreated }: { amount: string, disabled?: boolean, setAmount: (v: string) => void, onBack: () => void, onOrderIdCreated: () => void }) {
+    const inputRef = useRef<HTMLInputElement>(null);
+    useEffect(() => {
+        if (inputRef.current) {
+            inputRef.current.focus();
+        }
+    }, []);
+
     return <div className="relative flex flex-col items-center justify-center min-h-[320px]">
 
         <button
@@ -14,7 +21,7 @@ export default function FundFromCex({ amount, disabled, setAmount, onBack, onOrd
         </button>
 
         <div className="mt-[40px] mb-[32px] text-[#BBACA6] text-[16px] text-center">
-            Enter an amount ($10 minimum)
+            Enter an amount (${amount} minimum)
         </div>
         <div className="flex flex-col items-center mb-[40px] ">
             <div
@@ -28,6 +35,7 @@ export default function FundFromCex({ amount, disabled, setAmount, onBack, onOrd
                     className="text-[32px] text-white tracking-wide w-[100px] font-[DelaGothicOne] text-center"
                     placeholder="$0"
                     value={amount}
+                    ref={inputRef}
                     pattern="^[0-9]*[.,]?[0-9]*$"
                     onChange={(e) => setAmount(e.target.value as string)}
                 />

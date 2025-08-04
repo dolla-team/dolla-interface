@@ -4,27 +4,31 @@ import dayjs from "dayjs";
 import Pagination from "@/components/pagination";
 import { formatNumber } from "@/utils/format/number";
 import Big from "big.js";
-import chains from "@/config/chains";
+import { ESellerRecordsType } from "../hooks/use-create-pool-list";
+import useIsMobile from "@/hooks/use-is-mobile";
+import { useNavigate } from "react-router-dom";
 
 const Records = (props: any) => {
-  const { className, records, loading, onPrevPage, onNextPage, hasNextPage, currentPage } = props;
+  const { className, records, loading, onPrevPage, onNextPage, hasNextPage, currentPage, recordsPrices } = props;
+
+  const isMobile = useIsMobile();
+  const navigate = useNavigate();
 
   const columns = [
     {
       dataIndex: "marketId",
       title: "Market ID",
       width: 130,
+      fixed: true,
       render: (record: any) => {
-        const currentChain = Object.values(chains).find((chain) => chain.name.toLowerCase() === record.chain.toLowerCase());
         return (
           <div
-           className="flex items-center gap-[7px] cursor-pointer"
-           onClick={() => {
-            if (!currentChain) return;
-             window.open(`${currentChain.blockExplorers?.default?.url}/tx/${record.tx_hash}`, "_blank");
-           }}
-           >
-            <div className="">#{record.id}</div>
+            className="flex items-center gap-[7px] cursor-pointer"
+            onClick={() => {
+              navigate(`/btc/${record.pool_id}`);
+            }}
+          >
+            <div className="">#{record.pool_id}</div>
             <img src="/profile/icon-share.svg" alt="share" className="w-[9px] h-[9px] shrink-0" />
           </div>
         );
@@ -34,6 +38,9 @@ const Records = (props: any) => {
       dataIndex: "type",
       title: "Type",
       width: 160,
+      render: (record: any) => {
+        return ESellerRecordsType[record.type] || "";
+      }
     },
     {
       dataIndex: "assets",
@@ -41,34 +48,29 @@ const Records = (props: any) => {
       width: 170,
       render: (record: any) => {
         return (
-          <>
-            {record?.nft_ids
-              ? 1
-              : record?.reward_token_info?.[0]?.decimals && record?.reward_amount
-                ? formatNumber(
-                  Big(record.reward_amount || 0).div(
-                    10 ** record?.reward_token_info?.[0].decimals
-                  ),
-                  3,
-                  true
-                )
-                : "-"}{" "}
-            {record?.reward_token_info?.[0].symbol}
-          </>
+          <div className={clsx("flex items-center gap-[4px]", [ESellerRecordsType.Claimed, ESellerRecordsType.Refund].includes(record.type) ? "text-[#54FF59]" : "")}>
+            <div>
+              {formatNumber(record.amountBig, 3, true, { isShort: true, isShortUppercase: true })}
+            </div>
+            <div>
+              {record.token_info?.symbol}
+            </div>
+          </div>
         );
       }
     },
     {
       dataIndex: "valued",
       title: "Valued",
+      width: isMobile ? 170 : void 0,
       render: (record: any) => {
-        return formatNumber(record.reward_usd, 2, true, { prefix: "$" });
+        return formatNumber(Big(record.amountBig || 0).times(recordsPrices[record.priceKey] || 0), 3, true, { isShort: true, isShortUppercase: true, prefix: "$" });
       }
     },
     {
       dataIndex: "date",
       title: "Date",
-      width: 170,
+      width: isMobile ? 200 : 170,
       align: GridTableAlign.Right,
       render: (record: any) => {
         return (
@@ -84,13 +86,17 @@ const Records = (props: any) => {
   ];
 
   return (
-    <div className={clsx("mt-[20px]", className)}>
+    <div className={clsx("mt-[20px] max-md:w-screen max-md:mt-0 max-md:p-[17px_0]", className)}>
       <GridTable
         data={records}
         columns={columns}
         loading={loading}
+        className="max-md:w-full max-md:overflow-x-auto"
+        rowClassName="max-md:px-0 max-md:gap-x-0"
+        colClassName="max-md:px-[10px] max-md:bg-[#22201D]"
+        bodyColClassName="max-md:first:border-r max-md:border-[#423930]"
       />
-      <div className="flex justify-end items-center pt-[18px]">
+      <div className="flex justify-end items-center pt-[18px] max-md:justify-center">
         <Pagination
           current={currentPage}
           size={10}

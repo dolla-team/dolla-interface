@@ -5,9 +5,6 @@ import path from "path";
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
-  server: {
-    port: 3000, // Use a fixed port to avoid conflicts
-  },
   resolve: {
     alias: [
       { find: "@", replacement: path.resolve(__dirname, "src") },
@@ -30,5 +27,16 @@ export default defineConfig({
       }
     },
     include: ["buffer", "process", "https-browserify", "stream-http"]
+  },
+  server: {
+    host: "0.0.0.0",
+    port: 5173
+    // https: {
+    //   // mkcert 192.168.130.20 localhost
+    //   // mv 192.168.130.20+1.pem certs/
+    //   // mv 192.168.130.20+1-key.pem certs/
+    //   key: fs.readFileSync('./certs/192.168.31.155+1-key.pem'),
+    //   cert: fs.readFileSync('./certs/192.168.31.155+1.pem'),
+    // },
   }
 });

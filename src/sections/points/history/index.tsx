@@ -6,6 +6,7 @@ import useInfiniteScroll from "@/hooks/use-infinite-scroll";
 import LoadingMore from "@/components/loading/loading-more";
 import { useEffect } from "react";
 import dayjs from "dayjs";
+import useIsMobile from "@/hooks/use-is-mobile";
 
 export default function History({
   showHistory,
@@ -16,6 +17,7 @@ export default function History({
   onClose: () => void;
   itemsMap: any;
 }) {
+  const isMobile = useIsMobile();
   const { data, loading, hasMore, getHistory } = useHistory();
   const { containerRef, isLoading } = useInfiniteScroll(getHistory, {
     loading,
@@ -25,13 +27,18 @@ export default function History({
 
   useEffect(() => {
     if (showHistory) {
-      getHistory();
+      getHistory(true);
     }
   }, [showHistory]);
 
   return (
     <Modal open={showHistory} onClose={onClose}>
-      <div className="w-[618px] rounded-[16px] border border-[#6A5D3A] bg-[#35302B]">
+      <div
+        className={clsx(
+          "rounded-[16px] border border-[#6A5D3A] bg-[#35302B]",
+          isMobile ? "w-full" : "w-[618px]"
+        )}
+      >
         <div className="h-[54px] bg-[#00000033] rounded-t-[16px] flex items-center justify-between px-[16px]">
           <div className="text-[20px] text-white">Points Redemption</div>
           <button className="w-[24px] h-[24px] button" onClick={onClose}>
@@ -49,7 +56,7 @@ export default function History({
             </svg>
           </button>
         </div>
-        <div className="p-[18px] pt-[0px]">
+        <div className={clsx("pt-[0px]", isMobile ? "p-0" : "p-[18px]")}>
           <div className="px-[12px] h-[45px] flex items-center text-[14px] text-[#BBACA6]">
             {COLUMNS.map((column) => (
               <div
@@ -69,9 +76,15 @@ export default function History({
               </div>
             ))}
           </div>
-          <div ref={containerRef} className="h-[400px]">
+          <div
+            ref={containerRef}
+            className={clsx(
+              "overflow-y-auto",
+              isMobile ? "max-h-[70vh] min-h-[400px]" : "h-[400px]"
+            )}
+          >
             {loading && (
-              <div className="text-[14px] text-[#5E6B7D] w-full h-[50px] flex items-center justify-center">
+              <div className="text-[14px] text-[#5E6B7D] w-full h-[300px] flex items-center justify-center">
                 <Loading size={20} />
               </div>
             )}
@@ -102,7 +115,9 @@ export default function History({
                           dayjs(record.updated_at).format("hh:mm D MMM, YYYY")}
                         {column.key === "volume" &&
                           `${record.volume} ${
-                            itemsMap[record.token + "_" + record.volume].name
+                            itemsMap[
+                              record.token + "_" + record.config?.token_volume
+                            ]?.name
                           }`}
                         {["number", "reward"].includes(column.key) &&
                           record[column.key]}
@@ -112,19 +127,19 @@ export default function History({
                 ))}
               </div>
             )}
-            {data.length === 0 && (
+            {data.length === 0 && !loading && (
               <div className="text-[14px] text-[#BBACA6] w-full h-[300px] flex items-center justify-center">
                 No data
               </div>
             )}
+            {data.length > 0 && (
+              <LoadingMore
+                loading={isLoading}
+                hasMore={hasMore}
+                className="w-full"
+              />
+            )}
           </div>
-          {data.length > 0 && (
-            <LoadingMore
-              loading={isLoading}
-              hasMore={hasMore}
-              className="w-full"
-            />
-          )}
         </div>
       </div>
     </Modal>
@@ -135,7 +150,7 @@ const COLUMNS = [
   {
     key: "date",
     label: "Date",
-    width: "30%",
+    width: "35%",
     align: "left"
   },
   {
@@ -147,7 +162,7 @@ const COLUMNS = [
   {
     key: "number",
     label: "Amount",
-    width: "20%",
+    width: "15%",
     align: "center"
   },
   {

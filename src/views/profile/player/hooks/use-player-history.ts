@@ -11,20 +11,20 @@ export default function usePlayerHistory() {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<any[]>([]);
   const [page, setPage] = useState(1);
-  const { userInfo } = useAuth();
+  const { userInfo, onQueryUserInfo } = useAuth();
   const [hasMore, setHasMore] = useState(true);
 
   const [joinedPoolListData, setJoinedPoolListData] = useState<any>([]);
   const [joinedPoolListPageIndex, setJoinedPoolListPageIndex] = useState(1);
   const [joinedPoolListPageSize] = useState(10);
   const [joinedPoolListHasNextPage, setJoinedPoolListHasNextPage] = useState(true);
-  const [joinedPoolListStatus, setJoinedPoolListStatus] = useState("");
+  const [joinedPoolListStatus, setJoinedPoolListStatus] = useState("0,1");
 
   const { loading: joinedPoolListLoading } = useRequest(async () => {
     if (!userInfo?.user) return [];
     const url = new URL(window.location.href);
     url.searchParams.set("limit", joinedPoolListPageSize + "");
-    url.searchParams.set("offset", (joinedPoolListPageIndex - 1) + "");
+    url.searchParams.set("offset", (joinedPoolListPageIndex - 1) * joinedPoolListPageSize + "");
     url.searchParams.set("pool_status", joinedPoolListStatus);
     try {
       const response = await axiosInstance.get(`/api/v1/user/joined_market?${url.searchParams.toString()}`);
@@ -74,8 +74,7 @@ export default function usePlayerHistory() {
     setLoading(true);
     try {
       const response = await axiosInstance.get(
-        `/api/v1/user/player/history?limit=${pageSize}&offset=${
-          (_page - 1) * pageSize
+        `/api/v1/user/player/history?limit=${pageSize}&offset=${(_page - 1) * pageSize
         }`
       );
 
@@ -103,6 +102,10 @@ export default function usePlayerHistory() {
       getRecords(1);
     }
   }, [userInfo]);
+
+  useEffect(() => {
+    onQueryUserInfo();
+  }, []);
 
   const onPageChange = (_page: number) => {
     setPage(_page);

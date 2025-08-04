@@ -1,12 +1,20 @@
+import useIsMobile from "@/hooks/use-is-mobile";
+import clsx from "clsx";
+
 export default function ResultBg() {
+  const isMobile = useIsMobile();
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="464"
-      height="584"
       viewBox="0 0 464 584"
       fill="none"
-      className="absolute top-[0px] left-[0px]"
+      preserveAspectRatio="none"
+      className={clsx(
+        "absolute",
+        isMobile
+          ? "w-[120%] h-[120%] top-[0%] left-[-10%]"
+          : "w-[464px] h-[584px] top-[0px] left-[0px]"
+      )}
     >
       <g filter="url(#filter0_d_1746_1693)">
         <mask

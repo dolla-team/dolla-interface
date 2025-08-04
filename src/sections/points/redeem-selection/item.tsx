@@ -1,4 +1,5 @@
 import PointIcon from "@/components/icons/point-icon";
+import LockIcon from "@/components/icons/lock";
 import clsx from "clsx";
 
 const BG: Record<string, string> = {
@@ -21,7 +22,7 @@ export default function RedeemSelectionItem({
   return (
     <div
       className={clsx(
-        "h-[224px] rounded-[16px] border border-[#6A5D3A]",
+        "h-[224px] rounded-[16px] border border-[#6A5D3A] relative",
         BG[data.name],
         className
       )}
@@ -44,6 +45,11 @@ export default function RedeemSelectionItem({
         <PointIcon size={22} />
         <span>{data.number}</span>
       </button>
+      {data.disabled && (
+        <div className="w-full h-full absolute right-0 top-0 bg-[#231E13]/80 rounded-[16px] flex items-center justify-center">
+          <LockIcon size={71} />
+        </div>
+      )}
     </div>
   );
 }

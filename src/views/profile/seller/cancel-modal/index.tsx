@@ -1,9 +1,12 @@
 import Modal from "@/components/modal";
 import { formatNumber } from "@/utils/format/number";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import Big from "big.js";
-import useCancel from "@/hooks/use-cancel";
+import useCancel from "@/hooks/near/use-cancel";
 import ButtonV2 from "@/components/button/v2";
+import { penaltyPercent } from "@/utils/pool";
+import useMarkCancel from "@/hooks/near/use-mark-cancel";
+import useRevertCancel from "@/hooks/near/use-revert-cancel";
 
 export default function CancelModal({
   open,
@@ -13,23 +16,46 @@ export default function CancelModal({
 }: {
   open: boolean;
   onClose: () => void;
-  onSuccess: () => void;
+  onSuccess: (params: any) => void;
   order: any;
 }) {
   const rewardTokenInfo = useMemo(() => {
     return order?.reward_token_info?.[0] || {};
   }, [order]);
-  const { onCancel, canceling } = useCancel();
-  
-  const handleCancelSuccess = () => {
-    onClose();
-    onSuccess();
-  };
-
+  const { canceling, onCancel } = useCancel({
+    onCancelSuccess: () => {
+      onClose();
+      onSuccess({
+        status: 3
+      });
+    }
+  });
+  const { canceling: cancelingMark, onCancel: onMarkCancel } = useMarkCancel({
+    onCancelSuccess: () => {
+      onSuccess({
+        status: 5
+      });
+      onClose();
+    }
+  });
+  const { canceling: cancelingRevert, onCancel: onRevertCancel } =
+    useRevertCancel({
+      onCancelSuccess: () => {
+        onSuccess({
+          status: 1
+        });
+        onClose();
+      }
+    });
+  const [status, setStatus] = useState(0);
   const [penalty, finalRefund] = useMemo(() => {
-    const _penalty = Big(0)
-      .div(10 ** order?.purchase_token_info?.decimals || 18)
+    const _penalty = Big(order?.value || 0)
+      .times(penaltyPercent)
       .toString();
+
+    if (order.status === 5) {
+      setStatus(1);
+    }
     return [
       _penalty,
       Big(order?.value || 0)
@@ -96,7 +122,7 @@ export default function CancelModal({
               ${formatNumber(order?.accumulative_bids, 0, true)}
             </span>
           </div>
-          <div className="w-full h-[86px] p-[10px] mt-[20px] mx-auto bg-[#FFC42F1A] rounded-[4px] border border-[#FFC42F]">
+          <div className="w-full h-[72px] p-[10px] mt-[20px] mx-auto bg-[#FFC42F1A] rounded-[4px] border border-[#FFC42F]">
             <div className="flex items-center gap-[2px]">
               <img
                 src="/profile/icon-warning.svg"
@@ -106,8 +132,11 @@ export default function CancelModal({
               <span className="text-[#FFC42F]">Be careful!</span>
             </div>
             <div className="text-[12px] font-[400] leading-[120%] mt-[7px]">
-              If you cancel, platform will refund the bid amount of the player
-              who has already participated, and you need to pay 20% in demages.
+              The seller must pay an additional{" "}
+              <span className="text-[#FFC42F] font-[600]">
+                {formatNumber(penaltyPercent * 100, 2, true)}% penalty
+              </span>{" "}
+              based on the total funds collected from bids.
             </div>
           </div>
           <div className="mt-[10px]">
@@ -127,17 +156,53 @@ export default function CancelModal({
             </div>
           </div>
         </div>
-        <div className="flex justify-center mt-[0px]">
-          <ButtonV2
-            className="w-[220px] !h-[40px] !text-[16px]"
-            loading={canceling}
-            onClick={() => {
-              onCancel();
-              handleCancelSuccess();
-            }}
-          >
-            Confirm
-          </ButtonV2>
+        <div className="grid grid-cols-2 gap-[20px] mt-[0px] px-[20px]">
+          {status === 0 && (
+            <>
+              <div />
+              <ButtonV2
+                className="!h-[40px] !text-[16px]"
+                loading={cancelingMark}
+                onClick={() => {
+                  if (cancelingMark) {
+                    return;
+                  }
+                  onMarkCancel(order?.pool_id);
+                }}
+              >
+                Confirm
+              </ButtonV2>
+            </>
+          )}
+          {status === 1 && (
+            <>
+              <ButtonV2
+                className="!h-[40px] !text-[16px]"
+                loading={cancelingRevert}
+                type="default"
+                onClick={() => {
+                  if (cancelingRevert) {
+                    return;
+                  }
+                  onRevertCancel(order?.pool_id);
+                }}
+              >
+                Cancel
+              </ButtonV2>
+              <ButtonV2
+                className="!h-[40px] !text-[16px]"
+                loading={canceling}
+                onClick={() => {
+                  if (canceling) {
+                    return;
+                  }
+                  onCancel(order?.pool_id);
+                }}
+              >
+                Pay Penalty
+              </ButtonV2>
+            </>
+          )}
         </div>
       </div>
     </Modal>

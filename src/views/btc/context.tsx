@@ -3,12 +3,14 @@ import {
   useContext,
   useEffect,
   useRef,
-  useState
+  useState,
+  useMemo
 } from "react";
 import usePoolRecommend from "@/hooks/use-pool-recommend";
-import useBasicInfo from "@/hooks/use-basic";
 import { useParams } from "react-router-dom";
 import usePoolInfo from "@/hooks/use-pool-info";
+import { formatNumber } from "@/utils/format/number";
+import Big from "big.js";
 
 export const CannonCoinsContext = createContext<any>({});
 
@@ -19,23 +21,31 @@ export const CannonCoinsProvider = ({
 }) => {
   const [flipStatus, setFlipStatus] = useState(0); // 0: not flipping, 1: bidding, 2: bid success, 3: waiting, 4: bid complete, 5: auto flipping, 6: complete
   const [bids, setBids] = useState(1);
-  const basicInfo = useBasicInfo();
   const coinsRef = useRef<any>({});
   const flipedNumberRef = useRef(0);
   const [bidResult, setBidResult] = useState<any>(null);
   const params = useParams();
   const { onQueryPoolInfo } = usePoolInfo("solana");
   const [pool, setPool] = useState<any>(null);
-
   const { data, getPoolRecommend } = usePoolRecommend(0, !params?.poolId);
+  const [mobileMarketsOpen, setMobileMarketsOpen] = useState(false);
+
+  const onMobileMarketsClose = () => {
+    setMobileMarketsOpen(false);
+  };
 
   useEffect(() => {
+    if (flipStatus === 0) {
+      window.howl.bgm.fade(0.1, 0.2, 1000);
+    }
+
     if (flipStatus === 1 || flipStatus === 0) {
       flipedNumberRef.current = 0;
     }
+
     if (flipStatus === 2) {
       for (let i = 0; i < bids; i++) {
-        coinsRef.current[i].collect();
+        coinsRef.current[i]?.collect();
       }
       setTimeout(() => {
         setFlipStatus(3);
@@ -43,6 +53,7 @@ export const CannonCoinsProvider = ({
     }
 
     if (flipStatus === 4) {
+      window.howl.bgm.fade(0.2, 0, 1000);
       for (let i = 0; i < bids; i++) {
         coinsRef.current[i].revert();
       }
@@ -57,7 +68,9 @@ export const CannonCoinsProvider = ({
     if (_pool?.status === 1) {
       const res = await onQueryPoolInfo(_pool?.pool_id);
       if (res) setPool(res);
-      window.poolTimer = setTimeout(loopUpdatePool, 10000);
+      window.poolTimer = setTimeout(() => {
+        loopUpdatePool(res || _pool);
+      }, 10000);
     } else {
       clearTimeout(window.poolTimer);
     }
@@ -65,11 +78,19 @@ export const CannonCoinsProvider = ({
 
   useEffect(() => {
     if (!params?.poolId) return;
+    let count = 0;
     const updatePool = async () => {
       const res = await onQueryPoolInfo(Number(params.poolId));
       if (res) {
         setPool(res);
         loopUpdatePool(res);
+      } else {
+        clearTimeout(window.poolTimer);
+        if (count < 5) {
+          await new Promise((resolve) => setTimeout(resolve, 1000));
+          updatePool();
+        }
+        count++;
       }
     };
     updatePool();
@@ -88,15 +109,26 @@ export const CannonCoinsProvider = ({
     };
   }, []);
 
+  const [poolAmount] = useMemo(() => {
+    if (!pool) return ["0"];
+    const reward_amount = pool.reward_amount || 0;
+    const decimals = pool.reward_token_info?.[0]?.decimals || 1;
+    const _a = formatNumber(Big(reward_amount).div(10 ** decimals), 3, true);
+    return [_a];
+  }, [pool]);
+
   return (
     <CannonCoinsContext.Provider
       value={{
         isDetail: !!params?.poolId,
         flipStatus,
         pool,
-        // Remove sbProgramRef for NEAR integration
+        poolAmount,
         bids,
-        setBids,
+        setBids: (bids: number) => {
+          if (flipStatus !== 0) return;
+          setBids(bids);
+        },
         setFlipStatus,
         coinsRef,
         bidResult,
@@ -106,8 +138,17 @@ export const CannonCoinsProvider = ({
           if (addNumber) flipedNumberRef.current++;
 
           if (flipedNumberRef.current === bids) {
-            setFlipStatus(flipStatus !== 6 ? 6 : 0);
             flipedNumberRef.current = 0;
+            if (!bidResult.bid.is_winner) {
+              setFlipStatus(flipStatus !== 6 ? 6 : 0);
+            } else {
+              for (let i = 0; i < bids; i++) {
+                coinsRef.current[i].collect();
+              }
+              setTimeout(() => {
+                setFlipStatus(6);
+              }, 600);
+            }
             return;
           }
           if (flipStatus === 5 && flipedNumberRef.current < bids && !notAuto) {
@@ -116,11 +157,15 @@ export const CannonCoinsProvider = ({
         },
         onReset: () => {
           flipedNumberRef.current = 0;
+          setBidResult(null);
           for (let i = 0; i < bids; i++) {
             coinsRef.current[i]?.flip(true);
           }
         },
-        getPoolRecommend
+        getPoolRecommend,
+        mobileMarketsOpen,
+        setMobileMarketsOpen,
+        onMobileMarketsClose
       }}
     >
       {children}

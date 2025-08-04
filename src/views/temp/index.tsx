@@ -1,22 +1,7 @@
 import React from "react";
-import useTransfer from "@/hooks/use-transfer";
-import { QUOTE_TOKEN } from "@/config/btc";
-import Winner from "@/views/btc/components/result/winner";
-// GsJ6qBRNPcdSuAivJ2BQQmbWsEmDSQ8vYajfxUQqnBDj
 const TempPage: React.FC = () => {
-  const { onTransfer } = useTransfer({
-    token: QUOTE_TOKEN,
-    isTicket: false
-  });
-
   return (
-    <div className="relative">
-      <button
-        className="bg-white text-black button"
-        onClick={() => onTransfer()}
-      >
-        Transfer
-      </button>
+    <div className="relative flex gap-[10px]">
       {/* <Winner points={1000} onClose={() => {}} /> */}
     </div>
   );

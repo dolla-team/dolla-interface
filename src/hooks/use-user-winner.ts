@@ -70,7 +70,7 @@ export default function useUserWinner() {
   const [totalBtcAmount] = useMemo(() => {
     return [
       btcs.reduce((acc, item) => {
-        return Big(acc).plus(item.token_amount);
+        return Big(acc).plus(Big(item.token_amount || 0).div(10 ** item.token_info?.decimals || 6));
       }, 0)
     ];
   }, [btcs]);

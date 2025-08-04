@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
 import CreateButton from "./create-button";
 import Button from "@/components/button";
-import useDeposit from "@/hooks/use-deposit-reward";
-import useApprove from "@/hooks/use-approve";
-import useCreate from "@/hooks/use-create";
-import { BETTING_CONTRACT_ADDRESS } from "@/config";
+import useDeposit from "@/hooks/evm/use-deposit-reward";
+import useApprove from "@/hooks/evm/use-approve";
+import useCreate from "@/hooks/evm/use-create";
 import { useAuth } from "@/contexts/auth";
 
 export default function Action({
@@ -22,14 +21,14 @@ export default function Action({
   const [poolId, setPoolId] = useState(-1);
 
   const { onDeposit, depositing } = useDeposit();
-  
+
   const handleDepositSuccess = () => {
     setStep(0);
     onSuccess();
   };
 
   const { creating, onCreate } = useCreate();
-  
+
   const handleCreateSuccess = (poolId: number) => {
     setPoolId(poolId);
     setStep(1); // Skip approval step for NEAR

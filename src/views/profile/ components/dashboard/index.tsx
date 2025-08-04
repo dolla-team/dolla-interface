@@ -14,12 +14,16 @@ import Popover, {
 import Badge from "../badge";
 import ButtonV2 from "@/components/button/v2";
 import PopoverCard from "../popover-card";
+import { formatNumber } from "@/utils/format/number";
+import Big from "big.js";
+import useIsMobile from "@/hooks/use-is-mobile";
 
 const Dashboard = (props: any) => {
   const { className, tab } = props;
 
   const { userInfo } = useAuth();
   const toast = useToast();
+  const isMobile = useIsMobile();
 
   const [inviteFrenz] = useState([]);
 
@@ -27,13 +31,14 @@ const Dashboard = (props: any) => {
     <div
       className={clsx(
         "font-[SpaceGrotesk] text-white text-[14px] font-[400] leading-[100%] w-full p-[23px_29px_15px_13px] rounded-[16px] border border-[#6A5D3A] bg-[radial-gradient(25.97%_88.62%_at_6.81%_0%,_rgba(221,_144,_0,_0.10)_0%,_rgba(255,_196,_47,_0.00)_100%)] bg-[#35302B]",
+        "max-md:p-[12px_10px_17px]",
         className
       )}
     >
-      <div className="w-full pl-[13px]">
-        <div className="w-full flex justify-between items-center gap-[10px]">
+      <div className="w-full pl-[13px] max-md:pl-0">
+        <div className="w-full flex justify-between items-center gap-[10px] max-md:relative">
           {/*#region User Info*/}
-          <div className="flex items-center gap-[20px]">
+          <div className="flex items-center gap-[20px] max-md:gap-[10px]">
             <Avatar
               size={60}
               className="shrink-0 rounded-[8px] border-[2px] border-[rgba(255,255,255,0.8)]"
@@ -41,9 +46,9 @@ const Dashboard = (props: any) => {
               email={userInfo?.email}
             />
             <div className="flex flex-col gap-[14px]">
-              <div className="font-[DelaGothicOne] text-[20px] flex items-center gap-[9px]">
+              <div className="relative font-[DelaGothicOne] text-[20px] flex items-center gap-[9px]">
                 <div className="">
-                  {userInfo?.name || formatAddress(userInfo?.sol_user)}
+                  {formatAddress(userInfo?.name || userInfo?.sol_user, 3)}
                 </div>
                 {tab === "seller" && (
                   <div className="flex items-center gap-[7px]">
@@ -53,7 +58,9 @@ const Dashboard = (props: any) => {
                       trigger={PopoverTrigger.Hover}
                       closeDelayDuration={0}
                     >
-                      <Badge icon="/profile/icon-user.svg">3562</Badge>
+                      <Badge icon="/profile/icon-user.svg">
+                        {formatNumber(userInfo?.player_engagement, 0, true)}
+                      </Badge>
                     </Popover>
                     <Popover
                       content={<PopoverCard>Cancellation Rate</PopoverCard>}
@@ -61,7 +68,13 @@ const Dashboard = (props: any) => {
                       trigger={PopoverTrigger.Hover}
                       closeDelayDuration={0}
                     >
-                      <Badge icon="/profile/icon-cancel.svg">33%</Badge>
+                      <Badge icon="/profile/icon-cancel.svg">
+                        {
+                          (Big(userInfo?.created || 0).gt(0) && Big(userInfo?.cancel || 0).gt(0))
+                            ? formatNumber(Big(userInfo?.cancel).div(userInfo?.created).times(100), 2, true)
+                            : 0
+                        }%
+                      </Badge>
                     </Popover>
                   </div>
                 )}
@@ -94,32 +107,36 @@ const Dashboard = (props: any) => {
           {/*#endregion*/}
           {/*#region Invite frenz*/}
           <div className="flex flex-col gap-[12px] items-end">
-            <div className="flex justify-end gap-[13px] items-center">
-              {inviteFrenz.length > 0 && (
-                <div className="flex items-center gap-[6px] h-[32px] bg-black/20 border border-[#6A5D3A] rounded-[16px] pl-[5px] pr-[14px]">
-                  <div className="flex items-center">
-                    {inviteFrenz.slice(0, 5).map((item: any, index: number) => (
-                      <img
-                        key={index}
-                        src={item.avatar}
-                        alt=""
-                        className={clsx(
-                          "w-[26px] h-[26px] rounded-full border-[2px] border-[#131417] shrink-0",
-                          index > 0 && "ml-[-8px]"
-                        )}
-                      />
-                    ))}
-                  </div>
-                  <div className="[text-shaow:0px_1px_0px_#000]">
-                    {inviteFrenz.length || 0}
-                  </div>
+            {
+              !isMobile && (
+                <div className="flex justify-end gap-[13px] items-center">
+                  {inviteFrenz.length > 0 && (
+                    <div className="flex items-center gap-[6px] h-[32px] bg-black/20 border border-[#6A5D3A] rounded-[16px] pl-[5px] pr-[14px]">
+                      <div className="flex items-center">
+                        {inviteFrenz.slice(0, 5).map((item: any, index: number) => (
+                          <img
+                            key={index}
+                            src={item.avatar}
+                            alt=""
+                            className={clsx(
+                              "w-[26px] h-[26px] rounded-full border-[2px] border-[#131417] shrink-0",
+                              index > 0 && "ml-[-8px]"
+                            )}
+                          />
+                        ))}
+                      </div>
+                      <div className="[text-shaow:0px_1px_0px_#000]">
+                        {inviteFrenz.length || 0}
+                      </div>
+                    </div>
+                  )}
+                  <ButtonV2 soon disabled onClick={() => { }}>
+                    Invite frenz
+                  </ButtonV2>
                 </div>
-              )}
-              <ButtonV2 soon disabled onClick={() => {}}>
-                Invite frenz
-              </ButtonV2>
-            </div>
-            <div className="">
+              )
+            }
+            <div className="max-md:text-[12px] max-md:translate-y-[15px] max-md:absolute max-md:right-[0px] max-md:bottom-[20px]">
               Joined{" "}
               {userInfo?.created_at
                 ? dayjs(userInfo.created_at).format("MMMM D, YYYY")
@@ -128,7 +145,7 @@ const Dashboard = (props: any) => {
           </div>
           {/*#endregion*/}
         </div>
-        <div className="w-full bg-[#423930] h-[1px] mt-[20px]" />
+        <div className="w-full bg-[#423930] h-[1px] mt-[20px] max-md:mt-[14px]" />
       </div>
       {tab === "player" ? <StatisticsPlayer /> : <StatisticsSeller />}
     </div>

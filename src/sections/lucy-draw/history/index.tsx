@@ -4,6 +4,9 @@ import { useEffect, useState } from "react";
 import { formatAddress } from "@/utils/format/address";
 import clsx from "clsx";
 import LoadingItem from "./loading-item";
+import Avatar from "@/components/avatar";
+import useIsMobile from "@/hooks/use-is-mobile";
+import { useDebounceFn } from "ahooks";
 
 export default function LucyDrawHistory({
   open,
@@ -27,23 +30,38 @@ export default function LucyDrawHistory({
 }) {
   const [round, setRound] = useState(1);
   const [winningList, setWinningList] = useState<any[]>([]);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     if (!historyRound && !currentRound) return;
     setRound(historyRound || currentRound - 1);
   }, [historyRound, currentRound]);
 
+  const { run: fetchCurrentRoundDebounce } = useDebounceFn(
+    () => {
+      setWinningList([]);
+      fetchCurrentRound(round).then((res) => {
+        setWinningList(res.winningList);
+      });
+    },
+    {
+      wait: 500
+    }
+  );
+
   useEffect(() => {
     if (!open) return;
-    setWinningList([]);
-    fetchCurrentRound(round).then((res) => {
-      setWinningList(res.winningList);
-    });
+    fetchCurrentRoundDebounce();
   }, [round, open]);
 
   return (
     <Modal open={open} onClose={onClose}>
-      <div className="w-[496px] rounded-[16px] border border-[#6A5D3A] bg-[#1D1A16]">
+      <div
+        className={clsx(
+          "border border-[#6A5D3A] bg-[#1D1A16]",
+          isMobile ? "w-full rounded-t-[16px]" : "w-[496px] rounded-[16px]"
+        )}
+      >
         <div className="h-[160px] bg-black/80 backdrop-blur-[10px] rounded-t-[18px]">
           <div className="h-full relative z-[2] flex flex-col justify-center items-center">
             <div
@@ -74,7 +92,7 @@ export default function LucyDrawHistory({
                   }
                 }}
               />
-              <div className="w-[120px] h-[32px] rounded-[12px] bg-linear-to-r from-[#FFC42F] to-[#FFF698] leading-[32px] text-center">
+              <div className="w-[120px] h-[32px] rounded-[12px] bg-linear-to-r from-[#FFC42F] to-[#FFF698] leading-[32px] text-center pointer-events-none">
                 Round #{round}
               </div>
               <CircleArrow
@@ -94,14 +112,15 @@ export default function LucyDrawHistory({
         <div className="py-[8px] h-[476px]">
           {winningList.map((item, index) => (
             <div
-              key={item.tx_hash}
+              key={item.tx_hash + index}
               className="px-[20px] py-[8px] flex items-center justify-between"
             >
               <div className="flex items-center gap-[6px]">
                 <Rank rank={index + 1} />
-                <img
-                  src=""
-                  className="w-[30px] h-[30px] rounded-full border border-[#DD9000]"
+                <Avatar
+                  size={30}
+                  address={item.user_info?.sol_user}
+                  email={item.user_info?.email}
                 />
                 <div className="text-[14px] text-white">
                   {formatAddress(item.user)}

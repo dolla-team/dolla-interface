@@ -4,17 +4,19 @@ import {
   Navigate
 } from "react-router-dom";
 import { Suspense, lazy } from "react";
-import Loading from "./components/loading";
 import WalletProvider from "./contexts/wallet";
 import { AuthProvider } from "./contexts/auth";
 import { ToastContainer } from "react-toastify";
 import Temp from "./views/temp";
-import "react-toastify/dist/ReactToastify.css";
+// import "react-toastify/dist/ReactToastify.css";
+
 import MainLayout from "./layouts/main";
 import "./libs/howl";
 import Callback from "./views/callback";
+import DollaEyeContextProvider from "./contexts/dolla-eye";
+import BTC from "./views/btc";
 
-const LazyNewBTC = lazy(() => import("./views/btc"));
+// const LazyNewBTC = lazy(() => import("./views/btc"));
 const LazyBtcCreate = lazy(() => import("./views/btc-create"));
 const LazyProfilePlayer = lazy(() => import("./views/profile/player"));
 const LazyProfileSeller = lazy(() => import("./views/profile/seller"));
@@ -23,10 +25,47 @@ const LazyBtcCreator = lazy(() => import("./views/btc-creator"));
 const LazyPlayerBetting = lazy(() => import("./views/player-betting"));
 const LazyTools = lazy(() => import("./views/tools"));
 
+import("react-toastify/dist/ReactToastify.css");
+
+const ErrorPage = () => {
+  return (
+    <div
+      style={{
+        color: "white",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        height: "100vh"
+      }}
+    >
+      <div style={{ textAlign: "center" }}>
+        <h1>Oops! Something went wrong.</h1>
+        <p>We're sorry, but an unexpected error occurred.</p>
+      </div>
+      <button
+        style={{
+          padding: "10px 20px",
+          backgroundColor: "rgb(221, 144, 0)",
+          color: "white",
+          border: "none",
+          borderRadius: "5px",
+          cursor: "pointer",
+          marginTop: "20px"
+        }}
+        onClick={() => window.location.reload()}
+      >
+        Reload Page
+      </button>
+    </div>
+  );
+};
+
 const router = createBrowserRouter([
   {
     path: "/",
     element: <MainLayout />,
+    errorElement: <ErrorPage />,
     children: [
       {
         index: true,
@@ -35,11 +74,11 @@ const router = createBrowserRouter([
       {
         index: true,
         path: "btc",
-        element: <LazyNewBTC />
+        element: <BTC />
       },
       {
         path: "btc/:poolId",
-        element: <LazyNewBTC />
+        element: <BTC />
       },
       {
         path: "btc/create",
@@ -87,24 +126,26 @@ const router = createBrowserRouter([
 
 function App() {
   return (
-    <Suspense fallback={<Loading />}>
-      <WalletProvider>
-        <AuthProvider>
-          <RouterProvider router={router} />
-        </AuthProvider>
-      </WalletProvider>
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={true}
-        theme="light"
-        toastStyle={{ backgroundColor: "transparent", boxShadow: "none" }}
-        newestOnTop
-        rtl={false}
-        pauseOnFocusLoss
-        closeButton={false}
-      />
-    </Suspense>
+    <DollaEyeContextProvider>
+      <Suspense>
+        <WalletProvider>
+          <AuthProvider>
+            <RouterProvider router={router} />
+          </AuthProvider>
+        </WalletProvider>
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={true}
+          theme="light"
+          toastStyle={{ backgroundColor: "transparent", boxShadow: "none" }}
+          newestOnTop
+          rtl={false}
+          pauseOnFocusLoss
+          closeButton={false}
+        />
+      </Suspense>
+    </DollaEyeContextProvider>
   );
 }
 

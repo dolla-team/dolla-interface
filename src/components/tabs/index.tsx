@@ -8,7 +8,8 @@ export default function Tabs({
   tabs,
   className,
   tabClassName,
-  cursorClassName
+  cursorClassName,
+  activeClassName
 }: any) {
   const prevI = useRef<number[]>([0]);
   return (
@@ -16,14 +17,18 @@ export default function Tabs({
       {tabs.map((tab: any, i: number) => (
         <div
           key={tab.key}
-          className={clsx("button relative text-[14px] text-white pb-[10px]", tabClassName)}
+          className={clsx(
+            "button relative text-[14px] text-white pb-[10px]",
+            tabClassName,
+            tab.key === currentTab && activeClassName
+          )}
           onClick={() => {
             onChangeTab(tab.key);
             prevI.current.push(i);
             if (prevI.current.length > 2) prevI.current.shift();
           }}
         >
-          <span>{tab.label}</span>
+          <span className="relative z-[2]">{tab.label}</span>
           {currentTab === tab.key && (
             <motion.div
               initial="hidden"
@@ -39,7 +44,10 @@ export default function Tabs({
                   }
                 }
               }}
-              className={clsx("absolute rounded-[3px] w-full h-[3px] bg-[#EBFF57] bottom-0", cursorClassName)}
+              className={clsx(
+                "absolute rounded-[3px] w-full h-[3px] bg-[#EBFF57] bottom-0",
+                cursorClassName
+              )}
             />
           )}
         </div>

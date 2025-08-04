@@ -15,7 +15,7 @@ const Records = (props: any) => {
   const [tab, setTab] = useState("bidHistory");
 
   return (
-    <div className={clsx("w-full rounded-[16px] border border-[#2B2C2F] bg-[#22201D] p-[17px_22px_21px] mt-[20px]", className)}>
+    <div className={clsx("w-full rounded-[16px] border border-[#2B2C2F] bg-[#22201D] p-[17px_22px_21px] mt-[20px] max-md:w-screen max-md:mt-0 max-md:p-[17px_0]", className)}>
       <Switch
         tab={tab}
         tabs={[
@@ -23,7 +23,7 @@ const Records = (props: any) => {
           { label: "Account", value: "account" }
         ]}
         onChange={setTab}
-        className="w-[241px] !h-[38px] !border-[1px] !border-[#6A5D3A] !rounded-[19px] !bg-[#35302B] !p-[4px]"
+        className="w-[241px] !h-[38px] !border-[1px] !border-[#6A5D3A] !rounded-[19px] !bg-[#35302B] !p-[4px] max-md:mx-auto"
         cursorClassName="!rounded-[15px] !shadow-[unset] !bg-[radial-gradient(50%_50%_at_50%_50%,_#FFEF43_0%,_#FFC42F_100%)]"
         tabClassName="!px-[15px]"
       />

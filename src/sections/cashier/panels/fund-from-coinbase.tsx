@@ -4,6 +4,7 @@ import FundFromCex from "./fund-from-cex";
 import { useAuth } from "@/contexts/auth";
 import useBroadcatChannel from "@/hooks/use-broadcat-channel";
 import { toast } from "react-toastify";
+import { getWindowSize } from "../utils/getWindowSize";
 
 export default function FundFromCoinbase({ onBack }: { onBack: () => void }) {
     const { address, userInfo } = useAuth();
@@ -37,11 +38,8 @@ export default function FundFromCoinbase({ onBack }: { onBack: () => void }) {
     return <div>
         <FundFromCex amount={amount} disabled={!amount || Number(amount) < 10 || !coinBaseUrl} setAmount={setAmount} onBack={onBack} onOrderIdCreated={() => {
             if (coinBaseUrl) {
-                const windowWidth = 800;
-                const windowHeight = 600;
-                const left = (screen.width - windowWidth) / 2;
-                const top = (screen.height - windowHeight) / 2;
-                window.open(coinBaseUrl, '_blank', `width=${windowWidth},height=${windowHeight},left=${left},top=${top}`);
+                const features = getWindowSize(800, 600);
+                window.open(coinBaseUrl, '_blank', features);
             }
         }} />
     </div>

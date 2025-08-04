@@ -6,8 +6,6 @@ export default function useCoinBase({ address, amount, orderId }: { address: str
     const [coinBaseUrl, setCoinBaseUrl] = useState<string | null>(null);
 
     const getCoinBaseUrl = useCallback(() => {
-        console.log('getCoinBaseUrl', address, amount, orderId);
-
         if (!address || amount <= 0 || !orderId) {
             setCoinBaseUrl(null);
             return;
@@ -21,8 +19,6 @@ export default function useCoinBase({ address, amount, orderId }: { address: str
             fiatCurrency: 'USD',
             redirectUrl: `${window.location.origin}/callback?type=coinbase&orderId=${orderId}`,
         });
-
-        console.log('onrampBuyUrl', onrampBuyUrl);
 
         setCoinBaseUrl(onrampBuyUrl);
     }, [address, amount, orderId])
