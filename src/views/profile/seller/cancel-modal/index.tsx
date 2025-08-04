@@ -48,7 +48,7 @@ export default function CancelModal({
   });
   const [status, setStatus] = useState(0);
   const [penalty, finalRefund] = useMemo(() => {
-    const _penalty = Big(order?.value || 0)
+    const _penalty = Big(order?.accumulative_bids || 0)
       .times(penaltyPercent)
       .toString();
 
@@ -65,8 +65,8 @@ export default function CancelModal({
 
   return (
     <Modal onClose={onClose} open={open}>
-      <div className="w-[396px] h-[460px] rounded-[16px] bg-[#35302B] border border-[#6A5D3A] text-[14px] font-[500] leading-[100%] text-white font-[SpaceGrotesk]">
-        <div className="w-full pt-[20px] pb-[13px] px-[24px] bg-black/20 flex justify-between items-center">
+      <div className="w-[396px] pb-[20px] rounded-[16px] bg-[#35302B] border border-[#6A5D3A] text-[14px] font-[500] leading-[100%] text-white font-[SpaceGrotesk]">
+        <div className="w-full pt-[20px] pb-[13px] px-[20px] bg-black/20 flex justify-between items-center">
           <div className="text-[18px] font-medium text-white">
             Cancel Market
           </div>
@@ -87,7 +87,7 @@ export default function CancelModal({
         </div>
         <div className="w-full px-[24px] py-[20px]">
           <div className="flex items-center text-[14px] mb-[20px] gap-[10px]">
-            <span className="text-[#BBACA6] font-[400]">Market Amount</span>
+            <span className="text-[#BBACA6] font-[400]">Market Size</span>
             <div className="grow border-b border-dashed border-[#5E6B7D] opacity-50" />
             <span className="text-white font-medium">
               {formatNumber(
@@ -101,21 +101,21 @@ export default function CancelModal({
             </span>
           </div>
           <div className="flex items-center text-[14px] mb-[20px] gap-[10px]">
-            <span className="text-[#BBACA6] font-[400]">Valued</span>
+            <span className="text-[#BBACA6] font-[400]">Market Value</span>
             <div className="grow border-b border-dashed border-[#5E6B7D] opacity-50" />
             <span className="text-white font-medium">
               ${formatNumber(order?.value, 0, true)}
             </span>
           </div>
           <div className="flex items-center text-[14px] mb-[20px] gap-[10px]">
-            <span className="text-[#BBACA6] font-[400]">Bid player</span>
+            <span className="text-[#BBACA6] font-[400]">Total Players</span>
             <div className="grow border-b border-dashed border-[#5E6B7D] opacity-50" />
             <span className="text-white font-medium">
-              {formatNumber(order?.accumulative_bids, 0, true)}
+              {formatNumber(order?.participants, 0, true)}
             </span>
           </div>
           <div className="flex items-center text-[14px] mb-[20px] gap-[10px]">
-            <span className="text-[#BBACA6] font-[400]">Total bid value</span>
+            <span className="text-[#BBACA6] font-[400]">Total bids</span>
             <div className="grow border-b border-dashed border-[#5E6B7D] opacity-50" />
             <span className="text-white font-medium">
               ${formatNumber(order?.accumulative_bids, 0, true)}
@@ -138,21 +138,21 @@ export default function CancelModal({
               based on the total funds collected from bids.
             </div>
           </div>
-          <div className="mt-[10px]">
-            <div className="flex items-center text-[14px] mb-[20px] gap-[10px]">
-              <span className="text-[#BBACA6] font-[400]">Demage</span>
+          <div className="mt-[20px]">
+            <div className="flex items-center text-[14px] gap-[10px]">
+              <span className="text-[#BBACA6] font-[400]">Penalty</span>
               <div className="grow border-b border-dashed border-[#5E6B7D]" />
               <span className="text-white font-medium">
                 ${formatNumber(penalty, 2, true)}
               </span>
             </div>
-            <div className="flex items-center text-[14px] mb-[20px] gap-[10px]">
+            {/* <div className="flex items-center text-[14px] mb-[20px] gap-[10px]">
               <span className="text-[#BBACA6] font-[400]">Final refund</span>
               <div className="grow border-b border-dashed border-[#5E6B7D]" />
               <span className="text-[#FFC42F] font-medium">
                 ${formatNumber(finalRefund, 2, true)}
               </span>
-            </div>
+            </div> */}
           </div>
         </div>
         <div className="grid grid-cols-2 gap-[20px] mt-[0px] px-[20px]">
