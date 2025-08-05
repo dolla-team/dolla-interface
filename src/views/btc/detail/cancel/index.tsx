@@ -13,7 +13,7 @@ export default function Cancel({ data }: { data: any }) {
   });
   const [claimed, setClaimed] = useState<boolean | null>(null);
   useEffect(() => {
-    setClaimed(data.is_claim);
+    setClaimed(data.user_draw_attempt.status === 4);
   }, [data]);
   if (data?.status === 5) {
     return (
