@@ -35,10 +35,12 @@ const StatisticsPlayer = (props: any) => {
         (acc: any, item: any) => Big(acc).plus(item.token_usd),
         Big(0)
       ),
-      userInfo.claim_winner_pool?.filter?.((item: any) => !item.is_claim)?.reduce(
-        (acc: any, item: any) => Big(acc).plus(item.accumulative_bids),
-        Big(0)
-      ),
+      userInfo.claim_winner_pool
+        ?.filter?.((item: any) => !item.is_claim)
+        ?.reduce(
+          (acc: any, item: any) => Big(acc).plus(item.accumulative_bids),
+          Big(0)
+        )
     ];
   }, [userInfo]);
 
@@ -63,8 +65,17 @@ const StatisticsPlayer = (props: any) => {
             formatNumber(totalBtcAmount, 3, true)
           )}
         </LabelValue>
-        <ButtonV2 className="" onClick={() => { }} disabled soon>
+        {/* <ButtonV2 className="" onClick={() => { }} disabled soon>
           Share
+        </ButtonV2> */}
+        <ButtonV2
+          className="max-md:flex-1"
+          disabled={Big(claimableAmount || 0).lte(0)}
+          onClick={() => {
+            setClaimModalOpen(true);
+          }}
+        >
+          Claim
         </ButtonV2>
       </div>
       <div className="w-[1px] h-[70px] shrink-0 bg-[#423930] max-md:hidden"></div>
@@ -74,7 +85,11 @@ const StatisticsPlayer = (props: any) => {
             {isLoading ? (
               <Loading size={12} />
             ) : (
-              formatNumber(tokenBalance, 2, true, { prefix: "$", isShort: true, isShortUppercase: true })
+              formatNumber(tokenBalance, 2, true, {
+                prefix: "$",
+                isShort: true,
+                isShortUppercase: true
+              })
             )}
           </LabelValue>
           <LabelValue label="Played times" className="whitespace-nowrap">
@@ -85,15 +100,6 @@ const StatisticsPlayer = (props: any) => {
           </LabelValue>
         </div>
         <div className="flex items-center justify-end gap-[8px] max-md:w-full max-md:justify-between max-md:gap-[10px]">
-          <ButtonV2
-            className="max-md:flex-1"
-            disabled={Big(claimableAmount || 0).lte(0)}
-            onClick={() => {
-              setClaimModalOpen(true);
-            }}
-          >
-            Claim
-          </ButtonV2>
           <ButtonV2
             className="max-md:flex-1"
             onClick={() => {
