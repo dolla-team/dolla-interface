@@ -62,7 +62,7 @@ export default function PriceChart({
 
   // Initialize chart - only executed once when component mounts and animation is complete
   useEffect(() => {
-    if (!chartRef.current || !isAnimationComplete) return;
+    if (!chartRef.current || !isAnimationComplete || isFolded) return;
 
     const ctx = chartRef.current.getContext("2d");
     if (!ctx) return;
@@ -111,24 +111,7 @@ export default function PriceChart({
             display: false
           },
           annotation: {
-            annotations: {
-              line1: {
-                type: "line",
-                xMin: anchorPrice || 0,
-                xMax: anchorPrice || 0,
-                borderColor: "#FFC42F",
-                borderWidth: 1,
-                borderDash: [2, 2]
-              },
-              line2: {
-                type: "line",
-                xMin: anchorPrice * 1.2 || 0,
-                xMax: anchorPrice * 1.2 || 0,
-                borderColor: "#8C8B8B",
-                borderWidth: 1,
-                borderDash: [2, 2]
-              }
-            }
+            annotations: {}
           },
           tooltip: {
             backgroundColor: "rgba(20, 21, 25, 0.9)",
@@ -149,10 +132,11 @@ export default function PriceChart({
             },
             callbacks: {
               title: (items) => {
-                return `Total Sales: ${Number(items[0].parsed.x) > 0
+                return `Total Sales: ${
+                  Number(items[0].parsed.x) > 0
                     ? `$${items[0].parsed.x}`
                     : `-$${Math.abs(items[0].parsed.x)}`
-                  }`;
+                }`;
               },
               label: (item) => {
                 return `Probability: ${item.parsed.y.toFixed(2)}%`;
@@ -223,11 +207,17 @@ export default function PriceChart({
         chartInstance.current = null;
       }
     };
-  }, [isAnimationComplete]); // Execute when animation is complete
+  }, [isAnimationComplete, isFolded]); // Execute when animation is complete
 
   // Update chart data - only executed when anchorPrice changes and chart is initialized
   useEffect(() => {
-    if (!chartInstance.current || !anchorPrice || !isAnimationComplete) return;
+    if (
+      !chartInstance.current ||
+      !anchorPrice ||
+      !isAnimationComplete ||
+      isFolded
+    )
+      return;
 
     const density = calculateDensity(anchorPrice);
     const desiredMode = anchorPrice * 1.2;
@@ -237,12 +227,29 @@ export default function PriceChart({
 
     // Update annotation line positions
     if (chartInstance.current.options.plugins?.annotation?.annotations) {
-      const annotations = chartInstance.current.options.plugins.annotation
-        .annotations as any;
-      annotations.line1.xMin = anchorPrice;
-      annotations.line1.xMax = anchorPrice;
-      annotations.line2.xMin = desiredMode;
-      annotations.line2.xMax = desiredMode;
+      // const annotations = chartInstance.current.options.plugins.annotation
+      //   .annotations as any;
+      console.log("update", anchorPrice);
+
+      // Update annotations by reassigning the entire object to trigger re-render
+      chartInstance.current.options.plugins.annotation.annotations = {
+        line1: {
+          type: "line",
+          xMin: anchorPrice,
+          xMax: anchorPrice,
+          borderColor: "#FFC42F",
+          borderWidth: 1,
+          borderDash: [2, 2]
+        },
+        line2: {
+          type: "line",
+          xMin: desiredMode,
+          xMax: desiredMode,
+          borderColor: "#8C8B8B",
+          borderWidth: 1,
+          borderDash: [2, 2]
+        }
+      };
     }
 
     // Update segment background color logic
@@ -262,7 +269,7 @@ export default function PriceChart({
       updateAnchorPlace();
       setIsInit(true);
     }, 100);
-  }, [anchorPrice, isAnimationComplete]);
+  }, [anchorPrice, isAnimationComplete, isFolded]);
 
   const updateAnchorPlace = () => {
     const chart = chartInstance.current;
@@ -279,7 +286,7 @@ export default function PriceChart({
         Math.abs(p.raw?.x - anchorPrice * 1.2) < diff &&
         anchorDotRef.current
       ) {
-        anchorDotRef.current.style.left = `${pos.x + 15}px`;
+        anchorDotRef.current.style.left = `${pos.x - 6}px`;
         anchorDotRef.current.style.top = `${pos.y - 6}px`;
       }
     });

@@ -9,7 +9,7 @@ export const getPoolInfo = async (poolId: number) => {
 
 export const getAnchorPrice = (pool: any) => {
   if (pool?.anchor_price)
-    return Big(pool.anchor_price * 1.2)
+    return Big(pool.anchor_price * 1)
       .div(10 ** QUOTE_TOKEN.decimals)
       .toNumber();
   return 0;

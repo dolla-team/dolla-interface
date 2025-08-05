@@ -109,11 +109,18 @@ export default function EndPanel({ data }: { data: any }) {
                 )}
               >
                 <MultiIcon className="absolute top-0 left-0 w-full h-full" />
-                <div className="text-black text-center font-[DelaGothicOne] relative z-[1] rotate-[15deg]">
-                  <div className="text-[24px]">
+                <div className="text-black text-center font-[DelaGothicOne] relative z-[1] rotate-[15deg] w-full h-full flex flex-wrap items-center justify-center px-[6px]">
+                  <span className="text-[24px]">
                     {formatNumber(returnMultiple, 0, true, { isShort: true })}
-                  </div>
-                  <div className="mt-[-8px] text-[18px]">X</div>
+                  </span>
+                  <span
+                    className={clsx(
+                      "text-[18px]",
+                      Number(returnMultiple) > 999 ? "mt-[-50px]" : "mt-[6px]"
+                    )}
+                  >
+                    X
+                  </span>
                 </div>
               </div>
               <Avatar

@@ -3,6 +3,7 @@ import Avatar from "@/components/avatar";
 import { AnimatePresence, motion } from "framer-motion";
 import { formatAddress } from "@/utils/format/address";
 import MultipleBg from "./multiple-bg";
+import clsx from "clsx";
 
 export default function WinnerCard({
   data,
@@ -104,13 +105,20 @@ export default function WinnerCard({
           </div>
 
           <div className="absolute top-[-14px] right-[-14px] w-[61px] h-[63px]">
-            <div className="text-black relative z-[2] rotate-[15deg] flex flex-col items-center justify-center w-full h-full  font-[DelaGothicOne]">
+            <div className="text-black relative z-[2] px-[6px] rotate-[15deg] flex flex-wrap items-center justify-center w-full h-full  font-[DelaGothicOne]">
               <span className="font-bold text-[20px]">
                 {multiple
                   ? formatNumber(multiple, 0, true, { isShort: true })
                   : 0}{" "}
               </span>
-              <span className="text-[12px] mt-[-8px]">X</span>
+              <span
+                className={clsx(
+                  "text-[12px]",
+                  multiple > 99 ? "mt-[-24px]" : "mt-[8px]"
+                )}
+              >
+                X
+              </span>
             </div>
             <MultipleBg size={61} />
           </div>
