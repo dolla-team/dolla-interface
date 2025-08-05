@@ -9,24 +9,30 @@ import Points from "@/sections/points";
 import LucyDraw from "@/sections/lucy-draw";
 
 export default function GrandMobile({ tokenBalance }: any) {
-  const { flipStatus, pool, isDetail } = useBtcContext();
+  const { flipStatus, pool } = useBtcContext();
 
   return (
     <div
-      className={clsx("relative", !isDetail ? "overflow-hidden" : "grow")}
+      className={clsx(
+        "relative",
+        pool?.status === 1 || flipStatus !== 0 ? "overflow-hidden" : "grow"
+      )}
       style={{
-        height: !isDetail ? window.innerHeight - 444 : "auto"
+        height:
+          pool?.status === 1 || flipStatus !== 0
+            ? window.innerHeight - 444
+            : "auto"
       }}
     >
-      {!isDetail && (
+      {(pool?.status === 1 || flipStatus !== 0) && (
         <>
           <FlipCoins />
           {flipStatus === 3 && <FlippingCoin start={true} />}
           {flipStatus === 1 && <PreLoading />}
         </>
       )}
-      {pool?.status === 2 && isDetail && <EndPanel data={pool} />}
-      {(pool?.status === 3 || pool?.status === 5) && isDetail && (
+      {pool?.status === 2 && flipStatus === 0 && <EndPanel data={pool} />}
+      {(pool?.status === 3 || pool?.status === 5) && flipStatus === 0 && (
         <Cancel data={pool} />
       )}
       {flipStatus === 0 && (
