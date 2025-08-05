@@ -67,6 +67,7 @@ export const CannonCoinsProvider = ({
   }, [flipStatus]);
 
   const loopUpdatePool = async (_pool: any) => {
+    clearTimeout(window.poolTimer);
     if (_pool?.status === 1) {
       const res = await onQueryPoolInfo(_pool?.pool_id);
       if (res) setPool(res);
@@ -135,7 +136,10 @@ export const CannonCoinsProvider = ({
         setFlipStatus,
         coinsRef,
         bidResult,
-        setSelectedMarket: setPool,
+        setSelectedMarket: (market: any) => {
+          setPool(market);
+          loopUpdatePool(market);
+        },
         setBidResult,
         flipComplete: (index: number, addNumber: boolean, notAuto = false) => {
           if (addNumber) flipedNumberRef.current++;
