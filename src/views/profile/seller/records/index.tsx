@@ -7,6 +7,7 @@ import Big from "big.js";
 import { ESellerRecordsType } from "../hooks/use-create-pool-list";
 import useIsMobile from "@/hooks/use-is-mobile";
 import { useNavigate } from "react-router-dom";
+import chains from "@/config/chains";
 
 const Records = (props: any) => {
   const { className, records, loading, onPrevPage, onNextPage, hasNextPage, currentPage, recordsPrices } = props;
@@ -73,8 +74,19 @@ const Records = (props: any) => {
       width: isMobile ? 200 : 170,
       align: GridTableAlign.Right,
       render: (record: any) => {
+        const currentChain = Object.values(chains).find((it: any) => it.name.toLowerCase() === record.chain?.toLowerCase());
+        let txUrl: any;
+        if (currentChain) {
+          txUrl = `${currentChain?.blockExplorers?.default?.url}/tx/${record.tx_hash}?cluster=${import.meta.env.VITE_SOLANA_CLUSTER_NAME}`;
+        }
         return (
-          <div className="flex justify-end items-center gap-[11px]">
+          <div
+            className="flex justify-end items-center gap-[11px] cursor-pointer"
+            onClick={() => {
+              if (!txUrl) return;
+              window.open(txUrl, "_blank");
+            }}
+          >
             <div className="text-[#BBACA6]">
               {dayjs(record.updated_at).format("hh:mm D MMM, YYYY")}
             </div>
