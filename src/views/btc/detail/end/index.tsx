@@ -5,14 +5,16 @@ import { formatAddress } from "@/utils/format/address";
 import dayjs from "@/libs/dayjs";
 import { addThousandSeparator, formatNumber } from "@/utils/format/number";
 import useWinnerBidList from "../use-winner-bid-list";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import Big from "big.js";
 import useIsMobile from "@/hooks/use-is-mobile";
 import clsx from "clsx";
+import ProvablyFair from "@/sections/provably-fair";
 
 export default function EndPanel({ data }: { data: any }) {
   const { winnerBidList } = useWinnerBidList(data);
   const isMobile = useIsMobile();
+  const [openProvablyFair, setOpenProvablyFair] = useState(false);
 
   const [
     totalBids,
@@ -89,7 +91,7 @@ export default function EndPanel({ data }: { data: any }) {
               >
                 Winner
               </span>
-              <button className="text-[12px] underline button text-[#FFE9B2]">
+              <button onClick={() => {setOpenProvablyFair(true)}} className="text-[12px] underline button text-[#FFE9B2]">
                 Verify
               </button>
             </div>
@@ -247,6 +249,8 @@ export default function EndPanel({ data }: { data: any }) {
             </div>
           </div>
         </div>
+
+        <ProvablyFair open={openProvablyFair} onClose={() => {setOpenProvablyFair(false)}} defaultTab="provably-fair" />
       </div>
     )
   );
