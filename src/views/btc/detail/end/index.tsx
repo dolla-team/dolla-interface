@@ -7,7 +7,6 @@ import { addThousandSeparator, formatNumber } from "@/utils/format/number";
 import useWinnerBidList from "../use-winner-bid-list";
 import { useMemo } from "react";
 import Big from "big.js";
-import { BASE_TOKEN } from "@/config/btc";
 import useIsMobile from "@/hooks/use-is-mobile";
 import clsx from "clsx";
 

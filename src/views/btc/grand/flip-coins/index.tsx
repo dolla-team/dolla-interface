@@ -1,5 +1,4 @@
 import { useBtcContext } from "../../context";
-import FlipCoin from "../flip-coin";
 import { useEffect, useMemo, useRef, useState } from "react";
 import Result from "../../components/result";
 import { useDollaEyeContext } from "@/contexts/dolla-eye";
@@ -23,18 +22,18 @@ export default function FlipCoins() {
 
   const SIZE: Record<number, number> = isMobile
     ? {
-      1: 212,
-      10: 80,
-      50: 60,
-      100: 60
-    }
+        1: 212,
+        10: 80,
+        50: 60,
+        100: 60
+      }
     : {
-      1: 212,
-      5: 140,
-      10: 130,
-      50: 62,
-      100: 62
-    };
+        1: 212,
+        5: 140,
+        10: 130,
+        50: 62,
+        100: 62
+      };
   const { setCurrentEye } = useDollaEyeContext();
 
   const coinContainerRef = useRef<any>(null);
@@ -82,7 +81,7 @@ export default function FlipCoins() {
       if (contentRef.current && coinContainerRef.current) {
         const contentHeight = contentRef.current.offsetHeight;
         const containerHeight = coinContainerRef.current.offsetHeight;
-        
+
         setShouldCenter(contentHeight < containerHeight);
       }
     };
@@ -90,7 +89,7 @@ export default function FlipCoins() {
     checkHeightAndCenter();
 
     const resizeObserver = new ResizeObserver(checkHeightAndCenter);
-    
+
     if (contentRef.current) {
       resizeObserver.observe(contentRef.current);
     }
@@ -108,7 +107,9 @@ export default function FlipCoins() {
       <div
         className="w-full overflow-y-auto overflow-x-hidden h-full flex justify-center"
         style={{
-          maxWidth: isMobile ? "100%" : (SIZE[bids] + 20) * (bids > 10 ? 11 : 6),
+          maxWidth: isMobile
+            ? "100%"
+            : (SIZE[bids] + 20) * (bids > 10 ? 11 : 6),
           alignItems: shouldCenter ? "center" : "flex-start"
         }}
         ref={coinContainerRef}

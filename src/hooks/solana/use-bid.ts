@@ -184,7 +184,7 @@ export default function useBid(
       });
 
       let bidResponse = null;
-      let timer: any = null;
+
       console.time("bid loop");
       const loop = async () => {
         bidResponse = await axiosInstance.get(
@@ -202,10 +202,10 @@ export default function useBid(
 
           return;
         }
-        if (timer) {
-          clearTimeout(timer);
+        if (window.bidTimer) {
+          clearTimeout(window.bidTimer);
         }
-        timer = setTimeout(loop, 1000);
+        window.bidTimer = setTimeout(loop, 1000);
       };
       loop();
 
@@ -398,6 +398,12 @@ export default function useBid(
       fetchPoolInfo();
     }
   }, [poolId, wallets]);
+
+  useEffect(() => {
+    return () => {
+      clearTimeout(window.bidTimer);
+    };
+  }, []);
 
   return {
     bidding,

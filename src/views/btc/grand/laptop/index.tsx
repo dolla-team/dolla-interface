@@ -20,15 +20,17 @@ export default function Grand({ className }: { className?: string }) {
         className
       )}
     >
-      {pool?.status === 1 && (
+      {!isDetail && (
         <>
           <FlipCoins />
           {flipStatus === 3 && <FlippingCoin start={true} />}
           {flipStatus === 1 && <PreLoading />}
         </>
       )}
-      {pool?.status === 2 && <EndPanel data={pool} />}
-      {(pool?.status === 3 || pool?.status === 5) && <Cancel data={pool} />}
+      {pool?.status === 2 && isDetail && <EndPanel data={pool} />}
+      {(pool?.status === 3 || pool?.status === 5) && isDetail && (
+        <Cancel data={pool} />
+      )}
     </div>
   );
 }
