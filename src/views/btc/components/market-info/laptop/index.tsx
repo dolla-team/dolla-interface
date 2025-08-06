@@ -134,7 +134,7 @@ export default function MarketInfo() {
                 pool?.status === 3 ? "text-[#C3C3C3]" : "text-[#FFE9B2]"
               )}
             >
-              ${formatNumber(pool?.reward_usd, 0, true)}
+              ${formatNumber(pool?.value, 0, true)}
             </div>
           </div>
         </div>
