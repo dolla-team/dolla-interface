@@ -31,6 +31,7 @@ export const CannonCoinsProvider = ({
   const [pool, setPool] = useState<any>(null);
   const { data, getPoolRecommend } = usePoolRecommend(0, !params?.poolId);
   const [mobileMarketsOpen, setMobileMarketsOpen] = useState(false);
+  const poolCachedRef = useRef<any>(null);
 
   const onMobileMarketsClose = () => {
     setMobileMarketsOpen(false);
@@ -64,16 +65,29 @@ export const CannonCoinsProvider = ({
     if (flipStatus === 5) {
       coinsRef.current[0]?.flip();
     }
+
+    if (flipStatus === 6 && poolCachedRef.current?.status !== 1) {
+      if (!params?.poolId) {
+        clearTimeout(window.poolTimer);
+        getPoolRecommend();
+      } else {
+        setPool(poolCachedRef.current);
+      }
+    }
   }, [flipStatus]);
 
   const loopUpdatePool = async (_pool: any) => {
     clearTimeout(window.poolTimer);
     if (_pool?.status === 1) {
       const res = await onQueryPoolInfo(_pool?.pool_id);
-      if (res) setPool(res);
-      window.poolTimer = setTimeout(() => {
-        loopUpdatePool(res || _pool);
-      }, 10000);
+      if (res?.status === 1) {
+        setPool(res);
+        window.poolTimer = setTimeout(() => {
+          loopUpdatePool(res || _pool);
+        }, 10000);
+      } else {
+        poolCachedRef.current = res;
+      }
     } else {
       clearTimeout(window.poolTimer);
     }
@@ -146,6 +160,7 @@ export const CannonCoinsProvider = ({
 
           if (flipedNumberRef.current === bids) {
             flipedNumberRef.current = 0;
+
             if (!bidResult.bid.is_winner) {
               setFlipStatus(flipStatus !== 6 ? 6 : 0);
             } else {
