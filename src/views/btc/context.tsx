@@ -66,7 +66,7 @@ export const CannonCoinsProvider = ({
       coinsRef.current[0]?.flip();
     }
 
-    if (flipStatus === 6 && poolCachedRef.current?.status !== 1) {
+    if (flipStatus === 6 && poolCachedRef.current) {
       if (!params?.poolId) {
         clearTimeout(window.poolTimer);
         getPoolRecommend();
