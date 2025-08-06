@@ -61,7 +61,10 @@ export default function Winner({
         className="fixed right-[20px] top-[20px] z-[110] button"
         onClick={() => {
           onClose();
-          if (!isDetail) getPoolRecommend();
+          if (!isDetail) {
+            clearTimeout(window.poolTimer);
+            getPoolRecommend();
+          }
         }}
       >
         <CloseIcon size={36} />

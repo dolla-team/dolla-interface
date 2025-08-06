@@ -67,11 +67,12 @@ export const CannonCoinsProvider = ({
     }
 
     if (flipStatus === 6 && poolCachedRef.current) {
-      if (!params?.poolId) {
+      if (params?.poolId) {
+        setPool(poolCachedRef.current);
+      }
+      if (!params?.poolId && !bidResult?.bid?.is_winner) {
         clearTimeout(window.poolTimer);
         getPoolRecommend();
-      } else {
-        setPool(poolCachedRef.current);
       }
     }
   }, [flipStatus]);
