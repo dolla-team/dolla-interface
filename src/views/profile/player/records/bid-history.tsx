@@ -6,6 +6,8 @@ import { formatNumber } from "@/utils/format/number";
 import Big from "big.js";
 import useIsMobile from "@/hooks/use-is-mobile";
 import { useNavigate } from "react-router-dom";
+import useToast from "@/hooks/use-toast";
+import chains from "@/config/chains";
 
 const BidHistory = (props: any) => {
   const {
@@ -19,6 +21,7 @@ const BidHistory = (props: any) => {
 
   const isMobile = useIsMobile();
   const navigate = useNavigate();
+  const toast = useToast();
 
   const columns = [
     {
@@ -29,11 +32,11 @@ const BidHistory = (props: any) => {
       render: (record: any) => {
         return (
           <div
-           className="flex items-center gap-[7px] cursor-pointer"
-           onClick={() => {
-            navigate(`/btc/${record.pool_id}`);
-           }}
-           >
+            className="flex items-center gap-[7px] cursor-pointer"
+            onClick={() => {
+              navigate(`/btc/${record.pool_id}`);
+            }}
+          >
             <div className="">#{record.pool_id}</div>
             <img src="/profile/icon-share.svg" alt="share" className="w-[9px] h-[9px] shrink-0" />
           </div>
@@ -83,11 +86,42 @@ const BidHistory = (props: any) => {
     },
     {
       dataIndex: "date",
-      title: "Date",
-      width: isMobile ? 180 : 160,
+      title: "Date /  TX",
+      width: isMobile ? 230 : 210,
       align: GridTableAlign.Right,
       render: (record: any) => {
-        return dayjs(record.updated_at).format("hh:mm D MMM, YYYY");
+        const currentChain = Object.values(chains).find((it: any) => it.name.toLowerCase() === record.chain?.toLowerCase());
+        let txUrl: any;
+        if (currentChain) {
+          txUrl = `${currentChain?.blockExplorers?.default?.url}/tx/${record.tx_hash}?cluster=${import.meta.env.VITE_SOLANA_CLUSTER_NAME}`;
+        }
+        return (
+          <div className="flex items-center justify-end gap-[10px]">
+            <div className="">
+              {dayjs(record.updated_at).format("hh:mm D MMM, YYYY")}
+            </div>
+            <a
+              href={txUrl ? txUrl : "javascript:void(0);"}
+              target="_blank"
+              rel="noreferrer noopener nofollow"
+              className="text-[#FFC42F] underline underline-offset-2 font-[SpaceGrotesk] text-[16px] font-[400]"
+            >
+              TX
+            </a>
+            <button
+              type="button"
+              className="button w-[14px] h-[14px] shrink-0 flex justify-center items-center bg-[url('/profile/icon-copy.svg')] bg-no-repeat bg-center bg-contain"
+              onClick={async () => {
+                try {
+                  await navigator.clipboard.writeText(record.tx_hash || "");
+                  toast.success({ title: "Copied to clipboard" });
+                } catch (error) {
+                  toast.fail({ title: "Failed to copy" });
+                }
+              }}
+            />
+          </div>
+        );
       },
     },
   ];
