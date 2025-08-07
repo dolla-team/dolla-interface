@@ -47,7 +47,7 @@ export default function CreatePanel() {
 
   return (
     <div className="w-[400px] bg-gray-800 rounded-lg py-6 px-4">
-      <div className="mb-4 p-3 bg-blue-900/20 border border-blue-500 rounded">
+      <div className="mb-4 p-3 bg-blue-900/20 border border-[#FFC42F] rounded">
         <p className="text-blue-200 text-sm">
           <strong>当前账户:</strong> {accountId}
         </p>
