@@ -75,22 +75,6 @@ export async function checkUserStorageStatus(accountId: string) {
   };
 }
 
-export async function getBtcDepositAddress(params: {
-  nearAccountId: string;
-  bidUnit: string;
-  bep: string; // BTC Equivalent Prize
-}) {
-  return callContractView(CONTRACT_ID, "get_btc_deposit_address", {
-    deposit_msg: {
-      near_account_id: params.nearAccountId,
-      game_params: {
-        bid_unit: params.bidUnit,
-        bep: params.bep
-      }
-    }
-  });
-}
-
 export async function getPrizeSendingTxs(
   fromIndex: number = 0,
   limit: number = 100
