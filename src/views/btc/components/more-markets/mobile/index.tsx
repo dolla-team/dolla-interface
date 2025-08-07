@@ -4,13 +4,18 @@ import clsx from "clsx";
 import usePoolList from "@/hooks/use-pool-list";
 import Market from "../market";
 import MarketLoading from "../market-loading";
+import Loading from "@/components/icons/loading";
 import InfiniteScrollContainer from "@/components/infinite-scroll-container";
 import { useRef, useEffect, useCallback, useState } from "react";
 
 const Markets = (props: any) => {
-  const { } = props;
+  const {} = props;
 
-  const { onMobileMarketsClose, setSelectedMarket, pool: selectedMarket } = useBtcContext();
+  const {
+    onMobileMarketsClose,
+    setSelectedMarket,
+    pool: selectedMarket
+  } = useBtcContext();
   const {
     poolList,
     loading,
@@ -52,7 +57,9 @@ const Markets = (props: any) => {
     let minDistance = Infinity;
 
     // Check each Market element
-    const marketsEle = containerRef.current.querySelectorAll(".markets-list-market-item");
+    const marketsEle = containerRef.current.querySelectorAll(
+      ".markets-list-market-item"
+    );
     for (let i = 0; i < marketsEle.length; i++) {
       const element = marketsEle[i];
       const rect = element.getBoundingClientRect();
@@ -70,12 +77,15 @@ const Markets = (props: any) => {
   }, [poolList, activeMarketIndex]);
 
   // Scroll event handler
-  const handleScroll = useCallback((e: any) => {
-    // Get the container element from the event target
-    const container = e.target as HTMLDivElement;
-    containerRef.current = container;
-    checkActiveMarket();
-  }, [checkActiveMarket]);
+  const handleScroll = useCallback(
+    (e: any) => {
+      // Get the container element from the event target
+      const container = e.target as HTMLDivElement;
+      containerRef.current = container;
+      checkActiveMarket();
+    },
+    [checkActiveMarket]
+  );
 
   return (
     <div className="relative w-full h-[100dvh] bg-[#1A191D] text-[14px] leading-[100%] font-[400] font-[SpaceGrotesk]">
@@ -86,7 +96,11 @@ const Markets = (props: any) => {
             className="absolute left-[13px] top-[0px] shrink-0 w-[32px] h-[32px] flex justify-center items-center border border-[#3B3951] bg-white/10 rounded-[8px]"
             onClick={onMobileMarketsClose}
           >
-            <img src="/icon-back.svg" alt="back" className="w-[11px] h-[17px]" />
+            <img
+              src="/icon-back.svg"
+              alt="back"
+              className="w-[11px] h-[17px]"
+            />
           </button>
           <div className="font-[DelaGothicOne] text-[26px] leading-[100%] font-[400] bg-clip-text text-transparent bg-[linear-gradient(270deg,_#FFC42F_0%,_#FFF698_100%)]">
             Markets
@@ -95,7 +109,9 @@ const Markets = (props: any) => {
         </div>
         <div className="w-full p-[17px_14px_0]">
           <div className="flex items-center flex-nowrap gap-[10px]">
-            <div className="shrink-0 text-[#ADBCCF] text-[12px] w-[70px]">Market Size</div>
+            <div className="shrink-0 text-[#ADBCCF] text-[12px] w-[70px]">
+              Market Size
+            </div>
             <div className="flex items-center gap-[8px] flex-1 w-0 overflow-x-auto pr-[10px]">
               {MarketSizes.map((item: { label: string; key: number }) => (
                 <button
@@ -114,7 +130,9 @@ const Markets = (props: any) => {
             </div>
           </div>
           <div className="flex items-center flex-nowrap gap-[10px] mt-[12px]">
-            <div className="shrink-0 text-[#ADBCCF] text-[12px] w-[70px]">Filter by</div>
+            <div className="shrink-0 text-[#ADBCCF] text-[12px] w-[70px]">
+              Filter by
+            </div>
             <div className="flex items-center gap-[8px] flex-1 w-0 overflow-x-auto pr-[10px]">
               {MarketFilters.map((item) => (
                 <button
@@ -143,7 +161,7 @@ const Markets = (props: any) => {
         hasMore={hasMore}
         className={clsx(
           "pt-[150px] w-full h-full flex flex-col items-center gap-[12px] pb-[70px]",
-          (loading && !poolList.length) ? "overflow-y-hidden" : "overflow-y-auto"
+          loading && !poolList.length ? "overflow-y-hidden" : "overflow-y-auto"
         )}
         threshold={50}
         onScroll={handleScroll}
@@ -165,11 +183,14 @@ const Markets = (props: any) => {
             className={clsx("markets-list-market-item", `market-item-${index}`)}
           />
         ))}
-        {(loading && !poolList.length) && (
+        {loading && !poolList.length && (
           <>
-            {Array.from({ length: LIMIT }).map((_, index) => (
+            {/* {Array.from({ length: 5 }).map((_, index) => (
               <MarketLoading key={index} />
-            ))}
+            ))} */}
+            <div className="flex justify-center items-center h-full">
+              <Loading size={40} />
+            </div>
           </>
         )}
         {!loading && poolList.length === 0 && (
