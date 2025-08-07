@@ -31,9 +31,18 @@ export const getNetProfit = (pool: any) => {
   return Big(0);
 };
 
-export const getProfitFee = (pool: any) => {
+export const getProfitFee = (pool: any, opts?: { isLog?: boolean;}) => {
+  const { isLog = false } = opts || {};
+
   const netProfit = getNetProfit(pool);
-  const netProfitPercent = netProfit.div(getReAnchorPrice(pool));
+  const reAnchorPrice = getReAnchorPrice(pool);
+  const netProfitPercent = netProfit.div(reAnchorPrice);
+  if (isLog) {
+    console.log("------ Calculate Fee Start: pool: %o ------", pool.pool_id);
+    console.log("netProfit: %o", netProfit.toString());
+    console.log("reAnchorPrice: %o", reAnchorPrice.toString());
+    console.log("netProfitPercent: %o", netProfitPercent.toString());
+  }
   // net profit = accumulative_bids / anchorPrice
   // < 20%           =   0   fee
   // >= 20% & < 35%  =   5%  fee
@@ -41,18 +50,50 @@ export const getProfitFee = (pool: any) => {
   // >= 50% & < 100% =   20% fee
   // >= 100%         =   35% fee
   if (netProfitPercent.lt(0.2)) {
+    if (isLog) {
+      console.log("finalFee: %o", Big(0).toString());
+      console.log("------ Calculate Fee End ------");
+    }
     return Big(0);
   }
   if (netProfitPercent.gte(0.2) && netProfitPercent.lt(0.35)) {
-    return netProfit.mul(0.05);
+    const highFee = Big(reAnchorPrice).times(1.35);
+    const lowFee = Big(reAnchorPrice).times(1.2);
+    const finalFee = Big(Big(highFee).minus(lowFee)).times(0.05);
+    if (isLog) {
+      console.log("finalFee: %o", finalFee.toString());
+      console.log("------ Calculate Fee End ------");
+    }
+    return finalFee;
   }
   if (netProfitPercent.gte(0.35) && netProfitPercent.lt(0.5)) {
-    return netProfit.mul(0.1);
+    const highFee = Big(reAnchorPrice).times(1.5);
+    const lowFee = Big(reAnchorPrice).times(1.35);
+    const finalFee = Big(Big(highFee).minus(lowFee)).times(0.1);
+    if (isLog) {
+      console.log("finalFee: %o", finalFee.toString());
+      console.log("------ Calculate Fee End ------");
+    }
+    return finalFee;
   }
   if (netProfitPercent.gte(0.5) && netProfitPercent.lt(1)) {
-    return netProfit.mul(0.2);
+    const highFee = Big(reAnchorPrice).times(2);
+    const lowFee = Big(reAnchorPrice).times(1.5);
+    const finalFee = Big(Big(highFee).minus(lowFee)).times(0.2);
+    if (isLog) {
+      console.log("finalFee: %o", finalFee.toString());
+      console.log("------ Calculate Fee End ------");
+    }
+    return finalFee;
   }
-  return netProfit.mul(0.35);
+  const highFee = Big(reAnchorPrice).times(2);
+  const lowFee = Big(reAnchorPrice).times(1.5);
+  const finalFee = Big(Big(highFee).minus(lowFee)).times(0.35);
+  if (isLog) {
+    console.log("finalFee: %o", finalFee.toString());
+    console.log("------ Calculate Fee End ------");
+  }
+  return finalFee;
 };
 
 // 8% penalty
