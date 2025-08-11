@@ -32,7 +32,7 @@ const StatisticsPlayer = (props: any) => {
     if (userInfo.claim_pool) {
       _result[1] = userInfo
         .claim_pool
-        .reduce((acc: any, item: any) => Big(acc).plus(Big(item.accumulative_bids || 0).minus(getProfitFee(item))), 0);
+        .reduce((acc: any, item: any) => Big(acc).plus(Big(item.accumulative_bids || 0).minus(getProfitFee(item, { isLog: false }))), 0);
     }
     return _result;
   }, [userInfo]);
@@ -50,7 +50,7 @@ const StatisticsPlayer = (props: any) => {
         </LabelValue>
         <LabelValue label="Claimable" className="" valueClassName="flex items-center gap-[13px]">
           <div className="">
-            {formatNumber(claimableValue, 2, true, { prefix: "$", isShort: true, isShortUppercase: true })}
+            {formatNumber(claimableValue, 2, true, { prefix: "$", isShort: true, isShortUppercase: true, round: Big.roundDown })}
           </div>
           <ButtonV2
             className=""

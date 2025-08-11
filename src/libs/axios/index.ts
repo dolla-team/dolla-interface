@@ -31,7 +31,7 @@ axiosInstance.interceptors.request.use(
     if (token) {
       config.headers.Authorization = token;
       // FIXME remove this
-      // config.headers.Authorization = "03d521d8708971d4bf5ea9d4283db02369129fe812cf8dec5b5b6fb281d6f171ec991281e2eb89f25971f9fb83d59fd1a66439f77490db4f30bc25d04568f3b4";
+      // config.headers.Authorization = "699185a8d3a09629a68ca293b2f4a6df92aef4b4059bbbe13073a87dc0724b482b2cf9376f5826d3bbfd183135ac4833212244c84f5c96c3f5fd2502e51938bb";
     }
 
     return config;
