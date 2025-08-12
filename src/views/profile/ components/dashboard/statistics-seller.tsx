@@ -54,7 +54,7 @@ const StatisticsPlayer = (props: any) => {
           </div>
           <ButtonV2
             className=""
-            disabled={Big(claimableValue || 0).lte(0)}
+            // disabled={Big(claimableValue || 0).lte(0)}
             onClick={() => {
               setClaimModalOpen(true);
             }}
