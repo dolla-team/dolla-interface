@@ -38,10 +38,10 @@ export const getProfitFee = (pool: any, opts?: { isLog?: boolean; }) => {
   const reAnchorPrice = getReAnchorPrice(pool);
   const netProfitPercent = netProfit.div(reAnchorPrice);
   if (isLog) {
-    console.log("------ Calculate Fee Start: pool: %o ------", pool.pool_id);
-    console.log("netProfit: %o", netProfit.toString());
-    console.log("BTCPrice: %o", reAnchorPrice.toString());
-    console.log("netProfitPercent: %o", netProfitPercent.toString());
+    console.log("%c------ Calculate Fee Start: pool: %s ------", "background:#03A6A1;color:#fff;", pool.pool_id);
+    console.log("BTCPrice: (anchor_price(%o) / 10^decimals(%o)) / 1.2 = %o", pool.anchor_price, QUOTE_TOKEN.decimals, reAnchorPrice.toString());
+    console.log("netProfit: accumulative_bids(%o) - BTCPrice(%o) = %o", pool?.accumulative_bids, reAnchorPrice.toString(), netProfit.toString());
+    console.log("netProfitPercent: netProfit(%o) / BTCPrice(%o) = %o", netProfit.toString(), reAnchorPrice.toString(), netProfitPercent.toString());
   }
 
   // net profit = accumulative_bids / anchorPrice
@@ -90,7 +90,7 @@ export const getProfitFee = (pool: any, opts?: { isLog?: boolean; }) => {
 
   if (isLog) {
     console.log("Final fee: %o", finalStageFee.toString());
-    console.log("------ Calculate Fee End ------");
+    console.log("%c------ Calculate Fee End ------", "background:#03A6A1;color:#fff;");
   }
   return finalStageFee;
 };

@@ -124,7 +124,7 @@ const ClaimIndex = (props: any) => {
       width: 110,
       render: (record: any) => {
         return formatNumber(
-          type === "player" ? record.pool_info?.accumulative_bids : Big(record.pool_info?.accumulative_bids || 0).minus(getProfitFee(record.pool_info)),
+          type === "player" ? record.pool_info?.accumulative_bids : Big(record.pool_info?.accumulative_bids || 0).minus(getProfitFee(record.pool_info, { isLog: true })),
           2,
           true,
           {
