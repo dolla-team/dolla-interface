@@ -219,7 +219,7 @@ const MarketItem = (props: any) => {
                   <ButtonV2
                     type="default"
                     className="!h-[28px] !px-[7px] !rounded-[8px] !text-[14px] flex items-center gap-[3px]"
-                    // disabled={!cancelValid}
+                    disabled={!cancelValid}
                     onClick={(e: any) => {
                       e.stopPropagation();
                       onCancel(e);
