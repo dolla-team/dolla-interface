@@ -13,6 +13,7 @@ export default function BidSelection({
   tokenBalance,
   disabled,
   bids,
+  pool,
   flipStatus,
   onChangeBids,
   onBidClick
@@ -20,6 +21,7 @@ export default function BidSelection({
   tokenBalance: string;
   disabled: boolean;
   bids: number;
+  pool: string;
   flipStatus: number;
   onChangeBids: (bids: number) => void;
   onBidClick: () => void;
@@ -27,6 +29,8 @@ export default function BidSelection({
   const [showProvablyFair, setShowProvablyFair] = useState(false);
   const { userInfo } = useAuth();
   const [showCashier, setShowCashier] = useState(false);
+
+  console.log('pool:', pool);
 
   return (
     <div className="absolute bottom-0 left-[3%] w-full h-[202px] flex items-center justify-center">
@@ -90,6 +94,7 @@ export default function BidSelection({
 
       <ProvablyFair
         open={showProvablyFair}
+        pool={pool}
         onClose={() => setShowProvablyFair(false)}
       />
 

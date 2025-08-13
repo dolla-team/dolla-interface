@@ -1,10 +1,11 @@
 import axiosInstance from "@/libs/axios";
 import { formatAddress } from "@/utils/format/address";
-import { useDebounceFn, useThrottle, useThrottleFn } from "ahooks";
+import { useDebounceFn } from "ahooks";
+import Big from "big.js";
 import { useCallback, useEffect, useState } from "react";
 
 const LIMIT = 10;
-export default function useProvably() {
+export default function useProvably({ currentPool }: { currentPool: any }) {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false);
     const [offset, setOffset] = useState(0)
@@ -12,10 +13,15 @@ export default function useProvably() {
     const [hasNext, setHasNext] = useState(false)
     const [poolId, setPoolId] = useState('')
     const [chain, setChain] = useState('solana')
+    const [hasMore, setHasMore] = useState(false)
+    const [dataRecords, setDataRecords] = useState([])
+    const [recordLoading, setRecordLoading] = useState(false)
 
     useEffect(() => {
         getProvablyDataThrottled()
     }, [offset, youParticipateOnly, poolId]);
+
+    console.log('currentPool:', currentPool)
 
     const getProvablyData = useCallback(async (query: any) => {
         try {
@@ -101,6 +107,39 @@ export default function useProvably() {
 
     }, [])
 
+
+    const getRecords = async (_page: number) => {
+        setRecordLoading(true);
+        try {
+          const response = await axiosInstance.get(
+            `/api/v1/user/player/history?chain=${currentPool.chain}&pool_id=${currentPool.id}&limit=${LIMIT}&offset=${
+              (_page - 1) * LIMIT
+            }`
+          );
+    
+          setDataRecords(
+            response.data.data.list.map((item: any) => {
+              return {
+                ...item,
+                purchase_amount: Big(item.purchase_amount || 0)
+                  .div(10 ** item.purchase_token_info.decimals)
+                  .toString(),
+                rewardTokenInfo: item.reward_token_info?.[0] || {}
+              };
+            })
+          );
+          setHasMore(response.data.data.list.length === LIMIT);
+        } catch (error) {
+          console.log(error);
+        } finally {
+          setRecordLoading(false);
+        }
+      };
+
+    useEffect(() => {
+        getRecords(1)
+    }, [currentPool])
+
     return {
         data, 
         loading, 
@@ -115,6 +154,10 @@ export default function useProvably() {
         setPoolId, 
         poolId,
         setChain,
-        chain
+        chain,
+        getRecords,
+        dataRecords,
+        recordLoading,
+        hasMore,
     };
 }

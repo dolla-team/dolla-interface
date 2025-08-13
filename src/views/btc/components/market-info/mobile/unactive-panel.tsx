@@ -18,6 +18,7 @@ export default function UnactivePanel({ pool }: { pool: any }) {
         <ProvablyFair
           open={showProvablyFair}
           onClose={() => setShowProvablyFair(false)}
+          pool={pool?.id}
         />
       </div>
       <div className="flex items-center justify-between mt-[8px]">

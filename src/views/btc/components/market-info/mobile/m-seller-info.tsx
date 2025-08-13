@@ -29,6 +29,7 @@ export default function MSellerInfo({ pool }: any) {
       <ProvablyFair
         open={showProvablyFair}
         onClose={() => setShowProvablyFair(false)}
+        pool={pool?.id}
       />
     </>
   );

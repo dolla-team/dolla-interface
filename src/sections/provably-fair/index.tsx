@@ -6,8 +6,9 @@ import VerifyList from "./verifyList";
 import Switch from "@/components/switch";
 import { useEffect, useState } from "react";
 import useIsMobile from "@/hooks/use-is-mobile";
+import BidHistory from "@/views/profile/player/records/bid-history";
 
-export default function ProvablyFair({ open, onClose, defaultTab }: { open: boolean, onClose: () => void, defaultTab?: string }) {
+export default function ProvablyFair({ open, onClose, defaultTab, pool }: { open: boolean, onClose: () => void, defaultTab?: string, pool: string }) {
   const [tab, setTab] = useState("verify");
   const isMobile = useIsMobile();
 
@@ -18,17 +19,21 @@ export default function ProvablyFair({ open, onClose, defaultTab }: { open: bool
     }
   }, [defaultTab]);
 
-  const { 
-    data: provablyData, 
-    loading: provablyLoading, 
-    hasNext, verifySolana, 
-    setYouParticipateOnly, 
-    youParticipateOnly, 
-    offset, 
-    setOffset, 
+  const {
+    data: provablyData,
+    loading: provablyLoading,
+    hasNext, verifySolana,
+    setYouParticipateOnly,
+    youParticipateOnly,
+    offset,
+    setOffset,
     setPoolId,
     setChain,
-  } = useProvably();
+    getRecords,
+    dataRecords,
+    recordLoading,
+    hasMore,
+  } = useProvably({ currentPool: pool });
 
   return (
     <Modal open={open} onClose={onClose}>
@@ -55,24 +60,23 @@ export default function ProvablyFair({ open, onClose, defaultTab }: { open: bool
         }
 
         {
-          isMobile && (
-            <Switch
-              tabs={[
-                { label: "Bid Verify", value: "verify" },
-                { label: "Ended Markets", value: "markets" }
-                // { label: "Records", value: "records" }
-              ]}
-              onChange={(value) => {
-                setTab(value as string);
-              }}
-              tab={tab}
-              className="bg-[#00000033] h-[46px] w-full px-[20px] justify-center gap-[50px] rounded-t-[16px]"
-              type="line"
-            />
-          )
+          <Switch
+            tabs={[
+              { label: "Current Market", value: "verify" },
+              { label: "Ended Markets", value: "markets" }
+              // { label: "Records", value: "records" }
+            ]}
+            onChange={(value) => {
+              setTab(value as string);
+            }}
+            tab={tab}
+            className={clsx("h-[46px] w-full px-[20px] justify-center gap-[50px]", isMobile ? "rounded-t-[16px] bg-[#00000033]" : "bg-inherit")}
+            type="line"
+          />
+
         }
 
-        {
+        {/* {
           !isMobile && (
             <div className={clsx("pt-[20px] pb-[30px] pl-[20px] pr-[30px]")}>
               <div className="pl-[10px]">
@@ -91,51 +95,36 @@ export default function ProvablyFair({ open, onClose, defaultTab }: { open: bool
                 offset={offset}
                 setOffset={setOffset} />
 
-              {/* <div className="w-[544px] flex items-center gap-[12px] mt-[14px] text-white">
-            <input
-              className="w-1/3 h-[46px] bg-[#00000033] rounded-[10px] p-[15px] text-[16px]"
-              placeholder="Server Seed"
-            />
-            <input
-              className="w-1/3 h-[46px] bg-[#00000033] rounded-[10px] p-[15px] text-[16px]"
-              placeholder="Public Seed"
-            />
-            <input
-              className="w-1/3 h-[46px] bg-[#00000033] rounded-[10px] p-[15px] text-[16px]"
-              placeholder="EOS Block"
-            />
-          </div> */}
-
             </div>
           )
-        }
+        } */}
 
         {
-          isMobile && (
-            <div className="p-[10px] pt-[20px]">
-              {
-                tab === "verify" && (
+          <div className="p-[10px] pt-[20px]">
+            {
+              tab === "verify" && (
+                <div>
+                  <BidHistory data={dataRecords} loading={recordLoading} hasMore={hasMore} onPageChange={getRecords} fullAction={true}/>
                   <VerifiForm handleVerify={verifySolana} onPoolIdChange={(value: any) => {
-                    console.log('value:', value);
                     setPoolId(value.pool_id)
                     setChain(value.chain || 'solana')
                   }} />
-                )
-              }
-              {
-                tab === "markets" && (
-                  <VerifyList
-                    hasNext={hasNext}
-                    list={provablyData}
-                    loading={provablyLoading}
-                    setYouParticipateOnly={setYouParticipateOnly}
-                    youParticipateOnly={youParticipateOnly}
-                    offset={offset}
-                    setOffset={setOffset} />
-                )
-              }
-            </div>
-          )
+                </div>
+              )
+            }
+            {
+              tab === "markets" && (
+                <VerifyList
+                  hasNext={hasNext}
+                  list={provablyData}
+                  loading={provablyLoading}
+                  setYouParticipateOnly={setYouParticipateOnly}
+                  youParticipateOnly={youParticipateOnly}
+                  offset={offset}
+                  setOffset={setOffset} />
+              )
+            }
+          </div>
         }
 
       </div>

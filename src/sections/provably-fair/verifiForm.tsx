@@ -33,7 +33,7 @@ export default function VerifiForm({ handleVerify, onPoolIdChange }: { handleVer
   }, [value])
 
   return (
-    <div>
+    <div className="px-[10px]">
       <div className="text-[16px] text-[#BBACA6]">Verify</div>
       <div className={clsx("flex gap-[18px] mt-[10px]", isMobile ? "flex-col" : "flex-row items-center")}>
         <div className={clsx("flex-1 relative h-[46px] bg-black/20 rounded-[10px] text-[16px] text-white", isMobile ? "w-full" : "flex-1")}>

@@ -251,7 +251,7 @@ export default function EndPanel({ data }: { data: any }) {
           </div>
         </div>
 
-        <ProvablyFair open={openProvablyFair} onClose={() => {setOpenProvablyFair(false)}} defaultTab="provably-fair" />
+        <ProvablyFair pool={data?.id} open={openProvablyFair} onClose={() => {setOpenProvablyFair(false)}} defaultTab="provably-fair" />
       </div>
     )
   );

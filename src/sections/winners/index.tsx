@@ -18,12 +18,12 @@ export default function TopWinner() {
       .toString();
 
     let lastBids = 0;
-    data.bid_list.forEach((item: any) => {
+    data.bid_list?.forEach((item: any) => {
       if (item.is_winner) {
         lastBids = item.times;
       }
     });
-    const _returnMultiple = Big(data?.reward_usd).div(lastBids).toFixed(0);
+    const _returnMultiple = Big(data?.reward_usd).div(lastBids || 1).toFixed(0);
 
     return [_a, _rewardInfo, _returnMultiple];
   }, [data]);
