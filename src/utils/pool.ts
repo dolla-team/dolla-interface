@@ -47,10 +47,28 @@ export const getProfitFee = (pool: any, opts?: { isLog?: boolean; }) => {
   // net profit = accumulative_bids / anchorPrice
 
   let finalStageFee = Big(0);
-  const calcStageFee = (lowerRate: number, upperRate: number, fee: number) => {
-    const highFee = Big(reAnchorPrice).times(upperRate);
+  const calcStageFee = (lowerRate: number, upperRate: number, fee: number, totalBids: number) => {
+    let isOverTotalBids = false;
+    let highFee = Big(reAnchorPrice).times(upperRate);
+    if (Big(highFee).gt(totalBids)) {
+      highFee = Big(totalBids);
+      isOverTotalBids = true;
+    }
     const lowFee = Big(reAnchorPrice).times(lowerRate);
     const finalStageFee = Big(Big(highFee).minus(lowFee)).times(fee);
+    if (isLog) {
+      console.log(
+        "%s% - %s% stage fee: (%s - %s x BTCPrice(%o)) x %s%(%s) = %o",
+        Big(lowerRate).minus(1).times(100).toString(),
+        Big(upperRate).minus(1).times(100).toString(),
+        isOverTotalBids ? `accumulative_bids(${totalBids})` : `${upperRate} x BTCPrice(${reAnchorPrice.toString()})`,
+        lowerRate,
+        reAnchorPrice.toString(),
+        fee * 100,
+        fee,
+        finalStageFee.toString()
+      );
+    }
     return finalStageFee;
   };
 
@@ -59,32 +77,28 @@ export const getProfitFee = (pool: any, opts?: { isLog?: boolean; }) => {
   }
 
   if (netProfitPercent.gte(0.2)) {
-    const currentStageFee = calcStageFee(1.2, 1.35, 0.05);
+    const currentStageFee = calcStageFee(1.2, 1.35, 0.05, pool?.accumulative_bids);
     finalStageFee = Big(finalStageFee).plus(currentStageFee);
-    if (isLog) {
-      console.log("20% - 35% stage fee: (1.35 x BTCPrice(%o) - 1.2 x BTCPrice(%o)) x 5%(0.05) = %o", reAnchorPrice.toString(), reAnchorPrice.toString(), currentStageFee.toString());
-    }
   }
   if (netProfitPercent.gte(0.35)) {
-    const currentStageFee = calcStageFee(1.35, 1.5, 0.1);
+    const currentStageFee = calcStageFee(1.35, 1.5, 0.1, pool?.accumulative_bids);
     finalStageFee = Big(finalStageFee).plus(currentStageFee);
-    if (isLog) {
-      console.log("35% - 50% stage fee: (1.5 x BTCPrice(%o) - 1.35 x BTCPrice(%o)) x 10%(0.1) = %o", reAnchorPrice.toString(), reAnchorPrice.toString(), currentStageFee.toString());
-    }
   }
   if (netProfitPercent.gte(0.5)) {
-    const currentStageFee = calcStageFee(1.5, 2, 0.2);
+    const currentStageFee = calcStageFee(1.5, 2, 0.2, pool?.accumulative_bids);
     finalStageFee = Big(finalStageFee).plus(currentStageFee);
-    if (isLog) {
-      console.log("50% - 100% stage fee: (2 x BTCPrice(%o) - 1.5 x BTCPrice(%o)) x 20%(0.2) = %o", reAnchorPrice.toString(), reAnchorPrice.toString(), currentStageFee.toString());
-    }
   }
   if (netProfitPercent.gte(1)) {
     const highFee = Big(reAnchorPrice).times(2);
     const currentStageFee = Big(Big(pool?.accumulative_bids).minus(highFee)).times(0.35);
     finalStageFee = Big(finalStageFee).plus(currentStageFee);
     if (isLog) {
-      console.log("over than 100% stage fee: (accumulative_bids(%o) - 2 x BTCPrice(%o)) x 35%(0.35) = %o", pool?.accumulative_bids, reAnchorPrice.toString(), currentStageFee.toString());
+      console.log(
+        "over than 100% stage fee: (accumulative_bids(%o) - 2 x BTCPrice(%o)) x 35%(0.35) = %o",
+        pool?.accumulative_bids,
+        reAnchorPrice.toString(),
+        currentStageFee.toString()
+      );
     }
   }
 
