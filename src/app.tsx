@@ -20,6 +20,8 @@ import BTC from "./views/btc";
 const LazyBtcCreate = lazy(() => import("./views/btc-create"));
 const LazyProfilePlayer = lazy(() => import("./views/profile/player"));
 const LazyProfileSeller = lazy(() => import("./views/profile/seller"));
+const LazyTerms = lazy(() => import("./views/terms"));
+const LazyPolicy = lazy(() => import("./views/policy"));
 
 import("react-toastify/dist/ReactToastify.css");
 
@@ -87,6 +89,14 @@ const router = createBrowserRouter([
       {
         path: "portfolio/seller",
         element: <LazyProfileSeller />
+      },
+      {
+        path: "terms-of-service",
+        element: <LazyTerms />
+      },
+      {
+        path: "privacy-policy",
+        element: <LazyPolicy />
       }
     ]
   },

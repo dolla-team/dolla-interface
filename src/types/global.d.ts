@@ -12,6 +12,7 @@ declare global {
     poolTimer: NodeJS.Timeout;
     winnerTimer: NodeJS.Timeout;
     cachedPoolId: number;
+    bidTimer: NodeJS.Timeout;
   }
 }
 

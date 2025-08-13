@@ -3,6 +3,7 @@ import MultipleBg from "./multiple-bg";
 import { formatNumber } from "@/utils/format/number";
 import { formatAddress } from "@/utils/format/address";
 import { AnimatePresence, motion } from "framer-motion";
+import clsx from "clsx";
 
 export default function MWinnerCard({
   data,
@@ -36,17 +37,26 @@ export default function MWinnerCard({
                 email={data?.user_info?.email}
                 className="rounded-full"
               />
-              <div className="absolute top-[-18px] right-[-18px] w-[34px] h-[38px]">
-                <div className="text-black relative z-[2] rotate-[15deg] flex flex-col items-center justify-center w-full h-full  font-[DelaGothicOne]">
-                  <span className="font-bold text-[10px]">
-                    {multiple
-                      ? formatNumber(multiple, 0, true, { isShort: true })
-                      : 0}{" "}
-                  </span>
-                  <span className="text-[8px] mt-[-2px]">X</span>
+              {multiple && (
+                <div className="absolute top-[-18px] right-[-18px] w-[34px] h-[38px]">
+                  <div className="text-black relative z-[2] rotate-[15deg] px-[6px] flex flex-wrap items-center justify-center w-full h-full  font-[DelaGothicOne]">
+                    <span className="font-bold text-[10px]">
+                      {multiple
+                        ? formatNumber(multiple, 0, true, { isShort: true })
+                        : 0}{" "}
+                    </span>
+                    <span
+                      className={clsx(
+                        "text-[8px]",
+                        multiple > 99 ? "mt-[-20px]" : "mt-[2px]"
+                      )}
+                    >
+                      X
+                    </span>
+                  </div>
+                  <MultipleBg size={34} />
                 </div>
-                <MultipleBg size={34} />
-              </div>
+              )}
             </div>
             <div className="text-[14px] text-white ml-[20px]">
               {data?.pool_info?.winner_user_email ||

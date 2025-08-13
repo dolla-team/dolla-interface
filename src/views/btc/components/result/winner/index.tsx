@@ -23,7 +23,8 @@ export default function Winner({
   const [animationStatus, setAnimationStatus] = useState(0); // 0: coin rotating, 1: show bg
   const coinRef = useRef<HTMLDivElement>(null);
   const bgRef = useRef<HTMLDivElement>(null);
-  const { poolAmount, getPoolRecommend, pool, bids } = useBtcContext();
+  const { poolAmount, getPoolRecommend, pool, bids, isDetail } =
+    useBtcContext();
   const isMobile = useIsMobile();
 
   useEffect(() => {
@@ -60,7 +61,10 @@ export default function Winner({
         className="fixed right-[20px] top-[20px] z-[110] button"
         onClick={() => {
           onClose();
-          getPoolRecommend();
+          if (!isDetail) {
+            clearTimeout(window.poolTimer);
+            getPoolRecommend();
+          }
         }}
       >
         <CloseIcon size={36} />

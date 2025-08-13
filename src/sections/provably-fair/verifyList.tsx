@@ -3,11 +3,13 @@ import Pagination from "@/components/pagination";
 import useIsMobile from "@/hooks/use-is-mobile";
 import clsx from "clsx";
 import { useCallback, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function VerifyList({ hasNext, list, loading, setYouParticipateOnly, youParticipateOnly, offset, setOffset }: { hasNext: boolean, list: any[], loading: boolean, setYouParticipateOnly: (value: boolean) => void, youParticipateOnly: boolean, offset: number, setOffset: (value: number) => void }) {
     const [isScroll, setIsScroll] = useState(false);
     const isMobile = useIsMobile();
-
+    const navigate = useNavigate();
+    
     const handleScroll = useCallback((e: any) => {
         if (isMobile) {
             setIsScroll(e.target.scrollLeft > 0);
@@ -76,7 +78,9 @@ export default function VerifyList({ hasNext, list, loading, setYouParticipateOn
                                                         </div>
                                                     ) : (
                                                         column.key === "marketId"
-                                                            ? <div className="flex items-center gap-[4px]"># {record[column.key]} <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            ? <div className="flex items-center gap-[4px] cursor-pointer" onClick={() => {
+                                                                navigate(`/btc/${record[column.key]}`);
+                                                            }}># {record[column.key]} <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                                 <path d="M1 9.5L9.5 1M9.5 1H1M9.5 1V9.5" stroke="white" />
                                                             </svg>
                                                             </div>

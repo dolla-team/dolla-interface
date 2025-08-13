@@ -48,7 +48,7 @@ export default function CancelModal({
     }
   });
   const [status, setStatus] = useState(0);
-  const [penalty, finalRefund] = useMemo(() => {
+  const [penalty, markable] = useMemo(() => {
     const _penalty = Big(order?.accumulative_bids || 0)
       .times(penaltyPercent)
       .toString();
@@ -56,12 +56,8 @@ export default function CancelModal({
     if (order.status === 5) {
       setStatus(1);
     }
-    return [
-      _penalty,
-      Big(order?.value || 0)
-        .minus(_penalty)
-        .toString()
-    ];
+    const _markable = Date.now() - order?.created_at > 1000 * 60 * 60 * 24 * 3;
+    return [_penalty, _markable];
   }, [order]);
 
   return (
@@ -163,9 +159,9 @@ export default function CancelModal({
               <ButtonV2
                 className="!h-[40px] !text-[16px]"
                 loading={cancelingMark}
-                disabled={cancelingMark}
+                disabled={cancelingMark || !markable}
                 onClick={() => {
-                  if (cancelingMark) {
+                  if (cancelingMark || !markable) {
                     return;
                   }
                   onMarkCancel(order?.pool_id);

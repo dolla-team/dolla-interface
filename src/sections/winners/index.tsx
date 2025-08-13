@@ -23,7 +23,9 @@ export default function TopWinner() {
         lastBids = item.times;
       }
     });
-    const _returnMultiple = Big(data?.reward_usd).div(lastBids || 1).toFixed(0);
+    const _returnMultiple = lastBids
+      ? Big(data?.reward_usd).div(lastBids).toFixed(0)
+      : 0;
 
     return [_a, _rewardInfo, _returnMultiple];
   }, [data]);

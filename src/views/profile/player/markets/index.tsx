@@ -53,7 +53,7 @@ const MarketItem = (props: any) => {
   const { order, onClaimSuccess } = props;
 
   const { claiming, onClaim } = useClaimSlash({
-    onClaimSuccess,
+    onClaimSuccess
   });
   const navigate = useNavigate();
 
@@ -72,43 +72,50 @@ const MarketItem = (props: any) => {
       footer={
         <div className="w-full px-[13px] bg-black/20 py-[17px] mt-[20px] relative z-[2] text-white text-center font-[SpaceGrotesk] text-[14px] font-normal leading-[100%]">
           <div className="flex justify-between items-center gap-[10px]">
-            <div className="text-[#BBACA6]">You bid{order.pool_status === EMarketStatus.Cancelled ? " / Refund" : ""}</div>
+            <div className="text-[#BBACA6]">
+              You bid
+              {order.pool_status === EMarketStatus.Cancelled ? " / Refund" : ""}
+            </div>
             <div className="flex items-center justify-end gap-[7px]">
-              {
-                order.pool_status === EMarketStatus.Cancelled && (
-                  order.is_claim ? (
-                    <ButtonV2
-                      type="default"
-                      className="!h-[24px] !rounded-[12px] !px-[10px] !text-[#BBACA6]"
-                      disabled={true}
+              {order.pool_status === EMarketStatus.Cancelled &&
+                (order.is_claim ? (
+                  <div className="flex items-center gap-[4px] text-[#75FF4A] text-[14px]">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 22 22"
+                      fill="none"
                     >
-                      Claimed
-                    </ButtonV2>
-                  ) : (
-                    <ButtonV2
-                      type="default"
-                      className="!h-[24px] !rounded-[12px] !px-[10px] !text-[#BBACA6]"
-                      loading={claiming}
-                      disabled={claiming}
-                      onClick={(e: any) => {
-                        e.stopPropagation();
-                        onClaim(order.pool_id);
-                      }}
-                    >
-                      Claim
-                    </ButtonV2>
-                  )
-                )
-              }
+                      <circle cx="11" cy="11" r="11" fill="#75FF4A" />
+                      <path
+                        d="M6 11L10 15L17 8"
+                        stroke="#2B3337"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                      />
+                    </svg>
+                    <span>Claimed</span>
+                  </div>
+                ) : (
+                  <ButtonV2
+                    className="!h-[24px] !rounded-[12px] !px-[10px]"
+                    loading={claiming}
+                    disabled={claiming}
+                    onClick={(e: any) => {
+                      e.stopPropagation();
+                      onClaim(order.pool_id);
+                    }}
+                  >
+                    Claim
+                  </ButtonV2>
+                ))}
               <div className="">
-                {
-                  formatNumber(
-                    order.purchase_usd,
-                    2,
-                    true,
-                    { isShort: true, isShortUppercase: true, prefix: "$" }
-                  )
-                }
+                {formatNumber(order.purchase_usd, 2, true, {
+                  isShort: true,
+                  isShortUppercase: true,
+                  prefix: "$"
+                })}
               </div>
             </div>
           </div>
