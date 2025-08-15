@@ -13,18 +13,15 @@ export default function NFTCard({
   return (
     <div
       className={clsx(
-        "button rounded-[12px] bg-[#191817] p-[12px_12px_0px] relative border duration-200 hover:border-[#FFC42F]",
+        "button rounded-[12px] bg-[#0B0D11] p-[12px_12px_0px] relative border duration-200 hover:border-[#743EFF]",
         checked
-          ? "border-[#FFC42F] w-[238px] h-[266px] shadow-[0px_0px_6px_0px_#FFC530]"
+          ? "border-[#743EFF] w-[238px] h-[266px]"
           : "w-[128px] h-[160px] border-none"
       )}
       onClick={onSelect}
     >
       {data.icon ? (
-        <img
-          src={data.icon}
-          className="w-full rounded-[4px] border border-[#434343CC]"
-        />
+        <img src={data.icon} className="w-full rounded-[4px]" />
       ) : (
         <div
           className={clsx(

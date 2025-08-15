@@ -1,11 +1,19 @@
 import Button from "@/components/button";
 import { QRCodeSVG } from "qrcode.react";
 import useCopy from "@/hooks/use-copy";
-import { PURCHASE_TOKEN } from "@/config";
+import config from "@/config/bera";
 import clsx from "clsx";
 
-export default function Recharge({ token, className, tokenPanelClassName }: { token: any; className?: string; tokenPanelClassName?: string; }) {
-  const rechargeToken = token || PURCHASE_TOKEN;
+export default function Recharge({
+  token,
+  className,
+  tokenPanelClassName
+}: {
+  token: any;
+  className?: string;
+  tokenPanelClassName?: string;
+}) {
+  const rechargeToken = token || config.purchaseToken;
   const address = rechargeToken.address;
   const { onCopy } = useCopy();
   return (
@@ -23,7 +31,12 @@ export default function Recharge({ token, className, tokenPanelClassName }: { to
           }}
         />
       </div>
-      <div className={clsx("mt-[24px] px-[10px] py-[12px] rounded-[6px] bg-[#191E27] w-full", tokenPanelClassName)}>
+      <div
+        className={clsx(
+          "mt-[24px] px-[10px] py-[12px] rounded-[6px] bg-[#191E27] w-full",
+          tokenPanelClassName
+        )}
+      >
         <div className="flex items-center text-white">
           <div className="text-[16px] font-semibold mr-[10px]">
             {rechargeToken.symbol}

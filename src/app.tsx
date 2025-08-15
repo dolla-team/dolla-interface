@@ -17,7 +17,7 @@ import DollaEyeContextProvider from "./contexts/dolla-eye";
 import BTC from "./views/btc";
 
 // const LazyNewBTC = lazy(() => import("./views/btc"));
-const LazyBtcCreate = lazy(() => import("./views/btc-create"));
+const LazyNftCreate = lazy(() => import("./views/nft-create"));
 const LazyProfilePlayer = lazy(() => import("./views/profile/player"));
 const LazyProfileSeller = lazy(() => import("./views/profile/seller"));
 const LazyTerms = lazy(() => import("./views/terms"));
@@ -79,8 +79,8 @@ const router = createBrowserRouter([
         element: <BTC />
       },
       {
-        path: "btc/create",
-        element: <LazyBtcCreate />
+        path: "nft/create",
+        element: <LazyNftCreate />
       },
       {
         path: "portfolio/player",

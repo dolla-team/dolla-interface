@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Big from "big.js";
-import { PURCHASE_TOKEN } from "@/config";
+import config from "@/config/bera";
 import useToast from "@/hooks/use-toast";
 import useBettingContract from "./use-betting-contract";
 import reportHash from "@/utils/report-hash";
@@ -34,7 +34,7 @@ export default function useCreate({
         await BettingContract.getAllWhitelistedTokens();
       const isPurchaseTokenWhitelisted = purchaseTokens.filter(
         (item: any) =>
-          item.toLowerCase() === PURCHASE_TOKEN.address.toLowerCase()
+          item.toLowerCase() === config.purchaseToken.address.toLowerCase()
       );
 
       const isRewardTokenWhitelisted = (
@@ -55,15 +55,15 @@ export default function useCreate({
           ? 0
           : Big(amount * 10 ** token.decimals).toFixed(0);
 
-      const drawFee = Big(1 * 10 ** PURCHASE_TOKEN.decimals).toFixed(0);
+      const drawFee = Big(1 * 10 ** config.purchaseToken.decimals).toFixed(0);
 
       const tx = await BettingContract.populateTransaction.createPool(
-        PURCHASE_TOKEN.address,
+        config.purchaseToken.address,
         token.address,
         rewardAmount,
         token.id || token.id === 0 ? [token.id] : [], // nftIds
         drawFee,
-        Big(anchorPrice * 10 ** PURCHASE_TOKEN.decimals).toFixed(0)
+        Big(anchorPrice * 10 ** config.purchaseToken.decimals).toFixed(0)
       );
       executeTransaction({
         calls: [tx],

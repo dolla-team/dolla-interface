@@ -21,7 +21,7 @@ export default function PriceChart({
   const chartInstance = useRef<Chart | null>(null);
   const anchorDotRef = useRef<HTMLDivElement>(null);
   const [isInit, setIsInit] = useState(false);
-  const [isFolded, setIsFolded] = useState(true);
+  const [isFolded, setIsFolded] = useState(false);
   const [isAnimationComplete, setIsAnimationComplete] = useState(false);
 
   // Function to calculate probability density data
@@ -307,7 +307,7 @@ export default function PriceChart({
     >
       <div className="w-full px-[13px] h-[45px] flex justify-between items-center shrink-0">
         <Title className="!static" />
-        <button
+        {/* <button
           type="button"
           className="button shrink-0 w-[14px] h-[14px]"
           onClick={() => {
@@ -325,7 +325,7 @@ export default function PriceChart({
               rotate: !isFolded ? 0 : 180
             }}
           />
-        </button>
+        </button> */}
       </div>
       <motion.div
         className="w-full relative shrink-0 h-[calc(100%_-_45px)] px-[20px] max-md:px-[10px] max-md:pt-[100px]"
@@ -378,7 +378,7 @@ export default function PriceChart({
           </div>
         </div>
         <Annotations
-          className="z-[3] !top-[0px]"
+          className="z-[3] !top-[-30px]"
           anchorPrice={anchorPrice}
           expectedValue={anchorPrice ? anchorPrice * 1.2 : undefined}
         />

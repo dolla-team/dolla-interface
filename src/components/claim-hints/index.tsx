@@ -1,6 +1,6 @@
 import { useAuth } from "@/contexts/auth";
 import { useEffect, useImperativeHandle, useState, useMemo } from "react";
-import useClaimPenalty from "@/hooks/evm/use-claim-penalty";
+import useClaimPenalty from "@/hooks/evm/use-claim-rewards";
 import Loading from "../icons/loading";
 
 export default function ClaimHints({ ref }: { ref: any }) {

@@ -4,30 +4,36 @@ import useToast from "@/hooks/use-toast";
 import useGelatonetwork from "./use-gelatonetwork";
 import reportHash from "@/utils/report-hash";
 
-export default function useClaimPenalty(onSuccess: any) {
-  const [claiming, setClaiming] = useState(false);
+// for user unlocking pool
+
+export default function useUnlockPool({
+  onCancelSuccess
+}: {
+  onCancelSuccess: () => void;
+}) {
+  const [loading, setLoading] = useState(false);
   const toast = useToast();
   const BettingContract = useBettingContract();
   const { executeTransaction } = useGelatonetwork();
-  const claim = async (poolId: number) => {
+  const unlock = async (poolId: number) => {
     if (!BettingContract) {
       return;
     }
     try {
-      setClaiming(true);
-      const tx = await BettingContract.populateTransaction.claimPenalty(poolId);
+      setLoading(true);
+      const tx = await BettingContract.populateTransaction.unlockPool(poolId);
 
       executeTransaction({
         calls: [tx],
         onSuccess: (receipt: any) => {
-          setClaiming(false);
+          setLoading(false);
 
           if (receipt?.status === 0) {
-            toast.fail({ title: "Cancel order failed" });
+            toast.fail({ title: "Unlock pool failed" });
             return;
           } else {
-            toast.success({ title: "Claim success" });
-            onSuccess?.();
+            toast.success({ title: "Unlock pool success" });
+            onCancelSuccess?.();
           }
 
           reportHash({
@@ -38,16 +44,16 @@ export default function useClaimPenalty(onSuccess: any) {
           });
         },
         onError: () => {
-          toast.fail({ title: "Claim failed" });
-          setClaiming(false);
+          toast.fail({ title: "Unlock pool failed" });
+          setLoading(false);
         }
       });
     } catch (error) {
-      console.error("Claim error:", error);
-      toast.fail({ title: "Claim failed" });
-      setClaiming(false);
+      console.error("Unlock pool error:", error);
+      toast.fail({ title: "Unlock pool failed" });
+      setLoading(false);
     }
   };
 
-  return { claiming, claim };
+  return { loading, onRevertCancel: unlock };
 }

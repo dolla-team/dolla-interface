@@ -1,5 +1,5 @@
 import { ethers } from "ethers";
-import BettingContractAbi from "@/config/abis/betting";
+import BettingContractAbi from "@/config/abis/evm-betting";
 import { BETTING_CONTRACT_ADDRESS } from "@/config";
 import { useWallets } from "@privy-io/react-auth";
 import { useState, useEffect } from "react";

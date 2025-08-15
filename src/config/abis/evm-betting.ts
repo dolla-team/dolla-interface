@@ -21,29 +21,35 @@ export default [
     type: "constructor"
   },
   {
+    inputs: [
+      {
+        internalType: "address",
+        name: "target",
+        type: "address"
+      }
+    ],
+    name: "AddressEmptyCode",
+    type: "error"
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "account",
+        type: "address"
+      }
+    ],
+    name: "AddressInsufficientBalance",
+    type: "error"
+  },
+  {
     inputs: [],
     name: "BaseDenominatorNotSet",
     type: "error"
   },
   {
     inputs: [],
-    name: "FailedCall",
-    type: "error"
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "balance",
-        type: "uint256"
-      },
-      {
-        internalType: "uint256",
-        name: "needed",
-        type: "uint256"
-      }
-    ],
-    name: "InsufficientBalance",
+    name: "FailedInnerCall",
     type: "error"
   },
   {
@@ -697,6 +703,38 @@ export default [
     anonymous: false,
     inputs: [
       {
+        indexed: true,
+        internalType: "uint256",
+        name: "poolId",
+        type: "uint256"
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "lockStartTime",
+        type: "uint256"
+      }
+    ],
+    name: "PoolLocked",
+    type: "event"
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "uint256",
+        name: "poolId",
+        type: "uint256"
+      }
+    ],
+    name: "PoolUnlocked",
+    type: "event"
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
         indexed: false,
         internalType: "address",
         name: "token",
@@ -824,6 +862,19 @@ export default [
         type: "uint256[]"
       }
     ],
+    name: "adminExtractPenalty",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function"
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256[]",
+        name: "poolIds",
+        type: "uint256[]"
+      }
+    ],
     name: "batchExtractAdminFees",
     outputs: [],
     stateMutability: "nonpayable",
@@ -927,6 +978,19 @@ export default [
       }
     ],
     name: "claimPenalty",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function"
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "poolId",
+        type: "uint256"
+      }
+    ],
+    name: "claimReward",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function"
@@ -1288,6 +1352,21 @@ export default [
         internalType: "bool",
         name: "isAdminFeesClaimed",
         type: "bool"
+      },
+      {
+        internalType: "uint256",
+        name: "adminPenalty",
+        type: "uint256"
+      },
+      {
+        internalType: "bool",
+        name: "isLocked",
+        type: "bool"
+      },
+      {
+        internalType: "uint256",
+        name: "lockStartTime",
+        type: "uint256"
       }
     ],
     stateMutability: "view",
@@ -1344,6 +1423,32 @@ export default [
       }
     ],
     stateMutability: "view",
+    type: "function"
+  },
+  {
+    inputs: [],
+    name: "lockDuration",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256"
+      }
+    ],
+    stateMutability: "view",
+    type: "function"
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "poolId",
+        type: "uint256"
+      }
+    ],
+    name: "lockPool",
+    outputs: [],
+    stateMutability: "nonpayable",
     type: "function"
   },
   {
@@ -1507,6 +1612,21 @@ export default [
         internalType: "bool",
         name: "isAdminFeesClaimed",
         type: "bool"
+      },
+      {
+        internalType: "uint256",
+        name: "adminPenalty",
+        type: "uint256"
+      },
+      {
+        internalType: "bool",
+        name: "isLocked",
+        type: "bool"
+      },
+      {
+        internalType: "uint256",
+        name: "lockStartTime",
+        type: "uint256"
       }
     ],
     stateMutability: "view",
@@ -1559,6 +1679,19 @@ export default [
   {
     inputs: [
       {
+        internalType: "uint256",
+        name: "newDuration",
+        type: "uint256"
+      }
+    ],
+    name: "setLockDuration",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function"
+  },
+  {
+    inputs: [
+      {
         internalType: "bool",
         name: "_paused",
         type: "bool"
@@ -1601,6 +1734,19 @@ export default [
       }
     ],
     name: "transferOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function"
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "poolId",
+        type: "uint256"
+      }
+    ],
+    name: "unlockPool",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function"

@@ -4,10 +4,13 @@ export default function Title(props: any) {
   const { className } = props;
 
   return (
-    <div className={clsx("absolute top-[14px] left-[20px] flex items-center gap-[6px] text-[#BBACA6] text-[14px] font-[SpaceGrotesk] font-[400] leading-[100%]", className)}>
-      <span className="">
-        Probability Weighted Sales
-      </span>
+    <div
+      className={clsx(
+        "absolute top-[14px] left-[20px] flex items-center gap-[6px] text-white text-[14px] font-[SpaceGrotesk] font-[400] leading-[100%]",
+        className
+      )}
+    >
+      <span className="">Probability Weighted Sales</span>
       <button className="button relative group">
         <svg
           xmlns="http://www.w3.org/2000/svg"

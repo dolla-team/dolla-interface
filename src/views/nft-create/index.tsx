@@ -41,59 +41,62 @@ export default function ListNFT() {
   }, [collection, nft]);
 
   return (
-    <div className="w-full h-screen overflow-y-auto flex justify-center">
-      <div className="pt-[20px] max-w-[860px] pb-[50px]">
-        <div className="text-[16px] text-white font-semibold mb-[20px]">
-          Create Market
+    <div className="w-full h-screen overflow-y-auto pt-[40px] pb-[50px]">
+      <div className="max-w-[860px] mx-auto">
+        <div className="text-[20px] text-white text-center font-bold mb-[20px] mt-[10px]">
+          Create NFT Market
         </div>
-        <div className="flex items-center h-[60px] bg-[#141519] rounded-[6px] px-[26px] mb-[12px]">
-          <div className="text-[14px] text-white font-light w-[100px]">
-            Chains
+        <div className="bg-[#1A1E24] rounded-[12px] bg-[#1A1E24] px-[30px] py-[18px]">
+          <div className="flex items-center">
+            <div className="text-[14px] text-white font-light w-[100px]">
+              Chains
+            </div>
+            <div className="flex items-center gap-[20px]">
+              {chains.map((item) => (
+                <div
+                  key={item.id}
+                  className={clsx(
+                    chain.id === item.id &&
+                      "p-[4px] pr-[10px] bg-[#743EFF] rounded-[6px] gap-[5px] flex items-center text-white"
+                  )}
+                  onClick={() => {}}
+                >
+                  <img
+                    className="w-[32px] h-[32px] rounded-[4px"
+                    src={item.icon}
+                  />
+                  {chain.id === item.id && (
+                    <span className="text-[12px] font-light">{item.name}</span>
+                  )}
+                </div>
+              ))}
+            </div>
           </div>
-          <div className="flex items-center gap-[20px]">
-            {chains.map((item) => (
-              <div
-                key={item.id}
-                className={clsx(
-                  chain.id === item.id &&
-                  "p-[4px] border border-[#FFC42F] bg-[#222A35] rounded-[6px] gap-[5px] flex items-center text-[#FFC42F]"
-                )}
-                onClick={() => { }}
-              >
-                <img className="w-[32px] h-[32px] rounded-[4px" src={item.icon} />
-                {chain.id === item.id && (
+          <div className="flex items-center mt-[20px]">
+            <div className="text-[14px] text-white font-light w-[100px]">
+              Collections
+            </div>
+            <div className="flex items-center gap-[20px]">
+              {collections.map((item) => (
+                <div
+                  key={item.id}
+                  className={clsx(
+                    "flex rounded-[6px] gap-[5px] flex items-center p-[4px] pr-[10px] button border",
+                    collection.id === item.id && "bg-[#743EFF] text-white"
+                  )}
+                  onClick={() => onSelectCollection(item)}
+                >
+                  <img
+                    className="w-[30px] h-[30px] rounded-[4px]"
+                    src={item.icon}
+                  />
                   <span className="text-[12px] font-light">{item.name}</span>
-                )}
-              </div>
-            ))}
+                </div>
+              ))}
+            </div>
           </div>
         </div>
-        <div className="flex items-center h-[60px] bg-[#141519] rounded-[6px] px-[26px] mb-[12px]">
-          <div className="text-[14px] text-white font-light w-[100px]">
-            Collections
-          </div>
-          <div className="flex items-center gap-[20px]">
-            {collections.map((item) => (
-              <div
-                key={item.id}
-                className={clsx(
-                  "flex rounded-[6px] gap-[5px] flex items-center p-[4px] button border",
-                  collection.id === item.id
-                    ? "border-[#FFC42F] bg-[#222A35] text-[#FFC42F]"
-                    : "border-transparent"
-                )}
-                onClick={() => onSelectCollection(item)}
-              >
-                <img
-                  className="w-[32px] h-[32px] rounded-[4px]"
-                  src={item.icon}
-                />
-                <span className="text-[12px] font-light">{item.name}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-        <div className="border border-[#373737] bg-[#141519] rounded-[10px] p-[20px] mb-[12px]">
+        <div className="bg-[#1A1E24] rounded-[6px] p-[20px] mb-[12px] mt-[10px]">
           <div className="text-[14px] text-white font-light w-[100px]">
             Select NFT
           </div>

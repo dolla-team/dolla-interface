@@ -2,7 +2,7 @@ export default [
   {
     id: "80094",
     name: "Berachain",
-    icon: "/currency/bera.webp",
+    icon: "/chains/bera.png",
     children: [
       {
         id: "0x88888888a9361f15aadbaca355a6b2938c6a674e",

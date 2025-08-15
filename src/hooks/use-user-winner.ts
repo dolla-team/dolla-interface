@@ -2,7 +2,7 @@ import { useAuth } from "@/contexts/auth";
 import axiosInstance from "@/libs/axios";
 import { useEffect, useState, useMemo } from "react";
 import { TOKEN } from "@/config/btc";
-import { PURCHASE_TOKEN } from "@/config";
+import config from "@/config/bera";
 import useTokenBalance from "./evm/use-token-balance";
 import Big from "big.js";
 
@@ -12,7 +12,7 @@ export default function useUserWinner() {
   const [loading, setLoading] = useState(false);
   const { userInfo } = useAuth();
   // const { tokenBalance } = useTokenBalance(TOKEN);
-  const { tokenBalance: coinBalance } = useTokenBalance(PURCHASE_TOKEN);
+  const { tokenBalance: coinBalance } = useTokenBalance(config.purchaseToken);
 
   const fetchNfts = async () => {
     try {
@@ -35,7 +35,7 @@ export default function useUserWinner() {
         // nfts
         if (
           item.token.toLocaleLowerCase() !==
-          PURCHASE_TOKEN.address.toLocaleLowerCase() &&
+            config.purchaseToken.address.toLocaleLowerCase() &&
           item.token.toLocaleLowerCase() !== TOKEN.address.toLocaleLowerCase()
         ) {
           _nfts.push({
@@ -51,24 +51,6 @@ export default function useUserWinner() {
           _btcs.push(item);
         }
       });
-
-      // Moved to the above 👆
-      // res.data.data
-      //   .filter(
-      //     (item: any) =>
-      //       item.token.toLocaleLowerCase() !==
-      //         PURCHASE_TOKEN.address.toLocaleLowerCase() &&
-      //       item.token.toLocaleLowerCase() !== TOKEN.address.toLocaleLowerCase()
-      //   )
-      //   .forEach((item: any) => {
-      //     _nfts.push({
-      //       label: "NFT Prize",
-      //       address: item.token,
-      //       icon: item.icon,
-      //       type: "nft",
-      //       tokenId: item.token_id
-      //     });
-      //   });
 
       setNfts(_nfts);
       setBtcs(_btcs);
@@ -88,7 +70,7 @@ export default function useUserWinner() {
     if (Number(coinBalance) <= 0) return null;
     return {
       label: "Bid Coins",
-      address: PURCHASE_TOKEN.address,
+      address: config.purchaseToken.address,
       amount: coinBalance,
       type: "coin"
     };
@@ -97,7 +79,9 @@ export default function useUserWinner() {
   const [totalBtcAmount] = useMemo(() => {
     return [
       btcs.reduce((acc, item) => {
-        return Big(acc).plus(Big(item.token_amount || 0).div(10 ** item.token_info?.decimals || 6));
+        return Big(acc).plus(
+          Big(item.token_amount || 0).div(10 ** item.token_info?.decimals || 6)
+        );
       }, 0)
     ];
   }, [btcs]);
@@ -107,6 +91,6 @@ export default function useUserWinner() {
     nfts,
     loading,
     btcs,
-    totalBtcAmount,
+    totalBtcAmount
   };
 }

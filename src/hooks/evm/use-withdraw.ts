@@ -1,7 +1,7 @@
 import { ethers } from "ethers";
 import { useState } from "react";
-import nftAbi from "@/config/abis/nft";
-import tokenAbi from "@/config/abis/token";
+import nftAbi from "@/config/abis/evm-nft";
+import tokenAbi from "@/config/abis/evm-token";
 import reportHash from "@/utils/report-hash";
 import useToast from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/auth";

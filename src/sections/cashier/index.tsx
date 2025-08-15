@@ -5,13 +5,13 @@ import QuickPopup from "./quick-popup";
 import CashierModal from "./modal";
 import { useRef, useState } from "react";
 import useTokenBalance from "@/hooks/evm/use-token-balance";
-import { PURCHASE_TOKEN } from "@/config";
+import config from "@/config/bera";
 import { formatNumber } from "@/utils/format/number";
 
 export default function Cashier({ className }: any) {
   const quickPopupRef = useRef<any>(null);
   const [modalOpen, setModalOpen] = useState(false);
-  const { tokenBalance } = useTokenBalance(PURCHASE_TOKEN);
+  const { tokenBalance } = useTokenBalance(config.purchaseToken);
 
   return (
     <div className={clsx("flex items-center gap-[13px]", className)}>

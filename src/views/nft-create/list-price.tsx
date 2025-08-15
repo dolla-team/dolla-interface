@@ -36,12 +36,12 @@ export default function ListPrice({
   const tokenIds = useMemo(() => {
     return token.id
       ? [
-        {
-          chain: "Berachain",
-          address: token.address,
-          tokenIds: [token.id]
-        }
-      ]
+          {
+            chain: "Berachain",
+            address: token.address,
+            tokenIds: [token.id]
+          }
+        ]
       : [];
   }, [token]);
   const { prices, loading: pricesLoading } = useTokenPrice(tokenIds);
@@ -69,10 +69,10 @@ export default function ListPrice({
               className={clsx(
                 "p-[13px] bg-[#222A35] border border-[#373737] text-[12px] flex justify-between items-center font-light rounded-[6px] relative",
                 price[item.key] !== "0" && price[item.key]
-                  ? "cursor-pointer hover:border-[#FFC42F] hover:shadow-[0px_0px_6px_0px_#FFC530]"
+                  ? "cursor-pointer hover:border-[#743EFF] hover:shadow-[0px_0px_6px_0px_#743EFF]"
                   : "cursor-not-allowed opacity-50",
                 listPrice === price[item.key] &&
-                "border-[#FFC42F] shadow-[0px_0px_6px_0px_#FFC530]"
+                  "border-[#743EFF] shadow-[0px_0px_6px_0px_#743EFF]"
               )}
               key={item.key}
               onClick={() => {
@@ -147,7 +147,7 @@ export default function ListPrice({
         </div>
         <PriceChart
           anchorPrice={listPrice}
-          className="h-[328px] !w-[474px] bg-[#1A1E24] rounded-[6px]"
+          className="h-[328px] grow bg-[#1A1E24] rounded-[6px]"
         />
       </div>
     </div>

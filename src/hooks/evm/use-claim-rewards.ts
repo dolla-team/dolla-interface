@@ -4,36 +4,34 @@ import useToast from "@/hooks/use-toast";
 import useGelatonetwork from "./use-gelatonetwork";
 import reportHash from "@/utils/report-hash";
 
-// for seller claiming
+// for user claiming rewards
 
-export default function useClaim(poolIds: number[], onSuccess?: () => void) {
+export default function useClaimRewards(onSuccess: any) {
   const [claiming, setClaiming] = useState(false);
   const toast = useToast();
   const BettingContract = useBettingContract();
   const { executeTransaction } = useGelatonetwork();
-  const claim = async () => {
+  const claim = async (poolId: number) => {
     if (!BettingContract) {
       return;
     }
     try {
       setClaiming(true);
-      const _poolIds = Array.isArray(poolIds) ? poolIds : [poolIds];
-      const tx =
-        await BettingContract.populateTransaction.batchExtractCreatorFunds(
-          _poolIds
-        );
+      const tx = await BettingContract.populateTransaction.claimReward(poolId);
+
       executeTransaction({
         calls: [tx],
         onSuccess: (receipt: any) => {
-          console.log("receipt", receipt);
           setClaiming(false);
 
           if (receipt?.status === 0) {
             toast.fail({ title: "Claim failed" });
+            return;
           } else {
             toast.success({ title: "Claim success" });
             onSuccess?.();
           }
+
           reportHash({
             hash: receipt.transactionHash,
             block_number: receipt.blockNumber,
@@ -44,14 +42,12 @@ export default function useClaim(poolIds: number[], onSuccess?: () => void) {
         onError: () => {
           toast.fail({ title: "Claim failed" });
           setClaiming(false);
-          throw new Error("Claim failed");
         }
       });
     } catch (error) {
       console.error("Claim error:", error);
-      setClaiming(false);
       toast.fail({ title: "Claim failed" });
-      throw error;
+      setClaiming(false);
     }
   };
 

@@ -2,11 +2,11 @@ import Modal from "@/components/modal";
 import { formatNumber } from "@/utils/format/number";
 import { useMemo, useState } from "react";
 import Big from "big.js";
-import useCancel from "@/hooks/solana/use-cancel";
+import useCancel from "@/hooks/evm/use-cancel-order";
 import ButtonV2 from "@/components/button/v2";
 import { penaltyPercent } from "@/utils/pool";
-import useMarkCancel from "@/hooks/solana/use-mark-cancel";
-import useRevertCancel from "@/hooks/solana/use-revert-cancel";
+import useLockPool from "@/hooks/evm/use-lock-pool";
+import useUnlockPool from "@/hooks/evm/use-unlock-pool";
 
 export default function CancelModal({
   open,
@@ -30,7 +30,7 @@ export default function CancelModal({
       });
     }
   });
-  const { canceling: cancelingMark, onMarkCancel } = useMarkCancel({
+  const { loading: cancelingMark, onMarkCancel } = useLockPool({
     onCancelSuccess: () => {
       onSuccess({
         status: 5,
@@ -39,7 +39,7 @@ export default function CancelModal({
       onClose();
     }
   });
-  const { canceling: cancelingRevert, onRevertCancel } = useRevertCancel({
+  const { loading: cancelingRevert, onRevertCancel } = useUnlockPool({
     onCancelSuccess: () => {
       onSuccess({
         status: 1

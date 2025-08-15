@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Contract, ethers } from "ethers";
-import nftAbi from "@/config/abis/nft";
+import nftAbi from "@/config/abis/evm-nft";
 import useToast from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/auth";
 import useGelatonetwork from "@/hooks/evm/use-gelatonetwork";

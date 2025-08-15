@@ -1,6 +1,5 @@
 import Coin from "@/components/icons/coin";
 import ButtonWithAuth from "@/components/button/button-with-auth";
-// import { PURCHASE_TOKEN } from "@/config";
 import { formatNumber } from "@/utils/format/number";
 import { useMemo, useState } from "react";
 import clsx from "clsx";
@@ -28,7 +27,7 @@ export const TOKNES = [
   },
   {
     // address: "zBTCug3er3tLyffELcvDNrKkCymbPWysGcWihESYfLg",
-    address: 'G5aHXkUgD4NnBbTZcKf7aQP2hXGw5bTVotcUc7wS8FVV',
+    address: "G5aHXkUgD4NnBbTZcKf7aQP2hXGw5bTVotcUc7wS8FVV",
     decimals: 6,
     icon: "/btc.png",
     symbol: "BTC",
@@ -64,7 +63,6 @@ export default function WithdrawSolana() {
   //   amount: Number(amount),
   //   targetAddress: receiveAddress
   // });
-
 
   const { onTransfer } = useTransfer({
     token: selectedItem,

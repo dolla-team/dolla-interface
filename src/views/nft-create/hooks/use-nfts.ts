@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import mock from "../mock";
 import axiosInstance from "@/libs/axios";
-import nftAbi from "@/config/abis/nft";
+import nftAbi from "@/config/abis/evm-nft";
 import { useAuth } from "@/contexts/auth";
 import { ethers } from "ethers";
+import { useConfigStore } from "@/stores/use-config";
 
 export default function useNfts() {
   const [chains, setChains] = useState<any[]>([]);
@@ -16,6 +17,7 @@ export default function useNfts() {
   const [listPrice, setListPrice] = useState<number>(0);
   const [loadingNfts, setLoadingNfts] = useState<boolean>(false);
   const { wallet } = useAuth();
+  const configStore = useConfigStore();
 
   useEffect(() => {
     setChains(mock);
@@ -32,11 +34,17 @@ export default function useNfts() {
   };
 
   const fetchCollections = async () => {
+    if (configStore.config?.nft_config) {
+      setCollections(configStore.config.nft_config);
+      setCollection(configStore.config.nft_config[0]);
+      return;
+    }
     setLoadingCollections(true);
     try {
       const res = await axiosInstance.get(`/api/v1/config`);
       setCollections(res.data.data.nft_config);
       setCollection(res.data.data.nft_config[0]);
+      configStore.set({ config: res.data.data });
     } catch (error) {
       console.log("error", error);
     } finally {

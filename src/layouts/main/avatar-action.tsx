@@ -214,7 +214,7 @@ export default function AvatarAction() {
                     navigate("/portfolio/player");
                     return;
                   } else if (item.key === "create-market") {
-                    navigate("/btc/create");
+                    navigate("/nft/create");
                     return;
                   } else if (item.key === "claim") {
                     e.stopPropagation();
