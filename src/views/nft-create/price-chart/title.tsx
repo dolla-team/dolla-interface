@@ -6,7 +6,7 @@ export default function Title(props: any) {
   return (
     <div
       className={clsx(
-        "absolute top-[14px] left-[20px] flex items-center gap-[6px] text-white text-[14px] font-[SpaceGrotesk] font-[400] leading-[100%]",
+        "absolute top-[14px] left-[20px] flex items-center gap-[6px] text-white text-[14px] font-[400] leading-[100%]",
         className
       )}
     >

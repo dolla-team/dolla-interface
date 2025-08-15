@@ -69,7 +69,7 @@ const MarketItem = (props: any) => {
         />
       }
       footer={
-        <div className="w-full px-[13px] bg-black/20 py-[17px] mt-[20px] relative z-[2] text-white text-center font-[SpaceGrotesk] text-[14px] font-normal leading-[100%]">
+        <div className="w-full px-[13px] bg-black/20 py-[17px] mt-[20px] relative z-[2] text-white text-center text-[14px] font-normal leading-[100%]">
           <div className="flex justify-between items-center gap-[10px]">
             <div className="text-[#8795A7]">
               You bid

@@ -62,7 +62,7 @@ export default function CancelModal({
 
   return (
     <Modal onClose={onClose} open={open}>
-      <div className="w-[396px] pb-[20px] rounded-[16px] bg-[#35302B] border border-[#6A5D3A] text-[14px] font-[500] leading-[100%] text-white font-[SpaceGrotesk]">
+      <div className="w-[396px] pb-[20px] rounded-[16px] bg-[#35302B] border border-[#6A5D3A] text-[14px] font-[500] leading-[100%] text-white">
         <div className="w-full pt-[20px] pb-[13px] px-[20px] bg-black/20 flex justify-between items-center">
           <div className="text-[18px] font-medium text-white">
             Cancel Market

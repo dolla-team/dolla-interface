@@ -123,11 +123,11 @@ export default function PriceChart({
             cornerRadius: 8,
             displayColors: false,
             titleFont: {
-              family: "SpaceGrotesk",
+              family: "Unbounded",
               size: 12
             },
             bodyFont: {
-              family: "SpaceGrotesk",
+              family: "Unbounded",
               size: 12
             },
             callbacks: {
@@ -151,7 +151,7 @@ export default function PriceChart({
               display: true,
               text: "Total Sales ($)",
               font: {
-                family: "SpaceGrotesk",
+                family: "Unbounded",
                 size: 12
               },
               color: "#5E6B7D"
@@ -161,7 +161,7 @@ export default function PriceChart({
                 return value;
               },
               font: {
-                family: "SpaceGrotesk",
+                family: "Unbounded",
                 size: 10
               },
               color: "#666"
@@ -179,7 +179,7 @@ export default function PriceChart({
               display: true,
               text: "Probability Density",
               font: {
-                family: "SpaceGrotesk",
+                family: "Unbounded",
                 size: 12
               },
               color: "#5E6B7D"
@@ -190,7 +190,7 @@ export default function PriceChart({
                 return `${Number(value).toFixed(0)}%`;
               },
               font: {
-                family: "SpaceGrotesk",
+                family: "Unbounded",
                 size: 10
               },
               color: "#666"

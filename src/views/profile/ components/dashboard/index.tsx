@@ -30,7 +30,7 @@ const Dashboard = (props: any) => {
   return (
     <div
       className={clsx(
-        "font-[SpaceGrotesk] text-white text-[14px] font-[400] leading-[100%] w-full p-[23px_29px_15px_13px] rounded-[16px] border border-[#383F47] bg-[radial-gradient(81.26%_82.97%_at_1.18%_2.95%,_rgba(111,_55,_255,_0.20)_0%,_rgba(0,_0,_0,_0.20)_100%)] bg-[#1A1E24]",
+        "text-white text-[14px] font-[400] leading-[100%] w-full p-[23px_29px_15px_13px] rounded-[16px] border border-[#383F47] bg-[radial-gradient(81.26%_82.97%_at_1.18%_2.95%,_rgba(111,_55,_255,_0.20)_0%,_rgba(0,_0,_0,_0.20)_100%)] bg-[#1A1E24]",
         "max-md:p-[12px_10px_17px]",
         className
       )}

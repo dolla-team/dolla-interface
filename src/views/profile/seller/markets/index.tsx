@@ -151,7 +151,7 @@ const MarketItem = (props: any) => {
         />
       }
       footer={
-        <div className="w-full px-[13px] bg-black/20 py-[12px] mt-[20px] relative z-[2] text-white text-center font-[SpaceGrotesk] text-[14px] font-normal leading-[100%]">
+        <div className="w-full px-[13px] bg-black/20 py-[12px] mt-[20px] relative z-[2] text-white text-center text-[14px] font-normal leading-[100%]">
           <div className="flex justify-between items-center gap-[10px]">
             <div className="text-[#BBACA6] whitespace-nowrap">{time}</div>
             <div className="flex items-center justify-end gap-[7px]">
@@ -173,7 +173,7 @@ const MarketItem = (props: any) => {
               ) && (
                 <Popover
                   content={
-                    <PopoverCard className="!w-[300px] text-[#BBACA6] font-[SpaceGrotesk] text-[12px] leading-[120%] font-[400]">
+                    <PopoverCard className="!w-[300px] text-[#BBACA6] text-[12px] leading-[120%] font-[400]">
                       <div className="flex items-center gap-[3px]">
                         <img
                           src="/profile/icon-warning.svg"

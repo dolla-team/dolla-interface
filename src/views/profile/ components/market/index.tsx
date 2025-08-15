@@ -95,7 +95,7 @@ export default function Market({
                       />
                     </div>
                   )}
-                  <div className="text-[#FFE9B2] text-[16px] leading-[100%] font-[400] font-[SpaceGrotesk]">
+                  <div className="text-[#FFE9B2] text-[16px] leading-[100%] font-[400]">
                     <div className="flex items-center gap-[5px]">
                       <div className="">Seller</div>
                       <div className="relative w-[49px] h-[16px] rounded-[16px] border border-[#6A5D3A] bg-[#35302B] text-[14px] font-[700] flex justify-end pr-[6px] items-center">

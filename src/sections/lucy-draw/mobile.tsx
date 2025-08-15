@@ -40,7 +40,7 @@ export default function LucyDrawMobile(props: any) {
           setShowCard(true);
         }}
       >
-        <div className="h-[12px] z-[1] flex justify-center items-center text-white text-[10px] font-[600] leading-[100%] font-[SpaceGrotesk] absolute top-[-8px] left-[10px]">
+        <div className="h-[12px] z-[1] flex justify-center items-center text-white text-[10px] font-[600] leading-[100%] absolute top-[-8px] left-[10px]">
           <div className="w-[6px] h-full bg-[url('/btc/bg-round-left.svg')] bg-[length:6px_12px] bg-right bg-no-repeat shrink-0 translate-x-[1px]"></div>
           <div className="h-full min-w-[22px] flex-1 bg-[linear-gradient(270deg,_#2F1C99_0%,_#4E2FFF_100%)] flex justify-center items-center">
             #{currentRound}
