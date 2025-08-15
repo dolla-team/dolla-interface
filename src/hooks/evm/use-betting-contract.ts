@@ -1,6 +1,6 @@
 import { ethers } from "ethers";
 import BettingContractAbi from "@/config/abis/evm-betting";
-import { BETTING_CONTRACT_ADDRESS } from "@/config";
+import config from "@/config/bera";
 import { useWallets } from "@privy-io/react-auth";
 import { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/auth";
@@ -27,7 +27,7 @@ export default function useBettingContract(account?: string) {
       const signer = provider.getSigner();
 
       const BettingContract = new ethers.Contract(
-        BETTING_CONTRACT_ADDRESS,
+        config.bettingContractAddress,
         BettingContractAbi,
         signer
       );

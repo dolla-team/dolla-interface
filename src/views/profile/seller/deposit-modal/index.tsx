@@ -5,7 +5,7 @@ import { useMemo } from "react";
 import useTokenBalance from "@/hooks/evm/use-token-balance";
 import useDeposit from "@/hooks/evm/use-deposit-reward";
 import useApprove from "@/hooks/evm/use-approve";
-import { BETTING_CONTRACT_ADDRESS } from "@/config";
+import config from "@/config/bera";
 import { useAuth } from "@/contexts/auth";
 import ButtonV2 from "@/components/button/v2";
 
@@ -49,7 +49,7 @@ export default function DepositModal({
   const { approving, approve, approved, checking } = useApprove({
     token: approveToken,
     amount: amount?.toString(),
-    spender: BETTING_CONTRACT_ADDRESS,
+    spender: config.bettingContractAddress,
     account: address
   });
 
