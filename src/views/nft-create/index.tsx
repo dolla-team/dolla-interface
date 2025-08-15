@@ -6,8 +6,10 @@ import { useMemo } from "react";
 import clsx from "clsx";
 import Nfts from "./nfts";
 import { useAuth } from "@/contexts/auth";
+import { useNavigate } from "react-router-dom";
 
 export default function ListNFT() {
+  const navigate = useNavigate();
   const {
     chains,
     chain,
@@ -35,7 +37,7 @@ export default function ListNFT() {
   const selectedToken = useMemo(() => {
     return {
       type: "nft",
-      address: collection?.address,
+      address: collection?.address || collection?.id,
       id: nft?.id
     };
   }, [collection, nft]);
@@ -81,8 +83,10 @@ export default function ListNFT() {
                 <div
                   key={item.id}
                   className={clsx(
-                    "flex rounded-[6px] gap-[5px] flex items-center p-[4px] pr-[10px] button border",
-                    collection.id === item.id && "bg-[#743EFF] text-white"
+                    "flex rounded-[6px] gap-[5px] flex items-center p-[4px] pr-[10px] button",
+                    collection.id === item.id
+                      ? "bg-[#743EFF] text-white"
+                      : "text-[#ADBCCF] grayscale"
                   )}
                   onClick={() => onSelectCollection(item)}
                 >
@@ -114,6 +118,7 @@ export default function ListNFT() {
         </div>
         <ListPrice
           listPrice={listPrice}
+          collection={collection}
           onSetListPrice={setListPrice}
           errorTips={errorTips}
           address={address}
@@ -122,6 +127,9 @@ export default function ListNFT() {
             fetchNfts();
             if (type === "create") {
               setNft({});
+              setTimeout(() => {
+                navigate(`/portfolio/seller`);
+              }, 1000);
             }
           }}
         />

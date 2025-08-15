@@ -287,7 +287,7 @@ export default function PriceChart({
         anchorDotRef.current
       ) {
         anchorDotRef.current.style.left = `${pos.x - 6}px`;
-        anchorDotRef.current.style.top = `${pos.y - 6}px`;
+        anchorDotRef.current.style.top = `${pos.y - 12}px`;
       }
     });
   };

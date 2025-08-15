@@ -1,5 +1,5 @@
 import { useAuth } from "@/contexts/auth";
-import Button from ".";
+import Button from "./v2";
 
 export default function ButtonWithAuth({
   children,

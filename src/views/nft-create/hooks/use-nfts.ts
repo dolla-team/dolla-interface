@@ -14,7 +14,8 @@ export default function useNfts() {
   const [nfts, setNfts] = useState<any[]>([]);
   const [nft, setNft] = useState<any>({});
   const [loadingCollections, setLoadingCollections] = useState<boolean>(false);
-  const [listPrice, setListPrice] = useState<number>(0);
+  // TODO: remove this
+  const [listPrice, setListPrice] = useState<number>(100);
   const [loadingNfts, setLoadingNfts] = useState<boolean>(false);
   const { wallet } = useAuth();
   const configStore = useConfigStore();
@@ -23,6 +24,9 @@ export default function useNfts() {
     setChains(mock);
     setChain(mock[0]);
     setCollections(mock[0].children);
+    setCollection(mock[0].children[0]);
+    setNfts(mock[0].children[0].children);
+
     // fetchCollections();
   }, []);
 

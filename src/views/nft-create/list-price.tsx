@@ -4,7 +4,7 @@ import clsx from "clsx";
 import { formatNumber } from "@/utils/format/number";
 import { useMemo } from "react";
 import Action from "@/views/nft-create/action";
-import Button from "@/components/button";
+import Button from "@/components/button/v2";
 import useMintNft from "./hooks/use-mint-nft";
 import useTokenPrice from "@/hooks/use-token-price";
 
