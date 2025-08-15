@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import Market from "@/views/btc/components/more-markets/market";
+import Market from "../../ components/market";
 import ButtonV2 from "@/components/button/v2";
 import Empty from "@/components/empty";
 import MarketStatus, { EMarketStatus } from "../../ components/market-status";
@@ -141,13 +141,13 @@ const MarketItem = (props: any) => {
   return (
     <Market
       isAcitveBg={false}
-      className="!w-full !h-[unset] !bg-[#22201D] !rounded-[16px] !border !border-[#6A5D3A]"
+      className="!w-full !h-[unset]"
       data={order}
       header={
         <MarketStatus
           value={order.status}
           market={order}
-          className="absolute z-[2] left-1/2 -translate-x-1/2 top-[-12px]"
+          className="absolute z-[2] left-[12px] top-[-12px]"
         />
       }
       footer={

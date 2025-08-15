@@ -9,7 +9,7 @@ const MarketStatus = (props: Props) => {
   return (
     <div
       className={clsx(
-        "rounded-[10px] h-[26px] shrink-0 border border-[#6A5D3A] font-[SpaceGrotesk] text-[14px] bg-black/20 backdrop-blur-[5px] text-white font-[500] flex justify-center items-center gap-[7px]",
+        "rounded-[10px] h-[26px] shrink-0 border border-[#383F47] font-[SpaceGrotesk] text-[14px] bg-black/20 backdrop-blur-[5px] text-white font-[500] flex justify-center items-center gap-[7px]",
         ![EMarketStatus.Cancelled, EMarketStatus.Winner].includes(value) &&
           "pl-[20px] pr-[23px]",
         value === EMarketStatus.Cancelled && "pl-[9px] pr-[10px]",

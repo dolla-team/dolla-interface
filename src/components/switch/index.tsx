@@ -22,7 +22,7 @@ export default function Switch({
   className,
   type = "card",
   tabClassName,
-  cursorClassName,
+  cursorClassName
 }: SwitchProps) {
   const prevI = useRef<number[]>([0]);
   return (
@@ -30,15 +30,14 @@ export default function Switch({
       className={clsx(
         "h-[36px] rounded-[6px] p-[3px] text-[16px] font-medium flex items-center justify-between",
         className,
-        className?.includes("bg-") ? "" : "bg-[#222A35]"
+        className?.includes("bg-") ? "" : "bg-[#1A1E24]"
       )}
     >
       {tabs.map((item, i) => (
         <button
           key={item.value}
           className={clsx(
-            "px-[10px] h-full rounded-[6px] button relative",
-            tab === item.value && type === "card" ? "text-black" : "text-white",
+            "px-[10px] h-full rounded-[6px] button relative text-white",
             tabClassName
           )}
           onClick={() => {
@@ -71,10 +70,7 @@ export default function Switch({
                 cursorClassName
               )}
               style={{
-                background:
-                  type === "card"
-                    ? "radial-gradient(50% 50% at 50% 50%, #FFEF43 0%, #FFC42F 100%)"
-                    : "#FFC42F"
+                background: type === "card" ? "#743EFF" : "#FFC42F"
               }}
             />
           )}

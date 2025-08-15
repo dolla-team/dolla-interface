@@ -30,7 +30,7 @@ const Dashboard = (props: any) => {
   return (
     <div
       className={clsx(
-        "font-[SpaceGrotesk] text-white text-[14px] font-[400] leading-[100%] w-full p-[23px_29px_15px_13px] rounded-[16px] border border-[#6A5D3A] bg-[radial-gradient(25.97%_88.62%_at_6.81%_0%,_rgba(221,_144,_0,_0.10)_0%,_rgba(255,_196,_47,_0.00)_100%)] bg-[#35302B]",
+        "font-[SpaceGrotesk] text-white text-[14px] font-[400] leading-[100%] w-full p-[23px_29px_15px_13px] rounded-[16px] border border-[#383F47] bg-[radial-gradient(81.26%_82.97%_at_1.18%_2.95%,_rgba(111,_55,_255,_0.20)_0%,_rgba(0,_0,_0,_0.20)_100%)] bg-[#1A1E24]",
         "max-md:p-[12px_10px_17px]",
         className
       )}
@@ -41,14 +41,14 @@ const Dashboard = (props: any) => {
           <div className="flex items-center gap-[20px] max-md:gap-[10px]">
             <Avatar
               size={60}
-              className="shrink-0 rounded-[8px] border-[2px] border-[rgba(255,255,255,0.8)]"
-              address={userInfo?.sol_user}
+              className="shrink-0 rounded-[8px] border-[2px] border-[#383F47]"
+              address={userInfo?.user}
               email={userInfo?.email}
             />
             <div className="flex flex-col gap-[14px]">
               <div className="relative font-[DelaGothicOne] text-[20px] flex items-center gap-[9px]">
                 <div className="">
-                  {formatAddress(userInfo?.name || userInfo?.sol_user, 3)}
+                  {formatAddress(userInfo?.name || userInfo?.user, 3)}
                 </div>
                 {tab === "seller" && (
                   <div className="flex items-center gap-[7px]">
@@ -69,11 +69,17 @@ const Dashboard = (props: any) => {
                       closeDelayDuration={0}
                     >
                       <Badge icon="/profile/icon-cancel.svg">
-                        {
-                          (Big(userInfo?.created || 0).gt(0) && Big(userInfo?.cancel || 0).gt(0))
-                            ? formatNumber(Big(userInfo?.cancel).div(userInfo?.created).times(100), 2, true)
-                            : 0
-                        }%
+                        {Big(userInfo?.created || 0).gt(0) &&
+                        Big(userInfo?.cancel || 0).gt(0)
+                          ? formatNumber(
+                              Big(userInfo?.cancel)
+                                .div(userInfo?.created)
+                                .times(100),
+                              2,
+                              true
+                            )
+                          : 0}
+                        %
                       </Badge>
                     </Popover>
                   </div>
@@ -81,7 +87,7 @@ const Dashboard = (props: any) => {
               </div>
               <div className="flex items-center gap-[5px]">
                 <div className="text-[#ADBCCF]">
-                  {formatAddress(userInfo?.sol_user)}
+                  {formatAddress(userInfo?.user)}
                 </div>
                 <button
                   className="cursor-pointer"
@@ -107,35 +113,35 @@ const Dashboard = (props: any) => {
           {/*#endregion*/}
           {/*#region Invite frenz*/}
           <div className="flex flex-col gap-[12px] items-end">
-            {
-              !isMobile && (
-                <div className="flex justify-end gap-[13px] items-center">
-                  {inviteFrenz.length > 0 && (
-                    <div className="flex items-center gap-[6px] h-[32px] bg-black/20 border border-[#6A5D3A] rounded-[16px] pl-[5px] pr-[14px]">
-                      <div className="flex items-center">
-                        {inviteFrenz.slice(0, 5).map((item: any, index: number) => (
+            {!isMobile && (
+              <div className="flex justify-end gap-[13px] items-center">
+                {inviteFrenz.length > 0 && (
+                  <div className="flex items-center gap-[6px] h-[32px] bg-black/20 border border-[#383F47] rounded-[16px] pl-[5px] pr-[14px]">
+                    <div className="flex items-center">
+                      {inviteFrenz
+                        .slice(0, 5)
+                        .map((item: any, index: number) => (
                           <img
                             key={index}
                             src={item.avatar}
                             alt=""
                             className={clsx(
-                              "w-[26px] h-[26px] rounded-full border-[2px] border-[#131417] shrink-0",
+                              "w-[26px] h-[26px] rounded-full border-[2px] border-[#383F47] shrink-0",
                               index > 0 && "ml-[-8px]"
                             )}
                           />
                         ))}
-                      </div>
-                      <div className="[text-shaow:0px_1px_0px_#000]">
-                        {inviteFrenz.length || 0}
-                      </div>
                     </div>
-                  )}
-                  <ButtonV2 soon disabled onClick={() => { }}>
-                    Invite frenz
-                  </ButtonV2>
-                </div>
-              )
-            }
+                    <div className="[text-shaow:0px_1px_0px_#000]">
+                      {inviteFrenz.length || 0}
+                    </div>
+                  </div>
+                )}
+                <ButtonV2 soon disabled onClick={() => {}}>
+                  Invite frenz
+                </ButtonV2>
+              </div>
+            )}
             <div className="max-md:text-[12px] max-md:translate-y-[15px] max-md:absolute max-md:right-[0px] max-md:bottom-[20px]">
               Joined{" "}
               {userInfo?.created_at
@@ -145,7 +151,7 @@ const Dashboard = (props: any) => {
           </div>
           {/*#endregion*/}
         </div>
-        <div className="w-full bg-[#423930] h-[1px] mt-[20px] max-md:mt-[14px]" />
+        <div className="w-full bg-[#383F47] h-[1px] mt-[20px] max-md:mt-[14px]" />
       </div>
       {tab === "player" ? <StatisticsPlayer /> : <StatisticsSeller />}
     </div>

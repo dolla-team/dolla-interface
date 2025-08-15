@@ -43,7 +43,6 @@ export default function MainLayout() {
               navigate("/");
             }}
           />
-          {!isMobile && <EstGas />}
         </div>
 
         <div className="absolute right-[10px] top-[10px] z-[20] flex items-center gap-[36px]">
@@ -59,6 +58,7 @@ export default function MainLayout() {
               x35
             </span>
           </div> */}
+          {!isMobile && <EstGas />}
           {!userInfo ? (
             <Button onClick={login} className="w-[100px] h-[36px]">
               Connect

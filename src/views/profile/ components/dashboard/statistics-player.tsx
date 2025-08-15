@@ -52,17 +52,19 @@ const StatisticsPlayer = (props: any) => {
       )}
     >
       <div className="flex items-center justify-between gap-[10px] flex-1 max-md:justify-between max-md:w-full max-md:pl-[4px] max-md:pr-[10px]">
-        <div className="flex flex-col justify-center items-center gap-[15px] p-[20px_32px_33px] bg-[#22201D] border border-[#6A5D3A] rounded-[16px] shrink-0">
+        <div className="flex flex-col justify-center items-center gap-[15px] p-[20px_32px_33px] bg-[#743EFF] rounded-[16px] shrink-0">
           <div className="">Wins</div>
           <div className="font-[DelaGothicOne] text-[36px]">
             {formatNumber(userInfo?.winner, 2, true)}
           </div>
         </div>
-        <LabelValue label="#BTC" className="">
+        <LabelValue label="Total Valued" className="">
           {totalBtcLoading ? (
             <Loading size={12} />
           ) : (
-            formatNumber(totalBtcAmount, 3, true)
+            formatNumber(totalBtcAmount, 3, true, {
+              prefix: "$"
+            })
           )}
         </LabelValue>
         {/* <ButtonV2 className="" onClick={() => { }} disabled soon>
