@@ -7,8 +7,6 @@ import { INVATE_ACTIVE } from "@/config";
 import useCopy from "@/hooks/use-copy";
 import { useUser } from "@privy-io/react-auth";
 import AvatarCashier from "./avatar-cashier";
-import { QUOTE_TOKEN } from "@/config/btc";
-import useTokenBalance from "@/hooks/solana/use-token-balance";
 import { useEffect, useState } from "react";
 import useClaimTestCoin from "@/hooks/solana/use-claim-test-coin";
 import Cashier from "@/sections/cashier/modal";
@@ -163,22 +161,22 @@ export default function AvatarAction() {
             <div className="p-[10px] flex gap-[8px] items-center border-b border-[#423930]">
               <Avatar
                 size={32}
-                address={userInfo.sol_user}
+                address={userInfo.user}
                 email={userInfo?.email}
                 className="shrink-0"
               />
               <div className="flex-1 w-0 whitespace-nowrap overflow-hidden text-ellipsis">
-                <span className="text-[16px] font-medium">
+                <span className="text-[12px] font-medium">
                   {user?.email?.address}
                 </span>
                 <div className="flex items-center gap-[3px]">
                   <span className="text-[12px]">
-                    {formatAddress(userInfo?.sol_user)}
+                    {formatAddress(userInfo?.user)}
                   </span>
                   <button
                     className="button"
                     onClick={() => {
-                      onCopy(userInfo?.sol_user);
+                      onCopy(userInfo?.user);
                     }}
                   >
                     <svg
@@ -201,7 +199,7 @@ export default function AvatarAction() {
               <div
                 key={item.key + index}
                 className={clsx(
-                  "px-[20px] py-[12px] flex items-center justify-between text-[16px] font-medium",
+                  "px-[20px] py-[12px] flex items-center justify-between text-[12px] font-medium",
                   item.isActive ? "hover:bg-[#00000033] button" : "opacity-50"
                 )}
                 onClick={(e) => {

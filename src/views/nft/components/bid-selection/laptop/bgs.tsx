@@ -1,4 +1,4 @@
-export const Bg50 = ({ active }: { active: boolean }) => {
+export const Bg20 = ({ active }: { active: boolean }) => {
   return active ? (
     <>
       <svg
@@ -22,15 +22,15 @@ export const Bg50 = ({ active }: { active: boolean }) => {
             y2="68"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stopColor="#BFA6FF" />
-            <stop offset="1" stopColor="#10FFBF" />
+            <stop stopColor="#FFDAAD" />
+            <stop offset="1" stopColor="#FF3B3E" />
           </linearGradient>
         </defs>
       </svg>
       <img
-        className="absolute bottom-0 left-0"
-        src="/btc/bid50.gif"
-        alt="bid 50"
+        className="absolute bottom-[36px] left-[30px]"
+        src="/nft/bid20.gif"
+        alt="bid 20"
       />
     </>
   ) : (
@@ -106,13 +106,13 @@ export const Bg10 = ({ active }: { active: boolean }) => {
             gradientUnits="userSpaceOnUse"
           >
             <stop stopColor="#BFA6FF" />
-            <stop offset="1" stopColor="#10FFBF" />
+            <stop offset="1" stopColor="#FF7F9F" />
           </linearGradient>
         </defs>
       </svg>
       <img
         className="absolute bottom-0 left-0"
-        src="/btc/bid10.gif"
+        src="/nft/bid10.gif"
         alt="bid 10"
       />
     </>
@@ -188,14 +188,14 @@ export const Bg5 = ({ active }: { active: boolean }) => {
             y2="56"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stopColor="#BFA6FF" />
-            <stop offset="1" stopColor="#10FFBF" />
+            <stop stopColor="#F098FF" />
+            <stop offset="1" stopColor="#AB96FF" />
           </linearGradient>
         </defs>
       </svg>
       <img
         className="absolute bottom-0 left-0"
-        src="/btc/bid5.gif"
+        src="/nft/bid5.gif"
         alt="bid 5"
       />
     </>

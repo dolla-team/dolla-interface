@@ -1,15 +1,25 @@
 import { motion } from "framer-motion";
 import clsx from "clsx";
 import { useState } from "react";
+import useApprove from "@/hooks/evm/use-approve";
+import config from "@/config/bera";
 
 export default function BidBtn({
   disabled,
-  onClick
+  onClick,
+  bids
 }: {
   disabled: boolean;
   onClick: () => void;
+  bids: number;
 }) {
   const [isHovered, setIsHovered] = useState(false);
+  const { approve, approved, approving, checking } = useApprove({
+    token: config.purchaseToken,
+    spender: config.bettingContractAddress,
+    isMax: true,
+    amount: String(bids)
+  });
 
   return (
     <div
@@ -30,7 +40,17 @@ export default function BidBtn({
       <div
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
-        onClick={onClick}
+        onClick={() => {
+          if (approved) {
+            onClick();
+            return;
+          }
+          if (approving || checking) {
+            return;
+          }
+          console.log("approve");
+          approve();
+        }}
         className="cursor-pointer w-full h-full rounded-full flex items-center justify-center absolute top-[50%] translate-y-[-50%] left-[50%] translate-x-[-50%]"
         style={{
           background:
@@ -38,7 +58,7 @@ export default function BidBtn({
         }}
       >
         <span className="relative z-[2] text-[32px] text-white font-bold uppercase">
-          Bid!
+          {approved ? "Bid!" : "Appr!"}
         </span>
       </div>
     </div>

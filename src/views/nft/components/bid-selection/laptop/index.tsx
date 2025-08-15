@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { Bg1, Bg10, Bg5, Bg50 } from "./bgs";
+import { Bg1, Bg10, Bg5, Bg20 } from "./bgs";
 import BidBtn from "./bid-btn";
 import ProvablyFair from "@/sections/provably-fair";
 import { useAuth } from "@/contexts/auth";
@@ -57,6 +57,7 @@ export default function BidSelection({
           <BidBtn
             disabled={disabled || flipStatus === 4}
             onClick={onBidClick}
+            bids={bids}
           />
           {userInfo && (
             <CashierEntry
@@ -66,12 +67,12 @@ export default function BidSelection({
           )}
         </div>
         <div className="flex items-center gap-[10px] mt-[70px] text-white text-[22px] font-normal leading-[100%] uppercase">
-          {[50, 10, 5, 1].map((item) => (
+          {[20, 10, 5, 1].map((item) => (
             <div
               key={`bids-${item}`}
               className={clsx(
                 "relative flex items-center justify-center",
-                item === 50 && "w-[133px] h-[68px]",
+                item === 20 && "w-[133px] h-[68px]",
                 item === 10 && "w-[120px] h-[62px]",
                 item === 5 && "w-[118px] h-[56px]",
                 item === 1 && "w-[110px] h-[47px]",
@@ -79,7 +80,7 @@ export default function BidSelection({
               )}
               onClick={() => onChangeBids(item)}
             >
-              {item === 50 && <Bg50 active={bids === 50} />}
+              {item === 20 && <Bg20 active={bids === 20} />}
               {item === 10 && <Bg10 active={bids === 10} />}
               {item === 5 && <Bg5 active={bids === 5} />}
               {item === 1 && <Bg1 active={bids === 1} />}

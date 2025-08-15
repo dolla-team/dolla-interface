@@ -57,9 +57,7 @@ export default function BidSelection({ tokenBalance }: any) {
     if (disabled) {
       return;
     }
-    if (flipStatus === 6) {
-      onReset();
-    }
+
     setBidResult(null);
     setFlipStatus(1);
     onDraw(pool?.pool_id, bids);

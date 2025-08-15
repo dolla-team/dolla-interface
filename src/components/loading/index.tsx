@@ -12,8 +12,8 @@ const useTypewriter = (text: string, speed: number = 100) => {
     if (currentIndex < text.length) {
       // Calculate dynamic speed - start fast, gradually slow down
       const progress = currentIndex / text.length;
-      const dynamicSpeed = speed + (progress * 100); // Start at speed, end at speed + 100ms
-      
+      const dynamicSpeed = speed + progress * 100; // Start at speed, end at speed + 100ms
+
       const timer = setTimeout(() => {
         setDisplayText(text.slice(0, currentIndex + 1));
         setCurrentIndex(currentIndex + 1);
@@ -28,31 +28,39 @@ const useTypewriter = (text: string, speed: number = 100) => {
 
 // Function to render text with special styling
 const renderStyledText = (text: string, isMobile?: boolean) => {
-  return text.split('').map((char, charIndex) => {
-    const isQuestionMark = char === '?';
-    const isSpace = char === ' ';
+  return text.split("").map((char, charIndex) => {
+    const isQuestionMark = char === "?";
+    const isSpace = char === " ";
 
     // Hardcode font sizes based on character positions
-    let fontSize = isMobile ? "text-[16px]" : 'text-[20px]';
-    let marginClass = '-mr-[2px]';
+    let fontSize = isMobile ? "text-[16px]" : "text-[20px]";
+    let marginClass = "-mr-[2px]";
 
     // "Can one dollar win something big? Something, really big..."
     // Positions for "win"
     if (charIndex >= 15 && charIndex <= 17) {
-      fontSize = 'text-[30px]';
-      marginClass = '-mr-[6px]';
+      fontSize = "text-[30px]";
+      marginClass = "-mr-[6px]";
     }
     // Positions for "big..."
-    else if ((charIndex >= 51 && charIndex <= 57)) {
-      fontSize = 'text-[60px]';
-      marginClass = '-mr-[12px]';
+    else if (charIndex >= 51 && charIndex <= 57) {
+      fontSize = "text-[60px]";
+      marginClass = "-mr-[12px]";
     }
 
     return (
-      <span key={charIndex} className={`${fontSize} leading-none ${marginClass}`}>
-        {isSpace ? '\u00A0' : char}
+      <span
+        key={charIndex}
+        className={`${fontSize} leading-none ${marginClass}`}
+      >
+        {isSpace ? "\u00A0" : char}
         {isQuestionMark && <br />}
-        {charIndex === 50 && <div className="mt-[10px]"><br /></div>} {/* After "really" */}
+        {charIndex === 50 && (
+          <div className="mt-[10px]">
+            <br />
+          </div>
+        )}{" "}
+        {/* After "really" */}
       </span>
     );
   });
@@ -67,7 +75,8 @@ const Loading = (props: Props) => {
   const [isLoading, setIsLoading] = useState(true);
 
   // Typewriter text content
-  const typewriterText = "Can one dollar win something big? Something, really big...";
+  const typewriterText =
+    "Can one dollar win something big? Something, really big...";
   const displayText = useTypewriter(typewriterText, 50);
 
   useEffect(() => {
@@ -133,7 +142,7 @@ const Loading = (props: Props) => {
         <div className="w-[280px] h-[12px] flex-shrink-0 rounded-[12px] p-[2px] border border-[#3B3951] bg-[rgba(255,255,255,0.10)] backdrop-blur-[25px] relative">
           <motion.div
             ref={progressInnerRef}
-            className="h-full rounded-[3px] bg-[linear-gradient(90deg,_#A2623D_0%,_#FFC42F_47.6%,_#FFE9B2_100%)] relative"
+            className="h-full rounded-[3px] bg-[linear-gradient(90deg,_#6F37FF_0%,_#00FFBB_100%)] relative"
             initial={{ width: 0 }}
             animate={{
               width: `${progressWidth}%`
@@ -143,7 +152,7 @@ const Loading = (props: Props) => {
               {particles.map((particle) => (
                 <motion.div
                   key={particle.id}
-                  className="absolute bg-[#FFE9B2] rounded-full"
+                  className="absolute bg-[#10FFBF] rounded-full"
                   style={{
                     width: `${particle.size}px`,
                     height: `${particle.size}px`,
@@ -174,7 +183,7 @@ const Loading = (props: Props) => {
             </div>
           </motion.div>
         </div>
-        <div className="text-[#FFE9B2] text-center font-[DelaGothicOne] font-normal leading-[40px] mt-[20px] min-h-[120px] flex flex-col items-center justify-center">
+        <div className="text-[#AB96FF] text-center font-normal leading-[40px] mt-[20px] min-h-[120px] flex flex-col items-center justify-center">
           <div className="whitespace-pre-wrap">
             {renderStyledText(displayText, isMobile)}
           </div>

@@ -1,6 +1,6 @@
 import AvatarAction from "./avatar-action";
 import { Outlet, useNavigate } from "react-router-dom";
-import Button from "@/components/button";
+import Button from "@/components/button/v2";
 import { useAuth } from "@/contexts/auth";
 import DollaEye from "@/components/dolla-eye";
 import EstGas from "@/sections/est-gas";

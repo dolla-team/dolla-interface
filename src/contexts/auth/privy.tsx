@@ -59,7 +59,8 @@ export const AuthProvider: React.FC<{
   const { tokenBalance: quoteTokenBalance, update: updateQuoteTokenBalance } =
     useTokenBalance({
       address: config.purchaseToken.address,
-      decimals: config.purchaseToken.decimals
+      decimals: config.purchaseToken.decimals,
+      account: privyWallet?.address
     });
   const { signMessage } = useSignMessage();
   const { onLogin } = useLogin();
@@ -230,7 +231,7 @@ export function useAuth() {
   const context = useContext(AuthContext);
   console.log("context", context);
   if (!context) {
-    throw new Error("");
+    throw {};
   }
 
   return context || {};
