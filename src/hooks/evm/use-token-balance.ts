@@ -36,7 +36,8 @@ export default function useTokenBalance({
   chainId?: number;
   account?: string;
 }) {
-  const { address: privyAccount } = useAuth();
+  const authData = useAuth();
+  const privyAccount = authData?.address;
   const [tokenBalance, setTokenBalance] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);

@@ -14,7 +14,7 @@ import MainLayout from "./layouts/main";
 import "./libs/howl";
 import Callback from "./views/callback";
 import DollaEyeContextProvider from "./contexts/dolla-eye";
-import BTC from "./views/btc";
+import NFT from "./views/nft";
 
 // const LazyNewBTC = lazy(() => import("./views/btc"));
 const LazyNftCreate = lazy(() => import("./views/nft-create"));
@@ -67,16 +67,16 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Navigate to="/btc" replace />
+        element: <Navigate to="/nft" replace />
       },
       {
         index: true,
-        path: "btc",
-        element: <BTC />
+        path: "nft",
+        element: <NFT />
       },
       {
-        path: "btc/:poolId",
-        element: <BTC />
+        path: "nft/:poolId",
+        element: <NFT />
       },
       {
         path: "nft/create",

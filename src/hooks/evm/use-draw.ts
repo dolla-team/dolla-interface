@@ -5,7 +5,10 @@ import useBettingContract from "./use-betting-contract";
 import reportHash from "@/utils/report-hash";
 import useGelatonetwork from "./use-gelatonetwork";
 
-export default function useDraw(onSuccess: (isWinner: boolean) => void) {
+export default function useDraw(
+  onSuccess: (isWinner: boolean) => void,
+  onError: () => void
+) {
   const [drawing, setDrawing] = useState(false);
   const toast = useToast();
   const BettingContract = useBettingContract();
@@ -74,6 +77,7 @@ export default function useDraw(onSuccess: (isWinner: boolean) => void) {
           console.log("onError", status);
           setDrawing(false);
           toast.fail({ title: "Bid failed" });
+          onError();
         }
       });
     } catch (error) {

@@ -1,66 +1,51 @@
-// import NFTBg from "./bg";
-import NFTTop from "./top";
-import NFTBid from "./bid";
-import Switcher from "./switcher";
-import ProbabiltyChart from "./probabilty-chart";
-import PlayerDistribution from "./player-distribution";
-import usePoolRecommend from "../../hooks/use-pool-recommend";
-// import WinnerCard from "@/components/winners/winner-card";
-import { useMemo, useState } from "react";
-import { getAnchorPrice } from "@/utils/pool";
-import usePoolInfo from "@/hooks/use-pool-info";
+import { CannonCoinsProvider, useNftContext } from "./context";
+// import WildTimeBid from "@/sections/wild-time/bid";
+import Header from "./components/header";
+import BidSelection from "./components/bid-selection";
+import BidsInfo from "./components/bids-info";
+import Grand from "./grand";
+import Music from "./components/music";
+import useIsMobile from "@/hooks/use-is-mobile";
+import clsx from "clsx";
+import { useAuth } from "@/contexts/auth";
 
-export default function NFT() {
-  const { data, getPoolRecommend } = usePoolRecommend(1);
-  const [selectedBid, setSelectedBid] = useState(1);
-  const { onQueryPoolInfo, poolInfo } = usePoolInfo("Berachain");
-  const [refresh, setRefresh] = useState(0);
+// import ProvablyFair from "@/sections/provably-fair";
 
-  const mergedData = useMemo(() => {
-    return {
-      ...data,
-      ...poolInfo
-    };
-  }, [data, poolInfo]);
+// import WildTimeBid from "@/sections/wild-time/bid";
 
+export default function NewBTC() {
   return (
-    <div className="relative w-full h-full pt-[36px]">
-      <div className="relative z-[2]">
-        <NFTTop data={mergedData} />
-        <NFTBid
-          data={data}
-          selectedBid={selectedBid}
-          setSelectedBid={(val: number) => {
-            setSelectedBid(val);
-          }}
-          onDrawSuccess={async () => {
-            setTimeout(async () => {
-              await onQueryPoolInfo(data.pool_id);
-            }, 2000);
-            setRefresh(refresh + 1);
-          }}
-        />
-        <Switcher
-          onClick={() => {
-            getPoolRecommend();
-          }}
-        />
-      </div>
-      <div className="mt-[38px] flex gap-[14px] justify-center">
-        <div className="w-[566px] h-[326px]">
-          <ProbabiltyChart
-            anchorPrice={getAnchorPrice(data)}
-            selectedBids={selectedBid}
-            totalBids={mergedData?.accumulative_bids || 0}
-          />
-        </div>
-        <div className="w-[348px] h-[326px]">
-          <PlayerDistribution data={mergedData} key={refresh} />
-        </div>
-      </div>
-      {/* <div className="fixed bottom-[50px] right-[20px]">
-        <WinnerCard type="biggest" data={{}} />
-      </div> */}
-    </div>
+    <CannonCoinsProvider>
+      <Content />
+    </CannonCoinsProvider>
   );
 }
+
+const Content = () => {
+  const { quoteTokenBalance } = useAuth();
+
+  const isMobile = useIsMobile();
+  const { pool } = useNftContext();
+  return (
+    <div
+      className={clsx(
+        "h-[100dvh] relative",
+        isMobile && "flex flex-col",
+        isMobile && pool?.status !== 1 ? "overflow-y-auto" : "overflow-hidden"
+      )}
+      style={{
+        background: isMobile
+          ? "radial-gradient(108.21% 50% at 50% 50%, rgba(0, 0, 0, 0.20) 0%, #000 100%), linear-gradient(0deg, rgba(31, 19, 255, 0.20) 0%, rgba(31, 19, 255, 0.20) 100%), url('/new-btc/m-bg.gif') lightgray 50% / cover no-repeat"
+          : "radial-gradient(50% 50% at 50% 50%,rgba(0,0,0,0) 0%,#000 100%), url('/nft/bg.gif') lightgray 50% / cover no-repeat"
+      }}
+    >
+      {!isMobile && <Header className="h-[214px]" />}
+
+      <Grand tokenBalance={quoteTokenBalance} />
+      <BidSelection tokenBalance={quoteTokenBalance} />
+      {!isMobile && <BidsInfo />}
+      {/* {!isMobile && <TopWinner />} */}
+      {/* {!isMobile && <Music />} */}
+    </div>
+  );
+};

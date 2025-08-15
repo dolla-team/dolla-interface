@@ -20,8 +20,8 @@ import {
 import useConfig from "@/hooks/use-config";
 import useUserInfoStore from "@/stores/use-user-info";
 import { ethers } from "ethers";
-import useTokenBalance from "@/hooks/solana/use-token-balance";
-import { QUOTE_TOKEN } from "@/config/btc";
+import useTokenBalance from "@/hooks/evm/use-token-balance";
+import config from "@/config/bera";
 
 export const AuthContext = React.createContext<any | null>(null);
 
@@ -58,9 +58,8 @@ export const AuthProvider: React.FC<{
 
   const { tokenBalance: quoteTokenBalance, update: updateQuoteTokenBalance } =
     useTokenBalance({
-      address: QUOTE_TOKEN.address,
-      decimals: QUOTE_TOKEN.decimals,
-      userInfo
+      address: config.purchaseToken.address,
+      decimals: config.purchaseToken.decimals
     });
   const { signMessage } = useSignMessage();
   const { onLogin } = useLogin();
