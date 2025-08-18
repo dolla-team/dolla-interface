@@ -7,13 +7,13 @@ import Big from "big.js";
 import Avatar from "../avatar";
 import { formatAddress } from "@/utils/format/address";
 
-export default function NftCard({ data }: any) {
+export default function NftCard({ data, className }: any) {
   const [type, rewardToken, rewardTokenPrice, process, returnMultiple] =
     useMemo(() => {
       let _type = "basic";
       if (Number(data?.rare) === 1) _type = "saudi";
       if (Number(data?.rare) === 2) _type = "redOg";
-      const _p = Big(data?.accumulative_bids)
+      const _p = Big(data?.accumulative_bids || 0)
         .div(data?.anchor_price || 1)
         .mul(100)
         .toNumber();
@@ -32,10 +32,11 @@ export default function NftCard({ data }: any) {
         "w-[220px] h-[326px] rounded-[12px] p-[10px] relative border",
         type === "basic" && "border-[#3B3951] bg-white/10 backdrop-blur-[10px]",
         type === "saudi" && "border-[#434343CC]",
-        type === "redOg" && "border-[#2A2B27]"
+        type === "redOg" && "border-[#2A2B27]",
+        className
       )}
     >
-      {data.winner_user_info && (
+      {data?.winner_user_info && (
         <div className="w-full h-full rounded-[12px] absolute top-0 left-0 z-[10] bg-[#00000080]">
           <div className="flex justify-center mt-[100px]">
             <div className="p-[2px] pr-[10px] min-w-[100px] inline-flex gap-[3px] rounded-[12px] bg-[#FFFFFF1A] backdrop-blur-[10px]">
