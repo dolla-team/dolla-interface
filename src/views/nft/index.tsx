@@ -39,7 +39,7 @@ const Content = () => {
           : "radial-gradient(50% 50% at 50% 50%,rgba(0,0,0,0) 0%,#000 100%), url('/nft/bg.gif') lightgray 50% / cover no-repeat"
       }}
     >
-      {!isMobile && <Header className="h-[214px]" />}
+      {!isMobile && <Header className="h-[178px]" />}
 
       <Grand tokenBalance={quoteTokenBalance} />
       <BidSelection tokenBalance={quoteTokenBalance} />

@@ -50,7 +50,7 @@ const Item = ({ data, number, total, winner, bidsDistribution }: any) => {
 
   return (
     <div className="flex items-center">
-      <div className="text-[14px] text-[#FFE9B2] w-[60px] mr-[11px] shrink-0">
+      <div className="text-[12px] text-[#FFE9B2] w-[70px] mr-[11px] shrink-0">
         BID x{data.value}
       </div>
       <div className="h-[12px] w-[292px] rounded-[6px] flex items-center">

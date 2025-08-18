@@ -71,7 +71,7 @@ const StatisticsPlayer = (props: any) => {
           Share
         </ButtonV2> */}
         <ButtonV2
-          className="max-md:flex-1"
+          className="max-md:flex-1 !text-[14px]"
           disabled={Big(claimableAmount || 0).lte(0)}
           onClick={() => {
             setClaimModalOpen(true);
@@ -103,7 +103,7 @@ const StatisticsPlayer = (props: any) => {
         </div>
         <div className="flex items-center justify-end gap-[8px] max-md:w-full max-md:justify-between max-md:gap-[10px]">
           <ButtonV2
-            className="max-md:flex-1"
+            className="max-md:flex-1 !text-[14px]"
             onClick={() => {
               setCashierModalTab("fund");
               setCashierModalOpen(true);
@@ -112,7 +112,7 @@ const StatisticsPlayer = (props: any) => {
             Fund
           </ButtonV2>
           <ButtonV2
-            className="max-md:flex-1"
+            className="max-md:flex-1 !text-[14px]"
             type="default"
             onClick={() => {
               setCashierModalTab("withdraw");

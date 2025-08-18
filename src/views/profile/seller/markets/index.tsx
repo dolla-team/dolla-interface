@@ -151,14 +151,14 @@ const MarketItem = (props: any) => {
         />
       }
       footer={
-        <div className="w-full px-[13px] bg-black/20 py-[12px] mt-[20px] relative z-[2] text-white text-center text-[14px] font-normal leading-[100%]">
+        <div className="w-full px-[13px] bg-black/20 py-[12px] mt-[20px] relative z-[2] text-white text-center text-[12px] font-normal leading-[100%]">
           <div className="flex justify-between items-center gap-[10px]">
-            <div className="text-[#BBACA6] whitespace-nowrap">{time}</div>
+            <div className="text-[#8795A7] whitespace-nowrap">{time}</div>
             <div className="flex items-center justify-end gap-[7px]">
               {order.status === EMarketStatus.Created && (
                 <ButtonV2
                   type="primary"
-                  className="!h-[28px] !rounded-[8px] !text-[14px] !px-[5px] !font-[400]"
+                  className="!h-[28px] !rounded-[8px] !text-[12px] !px-[5px] !font-[400]"
                   onClick={(e: any) => {
                     e.stopPropagation();
                     onDeposit(e);
@@ -218,7 +218,7 @@ const MarketItem = (props: any) => {
                 >
                   <ButtonV2
                     type="default"
-                    className="!h-[28px] !px-[7px] !rounded-[8px] !text-[14px] flex items-center gap-[3px]"
+                    className="!h-[28px] !px-[7px] !rounded-[8px] !text-[12px] flex items-center gap-[3px]"
                     disabled={!cancelValid}
                     onClick={(e: any) => {
                       e.stopPropagation();
@@ -238,7 +238,7 @@ const MarketItem = (props: any) => {
               {order.status === EMarketStatus.Winner && !claimed && (
                 <ButtonV2
                   type="primary"
-                  className="!h-[28px] !rounded-[8px] !text-[14px]"
+                  className="!h-[28px] !rounded-[8px] !text-[12px]"
                   onClick={(e: any) => {
                     e.stopPropagation();
                     onClaim(order.pool_id);
@@ -254,14 +254,14 @@ const MarketItem = (props: any) => {
                 <ButtonV2
                   type="default"
                   disabled={true}
-                  className="!h-[28px] !rounded-[8px] !text-[14px]"
+                  className="!h-[28px] !rounded-[8px] !text-[12px]"
                 >
                   Claimed
                 </ButtonV2>
               )}
 
               {order.status === EMarketStatus.Cancelled && (
-                <div className="h-[28px] flex items-center justify-end text-[#BBACA6]">
+                <div className="h-[28px] flex items-center justify-end text-[#8795A7]">
                   Cancelled
                 </div>
               )}

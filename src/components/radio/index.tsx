@@ -28,7 +28,7 @@ const Radio = (props: any) => {
     >
       <div
         className={clsx(
-          "w-[17px] h-[17px] shrink-0 flex justify-center items-center rounded-full border border-[#6A5D3A] p-[3px] bg-black/20",
+          "w-[17px] h-[17px] shrink-0 flex justify-center items-center rounded-full border border-[#743EFF] p-[3px] bg-black/20",
           radioClassName
         )}
       >
@@ -41,7 +41,7 @@ const Radio = (props: any) => {
           {...restProps}
         />
         {checked && (
-          <div className="w-full h-full rounded-full shrink-0 bg-[#FFC42F]"></div>
+          <div className="w-full h-full rounded-full shrink-0 bg-[#743EFF]"></div>
         )}
       </div>
       <div className="">{children}</div>

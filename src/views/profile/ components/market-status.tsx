@@ -9,7 +9,7 @@ const MarketStatus = (props: Props) => {
   return (
     <div
       className={clsx(
-        "rounded-[10px] h-[26px] shrink-0 border border-[#383F47] text-[14px] bg-black/20 backdrop-blur-[5px] text-white font-[500] flex justify-center items-center gap-[7px]",
+        "rounded-[10px] h-[26px] shrink-0 border border-[#383F47] bg-black/20 backdrop-blur-[5px] text-white text-[12px] flex justify-center items-center gap-[7px]",
         ![EMarketStatus.Cancelled, EMarketStatus.Winner].includes(value) &&
           "pl-[20px] pr-[23px]",
         value === EMarketStatus.Cancelled && "pl-[9px] pr-[10px]",
@@ -24,7 +24,9 @@ const MarketStatus = (props: Props) => {
       ].includes(value) && (
         <div className="w-[9px] h-[9px] flex-shrink-0 bg-[#54FF59] rounded-full" />
       )}
-      <div className="">{currentMarketStatus?.label}</div>
+      <div className="border-r border-[#ADBCCF] h-[12px] pr-[8px] leading-[12px]">
+        {currentMarketStatus?.label}
+      </div>
       {value === EMarketStatus.Winner && (
         <>
           {market?.winner_user_info?.avatar && (
@@ -34,7 +36,7 @@ const MarketStatus = (props: Props) => {
             />
           )}
           {market?.winner_user && (
-            <div className="text-[#BBACA6]">
+            <div className="text-[#ADBCCF]">
               {formatAddress(market?.winner_user)}
             </div>
           )}

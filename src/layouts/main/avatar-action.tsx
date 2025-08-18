@@ -71,12 +71,12 @@ const MENU = [
       </svg>
     )
   },
-  {
-    key: "claim",
-    label: "Airdrop",
-    isActive: true,
-    icon: <span className="text-[20px]">$</span>
-  },
+  // {
+  //   key: "claim",
+  //   label: "Airdrop",
+  //   isActive: true,
+  //   icon: <span className="text-[20px]">$</span>
+  // },
   {
     key: "logout",
     label: "Disconnect",
