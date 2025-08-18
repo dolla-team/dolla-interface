@@ -1,6 +1,6 @@
 const config: Record<string, any> = {
   testnet: {
-    bettingContractAddress: "0xcc4658bc953748150D577CE9a4513dF88236671d",
+    bettingContractAddress: "0x48e66c1BE57C807E09C0AdeC7Dc300A5C058E919",
     purchaseToken: {
       address: "0x26591f0f2bbab1bb3cd457eE1dfd80EAE1474C6c",
       decimals: 18,

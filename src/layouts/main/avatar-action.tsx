@@ -155,7 +155,7 @@ export default function AvatarAction() {
               scale: { duration: 0.2 }
             }}
             className={clsx(
-              "w-[208px] rounded-[10px] bg-[#35302B] border border-[#6A5D3A] absolute right-0 top-[40px] text-white"
+              "w-[208px] rounded-[10px] bg-[#2D2B35] border border-[#514A5D] absolute right-0 top-[40px] text-white"
             )}
           >
             <div className="p-[10px] flex gap-[8px] items-center border-b border-[#423930]">

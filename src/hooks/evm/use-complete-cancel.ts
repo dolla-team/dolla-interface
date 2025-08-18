@@ -4,9 +4,9 @@ import useToast from "@/hooks/use-toast";
 import useGelatonetwork from "./use-gelatonetwork";
 import reportHash from "@/utils/report-hash";
 
-// for user locking pool
+// for user unlocking pool
 
-export default function useLockPool({
+export default function useCompleteCancel({
   onCancelSuccess
 }: {
   onCancelSuccess: () => void;
@@ -15,13 +15,15 @@ export default function useLockPool({
   const toast = useToast();
   const BettingContract = useBettingContract();
   const { executeTransaction } = useGelatonetwork();
-  const lock = async (poolId: number) => {
+  const unlock = async (poolId: number) => {
     if (!BettingContract) {
       return;
     }
     try {
       setLoading(true);
-      const tx = await BettingContract.populateTransaction.lockPool(poolId);
+      const tx = await BettingContract.populateTransaction.completeCancel(
+        poolId
+      );
 
       executeTransaction({
         calls: [tx],
@@ -29,10 +31,10 @@ export default function useLockPool({
           setLoading(false);
 
           if (receipt?.status === 0) {
-            toast.fail({ title: "Lock pool failed" });
+            toast.fail({ title: "Unlock pool failed" });
             return;
           } else {
-            toast.success({ title: "Lock pool success" });
+            toast.success({ title: "Unlock pool success" });
             onCancelSuccess?.();
           }
 
@@ -44,16 +46,16 @@ export default function useLockPool({
           });
         },
         onError: () => {
-          toast.fail({ title: "Lock pool failed" });
+          toast.fail({ title: "Unlock pool failed" });
           setLoading(false);
         }
       });
     } catch (error) {
-      console.error("Lock pool error:", error);
-      toast.fail({ title: "Lock pool failed" });
+      console.error("Unlock pool error:", error);
+      toast.fail({ title: "Unlock pool failed" });
       setLoading(false);
     }
   };
 
-  return { loading, onMarkCancel: lock };
+  return { loading, onRevertCancel: unlock };
 }

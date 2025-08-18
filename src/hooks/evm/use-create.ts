@@ -75,6 +75,7 @@ export default function useCreate({
             toast.fail({ title: "Create pool failed" });
           } else {
             const poolId = receipt.logs[0].topics[1];
+            console.log("poolId", poolId);
             onCreateSuccess?.(Number(poolId));
             toast.success({ title: "Create pool success" });
           }

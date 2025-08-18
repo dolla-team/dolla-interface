@@ -4,9 +4,9 @@ import useToast from "@/hooks/use-toast";
 import useGelatonetwork from "./use-gelatonetwork";
 import reportHash from "@/utils/report-hash";
 
-// for user unlocking pool
+// for user locking pool
 
-export default function useUnlockPool({
+export default function useRequestCancel({
   onCancelSuccess
 }: {
   onCancelSuccess: () => void;
@@ -15,13 +15,15 @@ export default function useUnlockPool({
   const toast = useToast();
   const BettingContract = useBettingContract();
   const { executeTransaction } = useGelatonetwork();
-  const unlock = async (poolId: number) => {
+  const lock = async (poolId: number) => {
     if (!BettingContract) {
       return;
     }
     try {
       setLoading(true);
-      const tx = await BettingContract.populateTransaction.unlockPool(poolId);
+      const tx = await BettingContract.populateTransaction.requestCancel(
+        poolId
+      );
 
       executeTransaction({
         calls: [tx],
@@ -29,10 +31,10 @@ export default function useUnlockPool({
           setLoading(false);
 
           if (receipt?.status === 0) {
-            toast.fail({ title: "Unlock pool failed" });
+            toast.fail({ title: "Lock pool failed" });
             return;
           } else {
-            toast.success({ title: "Unlock pool success" });
+            toast.success({ title: "Lock pool success" });
             onCancelSuccess?.();
           }
 
@@ -44,16 +46,16 @@ export default function useUnlockPool({
           });
         },
         onError: () => {
-          toast.fail({ title: "Unlock pool failed" });
+          toast.fail({ title: "Lock pool failed" });
           setLoading(false);
         }
       });
     } catch (error) {
-      console.error("Unlock pool error:", error);
-      toast.fail({ title: "Unlock pool failed" });
+      console.error("Lock pool error:", error);
+      toast.fail({ title: "Lock pool failed" });
       setLoading(false);
     }
   };
 
-  return { loading, onRevertCancel: unlock };
+  return { loading, onMarkCancel: lock };
 }

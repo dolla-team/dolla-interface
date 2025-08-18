@@ -2,11 +2,12 @@ import Modal from "@/components/modal";
 import { formatNumber } from "@/utils/format/number";
 import { useMemo, useState } from "react";
 import Big from "big.js";
-import useCancel from "@/hooks/evm/use-cancel-order";
 import ButtonV2 from "@/components/button/v2";
 import { penaltyPercent } from "@/utils/pool";
-import useLockPool from "@/hooks/evm/use-lock-pool";
-import useUnlockPool from "@/hooks/evm/use-unlock-pool";
+import useRequestCancel from "@/hooks/evm/use-request-cancel";
+import useCompleteCancel from "@/hooks/evm/use-complete-cancel";
+import useApprove from "@/hooks/evm/use-approve";
+import config from "@/config/bera";
 
 export default function CancelModal({
   open,
@@ -22,15 +23,8 @@ export default function CancelModal({
   const rewardTokenInfo = useMemo(() => {
     return order?.reward_token_info?.[0] || {};
   }, [order]);
-  const { canceling, onCancel } = useCancel({
-    onCancelSuccess: () => {
-      onClose();
-      onSuccess({
-        status: 3
-      });
-    }
-  });
-  const { loading: cancelingMark, onMarkCancel } = useLockPool({
+
+  const { loading: cancelingMark, onMarkCancel } = useRequestCancel({
     onCancelSuccess: () => {
       onSuccess({
         status: 5,
@@ -39,7 +33,7 @@ export default function CancelModal({
       onClose();
     }
   });
-  const { loading: cancelingRevert, onRevertCancel } = useUnlockPool({
+  const { loading: cancelingRevert, onRevertCancel } = useCompleteCancel({
     onCancelSuccess: () => {
       onSuccess({
         status: 1
@@ -48,6 +42,12 @@ export default function CancelModal({
     }
   });
   const [status, setStatus] = useState(0);
+  const { approve, approved, approving, checking } = useApprove({
+    token: config.purchaseToken,
+    spender: config.bettingContractAddress,
+    isMax: true,
+    amount: String(1)
+  });
   const [penalty, markable] = useMemo(() => {
     const _penalty = Big(order?.accumulative_bids || 0)
       .times(penaltyPercent)
@@ -153,54 +153,41 @@ export default function CancelModal({
           </div>
         </div>
         <div className="grid grid-cols-2 gap-[20px] mt-[0px] px-[20px]">
-          {status === 0 && (
-            <>
-              <div />
-              <ButtonV2
-                className="!h-[40px] !text-[16px]"
-                loading={cancelingMark}
-                disabled={cancelingMark || !markable}
-                onClick={() => {
-                  if (cancelingMark || !markable) {
-                    return;
-                  }
-                  onMarkCancel(order?.pool_id);
-                }}
-              >
-                Confirm
-              </ButtonV2>
-            </>
-          )}
           {status === 1 && (
-            <>
-              <ButtonV2
-                className="!h-[40px] !text-[16px]"
-                loading={cancelingRevert}
-                disabled={cancelingRevert}
-                type="default"
-                onClick={() => {
-                  if (cancelingRevert) {
-                    return;
-                  }
-                  onRevertCancel(order?.pool_id);
-                }}
-              >
-                Cancel
-              </ButtonV2>
-              <ButtonV2
-                className="!h-[40px] !text-[16px]"
-                loading={canceling}
-                disabled={canceling}
-                onClick={() => {
-                  if (canceling) {
-                    return;
-                  }
-                  onCancel(order?.pool_id);
-                }}
-              >
-                Pay Penalty
-              </ButtonV2>
-            </>
+            <ButtonV2
+              className="!h-[40px] !text-[16px]"
+              loading={cancelingRevert}
+              disabled={cancelingRevert}
+              type="default"
+              onClick={() => {
+                if (cancelingRevert) {
+                  return;
+                }
+                onRevertCancel(order?.pool_id);
+              }}
+            >
+              Cancel
+            </ButtonV2>
+          )}
+          {status === 0 && (
+            <ButtonV2
+              className="!h-[40px] !text-[16px]"
+              loading={cancelingMark || checking || approving}
+              disabled={cancelingMark || !markable}
+              onClick={() => {
+                if (approving || checking) return;
+                if (!approved) {
+                  approve();
+                  return;
+                }
+                if (cancelingMark || !markable) {
+                  return;
+                }
+                onMarkCancel(order?.pool_id);
+              }}
+            >
+              {!approved ? "Approve" : "Pay Penalty"}
+            </ButtonV2>
           )}
         </div>
       </div>

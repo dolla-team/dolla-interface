@@ -49,6 +49,26 @@ export default [
   },
   {
     inputs: [],
+    name: "CancelBufferNotElapsed",
+    type: "error"
+  },
+  {
+    inputs: [],
+    name: "CancelNotRequested",
+    type: "error"
+  },
+  {
+    inputs: [],
+    name: "CancelProtectionActive",
+    type: "error"
+  },
+  {
+    inputs: [],
+    name: "CancelRequestPending",
+    type: "error"
+  },
+  {
+    inputs: [],
     name: "FailedInnerCall",
     type: "error"
   },
@@ -64,7 +84,17 @@ export default [
   },
   {
     inputs: [],
+    name: "InvalidBufferTime",
+    type: "error"
+  },
+  {
+    inputs: [],
     name: "InvalidDepositType",
+    type: "error"
+  },
+  {
+    inputs: [],
+    name: "InvalidDrawFee",
     type: "error"
   },
   {
@@ -106,6 +136,11 @@ export default [
   },
   {
     inputs: [],
+    name: "PoolCanceled",
+    type: "error"
+  },
+  {
+    inputs: [],
     name: "PoolNotEnded",
     type: "error"
   },
@@ -122,6 +157,11 @@ export default [
   {
     inputs: [],
     name: "RewardAlreadyDeposited",
+    type: "error"
+  },
+  {
+    inputs: [],
+    name: "RewardNotDeposited",
     type: "error"
   },
   {
@@ -205,6 +245,12 @@ export default [
         internalType: "uint256",
         name: "totalSpent",
         type: "uint256"
+      },
+      {
+        indexed: false,
+        internalType: "address",
+        name: "completedBy",
+        type: "address"
       }
     ],
     name: "ActivityCancelled",
@@ -239,6 +285,68 @@ export default [
       }
     ],
     name: "AdminFeesWithdrawn",
+    type: "event"
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "uint256",
+        name: "poolId",
+        type: "uint256"
+      },
+      {
+        indexed: false,
+        internalType: "address",
+        name: "winner",
+        type: "address"
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "refundedPenalty",
+        type: "uint256"
+      },
+      {
+        indexed: false,
+        internalType: "address",
+        name: "creator",
+        type: "address"
+      }
+    ],
+    name: "CancelAborted",
+    type: "event"
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "uint256",
+        name: "poolId",
+        type: "uint256"
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "penalty",
+        type: "uint256"
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "requestTime",
+        type: "uint256"
+      },
+      {
+        indexed: false,
+        internalType: "address",
+        name: "creator",
+        type: "address"
+      }
+    ],
+    name: "CancelRequested",
     type: "event"
   },
   {
@@ -522,45 +630,7 @@ export default [
         type: "bool"
       }
     ],
-    name: "ERC20RewardTokenWhitelistUpdated",
-    type: "event"
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
-        internalType: "address",
-        name: "token",
-        type: "address"
-      },
-      {
-        indexed: false,
-        internalType: "bool",
-        name: "allowed",
-        type: "bool"
-      }
-    ],
     name: "ERC721RewardTokenWhitelistUpdated",
-    type: "event"
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
-        internalType: "address",
-        name: "entropy",
-        type: "address"
-      },
-      {
-        indexed: false,
-        internalType: "address",
-        name: "entropyProvider",
-        type: "address"
-      }
-    ],
-    name: "EntropyAndProviderUpdated",
     type: "event"
   },
   {
@@ -703,32 +773,19 @@ export default [
     anonymous: false,
     inputs: [
       {
-        indexed: true,
-        internalType: "uint256",
-        name: "poolId",
-        type: "uint256"
+        indexed: false,
+        internalType: "address",
+        name: "token",
+        type: "address"
       },
       {
         indexed: false,
-        internalType: "uint256",
-        name: "lockStartTime",
-        type: "uint256"
+        internalType: "bool",
+        name: "allowed",
+        type: "bool"
       }
     ],
-    name: "PoolLocked",
-    type: "event"
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "uint256",
-        name: "poolId",
-        type: "uint256"
-      }
-    ],
-    name: "PoolUnlocked",
+    name: "PurchaseTokenWhitelistUpdated",
     type: "event"
   },
   {
@@ -747,7 +804,7 @@ export default [
         type: "bool"
       }
     ],
-    name: "PurchaseTokenWhitelistUpdated",
+    name: "RewardTokenWhitelistUpdated",
     type: "event"
   },
   {
@@ -804,6 +861,19 @@ export default [
     ],
     name: "SponsoredDrawAttempt",
     type: "event"
+  },
+  {
+    inputs: [],
+    name: "CANCEL_PROTECTION_PERIOD",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256"
+      }
+    ],
+    stateMutability: "view",
+    type: "function"
   },
   {
     inputs: [],
@@ -934,17 +1004,7 @@ export default [
     outputs: [
       {
         internalType: "uint256",
-        name: "actualProb",
-        type: "uint256"
-      },
-      {
-        internalType: "uint256",
         name: "threshold",
-        type: "uint256"
-      },
-      {
-        internalType: "uint256",
-        name: "error",
         type: "uint256"
       },
       {
@@ -957,16 +1017,16 @@ export default [
     type: "function"
   },
   {
-    inputs: [
+    inputs: [],
+    name: "cancelBufferTime",
+    outputs: [
       {
         internalType: "uint256",
-        name: "poolId",
+        name: "",
         type: "uint256"
       }
     ],
-    name: "cancelActivity",
-    outputs: [],
-    stateMutability: "nonpayable",
+    stateMutability: "view",
     type: "function"
   },
   {
@@ -991,6 +1051,19 @@ export default [
       }
     ],
     name: "claimReward",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function"
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "poolId",
+        type: "uint256"
+      }
+    ],
+    name: "completeCancel",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function"
@@ -1324,11 +1397,6 @@ export default [
         type: "bool"
       },
       {
-        internalType: "uint8",
-        name: "purchaseTokenDecimals",
-        type: "uint8"
-      },
-      {
         internalType: "address",
         name: "winner",
         type: "address"
@@ -1359,13 +1427,18 @@ export default [
         type: "uint256"
       },
       {
-        internalType: "bool",
-        name: "isLocked",
-        type: "bool"
+        internalType: "uint256",
+        name: "creationTime",
+        type: "uint256"
       },
       {
         internalType: "uint256",
-        name: "lockStartTime",
+        name: "cancelRequestTime",
+        type: "uint256"
+      },
+      {
+        internalType: "uint256",
+        name: "pendingPenalty",
         type: "uint256"
       }
     ],
@@ -1423,32 +1496,6 @@ export default [
       }
     ],
     stateMutability: "view",
-    type: "function"
-  },
-  {
-    inputs: [],
-    name: "lockDuration",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256"
-      }
-    ],
-    stateMutability: "view",
-    type: "function"
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "poolId",
-        type: "uint256"
-      }
-    ],
-    name: "lockPool",
-    outputs: [],
-    stateMutability: "nonpayable",
     type: "function"
   },
   {
@@ -1584,11 +1631,6 @@ export default [
         type: "bool"
       },
       {
-        internalType: "uint8",
-        name: "purchaseTokenDecimals",
-        type: "uint8"
-      },
-      {
         internalType: "address",
         name: "winner",
         type: "address"
@@ -1619,13 +1661,18 @@ export default [
         type: "uint256"
       },
       {
-        internalType: "bool",
-        name: "isLocked",
-        type: "bool"
+        internalType: "uint256",
+        name: "creationTime",
+        type: "uint256"
       },
       {
         internalType: "uint256",
-        name: "lockStartTime",
+        name: "cancelRequestTime",
+        type: "uint256"
+      },
+      {
+        internalType: "uint256",
+        name: "pendingPenalty",
         type: "uint256"
       }
     ],
@@ -1660,6 +1707,19 @@ export default [
   {
     inputs: [
       {
+        internalType: "uint256",
+        name: "poolId",
+        type: "uint256"
+      }
+    ],
+    name: "requestCancel",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function"
+  },
+  {
+    inputs: [
+      {
         internalType: "uint64",
         name: "",
         type: "uint64"
@@ -1680,11 +1740,11 @@ export default [
     inputs: [
       {
         internalType: "uint256",
-        name: "newDuration",
+        name: "newTime",
         type: "uint256"
       }
     ],
-    name: "setLockDuration",
+    name: "setCancelBufferTime",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function"
@@ -1722,7 +1782,7 @@ export default [
     ],
     name: "sponsoredDraw",
     outputs: [],
-    stateMutability: "payable",
+    stateMutability: "nonpayable",
     type: "function"
   },
   {
@@ -1741,37 +1801,6 @@ export default [
   {
     inputs: [
       {
-        internalType: "uint256",
-        name: "poolId",
-        type: "uint256"
-      }
-    ],
-    name: "unlockPool",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function"
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "token",
-        type: "address"
-      },
-      {
-        internalType: "bool",
-        name: "allowed",
-        type: "bool"
-      }
-    ],
-    name: "updateERC20RewardTokenWhitelist",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function"
-  },
-  {
-    inputs: [
-      {
         internalType: "address",
         name: "token",
         type: "address"
@@ -1783,24 +1812,6 @@ export default [
       }
     ],
     name: "updateERC721RewardTokenWhitelist",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function"
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "newEntropy",
-        type: "address"
-      },
-      {
-        internalType: "address",
-        name: "newEntropyProvider",
-        type: "address"
-      }
-    ],
-    name: "updateEntropyAndProvider",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function"
@@ -1845,6 +1856,24 @@ export default [
     inputs: [
       {
         internalType: "address",
+        name: "token",
+        type: "address"
+      },
+      {
+        internalType: "bool",
+        name: "allowed",
+        type: "bool"
+      }
+    ],
+    name: "updateRewardTokenWhitelist",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function"
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
         name: "",
         type: "address"
       },
@@ -1865,6 +1894,30 @@ export default [
         internalType: "uint64",
         name: "",
         type: "uint64"
+      }
+    ],
+    stateMutability: "view",
+    type: "function"
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address"
+      },
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256"
+      }
+    ],
+    name: "userTotalFees",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256"
       }
     ],
     stateMutability: "view",

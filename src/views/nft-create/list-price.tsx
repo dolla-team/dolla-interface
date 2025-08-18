@@ -82,7 +82,7 @@ export default function ListPrice({
               }}
             >
               {index === 0 && (
-                <div className="w-[90px] h-[16px] rounded-[4px] bg-[#57FF70] text-[12px] text-black text-center font-medium absolute top-[-8px] left-[-4px]">
+                <div className="w-[90px] h-[16px] rounded-[4px] bg-[#57FF70] text-[10px] text-black text-center font-medium absolute top-[-8px] left-[-4px]">
                   Recommend
                 </div>
               )}

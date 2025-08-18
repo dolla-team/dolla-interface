@@ -33,7 +33,7 @@ export default function Carousel() {
               className="w-full h-full"
             />
           ) : (
-            <div className="w-full h-full flex flex-col rounded-[12px] bg-[#704CFF] p-[10px]">
+            <div className="w-full h-full flex flex-col rounded-[12px] bg-[#704CFF] p-[10px] bg-[url('/nft/default-bg.png')] bg-cover bg-center">
               <img
                 className="rounded-[10px] w-full aspect-square object-cover shrink-0"
                 src={`/nft/gifs/${index}.gif`}
