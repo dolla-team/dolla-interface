@@ -1,4 +1,35 @@
-export default function ProbabilityBar() {
+import { useMemo } from "react";
+
+export default function ProbabilityBar({
+  probability,
+  probabilities
+}: {
+  probability: number;
+  probabilities: number[];
+}) {
+  const [colors] = useMemo(() => {
+    let index = 0;
+    probabilities.forEach((item, i) => {
+      if (probability >= item) {
+        index = i;
+      }
+    });
+
+    if (index === 0) {
+      return [["#10FFBF", "#966DFF"]];
+    }
+    if (index === 1) {
+      return [["#F098FF", "#AB96FF"]];
+    }
+    if (index === 2) {
+      return [["#BFA6FF", "#FF7F9F"]];
+    }
+    if (index === 3) {
+      return [["#FFDAAD", "#FF3B3E"]];
+    }
+
+    return [["#10FFBF", "#966DFF"]];
+  }, [probability, probabilities]);
   return (
     <div className="relative w-[442px] h-[38px]">
       <Bar
@@ -8,10 +39,12 @@ export default function ProbabilityBar() {
         width="425px"
       />
       <Bar
-        color="#10FFBF"
-        borderColor="#966DFF"
+        color={colors[0]}
+        borderColor={colors[1]}
         className="absolute top-[7px] left-[5px] z-[3]"
-        width={425 * 0.5}
+        width={
+          425 * (probability / (probabilities[probabilities.length - 1] || 1))
+        }
       />
       <svg
         xmlns="http://www.w3.org/2000/svg"

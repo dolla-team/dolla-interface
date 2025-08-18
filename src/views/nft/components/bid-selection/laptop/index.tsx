@@ -6,8 +6,9 @@ import { useAuth } from "@/contexts/auth";
 import Cashier from "@/sections/cashier/modal";
 import CashierEntry from "../../cashier-entery";
 import ProbabilityBar from "./probability-bar";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import Bg from "./bg";
+import Big from "big.js";
 
 export default function BidSelection({
   tokenBalance,
@@ -21,7 +22,7 @@ export default function BidSelection({
   tokenBalance: string;
   disabled: boolean;
   bids: number;
-  pool: string;
+  pool: any;
   flipStatus: number;
   onChangeBids: (bids: number) => void;
   onBidClick: () => void;
@@ -29,6 +30,23 @@ export default function BidSelection({
   const [showProvablyFair, setShowProvablyFair] = useState(false);
   const { userInfo } = useAuth();
   const [showCashier, setShowCashier] = useState(false);
+
+  const [probability, probabilities] = useMemo(() => {
+    if (!pool || !bids) return [0, [1, 5, 11, 30]];
+    const rewardToken = pool.reward_token_info[0];
+    const price = Big(pool.anchor_price).div(10 ** rewardToken.decimals);
+
+    let _p = Big(bids).div(price).mul(100);
+
+    let _items = [1, 5, 11, 30];
+    if (_p.gt(50)) {
+      _items = [1, 11, 30, 50];
+      _p = Big(50);
+    } else if (_p.gt(30)) {
+      _p = Big(30);
+    }
+    return [Math.max(Number(_p.toFixed(0)), 1), _items];
+  }, [pool, bids]);
 
   return (
     <div className="absolute bottom-0 w-full h-[202px]">
@@ -39,7 +57,7 @@ export default function BidSelection({
             <span className="text-[#999999] text-[16px] rotate-[-3deg] mt-[30px]">
               Probability
             </span>
-            {[1, 5, 11, 30].map((item, index) => (
+            {probabilities.map((item, index) => (
               <span
                 key={`probability-${item}`}
                 className="text-[#999999] text-[16px] rotate-[-3deg]"
@@ -51,7 +69,10 @@ export default function BidSelection({
               </span>
             ))}
           </div>
-          <ProbabilityBar />
+          <ProbabilityBar
+            probability={probability}
+            probabilities={probabilities}
+          />
         </div>
         <div className="mx-[20px] relative flex flex-col items-center justify-end">
           <BidBtn
@@ -98,11 +119,13 @@ export default function BidSelection({
         </div>
       </div>
 
-      <ProvablyFair
-        open={showProvablyFair}
-        pool={pool}
-        onClose={() => setShowProvablyFair(false)}
-      />
+      {pool && (
+        <ProvablyFair
+          open={showProvablyFair}
+          pool={pool}
+          onClose={() => setShowProvablyFair(false)}
+        />
+      )}
 
       <Cashier open={showCashier} onClose={() => setShowCashier(false)} />
     </div>
