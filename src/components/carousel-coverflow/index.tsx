@@ -1,18 +1,24 @@
+import { useDebounceFn } from "ahooks";
 import clsx from "clsx";
 import { motion, useAnimate, useMotionValue } from "framer-motion";
-import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef, useState } from "react";
+import React, { forwardRef, useEffect, useImperativeHandle, useMemo, useRef, useState } from "react";
 
 const rotate = 20;
 const radius = 39.68; // vw
 const rotateSpeed = 60; // seconds
 
 const CarouselCoverflow = (props: any, ref: any) => {
-  const { className, list, initRotate = 0, isDebug } = props;
+  const { className, list, initRotate = 0, isDebug, isDrag = true } = props;
 
   const [containerRef, containerAnimate] = useAnimate();
   const containerRotate = useMotionValue(initRotate);
   const containerAnimation = useRef<any>(null);
   const [cardRotate, setCardRotate] = useState(initRotate);
+
+  // Drag-related state
+  const isDragging = useRef(false);
+  const dragStartX = useRef(0);
+  const dragStartRotate = useRef(0);
 
   const [cardIndex] = useMemo(() => {
     const maxIndex = 360 / rotate - 1;
@@ -23,7 +29,7 @@ const CarouselCoverflow = (props: any, ref: any) => {
     return [Math.max(0, Math.min(maxIndex, currentIndex))];
   }, [cardRotate]);
 
-  const cards = useMemo(() => {
+  const [cards, listLength] = useMemo(() => {
     const _cards = [];
 
     const counts = 360 / rotate;
@@ -50,7 +56,7 @@ const CarouselCoverflow = (props: any, ref: any) => {
         )
       });
     }
-    return _cards;
+    return [_cards, list?.length];
   }, [list]);
 
   useEffect(() => {
@@ -74,29 +80,46 @@ const CarouselCoverflow = (props: any, ref: any) => {
     });
   };
 
+  const { run: onRotateDebounce, cancel: cancelOnRotateDebounce } = useDebounceFn(onRotate, {
+    wait: 3000,
+  });
+
+  // Direct rotation update for smooth dragging
+  const updateRotate = (newRotate: number) => {
+    containerRotate.set(newRotate);
+  };
+
   useEffect(() => {
-    if (!list || !list.length) {
+    if (!listLength) {
       return;
     }
     onRotate();
-  }, [list]);
+  }, [listLength]);
 
-  const handleScroll = async (type: any, opts?: { target?: number; }) => {
+  // Cleanup event listeners on unmount
+  useEffect(() => {
+    return () => {
+      document.removeEventListener('pointermove', handlePointerMove);
+      document.removeEventListener('pointerup', handlePointerUp);
+    };
+  }, []);
+
+  const rotateTo = (rotateY: number) => new Promise((resolve) => {
+    containerAnimate(containerRef.current, {
+      rotateY,
+    }, {
+      duration: 0.15,
+      ease: "easeInOut",
+      onComplete: () => {
+        resolve(true)
+      },
+    });
+  });
+
+  const handleRotate = async (type: any, opts?: { target?: number; }) => {
     if (!containerAnimation.current) return;
 
     const { target } = opts ?? {};
-
-    const rotateTo = (rotateY: number) => new Promise((resolve) => {
-      containerAnimate(containerRef.current, {
-        rotateY,
-      }, {
-        duration: 0.15,
-        ease: "easeInOut",
-        onComplete: () => {
-          resolve(true)
-        },
-      });
-    });
 
     switch (type) {
       case "stop":
@@ -122,11 +145,68 @@ const CarouselCoverflow = (props: any, ref: any) => {
     }
   };
 
+  const handlePointerDown = (event: React.PointerEvent) => {
+    if (!isDrag) return;
+    
+    isDragging.current = true;
+    dragStartX.current = event.clientX;
+    dragStartRotate.current = containerRotate.get();
+
+    // Cancel any pending auto-rotate
+    cancelOnRotateDebounce();
+
+    // Stop current animation completely to prevent flickering
+    if (containerAnimation.current) {
+      containerAnimation.current.stop();
+      containerAnimation.current = null;
+    }
+
+    // Add global event listeners
+    document.addEventListener('pointermove', handlePointerMove);
+    document.addEventListener('pointerup', handlePointerUp);
+  };
+
+  const handlePointerMove = (event: PointerEvent) => {
+    if (!isDragging.current) return;
+
+    const deltaX = event.clientX - dragStartX.current;
+    const sensitivity = 0.1; // Drag sensitivity, can be adjusted as needed
+    let newRotate = dragStartRotate.current + deltaX * sensitivity;
+    if (newRotate > 0) {
+      newRotate = -(360 - newRotate);
+    }
+
+    // Direct update for smooth dragging
+    updateRotate(newRotate);
+  };
+
+  const handlePointerUp = () => {
+    if (!isDragging.current) return;
+
+    isDragging.current = false;
+
+    // Remove global event listeners
+    document.removeEventListener('pointermove', handlePointerMove);
+    document.removeEventListener('pointerup', handlePointerUp);
+
+    // Auto-align to the nearest card position
+    const currentRotate = containerRotate.get();
+    const nearestCardIndex = Math.round(Math.abs(currentRotate) / rotate);
+    const targetRotate = -nearestCardIndex * rotate;
+
+    // Smooth animation to target position
+    rotateTo(targetRotate).then(() => {
+      // Start auto rotation after alignment is complete
+      onRotateDebounce();
+    });
+  };
+
   useImperativeHandle(ref, () => ({
     cardIndex,
     containerRotate,
     cardRotate,
-    handleScroll,
+    handleRotate,
+    isDrag,
   }));
 
   return (
@@ -141,11 +221,15 @@ const CarouselCoverflow = (props: any, ref: any) => {
         }}
       />
       <motion.div
-        className="flex items-center justify-center w-full h-full will-change-transform mt-[-29.50vw] backface-hidden"
+        id="coverflowContainer"
+        className={`flex items-center justify-center w-full h-full will-change-transform mt-[-29.50vw] backface-hidden ${isDrag ? 'cursor-grab active:cursor-grabbing' : ''}`}
         style={{
           transformStyle: "preserve-3d",
           transformOrigin: `center center ${radius / 2}vw`,
+          cursor: isDrag ? 'grab' : 'default',
         }}
+        drag={false}
+        onPointerDown={isDrag ? handlePointerDown : undefined}
       >
         {cards.map((item: any) => (
           <motion.div
@@ -171,28 +255,28 @@ const CarouselCoverflow = (props: any, ref: any) => {
             <button
               type="button"
               className="button text-white bg-[#743EFF] rounded-[6px] h-[32px] text-center leading-[32px] px-[10px] uppercase"
-              onClick={() => handleScroll("stop")}
+              onClick={() => handleRotate("stop")}
             >
               stop
             </button>
             <button
               type="button"
               className="button text-white bg-[#743EFF] rounded-[6px] h-[32px] text-center leading-[32px] px-[10px] uppercase"
-              onClick={() => handleScroll("pause")}
+              onClick={() => handleRotate("pause")}
             >
               pause
             </button>
             <button
               type="button"
               className="button text-white bg-[#743EFF] rounded-[6px] h-[32px] text-center leading-[32px] px-[10px] uppercase"
-              onClick={() => handleScroll("play")}
+              onClick={() => handleRotate("play")}
             >
               play
             </button>
             <button
               type="button"
               className="button text-white bg-[#743EFF] rounded-[6px] h-[32px] text-center leading-[32px] px-[10px] uppercase"
-              onClick={() => handleScroll("rotate", { target: 8 })}
+              onClick={() => handleRotate("rotate", { target: 8 })}
             >
               rotate to index 8
             </button>

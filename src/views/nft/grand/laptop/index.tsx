@@ -19,6 +19,7 @@ export default function Laptop() {
       <CarouselCoverflow
         className="w-full"
         isDebug
+        isDrag
         initRotate={-40}
         list={[
           {
