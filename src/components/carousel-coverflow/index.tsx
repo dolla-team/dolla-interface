@@ -7,7 +7,7 @@ const radius = 39.68; // vw
 const rotateSpeed = 60; // seconds
 
 const CarouselCoverflow = (props: any, ref: any) => {
-  const { className, list, initRotate = 0 } = props;
+  const { className, list, initRotate = 0, isDebug } = props;
 
   const [containerRef, containerAnimate] = useAnimate();
   const containerRotate = useMotionValue(initRotate);
@@ -165,42 +165,46 @@ const CarouselCoverflow = (props: any, ref: any) => {
         alt=""
         className="w-[52px] h-[69px] shrink-0 absolute z-[1] left-1/2 -translate-x-1/2 top-[-27px]"
       />
-      <div className="absolute top-[-50px] left-0 z-[1] flex items-center gap-[10px]">
-        <button
-          type="button"
-          className="button text-white bg-[#743EFF] rounded-[6px] h-[32px] text-center leading-[32px] px-[10px] uppercase"
-          onClick={() => handleScroll("stop")}
-        >
-          stop
-        </button>
-        <button
-          type="button"
-          className="button text-white bg-[#743EFF] rounded-[6px] h-[32px] text-center leading-[32px] px-[10px] uppercase"
-          onClick={() => handleScroll("pause")}
-        >
-          pause
-        </button>
-        <button
-          type="button"
-          className="button text-white bg-[#743EFF] rounded-[6px] h-[32px] text-center leading-[32px] px-[10px] uppercase"
-          onClick={() => handleScroll("play")}
-        >
-          play
-        </button>
-        <button
-          type="button"
-          className="button text-white bg-[#743EFF] rounded-[6px] h-[32px] text-center leading-[32px] px-[10px] uppercase"
-          onClick={() => handleScroll("rotate", { target: 8 })}
-        >
-          rotate to index 8
-        </button>
-        <button
-          type="button"
-          className="button text-white bg-[#743EFF] rounded-[6px] h-[32px] text-center leading-[32px] px-[10px] uppercase"
-        >
-          current index: {cardIndex}
-        </button>
-      </div>
+      {
+        isDebug && (
+          <div className="absolute top-[-50px] left-0 z-[1] flex items-center gap-[10px]">
+            <button
+              type="button"
+              className="button text-white bg-[#743EFF] rounded-[6px] h-[32px] text-center leading-[32px] px-[10px] uppercase"
+              onClick={() => handleScroll("stop")}
+            >
+              stop
+            </button>
+            <button
+              type="button"
+              className="button text-white bg-[#743EFF] rounded-[6px] h-[32px] text-center leading-[32px] px-[10px] uppercase"
+              onClick={() => handleScroll("pause")}
+            >
+              pause
+            </button>
+            <button
+              type="button"
+              className="button text-white bg-[#743EFF] rounded-[6px] h-[32px] text-center leading-[32px] px-[10px] uppercase"
+              onClick={() => handleScroll("play")}
+            >
+              play
+            </button>
+            <button
+              type="button"
+              className="button text-white bg-[#743EFF] rounded-[6px] h-[32px] text-center leading-[32px] px-[10px] uppercase"
+              onClick={() => handleScroll("rotate", { target: 8 })}
+            >
+              rotate to index 8
+            </button>
+            <button
+              type="button"
+              className="button text-white bg-[#743EFF] rounded-[6px] h-[32px] text-center leading-[32px] px-[10px] uppercase"
+            >
+              current index: {cardIndex}
+            </button>
+          </div>
+        )
+      }
     </div>
   );
 };
