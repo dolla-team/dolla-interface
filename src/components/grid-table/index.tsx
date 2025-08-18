@@ -63,13 +63,13 @@ const GridTable = (props: Props, ref: any) => {
   return (
     <div
       className={clsx(
-        "w-full text-white text-[16px] font-normal leading-[16px]",
+        "w-full text-white text-[12px] font-normal leading-[16px]",
         className
       )}
     >
       <div
         className={clsx(
-          "border-b border-[#423930] max-md:min-w-fit",
+          "border-b border-[#383F47] max-md:min-w-fit",
           headerClassName
         )}
       >
@@ -87,7 +87,7 @@ const GridTable = (props: Props, ref: any) => {
             <div
               key={`grid-table-header-col-${index}`}
               className={clsx(
-                "flex items-center text-[#BBACA6] text-[14px] py-[10px]",
+                "flex items-center text-white text-[12px] py-[10px]",
                 col.align === "center"
                   ? "justify-center"
                   : col.align === "right"
@@ -176,7 +176,7 @@ const GridTable = (props: Props, ref: any) => {
       </div>
       <div
         className={clsx(
-          "border-b border-[#423930] max-md:min-w-fit",
+          "border-b border-[#383F47] max-md:min-w-fit",
           bodyClassName
         )}
       >

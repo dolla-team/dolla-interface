@@ -28,9 +28,8 @@ export default function Switch({
   return (
     <div
       className={clsx(
-        "h-[36px] rounded-[6px] p-[3px] text-[16px] font-medium flex items-center justify-between",
-        className,
-        className?.includes("bg-") ? "" : "bg-[#1A1E24]"
+        "h-[38px] rounded-[6px] p-[3px] text-[12px] font-medium flex items-center justify-between",
+        className
       )}
     >
       {tabs.map((item, i) => (
@@ -70,7 +69,7 @@ export default function Switch({
                 cursorClassName
               )}
               style={{
-                background: type === "card" ? "#743EFF" : "#FFC42F"
+                background: type === "card" ? "#743EFF" : "#743EFF"
               }}
             />
           )}

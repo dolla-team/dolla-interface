@@ -7,6 +7,7 @@ import { getAnchorPrice } from "@/utils/pool";
 import MarketActiveBg from "./market-active-bg";
 import useIsMobile from "@/hooks/use-is-mobile";
 import { formatAddress } from "@/utils/format/address";
+import Avatar from "@/components/avatar";
 
 export default function Market({
   data,
@@ -47,7 +48,7 @@ export default function Market({
           : "",
         isMobile
           ? ""
-          : "hover:border-[#99761D] hover:scale-[1.05] hover:shadow-[0px_0px_20px_0px_rgba(255,_239,_67,_0.60)]",
+          : "hover:border-[#743EFF] hover:scale-[1.05] hover:shadow-[0px_0px_20px_0px_rgba(116,_62,_255,_0.60)]",
         className
       )}
       onClick={onClick}
@@ -83,143 +84,57 @@ export default function Market({
                 Market #{data?.pool_id}
               </div>
             )}
-            {isActive ? (
-              <div className="flex items-start justify-between gap-[10px]">
-                <div className="flex items-center gap-[10px]">
-                  {data?.user_info?.icon && (
-                    <div className="w-[41px] h-[41px] shrink-0 rounded-[12px] border-[2px] border-[#FFC42F] overflow-hidden flex justify-center items-center">
-                      <img
-                        src={data.user_info?.icon}
-                        alt="user"
-                        className="w-full h-full object-center object-contain"
-                      />
-                    </div>
-                  )}
-                  <div className="text-[#FFE9B2] text-[16px] leading-[100%] font-[400]">
-                    <div className="flex items-center gap-[5px]">
-                      <div className="">Seller</div>
-                      <div className="relative w-[49px] h-[16px] rounded-[16px] border border-[#6A5D3A] bg-[#35302B] text-[14px] font-[700] flex justify-end pr-[6px] items-center">
-                        <div>4.2</div>
-                        <img
-                          src="/btc/icon-star.svg"
-                          alt="star"
-                          className="w-[18px] h-[18px] absolute left-[-2px] shrink-0 object-center object-contain"
-                        />
-                      </div>
-                    </div>
-                    <div className="font-[DelaGothicOne] mt-[5px]">
-                      {formatAddress(data?.user)}
-                    </div>
-                  </div>
-                </div>
-                <div className="font-[DelaGothicOne] leading-[100%] text-[14px] bg-clip-text text-transparent bg-[linear-gradient(270deg,_#FFC42F_0%,_#FFF698_100%)]">
-                  {rewardTokenInfo?.name}
-                  {data?.nft_ids ? `#${data?.nft_ids}` : null}
-                </div>
-              </div>
-            ) : (
-              <div
-                className={clsx(
-                  "flex items-center justify-between",
-                  isForceNormal ? "" : "max-md:mt-[9px]"
-                )}
-              >
-                <div className="flex items-center gap-[6px]">
-                  {rewardTokenInfo?.icon && (
-                    <img
-                      src={rewardTokenInfo.icon}
-                      className="w-[20px] h-[20px] rounded-[4px] border border-white/80"
-                    />
-                  )}
-
-                  <span className="text-[14px] text-white">
-                    {rewardTokenInfo?.name}
-                  </span>
-                </div>
-                {data?.nft_ids && (
-                  <span className="text-[12px] text-[#ADBCCF]">
-                    #{data?.nft_ids}
-                  </span>
-                )}
-              </div>
-            )}
+            <div
+              className={clsx(
+                "flex items-center justify-between",
+                isForceNormal ? "" : "max-md:mt-[9px]"
+              )}
+            >
+              <div className="flex items-center gap-[6px]"></div>
+              {data?.nft_ids && (
+                <span className="text-[12px] text-[#8795A7]">
+                  #{data?.nft_ids}
+                </span>
+              )}
+            </div>
           </div>
           <div
-            className={clsx(
-              "mx-[6px] h-[40px] rounded-[6px] flex flex-col items-center justify-center px-[6px]",
-              isForceNormal
-                ? ""
-                : "max-md:pt-[10px] max-md:px-0 max-md:mx-0 max-md:mt-0 max-md:items-end",
-              isActive ? "mt-[34px]" : "mt-[16px]"
-            )}
+            className={clsx("flex items-center gap-[10px] px-[12px] pt-[10px]")}
           >
-            <span
-              className={clsx(
-                "font-bold leading-[90%] font-[DelaGothicOne] relative",
-                isActive ? "text-[30px]" : "text-[26px]"
-              )}
-            >
-              <span
-                className={clsx(
-                  "absolute inset-0",
-                  isActive ? "text-shadow-[5px_4px_0_#382B0B]" : ""
-                )}
-                style={{
-                  WebkitTextFillColor: "transparent",
-                  WebkitTextStrokeWidth: "1px",
-                  WebkitTextStrokeColor: "#FFF79E"
-                }}
-              >
-                {data?.nft_ids
-                  ? 1
-                  : rewardTokenInfo?.decimals && data?.reward_amount
-                  ? formatNumber(
-                      Big(data.reward_amount || 0).div(
-                        10 ** rewardTokenInfo.decimals
-                      ),
-                      3,
-                      true
-                    )
-                  : "-"}{" "}
-                {rewardTokenInfo.symbol}{" "}
-              </span>
-              <span
-                className="relative z-[1] bg-[radial-gradient(50%_50%_at_50%_50%,_#FFEF43_0%,_#FFC42F_100%)] bg-clip-text"
-                style={{
-                  WebkitTextFillColor: "transparent",
-                  WebkitTextStrokeWidth: "1px",
-                  WebkitTextStrokeColor: "#FFF79E"
-                }}
-              >
-                {data?.nft_ids
-                  ? 1
-                  : rewardTokenInfo?.decimals && data?.reward_amount
-                  ? formatNumber(
-                      Big(data.reward_amount || 0).div(
-                        10 ** rewardTokenInfo.decimals
-                      ),
-                      3,
-                      true
-                    )
-                  : "-"}{" "}
-                {rewardTokenInfo.symbol}{" "}
-              </span>
-            </span>
-            <span
-              className={clsx(
-                "mt-[8px] font-semibold text-transparent bg-clip-text bg-[radial-gradient(50%_50%_at_50%_50%,#FFEF43_0%,#FFC42F_100%)]",
-                isActive ? "text-[24px] leading-[100%]" : "text-[16px]"
-              )}
-            >
-              {formatNumber(data?.value || 0, 0, true, {
-                prefix: "$"
-              })}
-            </span>
+            <img
+              className="w-[72px] h-[72px] rounded-[10px] border-[2px] border-[#999677]"
+              src={data?.reward_token_info?.[0]?.icon}
+            />
+            <div className="grow">
+              <div className="text-[12px] text-white">
+                {data?.reward_token_info?.[0]?.name}{" "}
+                {data?.reward_token_info?.[0]?.token_id}
+              </div>
+              <div className="flex items-center gap-[8px] mt-[6px]">
+                <Avatar
+                  size={20}
+                  address={data?.user_info?.user}
+                  email={data?.user_info?.email}
+                />
+                <div className="text-[12px] text-white">
+                  {data?.user_info?.email ||
+                    formatAddress(data?.user_info?.user)}
+                </div>
+              </div>
+              <div className="flex justify-between items-center text-[12px] text-[#8795A7] mt-[6px]">
+                <span>Valued</span>
+                <span className="text-right">
+                  {formatNumber(data?.value || 0, 0, true, {
+                    prefix: "$"
+                  })}
+                </span>
+              </div>
+            </div>
           </div>
         </div>
         <div
           className={clsx(
-            "px-[12px] flex items-center justify-between text-[14px] text-white",
+            "px-[12px] flex items-center justify-between text-[12px] text-white",
             isActive
               ? "mt-[23px] font-[DelaGothicOne] text-[#FFE9B2]"
               : "mt-[16px]"
@@ -304,7 +219,7 @@ export default function Market({
               background:
                 progress >= 100
                   ? "linear-gradient(270deg, #FFC42F 0%, #FF43E0 54.81%, #53EABF 100%)"
-                  : "radial-gradient(50% 50% at 50% 50%, #FFEF43 0%, #FFC42F 100%)",
+                  : "linear-gradient(90deg, #6F37FF 0%, #00FFBB 100%)",
               width: `${Math.min(progress, 100)}%`
             }}
           >

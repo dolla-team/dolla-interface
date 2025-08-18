@@ -172,6 +172,7 @@ export default function Player() {
                   data={data}
                   hasMore={hasMore}
                   onPageChange={onPageChange}
+                  fullAction={true}
                 />
               </SwitchPanel>
             )}
