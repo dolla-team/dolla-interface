@@ -79,76 +79,59 @@ export default function EndPanel({ data }: { data: any }) {
               "rounded-[20px]",
               isMobile
                 ? "w-full"
-                : "w-[250px] h-full px-[20px] pt-[10px] bg-[#00000033]"
+                : "w-[250px] h-full px-[20px] pt-[20px] bg-[#00000033]"
             )}
           >
-            <div className="flex items-center justify-between">
+            <img
+              className="w-[202px] h-[202px] rounded-[10px] border-[2px] border-[#999677]"
+              src={data.reward_token_info?.[0]?.icon}
+            />
+            <div
+              className={clsx(
+                "relative mx-auto rounded-full flex items-center justify-center mt-[-40px]"
+              )}
+            >
+              <Avatar
+                size={80}
+                address={data.winner_user_info?.sol_user}
+                email={data.winner_user_info?.email}
+                className="rounded-full border-[3px] border-[#DD9000]"
+              />
               <span
-                className="text-white text-[24px] [text-shadow:0_0_10px_rgba(255,213,105,0.5)] font-[DelaGothicOne]"
+                className="absolute bottom-[-10px] text-white text-[24px] [text-shadow:0_0_10px_rgba(255,213,105,0.5)] font-[DelaGothicOne]"
                 style={{
                   WebkitTextStroke: "1px #EEAF0F"
                 }}
               >
                 Winner
               </span>
-              <button onClick={() => {setOpenProvablyFair(true)}} className="text-[12px] underline button text-[#FFE9B2]">
+              <button
+                onClick={() => {
+                  setOpenProvablyFair(true);
+                }}
+                className="text-[12px] underline button text-[#FFE9B2] absolute bottom-[10px] right-[-14px]"
+              >
                 Verify
               </button>
-            </div>
-            <div
-              className={clsx(
-                "relative mx-auto rounded-full flex items-center justify-center",
-                isMobile ? "mt-[20px] w-[150px] h-[150px]" : "mt-[47px]"
-              )}
-            >
-              <div
-                className={clsx(
-                  "absolute z-[3] w-[93px] h-[93px] flex items-center justify-center",
-                  isMobile
-                    ? "top-[-30px] right-[-40px]"
-                    : "top-[-30px] right-[-30px]"
-                )}
-              >
-                <MultiIcon className="absolute top-0 left-0 w-full h-full" />
-                <div className="text-black text-center font-[DelaGothicOne] relative z-[1] rotate-[15deg] w-full h-full flex flex-wrap items-center justify-center px-[6px]">
-                  <span className="text-[24px]">
-                    {formatNumber(returnMultiple, 0, true, { isShort: true })}
-                  </span>
-                  <span
-                    className={clsx(
-                      "text-[18px]",
-                      Number(returnMultiple) > 999 ? "mt-[-50px]" : "mt-[6px]"
-                    )}
-                  >
-                    X
-                  </span>
-                </div>
-              </div>
-              <Avatar
-                size={150}
-                address={data.winner_user_info?.sol_user}
-                email={data.winner_user_info?.email}
-                className="rounded-full"
-              />
             </div>
             <div className="text-white text-center text-[16px] font-[DelaGothicOne] mt-[10px]">
               {data.winner_user_info?.email ||
                 formatAddress(data.winner_user_info?.sol_user)}
             </div>
-            <div className="flex items-center justify-between mt-[30px]">
-              <span className="text-[#FFE9B2] text-[14px]">Winner’s bid</span>
+            <div className="flex items-center justify-between mt-[20px]">
+              <span className="text-[#FFE9B2] text-[12px]">Winner’s bid</span>
               <span className="text-white text-[12px] font-[DelaGothicOne]">
                 ${totalBids.toLocaleString()}
               </span>
             </div>
             <div className="flex items-center justify-between mt-[4px]">
-              <span className="text-[#FFE9B2] text-[14px]">Bid times</span>
+              <span className="text-[#FFE9B2] text-[12px]">Bid times</span>
               <span className="text-white text-[12px] font-[DelaGothicOne]">
                 {totalTimes}
               </span>
             </div>
             <div className="flex items-center justify-between mt-[4px]">
-              <span className="text-[#FFE9B2] text-[14px]">
+              <span className="text-[#FFE9B2] text-[12px]">
                 Return multiple
               </span>
               <span className="text-white text-[12px] font-[DelaGothicOne]">
@@ -160,28 +143,25 @@ export default function EndPanel({ data }: { data: any }) {
             {!isMobile && (
               <>
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-[10px]">
-                    <Avatar
-                      size={32}
-                      address={data.user_info?.sol_user}
-                      email={data.user_info?.email}
-                    />
-                    <div>
-                      <div className="text-[#FFE9B2] text-[12px]">Seller</div>
-                      <div className="text-white text-[12px] font-[DelaGothicOne]">
-                        {data.user_info?.email ||
-                          formatAddress(data.user_info?.sol_user)}
-                      </div>
-                    </div>
+                  <div className="text-[12px] text-white flex items-center gap-[10px]">
+                    <div>{data.reward_token_info?.[0]?.name}</div>
+                    <div>{data.reward_token_info?.[0]?.token_id}</div>
                   </div>
-                  <div className="text-right">
-                    <div className="text-[#FFE9B2] text-[12px]">
-                      Started from
-                    </div>
-                    <div className="text-white text-[14px]">
-                      {dayjs(data.user_info?.created_at).format(
-                        "HH:mm DD MMM, YYYY"
-                      )}{" "}
+                  <div className="text-right flex items-center gap-[10px]">
+                    <div className="text-[12px] text-white">Valued</div>
+                    <div
+                      className="text-[26px] font-bold"
+                      style={{
+                        background:
+                          "linear-gradient(90deg, #FFE9B2 0%, #FFC42F 100%)",
+                        backgroundClip: "text",
+                        WebkitBackgroundClip: "text",
+                        WebkitTextFillColor: "transparent"
+                      }}
+                    >
+                      {formatNumber(data?.value, 2, true, {
+                        prefix: "$"
+                      })}
                     </div>
                   </div>
                 </div>
@@ -250,7 +230,14 @@ export default function EndPanel({ data }: { data: any }) {
           </div>
         </div>
 
-        <ProvablyFair pool={data?.id} open={openProvablyFair} onClose={() => {setOpenProvablyFair(false)}} defaultTab="provably-fair" />
+        <ProvablyFair
+          pool={data?.id}
+          open={openProvablyFair}
+          onClose={() => {
+            setOpenProvablyFair(false);
+          }}
+          defaultTab="provably-fair"
+        />
       </div>
     )
   );
