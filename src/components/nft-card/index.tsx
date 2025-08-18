@@ -7,7 +7,12 @@ import Big from "big.js";
 import Avatar from "../avatar";
 import { formatAddress } from "@/utils/format/address";
 
-export default function NftCard({ data, className }: any) {
+export default function NftCard({
+  data,
+  className,
+  isResult,
+  resultContent
+}: any) {
   const [type, rewardToken, rewardTokenPrice, process, returnMultiple] =
     useMemo(() => {
       let _type = "basic";
@@ -64,7 +69,9 @@ export default function NftCard({ data, className }: any) {
           </div>
         </div>
       )}
-      <Label type={type} id={data?.id} />
+      {isResult && resultContent}
+      {!isResult && <Label type={type} id={data?.id} />}
+
       {type === "saudi" && (
         <div className="w-full h-full bg-[url('/nft/saudi-bg.png')] bg-cover bg-center absolute top-0 left-0" />
       )}
@@ -83,86 +90,105 @@ export default function NftCard({ data, className }: any) {
             className="w-[196px] h-[196px] rounded-[10px]"
           />
         </div>
-
-        <div
-          className={clsx(
-            "text-[12px] font-semibold flex justify-between items-center mt-[10px]",
-            type === "saudi" ? "text-black" : "text-white"
-          )}
-        >
-          <span>{rewardToken?.name}</span>
-          <span>#{rewardToken?.token_id}</span>
-        </div>
-        <div
-          className={clsx(
-            "text-[12px] font-semibold flex justify-between items-center",
-            type === "saudi" ? "text-black" : "text-white",
-            type === "basic" ? "mt-[8px]" : "mt-[4px]"
-          )}
-        >
-          <span
+        {!isResult && (
+          <>
+            <div
+              className={clsx(
+                "text-[12px] font-semibold flex justify-between items-center mt-[10px]",
+                type === "saudi" ? "text-black" : "text-white"
+              )}
+            >
+              <span>{rewardToken?.name}</span>
+              <span>#{rewardToken?.token_id}</span>
+            </div>
+            <div
+              className={clsx(
+                "text-[12px] font-semibold flex justify-between items-center",
+                type === "saudi" ? "text-black" : "text-white",
+                type === "basic" ? "mt-[8px]" : "mt-[4px]"
+              )}
+            >
+              <span
+                className={clsx(
+                  "font-normal",
+                  type === "saudi" ? "text-black" : "text-white/60"
+                )}
+              >
+                Prize
+              </span>
+              {type === "basic" ? (
+                <span>
+                  {formatNumber(rewardTokenPrice?.last_price, 2, true, {
+                    prefix: "$"
+                  })}
+                </span>
+              ) : (
+                <div
+                  className="p-[5px] rounded-[6px] text-black"
+                  style={{
+                    background:
+                      "linear-gradient(90deg, #FFE9B2 0%, #FFC42F 100%)"
+                  }}
+                >
+                  🔥
+                  {formatNumber(rewardTokenPrice?.last_price, 2, true, {
+                    prefix: "$"
+                  })}
+                </div>
+              )}
+            </div>
+            <div
+              className={clsx(
+                "text-[12px] font-semibold flex justify-between items-center",
+                type === "saudi" ? "text-black" : "text-white",
+                type === "basic" ? "mt-[8px]" : "mt-[4px]"
+              )}
+            >
+              <div>
+                <span
+                  className={clsx(
+                    "font-normal",
+                    type === "saudi" ? "text-black" : "text-white/60"
+                  )}
+                >
+                  Players
+                </span>{" "}
+                <span>{data?.participants}</span>
+              </div>
+              <div>
+                <span
+                  className={clsx(
+                    "font-normal",
+                    type === "saudi" ? "text-black" : "text-white/60"
+                  )}
+                >
+                  Bid
+                </span>{" "}
+                <span>
+                  {formatNumber(data?.accumulative_bids, 0, true, {
+                    prefix: "$"
+                  })}
+                </span>
+              </div>
+            </div>
+            <ProgressBar type={type} progress={process} className="mt-[10px]" />
+          </>
+        )}
+        {isResult && (
+          <div
             className={clsx(
-              "font-normal",
-              type === "saudi" ? "text-black" : "text-white/60"
+              "text-center text-black flex flex-col justify-center h-[100px]",
+              type === "saudi" ? "text-black" : "text-white"
             )}
           >
-            Prize
-          </span>
-          {type === "basic" ? (
-            <span>
-              {formatNumber(rewardTokenPrice?.last_price, 2, true, {
-                prefix: "$"
-              })}
-            </span>
-          ) : (
-            <div
-              className="p-[5px] rounded-[6px] text-black"
-              style={{
-                background: "linear-gradient(90deg, #FFE9B2 0%, #FFC42F 100%)"
-              }}
-            >
-              🔥
-              {formatNumber(rewardTokenPrice?.last_price, 2, true, {
-                prefix: "$"
-              })}
+            <div className="text-[18px] font-bold">Congrats!</div>
+            <div className="text-[12px] font-semibold">
+              You won <span className="text-[14px]">{rewardToken?.name}</span>{" "}
+              <span className="text-[14px]">#{rewardToken?.token_id}</span> by
+              only <span className="text-[14px]">$1</span>
             </div>
-          )}
-        </div>
-        <div
-          className={clsx(
-            "text-[12px] font-semibold flex justify-between items-center",
-            type === "saudi" ? "text-black" : "text-white",
-            type === "basic" ? "mt-[8px]" : "mt-[4px]"
-          )}
-        >
-          <div>
-            <span
-              className={clsx(
-                "font-normal",
-                type === "saudi" ? "text-black" : "text-white/60"
-              )}
-            >
-              Players
-            </span>{" "}
-            <span>{data?.participants}</span>
           </div>
-          <div>
-            <span
-              className={clsx(
-                "font-normal",
-                type === "saudi" ? "text-black" : "text-white/60"
-              )}
-            >
-              Bid
-            </span>{" "}
-            <span>
-              {formatNumber(data?.accumulative_bids, 0, true, {
-                prefix: "$"
-              })}
-            </span>
-          </div>
-        </div>
-        <ProgressBar type={type} progress={process} className="mt-[10px]" />
+        )}
       </div>
     </div>
   );
