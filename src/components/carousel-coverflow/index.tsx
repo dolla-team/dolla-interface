@@ -39,14 +39,12 @@ const CarouselCoverflow = (props: any, ref: any) => {
       _cards.push({
         key: i + 1,
         angle: angle,
-        width: "19.84vw",
-        height: "29.50vw",
         content: (
           <div
             className="preserve-3d"
             style={{
-              width: "19.84vw",
-              height: "29.50vw",
+              width: "clamp(1px, 19.84vw, calc(var(--dolla-laptop-width-base)*0.1984))",
+              height: "clamp(1px, 29.50vw, calc(var(--dolla-laptop-width-base)*0.2950))",
             }}
           >
             <div className="w-full h-full flex justify-center items-center">
@@ -210,22 +208,22 @@ const CarouselCoverflow = (props: any, ref: any) => {
   }));
 
   return (
-    <div className={clsx("w-full h-[29.50vw] relative", className)}>
+    <div className={clsx("min-w-[clamp(1px,_100vw,_calc(var(--dolla-laptop-width-base)*1))] w-[clamp(1px,_100vw,_calc(var(--dolla-laptop-width-base)*1))] h-[clamp(1px,_29.50vw,_calc(var(--dolla-laptop-width-base)*0.2950))] mx-auto relative", className)}>
       <motion.div
         ref={containerRef}
         className="flex items-center justify-center w-full h-full will-change-transform"
         style={{
           transformStyle: "preserve-3d",
-          transformOrigin: `center center ${radius / 2}vw`,
+          transformOrigin: `center center clamp(1px, ${radius / 2}vw, calc(var(--dolla-laptop-width-base)*${radius / 200}))`,
           rotateY: containerRotate,
         }}
       />
       <motion.div
         id="coverflowContainer"
-        className={`flex items-center justify-center w-full h-full will-change-transform mt-[-29.50vw] backface-hidden ${isDrag ? 'cursor-grab active:cursor-grabbing' : ''}`}
+        className={`flex items-center justify-center w-full h-full will-change-transform -mt-[clamp(1px,_29.50vw,_calc(var(--dolla-laptop-width-base)*0.2950))] backface-hidden ${isDrag ? 'cursor-grab active:cursor-grabbing' : ''}`}
         style={{
           transformStyle: "preserve-3d",
-          transformOrigin: `center center ${radius / 2}vw`,
+          transformOrigin: `center center clamp(1px, ${radius / 2}vw, calc(var(--dolla-laptop-width-base)*${radius / 200}))`,
           cursor: isDrag ? 'grab' : 'default',
         }}
         drag={false}
@@ -236,7 +234,7 @@ const CarouselCoverflow = (props: any, ref: any) => {
             key={item.key}
             className="absolute backface-hidden"
             style={{
-              transform: `perspective(100vw) rotateY(${item.angle + cardRotate}deg) translateZ(${radius}vw) scale(${1 / (100 / (100 - radius))})`,
+              transform: `perspective(100vw) rotateY(${item.angle + cardRotate}deg) translateZ(clamp(1px, ${radius}vw, calc(var(--dolla-laptop-width-base)*0.3968))) scale(clamp(0.1, ${1 / (100 / (100 - radius))}, 1))`,
               transformStyle: "preserve-3d",
             }}
           >

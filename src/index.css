@@ -43,6 +43,8 @@ body {
 
 #root {
   width: 100%;
+
+  --dolla-laptop-width-base: 1512px;
 }
 
 /* Reset */
