@@ -1,10 +1,17 @@
 import clsx from "clsx";
 import { motion, useAnimate, useMotionValue } from "framer-motion";
-import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef, useState } from "react";
+import {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useMemo,
+  useRef,
+  useState
+} from "react";
 
 const rotate = 20;
 const radius = 39.68; // vw
-const rotateSpeed = 60; // seconds
+const rotateSpeed = 30; // seconds
 
 const CarouselCoverflow = (props: any, ref: any) => {
   const { className, list, initRotate = 0, isDebug } = props;
@@ -40,7 +47,7 @@ const CarouselCoverflow = (props: any, ref: any) => {
             className="preserve-3d"
             style={{
               width: "19.84vw",
-              height: "29.50vw",
+              height: "29.50vw"
             }}
           >
             <div className="w-full h-full flex justify-center items-center">
@@ -64,39 +71,49 @@ const CarouselCoverflow = (props: any, ref: any) => {
   const onRotate = () => {
     if (!containerRef.current) return;
     const prevRotate = containerRotate.get() || 0;
-    containerAnimation.current = containerAnimate(containerRef.current, {
-      rotateY: [prevRotate, -360 + prevRotate],
-    }, {
-      duration: rotateSpeed,
-      ease: "linear",
-      repeat: Infinity,
-      repeatType: "loop",
-    });
+    containerAnimation.current = containerAnimate(
+      containerRef.current,
+      {
+        rotateY: [prevRotate, -360 + prevRotate]
+      },
+      {
+        duration: rotateSpeed,
+        ease: "linear",
+        repeat: Infinity,
+        repeatType: "loop"
+      }
+    );
   };
 
   useEffect(() => {
     if (!list || !list.length) {
       return;
     }
-    onRotate();
+    // onRotate();
   }, [list]);
 
-  const handleScroll = async (type: any, opts?: { target?: number; }) => {
-    if (!containerAnimation.current) return;
+  const handleScroll = async (type: any, opts?: { target?: number }) => {
+    if (!containerAnimation.current && type !== "play") return;
 
     const { target } = opts ?? {};
 
-    const rotateTo = (rotateY: number) => new Promise((resolve) => {
-      containerAnimate(containerRef.current, {
-        rotateY,
-      }, {
-        duration: 0.15,
-        ease: "easeInOut",
-        onComplete: () => {
-          resolve(true)
-        },
+    const rotateTo = (rotateY: number) =>
+      new Promise((resolve) => {
+        console.log("rotateTo", rotateY);
+        containerAnimate(
+          containerRef.current,
+          {
+            rotateY
+          },
+          {
+            duration: 2,
+            ease: "easeInOut",
+            onComplete: () => {
+              resolve(true);
+            }
+          }
+        );
       });
-    });
 
     switch (type) {
       case "stop":
@@ -114,7 +131,9 @@ const CarouselCoverflow = (props: any, ref: any) => {
         const maxIndex = 360 / rotate - 1;
         const targetIndex = Math.max(0, Math.min(maxIndex, target || 0));
         const targetRotateY = targetIndex * rotate;
-        const targetRotateYFinal = -Math.ceil(Math.abs(containerRotate.get() || 0) / 360) * 360 - targetRotateY;
+        const targetRotateYFinal =
+          -Math.ceil(Math.abs(containerRotate.get() || 0) / 360) * 360 -
+          targetRotateY;
         rotateTo(targetRotateYFinal);
         break;
       default:
@@ -126,7 +145,7 @@ const CarouselCoverflow = (props: any, ref: any) => {
     cardIndex,
     containerRotate,
     cardRotate,
-    handleScroll,
+    handleScroll
   }));
 
   return (
@@ -137,14 +156,14 @@ const CarouselCoverflow = (props: any, ref: any) => {
         style={{
           transformStyle: "preserve-3d",
           transformOrigin: `center center ${radius / 2}vw`,
-          rotateY: containerRotate,
+          rotateY: containerRotate
         }}
       />
       <motion.div
         className="flex items-center justify-center w-full h-full will-change-transform mt-[-29.50vw] backface-hidden"
         style={{
           transformStyle: "preserve-3d",
-          transformOrigin: `center center ${radius / 2}vw`,
+          transformOrigin: `center center ${radius / 2}vw`
         }}
       >
         {cards.map((item: any) => (
@@ -152,8 +171,12 @@ const CarouselCoverflow = (props: any, ref: any) => {
             key={item.key}
             className="absolute backface-hidden"
             style={{
-              transform: `perspective(100vw) rotateY(${item.angle + cardRotate}deg) translateZ(${radius}vw) scale(${1 / (100 / (100 - radius))})`,
-              transformStyle: "preserve-3d",
+              transform: `perspective(100vw) rotateY(${
+                item.angle + cardRotate
+              }deg) translateZ(${radius}vw) scale(${
+                1 / (100 / (100 - radius))
+              })`,
+              transformStyle: "preserve-3d"
             }}
           >
             {item.content}
@@ -165,46 +188,44 @@ const CarouselCoverflow = (props: any, ref: any) => {
         alt=""
         className="w-[52px] h-[69px] shrink-0 absolute z-[1] left-1/2 -translate-x-1/2 top-[-27px]"
       />
-      {
-        isDebug && (
-          <div className="absolute top-[-50px] left-0 z-[1] flex items-center gap-[10px]">
-            <button
-              type="button"
-              className="button text-white bg-[#743EFF] rounded-[6px] h-[32px] text-center leading-[32px] px-[10px] uppercase"
-              onClick={() => handleScroll("stop")}
-            >
-              stop
-            </button>
-            <button
-              type="button"
-              className="button text-white bg-[#743EFF] rounded-[6px] h-[32px] text-center leading-[32px] px-[10px] uppercase"
-              onClick={() => handleScroll("pause")}
-            >
-              pause
-            </button>
-            <button
-              type="button"
-              className="button text-white bg-[#743EFF] rounded-[6px] h-[32px] text-center leading-[32px] px-[10px] uppercase"
-              onClick={() => handleScroll("play")}
-            >
-              play
-            </button>
-            <button
-              type="button"
-              className="button text-white bg-[#743EFF] rounded-[6px] h-[32px] text-center leading-[32px] px-[10px] uppercase"
-              onClick={() => handleScroll("rotate", { target: 8 })}
-            >
-              rotate to index 8
-            </button>
-            <button
-              type="button"
-              className="button text-white bg-[#743EFF] rounded-[6px] h-[32px] text-center leading-[32px] px-[10px] uppercase"
-            >
-              current index: {cardIndex}
-            </button>
-          </div>
-        )
-      }
+      {isDebug && (
+        <div className="absolute top-[-50px] left-0 z-[1] flex items-center gap-[10px]">
+          <button
+            type="button"
+            className="button text-white bg-[#743EFF] rounded-[6px] h-[32px] text-center leading-[32px] px-[10px] uppercase"
+            onClick={() => handleScroll("stop")}
+          >
+            stop
+          </button>
+          <button
+            type="button"
+            className="button text-white bg-[#743EFF] rounded-[6px] h-[32px] text-center leading-[32px] px-[10px] uppercase"
+            onClick={() => handleScroll("pause")}
+          >
+            pause
+          </button>
+          <button
+            type="button"
+            className="button text-white bg-[#743EFF] rounded-[6px] h-[32px] text-center leading-[32px] px-[10px] uppercase"
+            onClick={() => handleScroll("play")}
+          >
+            play
+          </button>
+          <button
+            type="button"
+            className="button text-white bg-[#743EFF] rounded-[6px] h-[32px] text-center leading-[32px] px-[10px] uppercase"
+            onClick={() => handleScroll("rotate", { target: 8 })}
+          >
+            rotate to index 8
+          </button>
+          <button
+            type="button"
+            className="button text-white bg-[#743EFF] rounded-[6px] h-[32px] text-center leading-[32px] px-[10px] uppercase"
+          >
+            current index: {cardIndex}
+          </button>
+        </div>
+      )}
     </div>
   );
 };

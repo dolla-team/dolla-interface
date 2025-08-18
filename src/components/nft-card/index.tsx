@@ -78,16 +78,16 @@ export default function NftCard({
       {type === "redOg" && (
         <div className="w-full h-full bg-[url('/nft/redOg-bg.png')] bg-cover bg-center absolute top-0 left-0" />
       )}
-      <div className="relative z-[1]">
+      <div className="relative z-[1] w-full">
         <div
           className={clsx(
-            "w-[200px] h-[200px] rounded-[10px] p-[2px]",
+            "w-full rounded-[10px] p-[2px]",
             type === "basic" && "bg-[#434343CC]"
           )}
         >
           <img
             src={rewardToken?.icon}
-            className="w-[196px] h-[196px] rounded-[10px]"
+            className="rounded-[10px] w-full aspect-square object-cover"
           />
         </div>
         {!isResult && (

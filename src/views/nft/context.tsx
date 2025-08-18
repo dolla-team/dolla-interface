@@ -27,6 +27,7 @@ export const CannonCoinsProvider = ({
   const [pool, setPool] = useState<any>(null);
   const { data, getPoolRecommend } = usePoolRecommend(0, !params?.poolId);
   const poolCachedRef = useRef<any>(null);
+  const carouselRef = useRef<any>(null);
 
   const loopUpdatePool = async (_pool: any) => {
     clearTimeout(window.poolTimer);
@@ -94,6 +95,7 @@ export const CannonCoinsProvider = ({
         pool,
         poolAmount,
         bids,
+        carouselRef,
         setBids: (bids: number) => {
           if (flipStatus !== 0) return;
           setBids(bids);

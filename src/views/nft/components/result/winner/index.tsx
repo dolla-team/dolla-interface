@@ -8,11 +8,13 @@ import gsap from "gsap";
 import { useEffect, useRef } from "react";
 import CloseIcon from "@/components/icons/close";
 import { useNftContext } from "@/views/nft/context";
+import ReactDOM from "react-dom";
 
 export default function Winner() {
   const { userInfo } = useAuth();
   const cardRef = useRef<HTMLDivElement>(null);
-  const { setFlipStatus, getPoolRecommend, pool, isDetail } = useNftContext();
+  const { setFlipStatus, getPoolRecommend, pool, isDetail, setBidResult } =
+    useNftContext();
 
   useEffect(() => {
     if (!cardRef.current) {
@@ -40,18 +42,6 @@ export default function Winner() {
         backdropFilter: "blur(10px)"
       }}
     >
-      <button
-        className="fixed right-[20px] top-[20px] z-[110] button"
-        onClick={() => {
-          setFlipStatus(0);
-          if (!isDetail) {
-            clearTimeout(window.poolTimer);
-            getPoolRecommend();
-          }
-        }}
-      >
-        <CloseIcon size={36} />
-      </button>
       <div
         ref={cardRef}
         className="relative z-[10] transition-transform ease-in-out w-[220px] h-[326px] scale-[0.2]"
@@ -83,6 +73,23 @@ export default function Winner() {
           />
         </div>
       </div>
+
+      {ReactDOM.createPortal(
+        <button
+          className="absolute right-[20px] top-[20px] z-[110] button"
+          onClick={() => {
+            setFlipStatus(0);
+            setBidResult(null);
+            if (!isDetail) {
+              clearTimeout(window.poolTimer);
+              getPoolRecommend();
+            }
+          }}
+        >
+          <CloseIcon size={36} />
+        </button>,
+        document.body
+      )}
 
       <div className="w-[872px] h-[937px] absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] z-[1] bg-[url('/nft/winner-light.png')] bg-contain bg-center bg-no-repeat" />
       <Confetti />
