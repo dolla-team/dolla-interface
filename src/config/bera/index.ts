@@ -14,4 +14,4 @@ const config: Record<string, any> = {
   }
 };
 
-export default config[import.meta.env.VITE_BERA_ENV || "mainnet"];
+export default config[import.meta.env.VITE_BERA_ENV || "testnet"];

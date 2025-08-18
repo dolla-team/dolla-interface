@@ -91,7 +91,12 @@ export default function EndPanel({ data }: { data: any }) {
               >
                 Winner
               </span>
-              <button onClick={() => {setOpenProvablyFair(true)}} className="text-[12px] underline button text-[#FFE9B2]">
+              <button
+                onClick={() => {
+                  setOpenProvablyFair(true);
+                }}
+                className="text-[12px] underline button text-[#FFE9B2]"
+              >
                 Verify
               </button>
             </div>
@@ -250,7 +255,14 @@ export default function EndPanel({ data }: { data: any }) {
           </div>
         </div>
 
-        <ProvablyFair pool={data?.id} open={openProvablyFair} onClose={() => {setOpenProvablyFair(false)}} defaultTab="provably-fair" />
+        <ProvablyFair
+          pool={data?.id}
+          open={openProvablyFair}
+          onClose={() => {
+            setOpenProvablyFair(false);
+          }}
+          defaultTab="provably-fair"
+        />
       </div>
     )
   );

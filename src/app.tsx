@@ -17,12 +17,11 @@ import DollaEyeContextProvider from "./contexts/dolla-eye";
 import NFT from "./views/nft";
 import NftList from "./views/nft-list";
 
-// const LazyNewBTC = lazy(() => import("./views/btc"));
 const LazyNftCreate = lazy(() => import("./views/nft-create"));
 const LazyProfilePlayer = lazy(() => import("./views/profile/player"));
 const LazyProfileSeller = lazy(() => import("./views/profile/seller"));
-const LazyTerms = lazy(() => import("./views/terms"));
-const LazyPolicy = lazy(() => import("./views/policy"));
+// const LazyTerms = lazy(() => import("./views/terms"));
+// const LazyPolicy = lazy(() => import("./views/policy"));
 
 import("react-toastify/dist/ReactToastify.css");
 
@@ -84,6 +83,10 @@ const router = createBrowserRouter([
         element: <LazyNftCreate />
       },
       {
+        path: "nft-list",
+        element: <NftList />
+      },
+      {
         path: "portfolio/player",
         element: <LazyProfilePlayer />
       },
@@ -91,18 +94,14 @@ const router = createBrowserRouter([
         path: "portfolio/seller",
         element: <LazyProfileSeller />
       },
-      {
-        path: "terms-of-service",
-        element: <LazyTerms />
-      },
-      {
-        path: "privacy-policy",
-        element: <LazyPolicy />
-      },
-      {
-        path: "nft-list",
-        element: <NftList />
-      }
+      // {
+      //   path: "terms-of-service",
+      //   element: <LazyTerms />
+      // },
+      // {
+      //   path: "privacy-policy",
+      //   element: <LazyPolicy />
+      // }
     ]
   },
   {
