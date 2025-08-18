@@ -31,6 +31,7 @@ export const CannonCoinsProvider = ({
   const [pool, setPool] = useState<any>(null);
   const { data, getPoolRecommend } = usePoolRecommend(0, !params?.poolId);
   const [mobileMarketsOpen, setMobileMarketsOpen] = useState(false);
+  const [filterVolume, setFilterVolume] = useState(0);
   const poolCachedRef = useRef<any>(null);
 
   const onMobileMarketsClose = () => {
@@ -188,7 +189,9 @@ export const CannonCoinsProvider = ({
         getPoolRecommend,
         mobileMarketsOpen,
         setMobileMarketsOpen,
-        onMobileMarketsClose
+        onMobileMarketsClose,
+        filterVolume,
+        setFilterVolume
       }}
     >
       {children}

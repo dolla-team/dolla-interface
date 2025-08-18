@@ -23,7 +23,8 @@ export default function Markets({ onClose }: { onClose: () => void }) {
     setVolume,
     LIMIT
   } = usePoolList();
-  const { setSelectedMarket } = useBtcContext();
+
+  const { setSelectedMarket, filterVolume } = useBtcContext();
 
   useEffect(() => {
     document.addEventListener("click", onClose);
@@ -31,6 +32,10 @@ export default function Markets({ onClose }: { onClose: () => void }) {
       document.removeEventListener("click", onClose);
     };
   }, []);
+
+  useEffect(() => {
+    setVolume(filterVolume);
+  }, [filterVolume]);
 
   return (
     <motion.div

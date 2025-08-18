@@ -12,7 +12,7 @@ import SellerLevel from "@/components/seller-level";
 import { formatAddress } from "@/utils/format/address";
 
 export default function Header({ className }: { className?: string }) {
-  const { bids, pool, getPoolRecommend } = useBtcContext();
+  const { bids, pool, getPoolRecommend, setFilterVolume } = useBtcContext();
 
   const [amount, prev, next] = useMemo(() => {
     if (!pool) return ["0", 0, 0];
@@ -103,6 +103,7 @@ export default function Header({ className }: { className?: string }) {
                 className="button"
                 onClick={() => {
                   getPoolRecommend(prev * 10 ** BASE_TOKEN.decimals);
+                  setFilterVolume(prev);
                 }}
               />
               <span className="text-[20px] text-[#FFEF43]">{prev} BTC</span>
@@ -115,6 +116,7 @@ export default function Header({ className }: { className?: string }) {
                 className="rotate-y-[180deg] button"
                 onClick={() => {
                   getPoolRecommend(next * 10 ** BASE_TOKEN.decimals);
+                  setFilterVolume(next);
                 }}
               />
             </div>
