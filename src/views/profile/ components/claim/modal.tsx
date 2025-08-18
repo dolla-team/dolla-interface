@@ -9,7 +9,7 @@ const ClaimModal = (props: any) => {
     <Modal open={open} onClose={onClose}>
       <div
         className={clsx(
-          "w-[672px] h-[444px] md:h-[480px] max-md:w-full flex flex-col items-stretch rounded-[16px] border border-[#6A5D3A] bg-[#35302B] max-md:rounded-b-[0]",
+          "w-[672px] h-[444px] md:h-[480px] max-md:w-full flex flex-col items-stretch rounded-[16px] bg-[#2D2B35] border border-[#514A5D] max-md:rounded-b-[0]",
           className
         )}
       >

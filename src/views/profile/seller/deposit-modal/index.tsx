@@ -64,7 +64,7 @@ export default function DepositModal({
   return (
     <>
       <Modal onClose={onClose} open={open}>
-        <div className="w-[396px] h-[240px] rounded-[16px] bg-[#35302B] border border-[#6A5D3A] text-[14px] font-[500] leading-[100%] text-white">
+        <div className="w-[396px] h-[240px] rounded-[16px] bg-[#2D2B35] border border-[#514A5D] text-[14px] font-[500] leading-[100%] text-white">
           <div className="w-full pt-[20px] pb-[13px] px-[24px] bg-black/20 flex justify-between items-center">
             <div className="text-[18px] font-medium text-white">
               Deposit Market

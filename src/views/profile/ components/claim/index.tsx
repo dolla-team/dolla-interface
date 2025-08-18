@@ -27,41 +27,49 @@ const ClaimIndex = (props: any) => {
   const [pageSize] = useState(10);
   const [pageHasNextPage, setPageHasNextPage] = useState(true);
 
-  const { runAsync: getClaimList, data: claimList, loading: claimListLoading } = useRequest(async () => {
-    let url: string = "/user/player/history";
-    const params = new URLSearchParams();
-    params.set("limit", pageSize + "");
-    params.set("offset", (pageIndex * pageSize) + "");
-    if (type === "player") {
-      // 0: ALl
-      // 1: Winner
-      // 2: Loser
-      params.set("winner", "1");
-    }
-    else {
-      url = "/user/create/pool/list";
-      // -1: All
-      // 0: Created
-      // 1: Sold
-      // 2: Ended
-      // 3: Cancelled
-      params.set("status", "2");
-    }
-    const response = await axiosInstance.get(`/api/v1${url}?${params.toString()}`);
-    const _list = response.data.data.list || [];
-    _list.forEach((item: any) => {
-      if (type === "seller") {
-        item.pool_info = item;
-      }
+  const {
+    runAsync: getClaimList,
+    data: claimList,
+    loading: claimListLoading
+  } = useRequest(
+    async () => {
+      let url: string = "/user/player/history";
+      const params = new URLSearchParams();
+      params.set("limit", pageSize + "");
+      params.set("offset", pageIndex * pageSize + "");
       if (type === "player") {
-        item.is_claim = item.status === 6;
+        // 0: ALl
+        // 1: Winner
+        // 2: Loser
+        params.set("winner", "1");
+      } else {
+        url = "/user/create/pool/list";
+        // -1: All
+        // 0: Created
+        // 1: Sold
+        // 2: Ended
+        // 3: Cancelled
+        params.set("status", "2");
       }
-    });
-    setPageHasNextPage(response.data.data.has_next_page);
-    return _list;
-  }, {
-    refreshDeps: [pageIndex, pageSize],
-  });
+      const response = await axiosInstance.get(
+        `/api/v1${url}?${params.toString()}`
+      );
+      const _list = response.data.data.list || [];
+      _list.forEach((item: any) => {
+        if (type === "seller") {
+          item.pool_info = item;
+        }
+        if (type === "player") {
+          item.is_claim = item.status === 6;
+        }
+      });
+      setPageHasNextPage(response.data.data.has_next_page);
+      return _list;
+    },
+    {
+      refreshDeps: [pageIndex, pageSize]
+    }
+  );
 
   const onPageChange = (page: number) => {
     setPageIndex(page - 1);
@@ -87,10 +95,11 @@ const ClaimIndex = (props: any) => {
               navigate(`/btc/${record.pool_id}`);
             }}
           >
-            <div>
-              #{record.pool_id}
-            </div>
-            <img src="/profile/icon-share.svg" className="w-[9px] h-[9px] shrink-0" />
+            <div>#{record.pool_id}</div>
+            <img
+              src="/profile/icon-share.svg"
+              className="w-[9px] h-[9px] shrink-0"
+            />
           </a>
         );
       }
@@ -102,7 +111,15 @@ const ClaimIndex = (props: any) => {
       render: (record: any) => {
         return (
           <>
-            {formatNumber(Big(record.reward_amount || 0).div(10 ** (record.reward_token_info?.[0]?.decimals || 6)), 4, true, { isShort: true, isShortUppercase: true })} {record.reward_token_info?.[0]?.symbol || "BTC"}
+            {formatNumber(
+              Big(record.reward_amount || 0).div(
+                10 ** (record.reward_token_info?.[0]?.decimals || 6)
+              ),
+              4,
+              true,
+              { isShort: true, isShortUppercase: true }
+            )}{" "}
+            {record.reward_token_info?.[0]?.symbol || "BTC"}
           </>
         );
       }
@@ -124,14 +141,23 @@ const ClaimIndex = (props: any) => {
       width: 110,
       render: (record: any) => {
         return formatNumber(
-          type === "player" ? record.pool_info?.accumulative_bids : Big(record.pool_info?.accumulative_bids || 0).minus(getProfitFee(record.pool_info, { isLog: true })),
+          type === "player"
+            ? record.pool_info?.accumulative_bids
+            : Big(record.pool_info?.accumulative_bids || 0).minus(
+                getProfitFee(record.pool_info, { isLog: true })
+              ),
           2,
           true,
           {
             prefix: "$",
-            isShort: type === "player" ? Big(record.accumulative_bids || 0).gt(100000) : Big(record.accumulative_bids || 0).minus(getProfitFee(record)).gt(100000),
+            isShort:
+              type === "player"
+                ? Big(record.accumulative_bids || 0).gt(100000)
+                : Big(record.accumulative_bids || 0)
+                    .minus(getProfitFee(record))
+                    .gt(100000),
             isShortUppercase: true,
-            round: Big.roundDown,
+            round: Big.roundDown
           }
         );
       }
@@ -149,7 +175,7 @@ const ClaimIndex = (props: any) => {
           />
         );
       }
-    },
+    }
   ];
 
   return (
@@ -158,7 +184,10 @@ const ClaimIndex = (props: any) => {
         columns={columns}
         data={claimList}
         loading={claimListLoading}
-        className={clsx("h-full max-md:w-full max-md:overflow-x-auto", className)}
+        className={clsx(
+          "h-full max-md:w-full max-md:overflow-x-auto",
+          className
+        )}
         rowClassName="max-md:px-0 max-md:gap-x-0"
         colClassName="max-md:px-[10px] max-md:bg-[#35302B]"
         bodyColClassName="max-md:first:border-r max-md:border-[#423930]"
@@ -185,12 +214,12 @@ const ClaimButton = (props: any) => {
   const { onClaim: onSellerClaim, claiming: sellerClaiming } = useClaimFunds({
     onClaimSuccess: () => {
       onAfterSuccess();
-    },
+    }
   });
   const { onClaim: onPlayerClaim, claiming: playerClaiming } = useClaimReward({
     onClaimSuccess: () => {
       onAfterSuccess();
-    },
+    }
   });
 
   const [onClaim, claiming] = useMemo(() => {
@@ -203,7 +232,7 @@ const ClaimButton = (props: any) => {
 
   return (
     <ButtonV2
-      className="!w-[69px] !px-[unset]"
+      className="!w-[69px] !px-[unset] !text-[12px]"
       loading={claiming}
       disabled={claiming || item.is_claim}
       onClick={() => {

@@ -62,9 +62,9 @@ export default function CancelModal({
 
   return (
     <Modal onClose={onClose} open={open}>
-      <div className="w-[396px] pb-[20px] rounded-[16px] bg-[#35302B] border border-[#6A5D3A] text-[14px] font-[500] leading-[100%] text-white">
+      <div className="w-[396px] pb-[20px] rounded-[16px] bg-[#2D2B35] border border-[#514A5D] text-[14px] font-[500] leading-[100%] text-white">
         <div className="w-full pt-[20px] pb-[13px] px-[20px] bg-black/20 flex justify-between items-center">
-          <div className="text-[18px] font-medium text-white">
+          <div className="text-[16px] font-medium text-white">
             Cancel Market
           </div>
           <button className="button" onClick={onClose}>
@@ -118,7 +118,7 @@ export default function CancelModal({
               ${formatNumber(order?.accumulative_bids, 0, true)}
             </span>
           </div>
-          <div className="w-full h-[72px] p-[10px] mt-[20px] mx-auto bg-[#FFC42F1A] rounded-[4px] border border-[#FFC42F]">
+          <div className="w-full h-[72px] p-[8px] mt-[20px] mx-auto bg-[#FFC42F1A] rounded-[4px] border border-[#FFC42F]">
             <div className="flex items-center gap-[2px]">
               <img
                 src="/profile/icon-warning.svg"
@@ -127,7 +127,7 @@ export default function CancelModal({
               />
               <span className="text-[#FFC42F]">Be careful!</span>
             </div>
-            <div className="text-[12px] font-[400] leading-[120%] mt-[7px]">
+            <div className="text-[12px] font-[400] leading-[120%] mt-[5px]">
               The seller must pay an additional{" "}
               <span className="text-[#FFC42F] font-[600]">
                 {formatNumber(penaltyPercent * 100, 2, true)}% penalty
@@ -152,10 +152,10 @@ export default function CancelModal({
             </div> */}
           </div>
         </div>
-        <div className="grid grid-cols-2 gap-[20px] mt-[0px] px-[20px]">
+        <div className="flex justify-end mt-[0px] px-[20px]">
           {status === 1 && (
             <ButtonV2
-              className="!h-[40px] !text-[16px]"
+              className="!h-[40px] !text-[14px]"
               loading={cancelingRevert}
               disabled={cancelingRevert}
               type="default"
@@ -171,7 +171,7 @@ export default function CancelModal({
           )}
           {status === 0 && (
             <ButtonV2
-              className="!h-[40px] !text-[16px]"
+              className="!h-[40px] !text-[14px]"
               loading={cancelingMark || checking || approving}
               disabled={cancelingMark || !markable}
               onClick={() => {
