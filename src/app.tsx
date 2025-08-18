@@ -15,6 +15,7 @@ import "./libs/howl";
 import Callback from "./views/callback";
 import DollaEyeContextProvider from "./contexts/dolla-eye";
 import NFT from "./views/nft";
+import NftList from "./views/nft-list";
 
 const LazyNftCreate = lazy(() => import("./views/nft-create"));
 const LazyProfilePlayer = lazy(() => import("./views/profile/player"));
@@ -82,13 +83,17 @@ const router = createBrowserRouter([
         element: <LazyNftCreate />
       },
       {
+        path: "nft-list",
+        element: <NftList />
+      },
+      {
         path: "portfolio/player",
         element: <LazyProfilePlayer />
       },
       {
         path: "portfolio/seller",
         element: <LazyProfileSeller />
-      }
+      },
       // {
       //   path: "terms-of-service",
       //   element: <LazyTerms />
