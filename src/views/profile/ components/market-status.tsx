@@ -24,7 +24,12 @@ const MarketStatus = (props: Props) => {
       ].includes(value) && (
         <div className="w-[9px] h-[9px] flex-shrink-0 bg-[#54FF59] rounded-full" />
       )}
-      <div className="border-r border-[#ADBCCF] h-[12px] pr-[8px] leading-[12px]">
+      <div
+        className={clsx(
+          "h-[12px] pr-[8px] leading-[12px]",
+          value === EMarketStatus.Winner && "border-r border-[#ADBCCF]"
+        )}
+      >
         {currentMarketStatus?.label}
       </div>
       {value === EMarketStatus.Winner && (

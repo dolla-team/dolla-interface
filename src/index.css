@@ -1,9 +1,5 @@
 @import "tailwindcss";
 
-@import "swiper/css";
-@import "swiper/css/effect-coverflow";
-@import "swiper/css/pagination";
-
 @font-face {
   font-family: "Unbounded";
   src: url("/fonts/Unbounded-Regular.ttf");
