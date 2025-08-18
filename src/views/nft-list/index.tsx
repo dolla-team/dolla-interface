@@ -1,15 +1,11 @@
 import Scroll from "./scroll";
+import NftListContent from "./content";
 
 export default function NftList() {
   return (
-    <div className="p-4 space-y-6">
-      <h1 className="text-2xl font-bold text-white">NFT List</h1>
-      
-        <Scroll />
-
-
-      </div>
-      
-   
+    <div className="pt-[50px]">
+      <Scroll />
+      <NftListContent />
+    </div>
   );
 }

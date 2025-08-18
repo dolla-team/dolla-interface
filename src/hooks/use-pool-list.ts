@@ -4,8 +4,14 @@ import { HOST_API } from "@/config";
 import { useAuth } from "@/contexts/auth";
 import { BASE_TOKEN } from "@/config/btc";
 
-export default function usePoolList(props?: { pageLimit?: number; isScrollList?: boolean; onFirstPageLoad?(list: any): void; }) {
-  const { pageLimit, isScrollList, onFirstPageLoad } = props ?? {};
+export default function usePoolList(props?: { 
+  pageLimit?: number; 
+  isScrollList?: boolean; 
+  chain?: string;
+  tokenStatus?: number;
+  onFirstPageLoad?(list: any): void; 
+}) {
+  const { pageLimit, isScrollList, onFirstPageLoad, chain = BASE_TOKEN.chain, tokenStatus = 0 } = props ?? {};
 
   const [poolList, setPoolList] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
@@ -46,8 +52,8 @@ export default function usePoolList(props?: { pageLimit?: number; isScrollList?:
       setLoading(true);
       const res = await axiosInstance.get(
         `${HOST_API}/api/v1/pool/list?limit=${LIMIT}&offset=${pageRef.current * LIMIT
-        }&sort_field=${sortField}&sort_order=${sortOrder}&status=1&token_status=0&chain=${BASE_TOKEN.chain
-        }&token=${BASE_TOKEN.address}${volume > 0 ? "&volume=" + volume * 10 ** BASE_TOKEN.decimals : ""
+        }&sort_field=${sortField}&sort_order=${sortOrder}&status=1&token_status=0&chain=${chain || BASE_TOKEN.chain
+        }&token_status={tokenStatus}&token=${BASE_TOKEN.address}${volume > 0 ? "&volume=" + volume * 10 ** BASE_TOKEN.decimals : ""
         }`
       );
 
