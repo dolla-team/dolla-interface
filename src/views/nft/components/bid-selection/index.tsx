@@ -58,11 +58,11 @@ export default function BidSelection({ tokenBalance }: any) {
 
   const onBidClick = () => {
     if (flipStatus === 0) {
-      carouselRef.current.handleScroll("play");
+      carouselRef.current.handleRotate("play");
       setFlipStatus(1);
       return;
     }
-    carouselRef.current.handleScroll("rotate", { target: 0 });
+    carouselRef.current.handleRotate("rotate", { target: 0 });
     setTimeout(() => {
       setBidResult({ isWinner: true });
     }, 3000);
