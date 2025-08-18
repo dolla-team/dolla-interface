@@ -3,42 +3,20 @@ import ButtonWithAuth from "@/components/button/button-with-auth";
 import { formatNumber } from "@/utils/format/number";
 import { useMemo, useState } from "react";
 import clsx from "clsx";
-import useSplWithdraw from "@/hooks/solana/use-spl-withdraw";
-// import useUserWinner from "@/hooks/use-user-winner";
-// import Loading from "@/components/icons/loading";
 import { useAuth } from "@/contexts/auth";
-import useTokenBalance from "@/hooks/solana/use-token-balance";
-import useTransfer from "@/hooks/solana/use-transfer";
+import useTokenBalance from "@/hooks/evm/use-token-balance";
+import useTransfer from "@/hooks/evm/use-withdraw";
 import useToast from "@/hooks/use-toast";
+import config from "@/config/bera";
 
-export const TOKNES = [
-  // {
-  //   address: "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
-  //   decimals: 6,
-  //   icon: "/currency/usdc.png",
-  //   symbol: "USDC"
-  // },
-  {
-    address: "ADo4M7ZEZwDKNP1k8dic26TBrftX6mix9sGMntkq6Tp4",
-    decimals: 6,
-    icon: "/currency/usdc.png",
-    symbol: "USDC",
-    chain: "solana"
-  },
-  // {
-  //   // address: "zBTCug3er3tLyffELcvDNrKkCymbPWysGcWihESYfLg",
-  //   address: "G5aHXkUgD4NnBbTZcKf7aQP2hXGw5bTVotcUc7wS8FVV",
-  //   decimals: 6,
-  //   icon: "/btc.png",
-  //   symbol: "BTC",
-  //   chain: "solana"
-  // }
-];
+console.log(config)
+
+
 export default function WithdrawSolana() {
   const { tokenBalance: usdcBalance, update: updateUsdcBalance } =
-    useTokenBalance(TOKNES[0]);
-  const { tokenBalance: btcBalance, update: updateBtcBalance } =
-    useTokenBalance(TOKNES[1]);
+    useTokenBalance(config.purchaseToken);
+  // const { tokenBalance: btcBalance, update: updateBtcBalance } =
+  //   useTokenBalance(TOKNES[1]);
   const [receiveAddress, setReceiveAddress] = useState("");
   const { address } = useAuth();
   const [amount, setAmount] = useState("");
@@ -51,7 +29,7 @@ export default function WithdrawSolana() {
     );
   }, [receiveAddress]);
 
-  const [selectedItem, setSelectedItem] = useState<any>(TOKNES[0]);
+  const [selectedItem, setSelectedItem] = useState<any>(config.purchaseToken);
   // const { withdrawing, onWithdraw } = useWithdraw(() => {
   //   setSelectedItem(null);
   //   setReceiveAddress("");
@@ -64,39 +42,25 @@ export default function WithdrawSolana() {
   //   targetAddress: receiveAddress
   // });
 
-  const { onTransfer } = useTransfer({
-    token: selectedItem,
-    type: "withdraw",
-    onTransferSuccess: () => {
+  const { onWithdraw, withdrawing } = useTransfer(() => {
+    updateUsdcBalance();
+    setTimeout(() => {
       updateUsdcBalance();
-      updateBtcBalance();
-      setTimeout(() => {
-        updateUsdcBalance();
-        updateBtcBalance();
-      }, 15000);
-
-      // setSelectedItem(null);
-      // setReceiveAddress("");
-      // setAmount("");
-    }
+    }, 15000);
   });
 
   return (
     <div className="pt-[20px]">
       <div className="flex gap-[15px] min-h-[160px]">
-        {TOKNES.map((item) => {
-          return (
-            <Item
-              data={item}
-              key={item.address}
-              active={selectedItem?.address === item.address}
-              onClick={() => {
-                setSelectedItem(item);
-              }}
-              balance={item.symbol === "USDC" ? usdcBalance : btcBalance}
-            />
-          );
-        })}
+        <Item
+          data={config.purchaseToken}
+          key={config.purchaseToken.address}
+          active={selectedItem?.address === config.purchaseToken.address}
+          onClick={() => {
+            setSelectedItem(config.purchaseToken);
+          }}
+          balance={usdcBalance}
+        />
       </div>
 
       <>
@@ -120,7 +84,7 @@ export default function WithdrawSolana() {
               className="button text-[#BBACA6] text-[12px]"
               onClick={() => {
                 setAmount(
-                  selectedItem.symbol === "USDC" ? usdcBalance : btcBalance
+                  usdcBalance
                 );
               }}
             >
@@ -163,20 +127,27 @@ export default function WithdrawSolana() {
         />
       </>
       <ButtonWithAuth
-        className="mt-[20px] w-[160px] mx-auto h-[40px]"
-        disabled={!isAddressValid || !amount || !receiveAddress}
-        loading={false}
+        className="mt-[20px] w-[200px] mx-auto h-[40px]"
+        disabled={!isAddressValid || !amount || !receiveAddress || withdrawing}
+        loading={withdrawing}
         onClick={() => {
-          onTransfer(Number(amount), receiveAddress);
+          // onTransfer(Number(amount), receiveAddress);
+          onWithdraw({
+            type: "coin",
+            amount: Number(amount),
+            address: config.purchaseToken.address,
+            receiveAddress,
+            tokenId: ''
+          })
         }}
       >
         {!amount
           ? "Input Amount"
           : !receiveAddress
-          ? "Input Address"
-          : isAddressValid
-          ? "Withdraw"
-          : "Invalid Address"}
+            ? "Input Address"
+            : isAddressValid
+              ? "Withdraw"
+              : "Invalid Address"}
       </ButtonWithAuth>
     </div>
   );

@@ -2,13 +2,12 @@ import useIsMobile from "@/hooks/use-is-mobile";
 import { useCallback, useEffect, useState } from "react";
 import clsx from "clsx";
 import { formatAddress } from "@/utils/format/address";
-import { TOKNES } from '@/sections/cashier/panels/withdraw-solana'
+import config from "@/config/bera";
 
 const panel_cls = 'bg-[#00000033] rounded-[10px] flex items-center justify-center flex-col py-[10px] text-white text-[16px]'
 
 const tokensByAddresses = {
-  [TOKNES[0].address]: TOKNES[0],
-  [TOKNES[1].address]: TOKNES[1],
+    [config.purchaseToken.address]: config.purchaseToken,
 }
 export default function VerifiForm({ handleVerify, onPoolIdChange }: { handleVerify: (query: any) => void, onPoolIdChange: (value: string) => void }) {
   const isMobile = useIsMobile();

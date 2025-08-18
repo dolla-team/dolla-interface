@@ -3,10 +3,9 @@ import Switch from "@/components/switch";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import FundList from "./panels/fund-list";
-import WithdrawSolana from "./panels/withdraw-solana";
 import useIsMobile from "@/hooks/use-is-mobile";
 import clsx from "clsx";
-
+import WithdrawEvm from "./panels/withdraw-evm";
 export default function CashierModal({ open, onClose, defaultTab }: any) {
   const [tab, setTab] = useState("fund");
   const isMobile = useIsMobile();
@@ -93,7 +92,7 @@ export default function CashierModal({ open, onClose, defaultTab }: any) {
 
         {tab === "withdraw" && (
           <PanelWrapper className="px-[14px] pb-[20px]">
-            <WithdrawSolana />
+            <WithdrawEvm />
           </PanelWrapper>
         )}
 
