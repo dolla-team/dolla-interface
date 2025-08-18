@@ -15,6 +15,7 @@ import "./libs/howl";
 import Callback from "./views/callback";
 import DollaEyeContextProvider from "./contexts/dolla-eye";
 import NFT from "./views/nft";
+import NftList from "./views/nft-list";
 
 // const LazyNewBTC = lazy(() => import("./views/btc"));
 const LazyNftCreate = lazy(() => import("./views/nft-create"));
@@ -97,6 +98,10 @@ const router = createBrowserRouter([
       {
         path: "privacy-policy",
         element: <LazyPolicy />
+      },
+      {
+        path: "nft-list",
+        element: <NftList />
       }
     ]
   },
