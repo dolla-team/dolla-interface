@@ -9,15 +9,8 @@ import useDraw from "@/hooks/evm/use-draw";
 export default function BidSelection({ tokenBalance }: any) {
   const { userInfo } = useAuth();
   const isMobile = useIsMobile();
-  const {
-    bids,
-    setBids,
-    flipStatus,
-    pool,
-    setFlipStatus,
-    setBidResult,
-    onReset
-  } = useNftContext();
+  const { bids, setBids, flipStatus, pool, setFlipStatus, setBidResult } =
+    useNftContext();
 
   const disabled = useMemo(() => {
     if (pool?.status !== 1) {
@@ -36,9 +29,10 @@ export default function BidSelection({ tokenBalance }: any) {
   }, [flipStatus, userInfo, tokenBalance, bids, pool]);
 
   const { onDraw } = useDraw(
-    () => {
+    (isWinner: boolean) => {
       console.log("bid success");
       setFlipStatus(2);
+      setBidResult({ isWinner });
     },
     () => {
       console.log("bid fail");

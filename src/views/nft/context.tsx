@@ -21,33 +21,12 @@ export const CannonCoinsProvider = ({
 }) => {
   const [flipStatus, setFlipStatus] = useState(0); // 0: not flipping, 1: bidding, 2: bid success
   const [bids, setBids] = useState(1);
-  const coinsRef = useRef<any>({});
-  const flipedNumberRef = useRef(0);
   const [bidResult, setBidResult] = useState<any>(null);
   const params = useParams();
   const { onQueryPoolInfo } = usePoolInfo("solana");
   const [pool, setPool] = useState<any>(null);
   const { data, getPoolRecommend } = usePoolRecommend(0, !params?.poolId);
   const poolCachedRef = useRef<any>(null);
-
-  useEffect(() => {
-    if (flipStatus === 0) {
-      window.howl.bgm.fade(0.1, 0.2, 1000);
-    }
-
-    if (flipStatus === 1 || flipStatus === 0) {
-      flipedNumberRef.current = 0;
-    }
-
-    if (flipStatus === 2) {
-      setTimeout(() => {
-        setFlipStatus(3);
-      }, 600);
-    }
-
-    if (flipStatus === 4) {
-    }
-  }, [flipStatus]);
 
   const loopUpdatePool = async (_pool: any) => {
     clearTimeout(window.poolTimer);
@@ -115,7 +94,6 @@ export const CannonCoinsProvider = ({
         pool,
         poolAmount,
         bids,
-        coinsRef,
         setBids: (bids: number) => {
           if (flipStatus !== 0) return;
           setBids(bids);
