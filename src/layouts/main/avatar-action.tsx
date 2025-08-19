@@ -9,7 +9,6 @@ import { useUser } from "@privy-io/react-auth";
 import AvatarCashier from "./avatar-cashier";
 import { useEffect, useState } from "react";
 import useClaimTestCoin from "@/hooks/solana/use-claim-test-coin";
-import Cashier from "@/sections/cashier/modal";
 import { AnimatePresence, motion } from "framer-motion";
 import Loading from "@/components/icons/loading";
 
@@ -105,8 +104,6 @@ export default function AvatarAction() {
   const { onCopy } = useCopy();
   const { user } = useUser();
   const [showMenu, setShowMenu] = useState(false);
-
-  const [showCashier, setShowCashier] = useState(false);
   const { claiming, claimTestCoin } = useClaimTestCoin();
 
   useEffect(() => {
@@ -125,7 +122,9 @@ export default function AvatarAction() {
     <div className="relative group flex items-center gap-[10px]">
       {user?.wallet?.address && (
         <AvatarCashier
-          onClick={() => setShowCashier(true)}
+          onClick={() => {
+            // TODO
+          }}
           tokenBalance={quoteTokenBalance}
         />
       )}
@@ -236,7 +235,6 @@ export default function AvatarAction() {
           </motion.div>
         )}
       </AnimatePresence>
-      <Cashier open={showCashier} onClose={() => setShowCashier(false)} />
     </div>
   );
 }
