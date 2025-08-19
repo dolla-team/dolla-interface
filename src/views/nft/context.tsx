@@ -25,7 +25,7 @@ export const CannonCoinsProvider = ({
   const params = useParams();
   const { onQueryPoolInfo } = usePoolInfo("solana");
   const [pool, setPool] = useState<any>(null);
-  const { data, getPoolRecommend } = usePoolRecommend(0, !params?.poolId);
+  const { data, getPoolRecommend } = usePoolRecommend(1, !params?.poolId);
   const poolCachedRef = useRef<any>(null);
   const carouselRef = useRef<any>(null);
 
