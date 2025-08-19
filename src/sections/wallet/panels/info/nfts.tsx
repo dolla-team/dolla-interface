@@ -18,7 +18,7 @@ export default function Nfts({
   ) : (
     <div className="flex gap-[20px] flex-wrap">
       {nftsStore.nfts.map((item: any) => (
-        <Item data={item} key={item.id} onSend={() => {}} />
+        <Item data={item} key={item.id} onSend={onSend} />
       ))}
     </div>
   );

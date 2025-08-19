@@ -55,7 +55,12 @@ export default function Info({
       />
       <div className="h-[calc(100vh-346px)] overflow-y-auto p-[15px]">
         {tab === 0 && <Tokens onDeposit={() => onTabChange("deposit")} />}
-        {tab === 1 && <Nfts onDeposit={() => onTabChange("deposit")} />}
+        {tab === 1 && (
+          <Nfts
+            onDeposit={() => onTabChange("deposit")}
+            onSend={() => onTabChange("deposit")}
+          />
+        )}
         {tab === 2 && <Txs />}
       </div>
     </div>

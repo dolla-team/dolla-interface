@@ -1,23 +1,22 @@
 import Info from "../panels/info";
 import Deposit from "../panels/deposit";
 import Withdraw from "../panels/withdraw";
-import { useState } from "react";
+
 import { motion, AnimatePresence } from "framer-motion";
 import useWalletStore from "@/stores/use-wallet";
 
 export default function Laptop() {
-  const [tab, setTab] = useState("info");
-  const { showWallet, set } = useWalletStore();
+  const walletStore = useWalletStore();
 
   const handleToggle = () => {
-    set({ showWallet: !showWallet });
+    walletStore.set({ showWallet: !walletStore.showWallet });
   };
 
   return (
     <>
       {/* Main panel with slide animation */}
       <AnimatePresence>
-        {showWallet && (
+        {walletStore.showWallet && (
           <motion.div
             initial={{ x: 456 }}
             animate={{ x: 0 }}
@@ -34,18 +33,26 @@ export default function Laptop() {
                 "radial-gradient(75.31% 36.96% at 1.18% 2.95%, rgba(111, 55, 255, 0.20) 0%, rgba(0, 0, 0, 0.20) 100%), #1A1E24"
             }}
           >
-            {tab === "info" && <Info onTabChange={setTab} />}
-            {tab === "deposit" && (
-              <Deposit
-                onBack={() => {
-                  setTab("info");
+            {walletStore.panelType === "info" && (
+              <Info
+                onTabChange={(tab: string) => {
+                  walletStore.set({
+                    panelType: tab
+                  });
                 }}
               />
             )}
-            {tab === "withdraw" && (
+            {walletStore.panelType === "deposit" && (
+              <Deposit
+                onBack={() => {
+                  walletStore.set({ panelType: "info" });
+                }}
+              />
+            )}
+            {walletStore.panelType === "withdraw" && (
               <Withdraw
                 onBack={() => {
-                  setTab("info");
+                  walletStore.set({ panelType: "info" });
                 }}
               />
             )}
