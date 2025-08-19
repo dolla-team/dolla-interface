@@ -28,7 +28,7 @@ const ButtonV2 = (props: any) => {
         "relative shrink-0 cursor-pointer flex justify-center items-center px-[17px] h-[32px] rounded-[8px] disabled:opacity-50 disabled:cursor-not-allowed",
         type === "default" &&
           "border border-[#383F47] text-white text-[14px] px-[10px] bg-black/20 [background-image:none]",
-        type === "primary" && "text-[16px] text-white font-[500] bg-[#743EFF]",
+        type === "primary" && "text-[14px] text-white font-[500] bg-[#743EFF]",
         className
       )}
       {...restProps}

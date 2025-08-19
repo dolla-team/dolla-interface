@@ -8,7 +8,11 @@ import Nfts from "./nfts";
 import Txs from "./txs";
 import { useState } from "react";
 
-export default function Info() {
+export default function Info({
+  onTabChange
+}: {
+  onTabChange: (tab: string) => void;
+}) {
   const { quoteTokenBalance } = useAuth() || {};
   const [tab, setTab] = useState(2);
   return (
@@ -32,6 +36,7 @@ export default function Info() {
             <div
               key={panel.label}
               className="button flex flex-col items-center justify-center gap-[4px] w-[116px] h-[60px] rounded-[10px] border border-[#383F47] bg-[#1A1E24]"
+              onClick={() => onTabChange(panel.label.toLowerCase())}
             >
               {panel.icon}
               <div className="text-[12px] text-white">{panel.label}</div>

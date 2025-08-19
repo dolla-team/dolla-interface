@@ -6,11 +6,7 @@ import clsx from "clsx";
 import { useAuth } from "@/contexts/auth";
 import useTokenBalance from "@/hooks/evm/use-token-balance";
 import useTransfer from "@/hooks/evm/use-withdraw";
-import useToast from "@/hooks/use-toast";
 import config from "@/config/bera";
-
-console.log(config)
-
 
 export default function WithdrawSolana() {
   const { tokenBalance: usdcBalance, update: updateUsdcBalance } =
@@ -20,7 +16,7 @@ export default function WithdrawSolana() {
   const [receiveAddress, setReceiveAddress] = useState("");
   const { address } = useAuth();
   const [amount, setAmount] = useState("");
-  const toast = useToast();
+
   const isAddressValid = useMemo(() => {
     return (
       // receiveAddress.length === 42 &&
@@ -50,105 +46,112 @@ export default function WithdrawSolana() {
   });
 
   return (
-    <div className="pt-[20px]">
-      <div className="flex gap-[15px] min-h-[160px]">
-        <Item
-          data={config.purchaseToken}
-          key={config.purchaseToken.address}
-          active={selectedItem?.address === config.purchaseToken.address}
-          onClick={() => {
-            setSelectedItem(config.purchaseToken);
+    <div className="pt-[20px] flex flex-col justify-between h-[calc(100vh-140px)]">
+      <div>
+        <div className="flex gap-[15px] min-h-[110px]">
+          <Item
+            data={config.purchaseToken}
+            key={config.purchaseToken.address}
+            active={selectedItem?.address === config.purchaseToken.address}
+            onClick={() => {
+              setSelectedItem(config.purchaseToken);
+            }}
+            balance={usdcBalance}
+          />
+        </div>
+        <div className="flex items-center justify-center mt-[30px] relative">
+          <div className="text-[14px] text-white">Withdraw Amount</div>
+          <button
+            onClick={() => {
+              setAmount(usdcBalance);
+            }}
+            className="w-[50px] h-[28px] absolute right-[0] top-[0] button border border-[#373737] rounded-[14px] text-[#8A87AA] text-[12px] bg-transparent"
+          >
+            Max
+          </button>
+        </div>
+        <input
+          className="w-full text-[32px] font-bold text-white text-center mt-[6px]"
+          value={amount}
+          onChange={(e) => {
+            if (isNaN(Number(e.target.value))) {
+              return;
+            }
+            setAmount(e.target.value);
           }}
-          balance={usdcBalance}
+          placeholder="0"
         />
+        <div className="flex items-center justify-center gap-[10px] mt-[10px]">
+          <img
+            src={selectedItem.icon}
+            alt="bid-coins"
+            className="w-[32px] h-[32px] rounded-full"
+          />
+          <div className="text-[14px] text-white">{selectedItem.symbol}</div>
+        </div>
       </div>
-
-      <>
-        <div className="text-[14px] text-[#BBACA6] mt-[20px]">
-          Withdraw Amount
-        </div>
-        <div className="flex items-center mt-[6px] gap-[12px]">
-          <div className="w-full h-[47px] rounded-[6px] bg-[#00000033] px-[12px] flex items-center">
-            <input
-              className="w-full text-[14px] text-white"
-              value={amount}
-              onChange={(e) => {
-                if (isNaN(Number(e.target.value))) {
-                  return;
-                }
-                setAmount(e.target.value);
-              }}
-              placeholder="Input amount"
-            />
-            <button
-              className="button text-[#BBACA6] text-[12px]"
-              onClick={() => {
-                setAmount(
-                  usdcBalance
-                );
-              }}
-            >
-              Max
-            </button>
-            <img
-              src={selectedItem.icon}
-              className="w-[20px] h-[20px] rounded-full ml-[5px]"
-            />
-          </div>
-        </div>
-
-        <div className="flex items-center justify-between mt-[10px] px-[7px] text-[14px] text-white">
-          <div className="text-[#BBACA6]">Est. Received</div>
-
-          <div className="flex items-center">
-            <span>{formatNumber(amount, 0, true, { isShort: true })}</span>
-            <img
-              src={selectedItem.icon}
-              alt="bid-coins"
-              className="w-[20px] h-[20px] rounded-full ml-[10px] mr-[7px]"
-            />
-          </div>
-        </div>
-      </>
-      <>
-        <div className="text-[14px] text-[#BBACA6] mt-[20px]">
+      <div>
+        <div className="text-[14px] text-white text-center mt-[20px]">
           Receive Address
         </div>
         <input
           className={clsx(
-            "h-[47px] w-full rounded-[6px] bg-[#00000033] leading-[47px] px-[12px] text-[#ADBCCF] mt-[6px]",
-            !isAddressValid && receiveAddress && "border border-[#FF5A974D]"
+            "h-[47px] w-full border border-[#8A87AA4D] rounded-[6px] bg-[#00000033] leading-[47px] px-[12px] text-[12px] text-white mt-[10px]",
+            !isAddressValid && receiveAddress && "!border-[#FF5A974D]"
           )}
           value={receiveAddress}
           onChange={(e) => {
             setReceiveAddress(e.target.value);
           }}
-          placeholder="Please input the address"
+          placeholder="Address"
         />
-      </>
-      <ButtonWithAuth
-        className="mt-[20px] w-[200px] mx-auto h-[40px]"
-        disabled={!isAddressValid || !amount || !receiveAddress || withdrawing}
-        loading={withdrawing}
-        onClick={() => {
-          // onTransfer(Number(amount), receiveAddress);
-          onWithdraw({
-            type: "coin",
-            amount: Number(amount),
-            address: config.purchaseToken.address,
-            receiveAddress,
-            tokenId: ''
-          })
-        }}
-      >
-        {!amount
-          ? "Input Amount"
-          : !receiveAddress
+        <ButtonWithAuth
+          className="mt-[10px] w-full h-[42px]"
+          disabled={
+            !isAddressValid || !amount || !receiveAddress || withdrawing
+          }
+          loading={withdrawing}
+          onClick={() => {
+            // onTransfer(Number(amount), receiveAddress);
+            onWithdraw({
+              type: "coin",
+              amount: Number(amount),
+              address: config.purchaseToken.address,
+              receiveAddress,
+              tokenId: ""
+            });
+          }}
+        >
+          {!amount
+            ? "Input Amount"
+            : !receiveAddress
             ? "Input Address"
             : isAddressValid
-              ? "Withdraw"
-              : "Invalid Address"}
-      </ButtonWithAuth>
+            ? "Withdraw"
+            : "Invalid Address"}
+        </ButtonWithAuth>
+        <div className="mt-[20px] flex items-center justify-center gap-[8px]">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="27"
+            height="26"
+            viewBox="0 0 27 26"
+            fill="none"
+          >
+            <path
+              d="M11.7847 2.86099C12.5614 1.56556 14.4386 1.56556 15.2153 2.86099L23.3756 16.4716C24.1749 17.8046 23.2146 19.5 21.6603 19.5H5.33969C3.7854 19.5 2.82513 17.8046 3.62437 16.4716L11.7847 2.86099Z"
+              fill="#FF4372"
+            />
+            <path
+              d="M12.1593 7.5H14.8613L14.4273 14.416H12.5793L12.1593 7.5ZM13.5033 18.14C13.0647 18.14 12.71 18.014 12.4393 17.762C12.1687 17.5007 12.0333 17.1647 12.0333 16.754C12.0333 16.3433 12.1687 16.012 12.4393 15.76C12.71 15.508 13.0647 15.382 13.5033 15.382C13.942 15.382 14.2967 15.508 14.5673 15.76C14.838 16.012 14.9733 16.3433 14.9733 16.754C14.9733 17.1647 14.838 17.5007 14.5673 17.762C14.2967 18.014 13.942 18.14 13.5033 18.14Z"
+              fill="#252525"
+            />
+          </svg>
+          <div className="text-[14px] text-[#FF4372]">
+            Make sure to send it to <span className="font-bold">Berachain</span>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
@@ -168,8 +171,8 @@ const Item = ({
     <div
       onClick={onClick}
       className={clsx(
-        "button flex-1 border border-[#191E27] w-[142px] h-[159px] pt-[20px] shrink-0 bg-[#00000033] rounded-[6px] flex flex-col items-center text-[14px]",
-        active && "border-[#FFC42F]"
+        "button flex-1 border border-[#383F47] w-full h-[118px] shrink-0 bg-[#1A1E24] rounded-[6px] flex flex-col justify-center items-center text-[14px]",
+        active && "!border-[#6F37FF]"
       )}
     >
       <div className="text-[#ADBCCF]">{data.label}</div>
@@ -182,13 +185,11 @@ const Item = ({
           <div className="w-full h-full bg-[#191E27] rounded-[6px]" />
         )}
       </div>
-      <div className="text-white text-[16px]">{data.symbol}</div>
-      {balance ? (
-        <div className="text-white text-[20px]">
+      <div className="text-white text-[14px]">{data.symbol}</div>
+      {balance && (
+        <div className="text-white text-[14px] font-[DelaGothicOne]">
           {formatNumber(balance, 0, true, { isShort: false })}
         </div>
-      ) : (
-        <div></div>
       )}
     </div>
   );

@@ -1,7 +1,10 @@
 import Info from "../panels/info";
 import Deposit from "../panels/deposit";
+import Withdraw from "../panels/withdraw";
+import { useState } from "react";
 
 export default function Laptop() {
+  const [tab, setTab] = useState("info");
   return (
     <div
       className="fixed top-0 right-0 z-[100] h-screen w-[416px] border-l border-[#383F47] rounded-l-[16px]"
@@ -10,8 +13,21 @@ export default function Laptop() {
           "radial-gradient(75.31% 36.96% at 1.18% 2.95%, rgba(111, 55, 255, 0.20) 0%, rgba(0, 0, 0, 0.20) 100%), #1A1E24"
       }}
     >
-      {/* <Info /> */}
-      <Deposit />
+      {tab === "info" && <Info onTabChange={setTab} />}
+      {tab === "deposit" && (
+        <Deposit
+          onBack={() => {
+            setTab("info");
+          }}
+        />
+      )}
+      {tab === "withdraw" && (
+        <Withdraw
+          onBack={() => {
+            setTab("info");
+          }}
+        />
+      )}
       <div className="button absolute top-0 left-[-41px] w-[40px] h-full bg-[#141519CC] border-l border-[#373737] rounded-l-[16px] backdrop-blur-[10px]">
         <svg
           xmlns="http://www.w3.org/2000/svg"

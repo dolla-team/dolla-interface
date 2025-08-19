@@ -30,6 +30,7 @@ export default function useUserNft() {
 
   return {
     loading,
-    nfts
+    nfts,
+    onQueryNfts
   };
 }

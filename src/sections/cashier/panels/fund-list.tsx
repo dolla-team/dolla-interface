@@ -18,7 +18,7 @@ interface FundOption {
   onClick: () => void;
 }
 
-export default function FundList() {
+export default function FundList({ onBack }: { onBack: () => void }) {
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const { userInfo } = useAuth();
 
@@ -132,7 +132,10 @@ export default function FundList() {
     <>
       {!selectedOption && (
         <>
-          <div className="flex items-center gap-[18px] text-[16px] cursor-pointer button">
+          <div
+            className="flex items-center gap-[18px] text-[16px] cursor-pointer button"
+            onClick={onBack}
+          >
             <BackIcon />
             <div className="text-white">Deposit</div>
           </div>

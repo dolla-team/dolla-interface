@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import Empty from "./empty";
 import Button from "@/components/button/v2";
 
@@ -5,25 +6,60 @@ export default function Nfts() {
   // return <Empty onDeposit={() => {}} />;
   return (
     <div className="flex gap-[20px] flex-wrap">
-      <Item />
+      <Item data={null} />
     </div>
   );
 }
 
-const Item = () => {
+export const Item = ({
+  data,
+  onClick,
+  active = false
+}: {
+  data: any;
+  onClick?: () => void;
+  active?: boolean;
+}) => {
   return (
-    <div className="w-[178px] relative group">
-      <div className="absolute top-0 left-0 w-[178px] h-[178px] rounded-[10px] bg-[#00000080] flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-        <Button className="button w-[150px] h-[36px] !text-[12px]">
-          Creat Market
-        </Button>
-        <Button className="button w-[150px] h-[36px] !text-[12px] !bg-[#1A1E24] mt-[10px]">
-          Send
-        </Button>
-      </div>
+    <div className="w-[178px] relative group" onClick={onClick}>
+      {!onClick && (
+        <div className="absolute top-0 left-0 w-[178px] h-[178px] rounded-[10px] bg-[#00000080] flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <Button className="button w-[150px] h-[36px] !text-[12px]">
+            Creat Market
+          </Button>
+          <Button className="button w-[150px] h-[36px] !text-[12px] !bg-[#1A1E24] mt-[10px]">
+            Send
+          </Button>
+        </div>
+      )}
+      {active && (
+        <>
+          <div className="absolute top-[-6px] left-[-6px] w-[190px] h-[190px] bg-[#00000080] rounded-[16px] border border-[#743EFF]" />
+          <div className="absolute top-[148px] right-[-2px] z-[3] w-[31px] h-[31px] rounded-full bg-[#1A1E24] border border-[#383F47] flex items-center justify-center">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="23"
+              height="23"
+              viewBox="0 0 23 23"
+              fill="none"
+            >
+              <circle cx="11.5005" cy="11.5" r="11.3667" fill="#743EFF" />
+              <path
+                d="M7.02246 11.1555L10.4669 14.5999L16.6669 8.3999"
+                stroke="white"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </div>
+        </>
+      )}
       <img
         src="/nfts/steady-teddys/1018.webp"
-        className="w-full h-[178px] object-cover rounded-[10px] border border-[#434343CC] button"
+        className={clsx(
+          "relative z-[2] w-full h-[178px] object-cover rounded-[10px] border border-[#434343CC] button"
+        )}
       />
       <div className="text-[12px] font-semibold text-white mt-[10px]">
         Steady Teddy #6257
