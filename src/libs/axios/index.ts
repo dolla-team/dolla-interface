@@ -13,7 +13,7 @@ const axiosInstance = axios.create({
   }
 });
 
-const signFn = () => {
+export const signFn = () => {
   clearTimeout((window as any).signTimer);
   if (typeof (window as any).sign === "function") {
     (window as any).sign();
