@@ -1,4 +1,5 @@
 import Info from "../panels/info";
+import Deposit from "../panels/deposit";
 
 export default function Laptop() {
   return (
@@ -9,7 +10,8 @@ export default function Laptop() {
           "radial-gradient(75.31% 36.96% at 1.18% 2.95%, rgba(111, 55, 255, 0.20) 0%, rgba(0, 0, 0, 0.20) 100%), #1A1E24"
       }}
     >
-      <Info />
+      {/* <Info /> */}
+      <Deposit />
       <div className="button absolute top-0 left-[-41px] w-[40px] h-full bg-[#141519CC] border-l border-[#373737] rounded-l-[16px] backdrop-blur-[10px]">
         <svg
           xmlns="http://www.w3.org/2000/svg"
