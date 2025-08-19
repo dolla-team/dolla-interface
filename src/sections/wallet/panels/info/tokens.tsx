@@ -1,16 +1,24 @@
 import config from "@/config/bera";
 import Empty from "./empty";
+import { useAuth } from "@/contexts/auth";
+import { formatNumber } from "@/utils/format/number";
+import Big from "big.js";
 
-export default function Tokens() {
-  // return <Empty onDeposit={() => {}} />;
+export default function Tokens({ onDeposit }: { onDeposit: () => void }) {
+  const { quoteTokenBalance } = useAuth() || {};
+
+  if (Big(quoteTokenBalance || 0).eq(0)) {
+    return <Empty onDeposit={onDeposit} />;
+  }
+
   return (
     <div>
-      <Item />
+      <Item balance={quoteTokenBalance} price={1} />
     </div>
   );
 }
 
-const Item = () => {
+const Item = ({ balance, price }: { balance: string; price: number }) => {
   return (
     <div className="flex justify-between items-center">
       <div className="flex items-center gap-[14px]">
@@ -31,12 +39,16 @@ const Item = () => {
             </span>
             <span className="text-[12px] text-[#8A87AA]">(Berachain)</span>
           </div>
-          <div className="text-[12px] text-[#8A87AA]">$100</div>
+          <div className="text-[12px] text-[#8A87AA]">$1.00</div>
         </div>
       </div>
       <div>
-        <div className="text-[14px] text-white">500</div>
-        <div className="text-[12px] text-[#8A87AA]">$100</div>
+        <div className="text-[14px] text-white">
+          {formatNumber(balance, 2, true)}
+        </div>
+        <div className="text-[12px] text-[#8A87AA]">
+          ${formatNumber(Big(balance).mul(price).toNumber(), 2, true)}
+        </div>
       </div>
     </div>
   );

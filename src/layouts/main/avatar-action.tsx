@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import useClaimTestCoin from "@/hooks/solana/use-claim-test-coin";
 import { AnimatePresence, motion } from "framer-motion";
 import Loading from "@/components/icons/loading";
+import useWalletStore from "@/stores/use-wallet";
 
 const MENU = [
   {
@@ -105,7 +106,7 @@ export default function AvatarAction() {
   const { user } = useUser();
   const [showMenu, setShowMenu] = useState(false);
   const { claiming, claimTestCoin } = useClaimTestCoin();
-
+  const { set } = useWalletStore();
   useEffect(() => {
     const handleClickOutside = () => {
       setShowMenu(false);
@@ -123,7 +124,7 @@ export default function AvatarAction() {
       {user?.wallet?.address && (
         <AvatarCashier
           onClick={() => {
-            // TODO
+            set({ showWallet: true });
           }}
           tokenBalance={quoteTokenBalance}
         />

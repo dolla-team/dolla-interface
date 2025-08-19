@@ -3,14 +3,14 @@ import { useMemo, useState } from "react";
 import clsx from "clsx";
 import { useAuth } from "@/contexts/auth";
 import useTransfer from "@/hooks/evm/use-withdraw";
-import useUserNft from "@/hooks/evm/use-user-nft";
 import Empty from "../info/empty";
 import { Item } from "../info/nfts";
-import Loading from "@/components/icons/loading";
+import useNftsStore from "@/stores/use-nfts";
 
 export default function WithdrawSolana() {
   const [receiveAddress, setReceiveAddress] = useState("");
   const { address } = useAuth();
+  const nftsStore = useNftsStore();
 
   const isAddressValid = useMemo(() => {
     return receiveAddress && receiveAddress !== address;
@@ -19,20 +19,15 @@ export default function WithdrawSolana() {
   const [selectedItem, setSelectedItem] = useState<any>(null);
 
   const { onWithdraw, withdrawing } = useTransfer(() => {
-    onQueryNfts();
+    nftsStore.set({ refresher: nftsStore.refresher + 1 });
   });
-  const { loading, nfts, onQueryNfts } = useUserNft();
 
   return (
     <div className="pt-[20px] flex flex-col justify-between h-[calc(100vh-140px)]">
       <div>
-        {loading ? (
-          <div className="flex items-center justify-center h-[200px]">
-            <Loading size={30} />
-          </div>
-        ) : nfts.length > 0 ? (
+        {nftsStore.nfts.length > 0 ? (
           <div className="flex gap-[15px] min-h-[110px]">
-            {nfts.map((item: any) => (
+            {nftsStore.nfts.map((item: any) => (
               <Item
                 data={item}
                 key={item.token_id}

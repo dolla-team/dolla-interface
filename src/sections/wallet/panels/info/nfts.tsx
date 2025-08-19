@@ -1,12 +1,25 @@
 import clsx from "clsx";
 import Empty from "./empty";
 import Button from "@/components/button/v2";
+import { useNavigate } from "react-router-dom";
+import useNftsStore from "@/stores/use-nfts";
 
-export default function Nfts() {
-  // return <Empty onDeposit={() => {}} />;
-  return (
+export default function Nfts({
+  onDeposit,
+  onSend
+}: {
+  onDeposit: () => void;
+  onSend?: () => void;
+}) {
+  const nftsStore = useNftsStore();
+
+  return nftsStore.nfts.length === 0 ? (
+    <Empty onDeposit={onDeposit} text="No NFTs found" />
+  ) : (
     <div className="flex gap-[20px] flex-wrap">
-      <Item data={null} />
+      {nftsStore.nfts.map((item: any) => (
+        <Item data={item} key={item.id} onSend={() => {}} />
+      ))}
     </div>
   );
 }
@@ -14,20 +27,31 @@ export default function Nfts() {
 export const Item = ({
   data,
   onClick,
+  onSend,
   active = false
 }: {
   data: any;
   onClick?: () => void;
+  onSend?: () => void;
   active?: boolean;
 }) => {
+  const navigate = useNavigate();
   return (
     <div className="w-[178px] relative group" onClick={onClick}>
       {!onClick && (
         <div className="absolute top-0 left-0 w-[178px] h-[178px] rounded-[10px] bg-[#00000080] flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-          <Button className="button w-[150px] h-[36px] !text-[12px]">
+          <Button
+            className="button w-[150px] h-[36px] !text-[12px]"
+            onClick={() => {
+              navigate("nft/create");
+            }}
+          >
             Creat Market
           </Button>
-          <Button className="button w-[150px] h-[36px] !text-[12px] !bg-[#1A1E24] mt-[10px]">
+          <Button
+            className="button w-[150px] h-[36px] !text-[12px] !bg-[#1A1E24] mt-[10px]"
+            onClick={onSend}
+          >
             Send
           </Button>
         </div>

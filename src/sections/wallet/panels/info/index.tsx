@@ -14,7 +14,7 @@ export default function Info({
   onTabChange: (tab: string) => void;
 }) {
   const { quoteTokenBalance } = useAuth() || {};
-  const [tab, setTab] = useState(2);
+  const [tab, setTab] = useState(0);
   return (
     <div className="h-full w-full">
       <Top />
@@ -54,8 +54,8 @@ export default function Info({
         cursorClassName="!bg-[#743EFF]"
       />
       <div className="h-[calc(100vh-346px)] overflow-y-auto p-[15px]">
-        {tab === 0 && <Tokens />}
-        {tab === 1 && <Nfts />}
+        {tab === 0 && <Tokens onDeposit={() => onTabChange("deposit")} />}
+        {tab === 1 && <Nfts onDeposit={() => onTabChange("deposit")} />}
         {tab === 2 && <Txs />}
       </div>
     </div>

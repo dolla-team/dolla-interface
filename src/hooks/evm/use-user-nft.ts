@@ -1,11 +1,10 @@
-import { useAuth } from "@/contexts/auth";
 import axiosInstance from "@/libs/axios";
 import { useEffect, useState } from "react";
+import useNftsStore from "@/stores/use-nfts";
 
-export default function useUserNft() {
+export default function useUserNft(userInfo: any) {
   const [loading, setLoading] = useState(false);
-  const [nfts, setNfts] = useState<any>([]);
-  const { userInfo } = useAuth();
+  const nftsStore = useNftsStore();
 
   const onQueryNfts = async () => {
     try {
@@ -15,7 +14,7 @@ export default function useUserNft() {
           userInfo?.user
         }`
       );
-      setNfts(res.data.data);
+      nftsStore.set({ nfts: res.data.data });
     } catch (err) {
     } finally {
       setLoading(false);
@@ -26,11 +25,10 @@ export default function useUserNft() {
     if (userInfo?.user) {
       onQueryNfts();
     }
-  }, [userInfo]);
+  }, [userInfo, nftsStore.refresher]);
 
   return {
     loading,
-    nfts,
-    onQueryNfts
+    nfts: nftsStore.nfts
   };
 }

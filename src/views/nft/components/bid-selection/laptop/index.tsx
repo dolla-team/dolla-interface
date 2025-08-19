@@ -3,12 +3,12 @@ import { Bg1, Bg10, Bg5, Bg20 } from "./bgs";
 import BidBtn from "./bid-btn";
 import ProvablyFair from "@/sections/provably-fair";
 import { useAuth } from "@/contexts/auth";
-import Cashier from "@/sections/cashier/modal";
 import CashierEntry from "../../cashier-entery";
 import ProbabilityBar from "./probability-bar";
 import { useMemo, useState } from "react";
 import Bg from "./bg";
 import Big from "big.js";
+import useWalletStore from "@/stores/use-wallet";
 
 export default function BidSelection({
   tokenBalance,
@@ -29,8 +29,7 @@ export default function BidSelection({
 }) {
   const [showProvablyFair, setShowProvablyFair] = useState(false);
   const { userInfo } = useAuth();
-  const [showCashier, setShowCashier] = useState(false);
-
+  const { set: walletSet } = useWalletStore();
   const [probability, probabilities] = useMemo(() => {
     if (!pool || !bids) return [0, [1, 5, 11, 30]];
     const rewardToken = pool.reward_token_info[0];
@@ -82,7 +81,7 @@ export default function BidSelection({
           />
           {userInfo && (
             <CashierEntry
-              onClick={() => setShowCashier(true)}
+              onClick={() => walletSet({ showWallet: true })}
               tokenBalance={tokenBalance}
             />
           )}
@@ -126,8 +125,6 @@ export default function BidSelection({
           onClose={() => setShowProvablyFair(false)}
         />
       )}
-
-      <Cashier open={showCashier} onClose={() => setShowCashier(false)} />
     </div>
   );
 }

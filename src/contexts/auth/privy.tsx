@@ -21,6 +21,7 @@ import useConfig from "@/hooks/use-config";
 import useUserInfoStore from "@/stores/use-user-info";
 import { ethers } from "ethers";
 import useTokenBalance from "@/hooks/evm/use-token-balance";
+import useUserNft from "@/hooks/evm/use-user-nft";
 import config from "@/config/bera";
 
 export const AuthContext = React.createContext<any | null>(null);
@@ -55,6 +56,8 @@ export const AuthProvider: React.FC<{
     onQueryUserInfo,
     setInfo
   } = useUserInfo(privyWallet?.address);
+
+  useUserNft(userInfo);
 
   const { tokenBalance: quoteTokenBalance, update: updateQuoteTokenBalance } =
     useTokenBalance({
