@@ -42,9 +42,11 @@ export default function WalletProvider({
           showWalletLoginFirst: true,
           logo: "/logo.svg",
           walletChainType: "ethereum-and-solana",
-          walletList: ["metamask"]
+          walletList: ["metamask"],
+          loginMessage: "Enter your email to receive a secure code"
         },
-        loginMethods: ["email"],
+
+        loginMethods: ["email", "google"],
         fundingMethodConfig: {
           moonpay: {
             useSandbox: true

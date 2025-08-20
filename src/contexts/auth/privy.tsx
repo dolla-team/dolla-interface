@@ -34,7 +34,7 @@ export const AuthProvider: React.FC<{
   useConfig();
   const { wallets } = useWallets();
   const { wallets: solanaWallets } = useSolanaWallets();
-
+  console.log("user", user);
   const timer = useRef<any>(0);
   const [logining, setLogining] = useState(false);
   const [accountRefresher, setAccountRefresher] = useState(-1);
