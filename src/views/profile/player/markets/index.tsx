@@ -121,7 +121,7 @@ const MarketItem = (props: any) => {
         </div>
       }
       onClick={() => {
-        navigate(`/btc/${order.pool_id}`);
+        navigate(`/nft/${order.pool_id}`);
       }}
     />
   );
