@@ -103,7 +103,7 @@ export default function DepositModal({
               <span className="text-[#BBACA6] font-[400]">Balance</span>
               <div className="grow border-b border-dashed border-[#5E6B7D] opacity-50 min-w-[50px]" />
               <span className="text-white font-medium text-right">
-                {formatNumber(tokenBalance, 0, true)} {rewardTokenInfo.symbol}{" "}
+                {formatNumber(tokenBalance, 0, true)}
               </span>
             </div>
           </div>

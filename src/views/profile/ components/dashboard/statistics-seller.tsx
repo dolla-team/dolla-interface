@@ -163,11 +163,10 @@ const StatisticsPlayer = (props: any) => {
               isShort: true,
               isShortUppercase: true
             })}{" "}
-            BTC
           </div>
           <ButtonV2
             onClick={() => {
-              navigate(`/btc/create`);
+              navigate(`/nft/create`);
             }}
             type="default"
             className="!text-[14px]"
