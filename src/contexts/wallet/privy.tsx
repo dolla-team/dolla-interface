@@ -39,12 +39,12 @@ export default function WalletProvider({
         appearance: {
           accentColor: "#FFC42F",
           theme: "#1a1e24",
-          showWalletLoginFirst: true,
+          showWalletLoginFirst: false,
           logo: "/logo.svg",
           walletChainType: "ethereum-and-solana",
-          walletList: ["metamask"]
+          loginMessage: "Enter your email to receive a secure code"
         },
-        loginMethods: ["email"],
+        loginMethods: ["email", "google"],
         fundingMethodConfig: {
           moonpay: {
             useSandbox: true
