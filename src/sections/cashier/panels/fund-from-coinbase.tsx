@@ -11,7 +11,7 @@ export default function FundFromCoinbase({ onBack }: { onBack: () => void }) {
   const [amount, setAmount] = useState("");
   const [orderId, setOrderId] = useState("");
   const { coinBaseUrl } = useCoinBase({
-    address: userInfo?.sol_user || "",
+    address: userInfo?.user || "",
     amount: Number(amount),
     orderId
   });

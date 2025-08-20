@@ -93,7 +93,7 @@ export default function EndPanel({ data }: { data: any }) {
             >
               <Avatar
                 size={80}
-                address={data.winner_user_info?.sol_user}
+                address={data.winner_user_info?.user}
                 email={data.winner_user_info?.email}
                 className="rounded-full border-[3px] border-[#DD9000]"
               />
@@ -116,7 +116,7 @@ export default function EndPanel({ data }: { data: any }) {
             </div>
             <div className="text-white text-center text-[16px] font-[DelaGothicOne] mt-[10px]">
               {data.winner_user_info?.email ||
-                formatAddress(data.winner_user_info?.sol_user)}
+                formatAddress(data.winner_user_info?.user)}
             </div>
             <div className="flex items-center justify-between mt-[20px]">
               <span className="text-[#FFE9B2] text-[12px]">Winner’s bid</span>
@@ -262,7 +262,7 @@ const ProgressAvatar = ({
     >
       <Avatar
         size={26}
-        address={data.winner_user_info?.sol_user}
+        address={data.winner_user_info?.user}
         email={data.winner_user_info?.email}
       />
       <svg

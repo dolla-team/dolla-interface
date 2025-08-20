@@ -10,8 +10,8 @@ export default function UserInfo() {
       <Avatar
         size={56}
         className="rounded-[8px] border border-[2px] border-[#FFFFFFCC]"
-        address={userInfo?.sol_user}
-        email={userInfo?.email}
+        address={userInfo?.user}
+        email={userInfo?.show_email}
       />
       <div className="text-white">
         <div className="text-[20px]">{userInfo?.username}</div>

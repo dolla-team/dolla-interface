@@ -119,7 +119,7 @@ export default function LucyDrawHistory({
                 <Rank rank={index + 1} />
                 <Avatar
                   size={30}
-                  address={item.user_info?.sol_user}
+                  address={item.user_info?.user}
                   email={item.user_info?.email}
                 />
                 <div className="text-[14px] text-white">

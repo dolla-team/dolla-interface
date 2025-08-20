@@ -258,9 +258,7 @@ export default function BTCCreate() {
                 // data={poolCashOutTiming}
                 data={[]}
                 formatLabel={(record: any) => {
-                  return (
-                    <div className="text-[#BBACA6]">Comming soon...</div>
-                  );
+                  return <div className="text-[#BBACA6]">Comming soon...</div>;
                   // return (
                   //   <div className="flex flex-col items-center justify-center gap-[5px]">
                   //     {!isMobile && (
@@ -361,7 +359,7 @@ const DepositBTC = (props: any) => {
       <div className="w-full rounded-[16px] border border-[#6A5D3A] bg-[#35302B] mt-[10px] max-md:rounded-b-[0] max-md:mt-0">
         <div className="w-full rounded-t-[16px] bg-black/20 p-[18px_15px]">
           <div className="max-md:text-white">
-            {formatAddress(userInfo?.sol_user)}
+            {formatAddress(userInfo?.user)}
           </div>
           <div className="text-center text-[#BBACA6] mt-[17px]">Balance</div>
           <div className="mt-[13px] text-center text-[16px] font-[DelaGothicOne] max-md:text-white">

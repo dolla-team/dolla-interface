@@ -130,7 +130,7 @@ const ClaimIndex = (props: any) => {
       width: isMobile ? 150 : void 0,
       render: (record: any) => {
         if (type === "player") {
-          return formatAddress(userInfo?.sol_user || "");
+          return formatAddress(userInfo?.user || "");
         }
         return formatAddress(record.winner_user);
       }

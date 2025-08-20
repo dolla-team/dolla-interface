@@ -111,7 +111,7 @@ export default function Winner({
             >
               <Avatar
                 size={240}
-                address={userInfo?.sol_user}
+                address={userInfo?.user}
                 email={userInfo?.email}
                 className="rounded-full border-[3px] border-[#DD9000]"
               />
@@ -163,7 +163,7 @@ export default function Winner({
                   You won {poolAmount} BTC by only ${bids}
                 </div>
                 <div className="text-white text-[26px] font-[DelaGothicOne]">
-                  {userInfo?.email || formatAddress(userInfo?.sol_user)}
+                  {userInfo?.email || formatAddress(userInfo?.user)}
                 </div>
                 {points > 0 && (
                   <div>

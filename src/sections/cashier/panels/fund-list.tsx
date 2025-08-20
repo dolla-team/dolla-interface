@@ -51,13 +51,13 @@ export default function FundList({ onBack }: { onBack: () => void }) {
       ),
       onClick: () => {
         // setSelectedOption("bridge");
-        if (userInfo?.sol_user) {
+        if (userInfo?.user) {
           const windowWidth = 800;
           const windowHeight = 600;
           const left = (screen.width - windowWidth) / 2;
           const top = (screen.height - windowHeight) / 2;
           window.open(
-            `https://dolla-bridge-interface.pages.dev?toAddress=${userInfo?.sol_user}`,
+            `https://dolla-bridge-interface.pages.dev?toAddress=${userInfo?.user}`,
             "_blank",
             `width=${windowWidth},height=${windowHeight},left=${left},top=${top}`
           );

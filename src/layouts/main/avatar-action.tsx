@@ -132,8 +132,8 @@ export default function AvatarAction() {
       {userInfo?.icon && (
         <Avatar
           size={32}
-          address={userInfo.sol_user}
-          email={userInfo?.email}
+          address={userInfo.user}
+          email={userInfo?.show_email}
           className="shrink-0 button"
           onClick={(e: any) => {
             e.stopPropagation();

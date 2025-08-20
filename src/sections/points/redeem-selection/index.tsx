@@ -70,12 +70,12 @@ export default function RedeemSelection({
               >
                 <Avatar
                   size={46}
-                  address={userInfo?.sol_user}
+                  address={userInfo?.user}
                   email={userInfo?.email}
                 />
                 <div className="font-[DelaGothicOne] text-white flex items-center">
                   <div className={isMobile ? "text-[16px]" : "text-[20px]"}>
-                    {userInfo?.name || formatAddress(userInfo?.sol_user)}
+                    {userInfo?.name || formatAddress(userInfo?.user)}
                   </div>
                 </div>
               </div>
