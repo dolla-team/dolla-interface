@@ -23,11 +23,8 @@ export default function useNfts() {
   useEffect(() => {
     setChains(mock);
     setChain(mock[0]);
-    setCollections(mock[0].children);
-    setCollection(mock[0].children[0]);
-    setNfts(mock[0].children[0].children);
 
-    // fetchCollections();
+    fetchCollections();
   }, []);
 
   const onSelectCollection = (collection: any) => {

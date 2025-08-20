@@ -91,7 +91,7 @@ export default function usePlayerHistory() {
     setLoading(true);
     try {
       const response = await axiosInstance.get(
-        `/api/v1/user/player/history?limit=${pageSize}&offset=${
+        `/api/v1/user/player/history?limit=${pageSize}&chain=Berachain&offset=${
           (_page - 1) * pageSize
         }`
       );

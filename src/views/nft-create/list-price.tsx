@@ -63,7 +63,7 @@ export default function ListPrice({
         people to place bid. *1 Bid = 1 USD
       </div>
       <div className="flex flex-row-reverse gap-[16px] pt-[16px]">
-        <div className="flex flex-col gap-[10px] w-[356px]">
+        <div className="flex flex-col gap-[10px] w-[356px] shrink-0">
           {ITEMS.map((item, index) => (
             <div
               className={clsx(
