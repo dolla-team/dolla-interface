@@ -126,13 +126,13 @@ const MarketItem = (props: any) => {
     if (!order.time) {
       _time = "-";
     } else {
-      const diff = dayjs().diff(dayjs(order.time), "hours");
+      const diff = dayjs().diff(dayjs(order.time * 1000), "hours");
       if (diff < 24) {
-        _time = dayjs(order.time).toNow(true) + " ago";
+        _time = dayjs(order.time * 1000).toNow(true) + " ago";
       } else {
-        _time = dayjs(order.time).format("hh:mm D MMM, YYYY");
+        _time = dayjs(order.time * 1000).format("hh:mm D MMM, YYYY");
       }
-      _cancelValid = dayjs().isAfter(dayjs(order.time).add(72, "hours"));
+      _cancelValid = dayjs().isAfter(dayjs(order.time * 1000).add(72, "hours"));
     }
 
     return [_time, _cancelValid];
