@@ -3,7 +3,8 @@ import NftCard from "@/components/nft-card";
 import { useNftContext } from "@/views/nft/context";
 
 export default function Carousel() {
-  const { carouselRef } = useNftContext();
+  const { carouselRef, pool } = useNftContext();
+
   return (
     <CarouselCoverflow
       className="w-full"
@@ -13,25 +14,7 @@ export default function Carousel() {
         key: index,
         content:
           index === 0 ? (
-            <NftCard
-              data={{
-                id: 1,
-                rare: 0, // basic
-                reward_token_info: [
-                  {
-                    icon: "/public/nfts/steady-teddys/1018.webp",
-                    name: "Steady Teddy",
-                    token_id: "1018"
-                  }
-                ],
-                reward_token_price: {
-                  last_price: 1250.5
-                },
-                participants: 156,
-                accumulative_bids: 2340
-              }}
-              className="w-full h-full"
-            />
+            <NftCard data={pool} className="w-full h-full" />
           ) : (
             <div className="w-full h-full flex flex-col rounded-[12px] bg-[#704CFF] p-[10px] bg-[url('/nft/default-bg.png')] bg-cover bg-center">
               <img

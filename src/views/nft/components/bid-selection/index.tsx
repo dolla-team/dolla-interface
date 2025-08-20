@@ -29,24 +29,32 @@ export default function BidSelection({ tokenBalance }: any) {
     if (Number(tokenBalance) < bids) {
       return true;
     }
-    if (flipStatus === 0 || flipStatus === 6) {
+    if (flipStatus === 0) {
       return false;
     }
+
     return true;
   }, [flipStatus, userInfo, tokenBalance, bids, pool]);
 
   const { onDraw } = useDraw(
     (isWinner: boolean) => {
-      console.log("bid success");
       setFlipStatus(2);
+
+      carouselRef.current.handleRotate("rotate", {
+        target: isWinner ? 0 : Math.floor(Math.random() * 17) + 1
+      });
       setTimeout(() => {
         setBidResult({ isWinner });
+        if (!isWinner) {
+          setFlipStatus(0);
+        }
       }, 3000);
     },
     () => {
       console.log("bid fail");
       setTimeout(() => {
         setFlipStatus(0);
+        carouselRef.current.handleRotate("pause");
       }, 30);
     }
   );
@@ -57,21 +65,13 @@ export default function BidSelection({ tokenBalance }: any) {
   };
 
   const onBidClick = () => {
-    if (flipStatus === 0) {
-      carouselRef.current.handleRotate("play");
-      setFlipStatus(1);
-      return;
-    }
-    carouselRef.current.handleRotate("rotate", { target: 0 });
-    setTimeout(() => {
-      setBidResult({ isWinner: true });
-    }, 3000);
-    return;
     if (disabled) {
       return;
     }
 
     setBidResult(null);
+    carouselRef.current.handleRotate("play");
+
     setFlipStatus(1);
     onDraw(pool?.pool_id, bids);
   };

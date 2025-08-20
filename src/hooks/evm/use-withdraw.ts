@@ -9,7 +9,7 @@ import useGelatonetwork from "./use-gelatonetwork";
 
 export default function useWithdraw(onSuccess: () => void) {
   const [withdrawing, setWithdrawing] = useState(false);
-  const { wallet } = useAuth();
+  const { wallet, updateQuoteTokenBalance } = useAuth();
   const toast = useToast();
   const { executeTransaction } = useGelatonetwork();
   const onWithdraw = async ({
@@ -48,6 +48,9 @@ export default function useWithdraw(onSuccess: () => void) {
           } else {
             onSuccess?.();
             toast.success({ title: "Withdraw success" });
+            if (type === "coin") {
+              updateQuoteTokenBalance();
+            }
           }
           reportHash({
             hash: receipt.transactionHash,

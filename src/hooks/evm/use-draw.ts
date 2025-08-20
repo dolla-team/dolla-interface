@@ -4,6 +4,7 @@ import { ethers } from "ethers";
 import useBettingContract from "./use-betting-contract";
 import reportHash from "@/utils/report-hash";
 import useGelatonetwork from "./use-gelatonetwork";
+import { useAuth } from "@/contexts/auth/privy";
 
 export default function useDraw(
   onSuccess: (isWinner: boolean) => void,
@@ -13,6 +14,7 @@ export default function useDraw(
   const toast = useToast();
   const BettingContract = useBettingContract();
   const { executeTransaction } = useGelatonetwork();
+  const { updateQuoteTokenBalance } = useAuth();
 
   const onDraw = async (poolId: number, times: number) => {
     if (poolId === -1 || !BettingContract) {
@@ -63,6 +65,7 @@ export default function useDraw(
                   : "Draw success"
             });
             setDrawing(false);
+            updateQuoteTokenBalance();
           } else {
             toast.fail({ title: "Bid failed" });
           }

@@ -25,7 +25,7 @@ export default function Item({ data }: any) {
           bid {data.times}
         </div>
         <div className="text-[14px] font-bold">
-          {dayjs(data.time).fromNow()}
+          {dayjs(data.time * 1000).fromNow()}
         </div>
       </div>
     </div>
