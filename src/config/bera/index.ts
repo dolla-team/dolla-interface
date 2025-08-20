@@ -7,10 +7,12 @@ const config: Record<string, any> = {
       icon: "/currency/usdc.png",
       name: "USDC.e",
       symbol: "USDC.e"
-    }
+    },
+    host_api: "https://test-api.dolla.market"
   },
   mainnet: {
-    bettingContractAddress: ""
+    bettingContractAddress: "",
+    host_api: "https://stg-api.dolla.market"
   }
 };
 
