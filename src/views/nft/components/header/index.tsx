@@ -1,17 +1,20 @@
 import clsx from "clsx";
 import { useNftContext } from "../../context";
 import { formatNumber } from "@/utils/format/number";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import Big from "big.js";
 import Btn from "./btn";
 import Avatar from "@/components/avatar";
 import SellerLevel from "@/components/seller-level";
 import { formatAddress } from "@/utils/format/address";
 import SellerBg from "./seller-bg";
+import { data, useNavigate } from "react-router-dom";
+import ProvablyFair from "@/sections/provably-fair";
 
 export default function Header({ className }: { className?: string }) {
   const { bids, pool } = useNftContext();
-
+  const [openProvablyFair, setOpenProvablyFair] = useState(false);
+  const navigate = useNavigate();
   const [amount, rewardTokenInfo] = useMemo(() => {
     if (!pool) return ["0", {}];
     const reward_amount = pool.reward_amount || 0;
@@ -24,10 +27,21 @@ export default function Header({ className }: { className?: string }) {
   return (
     <div className={clsx("w-full relative", className)}>
       <div className="absolute left-[50%] translate-x-[-50%] top-[-2px] w-[506px] h-[112px] bg-[url('/nft/header-bg.png')] bg-cover bg-center">
-        <Btn className="absolute left-[-166px]" onClick={() => {}}>
+        <Btn
+          className="absolute left-[-166px]"
+          onClick={() => {
+            navigate(`/nft-list`);
+          }}
+        >
           More Market
         </Btn>
-        <Btn className="absolute right-[-166px]" isBgReserve onClick={() => {}}>
+        <Btn
+          className="absolute right-[-166px]"
+          isBgReserve
+          onClick={() => {
+            setOpenProvablyFair(true);
+          }}
+        >
           Provably fair
         </Btn>
         <div className="absolute w-full text-center top-[50%] translate-y-[-50%]">
@@ -83,6 +97,14 @@ export default function Header({ className }: { className?: string }) {
           </div>
         </div>
       </div>
+      <ProvablyFair
+        pool={pool}
+        open={openProvablyFair}
+        onClose={() => {
+          setOpenProvablyFair(false);
+        }}
+        defaultTab="provably-fair"
+      />
     </div>
   );
 }

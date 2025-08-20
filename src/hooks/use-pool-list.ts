@@ -2,16 +2,21 @@ import { useEffect, useRef, useState } from "react";
 import axiosInstance from "@/libs/axios";
 import { HOST_API } from "@/config";
 import { useAuth } from "@/contexts/auth";
-import { BASE_TOKEN } from "@/config/btc";
 
-export default function usePoolList(props?: { 
-  pageLimit?: number; 
-  isScrollList?: boolean; 
+export default function usePoolList(props?: {
+  pageLimit?: number;
+  isScrollList?: boolean;
   chain?: string;
   tokenStatus?: number;
-  onFirstPageLoad?(list: any): void; 
+  onFirstPageLoad?(list: any): void;
 }) {
-  const { pageLimit, isScrollList, onFirstPageLoad, chain = BASE_TOKEN.chain, tokenStatus = 0 } = props ?? {};
+  const {
+    pageLimit,
+    isScrollList,
+    onFirstPageLoad,
+    chain = "Berachain",
+    tokenStatus = 0
+  } = props ?? {};
 
   const [poolList, setPoolList] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
@@ -21,7 +26,10 @@ export default function usePoolList(props?: {
   const [hasMore, setHasMore] = useState(true);
   const pageRef = useRef(0);
   const { userInfo } = useAuth();
-  const LIMIT = typeof pageLimit === "number" ? pageLimit : Math.floor(window.innerWidth / 300);
+  const LIMIT =
+    typeof pageLimit === "number"
+      ? pageLimit
+      : Math.floor(window.innerWidth / 300);
 
   const cachedList = useRef<any[]>([]);
 
@@ -51,10 +59,11 @@ export default function usePoolList(props?: {
     try {
       setLoading(true);
       const res = await axiosInstance.get(
-        `${HOST_API}/api/v1/pool/list?limit=${LIMIT}&offset=${pageRef.current * LIMIT
-        }&sort_field=${sortField}&sort_order=${sortOrder}&status=1&token_status=0&chain=${chain || BASE_TOKEN.chain
-        }&token_status={tokenStatus}&token=${BASE_TOKEN.address}${volume > 0 ? "&volume=" + volume * 10 ** BASE_TOKEN.decimals : ""
-        }`
+        `${HOST_API}/api/v1/pool/list?limit=${LIMIT}&offset=${
+          pageRef.current * LIMIT
+        }&sort_field=${sortField}&sort_order=${sortOrder}&status=1&token_status=0&chain=${
+          chain || "Berachain"
+        }&token_status=${tokenStatus}`
       );
 
       if (isScrollList) {

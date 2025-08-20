@@ -26,7 +26,7 @@ export default function useProvably({ currentPool }: { currentPool: any }) {
       setLoading(true);
       const queryString = new URLSearchParams(query).toString();
       const provablyData = await axiosInstance.get(
-        `/api/v1/pool/ended_market?${queryString}&chain=Berachain`
+        `/api/v1/pool/ended_market?${queryString}&chain=${currentPool.chain}`
       );
 
       if (provablyData.data?.data?.list?.length > 0) {
@@ -112,7 +112,7 @@ export default function useProvably({ currentPool }: { currentPool: any }) {
     setRecordLoading(true);
     try {
       const response = await axiosInstance.get(
-        `/api/v1/user/player/history?chain=${currentPool.chain}&pool_id=${
+        `/api/v1/user/player/history?chain=Berachain&pool_id=${
           currentPool.id
         }&limit=${LIMIT}&offset=${(_page - 1) * LIMIT}`
       );

@@ -58,7 +58,7 @@ export default function useCreatePoolList() {
       if (!userInfo?.user) return [];
       try {
         const response = await axiosInstance.get(
-          `/api/v1/user/records/seller?limit=${recordsPageSize}&offset=${
+          `/api/v1/user/records/seller?limit=${recordsPageSize}&chain=Berachain&offset=${
             (recordsPageIndex - 1) * pageSize
           }`
         );

@@ -7,7 +7,10 @@ import useTokenPrice from "./use-token-price";
 
 const LIMIT = 20;
 
-export default function useUserRecords(props?: { isSinglePage?: boolean; pageLimit?: number; }) {
+export default function useUserRecords(props?: {
+  isSinglePage?: boolean;
+  pageLimit?: number;
+}) {
   const { isSinglePage, pageLimit = LIMIT } = props ?? {};
 
   const [records, setRecords] = useState<any[]>([]);
@@ -20,7 +23,9 @@ export default function useUserRecords(props?: { isSinglePage?: boolean; pageLim
     try {
       setLoading(true);
       const res = await axiosInstance.get(
-        `/api/v1/user/records?limit=${pageLimit}&offset=${pageRef.current * pageLimit}`
+        `/api/v1/user/records?limit=${pageLimit}&offset=${
+          pageRef.current * pageLimit
+        }&chain=Berachain`
       );
 
       setRecords((prev) =>
@@ -47,31 +52,39 @@ export default function useUserRecords(props?: { isSinglePage?: boolean; pageLim
 
   const [hasNextPage, setHasNextPage] = useState(true);
   const [userRecordsPageIndex, setUserRecordsPageIndex] = useState(1);
-  const { data: userRecords, loading: userRecordsLoading } = useRequest(async () => {
-    if (!userInfo?.user || !isSinglePage) {
-      setUserRecordsPageIndex(1);
-      return [];
-    }
-    try {
-      const res = await axiosInstance.get(
-        `/api/v1/user/records?limit=${pageLimit}&offset=${(userRecordsPageIndex - 1) * pageLimit}`
-      );
+  const { data: userRecords, loading: userRecordsLoading } = useRequest(
+    async () => {
+      if (!userInfo?.user || !isSinglePage) {
+        setUserRecordsPageIndex(1);
+        return [];
+      }
+      try {
+        const res = await axiosInstance.get(
+          `/api/v1/user/records?limit=${pageLimit}&offset=${
+            (userRecordsPageIndex - 1) * pageLimit
+          }&chain=Berachain`
+        );
 
-      setHasNextPage(res.data.data.has_next_page);
-      const _list = res.data.data.list || [];
-      return _list.map((item: any) => {
-        item.typeName = UserRecordsTypeMap[item.type as EUserRecordsType]?.label;
-        item.amountBig = Big(item.amount || 0).div(10 ** (item.token_info?.decimals || 6));
-        item.priceKey = `${item.token_info?.chain}:${item.token_info?.address}`;
-        return item;
-      });
-    } catch (err) {
-      console.error("Failed to fetch user records:", err);
+        setHasNextPage(res.data.data.has_next_page);
+        const _list = res.data.data.list || [];
+        return _list.map((item: any) => {
+          item.typeName =
+            UserRecordsTypeMap[item.type as EUserRecordsType]?.label;
+          item.amountBig = Big(item.amount || 0).div(
+            10 ** (item.token_info?.decimals || 6)
+          );
+          item.priceKey = `${item.token_info?.chain}:${item.token_info?.address}`;
+          return item;
+        });
+      } catch (err) {
+        console.error("Failed to fetch user records:", err);
+      }
+      return [];
+    },
+    {
+      refreshDeps: [userRecordsPageIndex, userInfo]
     }
-    return [];
-  }, {
-    refreshDeps: [userRecordsPageIndex, userInfo]
-  });
+  );
   const onUserRecordsPageChange = (_page: number) => {
     setUserRecordsPageIndex(_page);
   };
@@ -87,7 +100,8 @@ export default function useUserRecords(props?: { isSinglePage?: boolean; pageLim
     });
     return Array.from(_tokens.values());
   }, [userRecords]);
-  const { prices: _userRecordsPrices, loading: userRecordsPricesLoading } = useTokenPrice(userRecordsTokens);
+  const { prices: _userRecordsPrices, loading: userRecordsPricesLoading } =
+    useTokenPrice(userRecordsTokens);
   const userRecordsPrices = useMemo(() => {
     if (!_userRecordsPrices) return {};
     const _prices: any = {};
@@ -116,7 +130,7 @@ export default function useUserRecords(props?: { isSinglePage?: boolean; pageLim
     userRecordsLoading: userRecordsLoading,
     userRecordsPageIndex,
     hasNextPage,
-    onUserRecordsPageChange,
+    onUserRecordsPageChange
   };
 }
 
@@ -125,23 +139,23 @@ export enum EUserRecordsType {
   Withdraw = 2,
   Refund = 3,
   Transfer = 4,
-  LuckyDraw = 5,
-};
+  LuckyDraw = 5
+}
 
 export const UserRecordsTypeMap = {
   [EUserRecordsType.Deposit]: {
-    label: "Deposit",
+    label: "Deposit"
   },
   [EUserRecordsType.Withdraw]: {
-    label: "Withdraw",
+    label: "Withdraw"
   },
   [EUserRecordsType.Refund]: {
-    label: "Refund",
+    label: "Refund"
   },
   [EUserRecordsType.Transfer]: {
-    label: "Transfer",
+    label: "Transfer"
   },
   [EUserRecordsType.LuckyDraw]: {
-    label: "Lucky Draw",
-  },
+    label: "Lucky Draw"
+  }
 };

@@ -86,17 +86,10 @@ export default function DepositModal({
           </div>
           <div className="w-full px-[24px] py-[20px]">
             <div className="flex items-center text-[14px] mb-[14px] gap-[10px]">
-              <span className="text-[#BBACA6] font-[400]">Market Amount</span>
+              <span className="text-[#BBACA6] font-[400]">Token</span>
               <div className="grow border-b border-dashed border-[#5E6B7D] opacity-50" />
               <span className="text-white font-medium">
-                {formatNumber(
-                  Big(order?.reward_amount || 0).div(
-                    10 ** rewardTokenInfo.decimals
-                  ),
-                  2,
-                  true
-                )}{" "}
-                {rewardTokenInfo.symbol}{" "}
+                {rewardTokenInfo.name} {rewardTokenInfo.token_id}
               </span>
             </div>
             <div className="flex items-center text-[14px] mb-[14px] gap-[10px]">

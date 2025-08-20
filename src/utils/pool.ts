@@ -3,7 +3,9 @@ import Big from "big.js";
 import { QUOTE_TOKEN } from "@/config/btc";
 
 export const getPoolInfo = async (poolId: number) => {
-  const res = await axiosInstance.get(`/api/v1/pool?pool_id=${poolId}`);
+  const res = await axiosInstance.get(
+    `/api/v1/pool?pool_id=${poolId}&chain=Berachain`
+  );
   return res.data.data;
 };
 
@@ -31,23 +33,47 @@ export const getNetProfit = (pool: any) => {
   return Big(0);
 };
 
-export const getProfitFee = (pool: any, opts?: { isLog?: boolean; }) => {
+export const getProfitFee = (pool: any, opts?: { isLog?: boolean }) => {
   const { isLog = false } = opts || {};
 
   const netProfit = getNetProfit(pool);
   const reAnchorPrice = getReAnchorPrice(pool);
   const netProfitPercent = netProfit.div(reAnchorPrice);
   if (isLog) {
-    console.log("%c------ Calculate Fee Start: pool: %s ------", "background:#03A6A1;color:#fff;", pool.pool_id);
-    console.log("BTCPrice: (anchor_price(%o) / 10^decimals(%o)) / 1.2 = %o", pool.anchor_price, QUOTE_TOKEN.decimals, reAnchorPrice.toString());
-    console.log("netProfit: accumulative_bids(%o) - BTCPrice(%o) = %o", pool?.accumulative_bids, reAnchorPrice.toString(), netProfit.toString());
-    console.log("netProfitPercent: netProfit(%o) / BTCPrice(%o) = %o", netProfit.toString(), reAnchorPrice.toString(), netProfitPercent.toString());
+    console.log(
+      "%c------ Calculate Fee Start: pool: %s ------",
+      "background:#03A6A1;color:#fff;",
+      pool.pool_id
+    );
+    console.log(
+      "BTCPrice: (anchor_price(%o) / 10^decimals(%o)) / 1.2 = %o",
+      pool.anchor_price,
+      QUOTE_TOKEN.decimals,
+      reAnchorPrice.toString()
+    );
+    console.log(
+      "netProfit: accumulative_bids(%o) - BTCPrice(%o) = %o",
+      pool?.accumulative_bids,
+      reAnchorPrice.toString(),
+      netProfit.toString()
+    );
+    console.log(
+      "netProfitPercent: netProfit(%o) / BTCPrice(%o) = %o",
+      netProfit.toString(),
+      reAnchorPrice.toString(),
+      netProfitPercent.toString()
+    );
   }
 
   // net profit = accumulative_bids / anchorPrice
 
   let finalStageFee = Big(0);
-  const calcStageFee = (lowerRate: number, upperRate: number, fee: number, totalBids: number) => {
+  const calcStageFee = (
+    lowerRate: number,
+    upperRate: number,
+    fee: number,
+    totalBids: number
+  ) => {
     let isOverTotalBids = false;
     let highFee = Big(reAnchorPrice).times(upperRate);
     if (Big(highFee).gt(totalBids)) {
@@ -61,7 +87,9 @@ export const getProfitFee = (pool: any, opts?: { isLog?: boolean; }) => {
         "%s% - %s% stage fee: (%s - %s x BTCPrice(%o)) x %s%(%s) = %o",
         Big(lowerRate).minus(1).times(100).toString(),
         Big(upperRate).minus(1).times(100).toString(),
-        isOverTotalBids ? `accumulative_bids(${totalBids})` : `${upperRate} x BTCPrice(${reAnchorPrice.toString()})`,
+        isOverTotalBids
+          ? `accumulative_bids(${totalBids})`
+          : `${upperRate} x BTCPrice(${reAnchorPrice.toString()})`,
         lowerRate,
         reAnchorPrice.toString(),
         fee * 100,
@@ -77,11 +105,21 @@ export const getProfitFee = (pool: any, opts?: { isLog?: boolean; }) => {
   }
 
   if (netProfitPercent.gte(0.2)) {
-    const currentStageFee = calcStageFee(1.2, 1.35, 0.05, pool?.accumulative_bids);
+    const currentStageFee = calcStageFee(
+      1.2,
+      1.35,
+      0.05,
+      pool?.accumulative_bids
+    );
     finalStageFee = Big(finalStageFee).plus(currentStageFee);
   }
   if (netProfitPercent.gte(0.35)) {
-    const currentStageFee = calcStageFee(1.35, 1.5, 0.1, pool?.accumulative_bids);
+    const currentStageFee = calcStageFee(
+      1.35,
+      1.5,
+      0.1,
+      pool?.accumulative_bids
+    );
     finalStageFee = Big(finalStageFee).plus(currentStageFee);
   }
   if (netProfitPercent.gte(0.5)) {
@@ -90,7 +128,9 @@ export const getProfitFee = (pool: any, opts?: { isLog?: boolean; }) => {
   }
   if (netProfitPercent.gte(1)) {
     const highFee = Big(reAnchorPrice).times(2);
-    const currentStageFee = Big(Big(pool?.accumulative_bids).minus(highFee)).times(0.35);
+    const currentStageFee = Big(
+      Big(pool?.accumulative_bids).minus(highFee)
+    ).times(0.35);
     finalStageFee = Big(finalStageFee).plus(currentStageFee);
     if (isLog) {
       console.log(
@@ -104,7 +144,10 @@ export const getProfitFee = (pool: any, opts?: { isLog?: boolean; }) => {
 
   if (isLog) {
     console.log("Final fee: %o", finalStageFee.toString());
-    console.log("%c------ Calculate Fee End ------", "background:#03A6A1;color:#fff;");
+    console.log(
+      "%c------ Calculate Fee End ------",
+      "background:#03A6A1;color:#fff;"
+    );
   }
   return finalStageFee;
 };

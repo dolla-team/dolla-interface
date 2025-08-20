@@ -88,7 +88,7 @@ export default function CancelModal({
         </div>
         <div className="w-full px-[24px] py-[20px]">
           <div className="flex items-center text-[14px] mb-[20px] gap-[10px]">
-            <span className="text-[#BBACA6] font-[400]">Market</span>
+            <span className="text-[#BBACA6] font-[400]">Token</span>
             <div className="grow border-b border-dashed border-[#5E6B7D] opacity-50" />
             <span className="text-white font-medium">
               {rewardTokenInfo.name} {rewardTokenInfo.token_id}
