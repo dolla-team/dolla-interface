@@ -1,5 +1,4 @@
 import Avatar from "@/components/avatar";
-import config from "@/components/bid/config";
 import { usePoolDistributed } from "@/hooks/use-pool-distributed";
 import { useMemo } from "react";
 import useIsMobile from "@/hooks/use-is-mobile";
@@ -27,7 +26,12 @@ export default function PlayerDistribution({
           isMobile ? "px-[0px]" : "px-[18px]"
         )}
       >
-        {config.map((item) => (
+        {[
+          { value: 1, color: "#FFC42F" },
+          { value: 5, color: "#FF9B43" },
+          { value: 10, color: "#83FF52" },
+          { value: 20, color: "#7357FF" }
+        ].map((item) => (
           <Item
             data={item}
             key={item.value}
