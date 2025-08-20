@@ -111,7 +111,7 @@ export default function Withdraw() {
                 {formatNumber(tokenBalance, 0, true, { isShort: true })}
               </span>
               <img
-                src="/currency/usdc.png"
+                src="/tokens/usdc.png"
                 alt="bid-coins"
                 className="w-[20px] h-[20px] rounded-full ml-[10px] mr-[7px]"
               />

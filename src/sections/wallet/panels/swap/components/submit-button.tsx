@@ -1,26 +1,30 @@
-import Loading from '@/components/icons/loading';
-import useApprove from '@/hooks/evm/use-approve';
-import { useEffect } from 'react';
-import { useAccount } from '@/hooks/evm/use-account';
-import { signFn } from '@/libs/axios';
+import Loading from "@/components/icons/loading";
+import useApprove from "@/hooks/evm/use-approve";
+import { useEffect } from "react";
+import { useAccount } from "@/hooks/evm/use-account";
+import { signFn } from "@/libs/axios";
 
-export const BaseButton = ({ loading, loadingText, onClick, children, disabled = false }: any) => {
+export const BaseButton = ({
+  loading,
+  loadingText,
+  onClick,
+  children,
+  disabled = false
+}: any) => {
   return (
     <button
       onClick={onClick}
       disabled={disabled}
-      className='h-[60px] md:h-[46px] w-full duration-500 hover:opacity-70 active:opacity-90 disabled:opacity-30 flex items-center justify-center gap-[10px] border border-[#000000] rounded-[10px] bg-[#FFDC50] text-[18px] md:text-[16px] font-[600] mt-[16px] cursor-pointer'
+      className="h-[60px] md:h-[46px] w-full duration-500 hover:opacity-70 active:opacity-90 disabled:opacity-30 flex items-center justify-center gap-[10px] border border-[#000000] rounded-[10px] bg-[#743EFF] text-[14px] text-white md:text-[14px] font-[600] mt-[16px] cursor-pointer"
     >
       {loading ? (
         <>
           <Loading />
-          {
-            !!loadingText && (
-              <div>{loadingText}</div>
-            )
-          }
+          {!!loadingText && <div>{loadingText}</div>}
         </>
-      ) : children}
+      ) : (
+        children
+      )}
     </button>
   );
 };
@@ -83,13 +87,7 @@ export default function SubmitBtn({
   }
 
   if (checking || approving || loading) {
-    return (
-      <BaseButton
-        loading={true}
-        disabled
-        loadingText={loadingText}
-      />
-    );
+    return <BaseButton loading={true} disabled loadingText={loadingText} />;
   }
 
   if (errorTips) {
@@ -104,7 +102,7 @@ export default function SubmitBtn({
 
   return (
     <BaseButton onClick={onClick} disabled={disabled}>
-      {children ? children : 'Swap'}
+      {children ? children : "Swap"}
     </BaseButton>
   );
 }

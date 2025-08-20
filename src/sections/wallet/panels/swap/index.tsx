@@ -9,12 +9,10 @@ import SubmitBtn from "./components/submit-button";
 import { DEFAULT_CHAIN_ID } from "./config";
 import TokenSelector from "./components/token-selector";
 import chains from "@/config/chains";
+import BackIcon from "../../back-icon";
 
 export default function Swap(props?: any) {
-  const {
-    outputCurrencyReadonly = false,
-    from,
-  } = props ?? {};
+  const { outputCurrencyReadonly = false, from, onBack } = props ?? {};
 
   const {
     inputCurrency,
@@ -44,15 +42,22 @@ export default function Swap(props?: any) {
     tokens,
     account,
     addImportToken,
-    onSelectToken,
+    onSelectToken
   } = useSwap({
     ...props,
-    dapp,
+    dapp
   });
 
   return (
-    <div className="h-full w-full">
-      <div className="">
+    <div className="px-[20px] pt-[30px]">
+      <div
+        className="flex items-center gap-[18px] text-[16px] cursor-pointer button"
+        onClick={onBack}
+      >
+        <BackIcon />
+        <div className="text-white">Swap</div>
+      </div>
+      <div className="pt-[20px]">
         <TokenAmount
           type="in"
           currency={inputCurrency}

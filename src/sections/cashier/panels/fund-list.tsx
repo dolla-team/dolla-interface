@@ -9,6 +9,7 @@ import config from "@/config/bera";
 import Avatar from "@/components/avatar";
 import { formatAddress } from "@/utils/format/address";
 import useCopy from "@/hooks/use-copy";
+import BackIcon from "@/sections/wallet/back-icon";
 
 interface FundOption {
   id: string;
@@ -290,22 +291,3 @@ export default function FundList({ onBack }: { onBack: () => void }) {
     </>
   );
 }
-
-const BackIcon = () => {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="10"
-      height="18"
-      viewBox="0 0 10 18"
-      fill="none"
-    >
-      <path
-        d="M9 1L2 9L9 17"
-        stroke="white"
-        strokeWidth="2"
-        strokeLinecap="round"
-      />
-    </svg>
-  );
-};

@@ -4,7 +4,7 @@ const config: Record<string, any> = {
     purchaseToken: {
       address: "0x26591f0f2bbab1bb3cd457eE1dfd80EAE1474C6c",
       decimals: 18,
-      icon: "/currency/usdc.png",
+      icon: "/tokens/usdc.png",
       name: "USDC.e",
       symbol: "USDC.e"
     },

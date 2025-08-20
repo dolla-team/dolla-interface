@@ -1,8 +1,8 @@
 import Withdraw from "@/sections/cashier/panels/withdraw-evm";
 import Tabs from "@/components/tabs";
-import { useState } from "react";
 import WithdrawNft from "./withdraw-nft";
 import useWalletStore from "@/stores/use-wallet";
+import BackIcon from "../../back-icon";
 
 export default function WithdrawPanel({ onBack }: { onBack: () => void }) {
   const walletStore = useWalletStore();
@@ -12,20 +12,7 @@ export default function WithdrawPanel({ onBack }: { onBack: () => void }) {
         className="flex items-center gap-[18px] text-[16px] cursor-pointer button"
         onClick={onBack}
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="10"
-          height="18"
-          viewBox="0 0 10 18"
-          fill="none"
-        >
-          <path
-            d="M9 1L2 9L9 17"
-            stroke="white"
-            strokeWidth="2"
-            strokeLinecap="round"
-          />
-        </svg>
+        <BackIcon />
         <div className="text-white">Withdraw</div>
       </div>
       <Tabs

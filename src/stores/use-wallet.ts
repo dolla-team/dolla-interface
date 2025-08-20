@@ -2,7 +2,7 @@ import { create } from "zustand/index";
 
 interface WalletState {
   showWallet: boolean;
-  panelType: "info" | "deposit" | "withdraw";
+  panelType: "info" | "deposit" | "withdraw" | "swap";
   withdrawType: "token" | "nft";
   set: (params: any) => void;
 }

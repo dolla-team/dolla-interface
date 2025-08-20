@@ -44,41 +44,43 @@ export default function CurrencyRow({
   return (
     <div
       className={clsx(
-        "px-5 py-3.5 flex justify-between items-center rounded-[10px] cursor-pointer hover:bg-[rgba(151,154,190,0.1)] transition-colors",
-        isActive && "bg-[var(--dex-hover-bg-color)] pointer-events-none opacity-80"
+        "py-[10px] flex justify-between items-center rounded-[10px] cursor-pointer hover:bg-[rgba(151,154,190,0.1)] transition-colors",
+        isActive &&
+          "bg-[var(--dex-hover-bg-color)] pointer-events-none opacity-80"
       )}
       onClick={onClick}
     >
       <div className="flex items-center">
-        {
-          (!currency.icon && currency.underlyingTokens) ? (
-            <div className="flex items-center mr-[8px]">
-              {
-                currency.underlyingTokens.map((_curreny: any, _index: number) => (
-                  <LazyImage
-                    key={_index}
-                    width={26}
-                    height={26}
-                    src={_curreny.icon}
-                    fallbackSrc="/assets/tokens/default_icon.png"
-                    containerClassName={clsx("rounded-full shrink-0 overflow-hidden", _index > 0 && "ml-[-15px]")}
-                  />
-                ))
-              }
-            </div>
-          ) : (
-            <LazyImage
-              width={26}
-              height={26}
-              src={currency.icon}
-              fallbackSrc="/assets/tokens/default_icon.png"
-              containerClassName="rounded-full shrink-0 mr-[8px] overflow-hidden"
-            />
-          )
-        }
+        {!currency.icon && currency.underlyingTokens ? (
+          <div className="flex items-center mr-[8px]">
+            {currency.underlyingTokens.map((_curreny: any, _index: number) => (
+              <LazyImage
+                key={_index}
+                width={26}
+                height={26}
+                src={_curreny.icon}
+                fallbackSrc="/assets/tokens/default_icon.png"
+                containerClassName={clsx(
+                  "rounded-full shrink-0 overflow-hidden",
+                  _index > 0 && "ml-[-15px]"
+                )}
+              />
+            ))}
+          </div>
+        ) : currency.icon ? (
+          <LazyImage
+            width={26}
+            height={26}
+            src={currency.icon}
+            fallbackSrc="/assets/tokens/default_icon.png"
+            containerClassName="rounded-full shrink-0 mr-[8px] overflow-hidden"
+          />
+        ) : null}
 
         <div>
-          <div className="text-base font-semibold">{currency.symbol}</div>
+          <div className="text-base font-semibold text-[14px]">
+            {currency.symbol}
+          </div>
           <div className="text-[10px] flex items-center gap-[12px]">
             <div className="">{currency.name}</div>
             {currency.address !== "native" && (
@@ -86,9 +88,9 @@ export default function CurrencyRow({
                 <div className="">
                   {currency.address
                     ? `${currency.address.slice(
-                      0,
-                      6
-                    )}...${currency.address.slice(-4)}`
+                        0,
+                        6
+                      )}...${currency.address.slice(-4)}`
                     : ""}
                 </div>
                 <button
@@ -110,7 +112,9 @@ export default function CurrencyRow({
             <Loading />
           ) : (
             <>
-              {typeof customBalanceFormatter === "function" ? customBalanceFormatter(currency, balance) : balanceFormated(balance)}
+              {typeof customBalanceFormatter === "function"
+                ? customBalanceFormatter(currency, balance)
+                : balanceFormated(balance)}
               {isActive ? checkIcon : <div style={{ width: 16 }} />}
             </>
           )}

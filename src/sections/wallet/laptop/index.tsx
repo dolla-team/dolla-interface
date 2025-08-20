@@ -1,7 +1,7 @@
 import Info from "../panels/info";
 import Deposit from "../panels/deposit";
 import Withdraw from "../panels/withdraw";
-
+import Swap from "../panels/swap";
 import { motion, AnimatePresence } from "framer-motion";
 import useWalletStore from "@/stores/use-wallet";
 
@@ -51,6 +51,13 @@ export default function Laptop() {
             )}
             {walletStore.panelType === "withdraw" && (
               <Withdraw
+                onBack={() => {
+                  walletStore.set({ panelType: "info" });
+                }}
+              />
+            )}
+            {walletStore.panelType === "swap" && (
+              <Swap
                 onBack={() => {
                   walletStore.set({ panelType: "info" });
                 }}

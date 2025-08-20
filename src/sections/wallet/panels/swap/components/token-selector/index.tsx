@@ -31,7 +31,7 @@ export default function CurrencySelect({
   customBalanceFormatter,
   className,
   titleClassName,
-  tabClassName,
+  tabClassName
 }: any) {
   const [tab, setTab] = useState("All");
   const [searchVal, setSearchVal] = useState("");
@@ -43,7 +43,7 @@ export default function CurrencySelect({
     loading: balancesLoading,
     balances = {},
     queryBalance
-  } = useTokensBalance((showBalance && display) ? tokens : []);
+  } = useTokensBalance(showBalance && display ? tokens : []);
 
   const handleSearch = () => {
     let tokenIsAvailable = false;
@@ -59,8 +59,8 @@ export default function CurrencySelect({
         tab === "All"
         ? true
         : tab === "Imported"
-          ? token.isImport
-          : false;
+        ? token.isImport
+        : false;
     });
 
     if (
@@ -112,8 +112,18 @@ export default function CurrencySelect({
 
   return (
     <Modal open={display} onClose={handleClose}>
-      <div className={clsx("w-[520px] p-[20px] bg-[#FFFDEB] md:w-full md:rounded-t-[20px]", className)}>
-        <div className={clsx("flex items-center gap-[10px] cursor-pointer text-[20px]", titleClassName)}>
+      <div
+        className={clsx(
+          "w-[380px]  p-[20px] bg-[#1A1E24] text-white border border-[#383F47] rounded-[12px] max-w-[100vw] md:rounded-t-[12px]",
+          className
+        )}
+      >
+        <div
+          className={clsx(
+            "flex items-center gap-[10px] cursor-pointer text-[16px]",
+            titleClassName
+          )}
+        >
           <button
             type="button"
             className="w-[16px] h-[16px] rotate-90 bg-[url('/images/icon-arrow.svg')] bg-no-repeat bg-center"
@@ -122,7 +132,7 @@ export default function CurrencySelect({
           <div>Select Token</div>
         </div>
         {showSearch && (
-          <div className="h-[52px] p-[18px] gap-[10px] mt-[25px] flex items-center rounded-[8px] border border-black bg-white">
+          <div className="h-[48px] p-[10px] gap-[10px] mt-[15px] flex items-center rounded-[8px] border border-[#373737]">
             {!searchVal && (
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -152,7 +162,7 @@ export default function CurrencySelect({
             )}
             <input
               value={searchVal}
-              className="text-[16px] bg-transparent flex-1"
+              className="text-[12px] flex-1"
               placeholder="Search name or paste address"
               onChange={(ev) => {
                 setSearchVal(ev.target.value);
@@ -182,13 +192,19 @@ export default function CurrencySelect({
             )}
           </div>
         )}
-        <div className={clsx("flex items-center gap-[44px] text-[14px] px-[30px] py-[12px] border-b border-[##373A53]", tabClassName)}>
+        <div
+          className={clsx(
+            "flex items-center gap-[44px] text-[12px] px-[30px] py-[12px] border-b border-[#373737]",
+            tabClassName
+          )}
+        >
           {!!onImport &&
             TABS.map((_tab) => (
               <div
                 key={_tab}
-                className={`cursor-pointer ${_tab === tab ? "opacity-100" : "opacity-50"
-                  }`}
+                className={`cursor-pointer ${
+                  _tab === tab ? "opacity-100" : "opacity-50"
+                }`}
                 onClick={() => {
                   setTab(_tab);
                 }}
@@ -197,7 +213,7 @@ export default function CurrencySelect({
               </div>
             ))}
         </div>
-        <div className="h-[calc(60vh-120px)] overflow-x-auto">
+        <div className="h-[calc(60vh-120px)] overflow-y-auto overflow-x-hidden">
           {loading && (
             <div className="h-[100px] flex justify-center items-center">
               <Loading size={30} />
