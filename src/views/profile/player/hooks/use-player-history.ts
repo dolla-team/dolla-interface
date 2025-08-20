@@ -31,6 +31,7 @@ export default function usePlayerHistory() {
         (joinedPoolListPageIndex - 1) * joinedPoolListPageSize + ""
       );
       url.searchParams.set("pool_status", joinedPoolListStatus);
+      url.searchParams.set("chain", "Berachain");
       try {
         const response = await axiosInstance.get(
           `/api/v1/user/joined_market?${url.searchParams.toString()}`

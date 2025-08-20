@@ -3,7 +3,7 @@ import { Outlet, useNavigate } from "react-router-dom";
 import Button from "@/components/button/v2";
 import { useAuth } from "@/contexts/auth";
 import DollaEye from "@/components/dolla-eye";
-import EstGas from "@/sections/est-gas";
+// import EstGas from "@/sections/est-gas";
 import Loading from "@/components/loading";
 import useIsMobile from "@/hooks/use-is-mobile";
 import { useEffect, useState } from "react";
@@ -11,7 +11,7 @@ import Wallet from "@/sections/wallet";
 
 export default function MainLayout() {
   const { userInfo, login, ready, user } = useAuth();
-  const isMobile = useIsMobile();
+  // const isMobile = useIsMobile();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
 
@@ -44,7 +44,7 @@ export default function MainLayout() {
               navigate("/");
             }}
           />
-          {!isMobile && <EstGas />}
+          {/* {!isMobile && <EstGas />} */}
         </div>
 
         <div className="absolute right-[10px] top-[10px] z-[20] flex items-center gap-[36px]">
