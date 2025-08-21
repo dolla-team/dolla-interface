@@ -1,12 +1,12 @@
 import useIsMobile from "@/hooks/use-is-mobile";
 import clsx from "clsx";
 import ButtonV2 from "@/components/button/v2";
-import useClaimSlash from "@/hooks/solana/use-claim-slash";
+import useClaimSlash from "@/hooks/evm/use-claim-penalty";
 import { useEffect, useState } from "react";
 
 export default function Cancel({ data }: { data: any }) {
   const isMobile = useIsMobile();
-  const { claiming, onClaim } = useClaimSlash({
+  const { claiming, claim: onClaim } = useClaimSlash({
     onClaimSuccess() {
       setClaimed(true);
     }

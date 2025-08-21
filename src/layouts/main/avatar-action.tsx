@@ -8,9 +8,9 @@ import useCopy from "@/hooks/use-copy";
 import { useUser } from "@privy-io/react-auth";
 import AvatarCashier from "./avatar-cashier";
 import { useEffect, useState } from "react";
-import useClaimTestCoin from "@/hooks/solana/use-claim-test-coin";
+// import useClaimTestCoin from "@/hooks/solana/use-claim-test-coin";
 import { AnimatePresence, motion } from "framer-motion";
-import Loading from "@/components/icons/loading";
+// import Loading from "@/components/icons/loading";
 import useWalletStore from "@/stores/use-wallet";
 
 const MENU = [
@@ -105,7 +105,7 @@ export default function AvatarAction() {
   const { onCopy } = useCopy();
   const { user } = useUser();
   const [showMenu, setShowMenu] = useState(false);
-  const { claiming, claimTestCoin } = useClaimTestCoin();
+  // const { claiming, claimTestCoin } = useClaimTestCoin();
   const { set } = useWalletStore();
   useEffect(() => {
     const handleClickOutside = () => {
@@ -216,7 +216,7 @@ export default function AvatarAction() {
                     return;
                   } else if (item.key === "claim") {
                     e.stopPropagation();
-                    claimTestCoin();
+                    // claimTestCoin();
                     return;
                   }
                 }}
@@ -230,7 +230,7 @@ export default function AvatarAction() {
                     soon
                   </div>
                 )}
-                {item.key === "claim" && claiming && <Loading size={16} />}
+                {/* {item.key === "claim" && claiming && <Loading size={16} />} */}
               </div>
             ))}
           </motion.div>

@@ -3,9 +3,9 @@ import ButtonV2 from "@/components/button/v2";
 import { formatAddress } from "@/utils/format/address";
 import { formatNumber } from "@/utils/format/number";
 import Big from "big.js";
-import useClaimFunds from "@/hooks/solana/use-claim-funds";
+import useClaimFunds from "@/hooks/evm/use-claim";
 import { useMemo } from "react";
-import useClaimReward from "@/hooks/solana/use-claim-reward";
+import useClaimReward from "@/hooks/evm/use-claim-rewards";
 import { useNavigate } from "react-router-dom";
 import { getProfitFee } from "@/utils/pool";
 import GridTable from "@/components/grid-table";
@@ -19,7 +19,7 @@ import Pagination from "@/components/pagination";
 const ClaimIndex = (props: any) => {
   const { className, type } = props;
 
-  const { onQueryUserInfo, userInfo, userInfoLoading } = useAuth();
+  const { onQueryUserInfo, userInfo } = useAuth();
   const navigate = useNavigate();
   const isMobile = useIsMobile();
 
@@ -212,16 +212,10 @@ export default ClaimIndex;
 const ClaimButton = (props: any) => {
   const { onAfterSuccess, item, type } = props;
 
-  const { onClaim: onSellerClaim, claiming: sellerClaiming } = useClaimFunds({
-    onClaimSuccess: () => {
-      onAfterSuccess();
-    }
-  });
-  const { onClaim: onPlayerClaim, claiming: playerClaiming } = useClaimReward({
-    onClaimSuccess: () => {
-      onAfterSuccess();
-    }
-  });
+  const { claim: onSellerClaim, claiming: sellerClaiming } =
+    useClaimFunds(onAfterSuccess);
+  const { claim: onPlayerClaim, claiming: playerClaiming } =
+    useClaimReward(onAfterSuccess);
 
   const [onClaim, claiming] = useMemo(() => {
     const isPlayer = type === "player";
