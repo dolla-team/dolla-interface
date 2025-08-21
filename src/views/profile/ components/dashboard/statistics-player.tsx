@@ -5,9 +5,9 @@ import { useMemo, useState } from "react";
 import { formatNumber } from "@/utils/format/number";
 import Big from "big.js";
 import { useAuth } from "@/contexts/auth";
-import useTokenBalance from "@/hooks/solana/use-token-balance";
+
 import Loading from "@/components/icons/loading";
-import { QUOTE_TOKEN } from "@/config/btc";
+
 import useUserWinner from "@/hooks/use-user-winner";
 import ClaimModal from "../claim/modal";
 import useWalletStore from "@/stores/use-wallet";
@@ -15,11 +15,8 @@ import useWalletStore from "@/stores/use-wallet";
 const StatisticsPlayer = (props: any) => {
   const { className } = props;
   const walletStore = useWalletStore();
-  const { userInfo } = useAuth();
-  const { tokenBalance, isLoading } = useTokenBalance({
-    address: QUOTE_TOKEN.address,
-    decimals: QUOTE_TOKEN.decimals
-  });
+  const { userInfo, quoteTokenBalance } = useAuth();
+
   const { totalBtcAmount, loading: totalBtcLoading } = useUserWinner();
 
   const [claimModalOpen, setClaimModalOpen] = useState(false);
@@ -82,15 +79,11 @@ const StatisticsPlayer = (props: any) => {
       <div className="flex items-center justify-between gap-[10px] flex-1 max-md:flex-col max-md:w-full max-md:gap-[15px]">
         <div className="flex items-center gap-[10px] max-md:w-full max-md:justify-between max-md:pr-[30px] max-md:pl-[7px]">
           <LabelValue label="Your Balance" className="whitespace-nowrap">
-            {isLoading ? (
-              <Loading size={12} />
-            ) : (
-              formatNumber(tokenBalance, 2, true, {
-                prefix: "$",
-                isShort: true,
-                isShortUppercase: true
-              })
-            )}
+            {formatNumber(quoteTokenBalance, 2, true, {
+              prefix: "$",
+              isShort: true,
+              isShortUppercase: true
+            })}
           </LabelValue>
           <LabelValue label="Played times" className="whitespace-nowrap">
             {formatNumber(userInfo?.played, 2, true, {
