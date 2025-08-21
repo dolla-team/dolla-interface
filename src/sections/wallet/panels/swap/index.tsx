@@ -49,7 +49,7 @@ export default function Swap(props?: any) {
   });
 
   return (
-    <div className="px-[20px] pt-[30px]">
+    <div className="px-[20px] pt-[30px] text-white">
       <div
         className="flex items-center gap-[18px] text-[16px] cursor-pointer button"
         onClick={onBack}

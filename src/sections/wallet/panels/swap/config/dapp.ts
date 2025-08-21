@@ -12,7 +12,7 @@ export const dapp = {
       bera["weth"],
       bera["usdc.e"],
       bera["honey"],
-      bera["usdt0"],
+      bera["usdt0"]
     ],
     [berachain.id]: [
       bera["bera"],
@@ -20,11 +20,11 @@ export const dapp = {
       bera["weth"],
       bera["usdc.e"],
       bera["honey"],
-      bera["usdt0"],
+      bera["usdt0"]
     ]
   }
 };
 
 export const dexs: Record<string, any> = {
-  kodiak: dapp,
+  kodiak: dapp
 };

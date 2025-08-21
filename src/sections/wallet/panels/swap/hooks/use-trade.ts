@@ -1,13 +1,10 @@
 import Big from "big.js";
 import { useCallback, useRef, useState } from "react";
-import weth from "@/sdks/smart-router/config/weth";
 import useToast from "@/hooks/use-toast";
 import quoter from "@/sdks/smart-router";
 import { useAccount } from "@/hooks/evm/use-account";
 import { useSettingsStore } from "../stores/settings";
-import checkGas from "../utils/check-gas";
-import formatTrade from "../utils/format-trade";
-import getWrapOrUnwrapTx from "../utils/get-wrap-or-unwrap-tx";
+import useGelatonetwork from "@/hooks/evm/use-gelatonetwork";
 
 export default function useTrade({ chainId, template, from, onSuccess }: any) {
   const slippage: any = useSettingsStore((store: any) => store.slippage);
@@ -18,6 +15,7 @@ export default function useTrade({ chainId, template, from, onSuccess }: any) {
   const lastestCachedKey = useRef("");
   const cachedTokens = useRef<any>(null);
   const prices = {};
+  const { executeTransaction } = useGelatonetwork();
 
   const onQuoter = useCallback(
     async ({
@@ -36,58 +34,11 @@ export default function useTrade({ chainId, template, from, onSuccess }: any) {
       ) {
         return;
       }
-      const wethAddress = weth[inputCurrency.chainId];
 
-      const wrapType =
-        inputCurrency.isNative &&
-        outputCurrency.address.toLowerCase() === wethAddress.toLowerCase()
-          ? 1
-          : inputCurrency.address.toLowerCase() === wethAddress.toLowerCase() &&
-            outputCurrency.isNative
-          ? 2
-          : 0;
-
-      const amount = Big(inputCurrencyAmount)
-        .mul(10 ** inputCurrency.decimals)
-        .toFixed(0);
       lastestCachedKey.current = `${inputCurrency.address}-${outputCurrency.address}-${inputCurrencyAmount}`;
 
       try {
         setLoading(true);
-
-        const rawBalance = await provider.getBalance(account);
-        const gasPrice = await provider.getGasPrice();
-
-        if (wrapType) {
-          const signer = provider.getSigner(account);
-          const { txn, gasLimit } = await getWrapOrUnwrapTx({
-            signer,
-            wethAddress,
-            type: wrapType,
-            amount
-          });
-
-          const { isGasEnough, gas } = checkGas({
-            rawBalance,
-            gasPrice,
-            gasLimit
-          });
-
-          setTrade({
-            inputCurrency,
-            inputCurrencyAmount,
-            outputCurrency,
-            outputCurrencyAmount: inputCurrencyAmount,
-            noPair: false,
-            txn,
-            routerAddress: wethAddress,
-            gas,
-            isGasEnough
-          });
-          setLoading(false);
-
-          return;
-        }
 
         const params: any = {
           inputCurrency,
@@ -108,47 +59,70 @@ export default function useTrade({ chainId, template, from, onSuccess }: any) {
         if (!data) {
           throw new Error("No Data.");
         }
-        setLoading(false);
+
         if (
           `${inputCurrency.address}-${outputCurrency.address}-${inputCurrencyAmount}` !==
           lastestCachedKey.current
-        )
-          return;
-        if (typeof template === "string") {
-          const _trade = {
-            ...formatTrade({
-              market: { ...data, template },
-              rawBalance,
-              gasPrice,
-              prices,
-              inputCurrency,
-              outputCurrency,
-              inputCurrencyAmount
-            })
-          };
-
-          setTrade(_trade);
+        ) {
+          setLoading(false);
           return;
         }
 
-        const _markets = data
-          .filter((item: any) => Big(item.outputCurrencyAmount || 0).gt(0))
-          .sort(
-            (a: any, b: any) => b.outputCurrencyAmount - a.outputCurrencyAmount
-          )
-          .map((item: any) => {
-            return formatTrade({
-              market: item,
-              rawBalance,
-              gasPrice,
-              prices,
-              inputCurrency,
-              outputCurrency,
-              inputCurrencyAmount
-            });
-          });
-        setTrade(_markets[0]);
-        console.log("trade from", _markets[0].name);
+        const response = await fetch(
+          `https://backend.kodiak.finance/quote?protocols=v2%2Cv3%2Cmixed&tokenInAddress=${
+            inputCurrency.isNative ? "BERA" : inputCurrency.address
+          }&tokenInChainId=80094&tokenOutAddress=${
+            outputCurrency.address
+          }&tokenOutChainId=80094&amount=${Big(inputCurrencyAmount)
+            .mul(10 ** inputCurrency.decimals)
+            .toString()}&type=exactIn&recipient=${account}&slippageTolerance=1`
+        );
+        const result = await response.json();
+
+        let priceImpact = Big(result.priceImpact).mul(100);
+        let priceImpactType = 0;
+
+        if (Big(priceImpact).gt(100)) {
+          priceImpact = Big(100);
+        }
+        if (
+          Big(priceImpact || 0)
+            .abs()
+            .gt(1)
+        ) {
+          priceImpactType = 1;
+        }
+        if (
+          Big(priceImpact || 0)
+            .abs()
+            .gt(2)
+        ) {
+          priceImpactType = 2;
+        }
+
+        const gasUsd = Big(Number(result.gasUseEstimateUSD)).toFixed(18);
+
+        const trade = {
+          inputCurrency,
+          outputCurrency,
+          inputCurrencyAmount,
+          name: "Kodiak",
+          txn: {
+            ...result.methodParameters,
+            value: Number(result.methodParameters.value)
+          },
+          routerAddress: result.methodParameters.to,
+          noPair: false,
+          outputCurrencyAmount: result.quoteDecimals,
+          routerStr: `${inputCurrency.symbol} -> ${outputCurrency.symbol}`,
+          isGasEnough: true,
+          priceImpact: priceImpact.toFixed(2),
+          priceImpactType,
+          gasUsd: gasUsd
+        };
+
+        setTrade(trade);
+        setLoading(false);
       } catch (err) {
         console.log(err);
         setTrade(null);
@@ -160,35 +134,42 @@ export default function useTrade({ chainId, template, from, onSuccess }: any) {
 
   const onSwap = useCallback(async () => {
     if (!provider) return;
-    const signer = provider.getSigner(account);
-    const wethAddress = weth[trade.inputCurrency.chainId];
+
     setLoading(true);
     let toastId = toast.loading({ title: "Confirming..." });
     try {
-      const tx = await signer.sendTransaction(trade.txn);
-      toast.dismiss(toastId);
-      toastId = toast.loading({ title: "Pending...", tx: tx.hash, chainId });
-      const { status, transactionHash } = await tx.wait();
-      setLoading(false);
-      toast.dismiss(toastId);
-
-      if (status === 1) {
-        toast.success({
-          title: `Swap Successful!`,
-          tx: transactionHash,
-          chainId
-        });
-        onSuccess?.({
-          inputCurrency: trade.inputCurrency,
-          outputCurrency: trade.outputCurrency,
-          inputCurrencyAmount: trade.inputCurrencyAmount,
-          outputCurrencyAmount: trade.outputCurrencyAmount,
-          transactionHash: transactionHash,
-          tradeFrom: trade.name
-        });
-      } else {
-        toast.fail({ title: `Swap failed!` });
-      }
+      executeTransaction({
+        calls: [trade.txn],
+        onSuccess: (receipt: any) => {
+          const { status, transactionHash } = receipt;
+          toast.dismiss(toastId);
+          setLoading(false);
+          if (status === 1) {
+            toast.success({
+              title: `Swap Successful!`,
+              tx: transactionHash,
+              chainId
+            });
+            onSuccess?.({
+              inputCurrency: trade.inputCurrency,
+              outputCurrency: trade.outputCurrency,
+              inputCurrencyAmount: trade.inputCurrencyAmount,
+              outputCurrencyAmount: trade.outputCurrencyAmount,
+              transactionHash: transactionHash,
+              tradeFrom: trade.name
+            });
+          } else {
+            toast.fail({ title: `Swap failed!` });
+          }
+        },
+        onError: () => {
+          setLoading(false);
+          toast.dismiss(toastId);
+          toast.fail({
+            title: "Swap failed!"
+          });
+        }
+      });
       // addAction({
       //   type: "Swap",
       //   inputCurrencyAmount: trade.inputCurrencyAmount,

@@ -282,8 +282,7 @@ export class V2 {
 
       for (let i = 0, len = path.length; i < len; i++) {
         const pair = path[i];
-        let _inputAmount =
-          i === 0 ? Big(inputAmount) : path[i - 1].amountOut;
+        let _inputAmount = i === 0 ? Big(inputAmount) : path[i - 1].amountOut;
         pair.amountOut = this.getAmountOut({ pair, inputAmount: _inputAmount });
 
         if (
@@ -446,7 +445,7 @@ export class V2 {
         : inputAmount;
 
       return reserveB
-        .multipliedBy(_inputAmountWithFee)
+        ?.times(_inputAmountWithFee)
         .div(reserveA.plus(_inputAmountWithFee));
     }
   }
