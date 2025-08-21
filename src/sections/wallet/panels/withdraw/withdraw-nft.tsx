@@ -29,10 +29,10 @@ export default function WithdrawSolana() {
           <div className="flex gap-[15px] min-h-[110px]">
             {nftsStore.nfts.map((item: any) => (
               <Item
-                data={item}
-                key={item.token_id}
+                data={item.token}
+                key={item.token.tokenId}
                 onClick={() => setSelectedItem(item)}
-                active={selectedItem?.token_id === item.token_id}
+                active={selectedItem?.token.tokenId === item.token.tokenId}
               />
             ))}
           </div>
@@ -65,9 +65,9 @@ export default function WithdrawSolana() {
             onWithdraw({
               type: "nft",
               amount: 1,
-              address: selectedItem.address,
+              address: selectedItem.token.contract,
               receiveAddress,
-              tokenId: selectedItem.token_id
+              tokenId: selectedItem.token.tokenId
             });
           }}
         >
