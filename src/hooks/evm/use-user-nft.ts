@@ -14,7 +14,8 @@ export default function useUserNft(userInfo: any) {
           userInfo?.user
         }`
       );
-      nftsStore.set({ nfts: res.data.data });
+
+      nftsStore.set({ nfts: res.data.data.tokens });
     } catch (err) {
     } finally {
       setLoading(false);

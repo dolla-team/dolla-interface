@@ -3,6 +3,9 @@ import Empty from "./empty";
 import Button from "@/components/button/v2";
 import { useNavigate } from "react-router-dom";
 import useNftsStore from "@/stores/use-nfts";
+import useTokenPrice from "@/hooks/use-token-price";
+import { useMemo } from "react";
+import { formatNumber } from "@/utils/format/number";
 
 export default function Nfts({
   onDeposit,
@@ -12,28 +15,43 @@ export default function Nfts({
   onSend?: () => void;
 }) {
   const nftsStore = useNftsStore();
+  const tokens = useMemo(() => {
+    return nftsStore.nfts.map((item: any) => ({
+      chain: "Berachain",
+      address: item.token.contract,
+      tokenIds: [item.token.tokenId]
+    }));
+  }, [nftsStore.nfts]);
+  const { prices } = useTokenPrice(tokens);
 
   return nftsStore.nfts.length === 0 ? (
     <Empty onDeposit={onDeposit} text="No NFTs found" />
   ) : (
     <div className="flex gap-[20px] flex-wrap">
-      {nftsStore.nfts.map((item: any) => (
-        <Item data={item} key={item.id} onSend={onSend} />
+      {nftsStore.nfts.map((item: any, index: number) => (
+        <Item
+          data={item.token}
+          key={item.id}
+          onSend={onSend}
+          price={prices[index]}
+        />
       ))}
     </div>
   );
 }
 
 export const Item = ({
-  data,
+  data = {},
   onClick,
   onSend,
-  active = false
+  active = false,
+  price
 }: {
   data: any;
   onClick?: () => void;
   onSend?: () => void;
   active?: boolean;
+  price?: any;
 }) => {
   const navigate = useNavigate();
   return (
@@ -80,18 +98,18 @@ export const Item = ({
         </>
       )}
       <img
-        src="/nfts/steady-teddys/1018.webp"
+        src={data.image || "/default-nft.png"}
         className={clsx(
           "relative z-[2] w-full h-[178px] object-cover rounded-[10px] border border-[#434343CC] button"
         )}
       />
       <div className="text-[12px] font-semibold text-white mt-[10px]">
-        Steady Teddy #6257
+        {data.collection.symbol} #{data.tokenId}
       </div>
       <div className="text-[12px] flex gap-[4px] items-center mt-[4px]">
         <span className="text-[#8A87AA]">Token ID</span>
-        <span className="text-white">#100</span>
-        <svg
+        <span className="text-white">#{data.tokenId}</span>
+        {/* <svg
           xmlns="http://www.w3.org/2000/svg"
           width="10"
           height="10"
@@ -99,11 +117,13 @@ export const Item = ({
           fill="none"
         >
           <path d="M1 9.5L9.5 1M9.5 1H1M9.5 1V9.5" stroke="white" />
-        </svg>
+        </svg> */}
       </div>
       <div className="text-[12px] mt-[4px]">
         <span className="text-[#8A87AA]">Valued</span>{" "}
-        <span className="text-white">$868.6</span>
+        <span className="text-white">
+          {formatNumber(price?.floor_price, 2, true, { prefix: "$" })}
+        </span>
       </div>
     </div>
   );
