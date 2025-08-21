@@ -4,29 +4,27 @@ import LabelValue from "../label-value";
 import { useMemo, useState } from "react";
 import { formatNumber } from "@/utils/format/number";
 import Big from "big.js";
-import CashierModal from "@/sections/cashier/modal";
 import { useAuth } from "@/contexts/auth";
 import useTokenBalance from "@/hooks/solana/use-token-balance";
 import Loading from "@/components/icons/loading";
 import { QUOTE_TOKEN } from "@/config/btc";
 import useUserWinner from "@/hooks/use-user-winner";
 import ClaimModal from "../claim/modal";
+import useWalletStore from "@/stores/use-wallet";
 
 const StatisticsPlayer = (props: any) => {
   const { className } = props;
-
-  const { userInfo, onQueryUserInfo } = useAuth();
+  const walletStore = useWalletStore();
+  const { userInfo } = useAuth();
   const { tokenBalance, isLoading } = useTokenBalance({
     address: QUOTE_TOKEN.address,
     decimals: QUOTE_TOKEN.decimals
   });
   const { totalBtcAmount, loading: totalBtcLoading } = useUserWinner();
 
-  const [cashierModalOpen, setCashierModalOpen] = useState(false);
   const [claimModalOpen, setClaimModalOpen] = useState(false);
-  const [cashierModalTab, setCashierModalTab] = useState("fund");
 
-  const [wonTotalUsd, claimableAmount] = useMemo(() => {
+  const [claimableAmount] = useMemo(() => {
     if (!userInfo) {
       return [Big(0), Big(0)];
     }
@@ -105,31 +103,29 @@ const StatisticsPlayer = (props: any) => {
           <ButtonV2
             className="max-md:flex-1 !text-[14px]"
             onClick={() => {
-              setCashierModalTab("fund");
-              setCashierModalOpen(true);
+              walletStore.set({
+                showWallet: true,
+                panelType: "deposit"
+              });
             }}
           >
-            Fund
+            Deposit
           </ButtonV2>
           <ButtonV2
             className="max-md:flex-1 !text-[14px]"
             type="default"
             onClick={() => {
-              setCashierModalTab("withdraw");
-              setCashierModalOpen(true);
+              walletStore.set({
+                showWallet: true,
+                panelType: "withdraw"
+              });
             }}
           >
             Withdraw
           </ButtonV2>
         </div>
       </div>
-      <CashierModal
-        open={cashierModalOpen}
-        defaultTab={cashierModalTab}
-        onClose={() => {
-          setCashierModalOpen(false);
-        }}
-      />
+
       <ClaimModal
         type="player"
         open={claimModalOpen}
