@@ -23,14 +23,7 @@ export default function useUserRecords(props?: {
     try {
       setLoading(true);
       const res = await axiosInstance.get(
-        `/api/v1
-        
-        
-        
-        
-        
-        
-        ?limit=${pageLimit}&offset=${
+        `/api/v1/user/records?limit=${pageLimit}&offset=${
           pageRef.current * pageLimit
         }&chain=Berachain`
       );
