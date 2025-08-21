@@ -100,7 +100,7 @@ const MENU = [
 ];
 
 export default function AvatarAction() {
-  const { userInfo, logout, quoteTokenBalance } = useAuth();
+  const { userInfo, logout, quoteTokenBalance, address } = useAuth();
   const navigate = useNavigate();
   const { onCopy } = useCopy();
   const { user } = useUser();
@@ -132,7 +132,7 @@ export default function AvatarAction() {
       {userInfo?.icon && (
         <Avatar
           size={32}
-          address={userInfo.user}
+          address={address}
           email={userInfo?.show_email}
           className="shrink-0 button"
           onClick={(e: any) => {

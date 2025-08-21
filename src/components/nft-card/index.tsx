@@ -11,7 +11,8 @@ export default function NftCard({
   data,
   className,
   isResult,
-  resultContent
+  resultContent,
+  onClick
 }: any) {
   const [type, rewardToken, rewardTokenPrice, process, returnMultiple] =
     useMemo(() => {
@@ -40,6 +41,7 @@ export default function NftCard({
         type === "redOg" && "border-[#2A2B27]",
         className
       )}
+      onClick={onClick}
     >
       {data?.winner_user_info && (
         <div className="w-full h-full rounded-[12px] absolute top-0 left-0 z-[10] bg-[#00000080]">

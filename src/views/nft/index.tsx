@@ -22,7 +22,7 @@ export default function NewBTC() {
 }
 
 const Content = () => {
-  const { quoteTokenBalance } = useAuth();
+  const { quoteTokenBalance } = useAuth() || {};
 
   const isMobile = useIsMobile();
   const { pool } = useNftContext();
