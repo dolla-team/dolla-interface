@@ -27,10 +27,10 @@ export default function usePoolRecommend(
   };
 
   useEffect(() => {
-    if (userInfo?.user && autoQuery) {
+    if (autoQuery) {
       getPoolRecommend();
     }
-  }, [userInfo, autoQuery]);
+  }, [autoQuery]);
 
   return {
     data,
