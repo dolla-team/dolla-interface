@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import axiosInstance from "@/libs/axios";
 import { HOST_API } from "@/config";
 import { useAuth } from "@/contexts/auth";
+import { useConfigStore } from "@/stores/use-config";
 
 export default function usePoolList(props?: {
   pageLimit?: number;
@@ -10,6 +11,7 @@ export default function usePoolList(props?: {
   tokenStatus?: number;
   onFirstPageLoad?(list: any): void;
 }) {
+  const configStore = useConfigStore();
   const {
     pageLimit,
     isScrollList,
@@ -22,7 +24,9 @@ export default function usePoolList(props?: {
   const [loading, setLoading] = useState(false);
   const [sortField, setSortField] = useState("time");
   const [sortOrder, setSortOrder] = useState("desc");
-  const [volume, setVolume] = useState(0);
+  const [collection, setCollection] = useState<any>(
+    configStore?.config?.nft_config[0]
+  );
   const [hasMore, setHasMore] = useState(true);
   const pageRef = useRef(0);
   const { userInfo } = useAuth();
@@ -61,9 +65,9 @@ export default function usePoolList(props?: {
       const res = await axiosInstance.get(
         `${HOST_API}/api/v1/pool/list?limit=${LIMIT}&offset=${
           pageRef.current * LIMIT
-        }&sort_field=${sortField}&sort_order=${sortOrder}&status=1&token_status=0&chain=${
+        }&sort_field=${sortField}&sort_order=${sortOrder}&status=1&chain=${
           chain || "Berachain"
-        }&token_status=${tokenStatus}`
+        }&token_status=${tokenStatus}&token=${collection?.address}`
       );
 
       if (isScrollList) {
@@ -101,7 +105,7 @@ export default function usePoolList(props?: {
       setPoolList([]);
       onQueryPoolList(0);
     }
-  }, [userInfo, sortOrder, sortField, volume]);
+  }, [userInfo, sortOrder, sortField]);
 
   return {
     poolList,
@@ -111,10 +115,10 @@ export default function usePoolList(props?: {
     setSortField,
     sortOrder,
     setSortOrder,
+    collection,
+    setCollection,
     hasMore,
     pageRef,
-    volume,
-    setVolume,
     LIMIT
   };
 }

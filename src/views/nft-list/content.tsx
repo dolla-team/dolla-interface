@@ -1,13 +1,13 @@
-import { useState } from "react";
 import clsx from "clsx";
 import NftCard from "@/components/nft-card";
 import usePoolList from "@/hooks/use-pool-list";
-import Loading from "@/components/loading";
 import Empty from "@/components/empty";
+import { useConfigStore } from "@/stores/use-config";
 
 const defultTabCls =
-  "cursor-pointer px-[10px] flex items-center gap-2 rounded-[8px] font-bold border border-[#383F47] bg-[##383F47] transition-all duration-300 h-[35px] text-[#FFFFFF99]";
+  "cursor-pointer px-[10px] flex items-center gap-2 rounded-[8px] text-[14px] border border-[#383F47] bg-[##383F47] transition-all duration-300 h-[35px] text-[#FFFFFF99]";
 export default function NFTListContent() {
+  const configStore = useConfigStore();
   const {
     poolList,
     loading,
@@ -15,7 +15,8 @@ export default function NFTListContent() {
     sortOrder,
     setSortField,
     setSortOrder,
-    onQueryPoolList
+    collection,
+    setCollection
   } = usePoolList({
     pageLimit: 100,
     chain: "Berachain",
@@ -24,46 +25,37 @@ export default function NFTListContent() {
 
   return (
     <div className="w-[1200px]  mx-auto py-[50px]">
-      <div className="flex justify-between items-center gap-6 mb-8">
+      <div className="flex justify-between items-center mb-8">
         <div className="flex gap-4 text-[14px]">
           {/* <button
-                        onClick={() => setSelectedCategory("all")}
-                        className={clsx(
-                            defultTabCls,
-                            'px-[40px]',
-                            selectedCategory === "all"
-                                ? "bg-[#6F37FF] text-white"
-                                : "bg-[#1A1E24]"
-                        )}
-                    >
-                        All
-                    </button>
-
-                    <button
-                        onClick={() => setSelectedCategory("steady-teddys")}
-                        className={clsx(
-                            defultTabCls,
-                            selectedCategory === "steady-teddys"
-                                ? "bg-[#6F37FF] text-white"
-                                : "bg-[#1A1E24]"
-                        )}
-                    >
-
-                        Steady Teddys
-                    </button>
-
-                    <button
-                        onClick={() => setSelectedCategory("mibera-maker")}
-                        className={clsx(
-                            defultTabCls,
-                            selectedCategory === "mibera-maker"
-                                ? "bg-[#6F37FF] text-white"
-                                : "bg-[#1A1E24] text-[#FFFFFF99]"
-                        )}
-                    >
-                        <span className="text-lg">🤖</span>
-                        Mibera Maker
-                    </button> */}
+            onClick={() => setCollection("all")}
+            className={clsx(
+              defultTabCls,
+              "px-[40px]",
+              collection === "all" ? "bg-[#6F37FF] text-white" : "bg-[#1A1E24]"
+            )}
+          >
+            All
+          </button> */}
+          {configStore.config?.nft_config.map((item: any) => {
+            return (
+              <button
+                onClick={() => setCollection(item)}
+                className={clsx(
+                  defultTabCls,
+                  collection?.id === item.id
+                    ? "bg-[#6F37FF] text-white"
+                    : "bg-[#1A1E24]"
+                )}
+              >
+                <img
+                  src={item.icon}
+                  className="w-[25px] h-[25px] rounded-full"
+                />
+                <span>{item.name}</span>
+              </button>
+            );
+          })}
         </div>
 
         <div className="flex gap-3 items-center">
@@ -126,7 +118,7 @@ export default function NFTListContent() {
       </div>
 
       {poolList.length > 0 && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 pb-[100px] overflow-auto h-[80vh]">
+        <div className="flex gap-[20px] flex-wrap pb-[100px] overflow-auto h-[80vh]">
           {poolList.map((nft: any) => {
             return <NftCard key={nft.id} data={nft} />;
           })}

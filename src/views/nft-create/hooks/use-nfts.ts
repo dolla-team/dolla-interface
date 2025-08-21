@@ -20,13 +20,6 @@ export default function useNfts() {
   const { wallet } = useAuth();
   const configStore = useConfigStore();
 
-  useEffect(() => {
-    setChains(mock);
-    setChain(mock[0]);
-
-    fetchCollections();
-  }, []);
-
   const onSelectCollection = (collection: any) => {
     setCollection(collection);
   };
@@ -123,6 +116,12 @@ export default function useNfts() {
       setLoadingNfts(false);
     }
   };
+
+  useEffect(() => {
+    setChains(mock);
+    setChain(mock[0]);
+    fetchCollections();
+  }, []);
 
   useEffect(() => {
     if (collection?.address && wallet) {
