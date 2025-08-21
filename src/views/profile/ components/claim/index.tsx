@@ -3,7 +3,7 @@ import ButtonV2 from "@/components/button/v2";
 import { formatAddress } from "@/utils/format/address";
 import { formatNumber } from "@/utils/format/number";
 import Big from "big.js";
-import useClaimFunds from "@/hooks/evm/use-claim";
+import useClaim from "@/hooks/evm/use-claim";
 import { useMemo } from "react";
 import useClaimReward from "@/hooks/evm/use-claim-rewards";
 import { useNavigate } from "react-router-dom";
@@ -212,8 +212,10 @@ export default ClaimIndex;
 const ClaimButton = (props: any) => {
   const { onAfterSuccess, item, type } = props;
 
-  const { claim: onSellerClaim, claiming: sellerClaiming } =
-    useClaimFunds(onAfterSuccess);
+  const { claim: onSellerClaim, claiming: sellerClaiming } = useClaim(
+    [item.pool_id],
+    onAfterSuccess
+  );
   const { claim: onPlayerClaim, claiming: playerClaiming } =
     useClaimReward(onAfterSuccess);
 

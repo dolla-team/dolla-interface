@@ -4,7 +4,7 @@ import ButtonV2 from "@/components/button/v2";
 import Empty from "@/components/empty";
 import MarketStatus, { EMarketStatus } from "../../ components/market-status";
 import Loading from "@/components/icons/loading";
-import useClaimSlash from "@/hooks/solana/use-claim-slash";
+import useClaimPenalty from "@/hooks/evm/use-claim-penalty";
 import { formatNumber } from "@/utils/format/number";
 import { useNavigate } from "react-router-dom";
 
@@ -51,7 +51,7 @@ export default PlayerMarkets;
 const MarketItem = (props: any) => {
   const { order, onClaimSuccess } = props;
 
-  const { claiming, onClaim } = useClaimSlash({
+  const { claiming, claim: onClaim } = useClaimPenalty({
     onClaimSuccess
   });
   const navigate = useNavigate();

@@ -14,7 +14,7 @@ import { useMemo, useState } from "react";
 import Loading from "@/components/icons/loading";
 import DepositModal from "../deposit-modal";
 import { formatNumber } from "@/utils/format/number";
-import useClaimFunds from "@/hooks/solana/use-claim-funds";
+import useClaimFunds from "@/hooks/evm/use-claim";
 import { useNavigate } from "react-router-dom";
 import { penaltyPercent } from "@/utils/pool";
 
@@ -111,11 +111,9 @@ const MarketItem = (props: any) => {
   const { order, onDeposit, onCancel, onClaimSuccess } = props;
   const [claimed, setClaimed] = useState(order.is_claim);
 
-  const { onClaim, claiming } = useClaimFunds({
-    onClaimSuccess: () => {
-      setClaimed(true);
-      onClaimSuccess();
-    }
+  const { claim: onClaim, claiming } = useClaimFunds([order.pool_id], () => {
+    setClaimed(true);
+    onClaimSuccess();
   });
   const navigate = useNavigate();
 
@@ -241,7 +239,7 @@ const MarketItem = (props: any) => {
                   className="!h-[28px] !rounded-[8px] !text-[12px]"
                   onClick={(e: any) => {
                     e.stopPropagation();
-                    onClaim(order.pool_id);
+                    onClaim();
                   }}
                   loading={claiming}
                   disabled={claiming}
