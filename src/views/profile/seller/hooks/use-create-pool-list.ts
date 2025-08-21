@@ -30,6 +30,9 @@ export default function useCreatePoolList() {
       );
       const poolIds: number[] = [];
       response.data.data.list.forEach((item: any) => {
+        if (item.status === 4) {
+          return;
+        }
         poolsData.current[item.pool_id] = item;
         poolIds.push(item.pool_id);
       });
