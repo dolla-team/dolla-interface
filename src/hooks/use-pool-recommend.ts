@@ -1,13 +1,12 @@
 import { useState, useEffect } from "react";
 import axiosInstance from "@/libs/axios";
-import { useAuth } from "@/contexts/auth";
 
 export default function usePoolRecommend(
   tokenStatus: number,
   autoQuery = true
 ) {
   const [loading, setLoading] = useState(false);
-  const { userInfo } = useAuth();
+
   const [data, setData] = useState<any>({});
 
   const getPoolRecommend = async () => {
