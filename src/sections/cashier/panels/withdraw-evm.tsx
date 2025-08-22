@@ -7,6 +7,7 @@ import { useAuth } from "@/contexts/auth";
 import useTokenBalance from "@/hooks/evm/use-token-balance";
 import useTransfer from "@/hooks/evm/use-withdraw";
 import config from "@/config/bera";
+import Big from "big.js";
 
 export default function WithdrawSolana() {
   const { tokenBalance: usdcBalance, update: updateUsdcBalance } =
@@ -115,7 +116,9 @@ export default function WithdrawSolana() {
             // onTransfer(Number(amount), receiveAddress);
             onWithdraw({
               type: "coin",
-              amount: Number(amount),
+              amount: Big(amount)
+                .times(10 ** config.purchaseToken.decimals)
+                .toFixed(0),
               address: config.purchaseToken.address,
               receiveAddress,
               tokenId: ""
