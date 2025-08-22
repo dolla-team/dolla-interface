@@ -6,6 +6,7 @@ import useTransfer from "@/hooks/evm/use-withdraw";
 import Empty from "../info/empty";
 import { Item } from "../info/nfts";
 import useNftsStore from "@/stores/use-nfts";
+import Loading from "@/components/icons/loading";
 
 export default function WithdrawSolana() {
   const [receiveAddress, setReceiveAddress] = useState("");
@@ -19,7 +20,14 @@ export default function WithdrawSolana() {
   const [selectedItem, setSelectedItem] = useState<any>(null);
 
   const { onWithdraw, withdrawing } = useTransfer(() => {
-    nftsStore.set({ refresher: nftsStore.refresher + 1 });
+    const nfts = nftsStore.nfts;
+    const index = nfts.findIndex(
+      (item: any) => item.token.tokenId === selectedItem.token.tokenId
+    );
+    nfts.splice(index, 1);
+    nftsStore.set({
+      nfts
+    });
   });
 
   useEffect(() => {
@@ -31,8 +39,12 @@ export default function WithdrawSolana() {
   return (
     <div className="pt-[20px] flex flex-col justify-between h-[calc(100vh-140px)]">
       <div>
-        {nftsStore.nfts.length > 0 ? (
-          <div className="flex gap-[15px] min-h-[110px]">
+        {nftsStore.loading ? (
+          <div className="flex justify-center items-center h-[110px]">
+            <Loading size={26} />
+          </div>
+        ) : nftsStore.nfts.length > 0 ? (
+          <div className="flex gap-[15px] min-h-[110px] flex-wrap">
             {nftsStore.nfts.map((item: any) => (
               <Item
                 data={item.token}
@@ -64,7 +76,7 @@ export default function WithdrawSolana() {
         <ButtonWithAuth
           className="mt-[10px] w-full h-[42px]"
           disabled={
-            !isAddressValid || !receiveAddress || withdrawing || selectedItem
+            !isAddressValid || !receiveAddress || withdrawing || !selectedItem
           }
           loading={withdrawing}
           onClick={() => {

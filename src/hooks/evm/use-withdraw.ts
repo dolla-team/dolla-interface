@@ -27,17 +27,21 @@ export default function useWithdraw(onSuccess: () => void) {
       }
       const provider = new ethers.providers.Web3Provider(ethereumProvider);
       const signer = provider.getSigner();
-      const Contract = new ethers.Contract(
+      const TokenContract = new ethers.Contract(
         address,
         type === "coin" ? tokenAbi : nftAbi,
         signer
       );
-      const method = type === "coin" ? "transfer" : "safeTransferFrom";
+      const method =
+        type === "coin"
+          ? "transfer"
+          : "safeTransferFrom(address,address,uint256)";
       const params =
         type === "coin"
           ? [receiveAddress, amount]
           : [wallet.address, receiveAddress, tokenId];
-      const tx = await Contract.populateTransaction[method](...params);
+
+      const tx = await TokenContract.populateTransaction[method](...params);
       executeTransaction({
         calls: [tx],
         onSuccess: (receipt: any) => {
@@ -67,6 +71,8 @@ export default function useWithdraw(onSuccess: () => void) {
       });
     } catch (err) {
       console.error(err);
+      setWithdrawing(false);
+      toast.fail({ title: "Withdraw failed" });
     }
   };
   return {

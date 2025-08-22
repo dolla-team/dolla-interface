@@ -229,7 +229,6 @@ export default function PriceChart({
     if (chartInstance.current.options.plugins?.annotation?.annotations) {
       // const annotations = chartInstance.current.options.plugins.annotation
       //   .annotations as any;
-      console.log("update", anchorPrice);
 
       // Update annotations by reassigning the entire object to trigger re-render
       chartInstance.current.options.plugins.annotation.annotations = {
