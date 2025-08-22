@@ -8,6 +8,7 @@ import useApprove from "@/hooks/evm/use-approve";
 import config from "@/config/bera";
 import { useAuth } from "@/contexts/auth";
 import ButtonV2 from "@/components/button/v2";
+import useCheckNft from "@/hooks/evm/use-check-nft";
 
 export default function DepositModal({
   open,
@@ -20,13 +21,14 @@ export default function DepositModal({
   order: any;
   onSuccess: () => void;
 }) {
-  const rewardTokenInfo = useMemo(() => {
-    return order?.reward_token_info?.[0] || {};
+  const [rewardTokenInfo] = useMemo(() => {
+    return [order?.reward_token_info?.[0] || {}];
   }, [order]);
   const { address } = useAuth();
   // const { tokenBalance, isLoading } = useTokenBalance(
   //   order?.reward_token_info?.[0]
   // );
+  const { loading, isOwner } = useCheckNft(rewardTokenInfo);
 
   const amount = useMemo(() => {
     return Big(order?.reward_amount || 0)
@@ -84,15 +86,15 @@ export default function DepositModal({
               </svg>
             </button>
           </div>
-          <div className="w-full px-[24px] py-[20px]">
-            <div className="flex items-center text-[14px] mb-[14px] gap-[10px]">
+          <div className="w-full px-[24px] py-[30px]">
+            <div className="flex items-center text-[14px] mb-[28px] gap-[10px]">
               <span className="text-[#BBACA6] font-[400]">Token</span>
               <div className="grow border-b border-dashed border-[#5E6B7D] opacity-50" />
               <span className="text-white font-medium">
                 {rewardTokenInfo.name} {rewardTokenInfo.token_id}
               </span>
             </div>
-            <div className="flex items-center text-[14px] mb-[14px] gap-[10px]">
+            <div className="flex items-center text-[14px] mb-[4px] gap-[10px]">
               <span className="text-[#BBACA6] font-[400]">Valued</span>
               <div className="grow border-b border-dashed border-[#5E6B7D] opacity-50" />
               <span className="text-white font-medium">
@@ -108,10 +110,11 @@ export default function DepositModal({
             </div> */}
           </div>
 
-          <div className="flex justify-center mt-[0px]">
+          <div className="flex justify-center w-full px-[20px]">
             <ButtonV2
-              className="w-[220px] !h-[40px] !text-[16px]"
+              className="w-full !h-[40px] !text-[16px]"
               loading={approving || checking || depositing}
+              disabled={!isOwner || loading}
               onClick={() => {
                 if (!approved) {
                   approve();
@@ -120,7 +123,11 @@ export default function DepositModal({
                 onDeposit();
               }}
             >
-              {!approved ? "Approve" : "Deposit"}
+              {!isOwner
+                ? "Insufficient Balance"
+                : !approved
+                ? "Approve"
+                : "Deposit"}
             </ButtonV2>
           </div>
         </div>
