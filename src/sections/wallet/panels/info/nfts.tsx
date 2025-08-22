@@ -4,8 +4,9 @@ import Button from "@/components/button/v2";
 import { useNavigate } from "react-router-dom";
 import useNftsStore from "@/stores/use-nfts";
 import useTokenPrice from "@/hooks/use-token-price";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { formatNumber } from "@/utils/format/number";
+import Loading from "@/components/icons/loading";
 
 export default function Nfts({
   onDeposit,
@@ -24,7 +25,17 @@ export default function Nfts({
   }, [nftsStore.nfts]);
   const { prices } = useTokenPrice(tokens);
 
-  return nftsStore.nfts.length === 0 ? (
+  useEffect(() => {
+    nftsStore.set({
+      refresher: nftsStore.refresher + 1
+    });
+  }, []);
+
+  return nftsStore.loading ? (
+    <div className="flex justify-center items-center h-full">
+      <Loading size={30} />
+    </div>
+  ) : nftsStore.nfts.length === 0 ? (
     <Empty onDeposit={onDeposit} text="No NFTs found" />
   ) : (
     <div className="flex gap-[20px] flex-wrap">
@@ -57,7 +68,7 @@ export const Item = ({
   return (
     <div className="w-[178px] relative group" onClick={onClick}>
       {!onClick && (
-        <div className="absolute top-0 left-0 w-[178px] h-[178px] rounded-[10px] bg-[#00000080] flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+        <div className="absolute top-0 left-0 z-[6] w-[178px] h-[178px] rounded-[10px] bg-[#00000080] flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
           <Button
             className="button w-[150px] h-[36px] !text-[12px]"
             onClick={() => {

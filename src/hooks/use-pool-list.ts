@@ -24,9 +24,7 @@ export default function usePoolList(props?: {
   const [loading, setLoading] = useState(false);
   const [sortField, setSortField] = useState("time");
   const [sortOrder, setSortOrder] = useState("desc");
-  const [collection, setCollection] = useState<any>(
-    configStore?.config?.nft_config[0]
-  );
+  const [collection, setCollection] = useState<any>();
   const [hasMore, setHasMore] = useState(true);
   const pageRef = useRef(0);
   const { userInfo } = useAuth();
@@ -67,7 +65,9 @@ export default function usePoolList(props?: {
           pageRef.current * LIMIT
         }&sort_field=${sortField}&sort_order=${sortOrder}&status=1&chain=${
           chain || "Berachain"
-        }&token_status=${tokenStatus}&token=${collection?.address}`
+        }&token_status=${tokenStatus}${
+          collection?.address ? "&token=" + collection.address : ""
+        }`
       );
 
       if (isScrollList) {
@@ -105,7 +105,7 @@ export default function usePoolList(props?: {
       setPoolList([]);
       onQueryPoolList(0);
     }
-  }, [userInfo, sortOrder, sortField]);
+  }, [userInfo, sortOrder, sortField, collection]);
 
   return {
     poolList,

@@ -4,6 +4,7 @@ import usePoolList from "@/hooks/use-pool-list";
 import Empty from "@/components/empty";
 import { useConfigStore } from "@/stores/use-config";
 import { useNavigate } from "react-router-dom";
+import Loading from "@/components/icons/loading";
 
 const defultTabCls =
   "cursor-pointer px-[10px] flex items-center gap-2 rounded-[8px] text-[14px] border border-[#383F47] bg-[##383F47] transition-all duration-300 h-[35px] text-[#FFFFFF99]";
@@ -29,16 +30,16 @@ export default function NFTListContent() {
     <div className="w-[1200px]  mx-auto py-[50px]">
       <div className="flex justify-between items-center mb-8">
         <div className="flex gap-4 text-[14px]">
-          {/* <button
-            onClick={() => setCollection("all")}
+          <button
+            onClick={() => setCollection(null)}
             className={clsx(
               defultTabCls,
               "px-[40px]",
-              collection === "all" ? "bg-[#6F37FF] text-white" : "bg-[#1A1E24]"
+              !collection ? "bg-[#6F37FF] text-white" : "bg-[#1A1E24]"
             )}
           >
             All
-          </button> */}
+          </button>
           {configStore.config?.nft_config.map((item: any) => {
             return (
               <button
@@ -133,7 +134,11 @@ export default function NFTListContent() {
           })}
         </div>
       )}
-
+      {loading && (
+        <div className="h-[30vh] flex justify-center items-center">
+          <Loading size={30} />
+        </div>
+      )}
       {!loading && poolList.length === 0 && (
         <Empty className="h-[30vh]">
           <div className="text-[#BBACA6] text-[14px] flex justify-center items-center">

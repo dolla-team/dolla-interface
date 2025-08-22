@@ -20,23 +20,21 @@ export default function NFTCard({
       )}
       onClick={onSelect}
     >
-      {data.icon ? (
-        <img src={data.icon} className="w-full rounded-[4px]" />
-      ) : (
-        <div
-          className={clsx(
-            "w-full h-[100px] bg-[#272727] rounded-[4px]",
-            checked ? "h-[210px]" : "h-[100px]"
-          )}
-        />
-      )}
+      <img
+        src={data.token.image || "/default-nft.png"}
+        className={clsx(
+          "w-full h-[100px] bg-[#272727] rounded-[4px]",
+          checked ? "h-[210px]" : "h-[100px]"
+        )}
+      />
+
       <div
         className={clsx(
           "flex items-center text-white font-light text-[12px] mt-[14px] overflow-hidden line-clamp-2 leading-[14px]",
           checked ? "justify-between" : "justify-center"
         )}
       >
-        <span> #{data.id}</span>
+        <span> #{data.token.tokenId}</span>
       </div>
       {/* <div className="absolute bottom-[-10px] right-[-8px]">
         {checked ? <CheckedIcon /> : <UncheckedIcon />}

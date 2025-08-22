@@ -57,10 +57,7 @@ export default function CancelModal({
       setStatus(1);
     }
 
-    // TODO: 3 days 1000 * 60 * 60 * 24 * 3
-    const _markable =
-      Date.now() - new Date(order?.created_at).getTime() >
-      1000 * 60 * 60 * 24 * 3;
+    const _markable = Date.now() - order?.time * 1000 > 1000 * 60 * 60 * 24 * 3;
     return [_penalty, _markable];
   }, [order]);
 

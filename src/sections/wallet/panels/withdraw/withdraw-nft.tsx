@@ -1,5 +1,5 @@
 import ButtonWithAuth from "@/components/button/button-with-auth";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import clsx from "clsx";
 import { useAuth } from "@/contexts/auth";
 import useTransfer from "@/hooks/evm/use-withdraw";
@@ -21,6 +21,12 @@ export default function WithdrawSolana() {
   const { onWithdraw, withdrawing } = useTransfer(() => {
     nftsStore.set({ refresher: nftsStore.refresher + 1 });
   });
+
+  useEffect(() => {
+    nftsStore.set({
+      refresher: nftsStore.refresher + 1
+    });
+  }, []);
 
   return (
     <div className="pt-[20px] flex flex-col justify-between h-[calc(100vh-140px)]">

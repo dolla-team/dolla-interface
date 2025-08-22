@@ -73,12 +73,8 @@ const Records = (props: any) => {
             )}
           >
             <div>
-              {formatNumber(record.amountBig, 3, true, {
-                isShort: true,
-                isShortUppercase: true
-              })}
+              {record.token_info?.symbol} #{record.token_info?.token_id}
             </div>
-            <div>{record.token_info?.symbol}</div>
           </div>
         );
       }

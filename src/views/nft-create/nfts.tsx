@@ -4,10 +4,11 @@ import NFTEmptyCard from "./nft-empty-card";
 import { useEffect, useState } from "react";
 
 export default function Nfts({ nfts, onSelectNft, currentNft }: any) {
-  const [currentIndex, setCurrentIndex] = useState(2);
+  const [currentIndex, setCurrentIndex] = useState(0);
   useEffect(() => {
     if (nfts[currentIndex]) onSelectNft(nfts[currentIndex]);
-  }, [currentIndex]);
+  }, [currentIndex, nfts]);
+
   return (
     <div className="w-full h-[300px] relative">
       <div className="w-full h-full overflow-hidden flex items-center">
@@ -21,9 +22,9 @@ export default function Nfts({ nfts, onSelectNft, currentNft }: any) {
         >
           {nfts.map((item: any, index: number) => (
             <NFTCard
-              key={item.id}
+              key={item.token.tokenId + item.token.contract}
               data={item}
-              checked={item.id === currentNft?.id}
+              checked={item.token.tokenId === currentNft?.id}
               onSelect={() => {
                 setCurrentIndex(index);
               }}

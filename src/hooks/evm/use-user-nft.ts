@@ -1,14 +1,13 @@
 import axiosInstance from "@/libs/axios";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import useNftsStore from "@/stores/use-nfts";
 
 export default function useUserNft(userInfo: any) {
-  const [loading, setLoading] = useState(false);
   const nftsStore = useNftsStore();
 
   const onQueryNfts = async () => {
     try {
-      setLoading(true);
+      nftsStore.set({ loading: true });
       const res = await axiosInstance.get(
         `/api/v1/user/nft?limit=${200}&sort_by=acquiredAt&sort_direction=desc&user=${
           userInfo?.user
@@ -18,18 +17,13 @@ export default function useUserNft(userInfo: any) {
       nftsStore.set({ nfts: res.data.data.tokens });
     } catch (err) {
     } finally {
-      setLoading(false);
+      nftsStore.set({ loading: false });
     }
   };
 
   useEffect(() => {
-    if (userInfo?.user) {
+    if (userInfo?.user && nftsStore.refresher) {
       onQueryNfts();
     }
-  }, [userInfo, nftsStore.refresher]);
-
-  return {
-    loading,
-    nfts: nftsStore.nfts
-  };
+  }, [nftsStore.refresher]);
 }

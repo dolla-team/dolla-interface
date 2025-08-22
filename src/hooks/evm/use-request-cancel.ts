@@ -19,11 +19,17 @@ export default function useRequestCancel({
     if (!BettingContract) {
       return;
     }
+
     try {
       setLoading(true);
       const tx = await BettingContract.populateTransaction.requestCancel(
         poolId
       );
+
+      const estimateGas = await BettingContract.estimateGas.requestCancel(
+        poolId
+      );
+      console.log("estimateGas", estimateGas.toString());
 
       executeTransaction({
         calls: [tx],
@@ -31,10 +37,10 @@ export default function useRequestCancel({
           setLoading(false);
 
           if (receipt?.status === 0) {
-            toast.fail({ title: "Lock pool failed" });
+            toast.fail({ title: "Request cancel failed" });
             return;
           } else {
-            toast.success({ title: "Lock pool success" });
+            toast.success({ title: "Request cancel success" });
             onCancelSuccess?.();
           }
 
@@ -46,13 +52,13 @@ export default function useRequestCancel({
           });
         },
         onError: () => {
-          toast.fail({ title: "Lock pool failed" });
+          toast.fail({ title: "Request cancel failed" });
           setLoading(false);
         }
       });
     } catch (error) {
-      console.error("Lock pool error:", error);
-      toast.fail({ title: "Lock pool failed" });
+      console.error("Request cancel error:", error);
+      toast.fail({ title: "Request cancel failed" });
       setLoading(false);
     }
   };

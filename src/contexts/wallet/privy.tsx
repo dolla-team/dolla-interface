@@ -39,10 +39,8 @@ export default function WalletProvider({
         appearance: {
           accentColor: "#6F37FF",
           theme: "#1a1e24",
-          showWalletLoginFirst: true,
           logo: "/logo.svg",
           walletChainType: "ethereum-and-solana",
-          walletList: ["metamask"],
           loginMessage: "Enter your email to receive a secure code"
         },
 
