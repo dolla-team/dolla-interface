@@ -33,7 +33,9 @@ export default function BidSelection({
   const [probability, probabilities] = useMemo(() => {
     if (!pool || !bids) return [0, [1, 5, 11, 30]];
     const rewardToken = pool.reward_token_info[0];
-    const price = Big(pool.anchor_price).div(10 ** rewardToken.decimals);
+    const price = Big(pool.anchor_price).div(
+      10 ** (rewardToken.decimals || 18)
+    );
 
     let _p = Big(bids).div(price).mul(100);
 
@@ -44,6 +46,7 @@ export default function BidSelection({
     } else if (_p.gt(30)) {
       _p = Big(30);
     }
+
     return [Math.max(Number(_p.toFixed(0)), 1), _items];
   }, [pool, bids]);
 

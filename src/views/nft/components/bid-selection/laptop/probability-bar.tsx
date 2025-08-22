@@ -7,29 +7,33 @@ export default function ProbabilityBar({
   probability: number;
   probabilities: number[];
 }) {
-  const [colors] = useMemo(() => {
+  const [colors, width] = useMemo(() => {
     let index = 0;
+    let diff = 0;
     probabilities.forEach((item, i) => {
       if (probability >= item) {
+        diff =
+          ((probability - item) / (probabilities[i + 1] - item)) * 425 * 0.25;
         index = i;
       }
     });
 
     if (index === 0) {
-      return [["#10FFBF", "#966DFF"]];
+      return [["#10FFBF", "#966DFF"], 425 * 0.25 + diff];
     }
     if (index === 1) {
-      return [["#F098FF", "#AB96FF"]];
+      return [["#F098FF", "#AB96FF"], 425 * 0.5 + diff];
     }
     if (index === 2) {
-      return [["#BFA6FF", "#FF7F9F"]];
+      return [["#BFA6FF", "#FF7F9F"], 425 * 0.75 + diff];
     }
     if (index === 3) {
-      return [["#FFDAAD", "#FF3B3E"]];
+      return [["#FFDAAD", "#FF3B3E"], 425];
     }
 
-    return [["#10FFBF", "#966DFF"]];
+    return [["#10FFBF", "#966DFF"], 425];
   }, [probability, probabilities]);
+
   return (
     <div className="relative w-[442px] h-[38px]">
       <Bar
@@ -42,9 +46,7 @@ export default function ProbabilityBar({
         color={colors[0]}
         borderColor={colors[1]}
         className="absolute top-[7px] left-[5px] z-[3]"
-        width={
-          425 * (probability / (probabilities[probabilities.length - 1] || 1))
-        }
+        width={width}
       />
       <svg
         xmlns="http://www.w3.org/2000/svg"

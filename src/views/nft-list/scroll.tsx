@@ -1,57 +1,41 @@
 import { motion, useAnimationControls } from "framer-motion";
 import { useEffect, useRef, useState, useCallback } from "react";
 import clsx from "clsx";
-
-interface ScrollItem {
-  address: string;
-  multiplier: string;
-  emoji: string;
-  color: string;
-}
+import axiosInstance from "@/libs/axios";
+import { formatAddress } from "@/utils/format/address";
+import Big from "big.js";
 
 interface ScrollProps {
-  items?: ScrollItem[];
   className?: string;
   speed?: number;
   height?: number;
   autoPlay?: boolean;
 }
 
-const defaultItems: ScrollItem[] = [
+const config: any[] = [
   {
-    address: "0x88...674e",
-    multiplier: "110x",
     emoji: "💰",
     color: "text-cyan-400"
   },
   {
-    address: "0x50...235b",
-    multiplier: "800x",
     emoji: "🚀",
     color: "text-pink-400"
   },
   {
-    address: "0x12...abcd",
-    multiplier: "250x",
     emoji: "🎯",
     color: "text-green-400"
   },
   {
-    address: "0x34...efgh",
-    multiplier: "500x",
     emoji: "⭐",
     color: "text-yellow-400"
   },
   {
-    address: "0x56...ijkl",
-    multiplier: "150x",
     emoji: "🎉",
     color: "text-purple-400"
   }
 ];
 
 export default function Scroll({
-  items = defaultItems,
   className = "",
   speed = 120,
   height = 40,
@@ -61,6 +45,7 @@ export default function Scroll({
   const [containerWidth, setContainerWidth] = useState(0);
   const [contentWidth, setContentWidth] = useState(0);
   const [isPaused, setIsPaused] = useState(!autoPlay);
+  const [data, setData] = useState<any[]>([]);
   const controls = useAnimationControls();
 
   useEffect(() => {
@@ -70,9 +55,9 @@ export default function Scroll({
   }, []);
 
   useEffect(() => {
-    const totalWidth = items.length * 300;
+    const totalWidth = data.length * 300;
     setContentWidth(totalWidth);
-  }, [items]);
+  }, [data]);
 
   const duration = contentWidth / speed;
 
@@ -102,71 +87,76 @@ export default function Scroll({
       }
     };
 
+    const getData = async () => {
+      const res = await axiosInstance.get(
+        "/api/v1/pool/winner/bid/recommend?chain=Berachain"
+      );
+      setData(res.data.data);
+    };
+
+    getData();
+
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   return (
-    <div
-      ref={containerRef}
-      className={clsx(
-        "relative overflow-hidden font-[DelaGothicOne] -rotate-3",
-        "shadow-[0_0_10px_rgba(168,85,247,0.3)]",
-        className
-      )}
-      style={{ height: `${height}px` }}
-    >
-      <div className="absolute top-0 left-0 right-0 h-[1px] bg-[#5537FF] " />
-
-      <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-[#5537FF] " />
-
-      <motion.div
-        className="flex items-center gap-8 px-4 whitespace-nowrap"
-        animate={controls}
-        style={{
-          width: contentWidth * 2
-        }}
+    !!data.length && (
+      <div
+        ref={containerRef}
+        className={clsx(
+          "relative overflow-hidden font-[DelaGothicOne] -rotate-3",
+          "shadow-[0_0_10px_rgba(168,85,247,0.3)]",
+          className
+        )}
+        style={{ height: `${height}px` }}
       >
-        {items.map((item, index) => (
-          <div
-            key={`first-${index}`}
-            className="flex items-center gap-3 text-white transition-transform duration-200"
-          >
-            <span
-              className="text-[20px] text-black px-2 py-1 rounded"
-              style={{ WebkitTextStroke: "1px white", color: "black" }}
-            >
-              {item.address} Won
-            </span>
-            <span
-              className={clsx("text-lg font-bold drop-shadow-lg", item.color)}
-            >
-              {item.multiplier}
-            </span>
-            <span className="text-xl drop-shadow-lg">{item.emoji}</span>
-          </div>
-        ))}
+        <div className="absolute top-0 left-0 right-0 h-[1px] bg-[#5537FF] " />
 
-        {items.map((item, index) => (
-          <div
-            key={`second-${index}`}
-            className="flex items-center gap-3 text-white transition-transform duration-200 hover:scale-105"
-          >
-            <span
-              className="text-[20px] text-black px-2 py-1 rounded"
-              style={{ WebkitTextStroke: "1px white", color: "black" }}
-            >
-              {item.address} Won
-            </span>
-            <span
-              className={clsx("text-lg font-bold drop-shadow-lg", item.color)}
-            >
-              {item.multiplier}
-            </span>
-            <span className="text-xl drop-shadow-lg">{item.emoji}</span>
-          </div>
-        ))}
-      </motion.div>
-    </div>
+        <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-[#5537FF] " />
+
+        <motion.div
+          className="flex items-center gap-8 px-4 whitespace-nowrap"
+          animate={controls}
+          style={{
+            width: contentWidth * 2
+          }}
+        >
+          {data.map((item, index) => (
+            <Item item={item} key={`first-${index}`} index={index} />
+          ))}
+          {data.map((item, index) => (
+            <Item item={item} key={`second-${index}`} index={index} />
+          ))}
+        </motion.div>
+      </div>
+    )
   );
 }
+
+const Item = ({ item }: { item: any; index: number }) => {
+  const randomIndex = Math.floor(Math.random() * config.length);
+  return (
+    <div className="flex items-center gap-3 text-white transition-transform duration-200 hover:scale-105">
+      <span
+        className="text-[20px] text-black px-2 py-1 rounded"
+        style={{ WebkitTextStroke: "1px white", color: "black" }}
+      >
+        {item.pool_info?.winner_user_email ||
+          formatAddress(item.pool_info.winner_user)}{" "}
+        Won
+      </span>
+      <span
+        className={clsx(
+          "text-lg font-bold drop-shadow-lg",
+          config[randomIndex].color
+        )}
+      >
+        {Big(item.reward_usd).toFixed(0)}x
+      </span>
+      <span className="text-xl drop-shadow-lg">
+        {config[randomIndex].emoji}
+      </span>
+    </div>
+  );
+};
