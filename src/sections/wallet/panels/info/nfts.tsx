@@ -32,8 +32,8 @@ export default function Nfts({
   }, []);
 
   return nftsStore.loading ? (
-    <div className="flex justify-center items-center h-full">
-      <Loading size={30} />
+    <div className="text-[14px] text-[#5E6B7D] w-full h-[100px] flex items-center justify-center">
+      <Loading size={20} />
     </div>
   ) : nftsStore.nfts.length === 0 ? (
     <Empty onDeposit={onDeposit} text="No NFTs found" />
