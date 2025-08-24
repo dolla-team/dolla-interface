@@ -75,7 +75,7 @@ export default function useTrade({ chainId, template, from, onSuccess }: any) {
             outputCurrency.address
           }&tokenOutChainId=80094&amount=${Big(inputCurrencyAmount)
             .mul(10 ** inputCurrency.decimals)
-            .toString()}&type=exactIn&recipient=${account}&slippageTolerance=1`
+            .toString()}&type=exactIn&recipient=${account}&slippageTolerance=1&refCode=4`
         );
         const result = await response.json();
 
