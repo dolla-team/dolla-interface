@@ -45,6 +45,12 @@ export default function useDraw(
       const tx = await BettingContract.populateTransaction[method](...params, {
         value: flipFee
       });
+
+      const estimateGas = await BettingContract.estimateGas[method](...params, {
+        value: flipFee
+      });
+      console.log("estimateGas", estimateGas);
+
       executeTransaction({
         calls: [tx],
         onSuccess: async (receipt: any) => {
