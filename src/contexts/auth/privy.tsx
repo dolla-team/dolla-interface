@@ -43,11 +43,9 @@ export const AuthProvider: React.FC<{
 
   const privyWallet = useMemo(() => {
     if (isLoggedOut) return { address: "" };
-
     if (wallets.length === 0) return { address: "" };
-    if (wallets.length === 1) return wallets[0];
     const privyItem = wallets.find((item) => item.walletClientType === "privy");
-    return privyItem;
+    return privyItem || { address: "" };
   }, [wallets, isLoggedOut]);
 
   const {
