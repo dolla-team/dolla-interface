@@ -31,24 +31,16 @@ export default function useDraw(
         setDrawing(false);
         return;
       }
-      const flipFee = await BettingContract.getFlipFee();
-      console.log("flipFee", flipFee);
-      const method = times > 1 ? "drawMultiple" : "drawOnce";
+
+      const method = "sponsoredDraw";
       const userRandomNumber = ethers.utils.hexlify(
         ethers.utils.randomBytes(32)
       );
-      const params =
-        times > 1
-          ? [poolId, times, userRandomNumber]
-          : [poolId, userRandomNumber];
+      const params = [poolId, times, userRandomNumber];
 
-      const tx = await BettingContract.populateTransaction[method](...params, {
-        value: flipFee
-      });
+      const tx = await BettingContract.populateTransaction[method](...params);
 
-      const estimateGas = await BettingContract.estimateGas[method](...params, {
-        value: flipFee
-      });
+      const estimateGas = await BettingContract.estimateGas[method](...params);
       console.log("estimateGas", estimateGas);
 
       executeTransaction({
