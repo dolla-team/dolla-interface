@@ -151,7 +151,9 @@ const MarketItem = (props: any) => {
       footer={
         <div className="w-full px-[13px] bg-black/20 py-[12px] mt-[20px] relative z-[2] text-white text-center text-[12px] font-normal leading-[100%]">
           <div className="flex justify-between items-center gap-[10px]">
-            <div className="text-[#8795A7] whitespace-nowrap">{time}</div>
+            <div className="text-[#8795A7] text-[10px] whitespace-nowrap">
+              {time}
+            </div>
             <div className="flex items-center justify-end gap-[7px]">
               {order.status === EMarketStatus.Created && (
                 <ButtonV2
