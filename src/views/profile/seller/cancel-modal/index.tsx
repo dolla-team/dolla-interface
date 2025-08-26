@@ -36,7 +36,7 @@ export default function CancelModal({
   const { loading: cancelingRevert, onRevertCancel } = useCompleteCancel({
     onCancelSuccess: () => {
       onSuccess({
-        status: 1
+        status: 3
       });
       onClose();
     }
@@ -48,17 +48,18 @@ export default function CancelModal({
     isMax: true,
     amount: String(1)
   });
-  const [penalty, markable] = useMemo(() => {
+  const [penalty, markable, completable] = useMemo(() => {
     const _penalty = Big(order?.accumulative_bids || 0)
       .times(penaltyPercent)
       .toString();
-
+    let _completable = false;
     if (order.status === 5) {
       setStatus(1);
+      _completable = Date.now() - order?.result_time * 1000 > 1000 * 60 * 10;
     }
 
     const _markable = Date.now() - order?.time * 1000 > 1000 * 60 * 60 * 24 * 3;
-    return [_penalty, _markable];
+    return [_penalty, _markable, _completable];
   }, [order]);
 
   return (
@@ -151,7 +152,7 @@ export default function CancelModal({
             <ButtonV2
               className="!h-[40px] !text-[14px]"
               loading={cancelingRevert}
-              disabled={cancelingRevert}
+              disabled={cancelingRevert || !completable}
               type="default"
               onClick={() => {
                 if (cancelingRevert) {

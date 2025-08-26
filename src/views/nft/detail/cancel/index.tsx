@@ -6,10 +6,8 @@ import { useEffect, useState } from "react";
 
 export default function Cancel({ data }: { data: any }) {
   const isMobile = useIsMobile();
-  const { claiming, claim: onClaim } = useClaimSlash({
-    onClaimSuccess() {
-      setClaimed(true);
-    }
+  const { claiming, claim: onClaim } = useClaimSlash(() => {
+    setClaimed(true);
   });
   const [claimed, setClaimed] = useState<boolean | null>(null);
   useEffect(() => {

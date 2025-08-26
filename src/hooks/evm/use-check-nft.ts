@@ -9,7 +9,6 @@ export default function useCheckNft(nft: any) {
   const { wallet } = useAuth();
 
   const checkNft = async () => {
-    console.log("nft", nft, wallet);
     if (!nft || !wallet) return;
     try {
       setLoading(true);
@@ -27,7 +26,6 @@ export default function useCheckNft(nft: any) {
   };
 
   useEffect(() => {
-    console.log("nft", nft);
     if (nft?.address && nft?.token_id) checkNft();
   }, [nft]);
 

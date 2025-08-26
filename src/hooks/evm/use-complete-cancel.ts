@@ -31,10 +31,10 @@ export default function useCompleteCancel({
           setLoading(false);
 
           if (receipt?.status === 0) {
-            toast.fail({ title: "Unlock pool failed" });
+            toast.fail({ title: "Cancel pool failed" });
             return;
           } else {
-            toast.success({ title: "Unlock pool success" });
+            toast.success({ title: "Cancel pool success" });
             onCancelSuccess?.();
           }
 
@@ -46,13 +46,13 @@ export default function useCompleteCancel({
           });
         },
         onError: () => {
-          toast.fail({ title: "Unlock pool failed" });
+          toast.fail({ title: "Cancel pool failed" });
           setLoading(false);
         }
       });
     } catch (error) {
-      console.error("Unlock pool error:", error);
-      toast.fail({ title: "Unlock pool failed" });
+      console.error("Cancel pool error:", error);
+      toast.fail({ title: "Cancel pool failed" });
       setLoading(false);
     }
   };

@@ -51,9 +51,7 @@ export default PlayerMarkets;
 const MarketItem = (props: any) => {
   const { order, onClaimSuccess } = props;
 
-  const { claiming, claim: onClaim } = useClaimPenalty({
-    onClaimSuccess
-  });
+  const { claiming, claim: onClaim } = useClaimPenalty(onClaimSuccess);
   const navigate = useNavigate();
 
   return (
