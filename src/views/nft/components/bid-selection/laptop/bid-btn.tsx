@@ -34,16 +34,18 @@ export default function BidBtn({
           if (disabled) return;
           onClick();
         }}
-        className="cursor-pointer w-full h-full rounded-full flex items-center justify-center absolute top-[50%] translate-y-[-50%] left-[50%] translate-x-[-50%]"
+        className="cursor-pointer w-full h-full rounded-full relative flex items-center justify-center absolute top-[50%] translate-y-[-50%] left-[50%] translate-x-[-50%]"
         style={{
-          background: disabled
-            ? "#514A5D"
-            : "radial-gradient(126.53% 77.78% at 50% 22.22%, #CAB5FF 0%, #6F37FF 100%)"
+          background:
+            "radial-gradient(126.53% 77.78% at 50% 22.22%, #CAB5FF 0%, #6F37FF 100%)"
         }}
       >
-        <span className="relative z-[2] text-[32px] text-white font-bold uppercase">
+        <span className="relative z-[1] text-[32px] text-white font-bold uppercase">
           Bid!
         </span>
+        {disabled && (
+          <div className="absolute z-[2] top-0 left-0 w-full h-full rounded-full bg-[#00000080]" />
+        )}
       </div>
     </div>
   );
