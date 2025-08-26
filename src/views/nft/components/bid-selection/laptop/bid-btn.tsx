@@ -36,8 +36,9 @@ export default function BidBtn({
         }}
         className="cursor-pointer w-full h-full rounded-full flex items-center justify-center absolute top-[50%] translate-y-[-50%] left-[50%] translate-x-[-50%]"
         style={{
-          background:
-            "radial-gradient(126.53% 77.78% at 50% 22.22%, #CAB5FF 0%, #6F37FF 100%)"
+          background: disabled
+            ? "#514A5D"
+            : "radial-gradient(126.53% 77.78% at 50% 22.22%, #CAB5FF 0%, #6F37FF 100%)"
         }}
       >
         <span className="relative z-[2] text-[32px] text-white font-bold uppercase">
