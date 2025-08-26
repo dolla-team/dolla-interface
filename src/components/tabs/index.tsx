@@ -45,7 +45,7 @@ export default function Tabs({
                 }
               }}
               className={clsx(
-                "absolute rounded-[3px] w-full h-[3px] bg-[#EBFF57] bottom-0",
+                "absolute rounded-[3px] w-full h-[3px] bg-[#743EFF] bottom-0",
                 cursorClassName
               )}
             />

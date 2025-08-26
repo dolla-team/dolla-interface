@@ -67,7 +67,7 @@ const StatisticsPlayer = (props: any) => {
         </ButtonV2> */}
         <ButtonV2
           className="max-md:flex-1 !text-[14px]"
-          disabled={Big(claimableAmount || 0).lte(0)}
+          // disabled={Big(claimableAmount || 0).lte(0)}
           onClick={() => {
             setClaimModalOpen(true);
           }}
