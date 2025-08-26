@@ -41,7 +41,7 @@ export default function BidSelection({ tokenBalance }: any) {
       setFlipStatus(2);
 
       carouselRef.current.handleRotate("rotate", {
-        target: isWinner ? 0 : Math.floor(Math.random() * 17) + 1
+        target: isWinner ? 0 : Math.floor(Math.random() * 13) + 1
       });
       setTimeout(() => {
         setBidResult({ isWinner });
