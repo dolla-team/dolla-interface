@@ -2,7 +2,7 @@ import Loading from "@/components/icons/loading";
 import PriceChart from "./price-chart";
 import clsx from "clsx";
 import { formatNumber } from "@/utils/format/number";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import Action from "@/views/nft-create/action";
 import Button from "@/components/button/v2";
 import useMintNft from "./hooks/use-mint-nft";
@@ -54,6 +54,11 @@ export default function ListPrice({
     token?.address,
     onSuccess
   );
+  useEffect(() => {
+    if (price) {
+      onSetListPrice(price.floor_price);
+    }
+  }, [price]);
 
   return (
     <div className="mt-[30px]">

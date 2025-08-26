@@ -14,7 +14,7 @@ export default function useDraw(
   const toast = useToast();
   const BettingContract = useBettingContract();
   const { executeTransaction } = useGelatonetwork();
-  const { updateQuoteTokenBalance } = useAuth();
+  const { updateQuoteTokenBalance, address } = useAuth();
 
   const onDraw = async (poolId: number, times: number) => {
     if (poolId === -1 || !BettingContract) {
@@ -46,27 +46,45 @@ export default function useDraw(
       executeTransaction({
         calls: [tx],
         onSuccess: async (receipt: any) => {
-          setDrawing(false);
-
           if (receipt?.status === 1) {
-            const afterPoolState = await BettingContract.getPoolState(poolId);
-            console.log("afterPoolState", afterPoolState);
-            onSuccess(
-              afterPoolState.winner !==
-                "0x0000000000000000000000000000000000000000"
-            );
+            const refundableRequests =
+              await BettingContract.getRefundableRequestsPaginated(
+                address,
+                poolId
+              );
+            const refundableRequest = refundableRequests[0]?.slice(-1)[0];
+            let isWinner = false;
+            let count = 0;
+
+            while (count < 5) {
+              try {
+                const bidResult = await BettingContract.drawRequests(
+                  poolId,
+                  refundableRequest
+                );
+                console.log("bidResult", bidResult);
+                if (bidResult.status === 1) {
+                  isWinner = bidResult.isWinner;
+                  break;
+                }
+                await new Promise((resolve) => setTimeout(resolve, 5000));
+                count++;
+              } catch (error) {
+                console.error("Error checking pool state:", error);
+                break;
+              }
+            }
+
+            onSuccess(isWinner);
             toast.success({
-              title:
-                afterPoolState.winner !==
-                "0x0000000000000000000000000000000000000000"
-                  ? "You are the winner"
-                  : "Draw success"
+              title: isWinner ? "You are the winner" : "Draw success"
             });
-            setDrawing(false);
             updateQuoteTokenBalance();
           } else {
             toast.fail({ title: "Bid failed" });
           }
+
+          setDrawing(false);
           reportHash({
             hash: receipt.transactionHash,
             block_number: receipt.blockNumber,
