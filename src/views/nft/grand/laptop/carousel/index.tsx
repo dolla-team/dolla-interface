@@ -10,6 +10,7 @@ export default function Carousel() {
       className="w-full"
       initRotate={0}
       ref={carouselRef}
+      isDrag={false}
       list={new Array(18).fill(0).map((_, index) => ({
         key: index,
         content:
