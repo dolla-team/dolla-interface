@@ -74,7 +74,7 @@ const CarouselCoverflow = (props: any, ref: any) => {
     return () => unsubscribe();
   }, [containerRotate]);
 
-  const onRotate = () => {
+  const onRotate = (speed = rotateSpeed) => {
     if (!containerRef.current) return;
     const prevRotate = containerRotate.get() || 0;
     containerAnimation.current = containerAnimate(
@@ -83,7 +83,7 @@ const CarouselCoverflow = (props: any, ref: any) => {
         rotateY: [prevRotate, -360 + prevRotate]
       },
       {
-        duration: rotateSpeed,
+        duration: speed,
         ease: "linear",
         repeat: Infinity,
         repeatType: "loop"
@@ -101,12 +101,12 @@ const CarouselCoverflow = (props: any, ref: any) => {
     containerRotate.set(newRotate);
   };
 
-  // useEffect(() => {
-  //   if (!listLength) {
-  //     return;
-  //   }
-  //   //onRotate();
-  // }, [listLength]);
+  useEffect(() => {
+    if (!listLength) {
+      return;
+    }
+    onRotate();
+  }, [listLength]);
 
   // Cleanup event listeners on unmount
   useEffect(() => {
@@ -133,7 +133,10 @@ const CarouselCoverflow = (props: any, ref: any) => {
       );
     });
 
-  const handleRotate = async (type: any, opts?: { target?: number }) => {
+  const handleRotate = async (
+    type: any,
+    opts?: { target?: number; speed?: number }
+  ) => {
     if (!containerAnimation.current && type !== "play") return;
 
     const { target } = opts ?? {};
@@ -144,7 +147,7 @@ const CarouselCoverflow = (props: any, ref: any) => {
         rotateTo(0);
         break;
       case "play":
-        onRotate();
+        onRotate(opts?.speed || rotateSpeed);
         break;
       case "pause":
         containerAnimation.current.pause();

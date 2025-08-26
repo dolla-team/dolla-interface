@@ -70,7 +70,7 @@ export default function BidSelection({ tokenBalance }: any) {
     }
 
     setBidResult(null);
-    carouselRef.current.handleRotate("play");
+    carouselRef.current.handleRotate("play", { speed: 10 });
 
     setFlipStatus(1);
     onDraw(pool?.pool_id, bids);

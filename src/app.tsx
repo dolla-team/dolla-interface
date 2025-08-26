@@ -67,7 +67,7 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Navigate to="/nft" replace />
+        element: <Navigate to="/nft-list" replace />
       },
       {
         index: true,
