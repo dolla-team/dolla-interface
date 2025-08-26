@@ -34,9 +34,9 @@ export default function CancelModal({
     }
   });
   const { loading: cancelingRevert, onRevertCancel } = useCompleteCancel({
-    onCancelSuccess: () => {
+    onCancelSuccess: (isEnded) => {
       onSuccess({
-        status: 3
+        status: isEnded ? 2 : 3
       });
       onClose();
     }

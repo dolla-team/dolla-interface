@@ -33,9 +33,6 @@ export default function Market({
 
     return (data.accumulative_bids / getAnchorPrice(data)) * 100;
   }, [data]);
-  const rewardTokenInfo = useMemo(() => {
-    return data?.reward_token_info?.[0] || {};
-  }, [data]);
 
   const isMobile = useIsMobile();
 

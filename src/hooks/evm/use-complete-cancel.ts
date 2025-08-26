@@ -9,7 +9,7 @@ import reportHash from "@/utils/report-hash";
 export default function useCompleteCancel({
   onCancelSuccess
 }: {
-  onCancelSuccess: () => void;
+  onCancelSuccess: (isEnded: boolean) => void;
 }) {
   const [loading, setLoading] = useState(false);
   const toast = useToast();
@@ -27,7 +27,7 @@ export default function useCompleteCancel({
 
       executeTransaction({
         calls: [tx],
-        onSuccess: (receipt: any) => {
+        onSuccess: async (receipt: any) => {
           setLoading(false);
 
           if (receipt?.status === 0) {
@@ -35,7 +35,11 @@ export default function useCompleteCancel({
             return;
           } else {
             toast.success({ title: "Cancel pool success" });
-            onCancelSuccess?.();
+            const poolState = await BettingContract.getPoolState(poolId);
+            const isEnded =
+              poolState.winner !== "0x0000000000000000000000000000000000000000";
+
+            onCancelSuccess?.(isEnded);
           }
 
           reportHash({
