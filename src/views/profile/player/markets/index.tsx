@@ -98,7 +98,7 @@ const MarketItem = (props: any) => {
                   </div>
                 ) : (
                   <ButtonV2
-                    className="!h-[24px] !rounded-[12px] !px-[10px]"
+                    className="!h-[24px] !rounded-[12px] !px-[10px] !text-[12px]"
                     loading={claiming}
                     disabled={claiming}
                     onClick={(e: any) => {
