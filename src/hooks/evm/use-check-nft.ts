@@ -9,24 +9,25 @@ export default function useCheckNft(nft: any) {
   const { wallet } = useAuth();
 
   const checkNft = async () => {
+    console.log("nft", nft, wallet);
     if (!nft || !wallet) return;
     try {
       setLoading(true);
       const ethereumProvider = await wallet.getEthereumProvider();
-      const contract = new ethers.Contract(
-        nft.address,
-        nftAbi,
-        ethereumProvider
-      );
+      const provider = new ethers.providers.Web3Provider(ethereumProvider);
+      const contract = new ethers.Contract(nft.address, nftAbi, provider);
       const owner = await contract.ownerOf(nft.token_id);
+
       setIsOwner(owner.toLowerCase() === wallet.address.toLowerCase());
     } catch (err) {
+      console.log("err", err);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
+    console.log("nft", nft);
     if (nft?.address && nft?.token_id) checkNft();
   }, [nft]);
 
