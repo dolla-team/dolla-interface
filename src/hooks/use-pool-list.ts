@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import axiosInstance from "@/libs/axios";
 import { HOST_API } from "@/config";
 import { useAuth } from "@/contexts/auth";
-import { useConfigStore } from "@/stores/use-config";
 
 export default function usePoolList(props?: {
   pageLimit?: number;
@@ -11,7 +10,6 @@ export default function usePoolList(props?: {
   tokenStatus?: number;
   onFirstPageLoad?(list: any): void;
 }) {
-  const configStore = useConfigStore();
   const {
     pageLimit,
     isScrollList,

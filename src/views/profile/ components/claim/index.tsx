@@ -112,15 +112,9 @@ const ClaimIndex = (props: any) => {
       render: (record: any) => {
         return (
           <>
-            {formatNumber(
-              Big(record.reward_amount || 0).div(
-                10 ** (record.reward_token_info?.[0]?.decimals || 6)
-              ),
-              4,
-              true,
-              { isShort: true, isShortUppercase: true }
-            )}{" "}
-            {record.reward_token_info?.[0]?.symbol || "BTC"}
+            {formatNumber(record.value, 4, true, {
+              prefix: "$"
+            })}{" "}
           </>
         );
       }
