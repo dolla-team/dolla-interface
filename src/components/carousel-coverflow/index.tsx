@@ -105,7 +105,8 @@ const CarouselCoverflow = (props: any, ref: any) => {
     if (!listLength) {
       return;
     }
-    onRotate();
+    // onRotate();
+    rotateTo(-360, 20);
   }, [listLength]);
 
   // Cleanup event listeners on unmount
@@ -116,7 +117,7 @@ const CarouselCoverflow = (props: any, ref: any) => {
     };
   }, []);
 
-  const rotateTo = (rotateY: number) =>
+  const rotateTo = (rotateY: number, speed = 2) =>
     new Promise((resolve) => {
       containerAnimate(
         containerRef.current,
@@ -124,7 +125,7 @@ const CarouselCoverflow = (props: any, ref: any) => {
           rotateY
         },
         {
-          duration: 2,
+          duration: speed,
           ease: "easeInOut",
           onComplete: () => {
             resolve(true);
@@ -264,15 +265,15 @@ const CarouselCoverflow = (props: any, ref: any) => {
         drag={false}
         onPointerDown={isDrag ? handlePointerDown : undefined}
       >
-        {cards.map((item: any) => (
+        {cards.map((item: any, index: number) => (
           <motion.div
             key={item.key}
-            className="absolute backface-hidden"
+            className="absolute backface-hidden duration-1000"
             style={{
               transform: `perspective(100vw) rotateY(${
                 item.angle + cardRotate
               }deg) translateZ(${radius}vw) scale(${
-                1 / (100 / (100 - radius))
+                index === cardIndex ? 0.7 : 1 / (100 / (100 - radius))
               })`,
               transformStyle: "preserve-3d"
             }}
@@ -284,7 +285,7 @@ const CarouselCoverflow = (props: any, ref: any) => {
       <img
         src="/nfts/carousel-arrow.png"
         alt=""
-        className="w-[52px] h-[69px] shrink-0 absolute z-[1] left-1/2 -translate-x-1/2 top-[-27px]"
+        className="w-[52px] h-[69px] shrink-0 absolute z-[1] left-1/2 -translate-x-1/2 top-[-56px]"
       />
     </div>
   );
