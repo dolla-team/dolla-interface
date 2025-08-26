@@ -56,7 +56,7 @@ export default function useDraw(
             let isWinner = false;
             let count = 0;
 
-            while (count < 5) {
+            while (count < 10) {
               try {
                 const bidResult = await BettingContract.drawRequests(
                   poolId,
@@ -67,7 +67,7 @@ export default function useDraw(
                   isWinner = bidResult.isWinner;
                   break;
                 }
-                await new Promise((resolve) => setTimeout(resolve, 5000));
+                await new Promise((resolve) => setTimeout(resolve, 2000));
                 count++;
               } catch (error) {
                 console.error("Error checking pool state:", error);
