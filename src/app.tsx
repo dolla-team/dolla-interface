@@ -11,7 +11,7 @@ import Temp from "./views/temp";
 // import "react-toastify/dist/ReactToastify.css";
 
 import MainLayout from "./layouts/main";
-import "./libs/howl";
+// import "./libs/howl";
 import Callback from "./views/callback";
 import DollaEyeContextProvider from "./contexts/dolla-eye";
 import NFT from "./views/nft";
@@ -93,7 +93,7 @@ const router = createBrowserRouter([
       {
         path: "portfolio/seller",
         element: <LazyProfileSeller />
-      },
+      }
       // {
       //   path: "terms-of-service",
       //   element: <LazyTerms />

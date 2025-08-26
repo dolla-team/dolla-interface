@@ -80,7 +80,6 @@ export default function BidSelection({
           <BidBtn
             disabled={disabled || flipStatus === 4}
             onClick={onBidClick}
-            bids={bids}
           />
           {userInfo && (
             <CashierEntry

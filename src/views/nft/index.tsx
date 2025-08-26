@@ -4,10 +4,11 @@ import Header from "./components/header";
 import BidSelection from "./components/bid-selection";
 import BidsInfo from "./components/bids-info";
 import Grand from "./grand";
-import Music from "./components/music";
+// import Music from "./components/music";
 import useIsMobile from "@/hooks/use-is-mobile";
 import clsx from "clsx";
 import { useAuth } from "@/contexts/auth";
+import ApproveModal from "./components/approve-modal";
 
 // import ProvablyFair from "@/sections/provably-fair";
 
@@ -40,7 +41,7 @@ const Content = () => {
       }}
     >
       {!isMobile && <Header className="h-[178px]" />}
-
+      <ApproveModal />
       <Grand tokenBalance={quoteTokenBalance} />
       <BidSelection tokenBalance={quoteTokenBalance} />
       {!isMobile && <BidsInfo />}
