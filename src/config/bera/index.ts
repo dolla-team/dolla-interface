@@ -8,7 +8,7 @@ const config: Record<string, any> = {
       name: "USDC.e",
       symbol: "USDC.e"
     },
-    host_api: "https://test-api.dolla.market"
+    host_api: "https://test-berachain-api.dolla.market"
   },
   mainnet: {
     bettingContractAddress: "",
