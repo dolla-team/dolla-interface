@@ -56,6 +56,13 @@ export default function useMintNft(
   };
 
   const checkMinted = async () => {
+    if (
+      nftAddress?.toLocaleLowerCase() ===
+      "0x2b517b73555598f0b1a0985a04c8cf76d5f54e8b"
+    ) {
+      setMinted(true);
+      return;
+    }
     try {
       const ethereumProvider = await wallet?.getEthereumProvider();
 
