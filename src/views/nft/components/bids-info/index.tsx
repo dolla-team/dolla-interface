@@ -32,7 +32,7 @@ function BidsInfoInner({ onRefresher }: any) {
       window.innerWidth
     );
     const _cx = containerWidth;
-    const _x = hasNext ? _cx + 360 : _cx + 760;
+    const _x = hasNext ? _cx + 360 : _cx + window.innerWidth * 2;
 
     const _d = Math.ceil(_x / window.innerWidth) * 20;
     return [_x, _d];

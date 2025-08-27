@@ -95,10 +95,10 @@ export default function NftCard({
         </div>
         {!isResult && isSimple ? (
           <>
-            <div className="text-[20px] font-semibold text-center pt-[30px]">
+            <div className="text-[20px] font-semibold text-center pt-[20px]">
               {rewardToken?.name}
             </div>
-            <div className="text-[26px] font-semibold text-center mt-[10px]">
+            <div className="text-[26px] font-semibold text-center mt-[4px]">
               {rewardToken?.token_id}
             </div>
           </>

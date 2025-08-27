@@ -1,16 +1,17 @@
 import Avatar from "@/components/avatar";
 import { formatAddress } from "@/utils/format/address";
 import dayjs from "dayjs";
+import { useMemo } from "react";
 
 const COLORS = ["#FF5DF1", "#10FFBF", "#FFC42F", "#6F37FF"];
 
 export default function Item({ data }: any) {
+  const color = useMemo(() => {
+    return COLORS[Math.floor(Math.random() * COLORS.length)];
+  }, [data]);
   return (
     <div className="relative h-[46px] shrink-0 mt-[10px]">
-      <Bg
-        color={COLORS[Math.floor(Math.random() * COLORS.length)]}
-        index={data?.user + data?.time}
-      />
+      <Bg color={color} index={data?.user + data?.time} />
       <div className="h-full p-[6px] inline-flex items-center">
         <Avatar
           address={data.user}
