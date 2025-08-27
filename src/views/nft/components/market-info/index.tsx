@@ -9,7 +9,7 @@ export default function MarketInfo() {
   const { pool, isDetail, getPoolRecommend } = useNftContext();
   const navigate = useNavigate();
   return (
-    <div className="w-[1016px] mx-auto mb-[40px]">
+    <div className="mb-[50px] w-[1016px] mx-auto">
       <div className="w-full flex justify-between items-center">
         <div className="flex items-center gap-[32px]">
           <button

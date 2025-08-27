@@ -24,8 +24,8 @@ export default function Carousel() {
 
   return (
     <CarouselCoverflow
-      className="w-full"
-      initRotate={0}
+      className="w-[1016px]"
+      initRotate={-30}
       ref={carouselRef}
       isDrag={false}
       list={new Array(18).fill(0).map((_, index) => ({

@@ -11,14 +11,14 @@ import React, {
 } from "react";
 
 const rotate = 20;
-const radius = 39.68; // vw
+const radius = 500; // px
 const rotateSpeed = 30; // seconds
 
 const CarouselCoverflow = (props: any, ref: any) => {
   const { className, list, initRotate = 0, isDrag = true } = props;
 
   const [containerRef, containerAnimate] = useAnimate();
-  const containerRotate = useMotionValue(initRotate);
+  const containerRotate = useMotionValue(initRotate); // Set initial value to 180
   const containerAnimation = useRef<any>(null);
   const [cardRotate, setCardRotate] = useState(initRotate);
 
@@ -109,11 +109,11 @@ const CarouselCoverflow = (props: any, ref: any) => {
   };
 
   useEffect(() => {
-    if (!listLength) {
+    if (!listLength || !containerRef.current) {
       return;
     }
 
-    rotateTo(-360, 20);
+    rotateTo(0, 1);
   }, [listLength]);
 
   // Cleanup event listeners on unmount
@@ -242,7 +242,7 @@ const CarouselCoverflow = (props: any, ref: any) => {
   return (
     <div
       className={clsx(
-        "min-w-[clamp(1px,_100vw,_calc(var(--dolla-laptop-width-base)*1))] w-[clamp(1px,_100vw,_calc(var(--dolla-laptop-width-base)*1))] h-[clamp(1px,_29.50vw,_calc(var(--dolla-laptop-width-base)*0.2950))] mx-auto relative",
+        "w-[var(--dolla-laptop-width-base)] h-[calc(var(--dolla-laptop-width-base)*0.2950)] mx-auto relative",
         className
       )}
     >
@@ -253,7 +253,7 @@ const CarouselCoverflow = (props: any, ref: any) => {
           transformStyle: "preserve-3d",
           transformOrigin: `center center clamp(1px, ${
             radius / 2
-          }vw, calc(var(--dolla-laptop-width-base)*${radius / 200}))`,
+          }px, calc(var(--dolla-laptop-width-base)*${10}px))`,
           rotateY: containerRotate
         }}
       />
@@ -266,7 +266,7 @@ const CarouselCoverflow = (props: any, ref: any) => {
           transformStyle: "preserve-3d",
           transformOrigin: `center center clamp(1px, ${
             radius / 2
-          }vw, calc(var(--dolla-laptop-width-base)*${radius / 200}))`,
+          }px, calc(var(--dolla-laptop-width-base)*${10}px))`,
           cursor: isDrag ? "grab" : "default"
         }}
         drag={false}
@@ -279,8 +279,8 @@ const CarouselCoverflow = (props: any, ref: any) => {
             style={{
               transform: `perspective(100vw) rotateY(${
                 item.angle + cardRotate
-              }deg) translateZ(${radius}vw) scale(${
-                index === cardIndex ? 0.65 : 1 / (100 / (100 - radius))
+              }deg) translateZ(${radius}px) scale(${
+                index === cardIndex ? 0.75 : 1 / (100 / (100 - 30))
               })`,
               transformStyle: "preserve-3d"
             }}

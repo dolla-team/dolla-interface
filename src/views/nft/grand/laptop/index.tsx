@@ -22,8 +22,8 @@ export default function Laptop() {
         <div>
           <MarketInfo />
           <Carousel />
-          <div className="w-[25vw] h-[100vh] fixed left-0 top-0 bg-linear-to-r from-[#000000] to-[#00000000]" />
-          <div className="w-[25vw] h-[100vh] fixed right-0 top-0 bg-linear-to-l from-[#000000] to-[#00000000]" />
+          <div className="w-[calc(50%-300px)] h-[100vh] pointer-events-none fixed left-0 top-0 bg-linear-to-r from-[#000000] to-[#00000000]" />
+          <div className="w-[calc(50%-300px)] h-[100vh] pointer-events-none fixed right-0 top-0 bg-linear-to-l from-[#000000] to-[#00000000]" />
         </div>
       )}
       {pool?.status === 2 && flipStatus === 0 && <EndPanel data={pool} />}
