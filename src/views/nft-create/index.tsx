@@ -90,10 +90,12 @@ export default function ListNFT() {
                   )}
                   onClick={() => onSelectCollection(item)}
                 >
-                  <img
-                    className="w-[30px] h-[30px] rounded-[4px]"
-                    src={item.icon}
-                  />
+                  {item.icon && (
+                    <img
+                      className="w-[30px] h-[30px] rounded-[4px]"
+                      src={item.icon}
+                    />
+                  )}
                   <span className="text-[12px] font-light">{item.name}</span>
                 </div>
               ))}

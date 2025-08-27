@@ -34,9 +34,7 @@ export default function Market({
   }, [data]);
 
   const isMobile = useIsMobile();
-  if (data.status === 2) {
-    console.log("data", data);
-  }
+
   return (
     <div
       className={clsx(
@@ -122,9 +120,14 @@ export default function Market({
               <div className="flex justify-between items-center text-[12px] text-[#8795A7] mt-[6px]">
                 <span>Valued</span>
                 <span className="text-right">
-                  {formatNumber(data?.value || 0, 0, true, {
-                    prefix: "$"
-                  })}
+                  {formatNumber(
+                    data?.reward_token_price?.[0]?.last_price || 0,
+                    0,
+                    true,
+                    {
+                      prefix: "$"
+                    }
+                  )}
                 </span>
               </div>
             </div>

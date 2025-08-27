@@ -98,7 +98,12 @@ export default function DepositModal({
               <span className="text-[#BBACA6] font-[400]">Valued</span>
               <div className="grow border-b border-dashed border-[#5E6B7D] opacity-50" />
               <span className="text-white font-medium">
-                ${formatNumber(order?.value, 0, true)}{" "}
+                $
+                {formatNumber(
+                  order?.reward_token_price?.[0]?.last_price || 0,
+                  0,
+                  true
+                )}{" "}
               </span>
             </div>
             {/* <div className="flex items-center text-[14px] mb-[14px] gap-[10px]">

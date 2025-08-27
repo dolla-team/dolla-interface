@@ -112,7 +112,7 @@ const ClaimIndex = (props: any) => {
       render: (record: any) => {
         return (
           <>
-            {formatNumber(record.value, 4, true, {
+            {formatNumber(record.reward_token_price?.[0]?.last_price, 4, true, {
               prefix: "$"
             })}{" "}
           </>

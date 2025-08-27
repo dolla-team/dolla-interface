@@ -52,10 +52,12 @@ export default function NFTListContent() {
                     : "bg-[#1A1E24]"
                 )}
               >
-                <img
-                  src={item.icon}
-                  className="w-[25px] h-[25px] rounded-full"
-                />
+                {item.icon && (
+                  <img
+                    src={item.icon}
+                    className="w-[25px] h-[25px] rounded-full"
+                  />
+                )}
                 <span>{item.name}</span>
               </button>
             );

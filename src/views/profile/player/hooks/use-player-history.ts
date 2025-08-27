@@ -41,7 +41,7 @@ export default function usePlayerHistory() {
           item.participants = item.pool_info?.participants;
           item.accumulative_bids = item.pool_info?.accumulative_bids;
           item.anchor_price = item.pool_info?.anchor_price;
-          item.value = item.pool_info?.value;
+          item.value = item.pool_info?.reward_token_price?.[0]?.last_price;
           item.is_claim = item.status === 4;
           item.status = item.pool_info?.status;
         });

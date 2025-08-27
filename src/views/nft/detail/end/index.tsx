@@ -44,7 +44,7 @@ export default function EndPanel({ data }: { data: any }) {
       }
     });
 
-    const _returnMultiple = Big(data.value)
+    const _returnMultiple = Big(data.reward_token_price?.[0]?.last_price)
       .div(lastBids || 1)
       .toFixed(0);
 
@@ -159,9 +159,14 @@ export default function EndPanel({ data }: { data: any }) {
                         WebkitTextFillColor: "transparent"
                       }}
                     >
-                      {formatNumber(data?.value, 2, true, {
-                        prefix: "$"
-                      })}
+                      {formatNumber(
+                        data?.reward_token_price?.[0]?.last_price,
+                        2,
+                        true,
+                        {
+                          prefix: "$"
+                        }
+                      )}
                     </div>
                   </div>
                 </div>

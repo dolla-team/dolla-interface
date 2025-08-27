@@ -96,7 +96,12 @@ export default function CancelModal({
             <span className="text-[#BBACA6] font-[400]">Market Value</span>
             <div className="grow border-b border-dashed border-[#5E6B7D] opacity-50" />
             <span className="text-white font-medium">
-              ${formatNumber(order?.value, 0, true)}
+              $
+              {formatNumber(
+                order?.reward_token_price?.[0]?.last_price || 0,
+                0,
+                true
+              )}
             </span>
           </div>
           <div className="flex items-center text-[14px] mb-[20px] gap-[10px]">
