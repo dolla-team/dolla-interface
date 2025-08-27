@@ -121,6 +121,7 @@ export default function AvatarAction() {
 
   return (
     <div className="relative group flex items-center gap-[10px]">
+      <div className="absolute right-[-10px] top-[-10px] w-[292px] h-[72px] bg-linear-to-r from-[#00000000] to-[#000]"></div>
       {user?.wallet?.address && (
         <AvatarCashier
           onClick={() => {

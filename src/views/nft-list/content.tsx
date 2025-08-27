@@ -40,10 +40,11 @@ export default function NFTListContent() {
           >
             All
           </button>
-          {configStore.config?.nft_config.map((item: any) => {
+          {configStore.config?.nft_config.map((item: any, index: number) => {
             return (
               <button
                 onClick={() => setCollection(item)}
+                key={item.id || index}
                 className={clsx(
                   defultTabCls,
                   collection?.id === item.id
