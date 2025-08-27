@@ -65,7 +65,16 @@ export default function MarketInfo() {
             <div className="text-[14px] text-[#8A87AA]">{item}</div>
             <div className="text-[20px] text-white">
               {item === "Valued" && (
-                <div>
+                <div
+                  className="text-[20px] font-bold"
+                  style={{
+                    background:
+                      "linear-gradient(90deg, #FFE9B2 0%, #FFC42F 100%)",
+                    backgroundClip: "text",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent"
+                  }}
+                >
                   {formatNumber(pool?.reward_usd || 0, 3, true, {
                     prefix: "$"
                   })}

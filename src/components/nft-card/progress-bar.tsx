@@ -68,9 +68,11 @@ export default function ProgressBar({
             ></motion.div>
           </>
         )}
-        <div className="absolute px-[6px] top-[14px] right-[-20px] rounded-[6px] bg-linear-to-b from-[#FFF698] to-[#FFC42F] font-[DelaGothicOne]">
-          {formatNumber(bids, 2, true, { isShort: true, prefix: "$" })}
-        </div>
+        {bids && (
+          <div className="absolute px-[6px] top-[14px] right-[-20px] rounded-[6px] bg-linear-to-b from-[#FFF698] to-[#FFC42F] font-[DelaGothicOne]">
+            {formatNumber(bids, 2, true, { isShort: true, prefix: "$" })}
+          </div>
+        )}
       </div>
     </div>
   );

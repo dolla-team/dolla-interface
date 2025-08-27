@@ -36,7 +36,7 @@ export default function NftCard({
   return (
     <div
       className={clsx(
-        "w-[220px] h-[326px] rounded-[12px] p-[10px] relative border",
+        "w-[220px] h-[326px] rounded-[20px] p-[10px] relative border",
         type === "basic" && "border-[#3B3951] bg-white/10 backdrop-blur-[10px]",
         type === "saudi" && "border-[#434343CC]",
         type === "redOg" && "border-[#2A2B27]",

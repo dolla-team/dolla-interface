@@ -45,6 +45,7 @@ const Content = () => {
       <Grand tokenBalance={quoteTokenBalance} />
       <BidSelection tokenBalance={quoteTokenBalance} />
       {!isMobile && <BidsInfo />}
+
       {/* {!isMobile && <TopWinner />} */}
       {/* {!isMobile && <Music />} */}
     </div>
