@@ -12,6 +12,7 @@ export default function NftCard({
   className,
   isResult,
   resultContent,
+  isSimple,
   onClick
 }: any) {
   const [type, rewardToken, rewardTokenPrice, process, returnMultiple] =
@@ -43,7 +44,7 @@ export default function NftCard({
       )}
       onClick={onClick}
     >
-      {data?.winner_user_info && (
+      {data?.winner_user_info && !isSimple && (
         <div className="w-full h-full rounded-[12px] absolute top-0 left-0 z-[10] bg-[#00000080]">
           <div className="flex justify-center mt-[100px]">
             <div className="p-[2px] pr-[10px] min-w-[100px] inline-flex gap-[3px] rounded-[12px] bg-[#FFFFFF1A] backdrop-blur-[10px]">
@@ -92,7 +93,16 @@ export default function NftCard({
             className="rounded-[10px] w-full aspect-square object-cover"
           />
         </div>
-        {!isResult && (
+        {!isResult && isSimple ? (
+          <>
+            <div className="text-[20px] font-semibold text-center pt-[30px]">
+              {rewardToken?.name}
+            </div>
+            <div className="text-[26px] font-semibold text-center mt-[10px]">
+              {rewardToken?.token_id}
+            </div>
+          </>
+        ) : (
           <>
             <div
               className={clsx(

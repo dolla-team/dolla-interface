@@ -32,7 +32,7 @@ export default function Carousel() {
         key: index,
         content:
           index < extraNumber ? (
-            <NftCard data={pool} className="w-full h-full" />
+            <NftCard data={pool} className="w-full h-full" isSimple />
           ) : (
             <div className="w-full h-full flex flex-col rounded-[12px] bg-[#704CFF] p-[10px] bg-[url('/nft/carousel-item.png')] bg-cover bg-center"></div>
           )

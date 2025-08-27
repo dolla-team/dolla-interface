@@ -40,7 +40,7 @@ const Bg = ({ color, index }: { color: string; index: string }) => {
       viewBox="0 0 256 46"
       fill="none"
       preserveAspectRatio="none"
-      className="absolute top-0 left-0"
+      className="absolute top-0 left-0  rounded-[24px]"
     >
       <foreignObject x="-20" y="-20" width="296" height="86">
         <div

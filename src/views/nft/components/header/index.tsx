@@ -1,27 +1,30 @@
 import clsx from "clsx";
 import { useNftContext } from "../../context";
-import { formatNumber } from "@/utils/format/number";
+
 import { useMemo, useState } from "react";
 import Big from "big.js";
 import Btn from "./btn";
-import Avatar from "@/components/avatar";
-import SellerLevel from "@/components/seller-level";
-import { formatAddress } from "@/utils/format/address";
-import SellerBg from "./seller-bg";
-import { data, useNavigate } from "react-router-dom";
+
+import ProgressBar from "@/components/nft-card/progress-bar";
+import { useNavigate } from "react-router-dom";
 import ProvablyFair from "@/sections/provably-fair";
 
 export default function Header({ className }: { className?: string }) {
-  const { bids, pool } = useNftContext();
+  const { pool } = useNftContext();
   const [openProvablyFair, setOpenProvablyFair] = useState(false);
   const navigate = useNavigate();
-  const [amount, rewardTokenInfo] = useMemo(() => {
-    if (!pool) return ["0", {}];
-    const reward_amount = pool.reward_amount || 0;
-    const decimals = pool.reward_token_info?.[0]?.decimals || 1;
-    const _an = Big(reward_amount).div(10 ** decimals);
-    const _a = formatNumber(_an, 3, true);
-    return [_a, pool.reward_token_info?.[0]];
+  const [rewardTokenInfo, type, process] = useMemo(() => {
+    if (!pool) return [{}, "basic", 0];
+    let _type = "basic";
+    if (Number(pool?.rare) === 1) _type = "saudi";
+    if (Number(pool?.rare) === 2) _type = "redOg";
+    const _p = Big(pool?.accumulative_bids || 0)
+      .div(pool?.anchor_price || 1)
+      .mul(1e18)
+      .mul(100)
+      .toNumber();
+
+    return [pool.reward_token_info?.[0], _type, _p];
   }, [pool]);
 
   return (
@@ -57,9 +60,15 @@ export default function Header({ className }: { className?: string }) {
           >
             {rewardTokenInfo.name} {rewardTokenInfo.token_id}
           </div>
-          <div className="flex items-center justify-center gap-[12px]">
-            <div className="text-[12px] text-white">Valued</div>
-            <div
+          <div className="flex items-center justify-center gap-[12px] mt-[10px]">
+            <div className="text-[14px] text-[#8A87AA]">Total Bid</div>
+            <ProgressBar
+              type={type}
+              progress={process}
+              className="w-[278px]"
+              bids={pool?.accumulative_bids}
+            />
+            {/* <div
               className="text-[26px] text-white font-bold"
               style={{
                 background: "linear-gradient(90deg, #FFE9B2 0%, #FFC42F 100%)",
@@ -69,10 +78,10 @@ export default function Header({ className }: { className?: string }) {
               }}
             >
               ${amount}
-            </div>
+            </div> */}
           </div>
         </div>
-        <div className="absolute w-[316px] h-[56px] bottom-[-60px] left-[50%] translate-x-[-50%]">
+        {/* <div className="absolute w-[316px] h-[56px] bottom-[-60px] left-[50%] translate-x-[-50%]">
           <SellerBg />
           <div className="absolute left-[50%] translate-x-[-50%] top-[50%] translate-y-[-50%] flex items-center gap-[12px]">
             <div className="w-[39px] h-[39px] bg-linear-to-b from-[#FFC42F] to-[#99761C] rounded-[12px] p-[2px]">
@@ -95,7 +104,7 @@ export default function Header({ className }: { className?: string }) {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
       <ProvablyFair
         pool={pool}

@@ -4,23 +4,25 @@ import { useNftContext } from "../../context";
 import clsx from "clsx";
 import Carousel from "./carousel";
 import Winner from "../../components/result/winner";
+import MarketInfo from "../../components/market-info";
 
 export default function Laptop() {
   const { flipStatus, pool, bidResult } = useNftContext();
   return (
     <div
       className={clsx(
-        "relative flex items-center justify-center mx-auto overflow-hidde h-[calc(100vh-416px)] pt-[25px]",
-
+        "relative flex items-center justify-center mx-auto overflow-hidde h-[calc(100vh-350px)]",
+        pool?.status === 1 ? "pb-[10px]" : "pb-[100px] pt-[25px]",
         !(pool?.status === 1 || flipStatus !== 0)
           ? "w-[calc(100vw-220px)]"
           : "w-[calc(100vw-620px)]"
       )}
     >
       {(pool?.status === 1 || flipStatus !== 0) && (
-        <>
+        <div>
+          <MarketInfo />
           <Carousel />
-        </>
+        </div>
       )}
       {pool?.status === 2 && flipStatus === 0 && <EndPanel data={pool} />}
       {(pool?.status === 3 || pool?.status === 5) && flipStatus === 0 && (

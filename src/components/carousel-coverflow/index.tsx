@@ -77,6 +77,7 @@ const CarouselCoverflow = (props: any, ref: any) => {
   const onRotate = (speed = rotateSpeed) => {
     if (!containerRef.current) return;
     const prevRotate = containerRotate.get() || 0;
+
     containerAnimation.current = containerAnimate(
       containerRef.current,
       {
@@ -85,8 +86,14 @@ const CarouselCoverflow = (props: any, ref: any) => {
       {
         duration: speed,
         ease: "linear",
-        repeat: Infinity,
-        repeatType: "loop"
+        onComplete: () => {
+          if (containerRef.current) {
+            containerRef.current.style.transform = `rotateY(${prevRotate}deg)`;
+            requestAnimationFrame(() => {
+              onRotate(speed);
+            });
+          }
+        }
       }
     );
   };
@@ -105,7 +112,7 @@ const CarouselCoverflow = (props: any, ref: any) => {
     if (!listLength) {
       return;
     }
-    // onRotate();
+
     rotateTo(-360, 20);
   }, [listLength]);
 
@@ -140,7 +147,7 @@ const CarouselCoverflow = (props: any, ref: any) => {
   ) => {
     if (!containerAnimation.current && type !== "play") return;
 
-    const { target } = opts ?? {};
+    const { target, speed = rotateSpeed } = opts ?? {};
 
     switch (type) {
       case "stop":
@@ -148,7 +155,7 @@ const CarouselCoverflow = (props: any, ref: any) => {
         rotateTo(0);
         break;
       case "play":
-        onRotate(opts?.speed || rotateSpeed);
+        onRotate(speed);
         break;
       case "pause":
         containerAnimation.current.pause();
@@ -273,7 +280,7 @@ const CarouselCoverflow = (props: any, ref: any) => {
               transform: `perspective(100vw) rotateY(${
                 item.angle + cardRotate
               }deg) translateZ(${radius}vw) scale(${
-                index === cardIndex ? 0.7 : 1 / (100 / (100 - radius))
+                index === cardIndex ? 0.65 : 1 / (100 / (100 - radius))
               })`,
               transformStyle: "preserve-3d"
             }}
