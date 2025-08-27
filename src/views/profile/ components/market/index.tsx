@@ -261,7 +261,7 @@ export default function Market({
             <div className="p-[2px] pr-[10px] min-w-[100px] inline-flex gap-[3px] rounded-[12px] bg-[#FFFFFF1A] backdrop-blur-[25px]">
               <Avatar
                 address={data.winner_user}
-                email={data.pool_info.winner_user_info?.email}
+                email={data.pool_info?.winner_user_info?.email}
                 size={24}
               />
               <div className="text-[12px] font-semibold text-white leading-[24px]">
