@@ -292,7 +292,7 @@ const CarouselCoverflow = (props: any, ref: any) => {
       <img
         src="/nfts/carousel-arrow.png"
         alt=""
-        className="w-[52px] h-[69px] shrink-0 absolute z-[1] left-1/2 -translate-x-1/2 top-[-56px]"
+        className="w-[52px] h-[69px] shrink-0 absolute z-[1] left-1/2 -translate-x-1/2 top-[-46px]"
       />
     </div>
   );
