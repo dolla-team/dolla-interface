@@ -30,7 +30,7 @@ export default function NftCard({
         data?.reward_token_info?.[0],
         data?.reward_token_price,
         _p,
-        0
+        data?.reward_token_price
       ];
     }, [data]);
   return (

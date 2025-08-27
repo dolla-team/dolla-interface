@@ -2,7 +2,6 @@ import clsx from "clsx";
 import { motion } from "framer-motion";
 import { formatNumber } from "@/utils/format/number";
 import { useMemo } from "react";
-import Big from "big.js";
 import { getAnchorPrice } from "@/utils/pool";
 import MarketActiveBg from "./market-active-bg";
 import useIsMobile from "@/hooks/use-is-mobile";
@@ -35,7 +34,9 @@ export default function Market({
   }, [data]);
 
   const isMobile = useIsMobile();
-
+  if (data.status === 2) {
+    console.log("data", data);
+  }
   return (
     <div
       className={clsx(
@@ -254,6 +255,34 @@ export default function Market({
         </div>
         {footer}
       </div>
+      {data.status === 2 && (
+        <div className="w-full h-full rounded-[16px] absolute top-0 left-0 z-[2] bg-[#00000080]">
+          <div className="flex justify-center mt-[100px]">
+            <div className="p-[2px] pr-[10px] min-w-[100px] inline-flex gap-[3px] rounded-[12px] bg-[#FFFFFF1A] backdrop-blur-[25px]">
+              <Avatar
+                address={data.winner_user}
+                email={data.pool_info.winner_user_info?.email}
+                size={24}
+              />
+              <div className="text-[12px] font-semibold text-white leading-[24px]">
+                {data.pool_info?.winner_user_info?.email ||
+                  formatAddress(data?.pool_info?.winner_user)}
+              </div>
+            </div>
+          </div>
+          <div
+            className="text-[26px] font-bold text-center mt-[4px]"
+            style={{
+              background: "linear-gradient(180deg, #FFF79F 0%, #D3C104 100%)",
+              backgroundClip: "text",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent"
+            }}
+          >
+            {formatNumber(data.reward_usd, 0, true, { isShort: true })}x WIN
+          </div>
+        </div>
+      )}
     </div>
   );
 }

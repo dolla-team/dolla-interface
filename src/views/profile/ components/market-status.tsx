@@ -1,15 +1,14 @@
-import { formatAddress } from "@/utils/format/address";
 import clsx from "clsx";
 
 const MarketStatus = (props: Props) => {
-  const { className, value, market } = props;
+  const { className, value } = props;
 
   const currentMarketStatus = MarketStatusMap[value];
 
   return (
     <div
       className={clsx(
-        "rounded-[10px] h-[26px] shrink-0 border border-[#383F47] bg-black/20 backdrop-blur-[5px] text-white text-[12px] flex justify-center items-center gap-[7px]",
+        "relative z-[10] rounded-[10px] h-[26px] shrink-0 border border-[#383F47] bg-black/20 backdrop-blur-[5px] text-white text-[12px] inline-flex justify-center items-center gap-[7px]",
         ![EMarketStatus.Cancelled, EMarketStatus.Winner].includes(value) &&
           "pl-[20px] pr-[23px]",
         value === EMarketStatus.Cancelled && "pl-[9px] pr-[10px]",
@@ -17,22 +16,24 @@ const MarketStatus = (props: Props) => {
         className
       )}
     >
-      {![
-        EMarketStatus.Cancelled,
-        EMarketStatus.Winner,
-        EMarketStatus.PreCancel
-      ].includes(value) && (
+      {[EMarketStatus.Live].includes(value) && (
         <div className="w-[9px] h-[9px] flex-shrink-0 bg-[#54FF59] rounded-full" />
+      )}
+      {[EMarketStatus.Cancelled].includes(value) && (
+        <div className="w-[9px] h-[9px] flex-shrink-0 bg-[#6F37FF] rounded-full" />
+      )}
+      {[EMarketStatus.Winner].includes(value) && (
+        <div className="w-[9px] h-[9px] flex-shrink-0 bg-[#ADBCCF] rounded-full" />
       )}
       <div
         className={clsx(
-          "h-[12px] pr-[8px] leading-[12px]",
-          value === EMarketStatus.Winner && "border-r border-[#ADBCCF]"
+          "h-[12px] pr-[8px] leading-[12px]"
+          // value === EMarketStatus.Winner && "border-r border-[#ADBCCF]"
         )}
       >
         {currentMarketStatus?.label}
       </div>
-      {value === EMarketStatus.Winner && (
+      {/* {value === EMarketStatus.Winner && (
         <>
           {market?.winner_user_info?.avatar && (
             <img
@@ -46,7 +47,7 @@ const MarketStatus = (props: Props) => {
             </div>
           )}
         </>
-      )}
+      )} */}
     </div>
   );
 };
@@ -85,7 +86,7 @@ export const MarketStatusMap = {
     name: "Cancelled"
   },
   [EMarketStatus.Winner]: {
-    label: "Winner",
+    label: "Ended",
     name: "Ended"
   },
   [EMarketStatus.PreCancel]: {
