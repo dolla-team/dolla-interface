@@ -24,7 +24,7 @@ export default function TopWinner() {
       }
     });
     const _returnMultiple = lastBids
-      ? Big(data?.reward_usd).div(lastBids).toFixed(0)
+      ? Big(data?.reward_token_price?.[0]?.last_price).div(lastBids).toFixed(0)
       : 0;
 
     return [_a, _rewardInfo, _returnMultiple];

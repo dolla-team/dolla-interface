@@ -279,7 +279,10 @@ export default function Market({
               WebkitTextFillColor: "transparent"
             }}
           >
-            {formatNumber(data.reward_usd, 0, true, { isShort: true })}x WIN
+            {formatNumber(data?.reward_token_price?.[0]?.last_price, 0, true, {
+              isShort: true
+            })}
+            x WIN
           </div>
         </div>
       )}

@@ -152,7 +152,7 @@ const Item = ({ item }: { item: any; index: number }) => {
           config[randomIndex].color
         )}
       >
-        {Big(item.reward_usd).toFixed(0)}x
+        {Big(item.reward_token_price?.[0]?.last_price).toFixed(0)}x
       </span>
       <span className="text-xl drop-shadow-lg">
         {config[randomIndex].emoji}

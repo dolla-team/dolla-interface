@@ -32,7 +32,7 @@ export default function MarketSize({
             WebkitTextFillColor: "transparent"
           }}
         >
-          ${formatNumber(pool?.reward_usd, 0, true)}
+          ${formatNumber(pool?.reward_token_price?.[0]?.last_price, 0, true)}
         </div>
         <div className="flex items-center justify-center gap-[6px] mt-[-8px]">
           <span

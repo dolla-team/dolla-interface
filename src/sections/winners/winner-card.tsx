@@ -58,7 +58,12 @@ export default function WinnerCard({
                 <div className="flex items-center justify-between mt-[4px]">
                   <div className="text-[#8C8B8B]">Valued</div>
                   <div className="text-white truncate">
-                    ${formatNumber(data?.reward_usd, 2, true)}{" "}
+                    $
+                    {formatNumber(
+                      data?.reward_token_price?.[0]?.last_price,
+                      2,
+                      true
+                    )}{" "}
                   </div>
                 </div>
                 <div className="flex items-center justify-between mt-[4px]">

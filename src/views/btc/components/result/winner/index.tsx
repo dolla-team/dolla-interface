@@ -148,7 +148,12 @@ export default function Winner({
                     WebkitTextFillColor: "transparent"
                   }}
                 >
-                  ${formatNumber(pool?.reward_usd, 0, true)}
+                  $
+                  {formatNumber(
+                    pool?.reward_token_price?.[0]?.last_price,
+                    0,
+                    true
+                  )}
                 </div>
               </>
             )}

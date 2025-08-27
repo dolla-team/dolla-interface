@@ -75,9 +75,14 @@ export default function MarketInfo() {
                     WebkitTextFillColor: "transparent"
                   }}
                 >
-                  {formatNumber(pool?.reward_usd || 0, 3, true, {
-                    prefix: "$"
-                  })}
+                  {formatNumber(
+                    pool?.reward_token_price?.[0]?.last_price || 0,
+                    3,
+                    true,
+                    {
+                      prefix: "$"
+                    }
+                  )}
                 </div>
               )}
               {item === "Players" && <div>{pool?.participants}</div>}
