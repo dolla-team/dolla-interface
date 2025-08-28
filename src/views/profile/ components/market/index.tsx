@@ -269,7 +269,9 @@ export default function Market({
               />
               <div className="text-[12px] font-semibold text-white leading-[24px]">
                 {data?.winner_user_info?.email ||
-                  formatAddress(data?.winner_user)}
+                  formatAddress(
+                    data?.winner_user || data?.pool_info?.winner_user
+                  )}
               </div>
             </div>
           </div>
@@ -282,7 +284,7 @@ export default function Market({
               WebkitTextFillColor: "transparent"
             }}
           >
-            {formatNumber(data?.reward_token_price?.[0]?.last_price, 0, true, {
+            {formatNumber(data?.reward_token_price?.[0]?.last_price, 2, true, {
               isShort: true
             })}
             x WIN
