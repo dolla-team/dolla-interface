@@ -35,7 +35,7 @@ export default function Winner() {
   }, []);
   return (
     <div
-      className="w-screen h-screen fixed z-[50] flex justify-center items-center"
+      className="w-screen h-screen top-0 left-0 fixed z-[50] flex justify-center items-center"
       style={{
         background:
           "radial-gradient(44.79% 52.28% at 50% 50%, rgba(185, 55, 255, 0.60) 0%, rgba(0, 0, 0, 0.60) 68.75%)",
