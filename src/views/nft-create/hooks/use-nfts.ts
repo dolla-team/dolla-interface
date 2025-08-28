@@ -13,7 +13,7 @@ export default function useNfts() {
   const [collections, setCollections] = useState<any[]>([]);
   const [collection, setCollection] = useState<any>({});
   const [nfts, setNfts] = useState<any[]>([]);
-  const [nft, setNft] = useState<any>({});
+  const [nft, setNft] = useState<any>(null);
   const [loadingCollections, setLoadingCollections] = useState<boolean>(false);
   const [listPrice, setListPrice] = useState<number>(100);
   // const [loadingNfts, setLoadingNfts] = useState<boolean>(false);
@@ -129,17 +129,23 @@ export default function useNfts() {
 
   useEffect(() => {
     if (nftsStore.nfts.length > 0 && collection?.address) {
-      const nft = nftsStore.nfts[0];
-      setNft({
-        id: nft.token.tokenId
-      });
-      setNfts(
-        nftsStore.nfts.filter(
-          (nft) =>
-            nft.token.contract.toLowerCase() ===
-            collection?.address?.toLowerCase()
-        )
+      const _nfts = nftsStore.nfts.filter(
+        (nft) =>
+          nft.token.contract.toLowerCase() ===
+          collection?.address?.toLowerCase()
       );
+      // const _nfts = [];
+
+      const nft = _nfts[0];
+
+      if (nft) {
+        setNft({
+          id: nft.token.tokenId
+        });
+      } else {
+        setNft(null);
+      }
+      setNfts(_nfts);
     }
   }, [nftsStore.nfts]);
 

@@ -50,10 +50,7 @@ export default function ListPrice({
     onSetListPrice(prices[0].floor_price);
     return prices[0];
   }, [prices]);
-  const { mintNft, minting, minted, mintedLoading } = useMintNft(
-    token?.address,
-    onSuccess
-  );
+  const { mintNft, minting } = useMintNft(token?.address, onSuccess);
   useEffect(() => {
     if (price) {
       onSetListPrice(price.floor_price);
@@ -127,7 +124,7 @@ export default function ListPrice({
               </div>
             </div>
           ))}
-          {minted && token?.id && (
+          {token?.id || pricesLoading ? (
             <Action
               amount={1}
               loading={pricesLoading}
@@ -139,14 +136,18 @@ export default function ListPrice({
                 onSuccess("create");
               }}
             />
-          )}
-          {(!minted || !token?.id) && token?.address && (
+          ) : token?.address?.toLocaleLowerCase() ===
+            "0x2b517b73555598f0b1a0985a04c8cf76d5f54e8b" ? (
             <Button
-              loading={minting || mintedLoading}
+              loading={minting}
               className="button w-full h-[40px] mt-[20px]"
               onClick={mintNft}
             >
               Mint NFT
+            </Button>
+          ) : (
+            <Button className="button w-full h-[40px] mt-[20px]" disabled>
+              No nft fund
             </Button>
           )}
         </div>
