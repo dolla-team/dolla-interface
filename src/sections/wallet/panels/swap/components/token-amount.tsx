@@ -31,7 +31,8 @@ export default function TokenAmount({
   currencyClassName
 }: any) {
   const tokenPrice = useMemo(
-    () => (currency ? prices[currency.priceKey || currency.symbol] : 0),
+    () =>
+      currency && prices ? prices[currency.priceKey || currency.symbol] : 0,
     [prices, currency]
   );
 
