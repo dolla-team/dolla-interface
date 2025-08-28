@@ -17,7 +17,7 @@ const StatisticsPlayer = (props: any) => {
   const walletStore = useWalletStore();
   const { userInfo, quoteTokenBalance } = useAuth();
 
-  const { totalBtcAmount, loading: totalBtcLoading } = useUserWinner();
+  const { totalAmount, loading } = useUserWinner();
 
   const [claimModalOpen, setClaimModalOpen] = useState(false);
 
@@ -54,10 +54,10 @@ const StatisticsPlayer = (props: any) => {
           </div>
         </div>
         <LabelValue label="Total Valued" className="">
-          {totalBtcLoading ? (
+          {loading ? (
             <Loading size={12} />
           ) : (
-            formatNumber(totalBtcAmount, 3, true, {
+            formatNumber(totalAmount, 3, true, {
               prefix: "$"
             })
           )}

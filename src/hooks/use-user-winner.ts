@@ -35,17 +35,14 @@ export default function useUserWinner() {
       const _data = res.data.data || [];
       _data.forEach((item: any) => {
         // nfts
-        if (
-          item.token.toLocaleLowerCase() !==
-            config.purchaseToken.address.toLocaleLowerCase() &&
-          item.token.toLocaleLowerCase() !== TOKEN.address.toLocaleLowerCase()
-        ) {
+        if (item.token_id) {
           _nfts.push({
             label: "NFT Prize",
             address: item.token,
-            icon: item.icon,
+            icon: item.token_info.icon,
             type: "nft",
-            tokenId: item.token_id
+            tokenId: item.token_id,
+            value: item.token_usd
           });
         }
         // btc
@@ -68,31 +65,18 @@ export default function useUserWinner() {
     }
   }, [userInfo]);
 
-  const coinItem = useMemo(() => {
-    if (Number(coinBalance) <= 0) return null;
-    return {
-      label: "Bid Coins",
-      address: config.purchaseToken.address,
-      amount: coinBalance,
-      type: "coin"
-    };
-  }, [coinBalance]);
-
-  const [totalBtcAmount] = useMemo(() => {
+  const [totalAmount] = useMemo(() => {
     return [
-      btcs.reduce((acc, item) => {
-        return Big(acc).plus(
-          Big(item.token_amount || 0).div(10 ** item.token_info?.decimals || 6)
-        );
+      nfts.reduce((acc, item) => {
+        return Big(acc).plus(Big(item.value || 0));
       }, 0)
     ];
-  }, [btcs]);
+  }, [nfts]);
 
   return {
-    coinItem,
     nfts,
     loading,
     btcs,
-    totalBtcAmount
+    totalAmount
   };
 }
