@@ -11,8 +11,10 @@ export default function Laptop() {
   return (
     <div
       className={clsx(
-        "relative flex items-center justify-center mx-auto overflow-hidde h-[calc(100vh-350px)]",
-        pool?.status === 1 ? "pb-[10px]" : "pb-[100px] pt-[25px]",
+        "relative flex items-center justify-center mx-auto",
+        pool?.status === 1
+          ? "pb-[10px] h-[calc(100vh-350px)]"
+          : "pb-[100px] pt-[25px] h-[calc(100vh-260px)] overflow-hidden",
         !(pool?.status === 1 || flipStatus !== 0)
           ? "w-[calc(100vw-220px)]"
           : "w-[calc(100vw-620px)]"

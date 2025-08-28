@@ -103,7 +103,18 @@ export const CannonCoinsProvider = ({
         setFlipStatus,
         bidResult,
         setBidResult,
-        getPoolRecommend
+        getPoolRecommend,
+        onWinnerCallback: () => {
+          setFlipStatus(0);
+          setBidResult(null);
+
+          if (!params?.poolId) {
+            clearTimeout(window.poolTimer);
+            getPoolRecommend();
+          } else {
+            onQueryPoolInfo(Number(params.poolId));
+          }
+        }
       }}
     >
       {children}

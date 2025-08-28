@@ -21,23 +21,23 @@ const StatisticsPlayer = (props: any) => {
 
   const [claimModalOpen, setClaimModalOpen] = useState(false);
 
-  const [claimableAmount] = useMemo(() => {
-    if (!userInfo) {
-      return [Big(0), Big(0)];
-    }
-    return [
-      userInfo.you_won?.reduce(
-        (acc: any, item: any) => Big(acc).plus(item.token_usd),
-        Big(0)
-      ),
-      userInfo.claim_winner_pool
-        ?.filter?.((item: any) => !item.is_claim)
-        ?.reduce(
-          (acc: any, item: any) => Big(acc).plus(item.accumulative_bids),
-          Big(0)
-        )
-    ];
-  }, [userInfo]);
+  // const [claimableAmount] = useMemo(() => {
+  //   if (!userInfo) {
+  //     return [Big(0), Big(0)];
+  //   }
+  //   return [
+  //     userInfo.you_won?.reduce(
+  //       (acc: any, item: any) => Big(acc).plus(item.token_usd),
+  //       Big(0)
+  //     ),
+  //     userInfo.claim_winner_pool
+  //       ?.filter?.((item: any) => !item.is_claim)
+  //       ?.reduce(
+  //         (acc: any, item: any) => Big(acc).plus(item.accumulative_bids),
+  //         Big(0)
+  //       )
+  //   ];
+  // }, [userInfo]);
 
   return (
     <div

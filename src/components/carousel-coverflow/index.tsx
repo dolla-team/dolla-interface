@@ -277,7 +277,7 @@ const CarouselCoverflow = (props: any, ref: any) => {
             key={item.key}
             className="absolute backface-hidden duration-1000"
             style={{
-              transform: `perspective(100vw) rotateY(${
+              transform: `perspective(1500px) rotateY(${
                 item.angle + cardRotate
               }deg) translateZ(${radius}px) scale(${
                 index === cardIndex ? 0.75 : 1 / (100 / (100 - 30))

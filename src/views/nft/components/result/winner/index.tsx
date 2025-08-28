@@ -13,8 +13,7 @@ import ReactDOM from "react-dom";
 export default function Winner() {
   const { userInfo } = useAuth();
   const cardRef = useRef<HTMLDivElement>(null);
-  const { setFlipStatus, getPoolRecommend, pool, isDetail, setBidResult } =
-    useNftContext();
+  const { pool, onWinnerCallback } = useNftContext();
 
   useEffect(() => {
     if (!cardRef.current) {
@@ -78,12 +77,7 @@ export default function Winner() {
         <button
           className="absolute right-[20px] top-[20px] z-[110] button"
           onClick={() => {
-            setFlipStatus(0);
-            setBidResult(null);
-            if (!isDetail) {
-              clearTimeout(window.poolTimer);
-              getPoolRecommend();
-            }
+            onWinnerCallback();
           }}
         >
           <CloseIcon size={36} />
