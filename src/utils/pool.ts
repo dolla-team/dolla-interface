@@ -1,6 +1,7 @@
 import axiosInstance from "@/libs/axios";
 import Big from "big.js";
-import { QUOTE_TOKEN } from "@/config/btc";
+
+const decimals = 18;
 
 export const getPoolInfo = async (poolId: number) => {
   const res = await axiosInstance.get(
@@ -9,10 +10,10 @@ export const getPoolInfo = async (poolId: number) => {
   return res.data.data;
 };
 
-export const getAnchorPrice = (pool: any) => {
-  if (pool?.anchor_price)
-    return Big(pool.anchor_price * 1)
-      .div(10 ** QUOTE_TOKEN.decimals)
+export const getAnchorPrice = (price: number) => {
+  if (price)
+    return Big(price * 1.2)
+      .div(10 ** decimals)
       .toNumber();
   return 0;
 };
@@ -21,7 +22,7 @@ export const getReAnchorPrice = (pool: any) => {
   if (pool?.anchor_price)
     return Big(pool.anchor_price)
       .div(1.2)
-      .div(10 ** QUOTE_TOKEN.decimals)
+      .div(10 ** decimals)
       .toNumber();
   return 0;
 };
@@ -48,7 +49,7 @@ export const getProfitFee = (pool: any, opts?: { isLog?: boolean }) => {
     console.log(
       "BTCPrice: (anchor_price(%o) / 10^decimals(%o)) / 1.2 = %o",
       pool.anchor_price,
-      QUOTE_TOKEN.decimals,
+      decimals,
       reAnchorPrice.toString()
     );
     console.log(

@@ -10,6 +10,7 @@ import Big from "big.js";
 import useIsMobile from "@/hooks/use-is-mobile";
 import clsx from "clsx";
 import ProvablyFair from "@/sections/provably-fair";
+import { getAnchorPrice } from "@/utils/pool";
 
 export default function EndPanel({ data }: { data: any }) {
   const { winnerBidList } = useWinnerBidList(data);
@@ -21,9 +22,10 @@ export default function EndPanel({ data }: { data: any }) {
     totalTimes,
     returnMultiple,
     bidsDistribution,
-    bidsProgress
+    bidsProgress,
+    anchorPrice
   ] = useMemo(() => {
-    if (!winnerBidList?.length) return [0, 0, 0, {}, []];
+    if (!winnerBidList?.length) return [0, 0, 0, {}, [], 0];
     let _totalBids = 0;
     let _bidsDistribution: any = {};
     let _bidsProgress: any = [];
@@ -43,8 +45,9 @@ export default function EndPanel({ data }: { data: any }) {
         lastBids = item.times;
       }
     });
+    const _price = getAnchorPrice(data?.anchor_price);
 
-    const _returnMultiple = Big(data.reward_token_price?.[0]?.last_price)
+    const _returnMultiple = Big(_price)
       .div(lastBids || 1)
       .toFixed(0);
 
@@ -54,7 +57,8 @@ export default function EndPanel({ data }: { data: any }) {
       winnerBidList.length,
       _returnMultiple,
       _bidsDistribution,
-      _bidsProgress
+      _bidsProgress,
+      _price
     ];
   }, [winnerBidList, data]);
 
@@ -159,14 +163,9 @@ export default function EndPanel({ data }: { data: any }) {
                         WebkitTextFillColor: "transparent"
                       }}
                     >
-                      {formatNumber(
-                        data?.reward_token_price?.[0]?.last_price,
-                        2,
-                        true,
-                        {
-                          prefix: "$"
-                        }
-                      )}
+                      {formatNumber(anchorPrice, 2, true, {
+                        prefix: "$"
+                      })}
                     </div>
                   </div>
                 </div>

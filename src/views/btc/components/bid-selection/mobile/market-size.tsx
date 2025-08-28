@@ -1,6 +1,7 @@
 import { formatNumber } from "@/utils/format/number";
 import { useBtcContext } from "@/views/btc/context";
 import clsx from "clsx";
+import { getAnchorPrice } from "@/utils/pool";
 
 export default function MarketSize({
   hasBg = true,
@@ -32,7 +33,7 @@ export default function MarketSize({
             WebkitTextFillColor: "transparent"
           }}
         >
-          ${formatNumber(pool?.reward_token_price?.[0]?.last_price, 0, true)}
+          ${formatNumber(getAnchorPrice(pool?.anchor_price), 0, true)}
         </div>
         <div className="flex items-center justify-center gap-[6px] mt-[-8px]">
           <span

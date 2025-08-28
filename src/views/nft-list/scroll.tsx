@@ -4,6 +4,7 @@ import clsx from "clsx";
 import axiosInstance from "@/libs/axios";
 import { formatAddress } from "@/utils/format/address";
 import Big from "big.js";
+import { getAnchorPrice } from "@/utils/pool";
 
 interface ScrollProps {
   className?: string;
@@ -91,6 +92,7 @@ export default function Scroll({
       const res = await axiosInstance.get(
         "/api/v1/pool/winner/bid/recommend?chain=Berachain"
       );
+
       setData(res.data.data);
     };
 
@@ -152,7 +154,7 @@ const Item = ({ item }: { item: any; index: number }) => {
           config[randomIndex].color
         )}
       >
-        {Big(item.reward_token_price?.[0]?.last_price).toFixed(0)}x
+        {Big(getAnchorPrice(item?.pool_info?.anchor_price)).toFixed(0)}x
       </span>
       <span className="text-xl drop-shadow-lg">
         {config[randomIndex].emoji}

@@ -27,10 +27,11 @@ export default function Market({
   isForceNormal?: boolean;
   isActive?: boolean;
 }) {
-  const progress = useMemo(() => {
-    if (!data?.accumulative_bids || data?.anchor_price === "0") return 0;
+  const [progress, anchorPrice] = useMemo(() => {
+    if (data?.anchor_price === "0") return [0, 0];
+    const _anchorPrice = getAnchorPrice(data?.anchor_price);
 
-    return (data.accumulative_bids / getAnchorPrice(data)) * 100;
+    return [(data.accumulative_bids / _anchorPrice) * 100, _anchorPrice];
   }, [data]);
 
   const isMobile = useIsMobile();
@@ -120,14 +121,9 @@ export default function Market({
               <div className="flex justify-between items-center text-[12px] text-[#8795A7] mt-[6px]">
                 <span>Valued</span>
                 <span className="text-right">
-                  {formatNumber(
-                    data?.reward_token_price?.[0]?.last_price || 0,
-                    0,
-                    true,
-                    {
-                      prefix: "$"
-                    }
-                  )}
+                  {formatNumber(anchorPrice, 0, true, {
+                    prefix: "$"
+                  })}
                 </span>
               </div>
             </div>
@@ -284,7 +280,7 @@ export default function Market({
               WebkitTextFillColor: "transparent"
             }}
           >
-            {formatNumber(data?.reward_token_price?.[0]?.last_price, 2, true, {
+            {formatNumber(anchorPrice, 0, true, {
               isShort: true
             })}
             x WIN

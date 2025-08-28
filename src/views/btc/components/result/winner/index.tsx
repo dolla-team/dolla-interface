@@ -11,6 +11,7 @@ import gsap from "gsap";
 import { useBtcContext } from "../../../context";
 import useIsMobile from "@/hooks/use-is-mobile";
 import DollaEye from "@/components/dolla-eye";
+import { getAnchorPrice } from "@/utils/pool";
 
 export default function Winner({
   points,
@@ -148,12 +149,7 @@ export default function Winner({
                     WebkitTextFillColor: "transparent"
                   }}
                 >
-                  $
-                  {formatNumber(
-                    pool?.reward_token_price?.[0]?.last_price,
-                    0,
-                    true
-                  )}
+                  ${formatNumber(getAnchorPrice(pool?.anchor_price), 0, true)}
                 </div>
               </>
             )}

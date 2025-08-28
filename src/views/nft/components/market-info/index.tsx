@@ -4,6 +4,7 @@ import Avatar from "@/components/avatar";
 import SellerLevel from "@/components/seller-level";
 import { formatNumber } from "@/utils/format/number";
 import { useNavigate } from "react-router-dom";
+import { getAnchorPrice } from "@/utils/pool";
 
 export default function MarketInfo() {
   const { pool, isDetail, getPoolRecommend } = useNftContext();
@@ -75,14 +76,9 @@ export default function MarketInfo() {
                     WebkitTextFillColor: "transparent"
                   }}
                 >
-                  {formatNumber(
-                    pool?.reward_token_price?.[0]?.last_price || 0,
-                    3,
-                    true,
-                    {
-                      prefix: "$"
-                    }
-                  )}
+                  {formatNumber(getAnchorPrice(pool?.anchor_price), 3, true, {
+                    prefix: "$"
+                  })}
                 </div>
               )}
               {item === "Players" && <div>{pool?.participants}</div>}

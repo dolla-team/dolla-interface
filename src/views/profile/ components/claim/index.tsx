@@ -15,6 +15,7 @@ import { useRequest } from "ahooks";
 import axiosInstance from "@/libs/axios";
 import { useAuth } from "@/contexts/auth";
 import Pagination from "@/components/pagination";
+import { getAnchorPrice } from "@/utils/pool";
 
 const ClaimIndex = (props: any) => {
   const { className, type } = props;
@@ -112,7 +113,7 @@ const ClaimIndex = (props: any) => {
       render: (record: any) => {
         return (
           <>
-            {formatNumber(record.reward_token_price?.[0]?.last_price, 4, true, {
+            {formatNumber(getAnchorPrice(record?.anchor_price), 4, true, {
               prefix: "$"
             })}{" "}
           </>

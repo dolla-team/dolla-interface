@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/auth";
 import Big from "big.js";
 import { useRequest } from "ahooks";
-import { getPoolInfo } from "@/utils/pool";
+import { getAnchorPrice, getPoolInfo } from "@/utils/pool";
 
 const pageSize = 10;
 
@@ -41,7 +41,7 @@ export default function usePlayerHistory() {
           item.participants = item.pool_info?.participants;
           item.accumulative_bids = item.pool_info?.accumulative_bids;
           item.anchor_price = item.pool_info?.anchor_price;
-          item.value = item.pool_info?.reward_token_price?.[0]?.last_price;
+          item.value = getAnchorPrice(item.pool_info?.anchor_price);
           item.is_claim = item.status === 4;
           item.status = item.pool_info?.status;
         });

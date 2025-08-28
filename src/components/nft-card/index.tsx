@@ -6,6 +6,7 @@ import { formatNumber } from "@/utils/format/number";
 import Big from "big.js";
 import Avatar from "../avatar";
 import { formatAddress } from "@/utils/format/address";
+import { getAnchorPrice } from "@/utils/pool";
 
 export default function NftCard({
   data,
@@ -15,7 +16,7 @@ export default function NftCard({
   isSimple,
   onClick
 }: any) {
-  const [type, rewardToken, rewardTokenPrice, process, returnMultiple] =
+  const [type, rewardToken, tokenPrice, process, returnMultiple] =
     useMemo(() => {
       let _type = "basic";
       if (Number(data?.rare) === 1) _type = "saudi";
@@ -24,14 +25,9 @@ export default function NftCard({
         .div(data?.anchor_price || 1)
         .mul(100)
         .toNumber();
+      const _price = getAnchorPrice(data?.anchor_price);
 
-      return [
-        _type,
-        data?.reward_token_info?.[0],
-        data?.reward_token_price?.[0],
-        _p,
-        data?.reward_token_price?.[0]
-      ];
+      return [_type, data?.reward_token_info?.[0], _price, _p, _price];
     }, [data]);
   return (
     <div
@@ -130,7 +126,7 @@ export default function NftCard({
               </span>
               {type === "basic" ? (
                 <span>
-                  {formatNumber(rewardTokenPrice?.last_price, 2, true, {
+                  {formatNumber(tokenPrice, 2, true, {
                     prefix: "$"
                   })}
                 </span>
@@ -143,7 +139,7 @@ export default function NftCard({
                   }}
                 >
                   🔥
-                  {formatNumber(rewardTokenPrice?.last_price, 2, true, {
+                  {formatNumber(tokenPrice, 2, true, {
                     prefix: "$"
                   })}
                 </div>

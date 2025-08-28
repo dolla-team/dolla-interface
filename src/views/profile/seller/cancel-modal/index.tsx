@@ -3,7 +3,7 @@ import { formatNumber } from "@/utils/format/number";
 import { useMemo, useState } from "react";
 import Big from "big.js";
 import ButtonV2 from "@/components/button/v2";
-import { penaltyPercent } from "@/utils/pool";
+import { getAnchorPrice, penaltyPercent } from "@/utils/pool";
 import useRequestCancel from "@/hooks/evm/use-request-cancel";
 import useCompleteCancel from "@/hooks/evm/use-complete-cancel";
 import useApprove from "@/hooks/evm/use-approve";
@@ -96,12 +96,7 @@ export default function CancelModal({
             <span className="text-[#BBACA6] font-[400]">Market Value</span>
             <div className="grow border-b border-dashed border-[#5E6B7D] opacity-50" />
             <span className="text-white font-medium">
-              $
-              {formatNumber(
-                order?.reward_token_price?.[0]?.last_price || 0,
-                0,
-                true
-              )}
+              ${formatNumber(getAnchorPrice(order?.anchor_price), 0, true)}
             </span>
           </div>
           <div className="flex items-center text-[14px] mb-[20px] gap-[10px]">

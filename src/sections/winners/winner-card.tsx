@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { formatAddress } from "@/utils/format/address";
 import MultipleBg from "./multiple-bg";
 import clsx from "clsx";
+import { getAnchorPrice } from "@/utils/pool";
 
 export default function WinnerCard({
   data,
@@ -58,12 +59,7 @@ export default function WinnerCard({
                 <div className="flex items-center justify-between mt-[4px]">
                   <div className="text-[#8C8B8B]">Valued</div>
                   <div className="text-white truncate">
-                    $
-                    {formatNumber(
-                      data?.reward_token_price?.[0]?.last_price,
-                      2,
-                      true
-                    )}{" "}
+                    ${formatNumber(getAnchorPrice(data?.anchor_price), 2, true)}{" "}
                   </div>
                 </div>
                 <div className="flex items-center justify-between mt-[4px]">
