@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import NFTCard from "./nft-card";
-import NFTEmptyCard from "./nft-empty-card";
+// import NFTEmptyCard from "./nft-empty-card";
 import { useEffect, useState } from "react";
 
 export default function Nfts({ nfts, onSelectNft, currentNft }: any) {
@@ -30,12 +30,17 @@ export default function Nfts({ nfts, onSelectNft, currentNft }: any) {
               }}
             />
           ))}
-          {nfts.length === 0 &&
-            Array.from({ length: 6 }).map((_, index) => (
-              <NFTEmptyCard key={index} />
-            ))}
         </div>
+        {nfts.length === 0 && (
+          // Array.from({ length: 6 }).map((_, index) => (
+          //   <NFTEmptyCard key={index} />
+          // ))
+          <div className="text-[16px] text-[#999999] text-center w-full">
+            no nft fund
+          </div>
+        )}
       </div>
+
       {nfts.length > 0 && (
         <>
           <ArrowBtn

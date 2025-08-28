@@ -61,15 +61,21 @@ const Item = ({ data }: { data: any }) => {
       </div>
       <div>
         <div className="text-[14px] text-white">
-          {formatNumber(
-            Big(data.amount).div(10 ** data.token_info.decimals),
-            2,
-            true,
-            data.type === 1 || data.type === 3 || data.type === 5
-              ? { prefix: "+" }
-              : { prefix: "-" }
-          )}{" "}
-          {data.token_info.symbol}
+          {!data.token_info?.token_id
+            ? formatNumber(
+                Big(data.amount).div(10 ** data.token_info.decimals),
+                2,
+                true,
+                data.type === 1 || data.type === 3 || data.type === 5
+                  ? { prefix: "+ " }
+                  : { prefix: "- " }
+              )
+            : data.type === 1 || data.type === 3 || data.type === 5
+            ? "+"
+            : "-"}{" "}
+          {data.token_info?.token_id
+            ? `${data.token_info.name} #${data.token_info.token_id}`
+            : data.token_info.symbol}
         </div>
         {/* <div className="text-[10px] text-[#8A87AA]">-200 USDC</div> */}
       </div>
