@@ -136,10 +136,10 @@ const Loading = (props: Props) => {
   );
 
   return (
-    <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-[#1A191D] z-50">
+    <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-[#fff] z-50">
       <div className="w-full h-full flex flex-col justify-center items-center gap-[30px]">
         <DollaEye className="" height={128} />
-        <div className="w-[280px] h-[12px] flex-shrink-0 rounded-[12px] p-[2px] border border-[#3B3951] bg-[rgba(255,255,255,0.10)] backdrop-blur-[25px] relative">
+        <div className="w-[280px] h-[12px] flex-shrink-0 rounded-[12px] p-[2px] border border-[#E4E4E4] bg-[rgba(255,255,255,0.10)] backdrop-blur-[25px] relative">
           <motion.div
             ref={progressInnerRef}
             className="h-full rounded-[3px] bg-[linear-gradient(90deg,_#6F37FF_0%,_#00FFBB_100%)] relative"
