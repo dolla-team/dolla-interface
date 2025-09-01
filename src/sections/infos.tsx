@@ -36,10 +36,10 @@ const config: any[] = [
   }
 ];
 
-export default function Scroll({
+export default function Infos({
   className = "",
   speed = 120,
-  height = 40,
+  height = 36,
   autoPlay = true
 }: ScrollProps) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -107,18 +107,14 @@ export default function Scroll({
       <div
         ref={containerRef}
         className={clsx(
-          "relative overflow-hidden font-[DelaGothicOne] -rotate-3",
+          "relative overflow-hidden font-[DelaGothicOne] bg-[#000000]",
           "shadow-[0_0_10px_rgba(168,85,247,0.3)]",
           className
         )}
         style={{ height: `${height}px` }}
       >
-        <div className="absolute top-0 left-0 right-0 h-[1px] bg-[#5537FF] " />
-
-        <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-[#5537FF] " />
-
         <motion.div
-          className="flex items-center gap-8 px-4 whitespace-nowrap"
+          className="flex items-center gap-8 h-full whitespace-nowrap"
           animate={controls}
           style={{
             width: contentWidth * 2
@@ -139,11 +135,8 @@ export default function Scroll({
 const Item = ({ item }: { item: any; index: number }) => {
   const randomIndex = Math.floor(Math.random() * config.length);
   return (
-    <div className="flex items-center gap-3 text-white transition-transform duration-200 hover:scale-105">
-      <span
-        className="text-[20px] text-black px-2 py-1 rounded"
-        style={{ WebkitTextStroke: "1px white", color: "black" }}
-      >
+    <div className="flex items-center h-full gap-3 text-white transition-transform duration-200 hover:scale-105">
+      <span className="text-[12px] text-[#D9D9D9] rounded">
         {item.pool_info?.winner_user_email ||
           formatAddress(item.pool_info.winner_user)}{" "}
         Won

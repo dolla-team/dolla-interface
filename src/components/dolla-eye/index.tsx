@@ -7,7 +7,12 @@ import { useRef, useEffect, useState, useMemo } from "react";
 const BASE_HEIGHT = 56;
 
 const DollaEye = (props: any) => {
-  const { className, height = BASE_HEIGHT, ...restProps } = props;
+  const {
+    className,
+    height = BASE_HEIGHT,
+    onlyEye = false,
+    ...restProps
+  } = props;
 
   const { currentEye } = useDollaEyeContext();
 
@@ -107,15 +112,17 @@ const DollaEye = (props: any) => {
       className={clsx("flex items-center flex-nowrap", className)}
       {...restProps}
     >
-      <img
-        src="/logo-eye/d.svg"
-        alt="d"
-        className="shrink-0 object-contain object-center relative z-[3]"
-        style={{
-          width: textDWidth,
-          height: textHeight
-        }}
-      />
+      {!onlyEye && (
+        <img
+          src="/logo-eye/d.svg"
+          alt="d"
+          className="shrink-0 object-contain object-center relative z-[3]"
+          style={{
+            width: textDWidth,
+            height: textHeight
+          }}
+        />
+      )}
       <div
         ref={eyeRef}
         className="overflow-hidden shrink-0 relative z-[2]"
@@ -132,7 +139,7 @@ const DollaEye = (props: any) => {
 
         {/*#region eye background layer 1*/}
         <div
-          className="z-[1] absolute w-[calc(100%_-_2px)] h-[calc(100%_-_2px)] left-[1px] top-[1px] bg-[#FFF3D4]"
+          className="z-[1] absolute w-[calc(100%_-_2px)] h-[calc(100%_-_2px)] left-[1px] top-[1px] bg-[#fff]"
           style={{ borderRadius: height / 2 }}
         />
         {/*#endregion*/}
@@ -277,16 +284,18 @@ const DollaEye = (props: any) => {
         )}
         {/*#endregion*/}
       </div>
-      <img
-        src="/logo-eye/lla.svg"
-        alt="lla"
-        className="shrink-0 object-contain object-center relative z-[1]"
-        style={{
-          marginLeft: -textLeft,
-          width: textLlaWidth,
-          height: textHeight
-        }}
-      />
+      {!onlyEye && (
+        <img
+          src="/logo-eye/lla.svg"
+          alt="lla"
+          className="shrink-0 object-contain object-center relative z-[1]"
+          style={{
+            marginLeft: -textLeft,
+            width: textLlaWidth,
+            height: textHeight
+          }}
+        />
+      )}
     </div>
   );
 };

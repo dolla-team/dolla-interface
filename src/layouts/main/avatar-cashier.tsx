@@ -7,7 +7,7 @@ export default function AvatarCashier({
   onClick,
   tokenBalance
 }: {
-  onClick: () => void;
+  onClick: (e: any) => void;
   tokenBalance: string;
 }) {
   const isMobile = useIsMobile();

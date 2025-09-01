@@ -3,11 +3,14 @@ import { Outlet, useNavigate } from "react-router-dom";
 import Button from "@/components/button/v2";
 import { useAuth } from "@/contexts/auth";
 import DollaEye from "@/components/dolla-eye";
-// import EstGas from "@/sections/est-gas";
+import EstGas from "@/sections/est-gas";
 import Loading from "@/components/loading";
 // import useIsMobile from "@/hooks/use-is-mobile";
 import { useEffect, useState } from "react";
 import Wallet from "@/sections/wallet";
+import Infos from "@/sections/infos";
+import UserInfo from "@/sections/user-info";
+import PageTabs from "./tabs";
 
 export default function MainLayout() {
   const { userInfo, login, ready, user } = useAuth() || {};
@@ -33,10 +36,10 @@ export default function MainLayout() {
   return isLoading ? (
     <Loading />
   ) : (
-    <div className="h-screen overflow-hidden bg-black relative">
+    <div className="h-screen overflow-hidden bg-white relative">
       {/* header */}
-      <>
-        <div className="absolute left-[20px] top-[15px] z-[20] flex items-center gap-[30px]">
+      <div className="flex justify-between items-center h-[76px] sticky top-0 bg-white z-[20]">
+        <div className="flex items-center gap-[30px] pl-[30px]">
           <DollaEye
             className="button origin-left"
             height={32}
@@ -47,7 +50,7 @@ export default function MainLayout() {
           {/* {!isMobile && <EstGas />} */}
         </div>
 
-        <div className="absolute right-[10px] top-[10px] z-[20] flex items-center gap-[36px]">
+        <div className="flex items-center gap-[12px] pr-[12px]">
           {/* <div className="flex items-center gap-[8px]">
             <TicketIcon />
             <span
@@ -60,6 +63,7 @@ export default function MainLayout() {
               x35
             </span>
           </div> */}
+          <EstGas />
 
           {!userInfo ? (
             <Button onClick={login} className="w-[100px] h-[36px]">
@@ -76,8 +80,13 @@ export default function MainLayout() {
             </>
           )}
         </div>
-      </>
-      <Outlet />
+        <PageTabs />
+      </div>
+      <Infos />
+      <div className="h-[calc(100vh-112px)] overflow-y-auto relative z-[2] bg-[#F0F0F0]">
+        <Outlet />
+        <UserInfo />
+      </div>
       <Wallet />
     </div>
   );

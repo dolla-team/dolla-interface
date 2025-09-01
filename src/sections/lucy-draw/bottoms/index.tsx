@@ -18,22 +18,6 @@ export default function Bottoms({
   const isMobile = useIsMobile();
   return (
     <>
-      <div
-        className={clsx(
-          "flex absolute z-[1] bottom-0",
-          isMobile ? "w-full" : ""
-        )}
-      >
-        <StarBg size={isMobile ? 180 : 119} />
-        <StarBg
-          className={isMobile ? "ml-[-50px]" : "ml-[-50px]"}
-          size={isMobile ? 180 : 119}
-        />
-        <StarBg
-          className={isMobile ? "ml-[-50px]" : "ml-[-50px]"}
-          size={isMobile ? 180 : 119}
-        />
-      </div>
       {status === 0 && (
         <TicketBottom tickets={tickets} onBuyTicket={onBuyTicket} />
       )}
@@ -42,6 +26,22 @@ export default function Bottoms({
       )}
       {status === 2 && (
         <>
+          <div
+            className={clsx(
+              "flex absolute z-[1] bottom-0",
+              isMobile ? "w-full" : ""
+            )}
+          >
+            <StarBg size={isMobile ? 180 : 119} />
+            <StarBg
+              className={isMobile ? "ml-[-50px]" : "ml-[-50px]"}
+              size={isMobile ? 180 : 119}
+            />
+            <StarBg
+              className={isMobile ? "ml-[-50px]" : "ml-[-50px]"}
+              size={isMobile ? 180 : 119}
+            />
+          </div>
           <div className="relative z-[2] w-full h-full flex items-center justify-center">
             {winningList.map((item, index) => (
               <Avatar

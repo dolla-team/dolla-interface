@@ -15,7 +15,7 @@ import MainLayout from "./layouts/main";
 import Callback from "./views/callback";
 import DollaEyeContextProvider from "./contexts/dolla-eye";
 import NFT from "./views/nft";
-import NftList from "./views/nft-list";
+import Home from "./views/home";
 
 const LazyNftCreate = lazy(() => import("./views/nft-create"));
 const LazyProfilePlayer = lazy(() => import("./views/profile/player"));
@@ -67,7 +67,7 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Navigate to="/nft-list" replace />
+        element: <Home />
       },
       {
         index: true,
@@ -81,10 +81,6 @@ const router = createBrowserRouter([
       {
         path: "nft/create",
         element: <LazyNftCreate />
-      },
-      {
-        path: "nft-list",
-        element: <NftList />
       },
       {
         path: "portfolio/player",

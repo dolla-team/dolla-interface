@@ -1,24 +1,24 @@
-import clsx from "clsx";
+// import clsx from "clsx";
 import NftCard from "@/components/nft-card";
 import usePoolList from "@/hooks/use-pool-list";
 import Empty from "@/components/empty";
-import { useConfigStore } from "@/stores/use-config";
+// import { useConfigStore } from "@/stores/use-config";
 import { useNavigate } from "react-router-dom";
 import Loading from "@/components/icons/loading";
 
-const defultTabCls =
-  "cursor-pointer px-[10px] flex items-center gap-2 rounded-[8px] text-[14px] border border-[#383F47] bg-[##383F47] transition-all duration-300 h-[35px] text-[#FFFFFF99]";
-export default function NFTListContent() {
-  const configStore = useConfigStore();
+// const defultTabCls =
+//   "cursor-pointer px-[10px] flex items-center gap-2 rounded-[8px] text-[14px] border border-[#383F47] bg-[##383F47] transition-all duration-300 h-[35px] text-[#FFFFFF99]";
+export default function MoreMarkets() {
+  // const configStore = useConfigStore();
   const {
     poolList,
-    loading,
-    sortField,
-    sortOrder,
-    setSortField,
-    setSortOrder,
-    collection,
-    setCollection
+    loading
+    // sortField,
+    // sortOrder,
+    // setSortField,
+    // setSortOrder,
+    // collection,
+    // setCollection
   } = usePoolList({
     pageLimit: 100,
     chain: "Berachain",
@@ -27,8 +27,8 @@ export default function NFTListContent() {
   const navigate = useNavigate();
 
   return (
-    <div className="w-[1200px]  mx-auto py-[50px]">
-      <div className="flex justify-between items-center mb-8">
+    <div className="w-full bg-white mt-[30px] rounded-[16px] border border-[#F2F2F233] px-[30px] py-[20px] overflow-hidden overflow-x-auto">
+      {/* <div className="flex justify-between items-center mb-8">
         <div className="flex gap-4 text-[14px]">
           <button
             onClick={() => setCollection(null)}
@@ -121,17 +121,19 @@ export default function NFTListContent() {
             Time
           </button>
         </div>
+      </div> */}
+      <div className="text-[20px] text-black font-[700] mb-[10px]">
+        Hot Markets
       </div>
-
       {poolList.length > 0 && (
-        <div className="flex gap-[20px] flex-wrap pb-[100px] overflow-auto h-[80vh]">
+        <div className="flex gap-[20px]">
           {poolList.map((nft: any) => {
             return (
               <NftCard
                 key={nft.id}
                 data={nft}
                 onClick={() => navigate(`/nft/${nft.pool_id}`)}
-                className="button"
+                className="button shrink-0"
               />
             );
           })}

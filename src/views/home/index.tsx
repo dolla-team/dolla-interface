@@ -1,0 +1,29 @@
+import MoreMarkets from "./more-markets";
+import Banner from "./banner";
+import LucyDraw from "@/sections/lucy-draw";
+import TopWinners from "./top-winners";
+import Leaderboard from "./leaderboard";
+import { useAuth } from "@/contexts/auth";
+
+export default function Home() {
+  const { quoteTokenBalance } = useAuth();
+  return (
+    <div className="pb-[30px]">
+      <div className="w-[1158px] mx-auto pt-[30px]">
+        <Banner />
+        <div className="flex items-center gap-[22px] h-[154px]">
+          <div className="w-1/3">
+            <LucyDraw tokenBalance={quoteTokenBalance} />
+          </div>
+          <div className="w-1/3 h-full">
+            <TopWinners />
+          </div>
+          <div className="w-1/3 h-full">
+            <Leaderboard />
+          </div>
+        </div>
+        <MoreMarkets />
+      </div>
+    </div>
+  );
+}

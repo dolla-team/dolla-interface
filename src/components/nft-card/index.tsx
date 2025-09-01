@@ -32,8 +32,8 @@ export default function NftCard({
   return (
     <div
       className={clsx(
-        "w-[220px] h-[326px] rounded-[20px] p-[10px] relative border",
-        type === "basic" && "border-[#3B3951] bg-white/10 backdrop-blur-[10px]",
+        "w-[220px] h-[326px] rounded-[14px] p-[10px] relative border",
+        type === "basic" && "border-[#C7C7CC] bg-black/10 backdrop-blur-[10px]",
         type === "saudi" && "border-[#434343CC]",
         type === "redOg" && "border-[#2A2B27]",
         className
@@ -103,7 +103,7 @@ export default function NftCard({
             <div
               className={clsx(
                 "text-[12px] font-semibold flex justify-between items-center mt-[10px]",
-                type === "saudi" ? "text-black" : "text-white"
+                type !== "redOg" ? "text-black" : "text-white"
               )}
             >
               <span>{rewardToken?.name}</span>
@@ -112,14 +112,14 @@ export default function NftCard({
             <div
               className={clsx(
                 "text-[12px] font-semibold flex justify-between items-center",
-                type === "saudi" ? "text-black" : "text-white",
+                type !== "redOg" ? "text-black" : "text-white",
                 type === "basic" ? "mt-[8px]" : "mt-[4px]"
               )}
             >
               <span
                 className={clsx(
                   "font-normal",
-                  type === "saudi" ? "text-black" : "text-white/60"
+                  type !== "redOg" ? "text-black" : "text-white/60"
                 )}
               >
                 Prize
@@ -148,7 +148,7 @@ export default function NftCard({
             <div
               className={clsx(
                 "text-[12px] font-semibold flex justify-between items-center",
-                type === "saudi" ? "text-black" : "text-white",
+                type !== "redOg" ? "text-black" : "text-white",
                 type === "basic" ? "mt-[8px]" : "mt-[4px]"
               )}
             >
@@ -156,7 +156,7 @@ export default function NftCard({
                 <span
                   className={clsx(
                     "font-normal",
-                    type === "saudi" ? "text-black" : "text-white/60"
+                    type !== "redOg" ? "text-black" : "text-white/60"
                   )}
                 >
                   Players
@@ -167,7 +167,7 @@ export default function NftCard({
                 <span
                   className={clsx(
                     "font-normal",
-                    type === "saudi" ? "text-black" : "text-white/60"
+                    type !== "redOg" ? "text-black" : "text-white/60"
                   )}
                 >
                   Bid
@@ -186,7 +186,7 @@ export default function NftCard({
           <div
             className={clsx(
               "text-center text-black flex flex-col justify-center h-[100px]",
-              type === "saudi" ? "text-black" : "text-white"
+              type !== "redOg" ? "text-black" : "text-white"
             )}
           >
             <div className="text-[18px] font-bold">Congrats!</div>
