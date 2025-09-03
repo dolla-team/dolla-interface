@@ -12,7 +12,7 @@ export default function useWinnerBidList(data: any) {
   };
 
   useEffect(() => {
-    if (data.pool_id) {
+    if (data?.pool_id) {
       queryWinnerBidList();
     }
   }, [data]);

@@ -1,39 +1,29 @@
 import Avatar from "@/components/avatar";
 import { formatAddress } from "@/utils/format/address";
 import dayjs from "dayjs";
-import { useMemo } from "react";
-
-const COLORS = ["#FF5DF1", "#10FFBF", "#FFC42F", "#6F37FF"];
 
 export default function Item({ data }: any) {
-  const color = useMemo(() => {
-    return COLORS[Math.floor(Math.random() * COLORS.length)];
-  }, [data]);
   return (
-    <div className="relative h-[46px] shrink-0 mt-[10px]">
-      <Bg color={color} index={data?.user + data?.time} />
-      <div className="h-full p-[6px] inline-flex items-center">
+    <div className="relative h-[46px] shrink-0 bg-linear-to-r from-[#FFFFFF]/60 to-[#FFFFFF00] rounded-l-[24px]">
+      <Bg index={data?.user + data?.time} />
+      <div className="h-full p-[6px] inline-flex items-center text-[#3B3951] relative z-[2]">
         <Avatar
           address={data.user}
           email={data.user_email}
           size={30}
-          className="border border-[#131417] mr-[6px]"
+          className="border border-[#131417] mr-[6px] rounded-full"
         />
-        <div className="text-[14px] font-bold truncate mr-[3px] shrink-0">
+        <div className="text-[12px] truncate mr-[3px] shrink-0">
           {formatAddress(data.user, 3)}
         </div>
-        <div className="text-[14px] font-bold text-[#FFEF43] mr-[3px]">
-          bid {data.times}
-        </div>
-        <div className="text-[14px] font-bold">
-          {dayjs(data.time * 1000).fromNow()}
-        </div>
+        <div className="text-[12px] font-bold mr-[3px]">bid ${data.times}</div>
+        <div className="text-[12px]">{dayjs(data.time * 1000).fromNow()}</div>
       </div>
     </div>
   );
 }
 
-const Bg = ({ color, index }: { color: string; index: string }) => {
+const Bg = ({ index }: { index: string }) => {
   return (
     <svg
       width="100%"
@@ -75,8 +65,8 @@ const Bg = ({ color, index }: { color: string; index: string }) => {
           y2="23"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stopColor={color} stopOpacity="0" />
-          <stop offset="1" stopColor={color} />
+          <stop stopColor="#E4E4E400" stopOpacity="0" />
+          <stop offset="1" stopColor="#E4E4E4" />
         </linearGradient>
       </defs>
     </svg>

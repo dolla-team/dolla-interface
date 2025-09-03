@@ -50,7 +50,7 @@ function BidsInfoInner({ onRefresher }: any) {
   return (
     <div
       ref={containerRef}
-      className="absolute right-[20px] bottom-[20%] text-white w-full overflow-hidden [mask-image:linear-gradient(to_bottom,rgba(0,0,0,0),rgba(0,0,0,1)_10%,rgba(0,0,0,0))]"
+      className="text-white w-full overflow-hidden h-[46px] mt-[10px]"
     >
       <AnimatePresence>
         {show && (
@@ -66,18 +66,9 @@ function BidsInfoInner({ onRefresher }: any) {
             onUpdate={run}
           >
             <div className="flex gap-[10px] min-w-[100vw]">
-              {list
-                .filter((item, i) => i % 2)
-                .map((item, index) => (
-                  <Item key={index} data={item} />
-                ))}
-            </div>
-            <div className="flex gap-[10px] pl-[40px] min-w-[100vw]">
-              {list
-                .filter((item, i) => !(i % 2))
-                .map((item, index) => (
-                  <Item key={index} data={item} />
-                ))}
+              {list.map((item, index) => (
+                <Item key={index} data={item} />
+              ))}
             </div>
           </motion.div>
         )}

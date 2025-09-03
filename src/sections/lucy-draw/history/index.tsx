@@ -58,7 +58,7 @@ export default function LucyDrawHistory({
     <Modal open={open} onClose={onClose}>
       <div
         className={clsx(
-          "border border-[#6A5D3A] bg-[#1D1A16]",
+          "bg-[#1D1A16]",
           isMobile ? "w-full rounded-t-[16px]" : "w-[496px] rounded-[16px]"
         )}
       >
