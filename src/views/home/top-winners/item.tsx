@@ -1,10 +1,20 @@
 import Avatar from "@/components/avatar";
 import ItemLevel from "./item-level";
-export default function TopWinnersItem() {
+import { formatAddress } from "@/utils/format/address";
+import { getAnchorPrice } from "@/utils/pool";
+import Big from "big.js";
+
+export default function TopWinnersItem({
+  data,
+  level
+}: {
+  data: any;
+  level: number;
+}) {
   return (
     <div className="w-full h-[48px] mt-[5px] px-[10px] relative flex items-center justify-between rounded-[10px] border border-[#F2F2F233] bg-linear-to-r from-[#D565C4]/10 to-[#8C8C8C]/10">
       <ItemLevel
-        level={1}
+        level={level}
         className="absolute top-[-10px] left-[-10px] z-[2]"
       />
       <div className="flex items-center gap-[10px]">
@@ -13,13 +23,16 @@ export default function TopWinnersItem() {
         </div>
         <div>
           <div className="text-[10px] text-black/30">Winner</div>
-          <div className="text-[12px] text-black font-semibold">0xdolla</div>
+          <div className="text-[12px] text-black font-semibold">
+            {data?.pool_info?.winner_user_email ||
+              formatAddress(data?.pool_info?.winner_user)}{" "}
+          </div>
         </div>
       </div>
       <div>
         <div className="text-[10px] text-black/30">Return</div>
         <div className="text-[12px] text-black text-right font-semibold">
-          800x
+          {Big(getAnchorPrice(data?.pool_info?.anchor_price)).toFixed(0)}x
         </div>
       </div>
     </div>

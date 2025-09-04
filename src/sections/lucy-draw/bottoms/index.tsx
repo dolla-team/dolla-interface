@@ -8,18 +8,24 @@ export default function Bottoms({
   status,
   tickets,
   onBuyTicket,
-  winningList = []
+  winningList = [],
+  participation
 }: {
   status: number;
   tickets: number;
   onBuyTicket: () => void;
   winningList: any[];
+  participation: number;
 }) {
   const isMobile = useIsMobile();
   return (
     <>
       {status === 0 && (
-        <TicketBottom tickets={tickets} onBuyTicket={onBuyTicket} />
+        <TicketBottom
+          tickets={tickets}
+          onBuyTicket={onBuyTicket}
+          participation={participation}
+        />
       )}
       {status === 1 && (
         <div className="relative z-[2] w-full h-full flex items-center justify-center bg-[url(/btc/lucky-draw-loading.gif)] bg-no-repeat bg-center bg-contain" />

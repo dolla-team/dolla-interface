@@ -12,7 +12,8 @@ export default function LucyDrawCard({
   setStatus,
   fetchResult,
   setShowBuyTicket,
-  setIsHistoryOpen
+  setIsHistoryOpen,
+  participation
 }: any) {
   const isMobile = useIsMobile();
   return (
@@ -98,6 +99,7 @@ export default function LucyDrawCard({
           tickets={tickets}
           onBuyTicket={() => setShowBuyTicket(true)}
           winningList={winningList}
+          participation={participation}
         />
       </div>
     </div>
