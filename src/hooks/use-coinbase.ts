@@ -21,13 +21,13 @@ export default function useCoinBase({ address, amount, orderId }: { address: str
             "/api/v1/coinbase/onramp/token",
             {
                 addresses: [
-                  {
-                    address: address,
-                    blockchains: ["solana"]
-                  }
+                    {
+                        address: address,
+                        blockchains: ["solana"]
+                    }
                 ],
                 assets: ["USDC"]
-              }
+            }
         )
 
         if (res?.data?.code != 0) {
