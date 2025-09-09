@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import useMoonpay from "@/hooks/use-moonpay";
 import { getWindowSize } from "../utils/getWindowSize";
 
-export default function FundFromCoinbase({ onBack }: { onBack: () => void }) {
+export default function FundFromMoonpay({ onBack }: { onBack: () => void }) {
     const { address, userInfo } = useAuth();
     const [amount, setAmount] = useState("");
     const [orderId, setOrderId] = useState("");
@@ -37,7 +37,7 @@ export default function FundFromCoinbase({ onBack }: { onBack: () => void }) {
     }, []);
 
     return <div>
-        <FundFromCex amount={amount} disabled={!amount || Number(amount) < 20 || !moonpayUrl} setAmount={setAmount} onBack={onBack} onOrderIdCreated={() => {
+        <FundFromCex amount={amount} minAmount={20} disabled={!amount || Number(amount) < 20 || !moonpayUrl} setAmount={setAmount} onBack={onBack} onOrderIdCreated={() => {
             if (moonpayUrl) {
                 const features = getWindowSize(800, 600);
                 window.open(moonpayUrl, '_blank', features);
