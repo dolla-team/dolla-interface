@@ -4,7 +4,7 @@ import axiosInstance from "@/libs/axios";
 
 // const projectId = 'b88afaf3-113e-4ec4-80d0-0178256acc0a';
 
-const projectId = 'fc6b7f9a-fff8-407f-bdda-0b8ede3ae84c'
+// const projectId = 'fc6b7f9a-fff8-407f-bdda-0b8ede3ae84c'
 
 export default function useCoinBase({ address, amount, orderId }: { address: string, amount: number, orderId: string }) {
     const [coinBaseUrl, setCoinBaseUrl] = useState<string | null>(null);
@@ -12,7 +12,7 @@ export default function useCoinBase({ address, amount, orderId }: { address: str
 
 
     const getCoinBaseUrl = useCallback(async () => {
-        if (!address || amount <= 0 || !orderId) {
+        if (!address || amount < 10 || !orderId) {
             setCoinBaseUrl(null);
             return;
         }
@@ -22,7 +22,7 @@ export default function useCoinBase({ address, amount, orderId }: { address: str
             {
                 addresses: [
                   {
-                    address: "GgmubAjnikmpiizfvSjbqYT7eq2Wx1HkMx4rQBPF3rws",
+                    address: address,
                     blockchains: ["solana"]
                   }
                 ],
