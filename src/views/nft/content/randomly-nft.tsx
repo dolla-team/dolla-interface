@@ -9,7 +9,7 @@ export default function RandomlyNft() {
       className="button flex justify-center items-center shadow-xl gap-[6px] fixed bottom-[20px] right-[20px] rounded-[20px] border border-[#E4E4E4] bg-[#FFFFFF80] w-[168px] h-[34px]"
       onClick={() => {
         if (isDetail) {
-          navigate("/nft");
+          navigate("/detail");
         } else {
           getPoolRecommend();
         }

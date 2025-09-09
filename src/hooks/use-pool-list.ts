@@ -2,6 +2,9 @@ import { useEffect, useRef, useState } from "react";
 import axiosInstance from "@/libs/axios";
 import { HOST_API } from "@/config";
 import { useAuth } from "@/contexts/auth";
+import { getAnchorPrice } from "@/utils/pool";
+import Big from "big.js";
+import { formatNumber } from "@/utils/format/number";
 
 export default function usePoolList(props?: {
   pageLimit?: number;
@@ -68,30 +71,44 @@ export default function usePoolList(props?: {
         }`
       );
 
+      const list = res.data.data.list.map((item: any) => {
+        const valued = item.nft_ids
+          ? getAnchorPrice(item.anchor_price)
+          : item.value;
+
+        const reward_amount = item.reward_amount || 0;
+        const decimals = item.reward_token_info?.[0]?.decimals || 1;
+        const _an = Big(reward_amount).div(10 ** decimals);
+        const _a = formatNumber(_an, 3, true);
+        return {
+          ...item,
+          amount: _a,
+          progress:
+            Number(valued) === 0
+              ? 0
+              : Big(item.accumulative_bids).div(valued).mul(100).toNumber()
+        };
+      });
+
       if (isScrollList) {
         setPoolList((prev) =>
-          pageRef.current === 0
-            ? res.data.data.list
-            : [...prev, ...res.data.data.list]
+          pageRef.current === 0 ? list : [...prev, ...list]
         );
       } else {
-        setPoolList(res.data.data.list);
+        setPoolList(list);
       }
       if (pageRef.current === 0) {
-        onFirstPageLoad?.(res.data.data.list);
+        onFirstPageLoad?.(list);
       }
 
       cachedList.current =
-        pageRef.current === 0
-          ? res.data.data.list
-          : [...cachedList.current, ...res.data.data.list];
+        pageRef.current === 0 ? list : [...cachedList.current, ...list];
 
       setHasMore(res.data.data.has_next_page);
-      // if (res.data.data.list.length === LIMIT) {
-      //   pageRef.current++;
-      // }
+
       setLoading(false);
     } catch (error) {
+      console.log(error);
       setLoading(false);
     }
   };

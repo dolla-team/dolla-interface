@@ -70,12 +70,7 @@ const router = createBrowserRouter([
         element: <Home />
       },
       {
-        index: true,
-        path: "nft",
-        element: <LazyNft />
-      },
-      {
-        path: "nft/:poolId",
+        path: "detail/:poolId",
         element: <LazyNft />
       },
       {

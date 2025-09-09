@@ -1,8 +1,9 @@
-import MoreMarkets from "./more-markets";
+import MoreMarkets from "./hot-markets";
 import Banner from "./banner";
 import LucyDraw from "@/sections/lucy-draw";
 import TopWinners from "./top-winners";
 import Leaderboard from "./leaderboard";
+import Markets from "./markets";
 import { useAuth } from "@/contexts/auth";
 
 export default function Home() {
@@ -23,6 +24,7 @@ export default function Home() {
           </div>
         </div>
         <MoreMarkets />
+        <Markets />
       </div>
     </div>
   );

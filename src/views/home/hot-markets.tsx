@@ -20,7 +20,7 @@ export default function MoreMarkets() {
     // collection,
     // setCollection
   } = usePoolList({
-    pageLimit: 100,
+    pageLimit: 10,
     chain: "Berachain",
     tokenStatus: 1
   });
@@ -132,8 +132,9 @@ export default function MoreMarkets() {
               <NftCard
                 key={nft.id}
                 data={nft}
-                onClick={() => navigate(`/nft/${nft.pool_id}`)}
+                onClick={() => navigate(`/detail/${nft.pool_id}`)}
                 className="button shrink-0"
+                isNft={true}
               />
             );
           })}
