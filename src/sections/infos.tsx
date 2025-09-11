@@ -90,16 +90,23 @@ export default function Infos({
 
     const getData = async () => {
       const res = await axiosInstance.get(
-        "/api/v1/pool/winner/bid/recommend?chain=Berachain"
+        "https://test-api.dolla.market/api/v1/pool/scroll/list?list=10&chain=solana"
       );
 
       setData(res.data.data);
+
+      window.scrollTimer = setTimeout(() => {
+        getData();
+      }, 10000);
     };
 
     getData();
 
     window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      clearTimeout(window.scrollTimer);
+    };
   }, []);
 
   return (
@@ -134,12 +141,10 @@ export default function Infos({
 
 const Item = ({ item }: { item: any; index: number }) => {
   const randomIndex = Math.floor(Math.random() * config.length);
-  return (
+  return item.winner_user ? (
     <div className="flex items-center h-full gap-3 text-white transition-transform duration-200 hover:scale-105">
       <span className="text-[12px] text-[#D9D9D9] rounded">
-        {item.pool_info?.winner_user_email ||
-          formatAddress(item.pool_info.winner_user)}{" "}
-        Won
+        {formatAddress(item.winner_user)} Won
       </span>
       <span
         className={clsx(
@@ -147,7 +152,19 @@ const Item = ({ item }: { item: any; index: number }) => {
           config[randomIndex].color
         )}
       >
-        {Big(getAnchorPrice(item?.pool_info?.anchor_price)).toFixed(0)}x
+        {Big(getAnchorPrice(item?.anchor_price, 8)).toFixed(0)}x
+      </span>
+      <span className="text-xl drop-shadow-lg">
+        {config[randomIndex].emoji}
+      </span>
+    </div>
+  ) : (
+    <div className="flex items-center h-full gap-3 text-white transition-transform duration-200 hover:scale-105">
+      <span className="text-[#D9D9D9] text-[12px]">
+        {item.nft_ids ? "New NFT Listed" : "New Market Listed"}
+      </span>
+      <span className={clsx("text-lg font-bold drop-shadow-lg")}>
+        ${Big(getAnchorPrice(item?.anchor_price, 8)).toFixed(0)}
       </span>
       <span className="text-xl drop-shadow-lg">
         {config[randomIndex].emoji}

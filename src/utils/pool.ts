@@ -10,7 +10,7 @@ export const getPoolInfo = async (poolId: number) => {
   return res.data.data;
 };
 
-export const getAnchorPrice = (price: number) => {
+export const getAnchorPrice = (price: number, decimals: number = 18) => {
   if (price)
     return Big(price * 1.2)
       .div(10 ** decimals)

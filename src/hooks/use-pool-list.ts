@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import axiosInstance from "@/libs/axios";
-import { HOST_API } from "@/config";
 import { useAuth } from "@/contexts/auth";
 import { getAnchorPrice } from "@/utils/pool";
 import Big from "big.js";
@@ -62,7 +61,7 @@ export default function usePoolList(props?: {
     try {
       setLoading(true);
       const res = await axiosInstance.get(
-        `${HOST_API}/api/v1/pool/list?limit=${LIMIT}&offset=${
+        `/api/v1/pool/list?limit=${LIMIT}&offset=${
           pageRef.current * LIMIT
         }&sort_field=${sortField}&sort_order=${sortOrder}&status=1&chain=${
           chain || "Berachain"
