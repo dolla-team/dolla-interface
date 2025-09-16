@@ -10,20 +10,20 @@ import Loading from "@/components/icons/loading";
 //   "cursor-pointer px-[10px] flex items-center gap-2 rounded-[8px] text-[14px] border border-[#383F47] bg-[##383F47] transition-all duration-300 h-[35px] text-[#FFFFFF99]";
 export default function MoreMarkets() {
   // const configStore = useConfigStore();
-  // const {
-  //   poolList,
-  //   loading
-  //   // sortField,
-  //   // sortOrder,
-  //   // setSortField,
-  //   // setSortOrder,
-  //   // collection,
-  //   // setCollection
-  // } = usePoolList({
-  //   pageLimit: 10,
-  //   chain: "solana",
-  //   tokenStatus: 1
-  // });
+  const {
+    poolList,
+    loading
+    // sortField,
+    // sortOrder,
+    // setSortField,
+    // setSortOrder,
+    // collection,
+    // setCollection
+  } = usePoolList({
+    pageLimit: 10,
+    chain: "Berachain",
+    tokenStatus: 1
+  });
   const navigate = useNavigate();
 
   return (
@@ -125,9 +125,9 @@ export default function MoreMarkets() {
       <div className="text-[20px] text-black font-[700] mb-[10px]">
         Hot Markets
       </div>
-      {[].length > 0 && (
+      {poolList.length > 0 && (
         <div className="flex gap-[20px]">
-          {[].map((nft: any) => {
+          {poolList.map((nft: any) => {
             return (
               <NftCard
                 key={nft.id}
@@ -140,13 +140,13 @@ export default function MoreMarkets() {
           })}
         </div>
       )}
-      {false && (
-        <div className="h-[30vh] flex justify-center items-center">
+      {loading && (
+        <div className="h-[314px] flex justify-center items-center">
           <Loading size={30} />
         </div>
       )}
-      {!false && [].length === 0 && (
-        <Empty className="h-[30vh]">
+      {!loading && poolList.length === 0 && (
+        <Empty className="h-[314px]">
           <div className="text-[#BBACA6] text-[14px] flex justify-center items-center">
             No data
           </div>

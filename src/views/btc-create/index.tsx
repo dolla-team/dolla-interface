@@ -86,7 +86,7 @@ export default function BTCCreate() {
   }, []);
 
   return (
-    <div className="w-full h-screen overflow-y-auto font-[SpaceGrotesk] text-[14px] font-[400] leading-[100%] text-white pt-[60px] pb-[60px] max-md:pt-[80px]">
+    <div className="w-full h-screen overflow-y-auto text-[14px] font-[400] leading-[100%] text-white pt-[60px] pb-[60px] max-md:pt-[80px]">
       <div className="text-[20px] font-[DelaGothicOne] text-center">
         Create BTC Market
       </div>
@@ -249,7 +249,7 @@ export default function BTCCreate() {
             </div>
             <div className="w-full mt-[30px] grid grid-cols-2 h-[210px] place-items-center max-md:grid-cols-1 max-md:mt-[28px] max-md:h-[unset]">
               {isMobile && (
-                <div className="text-[#FFE9B2] font-[SpaceGrotesk] text-[16px] text-left w-full">
+                <div className="text-[#FFE9B2] text-[16px] text-left w-full">
                   Cash out timing
                 </div>
               )}
@@ -275,7 +275,7 @@ export default function BTCCreate() {
                 }}
               />
               {isMobile && (
-                <div className="text-[#FFE9B2] font-[SpaceGrotesk] text-[16px] text-left w-full mt-[30px]">
+                <div className="text-[#FFE9B2] text-[16px] text-left w-full mt-[30px]">
                   Bids overmarket
                 </div>
               )}

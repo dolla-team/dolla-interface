@@ -3,7 +3,7 @@ import TopWinnersItem from "./item";
 import axiosInstance from "@/libs/axios";
 import { useEffect, useState } from "react";
 
-export default function TopWinners() {
+export default function TopWinners({ type }: { type: "winners" | "sellers" }) {
   const [data, setData] = useState<any[]>([]);
   useEffect(() => {
     const getData = async () => {
@@ -17,7 +17,9 @@ export default function TopWinners() {
     getData();
   }, []);
   return (
-    <TopWinnersContainer title="Top Winners">
+    <TopWinnersContainer
+      title={type === "winners" ? "Top BTC Winners" : "Top BTC Sellers"}
+    >
       {data.map((item, index) => (
         <TopWinnersItem key={item.id} data={item} level={index + 1} />
       ))}

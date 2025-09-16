@@ -2,7 +2,6 @@ import HotMarkets from "./hot-markets";
 import Banner from "./banner";
 import LucyDraw from "@/sections/lucy-draw";
 import TopWinners from "./top-winners";
-import Leaderboard from "./leaderboard";
 import Markets from "./markets";
 import { useAuth } from "@/contexts/auth";
 
@@ -19,10 +18,10 @@ export default function Home() {
             <LucyDraw tokenBalance={quoteTokenBalance} />
           </div>
           <div className="w-1/3 h-full">
-            <TopWinners />
+            <TopWinners type="winners" />
           </div>
           <div className="w-1/3 h-full">
-            <Leaderboard />
+            <TopWinners type="sellers" />
           </div>
         </div>
       </div>

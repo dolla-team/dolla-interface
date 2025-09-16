@@ -11,12 +11,14 @@ import Wallet from "@/sections/wallet";
 import Infos from "@/sections/infos";
 import UserInfo from "@/sections/user-info";
 import PageTabs from "./tabs";
+import useIsBtc from "@/hooks/use-is-btc";
 
 export default function MainLayout() {
   const { userInfo, login, ready, user } = useAuth() || {};
   // const isMobile = useIsMobile();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
+  const isBtc = useIsBtc();
 
   useEffect(() => {
     if (!ready) {
@@ -82,7 +84,7 @@ export default function MainLayout() {
         </div>
         <PageTabs />
       </div>
-      <Infos />
+      <Infos chain={isBtc ? "Berachain" : "solana"} />
       <div className="h-[calc(100vh-76px)] overflow-y-auto relative z-[2] bg-[#F0F0F0]">
         <Outlet />
         <UserInfo />

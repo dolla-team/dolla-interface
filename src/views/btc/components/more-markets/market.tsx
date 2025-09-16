@@ -14,7 +14,7 @@ export default function Market({
   footer,
   header,
   isAcitveBg = true,
-  onClick = () => { },
+  onClick = () => {},
   isForceNormal,
   isActive
 }: {
@@ -42,85 +42,115 @@ export default function Market({
     <div
       className={clsx(
         "w-[280px] h-[168px] cursor-pointer group shrink-0 rounded-[20px] border-[2px] border-transparent bg-[#222A35] transition-all duration-300 relative",
-        isActive ? "w-[344px] h-[222px] shadow-[0px_0px_20px_0px_rgba(255,_239,_67,_0.60)] bg-[url('/btc/bg-market-active-border.svg')] bg-[length:344px_222px] bg-no-repeat bg-center" : "",
-        isMobile ? "" : "hover:border-[#99761D] hover:scale-[1.05] hover:shadow-[0px_0px_20px_0px_rgba(255,_239,_67,_0.60)]",
+        isActive
+          ? "w-[344px] h-[222px] shadow-[0px_0px_20px_0px_rgba(255,_239,_67,_0.60)] bg-[url('/btc/bg-market-active-border.svg')] bg-[length:344px_222px] bg-no-repeat bg-center"
+          : "",
+        isMobile
+          ? ""
+          : "hover:border-[#99761D] hover:scale-[1.05] hover:shadow-[0px_0px_20px_0px_rgba(255,_239,_67,_0.60)]",
         className
       )}
       onClick={onClick}
     >
       {header}
-      {isAcitveBg && (
-        isActive ? (
-          <img src="/btc/bg-market-active.png" alt="" className="w-[340px] h-[218px] absolute left-0 top-0 object-center object-contain" />
+      {isAcitveBg &&
+        (isActive ? (
+          <img
+            src="/btc/bg-market-active.png"
+            alt=""
+            className="w-[340px] h-[218px] absolute left-0 top-0 object-center object-contain"
+          />
         ) : (
           <MarketActiveBg />
-        )
-      )}
+        ))}
       <div className="relative z-[2]">
-        <div className={clsx("", isForceNormal ? "" : "max-md:flex max-md:justify-between max-md:p-[23px_16px_0_12px]")}>
-          <div className={clsx("pt-[14px] px-[12px]", isForceNormal ? "" : "max-md:px-0 max-md:pt-0")}>
-            {
-              (!isForceNormal && isMobile) && (
-                <div className="text-[14px] font-[400] text-white">
-                  Market #{data?.pool_id}
-                </div>
-              )
-            }
-            {
-              isActive ? (
-                <div className="flex items-start justify-between gap-[10px]">
-                  <div className="flex items-center gap-[10px]">
-                    {
-                      data?.user_info?.icon && (
-                        <div className="w-[41px] h-[41px] shrink-0 rounded-[12px] border-[2px] border-[#FFC42F] overflow-hidden flex justify-center items-center">
-                          <img src={data.user_info?.icon} alt="user" className="w-full h-full object-center object-contain" />
-                        </div>
-                      )
-                    }
-                    <div className="text-[#FFE9B2] text-[16px] leading-[100%] font-[400] font-[SpaceGrotesk]">
-                      <div className="flex items-center gap-[5px]">
-                        <div className="">Seller</div>
-                        <div className="relative w-[49px] h-[16px] rounded-[16px] border border-[#6A5D3A] bg-[#35302B] text-[14px] font-[700] flex justify-end pr-[6px] items-center">
-                          <div>4.2</div>
-                          <img src="/btc/icon-star.svg" alt="star" className="w-[18px] h-[18px] absolute left-[-2px] shrink-0 object-center object-contain" />
-                        </div>
-                      </div>
-                      <div className="font-[DelaGothicOne] mt-[5px]">
-                        {formatAddress(data?.user)}
+        <div
+          className={clsx(
+            "",
+            isForceNormal
+              ? ""
+              : "max-md:flex max-md:justify-between max-md:p-[23px_16px_0_12px]"
+          )}
+        >
+          <div
+            className={clsx(
+              "pt-[14px] px-[12px]",
+              isForceNormal ? "" : "max-md:px-0 max-md:pt-0"
+            )}
+          >
+            {!isForceNormal && isMobile && (
+              <div className="text-[14px] font-[400] text-white">
+                Market #{data?.pool_id}
+              </div>
+            )}
+            {isActive ? (
+              <div className="flex items-start justify-between gap-[10px]">
+                <div className="flex items-center gap-[10px]">
+                  {data?.user_info?.icon && (
+                    <div className="w-[41px] h-[41px] shrink-0 rounded-[12px] border-[2px] border-[#FFC42F] overflow-hidden flex justify-center items-center">
+                      <img
+                        src={data.user_info?.icon}
+                        alt="user"
+                        className="w-full h-full object-center object-contain"
+                      />
+                    </div>
+                  )}
+                  <div className="text-[#FFE9B2] text-[16px] leading-[100%] font-[400]">
+                    <div className="flex items-center gap-[5px]">
+                      <div className="">Seller</div>
+                      <div className="relative w-[49px] h-[16px] rounded-[16px] border border-[#6A5D3A] bg-[#35302B] text-[14px] font-[700] flex justify-end pr-[6px] items-center">
+                        <div>4.2</div>
+                        <img
+                          src="/btc/icon-star.svg"
+                          alt="star"
+                          className="w-[18px] h-[18px] absolute left-[-2px] shrink-0 object-center object-contain"
+                        />
                       </div>
                     </div>
-                  </div>
-                  <div className="font-[DelaGothicOne] leading-[100%] text-[14px] bg-clip-text text-transparent bg-[linear-gradient(270deg,_#FFC42F_0%,_#FFF698_100%)]">
-                    {rewardTokenInfo?.name}
-                    {data?.nft_ids ? `#${data?.nft_ids}` : null}
+                    <div className="font-[DelaGothicOne] mt-[5px]">
+                      {formatAddress(data?.user)}
+                    </div>
                   </div>
                 </div>
-              ) : (
-                <div className={clsx("flex items-center justify-between", isForceNormal ? "" : "max-md:mt-[9px]")}>
-                  <div className="flex items-center gap-[6px]">
-                    {rewardTokenInfo?.icon && (
-                      <img
-                        src={rewardTokenInfo.icon}
-                        className="w-[20px] h-[20px] rounded-[4px] border border-white/80"
-                      />
-                    )}
-
-                    <span className="text-[14px] text-white">
-                      {rewardTokenInfo?.name}
-                    </span>
-                  </div>
-                  {data?.nft_ids && (
-                    <span className="text-[12px] text-[#ADBCCF]">#{data?.nft_ids}</span>
+                <div className="font-[DelaGothicOne] leading-[100%] text-[14px] bg-clip-text text-transparent bg-[linear-gradient(270deg,_#FFC42F_0%,_#FFF698_100%)]">
+                  {rewardTokenInfo?.name}
+                  {data?.nft_ids ? `#${data?.nft_ids}` : null}
+                </div>
+              </div>
+            ) : (
+              <div
+                className={clsx(
+                  "flex items-center justify-between",
+                  isForceNormal ? "" : "max-md:mt-[9px]"
+                )}
+              >
+                <div className="flex items-center gap-[6px]">
+                  {rewardTokenInfo?.icon && (
+                    <img
+                      src={rewardTokenInfo.icon}
+                      className="w-[20px] h-[20px] rounded-[4px] border border-white/80"
+                    />
                   )}
+
+                  <span className="text-[14px] text-white">
+                    {rewardTokenInfo?.name}
+                  </span>
                 </div>
-              )
-            }
+                {data?.nft_ids && (
+                  <span className="text-[12px] text-[#ADBCCF]">
+                    #{data?.nft_ids}
+                  </span>
+                )}
+              </div>
+            )}
           </div>
           <div
             className={clsx(
               "mx-[6px] h-[40px] rounded-[6px] flex flex-col items-center justify-center px-[6px]",
-              isForceNormal ? "" : "max-md:pt-[10px] max-md:px-0 max-md:mx-0 max-md:mt-0 max-md:items-end",
-              isActive ? "mt-[34px]" : "mt-[16px]",
+              isForceNormal
+                ? ""
+                : "max-md:pt-[10px] max-md:px-0 max-md:mx-0 max-md:mt-0 max-md:items-end",
+              isActive ? "mt-[34px]" : "mt-[16px]"
             )}
           >
             <span
@@ -132,7 +162,7 @@ export default function Market({
               <span
                 className={clsx(
                   "absolute inset-0",
-                  isActive ? "text-shadow-[5px_4px_0_#382B0B]" : "",
+                  isActive ? "text-shadow-[5px_4px_0_#382B0B]" : ""
                 )}
                 style={{
                   WebkitTextFillColor: "transparent",
@@ -143,14 +173,14 @@ export default function Market({
                 {data?.nft_ids
                   ? 1
                   : rewardTokenInfo?.decimals && data?.reward_amount
-                    ? formatNumber(
+                  ? formatNumber(
                       Big(data.reward_amount || 0).div(
                         10 ** rewardTokenInfo.decimals
                       ),
                       3,
                       true
                     )
-                    : "-"}{" "}
+                  : "-"}{" "}
                 {rewardTokenInfo.symbol}{" "}
               </span>
               <span
@@ -164,21 +194,21 @@ export default function Market({
                 {data?.nft_ids
                   ? 1
                   : rewardTokenInfo?.decimals && data?.reward_amount
-                    ? formatNumber(
+                  ? formatNumber(
                       Big(data.reward_amount || 0).div(
                         10 ** rewardTokenInfo.decimals
                       ),
                       3,
                       true
                     )
-                    : "-"}{" "}
+                  : "-"}{" "}
                 {rewardTokenInfo.symbol}{" "}
               </span>
             </span>
             <span
               className={clsx(
                 "mt-[8px] font-semibold text-transparent bg-clip-text bg-[radial-gradient(50%_50%_at_50%_50%,#FFEF43_0%,#FFC42F_100%)]",
-                isActive ? "text-[24px] leading-[100%]" : "text-[16px]",
+                isActive ? "text-[24px] leading-[100%]" : "text-[16px]"
               )}
             >
               {formatNumber(data?.value || 0, 0, true, {
@@ -190,7 +220,9 @@ export default function Market({
         <div
           className={clsx(
             "px-[12px] flex items-center justify-between text-[14px] text-white",
-            isActive ? "mt-[23px] font-[DelaGothicOne] text-[#FFE9B2]" : "mt-[16px]"
+            isActive
+              ? "mt-[23px] font-[DelaGothicOne] text-[#FFE9B2]"
+              : "mt-[16px]"
           )}
         >
           <div className="flex items-center gap-[5px]">
@@ -224,7 +256,12 @@ export default function Market({
                 strokeLinecap="round"
               />
             </svg>
-            <span className={clsx("", isActive ? "text-[#FFE9B2]" : "text-[#ADBCCF]")}>
+            <span
+              className={clsx(
+                "",
+                isActive ? "text-[#FFE9B2]" : "text-[#ADBCCF]"
+              )}
+            >
               {data?.participants}
             </span>
           </div>
@@ -241,7 +278,12 @@ export default function Market({
                 fill={isActive ? "#FFE9B2" : "#ADBCCF"}
               />
             </svg>
-            <span className={clsx("", isActive ? "text-[#FFE9B2]" : "text-[#ADBCCF]")}>
+            <span
+              className={clsx(
+                "",
+                isActive ? "text-[#FFE9B2]" : "text-[#ADBCCF]"
+              )}
+            >
               {formatNumber(data?.accumulative_bids || 0, 0, true, {
                 prefix: "$"
               })}
@@ -251,7 +293,9 @@ export default function Market({
         <div
           className={clsx(
             "mt-[15px] rounded-[6px] relative mx-[11px]",
-            isActive ? "h-[6px] bg-white/10 border border-[#948254]" : "h-[3px] bg-[#191E27]"
+            isActive
+              ? "h-[6px] bg-white/10 border border-[#948254]"
+              : "h-[3px] bg-[#191E27]"
           )}
         >
           <div

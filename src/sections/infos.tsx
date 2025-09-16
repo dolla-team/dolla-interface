@@ -12,6 +12,7 @@ interface ScrollProps {
   speed?: number;
   height?: number;
   autoPlay?: boolean;
+  chain: "solana" | "Berachain";
 }
 
 const config: any[] = [
@@ -41,7 +42,8 @@ export default function Infos({
   className = "",
   speed = 120,
   height = 36,
-  autoPlay = true
+  autoPlay = true,
+  chain
 }: ScrollProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [containerWidth, setContainerWidth] = useState(0);

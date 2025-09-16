@@ -1,9 +1,9 @@
-import TopWinnersContainer from "./container";
-import TopWinnersItem from "./item";
+import TopWinnersContainer from "@/views/btc-list/top-winners/container";
+import TopWinnersItem from "@/views/btc-list/top-winners/item";
 import axiosInstance from "@/libs/axios";
 import { useEffect, useState } from "react";
 
-export default function TopWinners() {
+export default function TopWinners({ type }: { type: "winners" | "sellers" }) {
   const [data, setData] = useState<any[]>([]);
   useEffect(() => {
     const getData = async () => {
@@ -17,7 +17,9 @@ export default function TopWinners() {
     getData();
   }, []);
   return (
-    <TopWinnersContainer title="Top Winners">
+    <TopWinnersContainer
+      title={type === "winners" ? "Top NFT Winners" : "Top NFT Sellers"}
+    >
       {data.map((item, index) => (
         <TopWinnersItem key={item.id} data={item} level={index + 1} />
       ))}

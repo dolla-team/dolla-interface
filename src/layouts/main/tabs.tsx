@@ -5,9 +5,10 @@ import useIsBtc from "@/hooks/use-is-btc";
 import clsx from "clsx";
 
 export default function PageTabs() {
-  const [tab, setTab] = useState(0);
-  const navigate = useNavigate();
   const isBtc = useIsBtc();
+  const [tab, setTab] = useState(isBtc ? 0 : 1);
+  const navigate = useNavigate();
+
   return (
     <Tabs
       tabs={[

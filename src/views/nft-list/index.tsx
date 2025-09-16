@@ -12,19 +12,21 @@ export default function Home() {
     <div className="pb-[30px]">
       <div className="w-[1158px] mx-auto pt-[30px]">
         <Banner />
-        <div className="flex items-center gap-[22px] h-[154px]">
+
+        <MoreMarkets />
+        <Markets />
+
+        <div className="flex items-center gap-[22px] h-[154px] mt-[30px]">
           <div className="w-1/3">
             <LucyDraw tokenBalance={quoteTokenBalance} />
           </div>
           <div className="w-1/3 h-full">
-            <TopWinners />
+            <TopWinners type="winners" />
           </div>
           <div className="w-1/3 h-full">
-            <Leaderboard />
+            <TopWinners type="sellers" />
           </div>
         </div>
-        <MoreMarkets />
-        <Markets />
       </div>
     </div>
   );

@@ -17,7 +17,7 @@ export default function AddBtn({
       )}
       onClick={onClick}
     >
-      <span className="text-[#000] text-[24px] font-bold font-[SpaceGrotesk]">
+      <span className="text-[#000] text-[24px] font-bold">
         {isAdd ? "+" : "-"}
       </span>
     </button>

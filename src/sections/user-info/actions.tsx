@@ -1,9 +1,11 @@
 import { useAuth } from "@/contexts/auth";
 import { useNavigate } from "react-router-dom";
+import useIsBtc from "@/hooks/use-is-btc";
 
 export default function Actions() {
   const navigate = useNavigate();
   const { logout } = useAuth();
+  const isBtc = useIsBtc();
   return (
     <div className="absolute bottom-0 right-0 border-t border-[#313038] px-[20px] pt-[12px] w-full">
       {MENU.map((item) => (
@@ -20,7 +22,7 @@ export default function Actions() {
               navigate("/portfolio/player");
               return;
             } else if (item.key === "create-market") {
-              navigate("/nft/create");
+              navigate(isBtc ? "/btc/create" : "/nft/create");
               return;
             } else if (item.key === "claim") {
               e.stopPropagation();
