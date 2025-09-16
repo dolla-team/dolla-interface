@@ -56,6 +56,7 @@ export default function Infos({
   }, []);
 
   useEffect(() => {
+    if (!data?.length) return;
     const totalWidth = data.length * 300;
     setContentWidth(totalWidth);
   }, [data]);
@@ -110,7 +111,7 @@ export default function Infos({
   }, []);
 
   return (
-    !!data.length && (
+    !!data?.length && (
       <div
         ref={containerRef}
         className={clsx(

@@ -14,14 +14,17 @@ import MainLayout from "./layouts/main";
 // import "./libs/howl";
 import Callback from "./views/callback";
 import DollaEyeContextProvider from "./contexts/dolla-eye";
-import Home from "./views/home";
+import BtcList from "./views/btc-list";
 
 const LazyNftCreate = lazy(() => import("./views/nft-create"));
+const LazyBtcCreate = lazy(() => import("./views/btc-create"));
 const LazyProfilePlayer = lazy(() => import("./views/profile/player"));
 const LazyProfileSeller = lazy(() => import("./views/profile/seller"));
 const LazyNft = lazy(() => import("./views/nft/index"));
-// const LazyTerms = lazy(() => import("./views/terms"));
-// const LazyPolicy = lazy(() => import("./views/policy"));
+const LazyNftList = lazy(() => import("./views/nft-list"));
+const LazyBtc = lazy(() => import("./views/btc/index"));
+const LazyTerms = lazy(() => import("./views/terms"));
+const LazyPolicy = lazy(() => import("./views/policy"));
 
 import("react-toastify/dist/ReactToastify.css");
 
@@ -67,15 +70,31 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Home />
+        element: <BtcList />
       },
       {
-        path: "detail/:poolId",
+        path: "nft",
+        element: <LazyNftList />
+      },
+      {
+        path: "nft/:poolId",
         element: <LazyNft />
       },
       {
         path: "nft/create",
         element: <LazyNftCreate />
+      },
+      {
+        path: "btc",
+        element: <BtcList />
+      },
+      {
+        path: "btc/:poolId",
+        element: <LazyBtc />
+      },
+      {
+        path: "btc/create",
+        element: <LazyBtcCreate />
       },
       {
         path: "portfolio/player",
@@ -84,15 +103,15 @@ const router = createBrowserRouter([
       {
         path: "portfolio/seller",
         element: <LazyProfileSeller />
+      },
+      {
+        path: "terms-of-service",
+        element: <LazyTerms />
+      },
+      {
+        path: "privacy-policy",
+        element: <LazyPolicy />
       }
-      // {
-      //   path: "terms-of-service",
-      //   element: <LazyTerms />
-      // },
-      // {
-      //   path: "privacy-policy",
-      //   element: <LazyPolicy />
-      // }
     ]
   },
   {
