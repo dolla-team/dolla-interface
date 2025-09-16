@@ -5,6 +5,7 @@ import axiosInstance from "@/libs/axios";
 import { formatAddress } from "@/utils/format/address";
 import Big from "big.js";
 import { getAnchorPrice } from "@/utils/pool";
+import useWalletStore from "@/stores/use-wallet";
 
 interface ScrollProps {
   className?: string;
@@ -47,6 +48,7 @@ export default function Infos({
   const [contentWidth, setContentWidth] = useState(0);
   const [isPaused, setIsPaused] = useState(!autoPlay);
   const [data, setData] = useState<any[]>([]);
+  const walletStore = useWalletStore();
   const controls = useAnimationControls();
 
   useEffect(() => {
@@ -91,11 +93,11 @@ export default function Infos({
 
     const getData = async () => {
       const res = await axiosInstance.get(
-        "https://test-api.dolla.market/api/v1/pool/scroll/list?list=10&chain=solana"
+        `/api/v1/pool/scroll/list?list=10&chain=solana`
       );
 
       setData(res.data.data);
-
+      walletStore.set({ showInfos: !!res.data.data?.length });
       window.scrollTimer = setTimeout(() => {
         getData();
       }, 10000);

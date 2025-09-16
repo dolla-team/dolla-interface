@@ -2,6 +2,8 @@ import { motion } from "framer-motion";
 import DollaEye from "../dolla-eye";
 import { useRef, useEffect, useState, useMemo } from "react";
 import useIsMobile from "@/hooks/use-is-mobile";
+import useIsBtc from "@/hooks/use-is-btc";
+import clsx from "clsx";
 
 // Custom hook for typewriter effect
 const useTypewriter = (text: string, speed: number = 100) => {
@@ -69,7 +71,7 @@ const renderStyledText = (text: string, isMobile?: boolean) => {
 const Loading = (props: Props) => {
   const { speed = 5000 } = props;
   const isMobile = useIsMobile();
-
+  const isBtc = useIsBtc();
   const progressInnerRef = useRef<any>(null);
   const [progressWidth, setProgressWidth] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
@@ -142,7 +144,12 @@ const Loading = (props: Props) => {
         <div className="w-[280px] h-[12px] flex-shrink-0 rounded-[12px] p-[2px] border border-[#E4E4E4] bg-[rgba(255,255,255,0.10)] backdrop-blur-[25px] relative">
           <motion.div
             ref={progressInnerRef}
-            className="h-full rounded-[3px] bg-[linear-gradient(90deg,_#6F37FF_0%,_#00FFBB_100%)] relative"
+            className={clsx(
+              "h-full rounded-[3px] relative",
+              isBtc
+                ? "bg-[linear-gradient(90deg,_#FFC42F_0%,_#FFE9B2_100%)]"
+                : "bg-[linear-gradient(90deg,_#6F37FF_0%,_#00FFBB_100%)]"
+            )}
             initial={{ width: 0 }}
             animate={{
               width: `${progressWidth}%`
@@ -152,7 +159,10 @@ const Loading = (props: Props) => {
               {particles.map((particle) => (
                 <motion.div
                   key={particle.id}
-                  className="absolute bg-[#10FFBF] rounded-full"
+                  className={clsx(
+                    "absolute rounded-full",
+                    isBtc ? "bg-[#FFC42F]" : "bg-[#10FFBF]"
+                  )}
                   style={{
                     width: `${particle.size}px`,
                     height: `${particle.size}px`,
@@ -183,7 +193,12 @@ const Loading = (props: Props) => {
             </div>
           </motion.div>
         </div>
-        <div className="text-[#AB96FF] text-center font-normal leading-[40px] mt-[20px] min-h-[120px] flex flex-col items-center justify-center">
+        <div
+          className={clsx(
+            "text-center font-normal leading-[40px] mt-[20px] min-h-[120px] flex flex-col items-center justify-center",
+            isBtc ? "text-[#FFC42F]" : "text-[#AB96FF]"
+          )}
+        >
           <div className="whitespace-pre-wrap">
             {renderStyledText(displayText, isMobile)}
           </div>

@@ -17,7 +17,7 @@ export default function AvatarAction() {
         <AvatarCashier
           onClick={(e: any) => {
             e.stopPropagation();
-            set({ showWallet: true });
+            set({ showWallet: true, showUserInfo: false });
           }}
           tokenBalance={quoteTokenBalance}
         />
@@ -30,7 +30,7 @@ export default function AvatarAction() {
           className="shrink-0 button border-[2px] border-[#1B1A23]"
           onClick={(e: any) => {
             e.stopPropagation();
-            set({ showUserInfo: true });
+            set({ showUserInfo: true, showWallet: false });
           }}
         />
       )}

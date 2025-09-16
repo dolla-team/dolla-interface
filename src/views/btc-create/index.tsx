@@ -28,7 +28,7 @@ export default function BTCCreate() {
   const navigate = useNavigate();
   const [amount, setAmount] = useState(1);
   const { address, userInfo } = useAuth();
-  const { tokenBalance, isLoading } = useTokenBalance(TOKNES[1]);
+  const { tokenBalance, isLoading } = useTokenBalance({});
   const { data: referenceData, loading: referenceDataLoading } =
     useReferenceData({ token: BASE_TOKEN, amount });
   const globalConfig = useConfigStore((state) => state.config);

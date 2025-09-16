@@ -98,6 +98,7 @@ const StatisticsPlayer = (props: any) => {
             onClick={() => {
               walletStore.set({
                 showWallet: true,
+                showUserInfo: false,
                 panelType: "deposit"
               });
             }}

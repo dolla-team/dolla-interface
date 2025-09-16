@@ -18,7 +18,7 @@ export default function Tabs({
         <div
           key={tab.key}
           className={clsx(
-            "button relative text-[14px] text-white pb-[10px]",
+            "button relative pb-[10px]",
             tabClassName,
             tab.key === currentTab && activeClassName
           )}
@@ -45,7 +45,7 @@ export default function Tabs({
                 }
               }}
               className={clsx(
-                "absolute rounded-[3px] w-full h-[3px] bg-[#743EFF] bottom-0",
+                "absolute rounded-[3px] w-full h-[3px] bottom-0",
                 cursorClassName
               )}
             />

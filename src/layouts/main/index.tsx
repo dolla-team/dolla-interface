@@ -1,6 +1,6 @@
 import AvatarAction from "./avatar-action";
 import { Outlet, useNavigate } from "react-router-dom";
-import Button from "@/components/button/v2";
+import Button from "@/components/button";
 import { useAuth } from "@/contexts/auth";
 import DollaEye from "@/components/dolla-eye";
 import EstGas from "@/sections/est-gas";
@@ -83,7 +83,7 @@ export default function MainLayout() {
         <PageTabs />
       </div>
       <Infos />
-      <div className="h-[calc(100vh-112px)] overflow-y-auto relative z-[2] bg-[#F0F0F0]">
+      <div className="h-[calc(100vh-76px)] overflow-y-auto relative z-[2] bg-[#F0F0F0]">
         <Outlet />
         <UserInfo />
       </div>

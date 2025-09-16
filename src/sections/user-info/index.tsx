@@ -5,6 +5,7 @@ import Level from "./level";
 import Info from "./info";
 import StarterObjectives from "./starter-objectives";
 import { useEffect } from "react";
+import clsx from "clsx";
 
 export default function Laptop() {
   const walletStore = useWalletStore();
@@ -35,7 +36,12 @@ export default function Laptop() {
               damping: 30,
               duration: 0.3
             }}
-            className="fixed bottom-0 right-0 z-[100] h-[calc(100vh-112px)] w-[294px] bg-[#1C1C23]"
+            className={clsx(
+              "fixed bottom-0 right-0 z-[100] w-[294px] bg-[#1C1C23]",
+              walletStore.showInfos
+                ? "h-[calc(100%-112px)]"
+                : "h-[calc(100%-76px)]"
+            )}
             onClick={(e: any) => {
               e.stopPropagation();
             }}

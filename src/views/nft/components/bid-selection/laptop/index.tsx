@@ -83,7 +83,9 @@ export default function BidSelection({
           />
           {userInfo && (
             <CashierEntry
-              onClick={() => walletSet({ showWallet: true })}
+              onClick={() =>
+                walletSet({ showWallet: true, showUserInfo: false })
+              }
               tokenBalance={tokenBalance}
             />
           )}

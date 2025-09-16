@@ -3,6 +3,7 @@ import { EEyeStatus, EEyeType } from "@/hooks/use-dolla-eye";
 import clsx from "clsx";
 import { motion } from "framer-motion";
 import { useRef, useEffect, useState, useMemo } from "react";
+import useIsBtc from "@/hooks/use-is-btc";
 
 const BASE_HEIGHT = 56;
 
@@ -15,7 +16,7 @@ const DollaEye = (props: any) => {
   } = props;
 
   const { currentEye } = useDollaEyeContext();
-
+  const isBtc = useIsBtc();
   const eyeRef = useRef<any>(null);
   const eyePupil = useRef<any>(null);
   const [pupilPosition, setPupilPosition] = useState({ x: 0, y: 0 });
@@ -114,7 +115,7 @@ const DollaEye = (props: any) => {
     >
       {!onlyEye && (
         <img
-          src="/logo-eye/d.svg"
+          src={isBtc ? "/logo-eye/d-btc.svg" : "/logo-eye/d.svg"}
           alt="d"
           className="shrink-0 object-contain object-center relative z-[3]"
           style={{
@@ -134,7 +135,14 @@ const DollaEye = (props: any) => {
         }}
       >
         {/*#region eye socket*/}
-        <div className="z-100 absolute w-full h-full left-0 top-0 bg-[url('/logo-eye/eye-socket.svg')] bg-no-repeat bg-contain bg-center" />
+        <div
+          className={clsx(
+            "z-100 absolute w-full h-full left-0 top-0 bg-no-repeat bg-contain bg-center",
+            isBtc
+              ? "bg-[url('/logo-eye/eye-socket-btc.svg')]"
+              : "bg-[url('/logo-eye/eye-socket.svg')]"
+          )}
+        />
         {/*#endregion*/}
 
         {/*#region eye background layer 1*/}
@@ -234,7 +242,9 @@ const DollaEye = (props: any) => {
               currentEye.type
             ) && (
               <motion.img
-                src="/logo-eye/eyelid.svg"
+                src={
+                  isBtc ? "/logo-eye/eyelid-btc.svg" : "/logo-eye/eyelid.svg"
+                }
                 alt=""
                 className="z-[3] absolute w-full h-full shrink-0 object-contain object-top"
                 {...currentEye.animation}
@@ -286,7 +296,7 @@ const DollaEye = (props: any) => {
       </div>
       {!onlyEye && (
         <img
-          src="/logo-eye/lla.svg"
+          src={isBtc ? "/logo-eye/lla-btc.svg" : "/logo-eye/lla.svg"}
           alt="lla"
           className="shrink-0 object-contain object-center relative z-[1]"
           style={{
