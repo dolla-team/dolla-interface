@@ -37,7 +37,7 @@ export default function Laptop() {
               duration: 0.3
             }}
             className={clsx(
-              "fixed bottom-0 right-0 z-[100] w-[416px] border-l border-[#383F47] bg-[#1C1C23]",
+              "fixed bottom-0 right-0 z-[100] w-[416px] bg-[#1C1C23]",
               walletStore.showInfos
                 ? "h-[calc(100%-112px)]"
                 : "h-[calc(100%-76px)]"

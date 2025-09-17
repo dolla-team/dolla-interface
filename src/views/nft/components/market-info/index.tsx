@@ -47,7 +47,7 @@ export default function MarketInfo() {
           className="button flex items-center gap-[6px]"
           onClick={() => {
             if (isDetail) {
-              navigate("/detail");
+              navigate("/nft/detail");
             } else {
               getPoolRecommend();
             }

@@ -94,7 +94,11 @@ const ClaimIndex = (props: any) => {
             className="py-[10px] flex items-center gap-[7px]"
             href={"javascript: void(0);"}
             onClick={() => {
-              navigate(`/btc/${record.pool_id}`);
+              navigate(
+                record?.nft_ids
+                  ? `/nft/detail/${record.pool_id}`
+                  : `/btc/detail/${record.pool_id}`
+              );
             }}
           >
             <div>#{record.pool_id}</div>

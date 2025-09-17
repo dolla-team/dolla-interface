@@ -58,10 +58,14 @@ const Coin = forwardRef<any, any>(
         const coinElement = coinRef.current;
         const containerRect = container.getBoundingClientRect();
         const coinRect = coinElement.getBoundingClientRect();
-        
+
         // Calculate the scroll position to bring the coin into view
-        const scrollTop = container.scrollTop + (coinRect.top - containerRect.top) - (containerRect.height / 2) + (coinRect.height / 2);
-        
+        const scrollTop =
+          container.scrollTop +
+          (coinRect.top - containerRect.top) -
+          containerRect.height / 2 +
+          coinRect.height / 2;
+
         container.scrollTo({
           top: scrollTop,
           behavior: "smooth"

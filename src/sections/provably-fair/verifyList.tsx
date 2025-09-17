@@ -123,7 +123,11 @@ export default function VerifyList({
                               <div
                                 className="flex items-center gap-[4px] cursor-pointer"
                                 onClick={() => {
-                                  navigate(`/btc/${record[column.key]}`);
+                                  navigate(
+                                    record?.nft_ids
+                                      ? `/nft/detail/${record[column.key]}`
+                                      : `/btc/detail/${record[column.key]}`
+                                  );
                                 }}
                               >
                                 # {record[column.key]}{" "}

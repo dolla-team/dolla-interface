@@ -34,7 +34,7 @@ const BidHistory = (props: any) => {
           <div
             className="flex items-center gap-[7px] cursor-pointer"
             onClick={() => {
-              navigate(`/nft/${record.pool_id}`);
+              navigate(`/nft/detail/${record.pool_id}`);
             }}
           >
             <div className="">#{record.pool_id}</div>

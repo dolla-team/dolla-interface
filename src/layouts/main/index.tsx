@@ -87,9 +87,9 @@ export default function MainLayout() {
       <Infos chain={isBtc ? "Berachain" : "solana"} />
       <div className="h-[calc(100vh-76px)] overflow-y-auto relative z-[2] bg-[#F0F0F0]">
         <Outlet />
-        <UserInfo />
       </div>
       <Wallet />
+      <UserInfo />
     </div>
   );
 }

@@ -132,7 +132,7 @@ export default function MoreMarkets() {
               <NftCard
                 key={nft.id}
                 data={nft}
-                onClick={() => navigate(`/detail/${nft.pool_id}`)}
+                onClick={() => navigate(`/nft/detail/${nft.pool_id}`)}
                 className="button shrink-0"
                 isNft={true}
               />

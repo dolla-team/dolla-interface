@@ -19,7 +19,7 @@ const Content = () => {
       <div className="flex justify-between items-center">
         <BackButton
           onClick={() => {
-            navigate("/");
+            navigate("/nft");
           }}
         />
         <ShareButton />

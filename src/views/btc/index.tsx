@@ -7,12 +7,20 @@ import BidsInfo from "./components/bids-info";
 import MarketInfo from "./components/market-info";
 import Grand from "./grand";
 import LucyDraw from "../../sections/lucy-draw";
+import DollaEye from "@/components/dolla-eye";
 import TopWinner from "@/sections/winners";
 import Music from "./components/music";
 import useIsMobile from "@/hooks/use-is-mobile";
 import clsx from "clsx";
 import MarketsModal from "./components/more-markets/mobile/modal";
 import { useAuth } from "@/contexts/auth";
+import Button from "@/components/button";
+import EstGas from "@/sections/est-gas";
+import AvatarAction from "@/layouts/main/avatar-action";
+import UserInfo from "@/sections/user-info";
+import Wallet from "@/sections/wallet";
+import "@/libs/howl";
+import { useNavigate } from "react-router-dom";
 
 // import ProvablyFair from "@/sections/provably-fair";
 
@@ -27,10 +35,10 @@ export default function NewBTC() {
 }
 
 const Content = () => {
-  const { quoteTokenBalance, updateQuoteTokenBalance } = useAuth();
-
+  const { userInfo, login, quoteTokenBalance } = useAuth() || {};
   const isMobile = useIsMobile();
   const { pool } = useBtcContext();
+  const navigate = useNavigate();
   return (
     <div
       className={clsx(
@@ -44,16 +52,47 @@ const Content = () => {
           : "radial-gradient(50% 50% at 50% 50%,rgba(0,0,0,0) 0%,#000 100%), url('/new-btc/bg.gif') lightgray 50% / cover no-repeat"
       }}
     >
+      <DollaEye
+        className="absolute top-[10px] left-[30px] z-[10] button"
+        height={32}
+        onClick={() => {
+          navigate("/");
+        }}
+      />
+      <div className="absolute top-[10px] right-[30px] z-[10] flex items-center gap-[12px]">
+        <EstGas className="!bg-transparent !border-[#454545]" />
+
+        {!userInfo ? (
+          <Button onClick={login} className="w-[100px] h-[36px]">
+            Connect
+          </Button>
+        ) : (
+          <>
+            <AvatarAction />
+            {/* <Menu
+            onClick={() => {
+              logout();
+            }}
+          /> */}
+          </>
+        )}
+      </div>
       {!isMobile && <Header className="h-[214px]" />}
       <MarketInfo />
       <Grand tokenBalance={quoteTokenBalance} />
       <BidSelection tokenBalance={quoteTokenBalance} />
       {!isMobile && <BidsInfo />}
       {!isMobile && <MoreMarkets />}
-      {!isMobile && <LucyDraw tokenBalance={quoteTokenBalance} />}
+      {/* {!isMobile && (
+        <div>
+          <LucyDraw tokenBalance={quoteTokenBalance} />
+        </div>
+      )} */}
       {!isMobile && <TopWinner />}
       {!isMobile && <Music />}
       {isMobile && <MarketsModal />}
+      <Wallet />
+      <UserInfo />
     </div>
   );
 };

@@ -11,7 +11,7 @@ import useTokenPrice from "@/hooks/use-token-price";
 import Loading from "@/components/icons/loading";
 import useCreate from "@/hooks/solana/use-create";
 import { motion } from "framer-motion";
-import ButtonV2 from "@/components/button/v2";
+import Button from "@/components/button";
 import DoughnutChart from "./doughnut-chart";
 import { formatAddress } from "@/utils/format/address";
 import { useReferenceData } from "./hooks/use-reference-data";
@@ -27,7 +27,7 @@ import useConfig from "@/hooks/use-config";
 export default function BTCCreate() {
   const navigate = useNavigate();
   const [amount, setAmount] = useState(1);
-  const { address, userInfo } = useAuth();
+  // const { address, userInfo } = useAuth();
   const { tokenBalance, isLoading } = useTokenBalance({});
   const { data: referenceData, loading: referenceDataLoading } =
     useReferenceData({ token: BASE_TOKEN, amount });
@@ -86,14 +86,14 @@ export default function BTCCreate() {
   }, []);
 
   return (
-    <div className="w-full h-screen overflow-y-auto text-[14px] font-[400] leading-[100%] text-white pt-[60px] pb-[60px] max-md:pt-[80px]">
+    <div className="w-full text-[14px] font-[400] leading-[100%] pt-[30px] pb-[60px] max-md:pt-[80px]">
       <div className="text-[20px] font-[DelaGothicOne] text-center">
         Create BTC Market
       </div>
       <div className="w-[894px] mx-auto flex justify-between items-start gap-[15px] pt-[42px] max-md:w-full max-md:pt-[40px]">
         <div className="flex-1 w-0">
           <div className="w-full max-md:px-[12px]">
-            <div className="text-[#BBACA6] flex justify-between items-center">
+            <div className="text-[#8A87AA] flex justify-between items-center">
               <div className="">Amount</div>
               {isMobile && (
                 <div
@@ -113,7 +113,7 @@ export default function BTCCreate() {
                   <motion.div
                     key={index}
                     className={clsx(
-                      "button rounded-[10px] bg-[#2B2C2F] flex flex-col items-center justify-center gap-[9px] border max-md:border-[#605D55]",
+                      "button rounded-[20px] flex flex-col items-center justify-center gap-[9px] bg-white border border-[#E4E4E4]",
                       "max-md:w-full",
                       isActive ? "backdrop-blur-[10px]" : ""
                     )}
@@ -130,15 +130,7 @@ export default function BTCCreate() {
                         ? isActive
                           ? "#FFE9B2"
                           : "transparent"
-                        : "#605D55",
-                      backgroundColor: !isMobile
-                        ? isActive
-                          ? "rgba(255, 255, 255, 0.1)"
-                          : "#2B2C2F"
-                        : isActive
-                        ? "#FFC42F"
-                        : "rgba(255, 255, 255, 0.1)",
-                      color: !isMobile ? "#FFF" : isActive ? "#000" : "#FFF"
+                        : "#605D55"
                     }}
                     style={{
                       fontSize: isActive ? 20 : 16
@@ -157,9 +149,9 @@ export default function BTCCreate() {
                 );
               })}
             </div>
-            <ButtonV2
+            <Button
               disabled={!!errorTips}
-              className="mt-[20px] w-full h-[40px]"
+              className="mt-[20px] w-full h-[40px] !bg-[#FFC42F]"
               loading={creating}
               onClick={() => {
                 if (errorTips || creating) return;
@@ -167,7 +159,7 @@ export default function BTCCreate() {
               }}
             >
               {errorTips || "Create Market"}
-            </ButtonV2>
+            </Button>
           </div>
           <div className="mt-[36px] w-full max-md:mt-[40px] max-md:px-[12px]">
             <div className="text-[#BBACA6]">Reference Data</div>
@@ -312,14 +304,14 @@ export default function BTCCreate() {
             />
           </div>
         </div>
-        {!isMobile && (
+        {/* {!isMobile && (
           <DepositBTC
             userInfo={userInfo}
             isLoading={isLoading}
             tokenBalance={tokenBalance}
             isMobile={isMobile}
           />
-        )}
+        )} */}
         <Modal
           open={depositModalOpen}
           onClose={() => {
@@ -338,49 +330,49 @@ export default function BTCCreate() {
               className="w-full h-full object-center object-contain"
             />
           </button>
-          <DepositBTC
+          {/* <DepositBTC
             userInfo={userInfo}
             isLoading={isLoading}
             tokenBalance={tokenBalance}
             isMobile={isMobile}
-          />
+          /> */}
         </Modal>
       </div>
     </div>
   );
 }
 
-const DepositBTC = (props: any) => {
-  const { userInfo, isLoading, tokenBalance, isMobile } = props;
+// const DepositBTC = (props: any) => {
+//   const { userInfo, isLoading, tokenBalance, isMobile } = props;
 
-  return (
-    <div className="w-[316px] shrink-0 max-md:w-full">
-      {!isMobile && <div className="text-[#BBACA6]">Account</div>}
-      <div className="w-full rounded-[16px] border border-[#6A5D3A] bg-[#35302B] mt-[10px] max-md:rounded-b-[0] max-md:mt-0">
-        <div className="w-full rounded-t-[16px] bg-black/20 p-[18px_15px]">
-          <div className="max-md:text-white">
-            {formatAddress(userInfo?.user)}
-          </div>
-          <div className="text-center text-[#BBACA6] mt-[17px]">Balance</div>
-          <div className="mt-[13px] text-center text-[16px] font-[DelaGothicOne] max-md:text-white">
-            {isLoading ? (
-              <Loading size={12} />
-            ) : (
-              `${formatNumber(tokenBalance, 2, true)} BTC`
-            )}
-          </div>
-        </div>
-        <div className="w-full p-[30px_15px]">
-          <div className="text-center font-[700] text-[16px] max-md:text-white">
-            Recharge
-          </div>
-          <Recharge
-            token={TOKNES[1]}
-            className="mt-[7px]"
-            tokenPanelClassName="!bg-black/20 !rounded-[10px]"
-          />
-        </div>
-      </div>
-    </div>
-  );
-};
+//   return (
+//     <div className="w-[316px] shrink-0 max-md:w-full">
+//       {!isMobile && <div className="text-[#BBACA6]">Account</div>}
+//       <div className="w-full rounded-[16px] border border-[#6A5D3A] bg-[#35302B] mt-[10px] max-md:rounded-b-[0] max-md:mt-0">
+//         <div className="w-full rounded-t-[16px] bg-black/20 p-[18px_15px]">
+//           <div className="max-md:text-white">
+//             {formatAddress(userInfo?.user)}
+//           </div>
+//           <div className="text-center text-[#BBACA6] mt-[17px]">Balance</div>
+//           <div className="mt-[13px] text-center text-[16px] font-[DelaGothicOne] max-md:text-white">
+//             {isLoading ? (
+//               <Loading size={12} />
+//             ) : (
+//               `${formatNumber(tokenBalance, 2, true)} BTC`
+//             )}
+//           </div>
+//         </div>
+//         <div className="w-full p-[30px_15px]">
+//           <div className="text-center font-[700] text-[16px] max-md:text-white">
+//             Recharge
+//           </div>
+//           <Recharge
+//             token={TOKNES[1]}
+//             className="mt-[7px]"
+//             tokenPanelClassName="!bg-black/20 !rounded-[10px]"
+//           />
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };

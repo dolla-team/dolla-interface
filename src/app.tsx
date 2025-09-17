@@ -77,7 +77,11 @@ const router = createBrowserRouter([
         element: <LazyNftList />
       },
       {
-        path: "nft/:poolId",
+        path: "nft/detail",
+        element: <LazyNft />
+      },
+      {
+        path: "nft/detail/:poolId",
         element: <LazyNft />
       },
       {
@@ -87,10 +91,6 @@ const router = createBrowserRouter([
       {
         path: "btc",
         element: <BtcList />
-      },
-      {
-        path: "btc/:poolId",
-        element: <LazyBtc />
       },
       {
         path: "btc/create",
@@ -113,6 +113,14 @@ const router = createBrowserRouter([
         element: <LazyPolicy />
       }
     ]
+  },
+  {
+    path: "btc/detail",
+    element: <LazyBtc />
+  },
+  {
+    path: "btc/detail/:poolId",
+    element: <LazyBtc />
   },
   {
     path: "/callback",
