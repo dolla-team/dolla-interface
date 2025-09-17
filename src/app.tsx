@@ -16,6 +16,7 @@ import Callback from "./views/callback";
 import DollaEyeContextProvider from "./contexts/dolla-eye";
 import BtcList from "./views/btc-list";
 
+
 const LazyNftCreate = lazy(() => import("./views/nft-create"));
 const LazyBtcCreate = lazy(() => import("./views/btc-create"));
 const LazyProfilePlayer = lazy(() => import("./views/profile/player"));
@@ -25,6 +26,7 @@ const LazyNftList = lazy(() => import("./views/nft-list"));
 const LazyBtc = lazy(() => import("./views/btc/index"));
 const LazyTerms = lazy(() => import("./views/terms"));
 const LazyPolicy = lazy(() => import("./views/policy"));
+const LazyDemo = lazy(() => import("./views/demo"));
 
 import("react-toastify/dist/ReactToastify.css");
 
@@ -111,6 +113,10 @@ const router = createBrowserRouter([
       {
         path: "privacy-policy",
         element: <LazyPolicy />
+      },
+      {
+        path: "demo",
+        element: <LazyDemo />
       }
     ]
   },
