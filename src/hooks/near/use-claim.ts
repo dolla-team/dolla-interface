@@ -115,8 +115,59 @@ export default function useClaim({
         }
     }
 
+    async function refund({
+        gameId,
+    }: {
+        gameId: string;
+    }) {
+        if (!keyPairSigner) {
+            return;
+        }
+
+        try {
+            const provider = getProvider();
+            const { header } = await provider.block({ finality: 'final' });
+
+            const args = {
+                game_args: {
+                    ByAk: {
+                        game_id: Number(gameId),
+                    }
+                }
+            };
+
+            const nonce = await getNonce(publicKey);
+
+            const transaction = transactions.createTransaction(
+                import.meta.env.VITE_NEAR_ACCOUNT_ID,
+                PublicKey.from(publicKey),
+                import.meta.env.VITE_NEAR_ACCOUNT_ID,
+                nonce,
+                [functionCall('refund_bet', args, BigInt(THIRTY_TGAS), BigInt(0))],
+                base_decode(header.hash)
+            )
+
+            const [, signedTransaction] = await keyPairSigner.signTransaction(transaction);
+
+            const result: any = await provider.sendTransaction(signedTransaction);
+
+            if (result.status.SuccessValue) {
+                console.log('success:', result);
+            } else {
+                console.log('fail:', result);
+            }
+
+            return result;;
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setLoading(false);
+        }
+    }
+
     return {
         claim,
         loading,
+        refund,
     };
 }
