@@ -13,7 +13,6 @@ import Skeleton from "@/components/skeleton";
 import { useConfigStore } from "@/stores/use-config";
 import Big from "big.js";
 import { useNavigate } from "react-router-dom";
-import { TOKNES } from "@/sections/cashier/panels/withdraw-solana";
 import useIsMobile from "@/hooks/use-is-mobile";
 import Modal from "@/components/modal";
 import useConfig from "@/hooks/use-config";
@@ -27,10 +26,11 @@ export default function BTCCreate() {
   const { data: referenceData, loading: referenceDataLoading } =
     useReferenceData({ token: BASE_TOKEN, amount });
   const globalConfig = useConfigStore((state) => state.config);
+
   const isMobile = useIsMobile();
   const { getConfig } = useConfig();
 
-  const { prices } = useTokenPrice(TOKNES[1]);
+  const { prices } = useTokenPrice(BASE_TOKEN);
   const [depositModalOpen, setDepositModalOpen] = useState(false);
 
   const pricePerBTC = useMemo(() => {

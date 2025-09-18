@@ -4,6 +4,7 @@ import { useAuth } from "@/contexts/auth";
 import { useNearKeyStore } from "@/stores/use-near-key";
 import useToast from "@/hooks/use-toast";
 import { KeyPair } from "near-api-js";
+import { viewMethod } from "./util";
 
 export default function useBid(
   poolId: number,
@@ -12,7 +13,7 @@ export default function useBid(
   onTxFail: () => void
 ) {
   const [biding, setBiding] = useState(false);
-  const { address, nearAccount } = useAuth();
+  const { address } = useAuth();
   const { privateKey } = useNearKeyStore();
   const toast = useToast();
 
@@ -48,34 +49,40 @@ export default function useBid(
     if (!address) return;
     setBiding(true);
 
-    const random_seed = Array.from({ length: 64 }, () =>
-      Math.floor(Math.random() * 16).toString(16)
-    ).join("");
-
-    const payload = {
-      bets: times,
-      deadline: Date.now() + 1000 * 60 * 60 * 24,
-      game_id: poolId,
-      nonce: nearAccount?.nonce,
-      user_id: {
-        Evm: address.slice(2).toLowerCase()
-      }
-    };
-
-    // Sign the payload using NEAR private key
-    const payloadString = JSON.stringify(payload);
-    const signature = signMessage(payloadString);
-    console.log("signature", {
-      payload: payloadString,
-      random_seed,
-      user_signature: signature?.slice(2) || ""
-    });
     let toastId = toast.loading({ title: "Bidding..." });
     try {
+      const res = await viewMethod({
+        method: "get_account",
+        args: { user_id: { Evm: address.replace(/^0x/, "").toLowerCase() } }
+      });
+      const random_seed = Array.from({ length: 64 }, () =>
+        Math.floor(Math.random() * 16).toString(16)
+      ).join("");
+
+      const payload = {
+        bets: times,
+        deadline: Date.now() + 1000 * 60 * 60 * 24,
+        game_id: poolId,
+        nonce: res.nonce,
+        user_id: {
+          Evm: address.slice(2).toLowerCase()
+        }
+      };
+
+      // Sign the payload using NEAR private key
+      const payloadString = JSON.stringify(payload);
+      const signature = signMessage(payloadString + random_seed);
+      console.log(
+        "signature",
+        signature,
+        random_seed,
+        payloadString + random_seed
+      );
+
       const response = await axiosInstance.post(`/api/v1/user/bid/data`, {
         payload: payloadString,
         random_seed,
-        user_signature: signature?.slice(2) || ""
+        user_signature: signature || ""
       });
       onTxSuccess();
       console.log("response", response);
