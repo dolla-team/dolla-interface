@@ -29,7 +29,11 @@ export const CannonCoinsProvider = ({
   const params = useParams();
   const { onQueryPoolInfo } = usePoolInfo("solana");
   const [pool, setPool] = useState<any>(null);
-  const { data, getPoolRecommend } = usePoolRecommend(0, !params?.poolId);
+  const { data, getPoolRecommend } = usePoolRecommend(
+    0,
+    "solana",
+    !params?.poolId
+  );
   const [mobileMarketsOpen, setMobileMarketsOpen] = useState(false);
   const poolCachedRef = useRef<any>(null);
 
