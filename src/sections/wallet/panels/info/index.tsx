@@ -24,7 +24,7 @@ export default function Info({
             src={config.purchaseToken.icon}
             className="w-[36px] h-[36px] rounded-full"
           />
-          <div className="text-[36px] text-white">
+          <div className="text-[36px] text-black">
             {formatNumber(quoteTokenBalance || 0, 2, true, { prefix: "$" })}
           </div>
         </div>
@@ -48,9 +48,9 @@ export default function Info({
         tabs={TABS}
         currentTab={tab}
         onChangeTab={setTab}
-        className="w-full !gap-0 border-b border-[#383F47] mt-[20px]"
+        className="w-full !gap-0 border-b border-[#D9D9D9] mt-[20px]"
         tabClassName="h-[38px] text-[14px] text-center !text-[#8A87AA] !pb-0 leading-[30px] mx-[20px]"
-        activeClassName="!text-white"
+        activeClassName="!text-black"
         cursorClassName="!bg-[#743EFF]"
       />
       <div className="h-[calc(100vh-346px)] overflow-y-auto p-[15px]">

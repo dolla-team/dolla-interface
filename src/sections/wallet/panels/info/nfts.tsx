@@ -114,12 +114,12 @@ export const Item = ({
           "relative z-[2] w-full h-[178px] object-cover rounded-[10px] border border-[#434343CC] button"
         )}
       />
-      <div className="text-[12px] font-semibold text-white mt-[10px]">
+      <div className="text-[12px] font-semibold text-black mt-[10px]">
         {data.collection.symbol} #{data.tokenId}
       </div>
       <div className="text-[12px] flex gap-[4px] items-center mt-[4px]">
         <span className="text-[#8A87AA]">Token ID</span>
-        <span className="text-white">#{data.tokenId}</span>
+        <span className="text-black">#{data.tokenId}</span>
         {/* <svg
           xmlns="http://www.w3.org/2000/svg"
           width="10"
@@ -132,7 +132,7 @@ export const Item = ({
       </div>
       <div className="text-[12px] mt-[4px]">
         <span className="text-[#8A87AA]">Valued</span>{" "}
-        <span className="text-white">
+        <span className="text-black">
           {formatNumber(price?.floor_price, 2, true, { prefix: "$" })}
         </span>
       </div>

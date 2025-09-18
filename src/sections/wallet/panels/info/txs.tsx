@@ -51,7 +51,7 @@ const Item = ({ data }: { data: any }) => {
           />
         </div> */}
         <div>
-          <div className="text-[14px] text-white">
+          <div className="text-[14px] text-black">
             {UserRecordsTypeMap[data.type as EUserRecordsType].label}
           </div>
           {/* <div className="text-[10px] text-[#8A87AA]">
@@ -60,7 +60,7 @@ const Item = ({ data }: { data: any }) => {
         </div>
       </div>
       <div>
-        <div className="text-[14px] text-white">
+        <div className="text-[14px] text-black">
           {!data.token_info?.token_id
             ? formatNumber(
                 Big(data.amount).div(10 ** data.token_info.decimals),

@@ -61,7 +61,7 @@ export default function WithdrawSolana() {
           />
         </div>
         <div className="flex items-center justify-center mt-[30px] relative">
-          <div className="text-[14px] text-white">Withdraw Amount</div>
+          <div className="text-[14px] text-black">Withdraw Amount</div>
           <button
             onClick={() => {
               setAmount(usdcBalance);
@@ -72,7 +72,7 @@ export default function WithdrawSolana() {
           </button>
         </div>
         <input
-          className="w-full text-[32px] font-bold text-white text-center mt-[6px]"
+          className="w-full text-[32px] font-bold text-black text-center mt-[6px]"
           value={amount}
           onChange={(e) => {
             if (isNaN(Number(e.target.value))) {
@@ -88,7 +88,7 @@ export default function WithdrawSolana() {
             alt="bid-coins"
             className="w-[32px] h-[32px] rounded-full"
           />
-          <div className="text-[14px] text-white">{selectedItem.symbol}</div>
+          <div className="text-[14px] text-black">{selectedItem.symbol}</div>
         </div>
       </div>
       <div>

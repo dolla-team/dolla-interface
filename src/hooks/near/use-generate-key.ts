@@ -98,7 +98,7 @@ export default function useGenerateKey() {
             PublicKey.from(publicKey),
             import.meta.env.VITE_NEAR_ACCOUNT_ID,
             signNonce,
-            [functionCall('update_user_ak', argas, BigInt(THIRTY_TGAS), BigInt(1))],
+            [functionCall('update_user_ak', argas, BigInt(THIRTY_TGAS), BigInt(0))],
             base_decode(header.hash)
         );
 

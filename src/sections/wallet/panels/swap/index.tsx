@@ -55,7 +55,7 @@ export default function Swap(props?: any) {
         onClick={onBack}
       >
         <BackIcon />
-        <div className="text-white">Swap</div>
+        <div className="text-black">Swap</div>
       </div>
       <div className="pt-[20px]">
         <TokenAmount

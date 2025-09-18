@@ -30,7 +30,7 @@ export default function AvatarAction() {
           className="shrink-0 button border-[2px] border-[#1B1A23]"
           onClick={(e: any) => {
             e.stopPropagation();
-            set({ showUserInfo: true, showWallet: false });
+            set({ showUserInfo: false, showWallet: true });
           }}
         />
       )}
