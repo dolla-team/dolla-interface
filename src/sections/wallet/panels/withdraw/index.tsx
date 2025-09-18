@@ -13,7 +13,7 @@ export default function WithdrawPanel({ onBack }: { onBack: () => void }) {
         onClick={onBack}
       >
         <BackIcon />
-        <div className="text-white">Withdraw</div>
+        <div className="text-black">Withdraw</div>
       </div>
       <Tabs
         tabs={[

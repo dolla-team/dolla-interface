@@ -34,7 +34,7 @@ const Item = ({ balance, price }: { balance: string; price: number }) => {
         </div>
         <div>
           <div>
-            <span className="text-[14px] text-white">
+            <span className="text-[14px] text-black">
               {config.purchaseToken.symbol}{" "}
             </span>
             <span className="text-[12px] text-[#8A87AA]">(Berachain)</span>
@@ -43,7 +43,7 @@ const Item = ({ balance, price }: { balance: string; price: number }) => {
         </div>
       </div>
       <div>
-        <div className="text-[14px] text-white">
+        <div className="text-[14px] text-black">
           {formatNumber(balance, 2, true)}
         </div>
         <div className="text-[12px] text-[#8A87AA]">

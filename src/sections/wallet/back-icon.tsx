@@ -9,7 +9,7 @@ export default function BackIcon() {
     >
       <path
         d="M9 1L2 9L9 17"
-        stroke="white"
+        stroke="black"
         strokeWidth="2"
         strokeLinecap="round"
       />

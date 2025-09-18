@@ -65,7 +65,7 @@ export default function Recharge({
           </span>
         </div>
         <Button
-          className="w-[352px] h-[50px] mt-[10px] flex items-center gap-[10px]"
+          className="w-[95%] mx-auto h-[50px] mt-[10px] flex items-center gap-[10px]"
           onClick={() => {
             onCopy(address);
           }}

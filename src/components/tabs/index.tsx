@@ -28,7 +28,7 @@ export default function Tabs({
             if (prevI.current.length > 2) prevI.current.shift();
           }}
         >
-          <span className="relative z-[2]">{tab.label}</span>
+          <span className="relative z-[2] whitespace-nowrap text-ellipsis overflow-hidden">{tab.label}</span>
           {currentTab === tab.key && (
             <motion.div
               initial="hidden"
