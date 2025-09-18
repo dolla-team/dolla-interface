@@ -23,7 +23,7 @@ export default function NewNft() {
 }
 
 const Content = () => {
-  const { quoteTokenBalance } = useAuth() || {};
+  const { nearAccount } = useAuth() || {};
 
   const isMobile = useIsMobile();
   const { pool } = useNftContext();
@@ -42,8 +42,8 @@ const Content = () => {
     >
       {!isMobile && <Header className="h-[112px]" />}
       <ApproveModal />
-      <Grand tokenBalance={quoteTokenBalance} />
-      <BidSelection tokenBalance={quoteTokenBalance} />
+      <Grand tokenBalance={nearAccount?.balance} />
+      <BidSelection tokenBalance={nearAccount?.balance} />
       {!isMobile && <BidsInfo />}
 
       {/* {!isMobile && <TopWinner />} */}

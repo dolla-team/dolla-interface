@@ -35,7 +35,7 @@ export default function NewBTC() {
 }
 
 const Content = () => {
-  const { userInfo, login, quoteTokenBalance } = useAuth() || {};
+  const { userInfo, login, nearAccount } = useAuth() || {};
   const isMobile = useIsMobile();
   const { pool } = useBtcContext();
   const navigate = useNavigate();
@@ -79,13 +79,13 @@ const Content = () => {
       </div>
       {!isMobile && <Header className="h-[214px]" />}
       <MarketInfo />
-      <Grand tokenBalance={quoteTokenBalance} />
-      <BidSelection tokenBalance={quoteTokenBalance} />
+      <Grand tokenBalance={nearAccount?.balance} />
+      <BidSelection tokenBalance={nearAccount?.balance} />
       {!isMobile && <BidsInfo />}
       {!isMobile && <MoreMarkets />}
       {/* {!isMobile && (
         <div>
-          <LucyDraw tokenBalance={quoteTokenBalance} />
+          <LucyDraw tokenBalance={nearAccount?.balance} />
         </div>
       )} */}
       {!isMobile && <TopWinner />}

@@ -27,13 +27,9 @@ export const CannonCoinsProvider = ({
   const flipedNumberRef = useRef(0);
   const [bidResult, setBidResult] = useState<any>(null);
   const params = useParams();
-  const { onQueryPoolInfo } = usePoolInfo("solana");
+  const { onQueryPoolInfo } = usePoolInfo();
   const [pool, setPool] = useState<any>(null);
-  const { data, getPoolRecommend } = usePoolRecommend(
-    0,
-    "solana",
-    !params?.poolId
-  );
+  const { data, getPoolRecommend } = usePoolRecommend(0, !params?.poolId);
   const [mobileMarketsOpen, setMobileMarketsOpen] = useState(false);
   const poolCachedRef = useRef<any>(null);
 

@@ -5,7 +5,7 @@ import clsx from "clsx";
 const frontFace = new Image();
 frontFace.src = "/btc/fliping-coin.svg";
 
-import("./index.scss")
+import("./index.scss");
 
 export default function FlippingCoin({ start = false }: any) {
   const [flipping, setFlipping] = useState(false);
@@ -15,7 +15,7 @@ export default function FlippingCoin({ start = false }: any) {
     if (!flipping && start) {
       setTimeout(() => {
         setFlipping(true);
-      }, 30);
+      }, 50);
     }
   }, [flipping, start]);
 
@@ -28,6 +28,7 @@ export default function FlippingCoin({ start = false }: any) {
             key={index}
             onAnimationEnd={() => {
               count.current++;
+
               if (count.current === 12) {
                 setFlipping(false);
                 count.current = 0;

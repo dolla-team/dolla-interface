@@ -4,7 +4,7 @@ import LaptopBidSelection from "./laptop";
 import { useBtcContext } from "../../context";
 import { useMemo } from "react";
 import { useAuth } from "@/contexts/auth";
-import useBid from "@/hooks/solana/use-bid";
+import useBid from "@/hooks/near/use-bid";
 
 export default function BidSelection({ tokenBalance }: any) {
   const { userInfo } = useAuth();
@@ -38,18 +38,18 @@ export default function BidSelection({ tokenBalance }: any) {
   const { onBid } = useBid(
     pool?.pool_id,
     (result) => {
-      console.log("complete success");
       setFlipStatus(4);
       setBidResult(result);
+      console.log("success", 4);
     },
     () => {
-      console.log("bid success");
       setFlipStatus(2);
+      console.log("tx success", 2);
     },
     () => {
-      console.log("bid fail");
       setTimeout(() => {
         setFlipStatus(0);
+        console.log("tx fail", 0);
       }, 30);
     }
   );

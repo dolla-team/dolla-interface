@@ -15,7 +15,7 @@ import useWalletStore from "@/stores/use-wallet";
 const StatisticsPlayer = (props: any) => {
   const { className } = props;
   const walletStore = useWalletStore();
-  const { userInfo, quoteTokenBalance } = useAuth();
+  const { userInfo, nearAccount } = useAuth();
 
   const { totalAmount, loading } = useUserWinner();
 
@@ -79,7 +79,7 @@ const StatisticsPlayer = (props: any) => {
       <div className="flex items-center justify-between gap-[10px] flex-1 max-md:flex-col max-md:w-full max-md:gap-[15px]">
         <div className="flex items-center gap-[10px] max-md:w-full max-md:justify-between max-md:pr-[30px] max-md:pl-[7px]">
           <LabelValue label="Your Balance" className="whitespace-nowrap">
-            {formatNumber(quoteTokenBalance, 2, true, {
+            {formatNumber(nearAccount?.balance || 0, 2, true, {
               prefix: "$",
               isShort: true,
               isShortUppercase: true

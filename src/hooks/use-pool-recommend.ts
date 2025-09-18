@@ -3,7 +3,6 @@ import axiosInstance from "@/libs/axios";
 
 export default function usePoolRecommend(
   tokenStatus: number,
-  chain: string,
   autoQuery = true
 ) {
   const [loading, setLoading] = useState(false);
@@ -14,7 +13,7 @@ export default function usePoolRecommend(
     try {
       setLoading(true);
       const response = await axiosInstance.get(
-        `/api/v1/pool/recommend?token_status=${tokenStatus}&chain=${chain}`
+        `/api/v1/pool/recommend?token_status=${tokenStatus}&chain=${"near"}`
       );
 
       setData(response.data.data[0]);

@@ -4,10 +4,12 @@ import SortIcon from "./sort-icon";
 import Market from "./market";
 import usePoolList from "@/hooks/use-pool-list";
 import Loading from "@/components/icons/loading";
+import { useNavigate } from "react-router-dom";
 
 export default function Markets() {
   const [sortDataIndex, setSortDataIndex] = useState("");
   const [sortDirection, setSortDirection] = useState(false);
+  const navigate = useNavigate();
   const {
     poolList,
     loading
@@ -19,8 +21,7 @@ export default function Markets() {
     // setCollection
   } = usePoolList({
     pageLimit: 100,
-    chain: "solana",
-    tokenStatus: 1
+    tokenStatus: 0
   });
 
   return (
@@ -53,7 +54,13 @@ export default function Markets() {
       </div>
       <div className="mt-[20px] flex flex-col gap-[10px]">
         {poolList.map((item: any) => (
-          <Market key={item.id} data={item} />
+          <Market
+            key={item.id}
+            data={item}
+            onClick={() => {
+              navigate(`/btc/detail/${item.pool_id}`);
+            }}
+          />
         ))}
         {loading && (
           <div className="flex justify-center items-center min-h-[150px]">

@@ -5,7 +5,13 @@ import { formatNumber } from "@/utils/format/number";
 import ProgressBar from "@/components/nft-card/progress-bar";
 import BtcImg from "./btc";
 
-export default function Market({ data }: { data: any }) {
+export default function Market({
+  data,
+  onClick
+}: {
+  data: any;
+  onClick: () => void;
+}) {
   return (
     <div className="flex items-center h-[70px] rounded-[10px] bg-[#0000000D] border border-[#F2F2F233] backdrop-blur-[25px] pl-[14px] pr-[20px]">
       {columns.map((column: any) => (
@@ -15,7 +21,12 @@ export default function Market({ data }: { data: any }) {
           style={{ width: column.width }}
         >
           {column.dataIndex === "market_id" && (
-            <div className="text-[14px] text-black">{data.pool_id}</div>
+            <div
+              className="text-[14px] text-black button hover:underline"
+              onClick={onClick}
+            >
+              {data.pool_id}
+            </div>
           )}
           {column.dataIndex === "market" && (
             <div className="flex items-center gap-[16px]">

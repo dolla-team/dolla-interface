@@ -21,7 +21,6 @@ export default function Markets() {
     // setCollection
   } = usePoolList({
     pageLimit: 100,
-    chain: "solana",
     tokenStatus: 1
   });
 

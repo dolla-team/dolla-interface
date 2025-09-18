@@ -6,7 +6,7 @@ import Markets from "./markets";
 import { useAuth } from "@/contexts/auth";
 
 export default function Home() {
-  const { quoteTokenBalance } = useAuth();
+  const { nearAccount } = useAuth();
   return (
     <div className="pb-[30px]">
       <div className="w-[1158px] mx-auto pt-[30px]">
@@ -15,7 +15,7 @@ export default function Home() {
         <Markets />
         <div className="flex items-center gap-[22px] h-[154px] mt-[30px]">
           <div className="w-1/3">
-            <LucyDraw tokenBalance={quoteTokenBalance} />
+            <LucyDraw tokenBalance={nearAccount?.balance} />
           </div>
           <div className="w-1/3 h-full">
             <TopWinners type="winners" />

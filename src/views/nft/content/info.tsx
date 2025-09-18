@@ -9,6 +9,7 @@ import { formatNumber } from "@/utils/format/number";
 import { getAnchorPrice } from "@/utils/pool";
 import Button from "@/components/button";
 import RandomlyNft from "./randomly-nft";
+import { useAuth } from "@/contexts/auth";
 
 export default function Info({
   disabled,
@@ -17,7 +18,8 @@ export default function Info({
   probabilities,
   rewardTokenInfo
 }: any) {
-  const { pool, quoteTokenBalance } = useNftContext();
+  const { pool } = useNftContext();
+  const { nearAccount } = useAuth();
 
   return (
     <div>
@@ -96,7 +98,7 @@ export default function Info({
         <div className="mr-[30px]">
           <div className="text-[14px] text-[#8A87AA]">
             Your Bal.{" "}
-            {formatNumber(quoteTokenBalance || 0, 3, true, {
+            {formatNumber(nearAccount?.balance || 0, 3, true, {
               prefix: "$"
             })}
           </div>

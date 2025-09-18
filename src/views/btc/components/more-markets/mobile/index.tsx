@@ -30,6 +30,7 @@ const Markets = (props: any) => {
   } = usePoolList({
     pageLimit: 10,
     isScrollList: true,
+    tokenStatus: 0,
     onFirstPageLoad: (_poolList) => {
       setActiveMarketIndex(0);
     }

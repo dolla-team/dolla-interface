@@ -5,7 +5,7 @@ import AvatarCashier from "./avatar-cashier";
 import useWalletStore from "@/stores/use-wallet";
 
 export default function AvatarAction() {
-  const { userInfo, quoteTokenBalance, address } = useAuth();
+  const { userInfo, nearAccount, address } = useAuth();
   const { user } = useUser();
 
   // const { claiming, claimTestCoin } = useClaimTestCoin();
@@ -19,7 +19,7 @@ export default function AvatarAction() {
             e.stopPropagation();
             set({ showWallet: true, showUserInfo: false });
           }}
-          tokenBalance={quoteTokenBalance}
+          tokenBalance={nearAccount?.balance}
         />
       )}
       {userInfo?.icon && (

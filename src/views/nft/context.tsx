@@ -23,13 +23,9 @@ export const CannonCoinsProvider = ({
   const [bids, setBids] = useState(1);
   const [bidResult, setBidResult] = useState<any>(null);
   const params = useParams();
-  const { onQueryPoolInfo } = usePoolInfo("Berachain");
+  const { onQueryPoolInfo } = usePoolInfo();
   const [pool, setPool] = useState<any>(null);
-  const { data, getPoolRecommend } = usePoolRecommend(
-    1,
-    "Berachain",
-    !params?.poolId
-  );
+  const { data, getPoolRecommend } = usePoolRecommend(1, !params?.poolId);
   const poolCachedRef = useRef<any>(null);
   const carouselRef = useRef<any>(null);
 

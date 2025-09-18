@@ -21,7 +21,6 @@ export default function MoreMarkets() {
     // setCollection
   } = usePoolList({
     pageLimit: 10,
-    chain: "Berachain",
     tokenStatus: 1
   });
   const navigate = useNavigate();

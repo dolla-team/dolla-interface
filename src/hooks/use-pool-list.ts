@@ -8,7 +8,6 @@ import { formatNumber } from "@/utils/format/number";
 export default function usePoolList(props?: {
   pageLimit?: number;
   isScrollList?: boolean;
-  chain?: string;
   tokenStatus?: number;
   onFirstPageLoad?(list: any): void;
 }) {
@@ -16,7 +15,6 @@ export default function usePoolList(props?: {
     pageLimit,
     isScrollList,
     onFirstPageLoad,
-    chain = "Berachain",
     tokenStatus = 0
   } = props ?? {};
 
@@ -63,9 +61,7 @@ export default function usePoolList(props?: {
       const res = await axiosInstance.get(
         `/api/v1/pool/list?limit=${LIMIT}&offset=${
           pageRef.current * LIMIT
-        }&sort_field=${sortField}&sort_order=${sortOrder}&status=1&chain=${
-          chain || "Berachain"
-        }&token_status=${tokenStatus}${
+        }&sort_field=${sortField}&sort_order=${sortOrder}&status=1&chain=${"near"}&token_status=${tokenStatus}${
           collection?.address ? "&token=" + collection.address : ""
         }`
       );

@@ -1,19 +1,13 @@
 import clsx from "clsx";
 import { useEffect, useMemo, useState } from "react";
-
-import Recharge from "@/sections/cashier/panels/recharge";
 import PriceChart from "../nft-create/price-chart";
-import { useAuth } from "@/contexts/auth";
 import { BASE_TOKEN } from "@/config/btc";
 import useTokenBalance from "@/hooks/solana/use-token-balance";
 import { formatNumber } from "@/utils/format/number";
 import useTokenPrice from "@/hooks/use-token-price";
-import Loading from "@/components/icons/loading";
-import useCreate from "@/hooks/solana/use-create";
 import { motion } from "framer-motion";
 import Button from "@/components/button";
 import DoughnutChart from "./doughnut-chart";
-import { formatAddress } from "@/utils/format/address";
 import { useReferenceData } from "./hooks/use-reference-data";
 import Skeleton from "@/components/skeleton";
 import { useConfigStore } from "@/stores/use-config";
@@ -23,12 +17,13 @@ import { TOKNES } from "@/sections/cashier/panels/withdraw-solana";
 import useIsMobile from "@/hooks/use-is-mobile";
 import Modal from "@/components/modal";
 import useConfig from "@/hooks/use-config";
+import useGameAction from "@/hooks/near/use-game-action";
+import { useAuth } from "@/contexts/auth";
 
 export default function BTCCreate() {
-  const navigate = useNavigate();
   const [amount, setAmount] = useState(1);
-  // const { address, userInfo } = useAuth();
-  const { tokenBalance, isLoading } = useTokenBalance({});
+  const { address: evmAddress } = useAuth();
+
   const { data: referenceData, loading: referenceDataLoading } =
     useReferenceData({ token: BASE_TOKEN, amount });
   const globalConfig = useConfigStore((state) => state.config);
@@ -39,32 +34,22 @@ export default function BTCCreate() {
   const [depositModalOpen, setDepositModalOpen] = useState(false);
 
   const pricePerBTC = useMemo(() => {
+    return 1;
     if (!prices || prices?.length === 0) return 0;
     const _p = prices[0].last_price;
     return _p;
   }, [prices]);
 
-  const { onCreate, creating } = useCreate({
-    amount,
-    anchorPrice: pricePerBTC,
-    onCreateSuccess: () => {
-      setTimeout(() => {
-        navigate(`/portfolio/seller`);
-      }, 1000);
-    }
-  });
+  const { createGame: onCreate, loading: creating } = useGameAction({});
 
   const errorTips = useMemo(() => {
-    if (Number(tokenBalance) < amount) {
-      return "Insufficient balance";
-    }
     if (pricePerBTC === 0) {
       return "Anchor price not found";
     }
     return "";
-  }, [amount, tokenBalance, pricePerBTC]);
+  }, [amount, pricePerBTC]);
 
-  const [poolCashOutTiming, poolBidsOvermarket] = useMemo(() => {
+  const [poolBidsOvermarket] = useMemo(() => {
     return [
       globalConfig?.pool_cash_out_timing?.map((_item: any) => ({
         label: _item.days,
@@ -155,7 +140,16 @@ export default function BTCCreate() {
               loading={creating}
               onClick={() => {
                 if (errorTips || creating) return;
-                onCreate();
+                onCreate({
+                  evmAddress: evmAddress || "",
+                  originAsset:
+                    "nep141:arb-0xaf88d065e77c8cc2239327c5edb3a432268e5831.omft.near",
+                  destinationAsset:
+                    "nep141:17208628f84f5d6ad33f0da3bbbeb27ffcb398eac501a31bd6ad2011e36133a1",
+                  amount: (amount * 1e6).toString(),
+                  refundTo: "0x229E549c97C22b139b8C05fba770D94C086853d8",
+                  price: pricePerBTC
+                });
               }}
             >
               {errorTips || "Create Market"}

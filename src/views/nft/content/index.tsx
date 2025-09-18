@@ -10,16 +10,9 @@ import PlayerDistribution from "./player-distribution";
 import Big from "big.js";
 
 export default function NftContent() {
-  const {
-    setFlipStatus,
-    setBidResult,
-    carouselRef,
-    pool,
-    quoteTokenBalance,
-    bids,
-    flipStatus
-  } = useNftContext();
-  const { userInfo } = useAuth();
+  const { setFlipStatus, setBidResult, carouselRef, pool, bids, flipStatus } =
+    useNftContext();
+  const { userInfo, nearAccount } = useAuth();
   const { onDraw } = useDraw(
     (isWinner: boolean) => {
       setFlipStatus(2);
@@ -70,7 +63,7 @@ export default function NftContent() {
     if (!userInfo?.user) {
       return true;
     }
-    if (Number(quoteTokenBalance) < bids) {
+    if (Number(nearAccount?.balance || 0) < bids) {
       return true;
     }
     if (flipStatus === 0) {
@@ -78,7 +71,7 @@ export default function NftContent() {
     }
 
     return true;
-  }, [flipStatus, userInfo, quoteTokenBalance, bids, pool]);
+  }, [flipStatus, userInfo, nearAccount?.balance, bids, pool]);
 
   const [rewardTokenInfo] = useMemo(() => {
     if (!pool) return [{}];

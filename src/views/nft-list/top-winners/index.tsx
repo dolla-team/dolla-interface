@@ -7,9 +7,7 @@ export default function TopWinners({ type }: { type: "winners" | "sellers" }) {
   const [data, setData] = useState<any[]>([]);
   useEffect(() => {
     const getData = async () => {
-      const res = await axiosInstance.get(
-        "/api/v1/pool/winner/bid/recommend?chain=Berachain"
-      );
+      const res = await axiosInstance.get("/api/v1/pool/winner/bid/recommend");
 
       setData(res.data.data);
     };
