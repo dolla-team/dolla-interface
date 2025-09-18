@@ -36,7 +36,10 @@ export default function useBid(
 
       // Sign the message
       const signature = keyPair.sign(messageBuffer);
-
+      console.log(
+        "signature",
+        Buffer.from(signature.signature).toString("hex")
+      );
       // Return signature as hex string
       return Buffer.from(signature.signature).toString("hex");
     } catch (error) {
@@ -61,7 +64,7 @@ export default function useBid(
 
       const payload = {
         bets: times,
-        deadline: Date.now() + 1000 * 60 * 60 * 24,
+        deadline: String(Date.now() + 1000 * 60 * 60 * 24),
         game_id: poolId,
         nonce: res.nonce,
         user_id: {
@@ -72,12 +75,7 @@ export default function useBid(
       // Sign the payload using NEAR private key
       const payloadString = JSON.stringify(payload);
       const signature = signMessage(payloadString + random_seed);
-      console.log(
-        "signature",
-        signature,
-        random_seed,
-        payloadString + random_seed
-      );
+      console.log("signature", signature, payloadString + random_seed);
 
       const response = await axiosInstance.post(`/api/v1/user/bid/data`, {
         payload: payloadString,
