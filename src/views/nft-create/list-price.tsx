@@ -2,9 +2,9 @@ import Loading from "@/components/icons/loading";
 import PriceChart from "./price-chart";
 import clsx from "clsx";
 import { formatNumber } from "@/utils/format/number";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import Action from "@/views/nft-create/action";
-import Button from "@/components/button";
+import Button from "@/components/button/v2";
 import useMintNft from "./hooks/use-mint-nft";
 import useTokenPrice from "@/hooks/use-token-price";
 
@@ -36,12 +36,12 @@ export default function ListPrice({
   const tokenIds = useMemo(() => {
     return token.id
       ? [
-        {
-          chain: "Berachain",
-          address: token.address,
-          tokenIds: [token.id]
-        }
-      ]
+          {
+            chain: "Berachain",
+            address: token.address,
+            tokenIds: [token.id]
+          }
+        ]
       : [];
   }, [token]);
   const { prices, loading: pricesLoading } = useTokenPrice(tokenIds);
@@ -50,10 +50,12 @@ export default function ListPrice({
     onSetListPrice(prices[0].floor_price);
     return prices[0];
   }, [prices]);
-  const { mintNft, minting, minted, mintedLoading } = useMintNft(
-    token?.address,
-    onSuccess
-  );
+  const { mintNft, minting } = useMintNft(token?.address, onSuccess);
+  useEffect(() => {
+    if (price) {
+      onSetListPrice(price.floor_price);
+    }
+  }, [price]);
 
   return (
     <div className="mt-[30px]">
@@ -63,16 +65,16 @@ export default function ListPrice({
         people to place bid. *1 Bid = 1 USD
       </div>
       <div className="flex flex-row-reverse gap-[16px] pt-[16px]">
-        <div className="flex flex-col gap-[10px] w-[356px]">
+        <div className="flex flex-col gap-[10px] w-[356px] shrink-0">
           {ITEMS.map((item, index) => (
             <div
               className={clsx(
                 "p-[13px] bg-[#222A35] border border-[#373737] text-[12px] flex justify-between items-center font-light rounded-[6px] relative",
                 price[item.key] !== "0" && price[item.key]
-                  ? "cursor-pointer hover:border-[#FFC42F] hover:shadow-[0px_0px_6px_0px_#FFC530]"
+                  ? "cursor-pointer hover:border-[#743EFF] hover:shadow-[0px_0px_6px_0px_#743EFF]"
                   : "cursor-not-allowed opacity-50",
                 listPrice === price[item.key] &&
-                "border-[#FFC42F] shadow-[0px_0px_6px_0px_#FFC530]"
+                  "border-[#743EFF] shadow-[0px_0px_6px_0px_#743EFF]"
               )}
               key={item.key}
               onClick={() => {
@@ -82,7 +84,7 @@ export default function ListPrice({
               }}
             >
               {index === 0 && (
-                <div className="w-[90px] h-[16px] rounded-[4px] bg-[#57FF70] text-[12px] text-black text-center font-medium absolute top-[-8px] left-[-4px]">
+                <div className="w-[90px] h-[16px] rounded-[4px] bg-[#57FF70] text-[10px] text-black text-center font-medium absolute top-[-8px] left-[-4px]">
                   Recommend
                 </div>
               )}
@@ -122,7 +124,7 @@ export default function ListPrice({
               </div>
             </div>
           ))}
-          {minted && token?.id && (
+          {token?.id || pricesLoading ? (
             <Action
               amount={1}
               loading={pricesLoading}
@@ -134,20 +136,24 @@ export default function ListPrice({
                 onSuccess("create");
               }}
             />
-          )}
-          {(!minted || !token?.id) && token?.address && (
+          ) : token?.address?.toLocaleLowerCase() ===
+            "0x2b517b73555598f0b1a0985a04c8cf76d5f54e8b" ? (
             <Button
-              loading={minting || mintedLoading}
+              loading={minting}
               className="button w-full h-[40px] mt-[20px]"
               onClick={mintNft}
             >
               Mint NFT
             </Button>
+          ) : (
+            <Button className="button w-full h-[40px] mt-[20px]" disabled>
+              No nft fund
+            </Button>
           )}
         </div>
         <PriceChart
           anchorPrice={listPrice}
-          className="h-[328px] !w-[474px] bg-[#1A1E24] rounded-[6px]"
+          className="h-[328px] grow bg-[#1A1E24] rounded-[6px]"
         />
       </div>
     </div>

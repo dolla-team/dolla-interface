@@ -1,7 +1,7 @@
 import Recharge from "./panels/recharge";
 import { motion } from "framer-motion";
 import { useState, useImperativeHandle, useEffect } from "react";
-import { PURCHASE_TOKEN } from "@/config";
+import config from "@/config/bera";
 
 export default function QuickPopup({ ref }: any) {
   const [showPopup, setShowPopup] = useState(false);
@@ -33,7 +33,7 @@ export default function QuickPopup({ ref }: any) {
         className="absolute top-[50px] left-[50%] translate-x-[-50%] w-[316px] h-[436px] p-[15px] rounded-[6px] bg-[#232932]"
       >
         <div className="text-center text-white font-bold">Recharge</div>
-        <Recharge token={PURCHASE_TOKEN} />
+        <Recharge token={config.purchaseToken} />
       </motion.div>
     )
   );

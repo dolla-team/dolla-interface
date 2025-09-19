@@ -11,13 +11,13 @@ export default function Item({ data }: any) {
         size={30}
         className="border border-[#131417] mr-[6px]"
       />
-      <div className="text-[14px] font-bold truncate mr-[3px] shrink-0">
+      <div className="text-[12px] font-bold truncate mr-[3px] shrink-0">
         {formatAddress(data.user, 3)}
       </div>
-      <div className="text-[14px] font-bold text-[#FFEF43] mr-[3px]">
+      <div className="text-[12px] font-bold text-[#FFEF43] mr-[3px]">
         bid {data.times}
       </div>
-      <div className="text-[14px] font-bold">{dayjs(data.time).fromNow()}</div>
+      <div className="text-[12px] font-bold">{dayjs(data.time).fromNow()}</div>
     </div>
   );
 }

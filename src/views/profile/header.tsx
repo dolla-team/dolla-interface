@@ -14,8 +14,8 @@ export default function Header({ tab }: any) {
         onChange={(value) => {
           navigate(`/portfolio/${value}`);
         }}
-        className="!h-[38px] !border-[1px] !border-[#6A5D3A] !rounded-[19px] !bg-[#35302B] !p-[4px]"
-        cursorClassName="!rounded-[15px] !shadow-[unset] !bg-[radial-gradient(50%_50%_at_50%_50%,_#FFEF43_0%,_#FFC42F_100%)]"
+        className="!h-[38px] !border-[1px] !border-[#383F47] !rounded-[19px] !p-[4px]"
+        cursorClassName="!rounded-[15px] !shadow-[unset]"
         tabClassName="!px-[15px]"
       />
       <span className="text-white text-[20px] font-[400] leading-[100%] font-[DelaGothicOne]">

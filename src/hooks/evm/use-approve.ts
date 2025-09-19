@@ -136,6 +136,9 @@ export default function useApprove({
 
   const approve = async () => {
     if (!token?.address || !amount || !spender) return;
+    let toastId = toast.loading({
+      title: "Approving..."
+    });
     try {
       setApproving(true);
 
@@ -176,6 +179,7 @@ export default function useApprove({
           if (receipt?.status === 1) {
             setApproved(true);
             onSuccess?.();
+            toast.dismiss(toastId);
             toast.success({
               title: "Approve Successful!"
             });
@@ -183,6 +187,7 @@ export default function useApprove({
         },
         onError: () => {
           setApproving(false);
+          toast.dismiss(toastId);
           toast.fail({
             title: "Approve Failed!"
           });
@@ -190,6 +195,7 @@ export default function useApprove({
       });
     } catch (err: any) {
       console.log("err", err);
+      toast.dismiss(toastId);
       toast.fail({
         title: "Approve Failed!",
         text: err?.message?.includes("user rejected transaction")

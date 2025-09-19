@@ -20,8 +20,10 @@ import {
 import useConfig from "@/hooks/use-config";
 import useUserInfoStore from "@/stores/use-user-info";
 import { ethers } from "ethers";
-import useTokenBalance from "@/hooks/solana/use-token-balance";
-import { QUOTE_TOKEN } from "@/config/btc";
+import useTokenBalance from "@/hooks/evm/use-token-balance";
+import useUserNft from "@/hooks/evm/use-user-nft";
+import useAccount from "@/hooks/near/use-account";
+import config from "@/config/bera";
 
 export const AuthContext = React.createContext<any | null>(null);
 
@@ -42,12 +44,12 @@ export const AuthProvider: React.FC<{
 
   const privyWallet = useMemo(() => {
     if (isLoggedOut) return { address: "" };
-
     if (wallets.length === 0) return { address: "" };
-    if (wallets.length === 1) return wallets[0];
     const privyItem = wallets.find((item) => item.walletClientType === "privy");
-    return privyItem;
+    return privyItem || { address: "" };
   }, [wallets, isLoggedOut]);
+
+  const { account, fetchAccount } = useAccount(privyWallet?.address);
 
   const {
     info: userInfo,
@@ -56,12 +58,8 @@ export const AuthProvider: React.FC<{
     setInfo
   } = useUserInfo(privyWallet?.address);
 
-  const { tokenBalance: quoteTokenBalance, update: updateQuoteTokenBalance } =
-    useTokenBalance({
-      address: QUOTE_TOKEN.address,
-      decimals: QUOTE_TOKEN.decimals,
-      userInfo
-    });
+  useUserNft(userInfo);
+
   const { signMessage } = useSignMessage();
   const { onLogin } = useLogin();
 
@@ -215,8 +213,8 @@ export const AuthProvider: React.FC<{
         logining,
         ready,
         user,
-        quoteTokenBalance,
-        updateQuoteTokenBalance,
+        nearAccount: account,
+        fetchAccount,
         login,
         logout,
         onQueryUserInfo
@@ -229,10 +227,6 @@ export const AuthProvider: React.FC<{
 
 export function useAuth() {
   const context = useContext(AuthContext);
-  console.log("context", context);
-  if (!context) {
-    throw new Error("");
-  }
 
   return context || {};
 }

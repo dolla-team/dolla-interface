@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { formatAddress } from "@/utils/format/address";
 import MultipleBg from "./multiple-bg";
 import clsx from "clsx";
+import { getAnchorPrice } from "@/utils/pool";
 
 export default function WinnerCard({
   data,
@@ -31,7 +32,7 @@ export default function WinnerCard({
               <div className="w-[76px] h-[76px] rounded-full flex items-center justify-center border-[1px] border-[#DD9000] bg-[linear-gradient(180deg,_#FFC93F_0%,_#FFDC84_50%,_#DEAF37_100%)] shadow-[0px_0px_30px_6px_rgba(250,252,129,0.30)]">
                 <Avatar
                   size={58}
-                  address={data?.user_info?.sol_user}
+                  address={data?.user_info?.user}
                   email={data?.user_info?.email}
                   className="rounded-full border-[1px] border-[#DD9000]"
                 />
@@ -58,7 +59,7 @@ export default function WinnerCard({
                 <div className="flex items-center justify-between mt-[4px]">
                   <div className="text-[#8C8B8B]">Valued</div>
                   <div className="text-white truncate">
-                    ${formatNumber(data?.reward_usd, 2, true)}{" "}
+                    ${formatNumber(getAnchorPrice(data?.anchor_price), 2, true)}{" "}
                   </div>
                 </div>
                 <div className="flex items-center justify-between mt-[4px]">

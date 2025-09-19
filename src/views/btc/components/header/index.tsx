@@ -18,8 +18,13 @@ export default function Header({ className }: { className?: string }) {
     if (!pool) return ["0", 0, 0];
     const reward_amount = pool.reward_amount || 0;
     const decimals = pool.reward_token_info?.[0]?.decimals || 1;
-    const _an = Big(reward_amount).div(10 ** decimals);
+    const _an = Big(
+      Big(reward_amount)
+        .div(10 ** decimals)
+        .toFixed(3)
+    );
     const _a = formatNumber(_an, 3, true);
+
     let prev = 0;
     let next = 0;
     if (_an.eq(0.001)) {

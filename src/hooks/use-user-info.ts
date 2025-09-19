@@ -17,7 +17,7 @@ export default function useUserInfo(address?: string) {
     setLoading(true);
 
     try {
-      const res = await axios.get("/api/v1/user");
+      const res = await axios.get("/api/v1/user?chain=Berachain");
       const _info = res.data.data;
       if (!_info.icon) {
         if (usersStore.users[address]) {

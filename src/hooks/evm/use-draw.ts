@@ -4,12 +4,17 @@ import { ethers } from "ethers";
 import useBettingContract from "./use-betting-contract";
 import reportHash from "@/utils/report-hash";
 import useGelatonetwork from "./use-gelatonetwork";
+import { useAuth } from "@/contexts/auth/privy";
 
-export default function useDraw(onSuccess: (isWinner: boolean) => void) {
+export default function useDraw(
+  onSuccess: (isWinner: boolean) => void,
+  onError: () => void
+) {
   const [drawing, setDrawing] = useState(false);
   const toast = useToast();
   const BettingContract = useBettingContract();
   const { executeTransaction } = useGelatonetwork();
+  const { updateQuoteTokenBalance, address } = useAuth();
 
   const onDraw = async (poolId: number, times: number) => {
     if (poolId === -1 || !BettingContract) {
@@ -26,43 +31,60 @@ export default function useDraw(onSuccess: (isWinner: boolean) => void) {
         setDrawing(false);
         return;
       }
-      const flipFee = await BettingContract.getFlipFee();
-      console.log("flipFee", flipFee);
-      const method = times > 1 ? "drawMultiple" : "drawOnce";
+
+      const method = "sponsoredDraw";
       const userRandomNumber = ethers.utils.hexlify(
         ethers.utils.randomBytes(32)
       );
-      const params =
-        times > 1
-          ? [poolId, times, userRandomNumber]
-          : [poolId, userRandomNumber];
+      const params = [poolId, times, userRandomNumber];
 
-      const tx = await BettingContract.populateTransaction[method](...params, {
-        value: flipFee
-      });
+      const tx = await BettingContract.populateTransaction[method](...params);
+
+      const estimateGas = await BettingContract.estimateGas[method](...params);
+      console.log("estimateGas", estimateGas);
+
       executeTransaction({
         calls: [tx],
         onSuccess: async (receipt: any) => {
-          setDrawing(false);
-
           if (receipt?.status === 1) {
-            const afterPoolState = await BettingContract.getPoolState(poolId);
-            console.log("afterPoolState", afterPoolState);
-            onSuccess(
-              afterPoolState.winner !==
-                "0x0000000000000000000000000000000000000000"
-            );
+            const refundableRequests =
+              await BettingContract.getRefundableRequestsPaginated(
+                address,
+                poolId
+              );
+            const refundableRequest = refundableRequests[0]?.slice(-1)[0];
+            let isWinner = false;
+            let count = 0;
+
+            while (count < 10) {
+              try {
+                const bidResult = await BettingContract.drawRequests(
+                  poolId,
+                  refundableRequest
+                );
+                console.log("bidResult", bidResult);
+                if (bidResult.status === 1) {
+                  isWinner = bidResult.isWinner;
+                  break;
+                }
+                await new Promise((resolve) => setTimeout(resolve, 2000));
+                count++;
+              } catch (error) {
+                console.error("Error checking pool state:", error);
+                break;
+              }
+            }
+
+            onSuccess(isWinner);
             toast.success({
-              title:
-                afterPoolState.winner !==
-                "0x0000000000000000000000000000000000000000"
-                  ? "You are the winner"
-                  : "Draw success"
+              title: isWinner ? "You are the winner" : "Draw success"
             });
-            setDrawing(false);
+            updateQuoteTokenBalance();
           } else {
             toast.fail({ title: "Bid failed" });
           }
+
+          setDrawing(false);
           reportHash({
             hash: receipt.transactionHash,
             block_number: receipt.blockNumber,
@@ -74,6 +96,7 @@ export default function useDraw(onSuccess: (isWinner: boolean) => void) {
           console.log("onError", status);
           setDrawing(false);
           toast.fail({ title: "Bid failed" });
+          onError();
         }
       });
     } catch (error) {

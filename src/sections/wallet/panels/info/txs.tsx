@@ -1,0 +1,84 @@
+import Loading from "@/components/icons/loading";
+import LoadingMore from "@/components/loading/loading-more";
+import useInfiniteScroll from "@/hooks/use-infinite-scroll";
+import Empty from "./empty";
+import useUserRecords, {
+  EUserRecordsType,
+  UserRecordsTypeMap
+} from "@/hooks/use-user-records";
+import { formatNumber } from "@/utils/format/number";
+import Big from "big.js";
+
+export default function Txs() {
+  const { loading, records, hasMore, onQueryRecords } = useUserRecords();
+
+  const { containerRef, isLoading } = useInfiniteScroll(onQueryRecords, {
+    loading,
+    hasMore,
+    threshold: 100
+  });
+
+  return (
+    <div ref={containerRef} className="h-full overflow-y-auto">
+      {records.map((item) => (
+        <Item key={item.id} data={item} />
+      ))}
+      {records.length === 0 && !loading && <Empty text="No transactions" />}
+      {loading && records.length === 0 && (
+        <div className="text-[14px] text-[#5E6B7D] w-full h-[100px] flex items-center justify-center">
+          <Loading size={20} />
+        </div>
+      )}
+      {records.length > 0 && (
+        <LoadingMore loading={isLoading} hasMore={hasMore} className="w-full" />
+      )}
+    </div>
+  );
+}
+
+const Item = ({ data }: { data: any }) => {
+  return (
+    <div className="flex justify-between items-center py-[8px]">
+      <div className="flex items-center gap-[8px]">
+        {/* <div className="relative flex">
+          <img
+            src={config.purchaseToken.icon}
+            className="w-[32px] h-[32px] rounded-full object-cover"
+          />
+          <img
+            src={config.purchaseToken.icon}
+            className="w-[32px] h-[32px] rounded-full object-cover ml-[-10px]"
+          />
+        </div> */}
+        <div>
+          <div className="text-[14px] text-black">
+            {UserRecordsTypeMap[data.type as EUserRecordsType].label}
+          </div>
+          {/* <div className="text-[10px] text-[#8A87AA]">
+            {data.token_info.symbol}
+          </div> */}
+        </div>
+      </div>
+      <div>
+        <div className="text-[14px] text-black">
+          {!data.token_info?.token_id
+            ? formatNumber(
+                Big(data.amount).div(10 ** data.token_info.decimals),
+                2,
+                true,
+                data.type === 1 || data.type === 3 || data.type === 5
+                  ? { prefix: "+ " }
+                  : { prefix: "- " }
+              )
+            : data.type === 1 || data.type === 3 || data.type === 5
+            ? "+"
+            : "-"}{" "}
+          {data.token_info?.token_id
+            ? `${data.token_info.name} #${data.token_info.token_id}`
+            : data.token_info.symbol}
+        </div>
+        {/* <div className="text-[10px] text-[#8A87AA]">-200 USDC</div> */}
+      </div>
+    </div>
+  );
+};

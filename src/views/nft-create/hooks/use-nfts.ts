@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
 import mock from "../mock";
 import axiosInstance from "@/libs/axios";
-import nftAbi from "@/config/abis/nft";
+import nftAbi from "@/config/abis/evm-nft";
 import { useAuth } from "@/contexts/auth";
 import { ethers } from "ethers";
+import { useConfigStore } from "@/stores/use-config";
+import useNftsStore from "@/stores/use-nfts";
 
 export default function useNfts() {
   const [chains, setChains] = useState<any[]>([]);
@@ -11,32 +13,34 @@ export default function useNfts() {
   const [collections, setCollections] = useState<any[]>([]);
   const [collection, setCollection] = useState<any>({});
   const [nfts, setNfts] = useState<any[]>([]);
-  const [nft, setNft] = useState<any>({});
+  const [nft, setNft] = useState<any>(null);
   const [loadingCollections, setLoadingCollections] = useState<boolean>(false);
-  const [listPrice, setListPrice] = useState<number>(0);
-  const [loadingNfts, setLoadingNfts] = useState<boolean>(false);
-  const { wallet } = useAuth();
-
-  useEffect(() => {
-    setChains(mock);
-    setChain(mock[0]);
-    fetchCollections();
-  }, []);
+  const [listPrice, setListPrice] = useState<number>(100);
+  // const [loadingNfts, setLoadingNfts] = useState<boolean>(false);
+  const { userInfo, wallet } = useAuth();
+  const configStore = useConfigStore();
+  const nftsStore = useNftsStore();
 
   const onSelectCollection = (collection: any) => {
     setCollection(collection);
   };
   const onSelectNft = (nft: any) => {
-    setNft(nft);
+    setNft({ id: nft.token.tokenId });
     setListPrice(0);
   };
 
   const fetchCollections = async () => {
+    if (configStore.config?.nft_config) {
+      setCollections(configStore.config.nft_config);
+      setCollection(configStore.config.nft_config[0]);
+      return;
+    }
     setLoadingCollections(true);
     try {
       const res = await axiosInstance.get(`/api/v1/config`);
       setCollections(res.data.data.nft_config);
       setCollection(res.data.data.nft_config[0]);
+      configStore.set({ config: res.data.data });
     } catch (error) {
       console.log("error", error);
     } finally {
@@ -45,13 +49,15 @@ export default function useNfts() {
   };
 
   const fetchNfts = async () => {
-    setLoadingNfts(true);
+    nftsStore.set({
+      refresher: nftsStore.refresher + 1
+    });
+    return;
     try {
       if (!collection.address) {
         setNfts([]);
         return;
       }
-
       const address = wallet?.address;
       if (!address) {
         setNfts([]);
@@ -61,9 +67,7 @@ export default function useNfts() {
       if (!ethereumProvider) {
         return;
       }
-
       const provider = new ethers.providers.Web3Provider(ethereumProvider);
-
       const nftCollectionContract = new ethers.Contract(
         collection.address as `0x${string}`,
         nftAbi as any,
@@ -71,33 +75,29 @@ export default function useNfts() {
       );
       // Method 1: Using viem's readContract for single calls
       const balanceOfResult = await nftCollectionContract.balanceOf(address);
-
       let balance = Number(balanceOfResult);
-
       if (!balance) {
         setNfts([]);
         return;
       }
-
       console.log("User NFT balance:", balance);
-
       // Method 2: Using viem's multicall for batch reading
-
       // Create contracts array for multicall
       const ownerResults: any[] = [];
-
       while (balance > 0) {
         const tokenOfOwnerByIndex =
           await nftCollectionContract.tokenOfOwnerByIndex(address, balance - 1);
         ownerResults.push(tokenOfOwnerByIndex);
         balance--;
       }
-
       const _nfts = ownerResults
         .filter((nft: any) => Number(nft) > 0)
         .map((nft: any) => {
           return {
-            id: Number(nft)
+            token: {
+              tokenId: Number(nft),
+              contract: collection.address
+            }
           };
         });
       if (_nfts.length > 0) {
@@ -110,15 +110,44 @@ export default function useNfts() {
       console.log("error", error);
       setNfts([]);
     } finally {
-      setLoadingNfts(false);
     }
   };
 
   useEffect(() => {
-    if (collection?.address && wallet) {
+    setChains(mock);
+    setChain(mock[0]);
+    fetchCollections();
+  }, []);
+
+  useEffect(() => {
+    if (collection?.address && userInfo?.user) {
       fetchNfts();
+    } else {
+      setNfts([]);
     }
-  }, [collection, wallet]);
+  }, [collection, userInfo]);
+
+  useEffect(() => {
+    if (nftsStore.nfts.length > 0 && collection?.address) {
+      const _nfts = nftsStore.nfts.filter(
+        (nft) =>
+          nft.token.contract.toLowerCase() ===
+          collection?.address?.toLowerCase()
+      );
+      // const _nfts = [];
+
+      const nft = _nfts[0];
+
+      if (nft) {
+        setNft({
+          id: nft.token.tokenId
+        });
+      } else {
+        setNft(null);
+      }
+      setNfts(_nfts);
+    }
+  }, [nftsStore.nfts]);
 
   return {
     chains,
@@ -133,7 +162,7 @@ export default function useNfts() {
     loadingCollections,
     listPrice,
     setListPrice,
-    loadingNfts,
+    loadingNfts: nftsStore.loading,
     fetchNfts
   };
 }

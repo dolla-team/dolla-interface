@@ -20,7 +20,8 @@ export default function LucyDraw({
   const userInfoStore = useUserInfoStore();
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
   const [historyRound, setHistoryRound] = useState(0);
-  const { currentRound, isLoading, fetchCurrentRound } = useLucyDraw();
+  const { currentRound, isLoading, fetchCurrentRound, participation } =
+    useLucyDraw();
   const configStore = useConfigStore();
   const [status, setStatus] = useState(0); // 0: running, 1: drawing, 2: end
   const timerRef = useRef<any>(null);
@@ -79,6 +80,7 @@ export default function LucyDraw({
     setIsHistoryOpen,
     setHistoryRound,
     currentRound,
+    participation,
     prizeAmount,
     status,
     tickets,

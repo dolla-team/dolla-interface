@@ -19,19 +19,19 @@ importers:
         version: 0.0.18(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(viem@2.29.4(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.24.4))
       '@gelatonetwork/smartwallet-react-sdk':
         specifier: ^0.0.18
-        version: 0.0.18(e7edfca2ee10cd5c47d3b3ab68545128)
+        version: 0.0.18(ylshajwpjf7erknhr43nkcgzqe)
       '@near-wallet-selector/core':
         specifier: ^9.1.0
-        version: 9.1.0(b2200f4f66a764c5799bc028c69956fb)
+        version: 9.1.0(gglj6hl42idj3vo5bb6psrakpu)
       '@near-wallet-selector/meteor-wallet':
         specifier: ^9.1.0
         version: 9.1.0(@near-js/crypto@2.2.3(@near-js/types@0.3.1)(@near-js/utils@1.1.0))(@near-js/keystores@2.2.3(@near-js/crypto@2.2.3(@near-js/types@0.3.1)(@near-js/utils@1.1.0))(@near-js/types@0.3.1))(@near-js/transactions@2.2.3(@near-js/crypto@2.2.3(@near-js/types@0.3.1)(@near-js/utils@1.1.0))(@near-js/types@0.3.1)(@near-js/utils@1.1.0))(encoding@0.1.13)
       '@near-wallet-selector/modal-ui':
         specifier: ^9.1.0
-        version: 9.1.0(b2200f4f66a764c5799bc028c69956fb)
+        version: 9.1.0(gglj6hl42idj3vo5bb6psrakpu)
       '@privy-io/react-auth':
         specifier: ^2.13.8
-        version: 2.19.0(ed0aad55e8edd1375583b18ca657abdd)
+        version: 2.19.0(b53dikydu46uiu6iogsp5fdzc4)
       '@rainbow-me/rainbowkit':
         specifier: ^2.2.6
         version: 2.2.8(@tanstack/react-query@5.83.0(react@19.1.0))(@types/react@19.1.8)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.7.3)(viem@2.29.4(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.24.4))(wagmi@2.16.0(@react-native-async-storage/async-storage@1.24.0(react-native@0.74.0(@babel/core@7.28.0)(@babel/preset-env@7.28.0(@babel/core@7.28.0))(@types/react@19.1.8)(bufferutil@4.0.9)(encoding@0.1.13)(react@18.3.1)(utf-8-validate@5.0.10)))(@tanstack/query-core@5.83.0)(@tanstack/react-query@5.83.0(react@19.1.0))(@types/react@19.1.8)(bufferutil@4.0.9)(encoding@0.1.13)(react@19.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(viem@2.29.4(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.24.4))(zod@3.24.4))
@@ -8627,7 +8627,7 @@ snapshots:
       eventemitter3: 5.0.1
       tldts: 6.0.16
 
-  '@dynamic-labs/wagmi-connector@4.18.3(5e82d3a67f629e02d56e19c3519d51fc)':
+  '@dynamic-labs/wagmi-connector@4.18.3(dqsb2mngc25vfknx6hzly7xj7q)':
     dependencies:
       '@dynamic-labs/assert-package-version': 4.18.3
       '@dynamic-labs/ethereum-core': 4.18.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(viem@2.29.4(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.24.4))
@@ -9193,11 +9193,11 @@ snapshots:
 
   '@floating-ui/utils@0.2.10': {}
 
-  '@gelatonetwork/smartwallet-react-dynamic@0.0.18(e88508a06d253de288673af8eebc1c34)':
+  '@gelatonetwork/smartwallet-react-dynamic@0.0.18(dqb74hp7rbwludelpoikvc6qoe)':
     dependencies:
       '@dynamic-labs/ethereum': 4.18.3(@babel/core@7.28.0)(@babel/preset-env@7.28.0(@babel/core@7.28.0))(@react-native-async-storage/async-storage@1.24.0(react-native@0.74.0(@babel/core@7.28.0)(@babel/preset-env@7.28.0(@babel/core@7.28.0))(@types/react@19.1.8)(bufferutil@4.0.9)(encoding@0.1.13)(react@18.3.1)(utf-8-validate@5.0.10)))(@types/react@19.1.8)(bufferutil@4.0.9)(encoding@0.1.13)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.7.3)(utf-8-validate@5.0.10)(viem@2.29.4(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.24.4))(zod@3.24.4)
       '@dynamic-labs/sdk-react-core': 4.18.3(@types/react@19.1.8)(react-dom@19.1.0(react@19.1.0))(react-native@0.74.0(@babel/core@7.28.0)(@babel/preset-env@7.28.0(@babel/core@7.28.0))(@types/react@19.1.8)(bufferutil@4.0.9)(encoding@0.1.13)(react@18.3.1)(utf-8-validate@5.0.10))(react@19.1.0)
-      '@dynamic-labs/wagmi-connector': 4.18.3(5e82d3a67f629e02d56e19c3519d51fc)
+      '@dynamic-labs/wagmi-connector': 4.18.3(dqsb2mngc25vfknx6hzly7xj7q)
       '@dynamic-labs/wallet-connector-core': 4.18.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@gelatonetwork/smartwallet': 0.0.18(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(viem@2.29.4(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.24.4))
       '@gelatonetwork/smartwallet-react-types': 0.0.18(@gelatonetwork/smartwallet@0.0.18(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(viem@2.29.4(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.24.4)))(@tanstack/query-core@5.83.0)(@types/react@19.1.8)(typescript@5.7.3)(use-sync-external-store@1.4.0(react@19.1.0))(viem@2.29.4(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.24.4))
@@ -9244,12 +9244,12 @@ snapshots:
       - utf-8-validate
       - zod
 
-  '@gelatonetwork/smartwallet-react-privy@0.0.18(2ddd06b6b77dc14b0e3674eea373dee8)':
+  '@gelatonetwork/smartwallet-react-privy@0.0.18(ei7cad5ic2nxfual4mrtrilldy)':
     dependencies:
       '@gelatonetwork/smartwallet': 0.0.18(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(viem@2.29.4(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.24.4))
       '@gelatonetwork/smartwallet-react-types': 0.0.18(@gelatonetwork/smartwallet@0.0.18(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(viem@2.29.4(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.24.4)))(@tanstack/query-core@5.83.0)(@types/react@19.1.8)(typescript@5.7.3)(use-sync-external-store@1.4.0(react@19.1.0))(viem@2.29.4(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.24.4))
       '@privy-io/react-auth': 2.13.0(@react-native-async-storage/async-storage@1.24.0(react-native@0.74.0(@babel/core@7.28.0)(@babel/preset-env@7.28.0(@babel/core@7.28.0))(@types/react@19.1.8)(bufferutil@4.0.9)(encoding@0.1.13)(react@18.3.1)(utf-8-validate@5.0.10)))(@solana/spl-token@0.4.13(@solana/web3.js@1.98.2(bufferutil@4.0.9)(encoding@0.1.13)(typescript@5.7.3)(utf-8-validate@5.0.10))(bufferutil@4.0.9)(encoding@0.1.13)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.7.3)(utf-8-validate@5.0.10))(@solana/web3.js@1.98.2(bufferutil@4.0.9)(encoding@0.1.13)(typescript@5.7.3)(utf-8-validate@5.0.10))(@types/react@19.1.8)(bs58@6.0.0)(bufferutil@4.0.9)(permissionless@0.2.52(ox@0.6.9(typescript@5.7.3)(zod@3.24.4))(viem@2.29.4(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.24.4)))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.7.3)(use-sync-external-store@1.4.0(react@19.1.0))(utf-8-validate@5.0.10)(zod@3.24.4)
-      '@privy-io/wagmi': 1.0.3(88699ecd82eb428f6b32e23a3706777a)
+      '@privy-io/wagmi': 1.0.3(hubedcgq7a4pyx5pyavfmqdmcm)
       '@tanstack/react-query': 5.74.11(react@18.3.1)
       caip: 1.1.1
       react: 18.3.1
@@ -9290,11 +9290,11 @@ snapshots:
       - use-sync-external-store
       - utf-8-validate
 
-  '@gelatonetwork/smartwallet-react-sdk@0.0.18(e7edfca2ee10cd5c47d3b3ab68545128)':
+  '@gelatonetwork/smartwallet-react-sdk@0.0.18(ylshajwpjf7erknhr43nkcgzqe)':
     dependencies:
       '@gelatonetwork/smartwallet': 0.0.18(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(viem@2.29.4(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.24.4))
-      '@gelatonetwork/smartwallet-react-dynamic': 0.0.18(e88508a06d253de288673af8eebc1c34)
-      '@gelatonetwork/smartwallet-react-privy': 0.0.18(2ddd06b6b77dc14b0e3674eea373dee8)
+      '@gelatonetwork/smartwallet-react-dynamic': 0.0.18(dqb74hp7rbwludelpoikvc6qoe)
+      '@gelatonetwork/smartwallet-react-privy': 0.0.18(ei7cad5ic2nxfual4mrtrilldy)
       '@gelatonetwork/smartwallet-react-types': 0.0.18(@gelatonetwork/smartwallet@0.0.18(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(viem@2.29.4(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.24.4)))(@tanstack/query-core@5.83.0)(@types/react@19.1.8)(typescript@5.7.3)(use-sync-external-store@1.4.0(react@19.1.0))(viem@2.29.4(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.24.4))
       react: 18.3.1
       viem: 2.29.4(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.24.4)
@@ -10023,7 +10023,7 @@ snapshots:
       - '@near-js/keystores'
       - '@near-js/transactions'
 
-  '@near-wallet-selector/core@9.1.0(b2200f4f66a764c5799bc028c69956fb)':
+  '@near-wallet-selector/core@9.1.0(gglj6hl42idj3vo5bb6psrakpu)':
     dependencies:
       '@near-js/signers': 2.1.0(@near-js/crypto@2.2.3(@near-js/types@0.3.1)(@near-js/utils@1.1.0))(@near-js/keystores@2.2.3(@near-js/crypto@2.2.3(@near-js/types@0.3.1)(@near-js/utils@1.1.0))(@near-js/types@0.3.1))(@near-js/transactions@2.2.3(@near-js/crypto@2.2.3(@near-js/types@0.3.1)(@near-js/utils@1.1.0))(@near-js/types@0.3.1)(@near-js/utils@1.1.0))
       borsh: 2.0.0
@@ -10047,9 +10047,9 @@ snapshots:
       - '@near-js/transactions'
       - encoding
 
-  '@near-wallet-selector/modal-ui@9.1.0(b2200f4f66a764c5799bc028c69956fb)':
+  '@near-wallet-selector/modal-ui@9.1.0(gglj6hl42idj3vo5bb6psrakpu)':
     dependencies:
-      '@near-wallet-selector/core': 9.1.0(b2200f4f66a764c5799bc028c69956fb)
+      '@near-wallet-selector/core': 9.1.0(gglj6hl42idj3vo5bb6psrakpu)
       copy-to-clipboard: 3.3.3
       qrcode: 1.5.4
       react: 18.3.1
@@ -10363,7 +10363,7 @@ snapshots:
       - utf-8-validate
       - zod
 
-  '@privy-io/react-auth@2.19.0(ed0aad55e8edd1375583b18ca657abdd)':
+  '@privy-io/react-auth@2.19.0(b53dikydu46uiu6iogsp5fdzc4)':
     dependencies:
       '@base-org/account': 1.0.2(@types/react@19.1.8)(bufferutil@4.0.9)(react@19.1.0)(typescript@5.7.3)(use-sync-external-store@1.4.0(react@19.1.0))(utf-8-validate@5.0.10)(wagmi@2.16.0(@react-native-async-storage/async-storage@1.24.0(react-native@0.74.0(@babel/core@7.28.0)(@babel/preset-env@7.28.0(@babel/core@7.28.0))(@types/react@19.1.8)(bufferutil@4.0.9)(encoding@0.1.13)(react@18.3.1)(utf-8-validate@5.0.10)))(@tanstack/query-core@5.83.0)(@tanstack/react-query@5.83.0(react@19.1.0))(@types/react@19.1.8)(bufferutil@4.0.9)(encoding@0.1.13)(react@19.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(viem@2.29.4(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.24.4))(zod@3.24.4))(zod@3.24.4)
       '@coinbase/wallet-sdk': 4.3.2
@@ -10443,7 +10443,7 @@ snapshots:
       - wagmi
       - zod
 
-  '@privy-io/wagmi@1.0.3(88699ecd82eb428f6b32e23a3706777a)':
+  '@privy-io/wagmi@1.0.3(hubedcgq7a4pyx5pyavfmqdmcm)':
     dependencies:
       '@privy-io/react-auth': 2.13.0(@react-native-async-storage/async-storage@1.24.0(react-native@0.74.0(@babel/core@7.28.0)(@babel/preset-env@7.28.0(@babel/core@7.28.0))(@types/react@19.1.8)(bufferutil@4.0.9)(encoding@0.1.13)(react@18.3.1)(utf-8-validate@5.0.10)))(@solana/spl-token@0.4.13(@solana/web3.js@1.98.2(bufferutil@4.0.9)(encoding@0.1.13)(typescript@5.7.3)(utf-8-validate@5.0.10))(bufferutil@4.0.9)(encoding@0.1.13)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.7.3)(utf-8-validate@5.0.10))(@solana/web3.js@1.98.2(bufferutil@4.0.9)(encoding@0.1.13)(typescript@5.7.3)(utf-8-validate@5.0.10))(@types/react@19.1.8)(bs58@6.0.0)(bufferutil@4.0.9)(permissionless@0.2.52(ox@0.6.9(typescript@5.7.3)(zod@3.24.4))(viem@2.29.4(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.24.4)))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.7.3)(use-sync-external-store@1.4.0(react@19.1.0))(utf-8-validate@5.0.10)(zod@3.24.4)
       react: 18.3.1
@@ -12740,7 +12740,7 @@ snapshots:
       - utf-8-validate
       - zod
 
-  '@wagmi/connectors@5.9.0(ff0e3a3c21e87aef5d541e66b747f9dd)':
+  '@wagmi/connectors@5.9.0(cryzp5sazad4adilrfq2qhsqnu)':
     dependencies:
       '@base-org/account': 1.0.2(@types/react@19.1.8)(bufferutil@4.0.9)(react@19.1.0)(typescript@5.7.3)(use-sync-external-store@1.4.0(react@19.1.0))(utf-8-validate@5.0.10)(wagmi@2.16.0(@react-native-async-storage/async-storage@1.24.0(react-native@0.74.0(@babel/core@7.28.0)(@babel/preset-env@7.28.0(@babel/core@7.28.0))(@types/react@19.1.8)(bufferutil@4.0.9)(encoding@0.1.13)(react@18.3.1)(utf-8-validate@5.0.10)))(@tanstack/query-core@5.83.0)(@tanstack/react-query@5.83.0(react@19.1.0))(@types/react@19.1.8)(bufferutil@4.0.9)(encoding@0.1.13)(react@19.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(viem@2.29.4(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.24.4))(zod@3.24.4))(zod@3.24.4)
       '@coinbase/wallet-sdk': 4.3.6(@types/react@19.1.8)(bufferutil@4.0.9)(react@19.1.0)(typescript@5.7.3)(use-sync-external-store@1.4.0(react@19.1.0))(utf-8-validate@5.0.10)(zod@3.24.4)
@@ -18417,7 +18417,7 @@ snapshots:
   wagmi@2.16.0(@react-native-async-storage/async-storage@1.24.0(react-native@0.74.0(@babel/core@7.28.0)(@babel/preset-env@7.28.0(@babel/core@7.28.0))(@types/react@19.1.8)(bufferutil@4.0.9)(encoding@0.1.13)(react@18.3.1)(utf-8-validate@5.0.10)))(@tanstack/query-core@5.83.0)(@tanstack/react-query@5.83.0(react@19.1.0))(@types/react@19.1.8)(bufferutil@4.0.9)(encoding@0.1.13)(react@19.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(viem@2.29.4(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.24.4))(zod@3.24.4):
     dependencies:
       '@tanstack/react-query': 5.83.0(react@19.1.0)
-      '@wagmi/connectors': 5.9.0(ff0e3a3c21e87aef5d541e66b747f9dd)
+      '@wagmi/connectors': 5.9.0(cryzp5sazad4adilrfq2qhsqnu)
       '@wagmi/core': 2.18.0(@tanstack/query-core@5.83.0)(@types/react@19.1.8)(react@19.1.0)(typescript@5.7.3)(use-sync-external-store@1.4.0(react@19.1.0))(viem@2.29.4(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.24.4))
       react: 19.1.0
       use-sync-external-store: 1.4.0(react@19.1.0)

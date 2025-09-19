@@ -7,7 +7,7 @@ import SwitchPanel from "@/components/switch/switch-panel";
 import Header from "../header";
 import Dashboard from "../ components/dashboard/index";
 import Tabs from "@/components/tabs";
-import { useRef, useState, useEffect, useCallback } from "react";
+import { useRef, useState, useEffect } from "react";
 import Radio from "@/components/radio";
 import PlayerMarkets from "./markets";
 import { AnimatePresence } from "framer-motion";
@@ -44,23 +44,26 @@ export default function Player() {
     updateJoinedPoolListData,
     onJoinedPoolListPageChange,
     joinedPoolListStatus,
-    onJoinedPoolListStatusChange,
+    onJoinedPoolListStatusChange
   } = usePlayerHistory();
 
   const containerRef = useRef<any>(null);
   const marketsBottomRef = useRef<any>(null);
 
-  const { run: handleLoadMore } = useDebounceFn(() => {
-    if (
-      joinedPoolListData.length > 0 &&
-      joinedPoolListHasNextPage &&
-      !joinedPoolListLoading
-    ) {
-      onJoinedPoolListPageChange(joinedPoolListPageIndex + 1);
+  const { run: handleLoadMore } = useDebounceFn(
+    () => {
+      if (
+        joinedPoolListData.length > 0 &&
+        joinedPoolListHasNextPage &&
+        !joinedPoolListLoading
+      ) {
+        onJoinedPoolListPageChange(joinedPoolListPageIndex + 1);
+      }
+    },
+    {
+      wait: 500
     }
-  }, {
-    wait: 500
-  });
+  );
 
   useEffect(() => {
     if (!marketsBottomRef.current || joinedPoolListData.length === 0) return;
@@ -95,7 +98,7 @@ export default function Player() {
     joinedPoolListData.length,
     joinedPoolListHasNextPage,
     joinedPoolListLoading,
-    joinedPoolListPageIndex,
+    joinedPoolListPageIndex
   ]);
 
   return (
@@ -115,8 +118,8 @@ export default function Player() {
               onChangeTab={setTab}
               tabs={TabsList}
               className="!gap-[62px] max-md:!gap-[42px]"
-              tabClassName="!text-[18px] !pb-[14px] font-[SpaceGrotesk]"
-              cursorClassName="!w-[30px] !bg-[#FFC42F] left-1/2 -translate-x-1/2"
+              tabClassName="!text-[18px] !pb-[14px]"
+              cursorClassName="!w-[30px] !bg-[#743EFF] left-1/2 -translate-x-1/2"
             />
             {tab === TabsList[0].key && (
               <div className="flex items-center justify-end gap-[15px] max-md:ml-auto max-md:mr-[10px]">
@@ -152,11 +155,12 @@ export default function Player() {
                   ref={marketsBottomRef}
                   className="h-[40px] flex justify-center items-center"
                 >
-                  {
-                    joinedPoolListData?.length > 0 && (
-                      <LoadingMore loading={joinedPoolListLoading} hasMore={joinedPoolListHasNextPage} />
-                    )
-                  }
+                  {joinedPoolListData?.length > 0 && (
+                    <LoadingMore
+                      loading={joinedPoolListLoading}
+                      hasMore={joinedPoolListHasNextPage}
+                    />
+                  )}
                 </div>
               </SwitchPanel>
             )}
@@ -168,6 +172,7 @@ export default function Player() {
                   data={data}
                   hasMore={hasMore}
                   onPageChange={onPageChange}
+                  fullAction={true}
                 />
               </SwitchPanel>
             )}

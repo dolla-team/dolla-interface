@@ -6,42 +6,55 @@ import { toast } from "react-toastify";
 import useMoonpay from "@/hooks/use-moonpay";
 import { getWindowSize } from "../utils/getWindowSize";
 
-export default function FundFromMoonpay({ onBack }: { onBack: () => void }) {
-    const { address, userInfo } = useAuth();
-    const [amount, setAmount] = useState("");
-    const [orderId, setOrderId] = useState("");
-    const { moonpayUrl } = useMoonpay({
-        address: userInfo?.sol_user || "",
-        amount: Number(amount),
-        orderId,
-    });
+export default function FundFromCoinbase({ onBack }: { onBack: () => void }) {
+  const { address, userInfo } = useAuth();
+  const [amount, setAmount] = useState("");
+  const [orderId, setOrderId] = useState("");
+  const { moonpayUrl } = useMoonpay({
+    address: userInfo?.user || "",
+    amount: Number(amount),
+    orderId
+  });
 
-    const { sendMessage, successOrderIds, addOrderId } = useBroadcatChannel();
+  const { sendMessage, successOrderIds, addOrderId } = useBroadcatChannel();
 
-    useEffect(() => {
-        if (successOrderIds.length > 0 && orderId && successOrderIds.includes(orderId)) {
-            toast.success('Order successful');
-            sendMessage(JSON.stringify({
-                orderId,
-                type: 'on-close-window',
-                status: 'success'
-            }))
-        }
-    }, [successOrderIds, orderId]);
+  useEffect(() => {
+    if (
+      successOrderIds.length > 0 &&
+      orderId &&
+      successOrderIds.includes(orderId)
+    ) {
+      toast.success("Order successful");
+      sendMessage(
+        JSON.stringify({
+          orderId,
+          type: "on-close-window",
+          status: "success"
+        })
+      );
+    }
+  }, [successOrderIds, orderId]);
 
+  useEffect(() => {
+    const orderId = Math.random().toString(36).substring(2, 15);
+    setOrderId(orderId);
+    addOrderId(orderId);
+  }, []);
 
-    useEffect(() => {
-        const orderId = Math.random().toString(36).substring(2, 15);
-        setOrderId(orderId);
-        addOrderId(orderId);
-    }, []);
-
-    return <div>
-        <FundFromCex amount={amount} minAmount={20} disabled={!amount || Number(amount) < 20 || !moonpayUrl} setAmount={setAmount} onBack={onBack} onOrderIdCreated={() => {
-            if (moonpayUrl) {
-                const features = getWindowSize(800, 600);
-                window.open(moonpayUrl, '_blank', features);
-            }
-        }} />
+  return (
+    <div>
+      <FundFromCex
+        amount={amount}
+        disabled={!amount || Number(amount) < 20 || !moonpayUrl}
+        setAmount={setAmount}
+        onBack={onBack}
+        onOrderIdCreated={() => {
+          if (moonpayUrl) {
+            const features = getWindowSize(800, 600);
+            window.open(moonpayUrl, "_blank", features);
+          }
+        }}
+      />
     </div>
+  );
 }

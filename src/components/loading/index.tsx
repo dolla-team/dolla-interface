@@ -2,6 +2,8 @@ import { motion } from "framer-motion";
 import DollaEye from "../dolla-eye";
 import { useRef, useEffect, useState, useMemo } from "react";
 import useIsMobile from "@/hooks/use-is-mobile";
+import useIsBtc from "@/hooks/use-is-btc";
+import clsx from "clsx";
 
 // Custom hook for typewriter effect
 const useTypewriter = (text: string, speed: number = 100) => {
@@ -12,8 +14,8 @@ const useTypewriter = (text: string, speed: number = 100) => {
     if (currentIndex < text.length) {
       // Calculate dynamic speed - start fast, gradually slow down
       const progress = currentIndex / text.length;
-      const dynamicSpeed = speed + (progress * 100); // Start at speed, end at speed + 100ms
-      
+      const dynamicSpeed = speed + progress * 100; // Start at speed, end at speed + 100ms
+
       const timer = setTimeout(() => {
         setDisplayText(text.slice(0, currentIndex + 1));
         setCurrentIndex(currentIndex + 1);
@@ -28,31 +30,39 @@ const useTypewriter = (text: string, speed: number = 100) => {
 
 // Function to render text with special styling
 const renderStyledText = (text: string, isMobile?: boolean) => {
-  return text.split('').map((char, charIndex) => {
-    const isQuestionMark = char === '?';
-    const isSpace = char === ' ';
+  return text.split("").map((char, charIndex) => {
+    const isQuestionMark = char === "?";
+    const isSpace = char === " ";
 
     // Hardcode font sizes based on character positions
-    let fontSize = isMobile ? "text-[16px]" : 'text-[20px]';
-    let marginClass = '-mr-[2px]';
+    let fontSize = isMobile ? "text-[16px]" : "text-[20px]";
+    let marginClass = "-mr-[2px]";
 
     // "Can one dollar win something big? Something, really big..."
     // Positions for "win"
     if (charIndex >= 15 && charIndex <= 17) {
-      fontSize = 'text-[30px]';
-      marginClass = '-mr-[6px]';
+      fontSize = "text-[30px]";
+      marginClass = "-mr-[6px]";
     }
     // Positions for "big..."
-    else if ((charIndex >= 51 && charIndex <= 57)) {
-      fontSize = 'text-[60px]';
-      marginClass = '-mr-[12px]';
+    else if (charIndex >= 51 && charIndex <= 57) {
+      fontSize = "text-[60px]";
+      marginClass = "-mr-[12px]";
     }
 
     return (
-      <span key={charIndex} className={`${fontSize} leading-none ${marginClass}`}>
-        {isSpace ? '\u00A0' : char}
+      <span
+        key={charIndex}
+        className={`${fontSize} leading-none ${marginClass}`}
+      >
+        {isSpace ? "\u00A0" : char}
         {isQuestionMark && <br />}
-        {charIndex === 50 && <div className="mt-[10px]"><br /></div>} {/* After "really" */}
+        {charIndex === 50 && (
+          <div className="mt-[10px]">
+            <br />
+          </div>
+        )}{" "}
+        {/* After "really" */}
       </span>
     );
   });
@@ -61,13 +71,14 @@ const renderStyledText = (text: string, isMobile?: boolean) => {
 const Loading = (props: Props) => {
   const { speed = 5000 } = props;
   const isMobile = useIsMobile();
-
+  const isBtc = useIsBtc();
   const progressInnerRef = useRef<any>(null);
   const [progressWidth, setProgressWidth] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
 
   // Typewriter text content
-  const typewriterText = "Can one dollar win something big? Something, really big...";
+  const typewriterText =
+    "Can one dollar win something big? Something, really big...";
   const displayText = useTypewriter(typewriterText, 50);
 
   useEffect(() => {
@@ -127,13 +138,18 @@ const Loading = (props: Props) => {
   );
 
   return (
-    <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-[#1A191D] z-50">
+    <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-[#fff] z-50">
       <div className="w-full h-full flex flex-col justify-center items-center gap-[30px]">
         <DollaEye className="" height={128} />
-        <div className="w-[280px] h-[12px] flex-shrink-0 rounded-[12px] p-[2px] border border-[#3B3951] bg-[rgba(255,255,255,0.10)] backdrop-blur-[25px] relative">
+        <div className="w-[280px] h-[12px] flex-shrink-0 rounded-[12px] p-[2px] border border-[#E4E4E4] bg-[rgba(255,255,255,0.10)] backdrop-blur-[25px] relative">
           <motion.div
             ref={progressInnerRef}
-            className="h-full rounded-[3px] bg-[linear-gradient(90deg,_#A2623D_0%,_#FFC42F_47.6%,_#FFE9B2_100%)] relative"
+            className={clsx(
+              "h-full rounded-[3px] relative",
+              isBtc
+                ? "bg-[linear-gradient(90deg,_#FFC42F_0%,_#FFE9B2_100%)]"
+                : "bg-[linear-gradient(90deg,_#6F37FF_0%,_#00FFBB_100%)]"
+            )}
             initial={{ width: 0 }}
             animate={{
               width: `${progressWidth}%`
@@ -143,7 +159,10 @@ const Loading = (props: Props) => {
               {particles.map((particle) => (
                 <motion.div
                   key={particle.id}
-                  className="absolute bg-[#FFE9B2] rounded-full"
+                  className={clsx(
+                    "absolute rounded-full",
+                    isBtc ? "bg-[#FFC42F]" : "bg-[#10FFBF]"
+                  )}
                   style={{
                     width: `${particle.size}px`,
                     height: `${particle.size}px`,
@@ -174,7 +193,12 @@ const Loading = (props: Props) => {
             </div>
           </motion.div>
         </div>
-        <div className="text-[#FFE9B2] text-center font-[DelaGothicOne] font-normal leading-[40px] mt-[20px] min-h-[120px] flex flex-col items-center justify-center">
+        <div
+          className={clsx(
+            "text-center font-normal leading-[40px] mt-[20px] min-h-[120px] flex flex-col items-center justify-center",
+            isBtc ? "text-[#FFC42F]" : "text-[#AB96FF]"
+          )}
+        >
           <div className="whitespace-pre-wrap">
             {renderStyledText(displayText, isMobile)}
           </div>

@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 
 export default function useLucyDraw() {
   const [currentRound, setCurrentRound] = useState(0);
+  const [participation, setParticipation] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
 
   const fetchCurrentRound = async (id?: number) => {
@@ -16,7 +17,7 @@ export default function useLucyDraw() {
       if (!id) {
         setCurrentRound(res.data.data.ticket_prize_draw.id);
       }
-
+      setParticipation(res.data.data.ticket_prize_draw.number);
       setIsLoading(false);
       return {
         winningList: res.data.data.winning_list || [],
@@ -37,6 +38,7 @@ export default function useLucyDraw() {
 
   return {
     currentRound,
+    participation,
     isLoading,
     fetchCurrentRound
   };

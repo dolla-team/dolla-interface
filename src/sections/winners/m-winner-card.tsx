@@ -33,7 +33,7 @@ export default function MWinnerCard({
             <div className="relative w-[32px] h-[32px] rounded-full">
               <Avatar
                 size={32}
-                address={data?.user_info?.sol_user}
+                address={data?.user_info?.user}
                 email={data?.user_info?.email}
                 className="rounded-full"
               />

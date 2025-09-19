@@ -21,7 +21,7 @@ export default function PriceChart({
   const chartInstance = useRef<Chart | null>(null);
   const anchorDotRef = useRef<HTMLDivElement>(null);
   const [isInit, setIsInit] = useState(false);
-  const [isFolded, setIsFolded] = useState(true);
+  const [isFolded, setIsFolded] = useState(false);
   const [isAnimationComplete, setIsAnimationComplete] = useState(false);
 
   // Function to calculate probability density data
@@ -123,11 +123,11 @@ export default function PriceChart({
             cornerRadius: 8,
             displayColors: false,
             titleFont: {
-              family: "SpaceGrotesk",
+              family: "Unbounded",
               size: 12
             },
             bodyFont: {
-              family: "SpaceGrotesk",
+              family: "Unbounded",
               size: 12
             },
             callbacks: {
@@ -151,7 +151,7 @@ export default function PriceChart({
               display: true,
               text: "Total Sales ($)",
               font: {
-                family: "SpaceGrotesk",
+                family: "Unbounded",
                 size: 12
               },
               color: "#5E6B7D"
@@ -161,7 +161,7 @@ export default function PriceChart({
                 return value;
               },
               font: {
-                family: "SpaceGrotesk",
+                family: "Unbounded",
                 size: 10
               },
               color: "#666"
@@ -179,7 +179,7 @@ export default function PriceChart({
               display: true,
               text: "Probability Density",
               font: {
-                family: "SpaceGrotesk",
+                family: "Unbounded",
                 size: 12
               },
               color: "#5E6B7D"
@@ -190,7 +190,7 @@ export default function PriceChart({
                 return `${Number(value).toFixed(0)}%`;
               },
               font: {
-                family: "SpaceGrotesk",
+                family: "Unbounded",
                 size: 10
               },
               color: "#666"
@@ -229,7 +229,6 @@ export default function PriceChart({
     if (chartInstance.current.options.plugins?.annotation?.annotations) {
       // const annotations = chartInstance.current.options.plugins.annotation
       //   .annotations as any;
-      console.log("update", anchorPrice);
 
       // Update annotations by reassigning the entire object to trigger re-render
       chartInstance.current.options.plugins.annotation.annotations = {
@@ -287,7 +286,7 @@ export default function PriceChart({
         anchorDotRef.current
       ) {
         anchorDotRef.current.style.left = `${pos.x - 6}px`;
-        anchorDotRef.current.style.top = `${pos.y - 6}px`;
+        anchorDotRef.current.style.top = `${pos.y - 12}px`;
       }
     });
   };
@@ -307,7 +306,7 @@ export default function PriceChart({
     >
       <div className="w-full px-[13px] h-[45px] flex justify-between items-center shrink-0">
         <Title className="!static" />
-        <button
+        {/* <button
           type="button"
           className="button shrink-0 w-[14px] h-[14px]"
           onClick={() => {
@@ -325,7 +324,7 @@ export default function PriceChart({
               rotate: !isFolded ? 0 : 180
             }}
           />
-        </button>
+        </button> */}
       </div>
       <motion.div
         className="w-full relative shrink-0 h-[calc(100%_-_45px)] px-[20px] max-md:px-[10px] max-md:pt-[100px]"
@@ -378,7 +377,7 @@ export default function PriceChart({
           </div>
         </div>
         <Annotations
-          className="z-[3] !top-[0px]"
+          className="z-[3] !top-[-30px]"
           anchorPrice={anchorPrice}
           expectedValue={anchorPrice ? anchorPrice * 1.2 : undefined}
         />

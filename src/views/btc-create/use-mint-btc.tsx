@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Contract, ethers } from "ethers";
-import tokenAbi from "@/config/abis/token";
+import tokenAbi from "@/config/abis/evm-token";
 import useToast from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/auth";
 import { TOKEN } from "@/config/btc";

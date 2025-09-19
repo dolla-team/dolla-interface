@@ -18,7 +18,7 @@ export default function Tabs({
         <div
           key={tab.key}
           className={clsx(
-            "button relative text-[14px] text-white pb-[10px]",
+            "button relative pb-[10px]",
             tabClassName,
             tab.key === currentTab && activeClassName
           )}
@@ -28,7 +28,7 @@ export default function Tabs({
             if (prevI.current.length > 2) prevI.current.shift();
           }}
         >
-          <span className="relative z-[2]">{tab.label}</span>
+          <span className="relative z-[2] whitespace-nowrap text-ellipsis overflow-hidden">{tab.label}</span>
           {currentTab === tab.key && (
             <motion.div
               initial="hidden"
@@ -45,7 +45,7 @@ export default function Tabs({
                 }
               }}
               className={clsx(
-                "absolute rounded-[3px] w-full h-[3px] bg-[#EBFF57] bottom-0",
+                "absolute rounded-[3px] w-full h-[3px] bottom-0",
                 cursorClassName
               )}
             />

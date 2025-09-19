@@ -18,7 +18,7 @@ const Account = (props: any) => {
     userRecordsLoading,
     userRecordsPageIndex,
     hasNextPage,
-    onUserRecordsPageChange,
+    onUserRecordsPageChange
   } = useUserRecords({ isSinglePage: true, pageLimit: 10 });
   const isMobile = useIsMobile();
 
@@ -33,11 +33,9 @@ const Account = (props: any) => {
           return (
             <div className="flex items-center gap-[4px]">
               <div className="">{record.typeName}</div>
-              {
-                Big(record.pool_id || 0).gt(0) && (
-                  <div className="">#{record.pool_id}</div>
-                )
-              }
+              {Big(record.pool_id || 0).gt(0) && (
+                <div className="">#{record.pool_id}</div>
+              )}
             </div>
           );
         }
@@ -45,11 +43,9 @@ const Account = (props: any) => {
           return (
             <div className="flex items-center gap-[4px]">
               <div className="">{record.typeName}</div>
-              {
-                Big(record.prize_draw_id || 0).gt(0) && (
-                  <div className="">#{record.prize_draw_id}</div>
-                )
-              }
+              {Big(record.prize_draw_id || 0).gt(0) && (
+                <div className="">#{record.prize_draw_id}</div>
+              )}
             </div>
           );
         }
@@ -63,21 +59,42 @@ const Account = (props: any) => {
       render: (record: any) => {
         return (
           <div className={clsx("flex items-center gap-[10px]")}>
-            {
-              record.type === EUserRecordsType.Transfer && (
-                <>
-                  <div className="">
-                    {formatNumber(record.pts, 0, true, { isShort: true, isShortUppercase: true })}
-                  </div>
-                  <svg className="shrink-" width="13" height="9" viewBox="0 0 13 9" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12.3536 4.85355C12.5488 4.65829 12.5488 4.34171 12.3536 4.14645L9.17157 0.964466C8.97631 0.769204 8.65973 0.769204 8.46447 0.964466C8.2692 1.15973 8.2692 1.47631 8.46447 1.67157L11.2929 4.5L8.46447 7.32843C8.2692 7.52369 8.2692 7.84027 8.46447 8.03553C8.65973 8.2308 8.97631 8.2308 9.17157 8.03553L12.3536 4.85355ZM0 4.5V5H12V4.5V4H0V4.5Z" fill="#BBACA6" />
-                  </svg>
-                </>
-              )
-            }
-            <div className={clsx("flex items-center gap-[4px]", ![EUserRecordsType.Deposit].includes(record.type) ? "text-[#54FF59]" : "")}>
+            {record.type === EUserRecordsType.Transfer && (
+              <>
+                <div className="">
+                  {formatNumber(record.pts, 0, true, {
+                    isShort: true,
+                    isShortUppercase: true
+                  })}
+                </div>
+                <svg
+                  className="shrink-"
+                  width="13"
+                  height="9"
+                  viewBox="0 0 13 9"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M12.3536 4.85355C12.5488 4.65829 12.5488 4.34171 12.3536 4.14645L9.17157 0.964466C8.97631 0.769204 8.65973 0.769204 8.46447 0.964466C8.2692 1.15973 8.2692 1.47631 8.46447 1.67157L11.2929 4.5L8.46447 7.32843C8.2692 7.52369 8.2692 7.84027 8.46447 8.03553C8.65973 8.2308 8.97631 8.2308 9.17157 8.03553L12.3536 4.85355ZM0 4.5V5H12V4.5V4H0V4.5Z"
+                    fill="#BBACA6"
+                  />
+                </svg>
+              </>
+            )}
+            <div
+              className={clsx(
+                "flex items-center gap-[4px]",
+                ![EUserRecordsType.Deposit].includes(record.type)
+                  ? "text-[#54FF59]"
+                  : ""
+              )}
+            >
               <div className="">
-                {formatNumber(record.amountBig, 3, true, { isShort: true, isShortUppercase: true })}
+                {formatNumber(record.amountBig, 3, true, {
+                  isShort: true,
+                  isShortUppercase: true
+                })}
               </div>
               <div className="">{record.token_info?.symbol}</div>
             </div>
@@ -87,10 +104,15 @@ const Account = (props: any) => {
     },
     {
       dataIndex: "valued",
-      title: "Valued",
+      title: "Amount",
       width: 110,
       render: (record: any) => {
-        return formatNumber(Big(record.amountBig).times(userRecordsPrices[record.priceKey] || 0), 3, true, { isShort: true, isShortUppercase: true, prefix: "$" });
+        return formatNumber(
+          Big(record.amountBig).times(userRecordsPrices[record.priceKey] || 0),
+          3,
+          true,
+          { isShort: true, isShortUppercase: true, prefix: "$" }
+        );
       }
     },
     {
@@ -98,31 +120,41 @@ const Account = (props: any) => {
       title: "Wallet",
       width: 200,
       render: (record: any) => {
-        const currentChain = Object.values(chains).find((it: any) => it.name.toLowerCase() === record.chain?.toLowerCase());
+        const currentChain = Object.values(chains).find(
+          (it: any) => it.name.toLowerCase() === record.chain?.toLowerCase()
+        );
         let txUrl: any;
         if (currentChain) {
-          txUrl = `${currentChain?.blockExplorers?.default?.url}/tx/${record.tx_hash}?cluster=${import.meta.env.VITE_SOLANA_CLUSTER_NAME}`;
+          txUrl = `${currentChain?.blockExplorers?.default?.url}/tx/${
+            record.tx_hash
+          }?cluster=${import.meta.env.VITE_SOLANA_CLUSTER_NAME}`;
         }
         return (
           <div className="flex items-center gap-[7px]">
             <div className="text-[#BBACA6]">
               {record.type === EUserRecordsType.Deposit ? "From" : "To"}
             </div>
-            {
-              txUrl ? (
-                <a target="_blank" href={txUrl} className="block">
-                  {record.type === EUserRecordsType.Deposit ? formatAddress(record.from) : formatAddress(record.to)}
-                </a>
-              ) : (
-                <div className="block">
-                  {record.type === EUserRecordsType.Deposit ? formatAddress(record.from) : formatAddress(record.to)}
-                </div>
-              )
-            }
-            <img src="/profile/icon-share.svg" alt="share" className="w-[9px] h-[9px] shrink-0" />
+            {txUrl ? (
+              <a target="_blank" href={txUrl} className="block">
+                {record.type === EUserRecordsType.Deposit
+                  ? formatAddress(record.from)
+                  : formatAddress(record.to)}
+              </a>
+            ) : (
+              <div className="block">
+                {record.type === EUserRecordsType.Deposit
+                  ? formatAddress(record.from)
+                  : formatAddress(record.to)}
+              </div>
+            )}
+            <img
+              src="/profile/icon-share.svg"
+              alt="share"
+              className="w-[9px] h-[9px] shrink-0"
+            />
           </div>
         );
-      },
+      }
     },
     {
       dataIndex: "date",
@@ -131,8 +163,8 @@ const Account = (props: any) => {
       align: GridTableAlign.Right,
       render: (record: any) => {
         return dayjs(record.updated_at).format("hh:mm D MMM, YYYY");
-      },
-    },
+      }
+    }
   ];
 
   return (

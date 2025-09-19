@@ -2,12 +2,14 @@ import Modal from "@/components/modal";
 import { formatNumber } from "@/utils/format/number";
 import Big from "big.js";
 import { useMemo } from "react";
-import useTokenBalance from "@/hooks/evm/use-token-balance";
+// import useTokenBalance from "@/hooks/evm/use-token-balance";
 import useDeposit from "@/hooks/evm/use-deposit-reward";
 import useApprove from "@/hooks/evm/use-approve";
-import { BETTING_CONTRACT_ADDRESS } from "@/config";
+import config from "@/config/bera";
 import { useAuth } from "@/contexts/auth";
 import ButtonV2 from "@/components/button/v2";
+import useCheckNft from "@/hooks/evm/use-check-nft";
+import { getAnchorPrice } from "@/utils/pool";
 
 export default function DepositModal({
   open,
@@ -20,13 +22,14 @@ export default function DepositModal({
   order: any;
   onSuccess: () => void;
 }) {
-  const rewardTokenInfo = useMemo(() => {
-    return order?.reward_token_info?.[0] || {};
+  const [rewardTokenInfo] = useMemo(() => {
+    return [order?.reward_token_info?.[0] || {}];
   }, [order]);
   const { address } = useAuth();
-  const { tokenBalance, isLoading } = useTokenBalance(
-    order?.reward_token_info?.[0]
-  );
+  // const { tokenBalance, isLoading } = useTokenBalance(
+  //   order?.reward_token_info?.[0]
+  // );
+  const { loading, isOwner } = useCheckNft(rewardTokenInfo);
 
   const amount = useMemo(() => {
     return Big(order?.reward_amount || 0)
@@ -49,7 +52,7 @@ export default function DepositModal({
   const { approving, approve, approved, checking } = useApprove({
     token: approveToken,
     amount: amount?.toString(),
-    spender: BETTING_CONTRACT_ADDRESS,
+    spender: config.bettingContractAddress,
     account: address
   });
 
@@ -64,7 +67,7 @@ export default function DepositModal({
   return (
     <>
       <Modal onClose={onClose} open={open}>
-        <div className="w-[396px] h-[240px] rounded-[16px] bg-[#35302B] border border-[#6A5D3A] text-[14px] font-[500] leading-[100%] text-white font-[SpaceGrotesk]">
+        <div className="w-[396px] h-[240px] rounded-[16px] bg-[#2D2B35] border border-[#514A5D] text-[14px] font-[500] leading-[100%] text-white">
           <div className="w-full pt-[20px] pb-[13px] px-[24px] bg-black/20 flex justify-between items-center">
             <div className="text-[18px] font-medium text-white">
               Deposit Market
@@ -84,41 +87,35 @@ export default function DepositModal({
               </svg>
             </button>
           </div>
-          <div className="w-full px-[24px] py-[20px]">
-            <div className="flex items-center text-[14px] mb-[14px] gap-[10px]">
-              <span className="text-[#BBACA6] font-[400]">Market Amount</span>
+          <div className="w-full px-[24px] py-[30px]">
+            <div className="flex items-center text-[14px] mb-[28px] gap-[10px]">
+              <span className="text-[#BBACA6] font-[400]">Token</span>
               <div className="grow border-b border-dashed border-[#5E6B7D] opacity-50" />
               <span className="text-white font-medium">
-                {formatNumber(
-                  Big(order?.reward_amount || 0).div(
-                    10 ** rewardTokenInfo.decimals
-                  ),
-                  2,
-                  true
-                )}{" "}
-                {rewardTokenInfo.symbol}{" "}
+                {rewardTokenInfo.name} {rewardTokenInfo.token_id}
               </span>
             </div>
-            <div className="flex items-center text-[14px] mb-[14px] gap-[10px]">
+            <div className="flex items-center text-[14px] mb-[4px] gap-[10px]">
               <span className="text-[#BBACA6] font-[400]">Valued</span>
               <div className="grow border-b border-dashed border-[#5E6B7D] opacity-50" />
               <span className="text-white font-medium">
-                ${formatNumber(order?.value, 0, true)}{" "}
+                ${formatNumber(getAnchorPrice(order?.anchor_price), 0, true)}
               </span>
             </div>
-            <div className="flex items-center text-[14px] mb-[14px] gap-[10px]">
+            {/* <div className="flex items-center text-[14px] mb-[14px] gap-[10px]">
               <span className="text-[#BBACA6] font-[400]">Balance</span>
               <div className="grow border-b border-dashed border-[#5E6B7D] opacity-50 min-w-[50px]" />
               <span className="text-white font-medium text-right">
-                {formatNumber(tokenBalance, 0, true)} {rewardTokenInfo.symbol}{" "}
+                {formatNumber(tokenBalance, 0, true)}
               </span>
-            </div>
+            </div> */}
           </div>
 
-          <div className="flex justify-center mt-[0px]">
+          <div className="flex justify-center w-full px-[20px]">
             <ButtonV2
-              className="w-[220px] !h-[40px] !text-[16px]"
-              loading={isLoading || approving || checking || depositing}
+              className="w-full !h-[40px] !text-[16px]"
+              loading={approving || checking || depositing}
+              disabled={!isOwner || loading}
               onClick={() => {
                 if (!approved) {
                   approve();
@@ -127,7 +124,11 @@ export default function DepositModal({
                 onDeposit();
               }}
             >
-              {!approved ? "Approve" : "Deposit"}
+              {!isOwner
+                ? "Insufficient Balance"
+                : !approved
+                ? "Approve"
+                : "Deposit"}
             </ButtonV2>
           </div>
         </div>

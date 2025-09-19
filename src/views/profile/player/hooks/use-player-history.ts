@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/auth";
 import Big from "big.js";
 import { useRequest } from "ahooks";
-import { getPoolInfo } from "@/utils/pool";
+import { getAnchorPrice, getPoolInfo } from "@/utils/pool";
 
 const pageSize = 10;
 
@@ -31,6 +31,7 @@ export default function usePlayerHistory() {
         (joinedPoolListPageIndex - 1) * joinedPoolListPageSize + ""
       );
       url.searchParams.set("pool_status", joinedPoolListStatus);
+      url.searchParams.set("chain", "Berachain");
       try {
         const response = await axiosInstance.get(
           `/api/v1/user/joined_market?${url.searchParams.toString()}`
@@ -40,7 +41,7 @@ export default function usePlayerHistory() {
           item.participants = item.pool_info?.participants;
           item.accumulative_bids = item.pool_info?.accumulative_bids;
           item.anchor_price = item.pool_info?.anchor_price;
-          item.value = item.pool_info?.value;
+          item.value = getAnchorPrice(item.pool_info?.anchor_price);
           item.is_claim = item.status === 4;
           item.status = item.pool_info?.status;
         });
@@ -91,7 +92,7 @@ export default function usePlayerHistory() {
     setLoading(true);
     try {
       const response = await axiosInstance.get(
-        `/api/v1/user/player/history?limit=${pageSize}&offset=${
+        `/api/v1/user/player/history?limit=${pageSize}&chain=Berachain&offset=${
           (_page - 1) * pageSize
         }`
       );

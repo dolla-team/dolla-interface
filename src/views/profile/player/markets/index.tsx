@@ -1,12 +1,11 @@
 import clsx from "clsx";
-import Market from "@/views/btc/components/more-markets/market";
+import Market from "../../ components/market";
 import ButtonV2 from "@/components/button/v2";
 import Empty from "@/components/empty";
 import MarketStatus, { EMarketStatus } from "../../ components/market-status";
 import Loading from "@/components/icons/loading";
-import useClaimSlash from "@/hooks/solana/use-claim-slash";
+import useClaimPenalty from "@/hooks/evm/use-claim-penalty";
 import { formatNumber } from "@/utils/format/number";
-import Big from "big.js";
 import { useNavigate } from "react-router-dom";
 
 const PlayerMarkets = (props: any) => {
@@ -52,27 +51,25 @@ export default PlayerMarkets;
 const MarketItem = (props: any) => {
   const { order, onClaimSuccess } = props;
 
-  const { claiming, onClaim } = useClaimSlash({
-    onClaimSuccess
-  });
+  const { claiming, claim: onClaim } = useClaimPenalty(onClaimSuccess);
   const navigate = useNavigate();
 
   return (
     <Market
       isAcitveBg={false}
-      className="!w-full !h-[unset] !bg-[#22201D] !rounded-[16px] !border !border-[#6A5D3A]"
+      className="!w-full !h-[unset]"
       data={order}
       header={
         <MarketStatus
           value={order.pool_status}
           market={order.pool_info}
-          className="absolute z-[2] left-1/2 -translate-x-1/2 top-[-12px]"
+          className="absolute z-[2] left-[12px] top-[-12px]"
         />
       }
       footer={
-        <div className="w-full px-[13px] bg-black/20 py-[17px] mt-[20px] relative z-[2] text-white text-center font-[SpaceGrotesk] text-[14px] font-normal leading-[100%]">
+        <div className="w-full px-[13px] bg-black/20 py-[17px] mt-[20px] relative z-[2] text-white text-center text-[12px] font-normal leading-[100%]">
           <div className="flex justify-between items-center gap-[10px]">
-            <div className="text-[#BBACA6]">
+            <div className="text-[#8795A7]">
               You bid
               {order.pool_status === EMarketStatus.Cancelled ? " / Refund" : ""}
             </div>
@@ -99,7 +96,7 @@ const MarketItem = (props: any) => {
                   </div>
                 ) : (
                   <ButtonV2
-                    className="!h-[24px] !rounded-[12px] !px-[10px]"
+                    className="!h-[24px] !rounded-[12px] !px-[10px] !text-[12px]"
                     loading={claiming}
                     disabled={claiming}
                     onClick={(e: any) => {
@@ -122,7 +119,7 @@ const MarketItem = (props: any) => {
         </div>
       }
       onClick={() => {
-        navigate(`/btc/${order.pool_id}`);
+        navigate(`/nft/detail/${order.pool_id}`);
       }}
     />
   );

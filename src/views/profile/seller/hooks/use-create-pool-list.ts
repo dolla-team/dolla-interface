@@ -24,11 +24,15 @@ export default function useCreatePoolList() {
     setLoading(true);
     try {
       const response = await axiosInstance.get(
-        `/api/v1/user/create/pool/list?limit=${pageSize}&offset=${pageRef.current * pageSize
-        }&status=-1`
+        `/api/v1/user/create/pool/list?limit=${pageSize}&offset=${
+          pageRef.current * pageSize
+        }&status=-1&chain=Berachain`
       );
       const poolIds: number[] = [];
       response.data.data.list.forEach((item: any) => {
+        if (item.status === 4) {
+          return;
+        }
         poolsData.current[item.pool_id] = item;
         poolIds.push(item.pool_id);
       });
@@ -57,13 +61,16 @@ export default function useCreatePoolList() {
       if (!userInfo?.user) return [];
       try {
         const response = await axiosInstance.get(
-          `/api/v1/user/records/seller?limit=${recordsPageSize}&offset=${(recordsPageIndex - 1) * pageSize
+          `/api/v1/user/records/seller?limit=${recordsPageSize}&chain=Berachain&offset=${
+            (recordsPageIndex - 1) * pageSize
           }`
         );
         setRecordsPageHasNextPage(response.data.data.has_next_page);
         const _list = response.data.data.list || [];
         return _list.map((item: any) => {
-          item.amountBig = Big(item.amount || 0).div(10 ** (item.token_info?.decimals || 6));
+          item.amountBig = Big(item.amount || 0).div(
+            10 ** (item.token_info?.decimals || 6)
+          );
           item.priceKey = `${item.token_info?.chain}:${item.token_info?.address}`;
           return item;
         });
@@ -88,7 +95,8 @@ export default function useCreatePoolList() {
     });
     return Array.from(_tokens.values());
   }, [records]);
-  const { prices: _recordsPrices, loading: recordsPricesLoading } = useTokenPrice(recordsTokens);
+  const { prices: _recordsPrices, loading: recordsPricesLoading } =
+    useTokenPrice(recordsTokens);
   const recordsPrices = useMemo(() => {
     if (!_recordsPrices) return {};
     const _prices: any = {};
@@ -149,7 +157,7 @@ export default function useCreatePoolList() {
     recordsPageHasNextPage,
     getRecords,
     recordsPrices,
-    recordsPricesLoading,
+    recordsPricesLoading
   };
 }
 
@@ -157,5 +165,5 @@ export enum ESellerRecordsType {
   Created = 1,
   Claimed = 2,
   Refund = 3,
-  Demage = 4,
+  Demage = 4
 }

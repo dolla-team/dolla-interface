@@ -30,8 +30,6 @@ export default function BidSelection({
   const { userInfo } = useAuth();
   const [showCashier, setShowCashier] = useState(false);
 
-  console.log('pool:', pool);
-
   return (
     <div className="absolute bottom-0 left-[3%] w-full h-[202px] flex items-center justify-center">
       <div

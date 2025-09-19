@@ -155,8 +155,7 @@ export default function ProfileChart() {
               text: "Played",
               color: "#5E6B7D",
               font: {
-                size: 10,
-                family: "SpaceGrotesk"
+                size: 10
               }
             },
             grid: {
@@ -171,7 +170,7 @@ export default function ProfileChart() {
               color: "#5E6B7D",
               font: {
                 size: 10,
-                family: "SpaceGrotesk"
+                family: "Unbounded"
               }
             }
           },
@@ -183,7 +182,7 @@ export default function ProfileChart() {
               color: "#5E6B7D",
               font: {
                 size: 10,
-                family: "SpaceGrotesk"
+                family: "Unbounded"
               }
             },
             grid: {
@@ -195,7 +194,7 @@ export default function ProfileChart() {
               color: "#5E6B7D",
               font: {
                 size: 10,
-                family: "SpaceGrotesk"
+                family: "Unbounded"
               }
             }
           }

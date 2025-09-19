@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import Market from "@/views/btc/components/more-markets/market";
+import Market from "../../ components/market";
 import ButtonV2 from "@/components/button/v2";
 import Empty from "@/components/empty";
 import MarketStatus, { EMarketStatus } from "../../ components/market-status";
@@ -14,7 +14,7 @@ import { useMemo, useState } from "react";
 import Loading from "@/components/icons/loading";
 import DepositModal from "../deposit-modal";
 import { formatNumber } from "@/utils/format/number";
-import useClaimFunds from "@/hooks/solana/use-claim-funds";
+import useClaimFunds from "@/hooks/evm/use-claim";
 import { useNavigate } from "react-router-dom";
 import { penaltyPercent } from "@/utils/pool";
 
@@ -111,11 +111,9 @@ const MarketItem = (props: any) => {
   const { order, onDeposit, onCancel, onClaimSuccess } = props;
   const [claimed, setClaimed] = useState(order.is_claim);
 
-  const { onClaim, claiming } = useClaimFunds({
-    onClaimSuccess: () => {
-      setClaimed(true);
-      onClaimSuccess();
-    }
+  const { claim: onClaim, claiming } = useClaimFunds([order.pool_id], () => {
+    setClaimed(true);
+    onClaimSuccess();
   });
   const navigate = useNavigate();
 
@@ -126,13 +124,13 @@ const MarketItem = (props: any) => {
     if (!order.time) {
       _time = "-";
     } else {
-      const diff = dayjs().diff(dayjs(order.time), "hours");
+      const diff = dayjs().diff(dayjs(order.time * 1000), "hours");
       if (diff < 24) {
-        _time = dayjs(order.time).toNow(true) + " ago";
+        _time = dayjs(order.time * 1000).toNow(true) + " ago";
       } else {
-        _time = dayjs(order.time).format("hh:mm D MMM, YYYY");
+        _time = dayjs(order.time * 1000).format("hh:mm D MMM, YYYY");
       }
-      _cancelValid = dayjs().isAfter(dayjs(order.time).add(72, "hours"));
+      _cancelValid = dayjs().isAfter(dayjs(order.time * 1000).add(72, "hours"));
     }
 
     return [_time, _cancelValid];
@@ -141,24 +139,26 @@ const MarketItem = (props: any) => {
   return (
     <Market
       isAcitveBg={false}
-      className="!w-full !h-[unset] !bg-[#22201D] !rounded-[16px] !border !border-[#6A5D3A]"
+      className="!w-full !h-[unset]"
       data={order}
       header={
         <MarketStatus
           value={order.status}
           market={order}
-          className="absolute z-[2] left-1/2 -translate-x-1/2 top-[-12px]"
+          className="absolute z-[2] left-[12px] top-[-12px]"
         />
       }
       footer={
-        <div className="w-full px-[13px] bg-black/20 py-[12px] mt-[20px] relative z-[2] text-white text-center font-[SpaceGrotesk] text-[14px] font-normal leading-[100%]">
+        <div className="w-full px-[13px] bg-black/20 py-[12px] mt-[20px] relative z-[2] text-white text-center text-[12px] font-normal leading-[100%]">
           <div className="flex justify-between items-center gap-[10px]">
-            <div className="text-[#BBACA6] whitespace-nowrap">{time}</div>
+            <div className="text-[#8795A7] text-[10px] whitespace-nowrap">
+              {time}
+            </div>
             <div className="flex items-center justify-end gap-[7px]">
               {order.status === EMarketStatus.Created && (
                 <ButtonV2
                   type="primary"
-                  className="!h-[28px] !rounded-[8px] !text-[14px] !px-[5px] !font-[400]"
+                  className="!h-[28px] !rounded-[8px] !text-[12px] !px-[5px] !font-[400]"
                   onClick={(e: any) => {
                     e.stopPropagation();
                     onDeposit(e);
@@ -173,7 +173,7 @@ const MarketItem = (props: any) => {
               ) && (
                 <Popover
                   content={
-                    <PopoverCard className="!w-[300px] text-[#BBACA6] font-[SpaceGrotesk] text-[12px] leading-[120%] font-[400]">
+                    <PopoverCard className="!w-[300px] text-[#BBACA6] text-[12px] leading-[120%] font-[400]">
                       <div className="flex items-center gap-[3px]">
                         <img
                           src="/profile/icon-warning.svg"
@@ -218,7 +218,7 @@ const MarketItem = (props: any) => {
                 >
                   <ButtonV2
                     type="default"
-                    className="!h-[28px] !px-[7px] !rounded-[8px] !text-[14px] flex items-center gap-[3px]"
+                    className="!h-[28px] !px-[7px] !rounded-[8px] !text-[12px] flex items-center gap-[3px]"
                     disabled={!cancelValid}
                     onClick={(e: any) => {
                       e.stopPropagation();
@@ -238,10 +238,10 @@ const MarketItem = (props: any) => {
               {order.status === EMarketStatus.Winner && !claimed && (
                 <ButtonV2
                   type="primary"
-                  className="!h-[28px] !rounded-[8px] !text-[14px]"
+                  className="!h-[28px] !rounded-[8px] !text-[12px]"
                   onClick={(e: any) => {
                     e.stopPropagation();
-                    onClaim(order.pool_id);
+                    onClaim();
                   }}
                   loading={claiming}
                   disabled={claiming}
@@ -254,14 +254,14 @@ const MarketItem = (props: any) => {
                 <ButtonV2
                   type="default"
                   disabled={true}
-                  className="!h-[28px] !rounded-[8px] !text-[14px]"
+                  className="!h-[28px] !rounded-[8px] !text-[12px]"
                 >
                   Claimed
                 </ButtonV2>
               )}
 
               {order.status === EMarketStatus.Cancelled && (
-                <div className="h-[28px] flex items-center justify-end text-[#BBACA6]">
+                <div className="h-[28px] flex items-center justify-end text-[#8795A7]">
                   Cancelled
                 </div>
               )}
@@ -270,7 +270,7 @@ const MarketItem = (props: any) => {
         </div>
       }
       onClick={() => {
-        navigate(`/btc/${order.pool_id}`);
+        navigate(`/nft/detail/${order.pool_id}`);
       }}
     />
   );

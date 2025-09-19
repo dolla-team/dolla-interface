@@ -19,12 +19,11 @@ export default function Markets({ onClose }: { onClose: () => void }) {
     setSortOrder,
     hasMore,
     pageRef,
-    volume,
-    setVolume,
     LIMIT
-  } = usePoolList();
-
-  const { setSelectedMarket, filterVolume } = useBtcContext();
+  } = usePoolList({
+    tokenStatus: 0
+  });
+  const { setSelectedMarket } = useBtcContext();
 
   useEffect(() => {
     document.addEventListener("click", onClose);
@@ -64,7 +63,7 @@ export default function Markets({ onClose }: { onClose: () => void }) {
             <div className="flex items-center gap-[46px] text-[#ADBCCF] text-[12px]">
               <div className="flex items-center gap-[8px]">
                 <div className="mr-[5px]">Market Size</div>
-                {MarketSizes.map((item: { label: string; key: number }) => (
+                {/* {MarketSizes.map((item: { label: string; key: number }) => (
                   <button
                     key={item.key}
                     className={clsx(
@@ -77,7 +76,7 @@ export default function Markets({ onClose }: { onClose: () => void }) {
                   >
                     {item.label}
                   </button>
-                ))}
+                ))} */}
               </div>
               <div className="flex items-center gap-[8px]">
                 <div className="mr-[5px]">

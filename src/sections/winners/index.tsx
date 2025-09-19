@@ -4,6 +4,7 @@ import WinnerCard from "./winner-card";
 import Big from "big.js";
 import MWinnerCard from "./m-winner-card";
 import useIsMobile from "@/hooks/use-is-mobile";
+import { getAnchorPrice } from "@/utils/pool";
 
 export default function TopWinner() {
   const { lastWinner: data } = useLastWinner();
@@ -23,9 +24,8 @@ export default function TopWinner() {
         lastBids = item.times;
       }
     });
-    const _returnMultiple = lastBids
-      ? Big(data?.reward_usd).div(lastBids).toFixed(0)
-      : 0;
+    const _price = getAnchorPrice(data?.anchor_price);
+    const _returnMultiple = lastBids ? Big(_price).div(lastBids).toFixed(0) : 0;
 
     return [_a, _rewardInfo, _returnMultiple];
   }, [data]);

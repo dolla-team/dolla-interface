@@ -1,20 +1,20 @@
 @import "tailwindcss";
 
 @font-face {
-  font-family: "SpaceGrotesk";
-  src: url("/fonts/SpaceGrotesk-Regular.ttf");
+  font-family: "Unbounded";
+  src: url("/fonts/Unbounded-Regular.ttf");
   font-weight: 400;
 }
 
 @font-face {
-  font-family: "SpaceGrotesk";
-  src: url("/fonts/SpaceGrotesk-Medium.ttf");
+  font-family: "Unbounded";
+  src: url("/fonts/Unbounded-Medium.ttf");
   font-weight: 500;
 }
 
 @font-face {
-  font-family: "SpaceGrotesk";
-  src: url("/fonts/SpaceGrotesk-Bold.ttf");
+  font-family: "Unbounded";
+  src: url("/fonts/Unbounded-Bold.ttf");
   font-weight: 700;
 }
 
@@ -37,12 +37,14 @@
 }
 
 body {
-  font-family: "SpaceGrotesk" !important;
+  font-family: "Unbounded" !important;
   background-color: #0d0f12;
 }
 
 #root {
   width: 100%;
+
+  --dolla-laptop-width-base: 1100px;
 }
 
 /* Reset */
@@ -78,12 +80,12 @@ div::-webkit-scrollbar-track {
 }
 body::-webkit-scrollbar-thumb,
 div::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.1);
   border-radius: 6px;
 }
 body::-webkit-scrollbar-thumb:hover,
 div::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.3);
+  background: rgba(0, 0, 0, 0.3);
 }
 .no-scrollbar::-webkit-scrollbar {
   display: none;
@@ -158,11 +160,10 @@ div::-webkit-scrollbar-thumb:hover {
   }
 }
 
-
- .table-container {
+.table-container {
   width: 100%;
-  max-height: 400px; 
-  overflow: auto; 
+  max-height: 400px;
+  overflow: auto;
 }
 
 .sticky-table {
@@ -174,10 +175,9 @@ div::-webkit-scrollbar-thumb:hover {
   border: none;
 }
 
-
 .sticky-column {
-  position: sticky; 
-  left: 0; 
-  top: 0; 
+  position: sticky;
+  left: 0;
+  top: 0;
   z-index: 1;
 }

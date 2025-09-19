@@ -26,7 +26,7 @@ export default function useProvably({ currentPool }: { currentPool: any }) {
       setLoading(true);
       const queryString = new URLSearchParams(query).toString();
       const provablyData = await axiosInstance.get(
-        `/api/v1/pool/ended_market?${queryString}`
+        `/api/v1/pool/ended_market?${queryString}&chain=${currentPool.chain}`
       );
 
       if (provablyData.data?.data?.list?.length > 0) {

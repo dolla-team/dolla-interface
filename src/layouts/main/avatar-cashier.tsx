@@ -7,7 +7,7 @@ export default function AvatarCashier({
   onClick,
   tokenBalance
 }: {
-  onClick: () => void;
+  onClick: (e: any) => void;
   tokenBalance: string;
 }) {
   const isMobile = useIsMobile();
@@ -15,10 +15,10 @@ export default function AvatarCashier({
     <div
       onClick={onClick}
       className={clsx(
-        "flex items-center cursor-pointer rounded-[12px] px-3 py-[5px]",
+        "flex items-center cursor-pointer rounded-[12px] px-3 py-[5px] relative z-[2]",
         isMobile
           ? "p-[10px] border border-[#3B3951] bg-[#FFFFFF1A] gap-[8px]"
-          : "bg-gradient-to-r from-[#704CFF] to-[#432E99] gap-1"
+          : "bg-gradient-to-b from-[#2B3337] to-[#7B929D] gap-1"
       )}
     >
       <svg

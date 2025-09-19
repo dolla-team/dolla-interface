@@ -1,6 +1,6 @@
 import Coin from "@/components/icons/coin";
 import ButtonWithAuth from "@/components/button/button-with-auth";
-import { PURCHASE_TOKEN } from "@/config";
+import config from "@/config/bera";
 import { formatNumber } from "@/utils/format/number";
 import useTokenBalance from "@/hooks/evm/use-token-balance";
 import { useMemo, useState } from "react";
@@ -11,7 +11,7 @@ import Loading from "@/components/icons/loading";
 import { useAuth } from "@/contexts/auth";
 
 export default function Withdraw() {
-  const { tokenBalance } = useTokenBalance(PURCHASE_TOKEN);
+  const { tokenBalance } = useTokenBalance(config.purchaseToken);
   const [receiveAddress, setReceiveAddress] = useState("");
   const { address } = useAuth();
   const isAddressValid = useMemo(() => {
@@ -111,11 +111,11 @@ export default function Withdraw() {
                 {formatNumber(tokenBalance, 0, true, { isShort: true })}
               </span>
               <img
-                src="/currency/usdc.png"
+                src="/tokens/usdc.png"
                 alt="bid-coins"
                 className="w-[20px] h-[20px] rounded-full ml-[10px] mr-[7px]"
               />
-              <span>{PURCHASE_TOKEN.symbol}</span>
+              <span>{config.purchaseToken.symbol}</span>
             </div>
           </div>
         </>

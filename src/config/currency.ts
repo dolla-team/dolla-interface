@@ -1,8 +1,8 @@
 export default {
   Bera: {
-    icon: "/currency/bera.webp"
+    icon: "/tokens/bera.png"
   },
   USD: {
-    icon: "/currency/usdt.png"
+    icon: "/tokens/usdt.png"
   }
 } as Record<string, { icon: string }>;

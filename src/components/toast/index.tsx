@@ -2,7 +2,7 @@ import clsx from "clsx";
 import Loading from "../icons/loading";
 
 const isAndroid = () => {
-  if (typeof window === 'undefined') return false;
+  if (typeof window === "undefined") return false;
   return /Android/i.test(navigator.userAgent);
 };
 
@@ -11,8 +11,10 @@ export default function Toast({ type, title, text, closeToast }: any) {
   return (
     <div
       className={clsx(
-        "rounded-[12px] border border-[#FFE9B2] px-[12px] py-[8px] flex gap-[10px] w-[288px] items-center md:w-[288px] max-md:w-[calc(100vw-32px)]",
-        isAndroidDevice ? "bg-[#35302B]" : "bg-[#35302B]/30 backdrop-blur-[10px]"
+        "rounded-[12px] border border-[#743EFF] px-[12px] py-[8px] flex gap-[10px] w-[288px] items-center md:w-[288px] max-md:w-[calc(100vw-32px)]",
+        isAndroidDevice
+          ? "bg-[#35302B]"
+          : "bg-[#35302B]/30 backdrop-blur-[10px]"
       )}
     >
       {type === "success" && (

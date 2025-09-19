@@ -10,7 +10,16 @@ import { useNavigate } from "react-router-dom";
 import chains from "@/config/chains";
 
 const Records = (props: any) => {
-  const { className, records, loading, onPrevPage, onNextPage, hasNextPage, currentPage, recordsPrices } = props;
+  const {
+    className,
+    records,
+    loading,
+    onPrevPage,
+    onNextPage,
+    hasNextPage,
+    currentPage,
+    recordsPrices
+  } = props;
 
   const isMobile = useIsMobile();
   const navigate = useNavigate();
@@ -26,14 +35,18 @@ const Records = (props: any) => {
           <div
             className="flex items-center gap-[7px] cursor-pointer"
             onClick={() => {
-              navigate(`/btc/${record.pool_id}`);
+              navigate(`/btc/detail/${record.pool_id}`);
             }}
           >
             <div className="">#{record.pool_id}</div>
-            <img src="/profile/icon-share.svg" alt="share" className="w-[9px] h-[9px] shrink-0" />
+            <img
+              src="/profile/icon-share.svg"
+              alt="share"
+              className="w-[9px] h-[9px] shrink-0"
+            />
           </div>
         );
-      },
+      }
     },
     {
       dataIndex: "type",
@@ -49,12 +62,18 @@ const Records = (props: any) => {
       width: 170,
       render: (record: any) => {
         return (
-          <div className={clsx("flex items-center gap-[4px]", [ESellerRecordsType.Claimed, ESellerRecordsType.Refund].includes(record.type) ? "text-[#54FF59]" : "")}>
+          <div
+            className={clsx(
+              "flex items-center gap-[4px]",
+              [ESellerRecordsType.Claimed, ESellerRecordsType.Refund].includes(
+                record.type
+              )
+                ? "text-[#54FF59]"
+                : ""
+            )}
+          >
             <div>
-              {formatNumber(record.amountBig, 3, true, { isShort: true, isShortUppercase: true })}
-            </div>
-            <div>
-              {record.token_info?.symbol}
+              {record.token_info?.symbol} #{record.token_info?.token_id}
             </div>
           </div>
         );
@@ -65,7 +84,12 @@ const Records = (props: any) => {
       title: "Valued",
       width: isMobile ? 170 : void 0,
       render: (record: any) => {
-        return formatNumber(Big(record.amountBig || 0).times(recordsPrices[record.priceKey] || 0), 3, true, { isShort: true, isShortUppercase: true, prefix: "$" });
+        return formatNumber(
+          Big(record.amountBig || 0).times(recordsPrices[record.priceKey] || 0),
+          3,
+          true,
+          { isShort: true, isShortUppercase: true, prefix: "$" }
+        );
       }
     },
     {
@@ -74,10 +98,14 @@ const Records = (props: any) => {
       width: isMobile ? 200 : 170,
       align: GridTableAlign.Right,
       render: (record: any) => {
-        const currentChain = Object.values(chains).find((it: any) => it.name.toLowerCase() === record.chain?.toLowerCase());
+        const currentChain = Object.values(chains).find(
+          (it: any) => it.name.toLowerCase() === record.chain?.toLowerCase()
+        );
         let txUrl: any;
         if (currentChain) {
-          txUrl = `${currentChain?.blockExplorers?.default?.url}/tx/${record.tx_hash}?cluster=${import.meta.env.VITE_SOLANA_CLUSTER_NAME}`;
+          txUrl = `${currentChain?.blockExplorers?.default?.url}/tx/${
+            record.tx_hash
+          }?cluster=${import.meta.env.VITE_SOLANA_CLUSTER_NAME}`;
         }
         return (
           <div
@@ -87,18 +115,27 @@ const Records = (props: any) => {
               window.open(txUrl, "_blank");
             }}
           >
-            <div className="text-[#BBACA6]">
+            <div className="text-[#8795A7]">
               {dayjs(record.updated_at).format("hh:mm D MMM, YYYY")}
             </div>
-            <img src="/profile/icon-share.svg" alt="share" className="w-[9px] h-[9px] shrink-0" />
+            <img
+              src="/profile/icon-share.svg"
+              alt="share"
+              className="w-[9px] h-[9px] shrink-0"
+            />
           </div>
         );
-      },
-    },
+      }
+    }
   ];
 
   return (
-    <div className={clsx("mt-[20px] max-md:w-screen max-md:mt-0 max-md:p-[17px_0]", className)}>
+    <div
+      className={clsx(
+        "mt-[20px] max-md:w-screen max-md:mt-0 max-md:p-[17px_0]",
+        className
+      )}
+    >
       <GridTable
         data={records}
         columns={columns}

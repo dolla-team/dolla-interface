@@ -1,23 +1,19 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import useBettingContract from "@/hooks/evm/use-betting-contract";
 import useToast from "@/hooks/use-toast";
 import reportHash from "@/utils/report-hash";
 import useGelatonetwork from "./use-gelatonetwork";
 
 export default function useCancelOrder({
-  poolId,
-  onSuccess
+  onCancelSuccess
 }: {
-  poolId: number;
-  onSuccess: () => void;
+  onCancelSuccess: () => void;
 }) {
-  const [cancelling, setCancelling] = useState(false);
-  const [penalty, setPenalty] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [canceling, setCancelling] = useState(false);
   const BettingContract = useBettingContract();
   const toast = useToast();
   const { executeTransaction } = useGelatonetwork();
-  const cancelOrder = async () => {
+  const cancelOrder = async (poolId: number) => {
     if (!BettingContract) {
       return;
     }
@@ -34,7 +30,7 @@ export default function useCancelOrder({
             toast.fail({ title: "Cancel order failed" });
           } else {
             toast.success({ title: "Cancel order success" });
-            onSuccess();
+            onCancelSuccess();
           }
 
           reportHash({
@@ -56,24 +52,5 @@ export default function useCancelOrder({
     }
   };
 
-  const getPenalty = async () => {
-    try {
-      setLoading(true);
-      const penalty = await BettingContract.getPenalty(poolId);
-      console.log("penalty", penalty.toString());
-      setPenalty(penalty.toString());
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    if (BettingContract && poolId !== -1) {
-      getPenalty();
-    }
-  }, [BettingContract, poolId]);
-
-  return { cancelling, cancelOrder, penalty, loading };
+  return { canceling, onCancel: cancelOrder };
 }

@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import CreateButton from "./create-button";
-import Button from "@/components/button";
+import Button from "@/components/button/v2";
 import useDeposit from "@/hooks/evm/use-deposit-reward";
 import useApprove from "@/hooks/evm/use-approve";
 import useCreate from "@/hooks/evm/use-create";
-import { BETTING_CONTRACT_ADDRESS } from "@/config";
+import config from "@/config/bera";
 import { useAuth } from "@/contexts/auth";
 
 export default function Action({
@@ -46,7 +46,7 @@ export default function Action({
   const { approving, approve, approved, checking } = useApprove({
     token: token,
     amount: amount?.toString(),
-    spender: BETTING_CONTRACT_ADDRESS,
+    spender: config.bettingContractAddress,
     account: walletAddress
   });
 

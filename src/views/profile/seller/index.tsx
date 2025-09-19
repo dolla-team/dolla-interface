@@ -69,8 +69,8 @@ export default function Seller() {
               onChangeTab={setTab}
               tabs={TabsList}
               className="!gap-[62px]"
-              tabClassName="!text-[18px] !pb-[14px] font-[SpaceGrotesk]"
-              cursorClassName="!w-[30px] !bg-[#FFC42F] left-1/2 -translate-x-1/2"
+              tabClassName="!text-[18px] !pb-[14px]"
+              cursorClassName="!w-[30px] left-1/2 -translate-x-1/2"
             />
           </div>
           <AnimatePresence>

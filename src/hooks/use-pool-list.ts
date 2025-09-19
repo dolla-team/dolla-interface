@@ -1,21 +1,36 @@
 import { useEffect, useRef, useState } from "react";
 import axiosInstance from "@/libs/axios";
-import { HOST_API } from "@/config";
 import { useAuth } from "@/contexts/auth";
-import { BASE_TOKEN } from "@/config/btc";
+import { getAnchorPrice } from "@/utils/pool";
+import Big from "big.js";
+import { formatNumber } from "@/utils/format/number";
+import { useDebounceFn } from "ahooks";
 
-export default function usePoolList(props?: { pageLimit?: number; isScrollList?: boolean; onFirstPageLoad?(list: any): void; }) {
-  const { pageLimit, isScrollList, onFirstPageLoad } = props ?? {};
+export default function usePoolList(props?: {
+  pageLimit?: number;
+  isScrollList?: boolean;
+  tokenStatus?: number;
+  onFirstPageLoad?(list: any): void;
+}) {
+  const {
+    pageLimit,
+    isScrollList,
+    onFirstPageLoad,
+    tokenStatus = 0
+  } = props ?? {};
 
   const [poolList, setPoolList] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
-  const [sortField, setSortField] = useState("time");
+  const [sortField, setSortField] = useState("hitting");
   const [sortOrder, setSortOrder] = useState("desc");
-  const [volume, setVolume] = useState(0);
+  const [collection, setCollection] = useState<any>();
   const [hasMore, setHasMore] = useState(true);
   const pageRef = useRef(0);
   const { userInfo } = useAuth();
-  const LIMIT = typeof pageLimit === "number" ? pageLimit : Math.floor(window.innerWidth / 300);
+  const LIMIT =
+    typeof pageLimit === "number"
+      ? pageLimit
+      : Math.floor(window.innerWidth / 300);
 
   const cachedList = useRef<any[]>([]);
 
@@ -45,48 +60,72 @@ export default function usePoolList(props?: { pageLimit?: number; isScrollList?:
     try {
       setLoading(true);
       const res = await axiosInstance.get(
-        `${HOST_API}/api/v1/pool/list?limit=${LIMIT}&offset=${pageRef.current * LIMIT
-        }&sort_field=${sortField}&sort_order=${sortOrder}&status=1&token_status=0&chain=${BASE_TOKEN.chain
-        }&token=${BASE_TOKEN.address}${volume > 0 ? "&volume=" + volume * 10 ** BASE_TOKEN.decimals : ""
+        `/api/v1/pool/list?limit=${LIMIT}&offset=${
+          pageRef.current * LIMIT
+        }&sort_field=${sortField}&sort_order=${sortOrder}&status=1&chain=${"near"}&token_status=${tokenStatus}${
+          collection?.address ? "&token=" + collection.address : ""
         }`
       );
 
+      const list = res.data.data.list.map((item: any) => {
+        const valued = item.nft_ids
+          ? getAnchorPrice(item.anchor_price)
+          : item.value;
+
+        const reward_amount = item.reward_amount || 0;
+        const decimals = item.reward_token_info?.[0]?.decimals || 1;
+        const _an = Big(reward_amount).div(10 ** decimals);
+        const _a = formatNumber(_an, 3, true);
+        return {
+          ...item,
+          amount: _a,
+          progress:
+            Number(valued) === 0
+              ? 0
+              : Big(item.accumulative_bids).div(valued).mul(100).toNumber()
+        };
+      });
+
       if (isScrollList) {
         setPoolList((prev) =>
-          pageRef.current === 0
-            ? res.data.data.list
-            : [...prev, ...res.data.data.list]
+          pageRef.current === 0 ? list : [...prev, ...list]
         );
       } else {
-        setPoolList(res.data.data.list);
+        setPoolList(list);
       }
       if (pageRef.current === 0) {
-        onFirstPageLoad?.(res.data.data.list);
+        onFirstPageLoad?.(list);
       }
 
       cachedList.current =
-        pageRef.current === 0
-          ? res.data.data.list
-          : [...cachedList.current, ...res.data.data.list];
+        pageRef.current === 0 ? list : [...cachedList.current, ...list];
 
       setHasMore(res.data.data.has_next_page);
-      // if (res.data.data.list.length === LIMIT) {
-      //   pageRef.current++;
-      // }
+
       setLoading(false);
     } catch (error) {
+      console.log(error);
       setLoading(false);
     }
   };
 
-  useEffect(() => {
-    if (userInfo?.user) {
+  const { run: onQueryPoolListDebounced } = useDebounceFn(
+    () => {
       pageRef.current = 0;
       cachedList.current = [];
       setPoolList([]);
       onQueryPoolList(0);
+    },
+    {
+      wait: 500
     }
-  }, [userInfo, sortOrder, sortField, volume]);
+  );
+
+  useEffect(() => {
+    if (userInfo?.user) {
+      onQueryPoolListDebounced();
+    }
+  }, [userInfo, sortOrder, sortField, collection]);
 
   return {
     poolList,
@@ -96,10 +135,10 @@ export default function usePoolList(props?: { pageLimit?: number; isScrollList?:
     setSortField,
     sortOrder,
     setSortOrder,
+    collection,
+    setCollection,
     hasMore,
     pageRef,
-    volume,
-    setVolume,
     LIMIT
   };
 }

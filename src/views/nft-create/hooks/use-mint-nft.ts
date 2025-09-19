@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Contract, ethers } from "ethers";
-import nftAbi from "@/config/abis/nft";
+import nftAbi from "@/config/abis/evm-nft";
 import useToast from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/auth";
 import useGelatonetwork from "@/hooks/evm/use-gelatonetwork";
@@ -10,9 +10,8 @@ export default function useMintNft(
   onSuccess?: () => void
 ) {
   const [minting, setMinting] = useState(false);
-  const { wallet, address } = useAuth();
-  const [minted, setMinted] = useState(false);
-  const [mintedLoading, setMintedLoading] = useState(false);
+  const { wallet } = useAuth();
+
   const toast = useToast();
   const { executeTransaction } = useGelatonetwork();
   const mintNft = async () => {
@@ -40,7 +39,6 @@ export default function useMintNft(
             const tokenId = receipt.logs[0].topics[3];
             console.log("tokenId", Number(tokenId));
             toast.success({ title: "Mint NFT success" });
-            setMinted(true);
             onSuccess?.();
           }
         },
@@ -55,34 +53,5 @@ export default function useMintNft(
     }
   };
 
-  const checkMinted = async () => {
-    try {
-      const ethereumProvider = await wallet?.getEthereumProvider();
-
-      if (!ethereumProvider || !nftAddress) {
-        return;
-      }
-      const provider = new ethers.providers.Web3Provider(ethereumProvider);
-      const signer = provider.getSigner();
-
-      const NftContract = new Contract(nftAddress, nftAbi, signer);
-
-      // const res = await NftContract.ownerOf(0);
-      // console.log(res);
-      const balance = await NftContract.balanceOf(address);
-      setMinted(balance.gt(0));
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setMintedLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    if (address && nftAddress) {
-      checkMinted();
-    }
-  }, [address, nftAddress]);
-
-  return { mintNft, minting, minted, mintedLoading };
+  return { mintNft, minting };
 }

@@ -4,6 +4,8 @@ import useToast from "@/hooks/use-toast";
 import useGelatonetwork from "./use-gelatonetwork";
 import reportHash from "@/utils/report-hash";
 
+// for user claiming penalty
+
 export default function useClaimPenalty(onSuccess: any) {
   const [claiming, setClaiming] = useState(false);
   const toast = useToast();
@@ -23,7 +25,7 @@ export default function useClaimPenalty(onSuccess: any) {
           setClaiming(false);
 
           if (receipt?.status === 0) {
-            toast.fail({ title: "Cancel order failed" });
+            toast.fail({ title: "Claim failed" });
             return;
           } else {
             toast.success({ title: "Claim success" });

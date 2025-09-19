@@ -91,7 +91,12 @@ export default function EndPanel({ data }: { data: any }) {
               >
                 Winner
               </span>
-              <button onClick={() => {setOpenProvablyFair(true)}} className="text-[12px] underline button text-[#FFE9B2]">
+              <button
+                onClick={() => {
+                  setOpenProvablyFair(true);
+                }}
+                className="text-[12px] underline button text-[#FFE9B2]"
+              >
                 Verify
               </button>
             </div>
@@ -126,14 +131,14 @@ export default function EndPanel({ data }: { data: any }) {
               </div>
               <Avatar
                 size={150}
-                address={data.winner_user_info?.sol_user}
+                address={data.winner_user_info?.user}
                 email={data.winner_user_info?.email}
                 className="rounded-full"
               />
             </div>
             <div className="text-white text-center text-[16px] font-[DelaGothicOne] mt-[10px]">
               {data.winner_user_info?.email ||
-                formatAddress(data.winner_user_info?.sol_user)}
+                formatAddress(data.winner_user_info?.user)}
             </div>
             <div className="flex items-center justify-between mt-[30px]">
               <span className="text-[#FFE9B2] text-[14px]">Winner’s bid</span>
@@ -163,14 +168,14 @@ export default function EndPanel({ data }: { data: any }) {
                   <div className="flex items-center gap-[10px]">
                     <Avatar
                       size={32}
-                      address={data.user_info?.sol_user}
+                      address={data.user_info?.user}
                       email={data.user_info?.email}
                     />
                     <div>
                       <div className="text-[#FFE9B2] text-[12px]">Seller</div>
                       <div className="text-white text-[12px] font-[DelaGothicOne]">
                         {data.user_info?.email ||
-                          formatAddress(data.user_info?.sol_user)}
+                          formatAddress(data.user_info?.user)}
                       </div>
                     </div>
                   </div>
@@ -250,7 +255,14 @@ export default function EndPanel({ data }: { data: any }) {
           </div>
         </div>
 
-        <ProvablyFair pool={data?.id} open={openProvablyFair} onClose={() => {setOpenProvablyFair(false)}} defaultTab="provably-fair" />
+        <ProvablyFair
+          pool={data?.id}
+          open={openProvablyFair}
+          onClose={() => {
+            setOpenProvablyFair(false);
+          }}
+          defaultTab="provably-fair"
+        />
       </div>
     )
   );
@@ -275,7 +287,7 @@ const ProgressAvatar = ({
     >
       <Avatar
         size={26}
-        address={data.winner_user_info?.sol_user}
+        address={data.winner_user_info?.user}
         email={data.winner_user_info?.email}
       />
       <svg

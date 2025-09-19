@@ -24,15 +24,28 @@ const StatisticsPlayer = (props: any) => {
       return _result;
     }
     if (userInfo.on_sell) {
-      _result[0] = userInfo
-        .on_sell
+      _result[0] = userInfo.on_sell
         .filter((item: any) => item.reward_token_info?.[0]?.symbol === "BTC")
-        .reduce((acc: any, item: any) => Big(acc).plus(Big(item.reward_amount || 0).div(10 ** (item.reward_token_info?.[0]?.decimals || 6))), 0);
+        .reduce(
+          (acc: any, item: any) =>
+            Big(acc).plus(
+              Big(item.reward_amount || 0).div(
+                10 ** (item.reward_token_info?.[0]?.decimals || 6)
+              )
+            ),
+          0
+        );
     }
     if (userInfo.claim_pool) {
-      _result[1] = userInfo
-        .claim_pool
-        .reduce((acc: any, item: any) => Big(acc).plus(Big(item.accumulative_bids || 0).minus(getProfitFee(item, { isLog: false }))), 0);
+      _result[1] = userInfo.claim_pool.reduce(
+        (acc: any, item: any) =>
+          Big(acc).plus(
+            Big(item.accumulative_bids || 0).minus(
+              getProfitFee(item, { isLog: false })
+            )
+          ),
+        0
+      );
     }
     return _result;
   }, [userInfo]);
@@ -45,15 +58,37 @@ const StatisticsPlayer = (props: any) => {
       )}
     >
       <div className="flex items-center gap-[10px] flex-1 justify-between max-md:w-full">
-        <LabelValue label="PnL" className="" valueClassName={clsx(Big(userInfo?.seller_profit || 0).lt(0) ? "text-[#FF399F]" : "text-[#57FF70]")}>
-          {Big(userInfo?.seller_profit || 0).lt(0) ? "-" : "+"}{formatNumber(Big(userInfo?.seller_profit || 0).abs(), 2, true, { prefix: "$", isShort: true, isShortUppercase: true })}
+        <LabelValue
+          label="PnL"
+          className=""
+          valueClassName={clsx(
+            Big(userInfo?.seller_profit || 0).lt(0)
+              ? "text-[#FF399F]"
+              : "text-[#57FF70]"
+          )}
+        >
+          {Big(userInfo?.seller_profit || 0).lt(0) ? "-" : "+"}
+          {formatNumber(Big(userInfo?.seller_profit || 0).abs(), 2, true, {
+            prefix: "$",
+            isShort: true,
+            isShortUppercase: true
+          })}
         </LabelValue>
-        <LabelValue label="Claimable" className="" valueClassName="flex items-center gap-[13px]">
+        <LabelValue
+          label="Claimable"
+          className=""
+          valueClassName="flex items-center gap-[13px]"
+        >
           <div className="">
-            {formatNumber(claimableValue, 2, true, { prefix: "$", isShort: true, isShortUppercase: true, round: Big.roundDown })}
+            {formatNumber(claimableValue, 2, true, {
+              prefix: "$",
+              isShort: true,
+              isShortUppercase: true,
+              round: Big.roundDown
+            })}
           </div>
           <ButtonV2
-            className=""
+            className="!text-[14px]"
             // disabled={Big(claimableValue || 0).lte(0)}
             onClick={() => {
               setClaimModalOpen(true);
@@ -64,40 +99,77 @@ const StatisticsPlayer = (props: any) => {
         </LabelValue>
       </div>
       <div className="flex items-center gap-[10px] flex-2 justify-between max-md:flex-col max-md:w-full">
-        <LabelValue label="Created Market" className="max-md:w-full" valueClassName="flex items-center gap-[13px]">
+        <LabelValue
+          label="Created Market"
+          className="max-md:w-full"
+          valueClassName="flex items-center gap-[13px]"
+        >
           <div className="">
-            {formatNumber(userInfo?.created, 0, true, { isShort: true, isShortUppercase: true })}
+            {formatNumber(userInfo?.created, 0, true, {
+              isShort: true,
+              isShortUppercase: true
+            })}
           </div>
           <div className="flex items-center gap-[8px] whitespace-nowrap flex-wrap">
             <Badge
               className="h-[24px] !px-[10px] !text-[14px]"
-              icon={(<div className="w-[7px] h-[7px] shrink-0 rounded-full bg-[#57FF70]" />)}
+              icon={
+                <div className="w-[7px] h-[7px] shrink-0 rounded-full bg-[#57FF70]" />
+              }
             >
-              {formatNumber(Big(userInfo?.created || 0).minus(userInfo?.cancel || 0).minus(userInfo?.ended || 0), 0, true, { isShort: true, isShortUppercase: true })} Live
+              {formatNumber(
+                Big(userInfo?.created || 0)
+                  .minus(userInfo?.cancel || 0)
+                  .minus(userInfo?.ended || 0),
+                0,
+                true,
+                { isShort: true, isShortUppercase: true }
+              )}{" "}
+              Live
             </Badge>
             <Badge
               className="h-[24px] !px-[10px] !text-[14px]"
-              icon={(<div className="w-[7px] h-[7px] shrink-0 rounded-full bg-[#FF399F]" />)}
+              icon={
+                <div className="w-[7px] h-[7px] shrink-0 rounded-full bg-[#FF399F]" />
+              }
             >
-              {formatNumber(userInfo?.cancel, 0, true, { isShort: true, isShortUppercase: true })} Cancelled
+              {formatNumber(userInfo?.cancel, 0, true, {
+                isShort: true,
+                isShortUppercase: true
+              })}{" "}
+              Cancelled
             </Badge>
             <Badge
               className="h-[24px] !px-[10px] !text-[14px]"
-              icon={(<div className="w-[7px] h-[7px] shrink-0 rounded-full bg-[#FF9F39]" />)}
+              icon={
+                <div className="w-[7px] h-[7px] shrink-0 rounded-full bg-[#FF9F39]" />
+              }
             >
-              {formatNumber(userInfo?.ended, 0, true, { isShort: true, isShortUppercase: true })} Ended
+              {formatNumber(userInfo?.ended, 0, true, {
+                isShort: true,
+                isShortUppercase: true
+              })}{" "}
+              Ended
             </Badge>
           </div>
         </LabelValue>
-        <LabelValue label="On Sell" className="max-md:w-full max-md:mt-[10px] max-md:gap-[8px]" valueClassName="flex items-center gap-[13px]">
-          <div className="">
-            {formatNumber(onSellTotalAmount, 3, true, { isShort: true, isShortUppercase: true })} BTC
+        <LabelValue
+          label="On Sell"
+          className="max-md:w-full max-md:mt-[10px] max-md:gap-[8px]"
+          valueClassName="flex items-center gap-[13px]"
+        >
+          <div className="text-[12px]">
+            {formatNumber(onSellTotalAmount, 3, true, {
+              isShort: true,
+              isShortUppercase: true
+            })}{" "}
           </div>
           <ButtonV2
             onClick={() => {
-              navigate(`/btc/create`);
+              navigate(`/nft/create`);
             }}
             type="default"
+            className="!text-[14px]"
           >
             Create
           </ButtonV2>

@@ -8,7 +8,7 @@ export default function useChainId() {
   const { wallets } = useWallets();
   const { address } = useAuth();
 
-  const switchToBerachain = async () => {
+  const switchToBerachain = async (targetChainId?: number) => {
     if (!wallets.length || !address) {
       return false;
     }
@@ -20,7 +20,7 @@ export default function useChainId() {
 
     try {
       // Use Privy wallet's built-in switchChain method
-      await wallet.switchChain(berachain.id);
+      await wallet.switchChain(targetChainId ?? berachain.id);
       return true;
     } catch (error) {
       console.error("Failed to switch network:", error);

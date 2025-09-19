@@ -26,12 +26,11 @@ const Markets = (props: any) => {
     setSortOrder,
     hasMore,
     pageRef,
-    volume,
-    setVolume,
     LIMIT
   } = usePoolList({
     pageLimit: 10,
     isScrollList: true,
+    tokenStatus: 0,
     onFirstPageLoad: (_poolList) => {
       setActiveMarketIndex(0);
     }
@@ -88,7 +87,7 @@ const Markets = (props: any) => {
   );
 
   return (
-    <div className="relative w-full h-[100dvh] bg-[#1A191D] text-[14px] leading-[100%] font-[400] font-[SpaceGrotesk]">
+    <div className="relative w-full h-[100dvh] bg-[#1A191D] text-[14px] leading-[100%] font-[400]">
       <div className="fixed bg-[#1A191D] left-0 top-0 z-[22] w-full pt-[10px] shadow-[0px_16px_32px_0px_#1A191D]">
         <div className="relative w-full flex justify-center items-center gap-[10px] px-[13px]">
           <button
@@ -112,7 +111,7 @@ const Markets = (props: any) => {
             <div className="shrink-0 text-[#ADBCCF] text-[12px] w-[70px]">
               Market Size
             </div>
-            <div className="flex items-center gap-[8px] flex-1 w-0 overflow-x-auto pr-[10px]">
+            {/* <div className="flex items-center gap-[8px] flex-1 w-0 overflow-x-auto pr-[10px]">
               {MarketSizes.map((item: { label: string; key: number }) => (
                 <button
                   key={item.key}
@@ -127,7 +126,7 @@ const Markets = (props: any) => {
                   {item.label}
                 </button>
               ))}
-            </div>
+            </div> */}
           </div>
           <div className="flex items-center flex-nowrap gap-[10px] mt-[12px]">
             <div className="shrink-0 text-[#ADBCCF] text-[12px] w-[70px]">

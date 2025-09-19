@@ -11,17 +11,22 @@ import Temp from "./views/temp";
 // import "react-toastify/dist/ReactToastify.css";
 
 import MainLayout from "./layouts/main";
-import "./libs/howl";
+// import "./libs/howl";
 import Callback from "./views/callback";
 import DollaEyeContextProvider from "./contexts/dolla-eye";
-import BTC from "./views/btc";
+import BtcList from "./views/btc-list";
 
-// const LazyNewBTC = lazy(() => import("./views/btc"));
+
+const LazyNftCreate = lazy(() => import("./views/nft-create"));
 const LazyBtcCreate = lazy(() => import("./views/btc-create"));
 const LazyProfilePlayer = lazy(() => import("./views/profile/player"));
 const LazyProfileSeller = lazy(() => import("./views/profile/seller"));
+const LazyNft = lazy(() => import("./views/nft/index"));
+const LazyNftList = lazy(() => import("./views/nft-list"));
+const LazyBtc = lazy(() => import("./views/btc/index"));
 const LazyTerms = lazy(() => import("./views/terms"));
 const LazyPolicy = lazy(() => import("./views/policy"));
+const LazyDemo = lazy(() => import("./views/demo"));
 
 import("react-toastify/dist/ReactToastify.css");
 
@@ -67,16 +72,27 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Navigate to="/btc" replace />
+        element: <BtcList />
       },
       {
-        index: true,
+        path: "nft",
+        element: <LazyNftList />
+      },
+      {
+        path: "nft/detail",
+        element: <LazyNft />
+      },
+      {
+        path: "nft/detail/:poolId",
+        element: <LazyNft />
+      },
+      {
+        path: "nft/create",
+        element: <LazyNftCreate />
+      },
+      {
         path: "btc",
-        element: <BTC />
-      },
-      {
-        path: "btc/:poolId",
-        element: <BTC />
+        element: <BtcList />
       },
       {
         path: "btc/create",
@@ -97,8 +113,20 @@ const router = createBrowserRouter([
       {
         path: "privacy-policy",
         element: <LazyPolicy />
+      },
+      {
+        path: "demo",
+        element: <LazyDemo />
       }
     ]
+  },
+  {
+    path: "btc/detail",
+    element: <LazyBtc />
+  },
+  {
+    path: "btc/detail/:poolId",
+    element: <LazyBtc />
   },
   {
     path: "/callback",

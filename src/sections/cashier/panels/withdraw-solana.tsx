@@ -1,6 +1,5 @@
 import Coin from "@/components/icons/coin";
 import ButtonWithAuth from "@/components/button/button-with-auth";
-// import { PURCHASE_TOKEN } from "@/config";
 import { formatNumber } from "@/utils/format/number";
 import { useMemo, useState } from "react";
 import clsx from "clsx";
@@ -16,24 +15,24 @@ export const TOKNES = [
   // {
   //   address: "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
   //   decimals: 6,
-  //   icon: "/currency/usdc.png",
+  //   icon: "/tokens/usdc.png",
   //   symbol: "USDC"
   // },
   {
     address: "ADo4M7ZEZwDKNP1k8dic26TBrftX6mix9sGMntkq6Tp4",
     decimals: 6,
-    icon: "/currency/usdc.png",
+    icon: "/tokens/usdc.png",
     symbol: "USDC",
     chain: "solana"
-  },
-  {
-    // address: "zBTCug3er3tLyffELcvDNrKkCymbPWysGcWihESYfLg",
-    address: 'G5aHXkUgD4NnBbTZcKf7aQP2hXGw5bTVotcUc7wS8FVV',
-    decimals: 6,
-    icon: "/btc.png",
-    symbol: "BTC",
-    chain: "solana"
   }
+  // {
+  //   // address: "zBTCug3er3tLyffELcvDNrKkCymbPWysGcWihESYfLg",
+  //   address: "G5aHXkUgD4NnBbTZcKf7aQP2hXGw5bTVotcUc7wS8FVV",
+  //   decimals: 6,
+  //   icon: "/btc.png",
+  //   symbol: "BTC",
+  //   chain: "solana"
+  // }
 ];
 export default function WithdrawSolana() {
   const { tokenBalance: usdcBalance, update: updateUsdcBalance } =
@@ -64,7 +63,6 @@ export default function WithdrawSolana() {
   //   amount: Number(amount),
   //   targetAddress: receiveAddress
   // });
-
 
   const { onTransfer } = useTransfer({
     token: selectedItem,
