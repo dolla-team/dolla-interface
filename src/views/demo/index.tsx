@@ -42,8 +42,8 @@ export default function Demo() {
               "nep141:arb-0xaf88d065e77c8cc2239327c5edb3a432268e5831.omft.near",
             destinationAsset:
               "nep141:17208628f84f5d6ad33f0da3bbbeb27ffcb398eac501a31bd6ad2011e36133a1",
-            amount: "3000000",
-            evmAddress: "0x9e80a8e261d2ac69777d854b21592729d6766709",
+            amount: "100000",
+            evmAddress: user?.wallet?.address || "",
             slippageTolerance: 50,
             refundTo: "0x229E549c97C22b139b8C05fba770D94C086853d8"
           });

@@ -11,12 +11,17 @@ export async function quote(body: any) {
         body: JSON.stringify(body)
     });
 
+
+    console.log('res:', res);
+
     if (res.ok) {
         const data = await res.json();
         return data;
+    } else {
+        const error = await res.json();
+        throw new Error(error.message);
     }
 
-    return null;
 }
 
 export function getProvider() {

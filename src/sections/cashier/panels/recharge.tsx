@@ -41,21 +41,21 @@ export default function Recharge({
           <div className="flex items-center gap-[14px]">
             <div className="w-[32px] h-[32px] rounded-full relative">
               <img
-                src={config.purchaseToken.icon}
+                src={token.icon}
                 className="w-full h-full object-cover"
               />
               <img
-                src="/chains/bera-1.png"
+                src={ token.chainLogo }
                 className="w-[16px] h-[16px] absolute bottom-[-4px] right-[-4px]"
               />
             </div>
             <div>
               <div>
                 <span className="text-[16px] text-white">
-                  {config.purchaseToken.symbol}{" "}
+                  {token.symbol}{" "}
                 </span>
               </div>
-              <div className="text-[12px] text-white">Berachain</div>
+              <div className="text-[12px] text-white">{ token.chainName }</div>
             </div>
           </div>
         </div>
