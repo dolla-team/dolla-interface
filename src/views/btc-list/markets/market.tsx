@@ -20,7 +20,7 @@ export default function Market({
           className="flex items-center"
           style={{ width: column.width }}
         >
-          {column.dataIndex === "market_id" && (
+          {column.dataIndex === "pool_id" && (
             <div
               className="text-[14px] text-black button hover:underline"
               onClick={onClick}
@@ -54,7 +54,7 @@ export default function Market({
               </div>
             </div>
           )}
-          {column.dataIndex === "value" && (
+          {column.dataIndex === "anchor_price" && (
             <div className="text-[14px] text-black">
               {formatNumber(data.value, 0, true, {
                 prefix: "$"
@@ -71,7 +71,7 @@ export default function Market({
           {column.dataIndex === "participants" && (
             <div className="text-[14px] text-black">{data.participants}</div>
           )}
-          {column.dataIndex === "bidding_progress" && (
+          {column.dataIndex === "hitting" && (
             <ProgressBar
               type="basic"
               progress={data.progress}

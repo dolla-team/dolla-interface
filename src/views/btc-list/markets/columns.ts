@@ -1,7 +1,7 @@
 export default [
   {
     title: "#",
-    dataIndex: "market_id",
+    dataIndex: "pool_id",
     width: "10%",
     sort: true
   },
@@ -12,7 +12,7 @@ export default [
   },
   {
     title: "Valued",
-    dataIndex: "value",
+    dataIndex: "anchor_price",
     width: "15%",
     sort: true
   },
@@ -30,7 +30,7 @@ export default [
   },
   {
     title: "Bidding progress",
-    dataIndex: "bidding_progress",
+    dataIndex: "hitting",
     width: "15%",
     sort: true
   }
