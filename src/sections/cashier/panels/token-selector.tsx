@@ -7,6 +7,8 @@ import useDeposit from "@/hooks/near/use-deposit";
 import { useUser } from "@privy-io/react-auth";
 import Big from "big.js";
 import { chainConfig } from "../utils/chainConfig";
+import useConfig from "@/hooks/near/use-config";
+import useToast from "@/hooks/use-toast";
 export default function TokenSelector({ onTokenSelect, onAddressCreated, onLoading }: { onTokenSelect: (token: any) => void, onAddressCreated: (amount: any) => void, onLoading: (loading: boolean) => void }) {
     const [isOpen, setIsOpen] = useState(false);
     const [selectedToken, setSelectedToken] = useState<any>(null);
@@ -15,7 +17,8 @@ export default function TokenSelector({ onTokenSelect, onAddressCreated, onLoadi
     const { generateDepositAddress } = useDeposit();
     const { user } = useUser();
     const [loading, setLoading] = useState(false);
-    
+    const { config } = useConfig();
+    const { fail } = useToast();
 
     const usedTokens = useMemo(() => {
         return tokens.filter((token: any) => token.symbol.toUpperCase() === "USDC"
@@ -53,7 +56,13 @@ export default function TokenSelector({ onTokenSelect, onAddressCreated, onLoadi
     }, [usedTokens]);
 
     useEffect(() => {
-        if (debouncedAmount && Number(debouncedAmount) > 0 && selectedToken && user?.wallet?.address) {
+        if (debouncedAmount && config && Number(debouncedAmount) < Number(config.min_deposit_amount / 10 ** 6)) {
+            fail({ title: `Minimum deposit amount is ${config.min_deposit_amount / 10 ** 6} USDC` });
+            return;
+        }
+
+        if (debouncedAmount && config 
+             && selectedToken && user?.wallet?.address) {
             (async () => {
                 onLoading(true);
                 const depositAddress = await generateDepositAddress({
@@ -68,7 +77,7 @@ export default function TokenSelector({ onTokenSelect, onAddressCreated, onLoadi
                 onLoading(false);
             })()
         }
-    }, [debouncedAmount, selectedToken, user]);
+    }, [debouncedAmount, selectedToken, user, config]);
 
 
     return (
