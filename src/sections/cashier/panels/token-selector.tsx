@@ -70,6 +70,7 @@ export default function TokenSelector({ onTokenSelect, onAddressCreated, onLoadi
         }
     }, [debouncedAmount, selectedToken, user]);
 
+
     return (
         <div className="relative" onClick={(e) => {
             setIsOpen(false);

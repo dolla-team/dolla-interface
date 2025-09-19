@@ -67,7 +67,7 @@ export default function RechargeFrom1click({
                 <div className="text-[14px] text-[#8A87AA]">
                     Deposit <span className="text-[##000000]">{token?.symbol}</span> from a
                     centralized exchange (Binance, OKX, etc.) to this one-time address
-                    on the <span className="text-[#000000]">{token?.blockchain}  network</span> to
+                    on the <span className="text-[#000000]">{chainConfig[token?.blockchain]?.name}  network</span> to
                     fund your Dolla wallet. This address can only be used one time.
                 </div>
                 <Recharge token={rechargeToken} />
@@ -142,13 +142,8 @@ export default function RechargeFrom1click({
                         />
                     </svg>
                     <div className="text-[14px] text-[#FF4372] whitespace-nowrap flex items-center gap-[4px]">
-                        <svg width="27" height="26" viewBox="0 0 27 26" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M11.7847 2.86099C12.5614 1.56556 14.4386 1.56556 15.2153 2.86099L23.3756 16.4716C24.1749 17.8046 23.2146 19.5 21.6603 19.5H5.33969C3.7854 19.5 2.82513 17.8046 3.62437 16.4716L11.7847 2.86099Z" fill="#FF4372" />
-                            <path d="M12.8509 8H15.1669L14.7949 13.928H13.2109L12.8509 8ZM14.0029 17.12C13.6269 17.12 13.3229 17.012 13.0909 16.796C12.8589 16.572 12.7429 16.284 12.7429 15.932C12.7429 15.58 12.8589 15.296 13.0909 15.08C13.3229 14.864 13.6269 14.756 14.0029 14.756C14.3789 14.756 14.6829 14.864 14.9149 15.08C15.1469 15.296 15.2629 15.58 15.2629 15.932C15.2629 16.284 15.1469 16.572 14.9149 16.796C14.6829 17.012 14.3789 17.12 14.0029 17.12Z" fill="white" />
-                        </svg>
-
                         Make sure to send funds to{" "}
-                        <span className="font-bold">{token?.blockchain}</span>
+                        <span className="font-bold">{chainConfig[token?.blockchain]?.name}</span>
                     </div>
                 </div>
             </>
