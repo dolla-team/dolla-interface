@@ -4,12 +4,14 @@ import ButtonV2 from "@/components/button/v2";
 import BackIcon from "@/sections/wallet/back-icon";
 
 export default function FundFromCex({
+  loading = false,
   amount,
   disabled,
   setAmount,
   onBack,
   onOrderIdCreated
 }: {
+  loading?: boolean;
   amount: string;
   disabled?: boolean;
   setAmount: (v: string) => void;
@@ -60,6 +62,7 @@ export default function FundFromCex({
       <div className="flex justify-center">
         <ButtonV2
           disabled={disabled}
+          loading={loading}
           onClick={() => {
             if (amount) {
               onOrderIdCreated();

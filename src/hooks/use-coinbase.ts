@@ -1,26 +1,82 @@
 import { useCallback, useEffect, useState } from "react";
 import { getOnrampBuyUrl } from '@coinbase/onchainkit/fund';
+import axiosInstance from "@/libs/axios";
+import useDeposit from "./near/use-deposit";
+import { useUser } from "@privy-io/react-auth";
+import Big from "big.js";
 
-const projectId = 'b88afaf3-113e-4ec4-80d0-0178256acc0a';
-export default function useCoinBase({ address, amount, orderId }: { address: string, amount: number, orderId: string }) {
+// const projectId = 'b88afaf3-113e-4ec4-80d0-0178256acc0a';
+
+// const projectId = 'fc6b7f9a-fff8-407f-bdda-0b8ede3ae84c'
+
+export default function useCoinBase({ address, amount, orderId, minAmount }: { address: string, amount: number, orderId: string, minAmount: number }) {
+    const [loading, setLoading] = useState(false);
     const [coinBaseUrl, setCoinBaseUrl] = useState<string | null>(null);
+    const { generateDepositAddress } = useDeposit();
+    const { user } = useUser();
 
-    const getCoinBaseUrl = useCallback(() => {
-        if (!address || amount <= 0 || !orderId) {
+    const getCoinBaseUrl = useCallback(async () => {
+        if (!address || amount < minAmount || !orderId || !user?.wallet?.address) {
             setCoinBaseUrl(null);
             return;
         }
 
-        const onrampBuyUrl = getOnrampBuyUrl({
-            projectId,
-            addresses: { [address]: ['solana'] },
-            assets: ['USDC'],
-            presetFiatAmount: amount || 0,
-            fiatCurrency: 'USD',
-            redirectUrl: `${window.location.origin}/callback?type=coinbase&orderId=${orderId}`,
-        });
+        try {
+            setLoading(true);
 
-        setCoinBaseUrl(onrampBuyUrl);
+            // Arbitrum usdc
+            const depositAddress = await generateDepositAddress({
+                originAsset:
+                    "nep141:arb-0xaf88d065e77c8cc2239327c5edb3a432268e5831.omft.near",
+                destinationAsset:
+                    "nep141:17208628f84f5d6ad33f0da3bbbeb27ffcb398eac501a31bd6ad2011e36133a1",
+                amount: new Big(amount).mul(1e6).toString(),
+                evmAddress: user?.wallet?.address || "",
+                slippageTolerance: 50,
+                refundTo: user?.wallet?.address
+            });
+
+            if (!depositAddress) {
+                setCoinBaseUrl(null);
+                setLoading(false);
+                return;
+            }
+
+            const res = await axiosInstance.post(
+                "/api/v1/coinbase/onramp/token",
+                {
+                    addresses: [
+                        {
+                            address: depositAddress,
+                            blockchains: ["arbitrum"]
+                        }
+                    ],
+                    assets: ["USDC"]
+                }
+            )
+
+            if (res?.data?.code != 0) {
+                setCoinBaseUrl(null);
+                return;
+            }
+
+            const onrampBuyUrl = getOnrampBuyUrl({
+                sessionToken: res.data.data?.token || '',
+                // projectId,
+                // addresses: { [address]: ['solana'] },
+                // assets: ['USDC'],
+                presetFiatAmount: new Big(amount).mul(1.1).toNumber() || 0,
+                fiatCurrency: 'USD',
+                redirectUrl: `${window.location.origin}/callback?type=coinbase&orderId=${orderId}`,
+            });
+
+            setCoinBaseUrl(onrampBuyUrl);
+        } catch (error) {
+            setLoading(false);
+            setCoinBaseUrl(null);
+        } finally {
+            setLoading(false);
+        }
     }, [address, amount, orderId])
 
     useEffect(() => {
@@ -29,7 +85,9 @@ export default function useCoinBase({ address, amount, orderId }: { address: str
 
     return {
         getCoinBaseUrl,
+        loading,
         coinBaseUrl,
     }
 
 }
+

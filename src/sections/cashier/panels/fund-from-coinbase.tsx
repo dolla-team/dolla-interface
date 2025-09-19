@@ -6,14 +6,16 @@ import useBroadcatChannel from "@/hooks/use-broadcat-channel";
 import { toast } from "react-toastify";
 import { getWindowSize } from "../utils/getWindowSize";
 
+const minAmount = 10;
 export default function FundFromCoinbase({ onBack }: { onBack: () => void }) {
   const { address, userInfo } = useAuth();
   const [amount, setAmount] = useState("");
   const [orderId, setOrderId] = useState("");
-  const { coinBaseUrl } = useCoinBase({
+  const { coinBaseUrl, loading } = useCoinBase({
     address: userInfo?.user || "",
     amount: Number(amount),
-    orderId
+    orderId,
+    minAmount,
   });
 
   const { sendMessage, successOrderIds, addOrderId } = useBroadcatChannel();
@@ -44,8 +46,9 @@ export default function FundFromCoinbase({ onBack }: { onBack: () => void }) {
   return (
     <div>
       <FundFromCex
+        loading={loading}
         amount={amount}
-        disabled={!amount || Number(amount) < 10 || !coinBaseUrl}
+        disabled={!amount || Number(amount) < minAmount || !coinBaseUrl}
         setAmount={setAmount}
         onBack={onBack}
         onOrderIdCreated={() => {

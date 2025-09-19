@@ -2,11 +2,13 @@ import { useState } from "react";
 import dayjs from "dayjs";
 import useGenerateKey from "./use-generate-key";
 import { quote } from "./util";
+import useToast from "../use-toast";
 
 export default function useDeposit() {
     const [loading, setLoading] = useState(false);
     const [depositAddress, setDepositAddress] = useState<string | null>("");
     const { publicKey } = useGenerateKey();
+    const { success, fail } = useToast();
     async function generateDepositAddress({
         swapType = "EXACT_INPUT",
         evmAddress,
@@ -55,7 +57,7 @@ export default function useDeposit() {
                 quoteWaitingTimeMs,
                 customRecipientMsg: JSON.stringify({
                     u: {
-                        Evm: evmAddress.replace(/^0x/, "")
+                        Evm: evmAddress.replace(/^0x/, "").toLowerCase()
                     },
                     b: 'Deposit',
                     k: publicKey
@@ -67,13 +69,17 @@ export default function useDeposit() {
             if (data) {
                 console.log(data)
                 setDepositAddress(data.quote.depositAddress)
+                return data.quote.depositAddress;
             } else {
+                
                 setDepositAddress(null)
+                return null;
             }
 
 
-        } catch (error) {
+        } catch (error: any) {
             console.error(error);
+            fail({ title: error.toString()});
         } finally {
             setLoading(false);
         }
