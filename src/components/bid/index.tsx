@@ -5,9 +5,7 @@ import { formatNumber } from "@/utils/format/number";
 import { getAnchorPrice } from "@/utils/pool";
 
 function calcProbability(price: number, times: number) {
-  return (
-    (1 - (1 - 1 / getAnchorPrice({ anchor_price: price })) ** times) * 99.99
-  );
+  return (1 - (1 - 1 / getAnchorPrice(price)) ** times) * 99.99;
 }
 
 export default function NFTBid({

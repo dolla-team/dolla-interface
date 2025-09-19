@@ -10,7 +10,9 @@ export default function Progress({ data }: any) {
     if (!data) return 0;
     if (!data?.accumulative_bids || data?.anchor_price === "0") return 0;
 
-    return (data.accumulative_bids / getAnchorPrice(data)) * 100;
+    const anchorPrice = getAnchorPrice(data?.anchor_price);
+    if (anchorPrice === 0) return 0;
+    return (data.accumulative_bids / anchorPrice) * 100;
   }, [data]);
 
   const particles = useMemo(

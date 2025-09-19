@@ -30,7 +30,9 @@ export default function Market({
   const progress = useMemo(() => {
     if (!data?.accumulative_bids || data?.anchor_price === "0") return 0;
 
-    return (data.accumulative_bids / getAnchorPrice(data)) * 100;
+    const anchorPrice = getAnchorPrice(data?.anchor_price);
+    if (anchorPrice === 0) return 0;
+    return (data.accumulative_bids / anchorPrice) * 100;
   }, [data]);
   const rewardTokenInfo = useMemo(() => {
     return data?.reward_token_info?.[0] || {};

@@ -4,7 +4,6 @@ import Avatar from "@/components/avatar";
 import { usePoolDistributed } from "@/hooks/use-pool-distributed";
 import useWinnerBidList from "../detail/use-winner-bid-list";
 import clsx from "clsx";
-import { getAnchorPrice } from "@/utils/pool";
 
 export default function PlayerDistribution() {
   const { pool } = useNftContext();

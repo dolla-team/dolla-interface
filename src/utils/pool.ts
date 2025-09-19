@@ -11,7 +11,8 @@ export const getPoolInfo = async (poolId: number) => {
 };
 
 export const getAnchorPrice = (price: number, decimals: number = 18) => {
-  if (price)
+  console.log(price, "price");
+  if (price && !isNaN(price))
     return Big(price * 1.2)
       .div(10 ** decimals)
       .toNumber();
