@@ -1,4 +1,3 @@
-import { useState } from "react";
 import columns from "./columns";
 import SortIcon from "./sort-icon";
 import Market from "./market";
@@ -7,18 +6,14 @@ import Loading from "@/components/icons/loading";
 import { useNavigate } from "react-router-dom";
 
 export default function Markets() {
-  const [sortDataIndex, setSortDataIndex] = useState("");
-  const [sortDirection, setSortDirection] = useState(false);
   const navigate = useNavigate();
   const {
     poolList,
-    loading
-    // sortField,
-    // sortOrder,
-    // setSortField,
-    // setSortOrder,
-    // collection,
-    // setCollection
+    loading,
+    sortField,
+    sortOrder,
+    setSortField,
+    setSortOrder
   } = usePoolList({
     pageLimit: 100,
     tokenStatus: 0
@@ -41,11 +36,11 @@ export default function Markets() {
             <span>{column.title}</span>
             {column.sort && (
               <SortIcon
-                active={sortDataIndex === column.dataIndex}
-                expanded={sortDataIndex === column.dataIndex && sortDirection}
+                active={sortField === column.dataIndex}
+                expanded={sortField === column.dataIndex && sortOrder === "asc"}
                 onClick={() => {
-                  setSortDataIndex(column.dataIndex);
-                  setSortDirection(!sortDirection);
+                  setSortField(column.dataIndex);
+                  setSortOrder(sortOrder === "asc" ? "desc" : "asc");
                 }}
               />
             )}

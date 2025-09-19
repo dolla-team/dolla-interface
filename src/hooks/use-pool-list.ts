@@ -4,6 +4,7 @@ import { useAuth } from "@/contexts/auth";
 import { getAnchorPrice } from "@/utils/pool";
 import Big from "big.js";
 import { formatNumber } from "@/utils/format/number";
+import { useDebounceFn } from "ahooks";
 
 export default function usePoolList(props?: {
   pageLimit?: number;
@@ -108,12 +109,21 @@ export default function usePoolList(props?: {
     }
   };
 
-  useEffect(() => {
-    if (userInfo?.user) {
+  const { run: onQueryPoolListDebounced } = useDebounceFn(
+    () => {
       pageRef.current = 0;
       cachedList.current = [];
       setPoolList([]);
       onQueryPoolList(0);
+    },
+    {
+      wait: 500
+    }
+  );
+
+  useEffect(() => {
+    if (userInfo?.user) {
+      onQueryPoolListDebounced();
     }
   }, [userInfo, sortOrder, sortField, collection]);
 
