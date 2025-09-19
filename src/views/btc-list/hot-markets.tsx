@@ -3,15 +3,15 @@ import clsx from "clsx";
 import useTokenPrice from "@/hooks/use-token-price";
 import { useMemo } from "react";
 import { formatNumber } from "@/utils/format/number";
-
-const BTC_TOKEN = {
-  chain: "solana",
-  address: "G5aHXkUgD4NnBbTZcKf7aQP2hXGw5bTVotcUc7wS8FVV"
-};
+import useBtcStore from "@/stores/use-btc";
+import { BASE_TOKEN } from "@/config/btc";
+import Big from "big.js";
+import { useNavigate } from "react-router-dom";
 
 export default function MoreMarkets() {
-  const { prices } = useTokenPrice(BTC_TOKEN);
-
+  const { prices } = useTokenPrice(BASE_TOKEN);
+  const btcStore = useBtcStore();
+  const navigate = useNavigate();
   const price = useMemo(() => {
     if (!prices || prices.length === 0) return 0;
 
@@ -21,13 +21,35 @@ export default function MoreMarkets() {
   return (
     <div className="flex items-center gap-[20px] mt-[20px]">
       {[1, 0.1, 0.01].map((item) => {
-        return <MarketItem key={item} value={item} price={price} />;
+        return (
+          <MarketItem
+            key={item}
+            value={item}
+            price={price}
+            onClick={() => {
+              btcStore.set({
+                recommendValue: Big(item)
+                  .mul(10 ** BASE_TOKEN.decimals)
+                  .toString()
+              });
+              navigate("/btc/detail");
+            }}
+          />
+        );
       })}
     </div>
   );
 }
 
-const MarketItem = ({ value, price }: { value: number; price: number }) => {
+const MarketItem = ({
+  value,
+  price,
+  onClick
+}: {
+  value: number;
+  price: number;
+  onClick: () => void;
+}) => {
   const valued = useMemo(() => {
     return formatNumber(price * value, 1, true);
   }, [price, value]);
@@ -92,7 +114,7 @@ const MarketItem = ({ value, price }: { value: number; price: number }) => {
         }}
       />
       <div className="opacity-0 absolute top-0 left-0 z-[10] bg-[#0000004D] backdrop-blur-[25px] group-hover:opacity-100 duration-300 w-full h-full rounded-[16px] flex items-center justify-center">
-        <Button className="w-[160px] h-[42px] !bg-[#FFC42F]">
+        <Button className="w-[160px] h-[42px] !bg-[#FFC42F]" onClick={onClick}>
           Bid for {value} BTC
         </Button>
       </div>

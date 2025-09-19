@@ -6,7 +6,6 @@ import BidSelection from "./components/bid-selection";
 import BidsInfo from "./components/bids-info";
 import MarketInfo from "./components/market-info";
 import Grand from "./grand";
-import LucyDraw from "../../sections/lucy-draw";
 import DollaEye from "@/components/dolla-eye";
 import TopWinner from "@/sections/winners";
 import Music from "./components/music";
