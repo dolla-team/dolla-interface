@@ -32,10 +32,6 @@ export default function Markets({ onClose }: { onClose: () => void }) {
     };
   }, []);
 
-  useEffect(() => {
-    setVolume(filterVolume);
-  }, [filterVolume]);
-
   return (
     <motion.div
       className="fixed top-0 left-0 w-full z-[50]"

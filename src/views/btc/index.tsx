@@ -1,6 +1,6 @@
 import { CannonCoinsProvider, useBtcContext } from "./context";
 // import WildTimeBid from "@/sections/wild-time/bid";
-import MoreMarkets from "./components/more-markets";
+// import MoreMarkets from "./components/more-markets";
 import Header from "./components/header";
 import BidSelection from "./components/bid-selection";
 import BidsInfo from "./components/bids-info";
@@ -11,7 +11,7 @@ import TopWinner from "@/sections/winners";
 import Music from "./components/music";
 import useIsMobile from "@/hooks/use-is-mobile";
 import clsx from "clsx";
-import MarketsModal from "./components/more-markets/mobile/modal";
+// import MarketsModal from "./components/more-markets/mobile/modal";
 import { useAuth } from "@/contexts/auth";
 import Button from "@/components/button";
 import EstGas from "@/sections/est-gas";
@@ -81,7 +81,7 @@ const Content = () => {
       <Grand tokenBalance={nearAccount?.balance} />
       <BidSelection tokenBalance={nearAccount?.balance} />
       {!isMobile && <BidsInfo />}
-      {!isMobile && <MoreMarkets />}
+      {/* {!isMobile && <MoreMarkets />} */}
       {/* {!isMobile && (
         <div>
           <LucyDraw tokenBalance={nearAccount?.balance} />
@@ -89,7 +89,7 @@ const Content = () => {
       )} */}
       {!isMobile && <TopWinner />}
       {!isMobile && <Music />}
-      {isMobile && <MarketsModal />}
+      {/* {isMobile && <MarketsModal />} */}
       <Wallet />
       <UserInfo />
     </div>
