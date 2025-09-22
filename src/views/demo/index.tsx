@@ -24,9 +24,7 @@ export default function Demo() {
     gameId: "2"
   });
 
-  const { claim } = useClaim({
-    evmAddress: user?.wallet?.address || ""
-  });
+  const { claim } = useClaim();
 
   return (
     <div>
@@ -156,7 +154,7 @@ export default function Demo() {
             });
 
             if (result) {
-              saveKeyPair(publicKey, keyPairSigner, privateKey);
+              // saveKeyPair(publicKey, keyPairSigner, privateKey);
             }
           }}
         >
