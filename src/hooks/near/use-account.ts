@@ -3,7 +3,7 @@ import { viewMethod } from "./util";
 import Big from "big.js";
 
 export default function useAccount(evmAddress: string) {
-  const [account, setAccount] = useState<any | null>(null);
+  const [account, setAccount] = useState<any | null>();
 
   const fetchAccount = async () => {
     try {

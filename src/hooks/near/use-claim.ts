@@ -1,173 +1,170 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import dayjs from "dayjs";
 import { getNonce, getProvider, quote } from "./util";
-import useGenerateKey from "./use-generate-key";
-import { transactions } from "near-api-js";
+import { KeyPairSigner, transactions } from "near-api-js";
 import { PublicKey } from "near-api-js/lib/utils/key_pair";
 import { functionCall } from "near-api-js/lib/transaction";
 import { base_decode } from "near-api-js/lib/utils/serialize";
-import useAccount from "./use-account";
-
+import { useNearKeyStore } from "@/stores/use-near-key";
 const THIRTY_TGAS = "300000000000000";
 
-export default function useClaim({
+export default function useClaim() {
+  const [loading, setLoading] = useState(false);
+  const { publicKey, privateKey } = useNearKeyStore();
+
+  const keyPairSigner = useMemo(() => {
+    return KeyPairSigner.fromSecretKey(privateKey);
+  }, [privateKey]);
+
+  async function claim({
+    gameId,
+    swapType = "EXACT_INPUT",
     evmAddress,
-}: {
-    evmAddress: string;
-}) {
-    const [loading, setLoading] = useState(false);
-    const { publicKey, keyPairSigner } = useGenerateKey();
-    const { account } = useAccount(evmAddress);
-    async function claim({
-        gameId,
-        swapType = "EXACT_INPUT",
-        evmAddress,
-        slippageTolerance = 50,
+    slippageTolerance = 50,
+    originAsset,
+    depositType = "ORIGIN_CHAIN",
+    destinationAsset,
+    amount,
+    refundTo,
+    refundType = "ORIGIN_CHAIN",
+    recipientType = "DESTINATION_CHAIN",
+    referral = "referral",
+    quoteWaitingTimeMs = 3000
+  }: {
+    gameId: string;
+    swapType?: string;
+    evmAddress?: string;
+    slippageTolerance?: number;
+    originAsset: string;
+    depositType?: string;
+    destinationAsset: string;
+    amount: string;
+    refundTo: string;
+    refundType?: string;
+    recipientType?: string;
+    referral?: string;
+    quoteWaitingTimeMs?: number;
+  }) {
+    try {
+      setLoading(true);
+      const body = {
+        dry: false,
+        swapType,
+        slippageTolerance,
         originAsset,
-        depositType = "ORIGIN_CHAIN",
+        depositType,
         destinationAsset,
         amount,
-        refundTo,
-        refundType = "ORIGIN_CHAIN",
-        recipientType = "DESTINATION_CHAIN",
-        referral = "referral",
-        quoteWaitingTimeMs = 3000,
-    }: {
-        gameId: string;
-        swapType?: string;
-        evmAddress?: string;
-        slippageTolerance?: number;
-        originAsset: string;
-        depositType?: string;
-        destinationAsset: string;
-        amount: string;
-        refundTo: string;
-        refundType?: string;
-        recipientType?: string;
-        referral?: string;
-        quoteWaitingTimeMs?: number;
-    }) {
-        try {
-            setLoading(true);
-            const body = {
-                dry: false,
-                swapType,
-                slippageTolerance,
-                originAsset,
-                depositType,
-                destinationAsset,
-                amount,
-                refundTo: refundTo || import.meta.env.VITE_NEAR_ACCOUNT_ID,
-                refundType,
-                recipient: evmAddress,
-                recipientType,
-                deadline: dayjs().add(1, 'hour').toISOString(),
-                referral,
-                quoteWaitingTimeMs,
-            };
+        refundTo: refundTo || import.meta.env.VITE_NEAR_ACCOUNT_ID,
+        refundType,
+        recipient: evmAddress,
+        recipientType,
+        deadline: dayjs().add(1, "hour").toISOString(),
+        referral,
+        quoteWaitingTimeMs
+      };
 
-            const data = await quote(body)
+      const data = await quote(body);
 
-            if (data && keyPairSigner) {
-                const depositAddress = data.quote.depositAddress
-                const provider = getProvider();
-                const { header } = await provider.block({ finality: 'final' });
+      if (data && keyPairSigner) {
+        const depositAddress = data.quote.depositAddress;
+        const provider = getProvider();
+        const { header } = await provider.block({ finality: "final" });
 
-                const args = {
-                    game_args: {
-                        ByAk: {
-                            game_id: Number(gameId),
-                            recipient_account: depositAddress
-                        }
-                    }
-                };
-
-                const nonce = await getNonce(publicKey);
-
-                const transaction = transactions.createTransaction(
-                    import.meta.env.VITE_NEAR_ACCOUNT_ID,
-                    PublicKey.from(publicKey),
-                    import.meta.env.VITE_NEAR_ACCOUNT_ID,
-                    nonce,
-                    [functionCall('claim_prize', args, BigInt(THIRTY_TGAS), BigInt(0))],
-                    base_decode(header.hash)
-                )
-
-                const [, signedTransaction] = await keyPairSigner.signTransaction(transaction);
-
-                const result: any = await provider.sendTransaction(signedTransaction);
-
-                if (result.status.SuccessValue) {
-                    console.log('success:', result);
-                } else {
-                    console.log('fail:', result);
-                }
-
-                return result;
-            } else {
-                return null
+        const args = {
+          game_args: {
+            ByAk: {
+              game_id: Number(gameId),
+              recipient_account: depositAddress
             }
+          }
+        };
 
-        } catch (error) {
-            console.error(error);
-        } finally {
-            setLoading(false);
+        const nonce = await getNonce(publicKey);
+
+        const transaction = transactions.createTransaction(
+          import.meta.env.VITE_NEAR_ACCOUNT_ID,
+          PublicKey.from(publicKey),
+          import.meta.env.VITE_NEAR_ACCOUNT_ID,
+          nonce,
+          [functionCall("claim_prize", args, BigInt(THIRTY_TGAS), BigInt(0))],
+          base_decode(header.hash)
+        );
+
+        const [, signedTransaction] = await keyPairSigner.signTransaction(
+          transaction
+        );
+
+        const result: any = await provider.sendTransaction(signedTransaction);
+
+        if (result.status.SuccessValue) {
+          console.log("success:", result);
+        } else {
+          console.log("fail:", result);
         }
+
+        return result;
+      } else {
+        return null;
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function refund({ gameId }: { gameId: string }) {
+    if (!keyPairSigner) {
+      return;
     }
 
-    async function refund({
-        gameId,
-    }: {
-        gameId: string;
-    }) {
-        if (!keyPairSigner) {
-            return;
+    try {
+      const provider = getProvider();
+      const { header } = await provider.block({ finality: "final" });
+
+      const args = {
+        game_args: {
+          ByAk: {
+            game_id: Number(gameId)
+          }
         }
+      };
 
-        try {
-            const provider = getProvider();
-            const { header } = await provider.block({ finality: 'final' });
+      const nonce = await getNonce(publicKey);
 
-            const args = {
-                game_args: {
-                    ByAk: {
-                        game_id: Number(gameId),
-                    }
-                }
-            };
+      const transaction = transactions.createTransaction(
+        import.meta.env.VITE_NEAR_ACCOUNT_ID,
+        PublicKey.from(publicKey),
+        import.meta.env.VITE_NEAR_ACCOUNT_ID,
+        nonce,
+        [functionCall("refund_bet", args, BigInt(THIRTY_TGAS), BigInt(0))],
+        base_decode(header.hash)
+      );
 
-            const nonce = await getNonce(publicKey);
+      const [, signedTransaction] = await keyPairSigner.signTransaction(
+        transaction
+      );
 
-            const transaction = transactions.createTransaction(
-                import.meta.env.VITE_NEAR_ACCOUNT_ID,
-                PublicKey.from(publicKey),
-                import.meta.env.VITE_NEAR_ACCOUNT_ID,
-                nonce,
-                [functionCall('refund_bet', args, BigInt(THIRTY_TGAS), BigInt(0))],
-                base_decode(header.hash)
-            )
+      const result: any = await provider.sendTransaction(signedTransaction);
 
-            const [, signedTransaction] = await keyPairSigner.signTransaction(transaction);
+      if (result.status.SuccessValue) {
+        console.log("success:", result);
+      } else {
+        console.log("fail:", result);
+      }
 
-            const result: any = await provider.sendTransaction(signedTransaction);
-
-            if (result.status.SuccessValue) {
-                console.log('success:', result);
-            } else {
-                console.log('fail:', result);
-            }
-
-            return result;;
-        } catch (error) {
-            console.error(error);
-        } finally {
-            setLoading(false);
-        }
+      return result;
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
     }
+  }
 
-    return {
-        claim,
-        loading,
-        refund,
-    };
+  return {
+    claim,
+    loading,
+    refund
+  };
 }

@@ -1,6 +1,6 @@
 import { useNearKeyStore } from "@/stores/use-near-key";
 import { KeyPair, KeyPairSigner, transactions } from "near-api-js";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useSignMessage } from "@privy-io/react-auth";
 import { getNonce, getProvider } from "./util";
 import { PublicKey } from "near-api-js/lib/utils/key_pair";
@@ -16,7 +16,21 @@ export default function useGenerateKey() {
     useNearKeyStore();
   const { signMessage } = useSignMessage();
 
-  async function generateKeyPair() {
+  async function generateKeyPair(account: any) {
+    if (account === null) {
+      const {
+        publicKey: shortPublicKey,
+        keyPairSigner: newKeyPairSigner,
+        privateKey: newPrivateKey
+      } = createKeyPair();
+
+      saveKeyPair(shortPublicKey, newKeyPairSigner, newPrivateKey);
+
+      return {
+        publicKey: shortPublicKey,
+        keyPairSigner: newKeyPairSigner
+      };
+    }
     if (publicKey && privateKey) {
       const newKeyPairSigner = KeyPairSigner.fromSecretKey(
         ("ed25519:" + privateKey) as any
@@ -27,19 +41,10 @@ export default function useGenerateKey() {
         keyPairSigner: newKeyPairSigner
       };
     }
-
-    const {
-      publicKey: shortPublicKey,
-      keyPairSigner: newKeyPairSigner,
-      privateKey: newPrivateKey
-    } = createKeyPair();
-
-    saveKeyPair(shortPublicKey, newKeyPairSigner, newPrivateKey);
-
-    return {
-      publicKey: shortPublicKey,
-      keyPairSigner: newKeyPairSigner
-    };
+    if (account && !publicKey) {
+      // TODO
+      console.log("generateKeyPair", "no key");
+    }
   }
 
   function createKeyPair(): any {
@@ -120,10 +125,6 @@ export default function useGenerateKey() {
 
     return result;
   }
-
-  useEffect(() => {
-    generateKeyPair();
-  }, []);
 
   return {
     generateKeyPair,

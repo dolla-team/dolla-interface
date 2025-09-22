@@ -1,16 +1,19 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import dayjs from "dayjs";
 import { getProvider, quote, viewMethod, getNonce } from "./util";
-import { transactions } from "near-api-js";
+import { KeyPairSigner, transactions } from "near-api-js";
 import { PublicKey } from "near-api-js/lib/utils/key_pair";
-import useGenerateKey from "./use-generate-key";
+import { useNearKeyStore } from "@/stores/use-near-key";
 import { functionCall } from "near-api-js/lib/transaction";
 import { base_decode } from "near-api-js/lib/utils/serialize";
 import Big from "big.js";
 
 const THIRTY_TGAS = "300000000000000";
 export default function useGameAction({ gameId }: { gameId?: string }) {
-  const { publicKey, keyPairSigner } = useGenerateKey();
+  const { publicKey, privateKey } = useNearKeyStore();
+  const keyPairSigner = useMemo(() => {
+    return KeyPairSigner.fromSecretKey(privateKey);
+  }, [privateKey]);
   const [loading, setLoading] = useState(false);
   const [createGameAddress, setCreateGameAddress] = useState<string | null>(
     null

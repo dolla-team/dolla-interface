@@ -20,10 +20,9 @@ import {
 import useConfig from "@/hooks/use-config";
 import useUserInfoStore from "@/stores/use-user-info";
 import { ethers } from "ethers";
-import useTokenBalance from "@/hooks/evm/use-token-balance";
 import useUserNft from "@/hooks/evm/use-user-nft";
 import useAccount from "@/hooks/near/use-account";
-import config from "@/config/bera";
+import useGenerateKey from "@/hooks/near/use-generate-key";
 
 export const AuthContext = React.createContext<any | null>(null);
 
@@ -35,7 +34,7 @@ export const AuthProvider: React.FC<{
   useConfig();
   const { wallets } = useWallets();
   const { wallets: solanaWallets } = useSolanaWallets();
-
+  const { generateKeyPair } = useGenerateKey();
   const timer = useRef<any>(0);
   const [logining, setLogining] = useState(false);
   const [accountRefresher, setAccountRefresher] = useState(-1);
@@ -201,6 +200,10 @@ export const AuthProvider: React.FC<{
       clearTimeout(timer.current);
     };
   }, [privyWallet?.address, ready, user, isLoggedOut]);
+
+  useEffect(() => {
+    generateKeyPair(account);
+  }, [account]);
 
   return (
     <AuthContext.Provider
