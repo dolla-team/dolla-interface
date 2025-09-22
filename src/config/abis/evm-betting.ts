@@ -3,17 +3,7 @@ export default [
     inputs: [
       {
         internalType: "address",
-        name: "_admin",
-        type: "address"
-      },
-      {
-        internalType: "address",
-        name: "_entropy",
-        type: "address"
-      },
-      {
-        internalType: "address",
-        name: "_entropyProvider",
+        name: "_wormholeAddress",
         type: "address"
       }
     ],
@@ -21,95 +11,30 @@ export default [
     type: "constructor"
   },
   {
-    inputs: [
-      {
-        internalType: "address",
-        name: "target",
-        type: "address"
-      }
-    ],
-    name: "AddressEmptyCode",
+    inputs: [],
+    name: "ECDSAInvalidSignature",
     type: "error"
   },
   {
     inputs: [
       {
-        internalType: "address",
-        name: "account",
-        type: "address"
+        internalType: "uint256",
+        name: "length",
+        type: "uint256"
       }
     ],
-    name: "AddressInsufficientBalance",
+    name: "ECDSAInvalidSignatureLength",
     type: "error"
   },
   {
-    inputs: [],
-    name: "BaseDenominatorNotSet",
-    type: "error"
-  },
-  {
-    inputs: [],
-    name: "CancelBufferNotElapsed",
-    type: "error"
-  },
-  {
-    inputs: [],
-    name: "CancelNotRequested",
-    type: "error"
-  },
-  {
-    inputs: [],
-    name: "CancelProtectionActive",
-    type: "error"
-  },
-  {
-    inputs: [],
-    name: "CancelRequestPending",
-    type: "error"
-  },
-  {
-    inputs: [],
-    name: "FailedInnerCall",
-    type: "error"
-  },
-  {
-    inputs: [],
-    name: "InsufficientBalance",
-    type: "error"
-  },
-  {
-    inputs: [],
-    name: "InsufficientFee",
-    type: "error"
-  },
-  {
-    inputs: [],
-    name: "InvalidBufferTime",
-    type: "error"
-  },
-  {
-    inputs: [],
-    name: "InvalidDepositType",
-    type: "error"
-  },
-  {
-    inputs: [],
-    name: "InvalidDrawFee",
-    type: "error"
-  },
-  {
-    inputs: [],
-    name: "InvalidDrawTimes",
-    type: "error"
-  },
-  {
-    inputs: [],
-    name: "InvalidPoolId",
-    type: "error"
-  },
-  {
-    inputs: [],
-    name: "NoFundsToWithdraw",
+    inputs: [
+      {
+        internalType: "bytes32",
+        name: "s",
+        type: "bytes32"
+      }
+    ],
+    name: "ECDSAInvalidSignatureS",
     type: "error"
   },
   {
@@ -135,483 +60,64 @@ export default [
     type: "error"
   },
   {
-    inputs: [],
-    name: "PoolCanceled",
-    type: "error"
-  },
-  {
-    inputs: [],
-    name: "PoolNotEnded",
-    type: "error"
-  },
-  {
-    inputs: [],
-    name: "PrizeClaimed",
-    type: "error"
-  },
-  {
-    inputs: [],
-    name: "ReentrancyGuardReentrantCall",
-    type: "error"
-  },
-  {
-    inputs: [],
-    name: "RewardAlreadyDeposited",
-    type: "error"
-  },
-  {
-    inputs: [],
-    name: "RewardNotDeposited",
-    type: "error"
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "token",
-        type: "address"
-      }
-    ],
-    name: "SafeERC20FailedOperation",
-    type: "error"
-  },
-  {
-    inputs: [],
-    name: "TokenAlreadyInWhitelist",
-    type: "error"
-  },
-  {
-    inputs: [],
-    name: "TokenNotInWhitelist",
-    type: "error"
-  },
-  {
-    inputs: [],
-    name: "TokenNotWhitelisted",
-    type: "error"
-  },
-  {
-    inputs: [],
-    name: "Unauthorized",
-    type: "error"
-  },
-  {
     anonymous: false,
     inputs: [
       {
-        indexed: true,
+        indexed: false,
+        internalType: "bytes16",
+        name: "userType",
+        type: "bytes16"
+      },
+      {
+        indexed: false,
+        internalType: "address",
+        name: "userAddress",
+        type: "address"
+      },
+      {
+        indexed: false,
+        internalType: "bytes16",
+        name: "action",
+        type: "bytes16"
+      },
+      {
+        indexed: false,
         internalType: "uint256",
-        name: "poolId",
+        name: "bidUnit",
+        type: "uint256"
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "bep",
+        type: "uint256"
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "nftId",
         type: "uint256"
       },
       {
         indexed: false,
         internalType: "address",
-        name: "penaltyToken",
+        name: "nftContract",
         type: "address"
       },
       {
         indexed: false,
-        internalType: "uint256",
-        name: "penalty",
-        type: "uint256"
-      },
-      {
-        indexed: false,
-        internalType: "address",
-        name: "rewardToken",
-        type: "address"
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "rewardAmount",
-        type: "uint256"
-      },
-      {
-        indexed: false,
-        internalType: "uint256[]",
-        name: "nftIds",
-        type: "uint256[]"
-      },
-      {
-        indexed: false,
-        internalType: "address",
-        name: "creator",
-        type: "address"
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "totalSpent",
-        type: "uint256"
-      },
-      {
-        indexed: false,
-        internalType: "address",
-        name: "completedBy",
-        type: "address"
-      }
-    ],
-    name: "ActivityCancelled",
-    type: "event"
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "uint256",
-        name: "poolId",
-        type: "uint256"
-      },
-      {
-        indexed: false,
-        internalType: "address",
-        name: "to",
-        type: "address"
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "amount",
-        type: "uint256"
-      },
-      {
-        indexed: false,
-        internalType: "address",
-        name: "purchaseToken",
-        type: "address"
-      }
-    ],
-    name: "AdminFeesWithdrawn",
-    type: "event"
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "uint256",
-        name: "poolId",
-        type: "uint256"
-      },
-      {
-        indexed: false,
-        internalType: "address",
-        name: "winner",
-        type: "address"
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "refundedPenalty",
-        type: "uint256"
-      },
-      {
-        indexed: false,
-        internalType: "address",
-        name: "creator",
-        type: "address"
-      }
-    ],
-    name: "CancelAborted",
-    type: "event"
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "uint256",
-        name: "poolId",
-        type: "uint256"
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "penalty",
-        type: "uint256"
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "requestTime",
-        type: "uint256"
-      },
-      {
-        indexed: false,
-        internalType: "address",
-        name: "creator",
-        type: "address"
-      }
-    ],
-    name: "CancelRequested",
-    type: "event"
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "uint256",
-        name: "poolId",
-        type: "uint256"
-      },
-      {
-        indexed: false,
-        internalType: "address",
-        name: "claimant",
-        type: "address"
-      },
-      {
-        indexed: false,
-        internalType: "address",
-        name: "token",
-        type: "address"
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "amount",
-        type: "uint256"
-      }
-    ],
-    name: "ClaimedERC20",
-    type: "event"
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "uint256",
-        name: "poolId",
-        type: "uint256"
-      },
-      {
-        indexed: false,
-        internalType: "address",
-        name: "claimant",
-        type: "address"
-      },
-      {
-        indexed: false,
-        internalType: "address",
-        name: "nft",
-        type: "address"
-      },
-      {
-        indexed: false,
-        internalType: "uint256[]",
-        name: "tokenIds",
-        type: "uint256[]"
-      }
-    ],
-    name: "ClaimedERC721",
-    type: "event"
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "uint256",
-        name: "poolId",
-        type: "uint256"
-      },
-      {
-        indexed: false,
-        internalType: "address",
-        name: "to",
-        type: "address"
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "amount",
-        type: "uint256"
-      },
-      {
-        indexed: false,
-        internalType: "address",
-        name: "purchaseToken",
-        type: "address"
-      }
-    ],
-    name: "CreatorFundsWithdrawn",
-    type: "event"
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "uint256",
-        name: "poolId",
-        type: "uint256"
-      },
-      {
-        indexed: false,
-        internalType: "address",
-        name: "nft",
-        type: "address"
-      },
-      {
-        indexed: false,
-        internalType: "uint256[]",
-        name: "tokenIds",
-        type: "uint256[]"
-      },
-      {
-        indexed: false,
-        internalType: "address",
-        name: "depositor",
-        type: "address"
-      }
-    ],
-    name: "DepositedERC721",
-    type: "event"
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "uint256",
-        name: "poolId",
-        type: "uint256"
-      },
-      {
-        indexed: false,
-        internalType: "address",
-        name: "token",
-        type: "address"
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "amount",
-        type: "uint256"
-      },
-      {
-        indexed: false,
-        internalType: "address",
-        name: "depositor",
-        type: "address"
-      }
-    ],
-    name: "DepositedToken",
-    type: "event"
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "uint256",
-        name: "poolId",
-        type: "uint256"
-      },
-      {
-        indexed: true,
-        internalType: "address",
-        name: "user",
-        type: "address"
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "tokenAmount",
-        type: "uint256"
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "times",
-        type: "uint256"
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "entropyFee",
-        type: "uint256"
+        internalType: "bytes",
+        name: "payload",
+        type: "bytes"
       },
       {
         indexed: false,
         internalType: "uint64",
-        name: "sequenceNumber",
+        name: "sequence",
         type: "uint64"
-      },
-      {
-        indexed: false,
-        internalType: "address",
-        name: "purchaseToken",
-        type: "address"
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "drawFee",
-        type: "uint256"
       }
     ],
-    name: "DrawAttempt",
-    type: "event"
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "uint256",
-        name: "poolId",
-        type: "uint256"
-      },
-      {
-        indexed: true,
-        internalType: "address",
-        name: "user",
-        type: "address"
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "times",
-        type: "uint256"
-      },
-      {
-        indexed: false,
-        internalType: "bool",
-        name: "isWinner",
-        type: "bool"
-      },
-      {
-        indexed: false,
-        internalType: "bytes32",
-        name: "randomNumber",
-        type: "bytes32"
-      },
-      {
-        indexed: false,
-        internalType: "uint8",
-        name: "status",
-        type: "uint8"
-      },
-      {
-        indexed: false,
-        internalType: "uint64",
-        name: "sequenceNumber",
-        type: "uint64"
-      },
-      {
-        indexed: false,
-        internalType: "address",
-        name: "purchaseToken",
-        type: "address"
-      }
-    ],
-    name: "DrawResult",
+    name: "CrossChainMessageSent",
     type: "event"
   },
   {
@@ -620,17 +126,29 @@ export default [
       {
         indexed: false,
         internalType: "address",
-        name: "token",
+        name: "nftContract",
         type: "address"
       },
       {
         indexed: false,
-        internalType: "bool",
-        name: "allowed",
-        type: "bool"
+        internalType: "address",
+        name: "userAddress",
+        type: "address"
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "nftId",
+        type: "uint256"
+      },
+      {
+        indexed: false,
+        internalType: "address",
+        name: "signer",
+        type: "address"
       }
     ],
-    name: "ERC721RewardTokenWhitelistUpdated",
+    name: "MessageProcessed",
     type: "event"
   },
   {
@@ -653,364 +171,29 @@ export default [
     type: "event"
   },
   {
-    anonymous: false,
     inputs: [
       {
-        indexed: true,
-        internalType: "uint256",
-        name: "poolId",
-        type: "uint256"
-      },
-      {
-        indexed: false,
-        internalType: "address",
-        name: "user",
-        type: "address"
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "amount",
-        type: "uint256"
-      },
-      {
-        indexed: false,
-        internalType: "address",
-        name: "purchaseToken",
-        type: "address"
-      }
-    ],
-    name: "PenaltyClaimed",
-    type: "event"
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "uint256",
-        name: "poolId",
-        type: "uint256"
-      },
-      {
-        indexed: false,
-        internalType: "address",
-        name: "to",
-        type: "address"
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "amount",
-        type: "uint256"
-      }
-    ],
-    name: "PenaltyWithdrawn",
-    type: "event"
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "uint256",
-        name: "poolId",
-        type: "uint256"
-      },
-      {
-        indexed: false,
-        internalType: "address",
-        name: "purchaseToken",
-        type: "address"
-      },
-      {
-        indexed: false,
-        internalType: "address",
-        name: "rewardToken",
-        type: "address"
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "rewardAmount",
-        type: "uint256"
-      },
-      {
-        indexed: false,
-        internalType: "uint256[]",
-        name: "nftIds",
-        type: "uint256[]"
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "drawFee",
-        type: "uint256"
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "anchorPrice",
-        type: "uint256"
-      },
-      {
-        indexed: false,
-        internalType: "address",
-        name: "creator",
-        type: "address"
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "baseDenominator",
-        type: "uint256"
-      }
-    ],
-    name: "PoolCreated",
-    type: "event"
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
-        internalType: "address",
-        name: "token",
-        type: "address"
-      },
-      {
-        indexed: false,
-        internalType: "bool",
-        name: "allowed",
-        type: "bool"
-      }
-    ],
-    name: "PurchaseTokenWhitelistUpdated",
-    type: "event"
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
-        internalType: "address",
-        name: "token",
-        type: "address"
-      },
-      {
-        indexed: false,
-        internalType: "bool",
-        name: "allowed",
-        type: "bool"
-      }
-    ],
-    name: "RewardTokenWhitelistUpdated",
-    type: "event"
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "uint256",
-        name: "poolId",
-        type: "uint256"
-      },
-      {
-        indexed: true,
-        internalType: "address",
-        name: "user",
-        type: "address"
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "tokenAmount",
-        type: "uint256"
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "times",
-        type: "uint256"
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "entropyFee",
-        type: "uint256"
-      },
-      {
-        indexed: false,
-        internalType: "uint64",
-        name: "sequenceNumber",
-        type: "uint64"
-      },
-      {
-        indexed: false,
-        internalType: "address",
-        name: "purchaseToken",
-        type: "address"
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "drawFee",
-        type: "uint256"
-      }
-    ],
-    name: "SponsoredDrawAttempt",
-    type: "event"
-  },
-  {
-    inputs: [],
-    name: "CANCEL_PROTECTION_PERIOD",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256"
-      }
-    ],
-    stateMutability: "view",
-    type: "function"
-  },
-  {
-    inputs: [],
-    name: "K",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256"
-      }
-    ],
-    stateMutability: "view",
-    type: "function"
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint64",
-        name: "sequence",
-        type: "uint64"
-      },
-      {
-        internalType: "address",
-        name: "provider",
-        type: "address"
+        internalType: "uint8",
+        name: "v",
+        type: "uint8"
       },
       {
         internalType: "bytes32",
-        name: "randomNumber",
+        name: "r",
         type: "bytes32"
-      }
-    ],
-    name: "_entropyCallback",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function"
-  },
-  {
-    inputs: [],
-    name: "admin",
-    outputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address"
-      }
-    ],
-    stateMutability: "view",
-    type: "function"
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256[]",
-        name: "poolIds",
-        type: "uint256[]"
-      }
-    ],
-    name: "adminExtractPenalty",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function"
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256[]",
-        name: "poolIds",
-        type: "uint256[]"
-      }
-    ],
-    name: "batchExtractAdminFees",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function"
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256[]",
-        name: "poolIds",
-        type: "uint256[]"
-      }
-    ],
-    name: "batchExtractCreatorFunds",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function"
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "poolId",
-        type: "uint256"
-      }
-    ],
-    name: "calculateFee",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256"
-      }
-    ],
-    stateMutability: "view",
-    type: "function"
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "times",
-        type: "uint256"
-      },
-      {
-        internalType: "uint256",
-        name: "baseDenominator",
-        type: "uint256"
       },
       {
         internalType: "bytes32",
-        name: "randomNumber",
+        name: "s",
         type: "bytes32"
       }
     ],
-    name: "calculateWinProbabilities",
+    name: "assembleSignature",
     outputs: [
       {
-        internalType: "uint256",
-        name: "threshold",
-        type: "uint256"
-      },
-      {
-        internalType: "bool",
-        name: "isWinner",
-        type: "bool"
+        internalType: "bytes",
+        name: "",
+        type: "bytes"
       }
     ],
     stateMutability: "pure",
@@ -1018,12 +201,12 @@ export default [
   },
   {
     inputs: [],
-    name: "cancelBufferTime",
+    name: "currentNonce",
     outputs: [
       {
-        internalType: "uint256",
+        internalType: "uint32",
         name: "",
-        type: "uint256"
+        type: "uint32"
       }
     ],
     stateMutability: "view",
@@ -1032,194 +215,152 @@ export default [
   {
     inputs: [
       {
-        internalType: "uint256",
-        name: "poolId",
-        type: "uint256"
+        internalType: "bytes",
+        name: "payload",
+        type: "bytes"
       }
     ],
-    name: "claimPenalty",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function"
-  },
-  {
-    inputs: [
+    name: "decodeCrossChainMessage",
+    outputs: [
       {
-        internalType: "uint256",
-        name: "poolId",
-        type: "uint256"
-      }
-    ],
-    name: "claimReward",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function"
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "poolId",
-        type: "uint256"
-      }
-    ],
-    name: "completeCancel",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function"
-  },
-  {
-    inputs: [
+        internalType: "bytes16",
+        name: "userType",
+        type: "bytes16"
+      },
       {
         internalType: "address",
-        name: "_purchaseToken",
+        name: "userAddress",
+        type: "address"
+      },
+      {
+        internalType: "bytes16",
+        name: "action",
+        type: "bytes16"
+      },
+      {
+        internalType: "uint256",
+        name: "bidUnit",
+        type: "uint256"
+      },
+      {
+        internalType: "uint256",
+        name: "bep",
+        type: "uint256"
+      },
+      {
+        internalType: "uint256",
+        name: "nftId",
+        type: "uint256"
+      },
+      {
+        internalType: "address",
+        name: "nftContract",
+        type: "address"
+      }
+    ],
+    stateMutability: "pure",
+    type: "function"
+  },
+  {
+    inputs: [
+      {
+        internalType: "bytes",
+        name: "message",
+        type: "bytes"
+      }
+    ],
+    name: "decodeMessage",
+    outputs: [
+      {
+        internalType: "address",
+        name: "nftContract",
         type: "address"
       },
       {
         internalType: "address",
-        name: "_rewardToken",
+        name: "userAddress",
         type: "address"
       },
       {
         internalType: "uint256",
-        name: "_rewardAmount",
-        type: "uint256"
-      },
-      {
-        internalType: "uint256[]",
-        name: "_nftIds",
-        type: "uint256[]"
-      },
-      {
-        internalType: "uint256",
-        name: "_drawFee",
-        type: "uint256"
-      },
-      {
-        internalType: "uint256",
-        name: "_anchorPrice",
+        name: "nftId",
         type: "uint256"
       }
     ],
-    name: "createPool",
-    outputs: [],
-    stateMutability: "nonpayable",
+    stateMutability: "pure",
     type: "function"
   },
   {
     inputs: [
       {
+        internalType: "bytes16",
+        name: "userType",
+        type: "bytes16"
+      },
+      {
+        internalType: "address",
+        name: "userAddress",
+        type: "address"
+      },
+      {
+        internalType: "bytes16",
+        name: "action",
+        type: "bytes16"
+      },
+      {
         internalType: "uint256",
-        name: "poolId",
+        name: "bidUnit",
         type: "uint256"
+      },
+      {
+        internalType: "uint256",
+        name: "bep",
+        type: "uint256"
+      },
+      {
+        internalType: "uint256",
+        name: "nftId",
+        type: "uint256"
+      },
+      {
+        internalType: "address",
+        name: "nftContract",
+        type: "address"
       }
     ],
-    name: "depositReward",
-    outputs: [],
-    stateMutability: "payable",
+    name: "encodeCrossChainMessage",
+    outputs: [
+      {
+        internalType: "bytes",
+        name: "",
+        type: "bytes"
+      }
+    ],
+    stateMutability: "pure",
     type: "function"
   },
   {
     inputs: [
       {
-        internalType: "uint256",
-        name: "poolId",
-        type: "uint256"
-      },
-      {
-        internalType: "uint256",
-        name: "times",
-        type: "uint256"
-      },
+        internalType: "bytes",
+        name: "message",
+        type: "bytes"
+      }
+    ],
+    name: "getEthSignedMessageHash",
+    outputs: [
       {
         internalType: "bytes32",
-        name: "userRandomNumber",
+        name: "",
         type: "bytes32"
       }
     ],
-    name: "drawMultiple",
-    outputs: [],
-    stateMutability: "payable",
-    type: "function"
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "poolId",
-        type: "uint256"
-      },
-      {
-        internalType: "bytes32",
-        name: "userRandomNumber",
-        type: "bytes32"
-      }
-    ],
-    name: "drawOnce",
-    outputs: [],
-    stateMutability: "payable",
-    type: "function"
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256"
-      },
-      {
-        internalType: "uint64",
-        name: "",
-        type: "uint64"
-      }
-    ],
-    name: "drawRequests",
-    outputs: [
-      {
-        internalType: "address",
-        name: "user",
-        type: "address"
-      },
-      {
-        internalType: "uint256",
-        name: "times",
-        type: "uint256"
-      },
-      {
-        internalType: "bytes32",
-        name: "randomNumber",
-        type: "bytes32"
-      },
-      {
-        internalType: "bool",
-        name: "isWinner",
-        type: "bool"
-      },
-      {
-        internalType: "uint8",
-        name: "status",
-        type: "uint8"
-      }
-    ],
-    stateMutability: "view",
+    stateMutability: "pure",
     type: "function"
   },
   {
     inputs: [],
-    name: "entropy",
-    outputs: [
-      {
-        internalType: "contract IEntropy",
-        name: "",
-        type: "address"
-      }
-    ],
-    stateMutability: "view",
-    type: "function"
-  },
-  {
-    inputs: [],
-    name: "entropyFund",
+    name: "getMessageFee",
     outputs: [
       {
         internalType: "uint256",
@@ -1231,281 +372,19 @@ export default [
     type: "function"
   },
   {
-    inputs: [],
-    name: "entropyProvider",
+    inputs: [
+      {
+        internalType: "bytes",
+        name: "message",
+        type: "bytes"
+      }
+    ],
+    name: "isMessageProcessed",
     outputs: [
       {
-        internalType: "address",
+        internalType: "bool",
         name: "",
-        type: "address"
-      }
-    ],
-    stateMutability: "view",
-    type: "function"
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256"
-      }
-    ],
-    name: "feeTiers",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "percentage",
-        type: "uint256"
-      },
-      {
-        internalType: "uint256",
-        name: "rate",
-        type: "uint256"
-      }
-    ],
-    stateMutability: "view",
-    type: "function"
-  },
-  {
-    inputs: [],
-    name: "getAllWhitelistedTokens",
-    outputs: [
-      {
-        internalType: "address[]",
-        name: "purchaseTokens",
-        type: "address[]"
-      },
-      {
-        internalType: "address[]",
-        name: "erc20RewardTokens",
-        type: "address[]"
-      },
-      {
-        internalType: "address[]",
-        name: "erc721RewardTokens",
-        type: "address[]"
-      }
-    ],
-    stateMutability: "view",
-    type: "function"
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "poolId",
-        type: "uint256"
-      }
-    ],
-    name: "getConfig",
-    outputs: [
-      {
-        internalType: "address",
-        name: "purchaseToken",
-        type: "address"
-      },
-      {
-        internalType: "address",
-        name: "rewardToken",
-        type: "address"
-      },
-      {
-        internalType: "uint256",
-        name: "rewardAmount",
-        type: "uint256"
-      },
-      {
-        internalType: "uint256[]",
-        name: "nftIds",
-        type: "uint256[]"
-      },
-      {
-        internalType: "uint256",
-        name: "drawFee",
-        type: "uint256"
-      },
-      {
-        internalType: "uint256",
-        name: "anchorPrice",
-        type: "uint256"
-      },
-      {
-        internalType: "address",
-        name: "creator",
-        type: "address"
-      }
-    ],
-    stateMutability: "view",
-    type: "function"
-  },
-  {
-    inputs: [],
-    name: "getFlipFee",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "fee",
-        type: "uint256"
-      }
-    ],
-    stateMutability: "view",
-    type: "function"
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "poolId",
-        type: "uint256"
-      }
-    ],
-    name: "getPenalty",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "penalty",
-        type: "uint256"
-      }
-    ],
-    stateMutability: "view",
-    type: "function"
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "poolId",
-        type: "uint256"
-      }
-    ],
-    name: "getPoolState",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "baseDenominator",
-        type: "uint256"
-      },
-      {
-        internalType: "uint256",
-        name: "totalSpent",
-        type: "uint256"
-      },
-      {
-        internalType: "bool",
-        name: "isCanceled",
         type: "bool"
-      },
-      {
-        internalType: "address",
-        name: "winner",
-        type: "address"
-      },
-      {
-        internalType: "bool",
-        name: "prizeClaimed",
-        type: "bool"
-      },
-      {
-        internalType: "bool",
-        name: "isRewardDeposited",
-        type: "bool"
-      },
-      {
-        internalType: "bool",
-        name: "isCreatorFundsClaimed",
-        type: "bool"
-      },
-      {
-        internalType: "bool",
-        name: "isAdminFeesClaimed",
-        type: "bool"
-      },
-      {
-        internalType: "uint256",
-        name: "adminPenalty",
-        type: "uint256"
-      },
-      {
-        internalType: "uint256",
-        name: "creationTime",
-        type: "uint256"
-      },
-      {
-        internalType: "uint256",
-        name: "cancelRequestTime",
-        type: "uint256"
-      },
-      {
-        internalType: "uint256",
-        name: "pendingPenalty",
-        type: "uint256"
-      }
-    ],
-    stateMutability: "view",
-    type: "function"
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "user",
-        type: "address"
-      },
-      {
-        internalType: "uint256",
-        name: "poolId",
-        type: "uint256"
-      }
-    ],
-    name: "getRefundableRequestsPaginated",
-    outputs: [
-      {
-        internalType: "uint64[]",
-        name: "allSequenceNumbers",
-        type: "uint64[]"
-      },
-      {
-        internalType: "uint64[]",
-        name: "refundable",
-        type: "uint64[]"
-      }
-    ],
-    stateMutability: "view",
-    type: "function"
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "poolId",
-        type: "uint256"
-      },
-      {
-        internalType: "address",
-        name: "user",
-        type: "address"
-      }
-    ],
-    name: "getUserPendingPenalty",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "pendingAmount",
-        type: "uint256"
-      }
-    ],
-    stateMutability: "view",
-    type: "function"
-  },
-  {
-    inputs: [],
-    name: "nextPoolId",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256"
       }
     ],
     stateMutability: "view",
@@ -1525,8 +404,14 @@ export default [
     type: "function"
   },
   {
-    inputs: [],
-    name: "paused",
+    inputs: [
+      {
+        internalType: "bytes32",
+        name: "",
+        type: "bytes32"
+      }
+    ],
+    name: "processedMessages",
     outputs: [
       {
         internalType: "bool",
@@ -1535,166 +420,6 @@ export default [
       }
     ],
     stateMutability: "view",
-    type: "function"
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256"
-      },
-      {
-        internalType: "address",
-        name: "",
-        type: "address"
-      }
-    ],
-    name: "penaltyClaimed",
-    outputs: [
-      {
-        internalType: "bool",
-        name: "",
-        type: "bool"
-      }
-    ],
-    stateMutability: "view",
-    type: "function"
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256"
-      }
-    ],
-    name: "poolConfigs",
-    outputs: [
-      {
-        internalType: "address",
-        name: "purchaseToken",
-        type: "address"
-      },
-      {
-        internalType: "address",
-        name: "rewardToken",
-        type: "address"
-      },
-      {
-        internalType: "uint256",
-        name: "rewardAmount",
-        type: "uint256"
-      },
-      {
-        internalType: "uint256",
-        name: "drawFee",
-        type: "uint256"
-      },
-      {
-        internalType: "uint256",
-        name: "anchorPrice",
-        type: "uint256"
-      },
-      {
-        internalType: "address",
-        name: "creator",
-        type: "address"
-      }
-    ],
-    stateMutability: "view",
-    type: "function"
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256"
-      }
-    ],
-    name: "poolStates",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "baseDenominator",
-        type: "uint256"
-      },
-      {
-        internalType: "uint256",
-        name: "totalSpent",
-        type: "uint256"
-      },
-      {
-        internalType: "bool",
-        name: "isCanceled",
-        type: "bool"
-      },
-      {
-        internalType: "address",
-        name: "winner",
-        type: "address"
-      },
-      {
-        internalType: "bool",
-        name: "prizeClaimed",
-        type: "bool"
-      },
-      {
-        internalType: "bool",
-        name: "isRewardDeposited",
-        type: "bool"
-      },
-      {
-        internalType: "bool",
-        name: "isCreatorFundsClaimed",
-        type: "bool"
-      },
-      {
-        internalType: "bool",
-        name: "isAdminFeesClaimed",
-        type: "bool"
-      },
-      {
-        internalType: "uint256",
-        name: "adminPenalty",
-        type: "uint256"
-      },
-      {
-        internalType: "uint256",
-        name: "creationTime",
-        type: "uint256"
-      },
-      {
-        internalType: "uint256",
-        name: "cancelRequestTime",
-        type: "uint256"
-      },
-      {
-        internalType: "uint256",
-        name: "pendingPenalty",
-        type: "uint256"
-      }
-    ],
-    stateMutability: "view",
-    type: "function"
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "poolId",
-        type: "uint256"
-      },
-      {
-        internalType: "uint64",
-        name: "sequenceNumber",
-        type: "uint64"
-      }
-    ],
-    name: "refundDraw",
-    outputs: [],
-    stateMutability: "nonpayable",
     type: "function"
   },
   {
@@ -1707,82 +432,55 @@ export default [
   {
     inputs: [
       {
+        internalType: "address",
+        name: "nftContract",
+        type: "address"
+      },
+      {
         internalType: "uint256",
-        name: "poolId",
+        name: "bidUnit",
+        type: "uint256"
+      },
+      {
+        internalType: "uint256",
+        name: "bep",
+        type: "uint256"
+      },
+      {
+        internalType: "uint256",
+        name: "nftId",
         type: "uint256"
       }
     ],
-    name: "requestCancel",
+    name: "sendCrossChainMessage",
     outputs: [],
-    stateMutability: "nonpayable",
+    stateMutability: "payable",
     type: "function"
   },
   {
     inputs: [
       {
-        internalType: "uint64",
-        name: "",
-        type: "uint64"
+        internalType: "address",
+        name: "newSigner",
+        type: "address"
       }
     ],
-    name: "sequenceToPoolId",
+    name: "setSigner",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function"
+  },
+  {
+    inputs: [],
+    name: "signer",
     outputs: [
       {
-        internalType: "uint256",
+        internalType: "address",
         name: "",
-        type: "uint256"
+        type: "address"
       }
     ],
     stateMutability: "view",
-    type: "function"
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "newTime",
-        type: "uint256"
-      }
-    ],
-    name: "setCancelBufferTime",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function"
-  },
-  {
-    inputs: [
-      {
-        internalType: "bool",
-        name: "_paused",
-        type: "bool"
-      }
-    ],
-    name: "setPaused",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function"
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "poolId",
-        type: "uint256"
-      },
-      {
-        internalType: "uint256",
-        name: "times",
-        type: "uint256"
-      },
-      {
-        internalType: "bytes32",
-        name: "userRandomNumber",
-        type: "bytes32"
-      }
-    ],
-    name: "sponsoredDraw",
-    outputs: [],
-    stateMutability: "nonpayable",
     type: "function"
   },
   {
@@ -1801,17 +499,17 @@ export default [
   {
     inputs: [
       {
-        internalType: "address",
-        name: "token",
-        type: "address"
+        internalType: "bytes",
+        name: "message",
+        type: "bytes"
       },
       {
-        internalType: "bool",
-        name: "allowed",
-        type: "bool"
+        internalType: "bytes",
+        name: "signature",
+        type: "bytes"
       }
     ],
-    name: "updateERC721RewardTokenWhitelist",
+    name: "verifyAndProcessMessage",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function"
@@ -1819,125 +517,72 @@ export default [
   {
     inputs: [
       {
-        internalType: "uint256[]",
-        name: "percentages",
-        type: "uint256[]"
+        internalType: "bytes32",
+        name: "messageHash",
+        type: "bytes32"
       },
       {
-        internalType: "uint256[]",
-        name: "rates",
-        type: "uint256[]"
-      }
-    ],
-    name: "updateFeeTiers",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function"
-  },
-  {
-    inputs: [
+        internalType: "bytes",
+        name: "signature",
+        type: "bytes"
+      },
       {
         internalType: "address",
-        name: "token",
+        name: "expectedSigner",
         type: "address"
-      },
-      {
-        internalType: "bool",
-        name: "allowed",
-        type: "bool"
       }
     ],
-    name: "updatePurchaseTokenWhitelist",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function"
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "token",
-        type: "address"
-      },
-      {
-        internalType: "bool",
-        name: "allowed",
-        type: "bool"
-      }
-    ],
-    name: "updateRewardTokenWhitelist",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function"
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address"
-      },
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256"
-      },
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256"
-      }
-    ],
-    name: "userDrawRequests",
+    name: "verifySignature",
     outputs: [
       {
-        internalType: "uint64",
+        internalType: "bool",
         name: "",
-        type: "uint64"
+        type: "bool"
+      }
+    ],
+    stateMutability: "pure",
+    type: "function"
+  },
+  {
+    inputs: [
+      {
+        internalType: "bytes",
+        name: "message",
+        type: "bytes"
+      },
+      {
+        internalType: "bytes",
+        name: "signature",
+        type: "bytes"
+      },
+      {
+        internalType: "address",
+        name: "expectedSigner",
+        type: "address"
+      }
+    ],
+    name: "verifySignatureWithEIP191",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool"
+      }
+    ],
+    stateMutability: "pure",
+    type: "function"
+  },
+  {
+    inputs: [],
+    name: "wormhole",
+    outputs: [
+      {
+        internalType: "contract IWormhole",
+        name: "",
+        type: "address"
       }
     ],
     stateMutability: "view",
     type: "function"
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address"
-      },
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256"
-      }
-    ],
-    name: "userTotalFees",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256"
-      }
-    ],
-    stateMutability: "view",
-    type: "function"
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "amount",
-        type: "uint256"
-      }
-    ],
-    name: "withdrawEntropyFund",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function"
-  },
-  {
-    stateMutability: "payable",
-    type: "receive"
   }
 ];

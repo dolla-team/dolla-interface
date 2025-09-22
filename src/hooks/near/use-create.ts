@@ -8,6 +8,7 @@ import { useNearKeyStore } from "@/stores/use-near-key";
 import Big from "big.js";
 import useToast from "@/hooks/use-toast";
 import { BASE_TOKEN } from "@/config/btc";
+import { BET_UNIT } from "@/config";
 const THIRTY_TGAS = "300000000000000";
 
 export default function useCreate(onSuccess: () => void) {
@@ -48,8 +49,8 @@ export default function useCreate(onSuccess: () => void) {
         create_args: {
           ByAk: {
             amount: _amount,
-            bid_unit: "10",
-            bep: Big(_amount).mul(price).mul(1.2).toFixed(0),
+            bid_unit: BET_UNIT,
+            bep: Big(_amount).mul(price).toFixed(0),
             prize: { FT: BASE_TOKEN.address }
           }
         }

@@ -77,6 +77,8 @@ export default function useBid(
 
       // Sign the payload using NEAR private key
       const payloadString = JSON.stringify(payload);
+      console.log("payloadString", payloadString);
+
       const signature = signMessage(payloadString + random_seed);
       console.log("signature", signature, payloadString + random_seed);
 
