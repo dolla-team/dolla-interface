@@ -158,7 +158,7 @@ export default function Demo() {
             });
 
             if (result) {
-              saveKeyPair(publicKey, privateKey);
+              // saveKeyPair(publicKey, keyPairSigner, privateKey);
             }
           }}
         >

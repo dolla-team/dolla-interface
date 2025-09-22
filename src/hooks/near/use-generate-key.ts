@@ -8,7 +8,7 @@ import { functionCall } from "near-api-js/lib/transaction";
 import { base_decode } from "near-api-js/lib/utils/serialize";
 
 const THIRTY_TGAS = "300000000000000";
-export default function useGenerateKey(account: any) {
+export default function useGenerateKey(account?: any) {
   const { setPublicKey, setPrivateKey, publicKey, privateKey } =
     useNearKeyStore();
   const { signMessage } = useSignMessage();
