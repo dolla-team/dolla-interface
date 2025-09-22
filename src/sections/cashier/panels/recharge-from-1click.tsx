@@ -8,6 +8,7 @@ import { formatNumber } from "@/utils/format/number";
 import { useMemo, useState } from "react";
 import Loading from "@/components/icons/loading";
 import { chainConfig } from "../utils/chainConfig";
+import Big from "big.js";
 
 export default function RechargeFrom1click({
     userInfo,
@@ -23,8 +24,8 @@ export default function RechargeFrom1click({
     tokenBalance: number | string
 }) {
     const [token, setToken] = useState<any>(null);
-    const [address, setAddress] = useState<any>(null);
-    const [loading, setLoading] = useState(false);
+    const [qoute, setQoute] = useState<any>(null);
+    const [showAddress, setShowAddress] = useState(false)
 
     const rechargeToken = useMemo(() => {
         return {
@@ -32,46 +33,83 @@ export default function RechargeFrom1click({
             chainName: chainConfig[token?.blockchain]?.name,
             chainLogo: chainConfig[token?.blockchain]?.icon,
             symbol: token?.symbol,
-            address: address
+            address: qoute?.depositAddress,
+            icon: token?.icon
         }
-    }, [address, token, config])
+    }, [qoute, token, config])
 
     return <div className="pb-[20px] relative">
         <div
             className="flex items-center gap-[18px] text-[16px] cursor-pointer button"
-            onClick={() => setSelectedOption(null)}
+            onClick={() => {
+                if (showAddress) {
+                    setShowAddress(false)
+                } else {
+                    setSelectedOption(null)
+                }
+            }}
         >
             <BackIcon />
             <div className="text-[#4c4789] text-[12px]">Back</div>
         </div>
-        <div className="py-[20px]">
-            <TokenSelector
-                onTokenSelect={(token) => {
-                    setToken(token)
-                }}
-                onAddressCreated={(amount) => {
-                    setAddress(amount)
-                }}
-                onLoading={setLoading}
-            />
-        </div>
 
         {
+            !showAddress && (
+                <div className="py-[20px]">
+                    <TokenSelector
+                        onTokenSelect={(token) => {
+                            setToken(token)
+                        }}
+                        onQoute={(qoute) => {
+                            setQoute(qoute)
+                        }}
+                        onConfirm={() => {
+                            setShowAddress(true)
+                        }}
+                    // onLoading={setLoading}
+                    />
+                </div>
+            )
+        }
+
+
+        {/* {
             loading && <div className="flex align-center justify-center p-[20px]">
                 <Loading size={20} />
             </div>
-        }
+        } */}
 
         {
-            token && address && !loading && <>
-                <div className="text-[14px] text-[#8A87AA]">
+            showAddress && token && qoute && <>
+                {/* <div className="text-[14px] text-[#8A87AA]">
                     Deposit <span className="text-[##000000]">{token?.symbol}</span> from a
                     centralized exchange (Binance, OKX, etc.) to this one-time address
                     on the <span className="text-[#000000]">{chainConfig[token?.blockchain]?.name}  network</span> to
                     fund your Dolla wallet. This address can only be used one time.
+                </div> */}
+                <div className="pt-[50px]">
+                    <Recharge token={rechargeToken} />
+
+                    <div className="flex justify-between items-center mt-[20px] px-[10px]">
+                        <div className="text-[14px] text-[#8A87AA]">
+                            Minimum Receive
+                        </div>
+                        <div className="text-[14px] text-[#8A87AA]">
+                            { qoute?.minAmountOut ? new Big(qoute?.minAmountOut).div(10 ** token?.decimals).toString() : '-' } { token?.symbol }
+                        </div>
+                    </div>
+
+                    <div className="flex justify-between items-center mt-[20px] px-[10px]">
+                        <div className="text-[14px] text-[#8A87AA]">
+                        Cost time
+                        </div>
+                        <div className="text-[14px] text-[#8A87AA]">
+                            { qoute?.costTime || '~' }
+                        </div>
+                    </div>
                 </div>
-                <Recharge token={rechargeToken} />
-                {selectedOption === "maually" && (
+
+                {/* {selectedOption === "maually" && (
                     <div className="w-full mt-[12px] p-[12px] border border-[#383F47] bg-[#1A1E24] rounded-[10px] flex justify-between items-center">
                         <div className="flex items-center gap-[10px]">
                             <Avatar
@@ -123,8 +161,8 @@ export default function RechargeFrom1click({
                             </div>
                         </div>
                     </div>
-                )}
-                <div className="mt-[20px] flex items-center justify-center gap-[8px]">
+                )} */}
+                {/* <div className="mt-[20px] flex items-center justify-center gap-[8px]">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="27"
@@ -145,7 +183,7 @@ export default function RechargeFrom1click({
                         Make sure to send funds to{" "}
                         <span className="font-bold">{chainConfig[token?.blockchain]?.name}</span>
                     </div>
-                </div>
+                </div> */}
             </>
         }
 

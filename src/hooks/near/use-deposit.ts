@@ -21,7 +21,8 @@ export default function useDeposit() {
     refundType = "ORIGIN_CHAIN",
     recipientType = "DESTINATION_CHAIN",
     referral = "referral",
-    quoteWaitingTimeMs = 3000
+    quoteWaitingTimeMs = 3000,
+    getFullQuote = false
   }: {
     swapType?: string;
     evmAddress: string;
@@ -35,6 +36,7 @@ export default function useDeposit() {
     recipientType?: string;
     referral?: string;
     quoteWaitingTimeMs?: number;
+    getFullQuote?: boolean;
   }) {
     try {
       setLoading(true);
@@ -65,7 +67,11 @@ export default function useDeposit() {
       const data = await quote(body);
 
       if (data) {
+        console.log(data);
         setDepositAddress(data.quote.depositAddress);
+        if (getFullQuote) {
+          return data.quote;
+        }
         return data.quote.depositAddress;
       } else {
         setDepositAddress(null);
