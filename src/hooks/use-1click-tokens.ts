@@ -14,7 +14,6 @@ export default function use1clickTokens() {
         }
         const data = await response.json();
 
-        console.log('data:', data);
         setStoreTokens(data)
 
         setTokens(data);
@@ -22,7 +21,6 @@ export default function use1clickTokens() {
         console.error("get 1click tokens failed:", error);
         setTokens([]);
       }
-      setTokens(tokens);
     };
 
     if (storeTokens.length > 0) {
