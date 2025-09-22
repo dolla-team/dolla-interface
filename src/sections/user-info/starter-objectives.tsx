@@ -8,7 +8,7 @@ export default function StarterObjectives() {
         <div className="text-[10px]">Starter Objectives</div>
         <div>
           <span className="text-[8px] text-white/30">Completed </span>
-          <span className="text-[10px]"> 1/3</span>
+          <span className="text-[10px]"> 0/3</span>
         </div>
       </div>
       <Item type="Follow" />
@@ -40,14 +40,12 @@ const Item = ({ type }: { type: "Follow" | "Deposit" | "Bid" }) => {
         </div> */}
       </div>
 
-      {type !== "Follow" && (
-        <div className="w-full h-[6px] bg-[#F2F2F21A] rounded-[3px] backdrop-blur-[25px] mt-[10px]">
-          <div
-            className="h-full bg-[#00FFBB] rounded-[3px]"
-            style={{ width: `30%` }}
-          />
-        </div>
-      )}
+      <div className="w-full h-[6px] bg-[#F2F2F21A] rounded-[3px] backdrop-blur-[25px] mt-[10px]">
+        <div
+          className="h-full bg-[#00FFBB] rounded-[3px]"
+          style={{ width: `0%` }}
+        />
+      </div>
     </div>
   );
 };
