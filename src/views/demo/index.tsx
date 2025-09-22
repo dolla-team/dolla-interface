@@ -7,6 +7,7 @@ import useGenerateKey from "@/hooks/near/use-generate-key";
 import useClaim from "@/hooks/near/use-claim";
 import useWithdraw from "@/hooks/near/use-withdraw";
 import Button from "@/components/button";
+import useBid from "@/hooks/near/use-bid";
 
 export default function Demo() {
   const { generateDepositAddress, loading, depositAddress } = useDeposit();
@@ -16,17 +17,23 @@ export default function Demo() {
   const { updateAk, publicKey, createKeyPair, saveKeyPair } =
     useGenerateKey(account);
   const { withdraw, loading: withdrawing } = useWithdraw();
+  const { onBid, biding } = useBid(
+    0,
+    () => {
+      console.log("bid success");
+    },
+    () => {
+      console.log("tx success");
+    },
+    () => {
+      console.log("tx fail");
+    }
+  );
 
-  const {
-    createGame,
-    createGameAddress,
-    getAllGames,
-    resumeGame,
-    pauseGame,
-    cancelGame
-  } = useGameAction({
-    gameId: "2"
-  });
+  const { createGameAddress, getAllGames, resumeGame, pauseGame, cancelGame } =
+    useGameAction({
+      gameId: "2"
+    });
 
   const { claim } = useClaim();
 
@@ -55,27 +62,6 @@ export default function Demo() {
       </button>
 
       <div>createGameAddress: {createGameAddress}</div>
-
-      <div>
-        <button
-          className="border border-red-500"
-          onClick={async () => {
-            const result = await createGame({
-              evmAddress: user?.wallet?.address || "",
-              originAsset:
-                "nep141:arb-0xaf88d065e77c8cc2239327c5edb3a432268e5831.omft.near",
-              destinationAsset:
-                "nep141:17208628f84f5d6ad33f0da3bbbeb27ffcb398eac501a31bd6ad2011e36133a1",
-              amount: "100000",
-              refundTo: "0x86cdCd7fA9F3B24D68CbDD9170C3662036BDC2ef",
-              price: 1
-            });
-            console.log("result:", result);
-          }}
-        >
-          Create Game
-        </button>
-      </div>
 
       <div>
         <button
@@ -185,6 +171,16 @@ export default function Demo() {
           }}
         >
           Withdraw
+        </Button>
+
+        <Button
+          className="w-[200px] h-[40px] !bg-black !text-white mt-[20px]"
+          onClick={() => {
+            onBid(1);
+          }}
+          loading={biding}
+        >
+          Bid
         </Button>
       </div>
     </div>

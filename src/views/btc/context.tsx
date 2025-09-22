@@ -7,7 +7,6 @@ import {
   useState
 } from "react";
 import usePoolRecommend from "@/hooks/use-pool-recommend";
-import useBasicInfo from "@/hooks/solana/use-basic";
 import { useParams } from "react-router-dom";
 import usePoolInfo from "@/hooks/use-pool-info";
 import { formatNumber } from "@/utils/format/number";
@@ -22,7 +21,6 @@ export const CannonCoinsProvider = ({
 }) => {
   const [flipStatus, setFlipStatus] = useState(0); // 0: not flipping, 1: bidding, 2: bid success, 3: waiting, 4: bid complete, 5: auto flipping, 6: complete
   const [bids, setBids] = useState(1);
-  const { sbProgramRef } = useBasicInfo();
   const coinsRef = useRef<any>({});
   const flipedNumberRef = useRef(0);
   const [bidResult, setBidResult] = useState<any>(null);
@@ -142,7 +140,6 @@ export const CannonCoinsProvider = ({
         isDetail: !!params?.poolId,
         flipStatus,
         pool,
-        sbProgramRef,
         poolAmount,
         bids,
         setBids: (bids: number) => {

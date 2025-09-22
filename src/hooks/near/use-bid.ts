@@ -5,6 +5,7 @@ import { useNearKeyStore } from "@/stores/use-near-key";
 import useToast from "@/hooks/use-toast";
 import { KeyPair } from "near-api-js";
 import { viewMethod } from "./util";
+import { QUOTE_TOKEN } from "@/config/btc";
 
 export default function useBid(
   poolId: number,
