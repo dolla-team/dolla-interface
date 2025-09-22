@@ -6,6 +6,8 @@ interface WalletState {
   showInfos: boolean;
   panelType: "info" | "deposit" | "withdraw" | "swap";
   withdrawType: "token" | "nft";
+  defaultDepositToken: any;
+  defaultDepositAmount: any;
   set: (params: any) => void;
   get: () => WalletState;
 }
@@ -16,6 +18,8 @@ const useWalletStore = create<WalletState>((set, get) => ({
   showInfos: false,
   panelType: "info",
   withdrawType: "token",
+  defaultDepositToken: null,
+  defaultDepositAmount: null,
   set: (params) => set(() => ({ ...params })),
   get: () => get()
 }));

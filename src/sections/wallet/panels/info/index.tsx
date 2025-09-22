@@ -13,7 +13,7 @@ export default function Info({
 }: {
   onTabChange: (tab: string) => void;
 }) {
-  const { quoteTokenBalance } = useAuth() || {};
+  const { nearAccount } = useAuth() || {};
   const [tab, setTab] = useState(0);
   return (
     <div className="h-full w-full">
@@ -25,7 +25,7 @@ export default function Info({
             className="w-[36px] h-[36px] rounded-full"
           />
           <div className="text-[36px] text-black">
-            {formatNumber(quoteTokenBalance || 0, 2, true, { prefix: "$" })}
+            {formatNumber(nearAccount?.balance || 0, 2, true, { prefix: "$" })}
           </div>
         </div>
         <div className="text-[12px] text-[#8A87AA] text-center">

@@ -11,7 +11,7 @@ export default function Button({
   isPrimary = true
 }: {
   children?: React.ReactNode;
-  onClick?: () => void;
+  onClick?: (ev: any) => void;
   disabled?: boolean;
   className?: string;
   loading?: boolean;

@@ -17,7 +17,13 @@ export default function AvatarAction() {
         <AvatarCashier
           onClick={(e: any) => {
             e.stopPropagation();
-            set({ showWallet: true, showUserInfo: false });
+            set({
+              showWallet: true,
+              showUserInfo: false,
+              defaultDepositToken: null,
+              defaultDepositAmount: null,
+              panelType: "info"
+            });
           }}
           tokenBalance={nearAccount?.balance}
         />

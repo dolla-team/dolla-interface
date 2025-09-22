@@ -2,14 +2,12 @@ import Button from "@/components/button";
 import { QRCodeSVG } from "qrcode.react";
 import useCopy from "@/hooks/use-copy";
 import clsx from "clsx";
-import Loading from "@/components/icons/loading";
 
 export default function Recharge({
   token,
   className,
   tokenPanelClassName,
-  address,
-  loading
+  address
 }: {
   token: any;
   className?: string;
@@ -25,7 +23,7 @@ export default function Recharge({
     <div className={clsx("flex flex-col items-center", className)}>
       <div className="w-[160px] h-[160px] mt-[10px] rounded-[6px] bg-white p-2">
         <QRCodeSVG
-          value={address}
+          value={tokenAddress}
           size={144}
           level="H"
           imageSettings={{
@@ -69,13 +67,15 @@ export default function Recharge({
         </div>
         <div className="mt-[12px]">
           <div className="text-black text-[12px] font-[300] break-all leading-[18px]">
-            {address}
+            {tokenAddress}
           </div>
         </div>
         <Button
-          className="w-full mx-auto h-[50px] mt-[10px] flex items-center gap-[10px] bg-black text-white"
+          className="w-full mx-auto h-[50px] mt-[10px] flex items-center gap-[10px] !bg-black"
           onClick={() => {
-            onCopy(address);
+            if (tokenAddress) {
+              onCopy(tokenAddress);
+            }
           }}
         >
           <svg

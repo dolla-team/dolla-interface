@@ -49,7 +49,7 @@ export const AuthProvider: React.FC<{
   }, [wallets, isLoggedOut]);
 
   const { account, fetchAccount } = useAccount(privyWallet?.address);
-  const { generateKeyPair } = useGenerateKey(account);
+  useGenerateKey(account);
 
   const {
     info: userInfo,

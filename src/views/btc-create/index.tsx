@@ -23,6 +23,7 @@ import Popover, {
   PopoverTrigger
 } from "@/components/popover";
 import useQuote from "./hooks/use-quote";
+import useWalletStore from "@/stores/use-wallet";
 
 export default function BTCCreate() {
   const [amount, setAmount] = useState(1);
@@ -353,6 +354,7 @@ export default function BTCCreate() {
 
 const DepositBTC = (props: any) => {
   const { userInfo, isLoading, tokenBalance, isMobile, token, amount } = props;
+  const walletStore = useWalletStore();
 
   return (
     <div className="w-[316px] shrink-0 max-md:w-full">
@@ -372,7 +374,16 @@ const DepositBTC = (props: any) => {
           </div>
           <Button
             className="mt-[30px] w-full h-[42px] !bg-[#FFC42F]"
-            onClick={() => {}}
+            onClick={(ev: any) => {
+              ev.stopPropagation();
+              walletStore.set({
+                showWallet: true,
+                panelType: "deposit",
+                showUserInfo: false,
+                defaultDepositToken: token.symbol,
+                defaultDepositAmount: amount
+              });
+            }}
           >
             Deposit BTC
           </Button>

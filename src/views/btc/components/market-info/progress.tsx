@@ -113,11 +113,11 @@ const Label = ({ amount, disabled }: { amount: number; disabled: boolean }) => {
   return (
     <div
       className={clsx(
-        "absolute p-[4px] h-[24px] leading-[14px] text-[14px] text-center font-[DelaGothicOne] rounded-[6px]",
+        "absolute  p-[4px] h-[24px] leading-[14px] text-[14px] text-center font-[DelaGothicOne] rounded-[6px]",
         !disabled
           ? "bg-[linear-gradient(180deg,#FFF698_0%,#FFC42F_100%)] border-[#4E4E4E]"
           : "bg-[linear-gradient(180deg,#C3C3C3_0%,#787878_100%)]",
-        isMobile ? "top-[12px]" : "top-[16px] right-[0px]"
+        isMobile ? "top-[12px]" : "top-[16px] right-[-20px]"
       )}
     >
       ${formatNumber(amount, 2, true)}
