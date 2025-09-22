@@ -33,39 +33,40 @@ export default function Recharge({
       </div>
       <div
         className={clsx(
-          "mt-[24px] p-[12px] rounded-[10px] bg-[#1A1E24] border border-[#383F47] w-full",
+          "mt-[24px] p-[12px] rounded-[10px] border bg-white border-[#8A87AA4D] w-full",
           tokenPanelClassName
         )}
       >
-        <div className="flex items-center text-white">
-          <div className="flex items-center gap-[14px]">
-            <div className="w-[32px] h-[32px] rounded-full relative">
-              <img
+        <div className="flex items-center">
+          <div className="flex items-center gap-[5px]">
+            <div className="text-[18px] text-black font-[700] pr-[10px]">{ token.symbol }</div>
+            <div className="w-[17px] h-[17px] relative">
+              {/* <img
                 src={token.icon}
                 className="w-full h-full object-cover"
-              />
+              /> */}
               <img
                 src={ token.chainLogo }
-                className="w-[16px] h-[16px] absolute bottom-[-4px] right-[-4px]"
+                className="w-full h-full object-cover"
               />
             </div>
             <div>
-              <div>
+              {/* <div>
                 <span className="text-[16px] text-white">
                   {token.symbol}{" "}
                 </span>
-              </div>
-              <div className="text-[12px] text-white">{ token.chainName }</div>
+              </div> */}
+              <div className="text-[14px] text-black">{ token.chainName }</div>
             </div>
           </div>
         </div>
         <div className="mt-[12px]">
-          <span className="text-[#8A87AA] text-[12px] break-all leading-[18px]">
+          <div className="text-black text-[12px] font-[300] break-all leading-[18px]">
             {address}
-          </span>
+          </div>
         </div>
         <Button
-          className="w-[95%] mx-auto h-[50px] mt-[10px] flex items-center gap-[10px]"
+          className="w-full mx-auto h-[50px] mt-[10px] flex items-center gap-[10px] bg-black text-white"
           onClick={() => {
             onCopy(address);
           }}
@@ -85,6 +86,7 @@ export default function Recharge({
           <span className="text-[14px] text-white">Copy Deposit Address</span>
         </Button>
       </div>
+     
     </div>
   );
 }

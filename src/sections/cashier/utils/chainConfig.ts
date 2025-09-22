@@ -8,5 +8,6 @@ export const chainConfig: any = {
     bsc: { name: 'BNB Chain', icon: '/chains/bsc.svg' },
     op: { name: 'Optimism', icon: '/chains/op.svg' },
     avax: { name: 'Avalanche', icon: '/chains/avax.svg' },
+    btc: { name: 'BTC', icon: '/chains/btc.png' },
     // stellar: { name: 'Stellar', icon: '/chains/chains/stellar.svg' },
 }

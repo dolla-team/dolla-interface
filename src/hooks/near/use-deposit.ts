@@ -22,6 +22,7 @@ export default function useDeposit() {
         recipientType = "DESTINATION_CHAIN",
         referral = "referral",
         quoteWaitingTimeMs = 3000,
+        getFullQuote = false,
     }: {
         swapType?: string;
         evmAddress: string;
@@ -35,6 +36,7 @@ export default function useDeposit() {
         recipientType?: string;
         referral?: string;
         quoteWaitingTimeMs?: number;
+        getFullQuote?: boolean;
     }) {
 
 
@@ -69,6 +71,9 @@ export default function useDeposit() {
             if (data) {
                 console.log(data)
                 setDepositAddress(data.quote.depositAddress)
+                if (getFullQuote) {
+                    return data.quote;
+                }
                 return data.quote.depositAddress;
             } else {
                 
