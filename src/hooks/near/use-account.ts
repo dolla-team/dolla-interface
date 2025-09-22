@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { viewMethod } from "./util";
 import Big from "big.js";
+import { QUOTE_TOKEN, BASE_TOKEN } from "@/config/btc";
 
 export default function useAccount(evmAddress: string) {
   const [account, setAccount] = useState<any | null>();
@@ -12,6 +13,14 @@ export default function useAccount(evmAddress: string) {
         args: { user_id: { Evm: evmAddress.replace(/^0x/, "").toLowerCase() } }
       });
       console.log("account", res);
+
+      let quoteBalance = "0";
+      let prizeBalance = "0";
+
+      if (res?.ft_tokens) {
+        quoteBalance = res.ft_tokens[`{"FT":"${QUOTE_TOKEN.address}"}`];
+        prizeBalance = res.ft_tokens[`{"FT":"${BASE_TOKEN.address}"}`];
+      }
       /**
         acc_bet_amount: "0",
         acc_bet_games: 0,
@@ -23,7 +32,12 @@ export default function useAccount(evmAddress: string) {
 
       setAccount({
         ...(res || {}),
-        balance: Big(res?.balance).div(1e6).toString()
+        balance: Big(quoteBalance)
+          .div(10 ** QUOTE_TOKEN.decimals)
+          .toString(),
+        prizeBalance: Big(prizeBalance)
+          .div(10 ** BASE_TOKEN.decimals)
+          .toString()
       });
     } catch (error) {
       console.error(error);
