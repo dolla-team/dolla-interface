@@ -58,6 +58,28 @@ const Content = () => {
           navigate("/");
         }}
       />
+      <button
+        onClick={() => {
+          navigate("/");
+        }}
+        className="button absolute top-[110px] left-[30px] w-[85px] h-[30px] z-[10] rounded-[8px] border border-[#3B3951] bg-[#FFFFFF1A] flex items-center justify-center gap-[8px]"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="13"
+          height="9"
+          viewBox="0 0 13 9"
+          fill="none"
+        >
+          <path
+            d="M11.1 4.4839L2 4.4839M2 4.4839L5.03333 7.96777M2 4.4839L5.03333 1.00003"
+            stroke="#FFE9B2"
+            strokeWidth="2"
+            strokeLinecap="round"
+          />
+        </svg>
+        <span className="text-[#FFE9B2] text-[12px]">Back</span>
+      </button>
       <div className="absolute top-[10px] right-[30px] z-[10] flex items-center gap-[12px]">
         <EstGas className="!bg-transparent !border-[#454545]" />
 

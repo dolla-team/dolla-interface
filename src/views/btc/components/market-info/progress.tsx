@@ -117,7 +117,7 @@ const Label = ({ amount, disabled }: { amount: number; disabled: boolean }) => {
         !disabled
           ? "bg-[linear-gradient(180deg,#FFF698_0%,#FFC42F_100%)] border-[#4E4E4E]"
           : "bg-[linear-gradient(180deg,#C3C3C3_0%,#787878_100%)]",
-        isMobile ? "top-[12px]" : "top-[16px]"
+        isMobile ? "top-[12px]" : "top-[16px] right-[0px]"
       )}
     >
       ${formatNumber(amount, 2, true)}

@@ -14,15 +14,7 @@ export default function MarketInfo() {
       <div className="absolute left-[20px] bottom-[24%] w-[244px]">
         <div className="flex items-center justify-between">
           <div>
-            <span
-              className="font-[DelaGothicOne] text-[20px]"
-              style={{
-                WebkitTextStroke:
-                  pool?.status === 3 ? "1px #C3C3C3" : "1px #FFC42F"
-              }}
-            >
-              Market{" "}
-            </span>
+            <span className="text-[#D9D9D9] text-[20px]">Market </span>
             <span
               className={clsx(
                 "font-[DelaGothicOne] text-[20px] bg-clip-text",

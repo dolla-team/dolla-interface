@@ -13,7 +13,10 @@ export default function Market({
   onClick: () => void;
 }) {
   return (
-    <div className="flex items-center h-[70px] rounded-[10px] bg-[#0000000D] border border-[#F2F2F233] backdrop-blur-[25px] pl-[14px] pr-[20px]">
+    <div
+      onClick={onClick}
+      className="flex items-center h-[70px] rounded-[10px] bg-[#0000000D] button border border-[#F2F2F233] backdrop-blur-[25px] pl-[14px] pr-[20px]"
+    >
       {columns.map((column: any) => (
         <div
           key={column.title}
@@ -21,12 +24,7 @@ export default function Market({
           style={{ width: column.width }}
         >
           {column.dataIndex === "pool_id" && (
-            <div
-              className="text-[14px] text-black button hover:underline"
-              onClick={onClick}
-            >
-              {data.pool_id}
-            </div>
+            <div className="text-[14px] text-black button">{data.pool_id}</div>
           )}
           {column.dataIndex === "market" && (
             <div className="flex items-center gap-[16px]">

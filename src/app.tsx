@@ -3,10 +3,11 @@ import {
   RouterProvider,
   Navigate
 } from "react-router-dom";
-import { Suspense, lazy } from "react";
+import { Suspense, lazy, useEffect, useState } from "react";
 import WalletProvider from "./contexts/wallet";
-import { AuthProvider } from "./contexts/auth";
+import { AuthProvider, useAuth } from "./contexts/auth";
 import { ToastContainer } from "react-toastify";
+import Loading from "@/components/loading";
 import Temp from "./views/temp";
 // import "react-toastify/dist/ReactToastify.css";
 
@@ -15,7 +16,7 @@ import MainLayout from "./layouts/main";
 import Callback from "./views/callback";
 import DollaEyeContextProvider from "./contexts/dolla-eye";
 import BtcList from "./views/btc-list";
-
+import ErrorPage from "./views/error-page";
 
 const LazyNftCreate = lazy(() => import("./views/nft-create"));
 const LazyBtcCreate = lazy(() => import("./views/btc-create"));
@@ -29,40 +30,6 @@ const LazyPolicy = lazy(() => import("./views/policy"));
 const LazyDemo = lazy(() => import("./views/demo"));
 
 import("react-toastify/dist/ReactToastify.css");
-
-const ErrorPage = () => {
-  return (
-    <div
-      style={{
-        color: "white",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        height: "100vh"
-      }}
-    >
-      <div style={{ textAlign: "center" }}>
-        <h1>Oops! Something went wrong.</h1>
-        <p>We're sorry, but an unexpected error occurred.</p>
-      </div>
-      <button
-        style={{
-          padding: "10px 20px",
-          backgroundColor: "rgb(221, 144, 0)",
-          color: "white",
-          border: "none",
-          borderRadius: "5px",
-          cursor: "pointer",
-          marginTop: "20px"
-        }}
-        onClick={() => window.location.reload()}
-      >
-        Reload Page
-      </button>
-    </div>
-  );
-};
 
 const router = createBrowserRouter([
   {
@@ -142,13 +109,33 @@ const router = createBrowserRouter([
   }
 ]);
 
+const Content = () => {
+  const [isLoading, setIsLoading] = useState(true);
+  const { ready, user } = useAuth() || {};
+  useEffect(() => {
+    if (!ready) {
+      return;
+    }
+
+    if (!user) {
+      setIsLoading(false);
+      return;
+    }
+
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
+  }, [ready, user]);
+  return isLoading ? <Loading /> : <RouterProvider router={router} />;
+};
+
 function App() {
   return (
     <DollaEyeContextProvider>
       <Suspense>
         <WalletProvider>
           <AuthProvider>
-            <RouterProvider router={router} />
+            <Content />
           </AuthProvider>
         </WalletProvider>
         <ToastContainer

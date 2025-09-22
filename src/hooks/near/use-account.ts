@@ -5,7 +5,6 @@ import Big from "big.js";
 export default function useAccount(evmAddress: string) {
   const [account, setAccount] = useState<any | null>(null);
 
-  console.log("evmAddress", evmAddress);
   const fetchAccount = async () => {
     try {
       const res = await viewMethod({

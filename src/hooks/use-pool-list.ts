@@ -24,6 +24,7 @@ export default function usePoolList(props?: {
   const [sortField, setSortField] = useState("hitting");
   const [sortOrder, setSortOrder] = useState("desc");
   const [collection, setCollection] = useState<any>();
+  const [volume, setVolume] = useState(0);
   const [hasMore, setHasMore] = useState(true);
   const pageRef = useRef(0);
   const { userInfo } = useAuth();
@@ -64,7 +65,7 @@ export default function usePoolList(props?: {
           pageRef.current * LIMIT
         }&sort_field=${sortField}&sort_order=${sortOrder}&status=1&chain=${"near"}&token_status=${tokenStatus}${
           collection?.address ? "&token=" + collection.address : ""
-        }`
+        }${volume ? "&volume=" + volume : ""}`
       );
 
       const list = res.data.data.list.map((item: any) => {
@@ -125,7 +126,7 @@ export default function usePoolList(props?: {
     if (userInfo?.user) {
       onQueryPoolListDebounced();
     }
-  }, [userInfo, sortOrder, sortField, collection]);
+  }, [userInfo, sortOrder, sortField, collection, volume]);
 
   return {
     poolList,
@@ -137,6 +138,8 @@ export default function usePoolList(props?: {
     setSortOrder,
     collection,
     setCollection,
+    volume,
+    setVolume,
     hasMore,
     pageRef,
     LIMIT

@@ -21,7 +21,7 @@ export default function PriceChart({
   const chartInstance = useRef<Chart | null>(null);
   const anchorDotRef = useRef<HTMLDivElement>(null);
   const [isInit, setIsInit] = useState(false);
-  const [isFolded, setIsFolded] = useState(false);
+  const [isFolded, setIsFolded] = useState(true);
   const [isAnimationComplete, setIsAnimationComplete] = useState(false);
 
   // Function to calculate probability density data
@@ -304,11 +304,11 @@ export default function PriceChart({
         duration: 0.3
       }}
     >
-      <div className="w-full px-[13px] h-[45px] flex justify-between items-center shrink-0">
+      <div className="w-full px-[13px] h-[45px] flex justify-between items-center shrink-0 relative z-[10]">
         <Title className="!static" />
-        {/* <button
+        <button
           type="button"
-          className="button shrink-0 w-[14px] h-[14px]"
+          className="button shrink-0 w-[44px] h-[36px] rounded-[12px] bg-[#000000] flex items-center justify-center"
           onClick={() => {
             setIsFolded(!isFolded);
             if (isFolded) {
@@ -317,14 +317,22 @@ export default function PriceChart({
             }
           }}
         >
-          <motion.img
-            src="/new-btc/icon-fold-arrow.svg"
-            className="w-full h-full object-center object-contain"
+          <motion.svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="14"
+            height="6"
+            viewBox="0 0 14 6"
+            fill="none"
             animate={{
               rotate: !isFolded ? 0 : 180
             }}
-          />
-        </button> */}
+          >
+            <path
+              d="M12.614 5.51375e-07L6.608 3.654L0.602001 2.63143e-08L-6.0584e-08 1.386L6.608 5.404L13.216 1.386L12.614 5.51375e-07Z"
+              fill="white"
+            />
+          </motion.svg>
+        </button>
       </div>
       <motion.div
         className="w-full relative shrink-0 h-[calc(100%_-_45px)] px-[20px] max-md:px-[10px] max-md:pt-[100px]"
@@ -349,7 +357,7 @@ export default function PriceChart({
             className="w-full h-full relative z-[2]"
           ></canvas>
           {!anchorPrice && (
-            <div className="w-full h-full flex justify-center items-center text-[#ABABAB] text-[14px] absolute top-0 left-0">
+            <div className="w-full h-full flex justify-center items-center text-[#8A87AA] text-[14px] absolute top-0 left-0">
               Please set the price first
             </div>
           )}

@@ -13,7 +13,7 @@ export default function Annotations({
   return (
     <div
       className={clsx(
-        "absolute z-[1] right-[12px] top-0 bg-[#1A1E24] rounded-[6px] py-[12px] pl-[8px] pr-[3px] font-[400] leading-[100%] text-[10px] text-[#5E6B7D]",
+        "absolute z-[1] right-[12px] top-0 rounded-[6px] py-[12px] pl-[8px] pr-[3px] font-[400] leading-[100%] text-[10px] text-[#5E6B7D]",
         "max-md:w-[calc(100%_-_20px)] max-md:left-[10px]",
         className
       )}

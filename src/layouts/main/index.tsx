@@ -4,9 +4,7 @@ import Button from "@/components/button";
 import { useAuth } from "@/contexts/auth";
 import DollaEye from "@/components/dolla-eye";
 import EstGas from "@/sections/est-gas";
-import Loading from "@/components/loading";
 // import useIsMobile from "@/hooks/use-is-mobile";
-import { useEffect, useState } from "react";
 import Wallet from "@/sections/wallet";
 import Infos from "@/sections/infos";
 import UserInfo from "@/sections/user-info";
@@ -14,30 +12,13 @@ import PageTabs from "./tabs";
 import useIsBtc from "@/hooks/use-is-btc";
 
 export default function MainLayout() {
-  const { userInfo, login, ready, user } = useAuth() || {};
+  const { userInfo, login } = useAuth() || {};
   // const isMobile = useIsMobile();
   const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(true);
+
   const isBtc = useIsBtc();
 
-  useEffect(() => {
-    if (!ready) {
-      return;
-    }
-
-    if (!user) {
-      setIsLoading(false);
-      return;
-    }
-
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 2000);
-  }, [ready, user]);
-
-  return isLoading ? (
-    <Loading />
-  ) : (
+  return (
     <div className="h-screen overflow-hidden bg-white relative">
       {/* header */}
       <div className="flex justify-between items-center h-[76px] sticky top-0 bg-white z-[20]">
