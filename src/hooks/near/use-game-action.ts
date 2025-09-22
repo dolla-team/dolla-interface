@@ -18,76 +18,6 @@ export default function useGameAction({ gameId }: { gameId?: string }) {
   const [createGameAddress, setCreateGameAddress] = useState<string | null>(
     null
   );
-  async function createGame({
-    swapType = "EXACT_INPUT",
-    evmAddress,
-    slippageTolerance = 50,
-    originAsset,
-    depositType = "ORIGIN_CHAIN",
-    destinationAsset,
-    amount,
-    refundTo,
-    refundType = "ORIGIN_CHAIN",
-    recipientType = "DESTINATION_CHAIN",
-    referral = "referral",
-    quoteWaitingTimeMs = 3000,
-    price
-  }: {
-    swapType?: string;
-    evmAddress: string;
-    slippageTolerance?: number;
-    originAsset: string;
-    depositType?: string;
-    destinationAsset: string;
-    amount: string;
-    refundTo: string;
-    refundType?: string;
-    recipientType?: string;
-    referral?: string;
-    quoteWaitingTimeMs?: number;
-    price: number;
-  }) {
-    try {
-      setLoading(true);
-      const body = {
-        dry: false,
-        swapType,
-        slippageTolerance,
-        originAsset,
-        depositType,
-        destinationAsset,
-        amount,
-        refundTo,
-        refundType,
-        recipient: import.meta.env.VITE_NEAR_ACCOUNT_ID,
-        recipientType,
-        deadline: dayjs().add(1, "hour").toISOString(),
-        referral,
-        quoteWaitingTimeMs,
-        customRecipientMsg: JSON.stringify({
-          u: {
-            Evm: evmAddress.replace(/^0x/, "").toLowerCase()
-          },
-          // TODO
-          b: { Cg: ["10", Big(amount).mul(price).mul(1.2).toFixed(0)] }
-        })
-      };
-
-      const data = await quote(body);
-
-      if (data) {
-        setCreateGameAddress(data.quote.depositAddress);
-
-        return data.quote.depositAddress;
-      } else {
-        return null;
-      }
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  }
 
   async function pauseGame() {
     if (!keyPairSigner) {
@@ -146,7 +76,12 @@ export default function useGameAction({ gameId }: { gameId?: string }) {
       const provider = getProvider();
       const { header } = await provider.block({ finality: "final" });
 
-      const gameArgs = { game_args: { ByAk: { game_id: Number(gameId) } } };
+      const gameArgs = {
+        game_args: {
+          // TODO
+          ByAk: { game_id: Number(gameId), token: { FT: QUOTE_TOKEN.address } }
+        }
+      };
       const nonce = await getNonce(publicKey);
 
       const transaction = transactions.createTransaction(
@@ -228,7 +163,6 @@ export default function useGameAction({ gameId }: { gameId?: string }) {
   }
 
   return {
-    createGame,
     pauseGame,
     resumeGame,
     cancelGame,

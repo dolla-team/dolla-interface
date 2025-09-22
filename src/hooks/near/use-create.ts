@@ -1,18 +1,19 @@
 import { useMemo, useState } from "react";
-import { getNonce, getProvider, quote } from "./util";
+import { getNonce, getProvider } from "./util";
 import { KeyPairSigner, transactions } from "near-api-js";
 import { PublicKey } from "near-api-js/lib/utils/key_pair";
 import { functionCall } from "near-api-js/lib/transaction";
 import { base_decode } from "near-api-js/lib/utils/serialize";
 import { useNearKeyStore } from "@/stores/use-near-key";
 import Big from "big.js";
-import dayjs from "dayjs";
+import useToast from "@/hooks/use-toast";
+import { BASE_TOKEN } from "@/config/btc";
 const THIRTY_TGAS = "300000000000000";
 
-export default function useWithdraw() {
+export default function useCreate(onSuccess: () => void) {
   const [loading, setLoading] = useState(false);
   const { publicKey, privateKey } = useNearKeyStore();
-
+  const toast = useToast();
   const keyPairSigner = useMemo(() => {
     if (!privateKey) {
       return null;
@@ -20,17 +21,7 @@ export default function useWithdraw() {
     return KeyPairSigner.fromSecretKey(("ed25519:" + privateKey) as any);
   }, [privateKey]);
 
-  async function withdraw({
-    fromToken,
-    toToken,
-    account,
-    amount
-  }: {
-    fromToken: any;
-    toToken: any;
-    account: string;
-    amount: string;
-  }) {
+  async function create({ amount, price }: { amount: string; price: number }) {
     try {
       setLoading(true);
 
@@ -48,32 +39,18 @@ export default function useWithdraw() {
 
       const provider = getProvider();
       const { header } = await provider.block({ finality: "final" });
+
       const _amount = Big(amount)
-        .mul(10 ** fromToken.decimals)
+        .mul(10 ** BASE_TOKEN.decimals)
         .toFixed(0);
-      const res = await quote({
-        dry: false,
-        swapType: "EXACT_INPUT",
-        slippageTolerance: 50,
-        originAsset: fromToken.assetId,
-        depositType: "ORIGIN_CHAIN",
-        destinationAsset: toToken.assetId,
-        amount: _amount,
-        refundTo: import.meta.env.VITE_NEAR_ACCOUNT_ID,
-        refundType: "ORIGIN_CHAIN",
-        recipient: account,
-        recipientType: "DESTINATION_CHAIN",
-        deadline: dayjs().add(1, "hour").toISOString()
-      });
 
-      const recipientAccount = res.quote.depositAddress;
-
-      const withdrawArgs = {
-        withdraw_args: {
+      const args = {
+        create_args: {
           ByAk: {
             amount: _amount,
-            token: { FT: { [fromToken.address]: fromToken.decimals } },
-            recipient_account: recipientAccount
+            bid_unit: "10",
+            bep: Big(_amount).mul(price).mul(1.2).toFixed(0),
+            prize: { FT: BASE_TOKEN.address }
           }
         }
       };
@@ -86,9 +63,7 @@ export default function useWithdraw() {
         publicKeyObj,
         import.meta.env.VITE_NEAR_ACCOUNT_ID,
         nonce,
-        [
-          functionCall("withdraw", withdrawArgs, BigInt(THIRTY_TGAS), BigInt(0))
-        ],
+        [functionCall("create_game", args, BigInt(THIRTY_TGAS), BigInt(0))],
         base_decode(header.hash)
       );
 
@@ -97,21 +72,23 @@ export default function useWithdraw() {
       );
       console.log("signedTransaction:", signedTransaction);
       const result: any = await provider.sendTransaction(signedTransaction);
-
+      console.log("result:", result);
       if (result.status.SuccessValue) {
-        console.log("Withdraw success:", result);
+        toast.success({ title: "Create success" });
+        onSuccess?.();
       } else {
-        console.log("Withdraw failed:", result);
+        toast.fail({ title: "Create failed" });
       }
     } catch (error) {
-      console.error("Withdraw error:", error);
+      console.error("Create error:", error);
+      toast.fail({ title: "Create failed" });
     } finally {
       setLoading(false);
     }
   }
 
   return {
-    withdraw,
+    create,
     loading
   };
 }

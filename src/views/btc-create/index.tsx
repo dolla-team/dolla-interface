@@ -14,7 +14,6 @@ import Big from "big.js";
 import useIsMobile from "@/hooks/use-is-mobile";
 import Modal from "@/components/modal";
 import useConfig from "@/hooks/use-config";
-import useGameAction from "@/hooks/near/use-game-action";
 import { useAuth } from "@/contexts/auth";
 import { formatAddress } from "@/utils/format/address";
 import Loading from "@/components/icons/loading";
@@ -24,6 +23,7 @@ import Popover, {
 } from "@/components/popover";
 import useQuote from "./hooks/use-quote";
 import useWalletStore from "@/stores/use-wallet";
+import useCreate from "@/hooks/near/use-create";
 
 export default function BTCCreate() {
   const [amount, setAmount] = useState(1);
@@ -33,14 +33,14 @@ export default function BTCCreate() {
     address: evmAddress,
     nearAccount
   } = useAuth() || {};
-  const { token } = useQuote(amount);
+  const { token } = useQuote();
   const tokenBalance = nearAccount?.balance;
   const { data: referenceData, loading: referenceDataLoading } =
     useReferenceData({ token: BASE_TOKEN, amount });
+
   const globalConfig = useConfigStore((state) => state.config);
 
   const isMobile = useIsMobile();
-  const { getConfig } = useConfig();
 
   const { prices } = useTokenPrice(BASE_TOKEN);
   const [depositModalOpen, setDepositModalOpen] = useState(false);
@@ -51,7 +51,7 @@ export default function BTCCreate() {
     return _p;
   }, [prices]);
 
-  const { createGame: onCreate, loading: creating } = useGameAction({});
+  const { create: onCreate, loading: creating } = useCreate(() => {});
 
   const errorTips = useMemo(() => {
     if (pricePerBTC === 0) {
@@ -76,10 +76,6 @@ export default function BTCCreate() {
       })) || []
     ];
   }, [globalConfig]);
-
-  useEffect(() => {
-    getConfig();
-  }, []);
 
   return (
     <div className="w-full text-[14px] font-[400] leading-[100%] pt-[40px] pb-[60px] max-md:pt-[80px]">
@@ -146,13 +142,7 @@ export default function BTCCreate() {
               onClick={() => {
                 if (errorTips || creating) return;
                 onCreate({
-                  evmAddress: evmAddress || "",
-                  originAsset:
-                    "nep141:arb-0xaf88d065e77c8cc2239327c5edb3a432268e5831.omft.near",
-                  destinationAsset:
-                    "nep141:17208628f84f5d6ad33f0da3bbbeb27ffcb398eac501a31bd6ad2011e36133a1",
-                  amount: (amount * 1e6).toString(),
-                  refundTo: "0x229E549c97C22b139b8C05fba770D94C086853d8",
+                  amount: amount.toString(),
                   price: pricePerBTC
                 });
               }}

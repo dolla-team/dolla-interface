@@ -1,12 +1,10 @@
 import { BASE_TOKEN } from "@/config/btc";
 
-export default function useQuote(amount: number) {
+export default function useQuote() {
   return {
     token: {
-      symbol: BASE_TOKEN.createTokenName,
-      icon: BASE_TOKEN.createTokenIcon,
-      chainName: BASE_TOKEN.createChainName,
-      chainLogo: BASE_TOKEN.createChainLogo,
+      symbol: BASE_TOKEN.symbol,
+      icon: BASE_TOKEN.icon,
       address: BASE_TOKEN.address,
       decimals: BASE_TOKEN.decimals
     }

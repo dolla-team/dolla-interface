@@ -67,6 +67,8 @@ export default function useBid(
         deadline: String(Date.now() + 1000 * 60 * 60 * 24),
         game_id: poolId,
         nonce: res.nonce,
+        bet_token: { FT: QUOTE_TOKEN.address },
+        gas_token: { FT: QUOTE_TOKEN.address },
         user_id: {
           Evm: address.slice(2).toLowerCase()
         }
