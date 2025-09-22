@@ -5,13 +5,17 @@ import useAccount from "@/hooks/near/use-account";
 import useGameAction from "@/hooks/near/use-game-action";
 import useGenerateKey from "@/hooks/near/use-generate-key";
 import useClaim from "@/hooks/near/use-claim";
+import useWithdraw from "@/hooks/near/use-withdraw";
+import Button from "@/components/button";
 
 export default function Demo() {
   const { generateDepositAddress, loading, depositAddress } = useDeposit();
   const { user } = useUser();
   const { config } = useConfig();
-  const { updateAk, publicKey, createKeyPair, saveKeyPair } = useGenerateKey();
   const { account } = useAccount(user?.wallet?.address || "");
+  const { updateAk, publicKey, createKeyPair, saveKeyPair } =
+    useGenerateKey(account);
+  const { withdraw, loading: withdrawing } = useWithdraw();
 
   const {
     createGame,
@@ -24,9 +28,7 @@ export default function Demo() {
     gameId: "2"
   });
 
-  const { claim } = useClaim({
-    evmAddress: user?.wallet?.address || ""
-  });
+  const { claim } = useClaim();
 
   return (
     <div>
@@ -148,7 +150,7 @@ export default function Demo() {
         <button
           className="border border-red-500"
           onClick={async () => {
-            const { publicKey, keyPairSigner, privateKey } = createKeyPair();
+            const { publicKey, privateKey } = createKeyPair();
             const result = await updateAk({
               evmAddress: user?.wallet?.address || "",
               publicKey: publicKey,
@@ -156,12 +158,34 @@ export default function Demo() {
             });
 
             if (result) {
-              saveKeyPair(publicKey, keyPairSigner, privateKey);
+              saveKeyPair(publicKey, privateKey);
             }
           }}
         >
           Update Ak
         </button>
+
+        <Button
+          className="w-[200px] h-[40px] !bg-black !text-white"
+          loading={withdrawing}
+          onClick={() => {
+            withdraw({
+              fromToken: {
+                assetId:
+                  "nep141:17208628f84f5d6ad33f0da3bbbeb27ffcb398eac501a31bd6ad2011e36133a1",
+                decimals: 6
+              },
+              toToken: {
+                assetId:
+                  "nep141:arb-0xaf88d065e77c8cc2239327c5edb3a432268e5831.omft.near"
+              },
+              account: "0x229E549c97C22b139b8C05fba770D94C086853d8",
+              amount: "1"
+            });
+          }}
+        >
+          Withdraw
+        </Button>
       </div>
     </div>
   );
