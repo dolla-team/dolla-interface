@@ -124,13 +124,16 @@ export default function TokenSelector({
     useEffect(() => {
         if (debouncedAmount && config) {
             let minDepositAmount = 0;
+
             for (const token in config.legal_bet_tokens) {
                 const tokenObj = JSON.parse(token)
-                if (selectedToken.symbol.toUpperCase().includes(tokenObj.FT?.toUpperCase())) {
+                if (tokenObj && selectedToken.address.toUpperCase().includes(tokenObj.FT?.toUpperCase())) {
                     minDepositAmount = Number(config.legal_bet_tokens[token]) / (10 ** selectedToken.decimals)
                     break;
                 }
             }
+
+            console.log('minDepositAmount', minDepositAmount);
 
             if (Number(debouncedAmount) < minDepositAmount) {
                 fail({
