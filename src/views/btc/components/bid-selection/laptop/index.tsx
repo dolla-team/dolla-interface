@@ -2,12 +2,10 @@ import clsx from "clsx";
 import { BalanceBg, Bg1, Bg100, Bg10, Bg5, Bg50, ProvablyFairBg } from "./bgs";
 import BidBtn from "./bid-btn";
 import AutoBtn from "./auto-btn";
-import ProvablyFair from "@/sections/provably-fair";
 import Points from "@/sections/points";
 import { useAuth } from "@/contexts/auth";
-import Cashier from "@/sections/cashier/modal";
+import useWalletStore from "@/stores/use-wallet";
 import CashierEntry from "../../cashier-entery";
-import { useState } from "react";
 
 export default function BidSelection({
   tokenBalance,
@@ -26,20 +24,25 @@ export default function BidSelection({
   onChangeBids: (bids: number) => void;
   onBidClick: () => void;
 }) {
-  const [showProvablyFair, setShowProvablyFair] = useState(false);
   const { userInfo } = useAuth();
-  const [showCashier, setShowCashier] = useState(false);
-
+  const { set } = useWalletStore();
   return (
     <div className="absolute bottom-0 left-[3%] w-full h-[202px] flex items-center justify-center">
-      <div
-        onClick={() => setShowProvablyFair(true)}
-        className="w-[192px] cursor-pointer h-[53px] relative top-[10px] flex items-center justify-center font-[BlackHanSans]"
-      >
+      <div className="w-[192px] cursor-pointer h-[53px] relative top-[10px] flex items-center justify-center font-[BlackHanSans] relative">
         <ProvablyFairBg />
-        <span className="text-white text-[16px] mt-[10px] leading-[16px]">
-          Provably fair
-        </span>
+        {userInfo && (
+          <CashierEntry
+            onClick={(e: any) => {
+              e.stopPropagation();
+              set({
+                showWallet: true,
+                showUserInfo: false,
+                panelType: "deposit"
+              });
+            }}
+            tokenBalance={tokenBalance}
+          />
+        )}
       </div>
       <div className="w-[333px] h-[73px] relative font-[BlackHanSans]">
         <BalanceBg />
@@ -53,12 +56,6 @@ export default function BidSelection({
           <BidBtn disabled={disabled} onClick={onBidClick} />
         )}
         {flipStatus === 4 && <AutoBtn />}
-        {userInfo && (
-          <CashierEntry
-            onClick={() => setShowCashier(true)}
-            tokenBalance={tokenBalance}
-          />
-        )}
       </div>
       <div className="flex items-center text-white text-[22px] font-normal leading-[100%] uppercase font-[DelaGothicOne]">
         {[100, 50, 10, 5, 1].map((item) => (
@@ -89,14 +86,6 @@ export default function BidSelection({
           </div>
         ))}
       </div>
-
-      <ProvablyFair
-        open={showProvablyFair}
-        pool={pool}
-        onClose={() => setShowProvablyFair(false)}
-      />
-
-      <Cashier open={showCashier} onClose={() => setShowCashier(false)} />
     </div>
   );
 }
