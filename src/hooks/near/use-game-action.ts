@@ -12,7 +12,7 @@ const THIRTY_TGAS = "300000000000000";
 export default function useGameAction({ gameId }: { gameId?: string }) {
   const { publicKey, privateKey } = useNearKeyStore();
   const keyPairSigner = useMemo(() => {
-    return KeyPairSigner.fromSecretKey(privateKey);
+    return KeyPairSigner.fromSecretKey(("ed25519:" + privateKey) as any);
   }, [privateKey]);
   const [loading, setLoading] = useState(false);
   const [createGameAddress, setCreateGameAddress] = useState<string | null>(

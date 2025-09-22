@@ -18,7 +18,7 @@ export default function Header({ tab }: any) {
         cursorClassName="!rounded-[15px] !shadow-[unset]"
         tabClassName="!px-[15px]"
       />
-      <span className="text-white text-[20px] font-[400] leading-[100%] font-[DelaGothicOne]">
+      <span className="text-[20px] font-[400] leading-[100%] font-[DelaGothicOne]">
         Portfolio
       </span>
     </div>

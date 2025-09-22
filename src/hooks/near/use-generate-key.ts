@@ -1,6 +1,6 @@
 import { useNearKeyStore } from "@/stores/use-near-key";
 import { KeyPair, KeyPairSigner, transactions } from "near-api-js";
-import { useState } from "react";
+import { useEffect } from "react";
 import { useSignMessage } from "@privy-io/react-auth";
 import { getNonce, getProvider } from "./util";
 import { PublicKey } from "near-api-js/lib/utils/key_pair";
@@ -8,15 +8,12 @@ import { functionCall } from "near-api-js/lib/transaction";
 import { base_decode } from "near-api-js/lib/utils/serialize";
 
 const THIRTY_TGAS = "300000000000000";
-export default function useGenerateKey() {
-  const [keyPairSigner, setKeyPairSigner] = useState<KeyPairSigner | null>(
-    null
-  );
+export default function useGenerateKey(account: any) {
   const { setPublicKey, setPrivateKey, publicKey, privateKey } =
     useNearKeyStore();
   const { signMessage } = useSignMessage();
 
-  async function generateKeyPair(account: any) {
+  async function generateKeyPair() {
     if (account === null) {
       const {
         publicKey: shortPublicKey,
@@ -24,7 +21,7 @@ export default function useGenerateKey() {
         privateKey: newPrivateKey
       } = createKeyPair();
 
-      saveKeyPair(shortPublicKey, newKeyPairSigner, newPrivateKey);
+      saveKeyPair(shortPublicKey, newPrivateKey);
 
       return {
         publicKey: shortPublicKey,
@@ -35,7 +32,7 @@ export default function useGenerateKey() {
       const newKeyPairSigner = KeyPairSigner.fromSecretKey(
         ("ed25519:" + privateKey) as any
       );
-      setKeyPairSigner(newKeyPairSigner);
+
       return {
         publicKey,
         keyPairSigner: newKeyPairSigner
@@ -58,14 +55,9 @@ export default function useGenerateKey() {
       keyPairSigner: newKeyPairSigner
     };
   }
-  function saveKeyPair(
-    publicKey: string,
-    keyPairSigner: KeyPairSigner,
-    privateKey: string
-  ) {
+  function saveKeyPair(publicKey: string, privateKey: string) {
     setPublicKey(publicKey);
     setPrivateKey(privateKey);
-    setKeyPairSigner(keyPairSigner);
   }
 
   async function updateAk({
@@ -91,10 +83,6 @@ export default function useGenerateKey() {
 
     console.log("signature:", signatureData);
 
-    if (!keyPairSigner) {
-      return;
-    }
-
     const provider = getProvider();
     const { header } = await provider.block({ finality: "final" });
 
@@ -117,6 +105,10 @@ export default function useGenerateKey() {
       base_decode(header.hash)
     );
 
+    const keyPairSigner = KeyPairSigner.fromSecretKey(
+      ("ed25519:" + privateKey) as any
+    );
+
     const [, signedTransaction] = await keyPairSigner.signTransaction(
       transaction
     );
@@ -126,13 +118,16 @@ export default function useGenerateKey() {
     return result;
   }
 
+  useEffect(() => {
+    generateKeyPair();
+  }, [account]);
+
   return {
     generateKeyPair,
     createKeyPair,
     saveKeyPair,
     publicKey,
     privateKey,
-    keyPairSigner,
     updateAk
   };
 }

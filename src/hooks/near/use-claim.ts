@@ -13,7 +13,7 @@ export default function useClaim() {
   const { publicKey, privateKey } = useNearKeyStore();
 
   const keyPairSigner = useMemo(() => {
-    return KeyPairSigner.fromSecretKey(privateKey);
+    return KeyPairSigner.fromSecretKey(("ed25519:" + privateKey) as any);
   }, [privateKey]);
 
   async function claim({

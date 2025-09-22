@@ -34,7 +34,7 @@ export const AuthProvider: React.FC<{
   useConfig();
   const { wallets } = useWallets();
   const { wallets: solanaWallets } = useSolanaWallets();
-  const { generateKeyPair } = useGenerateKey();
+
   const timer = useRef<any>(0);
   const [logining, setLogining] = useState(false);
   const [accountRefresher, setAccountRefresher] = useState(-1);
@@ -49,6 +49,7 @@ export const AuthProvider: React.FC<{
   }, [wallets, isLoggedOut]);
 
   const { account, fetchAccount } = useAccount(privyWallet?.address);
+  const { generateKeyPair } = useGenerateKey(account);
 
   const {
     info: userInfo,
@@ -200,10 +201,6 @@ export const AuthProvider: React.FC<{
       clearTimeout(timer.current);
     };
   }, [privyWallet?.address, ready, user, isLoggedOut]);
-
-  useEffect(() => {
-    generateKeyPair(account);
-  }, [account]);
 
   return (
     <AuthContext.Provider
