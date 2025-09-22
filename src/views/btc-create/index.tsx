@@ -18,7 +18,6 @@ import useGameAction from "@/hooks/near/use-game-action";
 import { useAuth } from "@/contexts/auth";
 import { formatAddress } from "@/utils/format/address";
 import Loading from "@/components/icons/loading";
-import Recharge from "@/sections/cashier/panels/recharge";
 import Popover, {
   PopoverPlacement,
   PopoverTrigger
@@ -33,7 +32,7 @@ export default function BTCCreate() {
     address: evmAddress,
     nearAccount
   } = useAuth() || {};
-  const { token, loading: quoteLoading, depositAddress } = useQuote(amount);
+  const { token } = useQuote(amount);
   const tokenBalance = nearAccount?.balance;
   const { data: referenceData, loading: referenceDataLoading } =
     useReferenceData({ token: BASE_TOKEN, amount });
@@ -46,7 +45,6 @@ export default function BTCCreate() {
   const [depositModalOpen, setDepositModalOpen] = useState(false);
 
   const pricePerBTC = useMemo(() => {
-    return 1;
     if (!prices || prices?.length === 0) return 0;
     const _p = prices[0].last_price;
     return _p;
@@ -318,8 +316,6 @@ export default function BTCCreate() {
             tokenBalance={tokenBalance}
             isMobile={isMobile}
             token={token}
-            depositAddress={depositAddress}
-            quoteLoading={quoteLoading}
             amount={amount}
           />
         )}
@@ -347,8 +343,6 @@ export default function BTCCreate() {
             tokenBalance={tokenBalance}
             isMobile={isMobile}
             token={token}
-            depositAddress={depositAddress}
-            quoteLoading={quoteLoading}
             amount={amount}
           />
         </Modal>
@@ -358,16 +352,7 @@ export default function BTCCreate() {
 }
 
 const DepositBTC = (props: any) => {
-  const {
-    userInfo,
-    isLoading,
-    tokenBalance,
-    isMobile,
-    token,
-    depositAddress,
-    quoteLoading,
-    amount
-  } = props;
+  const { userInfo, isLoading, tokenBalance, isMobile, token, amount } = props;
 
   return (
     <div className="w-[316px] shrink-0 max-md:w-full">
@@ -385,25 +370,12 @@ const DepositBTC = (props: any) => {
               `${formatNumber(tokenBalance, 2, true)} ${token.symbol}`
             )}
           </div>
-        </div>
-        <div className="w-full p-[30px_15px]">
-          <div className="text-center text-[14px] text-white">Recharge</div>
-          <Recharge
-            token={token}
-            className="mt-[7px]"
-            address={depositAddress}
-            loading={quoteLoading}
-          />
-          <div className="flex items-center justify-between text-[12px] mt-[26px]">
-            <span className="text-[#8A87AA]">Minimum deposit</span>
-            <span className="text-white">
-              {amount} {token.symbol}
-            </span>
-          </div>
-          <div className="flex items-center justify-between text-[12px] mt-[16px]">
-            <span className="text-[#8A87AA]">Cost time</span>
-            <span className="text-white">~2 mins</span>
-          </div>
+          <Button
+            className="mt-[30px] w-full h-[42px] !bg-[#FFC42F]"
+            onClick={() => {}}
+          >
+            Deposit BTC
+          </Button>
         </div>
       </div>
     </div>
