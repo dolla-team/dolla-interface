@@ -14,7 +14,7 @@ export default function useGenerateKey(account?: any) {
   const { signMessage } = useSignMessage();
 
   async function generateKeyPair() {
-    if (account === null) {
+    if (!publicKey) {
       const {
         publicKey: shortPublicKey,
         keyPairSigner: newKeyPairSigner,
