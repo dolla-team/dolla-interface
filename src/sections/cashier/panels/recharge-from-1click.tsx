@@ -9,11 +9,7 @@ import Big from "big.js";
 export default function RechargeFrom1click({
   setSelectedOption
 }: {
-  selectedOption: string | null;
   setSelectedOption: (option: string | null) => void;
-  userInfo: any;
-  onCopy: (address: string) => void;
-  tokenBalance: number | string;
 }) {
   const [token, setToken] = useState<any>(null);
   const [qoute, setQoute] = useState<any>(null);
