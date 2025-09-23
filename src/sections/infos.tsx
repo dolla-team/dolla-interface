@@ -95,7 +95,7 @@ export default function Infos({
 
     const getData = async () => {
       const res = await axiosInstance.get(
-        `/api/v1/pool/scroll/list?list=10&chain=solana`
+        `/api/v1/pool/scroll/list?list=10&chain=near`
       );
 
       setData(res.data.data);
