@@ -25,10 +25,10 @@ export default function FundList({ onBack }: { onBack: () => void }) {
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const { userInfo } = useAuth();
 
-  const { tokenBalance } = useTokenBalance({
-    address: config.purchaseToken.address,
-    decimals: config.purchaseToken.decimals
-  });
+  // const { tokenBalance } = useTokenBalance({
+  //   address: config.purchaseToken.address,
+  //   decimals: config.purchaseToken.decimals
+  // });
   const { onCopy } = useCopy();
   const fundOptions: FundOption[] = [
     // {
@@ -195,7 +195,7 @@ export default function FundList({ onBack }: { onBack: () => void }) {
             setSelectedOption={setSelectedOption}
             userInfo={userInfo}
             onCopy={onCopy}
-            tokenBalance={tokenBalance}
+            tokenBalance={'0'}
           />
         )}
 

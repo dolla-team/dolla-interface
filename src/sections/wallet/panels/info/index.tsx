@@ -21,7 +21,7 @@ export default function Info({
       <div className="pt-[20px]">
         <div className="flex justify-center items-center gap-[16px]">
           <img
-            src={config.purchaseToken.icon}
+            src={config.purchaseToken?.icon || ''}
             className="w-[36px] h-[36px] rounded-full"
           />
           <div className="text-[36px] text-black">

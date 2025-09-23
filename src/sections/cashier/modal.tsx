@@ -86,7 +86,7 @@ export default function CashierModal({ open, onClose, defaultTab }: any) {
         </div>
         {tab === "fund" && (
           <PanelWrapper className="px-[14px] pb-[20px]">
-            <FundList />
+            <FundList onBack={onClose} />
           </PanelWrapper>
         )}
 
