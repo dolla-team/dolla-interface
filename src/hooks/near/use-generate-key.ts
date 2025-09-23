@@ -14,20 +14,6 @@ export default function useGenerateKey(account?: any) {
   const { signMessage } = useSignMessage();
 
   async function generateKeyPair() {
-    if (!publicKey) {
-      const {
-        publicKey: shortPublicKey,
-        keyPairSigner: newKeyPairSigner,
-        privateKey: newPrivateKey
-      } = createKeyPair();
-
-      saveKeyPair(shortPublicKey, newPrivateKey);
-
-      return {
-        publicKey: shortPublicKey,
-        keyPairSigner: newKeyPairSigner
-      };
-    }
     if (publicKey && privateKey) {
       const newKeyPairSigner = KeyPairSigner.fromSecretKey(
         ("ed25519:" + privateKey) as any
@@ -41,6 +27,21 @@ export default function useGenerateKey(account?: any) {
     if (account && !publicKey) {
       // TODO
       console.log("generateKeyPair", "no key");
+    }
+
+    if (!account || !publicKey) {
+      const {
+        publicKey: shortPublicKey,
+        keyPairSigner: newKeyPairSigner,
+        privateKey: newPrivateKey
+      } = createKeyPair();
+
+      saveKeyPair(shortPublicKey, newPrivateKey);
+
+      return {
+        publicKey: shortPublicKey,
+        keyPairSigner: newKeyPairSigner
+      };
     }
   }
 
