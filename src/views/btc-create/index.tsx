@@ -27,12 +27,8 @@ import useCreate from "@/hooks/near/use-create";
 
 export default function BTCCreate() {
   const [amount, setAmount] = useState(1);
-  const {
-    userInfo,
-    isLoading,
-    address: evmAddress,
-    nearAccount
-  } = useAuth() || {};
+  const { userInfo, isLoading, updateNearAccount, nearAccount } =
+    useAuth() || {};
   const { token } = useQuote();
   const tokenBalance = nearAccount?.balance;
   const { data: referenceData, loading: referenceDataLoading } =
@@ -51,7 +47,9 @@ export default function BTCCreate() {
     return _p;
   }, [prices]);
 
-  const { create: onCreate, loading: creating } = useCreate(() => {});
+  const { create: onCreate, loading: creating } = useCreate(() => {
+    updateNearAccount?.();
+  });
 
   const errorTips = useMemo(() => {
     if (pricePerBTC === 0) {
