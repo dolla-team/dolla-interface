@@ -117,7 +117,7 @@ export default function TokenSelector({
   useEffect(() => {
     onTokenSelect({
       ...selectedChain,
-      icon: selectedToken?.icon
+      ...selectedToken
     });
   }, [selectedChain, selectedToken]);
 

@@ -1,7 +1,6 @@
 import BackIcon from "@/sections/wallet/back-icon";
 import TokenSelector from "./token-selector";
 import Recharge from "./recharge";
-import config from "@/config/bera";
 import { useMemo, useState } from "react";
 import { chainConfig } from "../utils/chainConfig";
 import Big from "big.js";
@@ -17,14 +16,13 @@ export default function RechargeFrom1click({
 
   const rechargeToken = useMemo(() => {
     return {
-      ...config.purchaseToken,
       chainName: chainConfig[token?.blockchain]?.name,
       chainLogo: chainConfig[token?.blockchain]?.icon,
       symbol: token?.symbol,
       address: qoute?.depositAddress,
       icon: token?.icon
     };
-  }, [qoute, token, config]);
+  }, [qoute, token]);
 
   return (
     <div className="pb-[20px] relative">
