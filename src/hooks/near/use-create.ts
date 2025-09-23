@@ -39,6 +39,7 @@ export default function useCreate(onSuccess: () => void) {
       }
 
       const provider = getProvider();
+
       const { header } = await provider.block({ finality: "final" });
 
       const _amount = Big(amount)

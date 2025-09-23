@@ -61,7 +61,7 @@ export default function BTCCreate() {
       return "Insufficient Balance";
     }
     return "";
-  }, [amount, pricePerBTC]);
+  }, [amount, pricePerBTC, nearAccount?.prizeBalance]);
 
   const [poolBidsOvermarket] = useMemo(() => {
     return [
