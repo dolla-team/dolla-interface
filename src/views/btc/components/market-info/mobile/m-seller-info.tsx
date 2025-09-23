@@ -1,11 +1,11 @@
 import Avatar from "@/components/avatar";
 import { formatAddress } from "@/utils/format/address";
 import SellerLevel from "@/components/seller-level";
-import ProvablyFair from "@/sections/provably-fair";
-import { useState } from "react";
+// import ProvablyFair from "@/sections/provably-fair";
+// import { useState } from "react";
 
 export default function MSellerInfo({ pool }: any) {
-  const [showProvablyFair, setShowProvablyFair] = useState(false);
+  // const [showProvablyFair, setShowProvablyFair] = useState(false);
 
   return (
     <>
@@ -22,15 +22,15 @@ export default function MSellerInfo({ pool }: any) {
           </div>
           <SellerLevel />
         </div>
-        <button className="button text-[#FFE9B2] text-[14px]" onClick={() => setShowProvablyFair(true)}>
+        {/* <button className="button text-[#FFE9B2] text-[14px]" onClick={() => setShowProvablyFair(true)}>
           Provably fair
-        </button>
+        </button> */}
       </div>
-      <ProvablyFair
+      {/* <ProvablyFair
         open={showProvablyFair}
         onClose={() => setShowProvablyFair(false)}
         pool={pool?.id}
-      />
+      /> */}
     </>
   );
 }

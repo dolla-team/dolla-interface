@@ -2,11 +2,11 @@ import Avatar from "@/components/avatar";
 import { formatAddress } from "@/utils/format/address";
 import SellerLevel from "@/components/seller-level";
 import dayjs from "dayjs";
-import { useState } from "react";
-import ProvablyFair from "@/sections/provably-fair";
+// import { useState } from "react";
+// import ProvablyFair from "@/sections/provably-fair";
 
 export default function UnactivePanel({ pool }: { pool: any }) {
-  const [showProvablyFair, setShowProvablyFair] = useState(false);
+  // const [showProvablyFair, setShowProvablyFair] = useState(false);
 
   return (
     <>
@@ -14,12 +14,12 @@ export default function UnactivePanel({ pool }: { pool: any }) {
         <div className="px-[8px] py-[3px] rounded-[10px] border border-[#6A5D3A] bg-[#00000033] backdrop-blur-[10px] text-white text-[14px]">
           {pool?.status === 2 ? "Ended" : "Cancelled"}
         </div>
-        <button onClick={() => {setShowProvablyFair(true)}} className="text-[14px] text-[#FFE9B2]">Provably fair</button>
+        {/* <button onClick={() => {setShowProvablyFair(true)}} className="text-[14px] text-[#FFE9B2]">Provably fair</button>
         <ProvablyFair
           open={showProvablyFair}
           onClose={() => setShowProvablyFair(false)}
           pool={pool?.id}
-        />
+        /> */}
       </div>
       <div className="flex items-center justify-between mt-[8px]">
         <div className="flex items-center gap-[10px]">
