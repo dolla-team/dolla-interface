@@ -24,8 +24,7 @@ export const BASE_TOKEN: Record<string, any> = {
   chain: "near",
   name: "USDC",
   symbol: "USDC",
-  pointIcon: "/points/btc.png",
-  icon: "/btc.png"
+  icon: "/tokens/usdc.png"
 };
 
 export const QUOTE_TOKEN: Record<string, any> = {
@@ -36,7 +35,7 @@ export const QUOTE_TOKEN: Record<string, any> = {
   chain: "near",
   name: "USDC",
   symbol: "USDC",
-  pointIcon: "/points/usdt.png"
+  icon: "/tokens/usdc.png"
 };
 
 export const PAID_TOKEN = QUOTE_TOKEN;
