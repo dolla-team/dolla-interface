@@ -72,7 +72,7 @@ export default function useWithdraw() {
         withdraw_args: {
           ByAk: {
             amount: _amount,
-            token: { FT: { [fromToken.address]: fromToken.decimals } },
+            token: { FT: [fromToken.address] },
             recipient_account: recipientAccount
           }
         }
