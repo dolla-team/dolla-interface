@@ -9,12 +9,12 @@ import { useMemo, useState } from "react";
 import Big from "big.js";
 import useIsMobile from "@/hooks/use-is-mobile";
 import clsx from "clsx";
-import ProvablyFair from "@/sections/provably-fair";
+// import ProvablyFair from "@/sections/provably-fair";
 
 export default function EndPanel({ data }: { data: any }) {
   const { winnerBidList } = useWinnerBidList(data);
   const isMobile = useIsMobile();
-  const [openProvablyFair, setOpenProvablyFair] = useState(false);
+  // const [openProvablyFair, setOpenProvablyFair] = useState(false);
 
   const [
     totalBids,
@@ -91,14 +91,14 @@ export default function EndPanel({ data }: { data: any }) {
               >
                 Winner
               </span>
-              <button
+              {/* <button
                 onClick={() => {
                   setOpenProvablyFair(true);
                 }}
                 className="text-[12px] underline button text-[#FFE9B2]"
               >
                 Verify
-              </button>
+              </button> */}
             </div>
             <div
               className={clsx(
@@ -255,14 +255,14 @@ export default function EndPanel({ data }: { data: any }) {
           </div>
         </div>
 
-        <ProvablyFair
+        {/* <ProvablyFair
           pool={data?.id}
           open={openProvablyFair}
           onClose={() => {
             setOpenProvablyFair(false);
           }}
           defaultTab="provably-fair"
-        />
+        /> */}
       </div>
     )
   );

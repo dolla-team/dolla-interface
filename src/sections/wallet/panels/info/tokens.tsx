@@ -1,4 +1,4 @@
-import config from "@/config/bera";
+import { QUOTE_TOKEN } from "@/config/btc";
 import Empty from "./empty";
 import { useAuth } from "@/contexts/auth";
 import { formatNumber } from "@/utils/format/number";
@@ -23,10 +23,7 @@ const Item = ({ balance, price }: { balance: string; price: number }) => {
     <div className="flex justify-between items-center">
       <div className="flex items-center gap-[14px]">
         <div className="w-[32px] h-[32px] rounded-full relative">
-          <img
-            src={config.purchaseToken.icon}
-            className="w-full h-full object-cover"
-          />
+          <img src={QUOTE_TOKEN.icon} className="w-full h-full object-cover" />
           <img
             src="/chains/bera-1.png"
             className="w-[16px] h-[16px] absolute bottom-[-4px] right-[-4px]"
@@ -35,9 +32,9 @@ const Item = ({ balance, price }: { balance: string; price: number }) => {
         <div>
           <div>
             <span className="text-[14px] text-black">
-              {config.purchaseToken.symbol}{" "}
+              {QUOTE_TOKEN.symbol}{" "}
             </span>
-            <span className="text-[12px] text-[#8A87AA]">(Berachain)</span>
+            {/* <span className="text-[12px] text-[#8A87AA]">(Near)</span> */}
           </div>
           <div className="text-[12px] text-[#8A87AA]">$1.00</div>
         </div>

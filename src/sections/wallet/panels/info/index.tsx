@@ -1,6 +1,6 @@
 import { useAuth } from "@/contexts/auth";
 import Top from "./top";
-import config from "@/config/bera";
+import { QUOTE_TOKEN } from "@/config/btc";
 import { formatNumber } from "@/utils/format/number";
 import Tabs from "@/components/tabs";
 import Tokens from "./tokens";
@@ -21,7 +21,7 @@ export default function Info({
       <div className="pt-[20px]">
         <div className="flex justify-center items-center gap-[16px]">
           <img
-            src={config.purchaseToken?.icon || ''}
+            src={QUOTE_TOKEN.icon}
             className="w-[36px] h-[36px] rounded-full"
           />
           <div className="text-[36px] text-black">

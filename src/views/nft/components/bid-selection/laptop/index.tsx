@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import { Bg1, Bg10, Bg5, Bg20 } from "./bgs";
 import BidBtn from "./bid-btn";
-import ProvablyFair from "@/sections/provably-fair";
+// import ProvablyFair from "@/sections/provably-fair";
 import { useAuth } from "@/contexts/auth";
 import CashierEntry from "../../cashier-entery";
 import ProbabilityBar from "./probability-bar";
@@ -27,7 +27,7 @@ export default function BidSelection({
   onChangeBids: (bids: number) => void;
   onBidClick: () => void;
 }) {
-  const [showProvablyFair, setShowProvablyFair] = useState(false);
+  // const [showProvablyFair, setShowProvablyFair] = useState(false);
   const { userInfo } = useAuth();
   const { set: walletSet } = useWalletStore();
   const [probability, probabilities] = useMemo(() => {
@@ -122,13 +122,13 @@ export default function BidSelection({
         </div>
       </div>
 
-      {pool && (
+      {/* {pool && (
         <ProvablyFair
           open={showProvablyFair}
           pool={pool}
           onClose={() => setShowProvablyFair(false)}
         />
-      )}
+      )} */}
     </div>
   );
 }

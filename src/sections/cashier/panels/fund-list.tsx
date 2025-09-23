@@ -1,16 +1,9 @@
 import { useState } from "react";
-import Recharge from "./recharge";
 import { useAuth } from "@/contexts/auth";
-import useTokenBalance from "@/hooks/evm/use-token-balance";
-import { formatNumber } from "@/utils/format/number";
 import FundFromCoinbase from "./fund-from-coinbase";
 import FundFromMoonpay from "./fund-from-moonpay";
-import config from "@/config/bera";
-import Avatar from "@/components/avatar";
-import { formatAddress } from "@/utils/format/address";
 import useCopy from "@/hooks/use-copy";
 import BackIcon from "@/sections/wallet/back-icon";
-import TokenSelector from "./token-selector";
 import RechargeFrom1click from "./recharge-from-1click";
 
 interface FundOption {
@@ -25,10 +18,6 @@ export default function FundList({ onBack }: { onBack: () => void }) {
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const { userInfo } = useAuth();
 
-  // const { tokenBalance } = useTokenBalance({
-  //   address: config.purchaseToken.address,
-  //   decimals: config.purchaseToken.decimals
-  // });
   const { onCopy } = useCopy();
   const fundOptions: FundOption[] = [
     // {
@@ -110,7 +99,7 @@ export default function FundList({ onBack }: { onBack: () => void }) {
         console.log("Coinbase clicked");
         setSelectedOption("coinbase");
       }
-    },
+    }
     // {
     //   id: "moonpay",
     //   title: "Moonpay",
@@ -190,14 +179,8 @@ export default function FundList({ onBack }: { onBack: () => void }) {
 
       {(selectedOption === "centralized-exchange" ||
         selectedOption === "maually") && (
-          <RechargeFrom1click
-            selectedOption={selectedOption}
-            setSelectedOption={setSelectedOption}
-            userInfo={userInfo}
-            onCopy={onCopy}
-            tokenBalance={'0'}
-          />
-        )}
+        <RechargeFrom1click setSelectedOption={setSelectedOption} />
+      )}
 
       {selectedOption === "coinbase" && (
         <FundFromCoinbase onBack={() => setSelectedOption(null)} />

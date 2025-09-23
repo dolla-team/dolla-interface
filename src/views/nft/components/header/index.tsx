@@ -7,11 +7,11 @@ import Btn from "./btn";
 
 import ProgressBar from "@/components/nft-card/progress-bar";
 import { useNavigate } from "react-router-dom";
-import ProvablyFair from "@/sections/provably-fair";
+// import ProvablyFair from "@/sections/provably-fair";
 
 export default function Header({ className }: { className?: string }) {
   const { pool } = useNftContext();
-  const [openProvablyFair, setOpenProvablyFair] = useState(false);
+  // const [openProvablyFair, setOpenProvablyFair] = useState(false);
   const navigate = useNavigate();
   const [rewardTokenInfo, type, process] = useMemo(() => {
     if (!pool) return [{}, "basic", 0];
@@ -38,7 +38,7 @@ export default function Header({ className }: { className?: string }) {
         >
           More Market
         </Btn>
-        <Btn
+        {/* <Btn
           className="absolute right-[-166px]"
           isBgReserve
           onClick={() => {
@@ -46,7 +46,7 @@ export default function Header({ className }: { className?: string }) {
           }}
         >
           Provably fair
-        </Btn>
+        </Btn> */}
         <div className="absolute w-full text-center top-[50%] translate-y-[-50%]">
           <div
             className=" font-bold text-[32px]"
@@ -106,14 +106,14 @@ export default function Header({ className }: { className?: string }) {
           </div>
         </div> */}
       </div>
-      <ProvablyFair
+      {/* <ProvablyFair
         pool={pool}
         open={openProvablyFair}
         onClose={() => {
           setOpenProvablyFair(false);
         }}
         defaultTab="provably-fair"
-      />
+      /> */}
     </div>
   );
 }

@@ -9,13 +9,13 @@ import { useMemo, useState } from "react";
 import Big from "big.js";
 import useIsMobile from "@/hooks/use-is-mobile";
 import clsx from "clsx";
-import ProvablyFair from "@/sections/provably-fair";
+// import ProvablyFair from "@/sections/provably-fair";
 import { getAnchorPrice } from "@/utils/pool";
 
 export default function EndPanel({ data }: { data: any }) {
   const { winnerBidList } = useWinnerBidList(data);
   const isMobile = useIsMobile();
-  const [openProvablyFair, setOpenProvablyFair] = useState(false);
+  // const [openProvablyFair, setOpenProvablyFair] = useState(false);
 
   const [
     totalBids,
@@ -109,14 +109,14 @@ export default function EndPanel({ data }: { data: any }) {
               >
                 Winner
               </span>
-              <button
+              {/* <button
                 onClick={() => {
                   setOpenProvablyFair(true);
                 }}
                 className="text-[12px] underline button text-[#FFE9B2] absolute bottom-[10px] right-[-14px]"
               >
                 Verify
-              </button>
+              </button> */}
             </div>
             <div className="text-white text-center text-[16px] font-[DelaGothicOne] mt-[10px]">
               {data.winner_user_info?.email ||
@@ -233,7 +233,7 @@ export default function EndPanel({ data }: { data: any }) {
             </div>
           </div>
         </div>
-
+        {/* 
         <ProvablyFair
           pool={data?.id}
           open={openProvablyFair}
@@ -241,7 +241,7 @@ export default function EndPanel({ data }: { data: any }) {
             setOpenProvablyFair(false);
           }}
           defaultTab="provably-fair"
-        />
+        /> */}
       </div>
     )
   );
