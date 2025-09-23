@@ -57,6 +57,9 @@ export default function BTCCreate() {
     if (pricePerBTC === 0) {
       return "Anchor price not found";
     }
+    if (Big(amount).gt(Big(nearAccount?.prizeBalance || 0))) {
+      return "Insufficient Balance";
+    }
     return "";
   }, [amount, pricePerBTC]);
 
@@ -150,6 +153,11 @@ export default function BTCCreate() {
               {errorTips || "Create Market"}
             </Button>
           </div>
+          {errorTips === "Insufficient Balance" && (
+            <div className="text-[12px] text-[#F87168] text-center mt-[6px]">
+              Insufficient Balance, deposit BTC first
+            </div>
+          )}
           <div className="mt-[36px] rounded-[12px] bg-[#FFFFFF99] p-[24px] w-full max-md:mt-[40px] max-md:px-[12px]">
             <div className="text-[#8A87AA]">Reference Data</div>
             <div className="w-full grid grid-cols-3 gap-[10px] mt-[11px] max-md:mt-[15px] max-md:gap-[7px]">
