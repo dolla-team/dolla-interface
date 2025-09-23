@@ -5,4 +5,4 @@ export const HOST_API = "https://test-api.dolla.market";
 
 export const INVATE_ACTIVE = false;
 
-export const BET_UNIT = 10;
+export const BET_UNIT = "10";

@@ -130,7 +130,9 @@ export default function BTCCreate() {
                       fontSize: isActive ? 20 : 16
                     }}
                   >
-                    <div className="text-[14px] font-[800]">{item} BTC</div>
+                    <div className="text-[14px] font-[800]">
+                      {item} {BASE_TOKEN.symbol}
+                    </div>
                     <div className={clsx("text-[12px]")}>
                       ~${formatNumber(item * pricePerBTC, 0, true)}
                     </div>
