@@ -2,6 +2,7 @@ import Button from "@/components/button";
 import { QRCodeSVG } from "qrcode.react";
 import useCopy from "@/hooks/use-copy";
 import clsx from "clsx";
+import { formatAddress } from "@/utils/format/address";
 
 export default function Recharge({
   token,
@@ -16,14 +17,14 @@ export default function Recharge({
   loading?: boolean;
 }) {
   const rechargeToken = token;
-  const tokenAddress = address || rechargeToken.address;
+  const depositAddress = address || rechargeToken.depositAddress;
   const { onCopy } = useCopy();
 
   return (
     <div className={clsx("flex flex-col items-center", className)}>
       <div className="w-[160px] h-[160px] mt-[10px] rounded-[6px] bg-white p-2">
         <QRCodeSVG
-          value={tokenAddress}
+          value={depositAddress}
           size={144}
           level="H"
           imageSettings={{
@@ -42,39 +43,33 @@ export default function Recharge({
       >
         <div className="flex items-center">
           <div className="flex items-center gap-[5px]">
-            <div className="text-[18px] text-black font-[700] pr-[10px]">
+            <div className="text-[18px] text-black font-[700] pr-[8px]">
               {token.symbol}
             </div>
-            <div className="w-[17px] h-[17px] relative">
-              {/* <img
-                src={token.icon}
-                className="w-full h-full object-cover"
-              /> */}
-              <img
-                src={token.chainLogo}
-                className="w-full h-full object-cover"
-              />
-            </div>
-            <div>
-              {/* <div>
-                <span className="text-[16px] text-white">
-                  {token.symbol}{" "}
-                </span>
-              </div> */}
-              <div className="text-[14px] text-black">{token.chainName}</div>
+            <div className="relative">
+              <div className="flex items-center gap-[5px]">
+                <img
+                  src={token.chainLogo}
+                  className="object-cover w-[17px] h-[17px]"
+                />
+                <div className="text-[12px] text-black">{token.chainName}</div>
+              </div>
+              <div className="text-[10px] text-black/60">
+                {formatAddress(token.address, 10)}
+              </div>
             </div>
           </div>
         </div>
         <div className="mt-[12px]">
           <div className="text-black text-[12px] font-[300] break-all leading-[18px]">
-            {tokenAddress}
+            {depositAddress}
           </div>
         </div>
         <Button
           className="w-full mx-auto h-[50px] mt-[10px] flex items-center gap-[10px] !bg-black"
           onClick={() => {
-            if (tokenAddress) {
-              onCopy(tokenAddress);
+            if (depositAddress) {
+              onCopy(depositAddress);
             }
           }}
         >

@@ -1,14 +1,11 @@
 import { useState } from "react";
-import Big from "big.js";
 import useToast from "@/hooks/use-toast";
 import useBettingContract from "./use-betting-contract";
 import reportHash from "@/utils/report-hash";
 import useGelatonetwork from "./use-gelatonetwork";
-import { BET_UNIT } from "@/config";
 
 export default function useCreate({
   token,
-  price,
   onCreateSuccess
 }: {
   token: any;
@@ -30,8 +27,6 @@ export default function useCreate({
       const tx =
         await BettingContract.populateTransaction.sendCrossChainMessage(
           token.address,
-          BET_UNIT,
-          Big(price * 10 ** 6).toFixed(0),
           token.id // nftIds
         );
       executeTransaction({
