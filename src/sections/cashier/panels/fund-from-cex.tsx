@@ -56,7 +56,7 @@ export default function FundFromCex({
           />
         </div>
         <span className="text-black text-[15px] mt-1">
-          {config.purchaseToken.symbol}
+          {config.purchaseToken?.symbol || 'USDC'}
         </span>
       </div>
       <div className="flex justify-center">
