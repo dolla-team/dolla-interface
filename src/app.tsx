@@ -1,7 +1,8 @@
 import {
   createBrowserRouter,
   RouterProvider,
-  Navigate
+  Navigate,
+  ScrollRestoration
 } from "react-router-dom";
 import { Suspense, lazy, useEffect, useState } from "react";
 import WalletProvider from "./contexts/wallet";

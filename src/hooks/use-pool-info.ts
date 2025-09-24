@@ -7,7 +7,7 @@ export default function usePoolInfo() {
 
   const onQueryPoolInfo = async (poolId?: number) => {
     try {
-      if (!poolId) return;
+      if (!poolId && poolId !== 0) return;
       setLoading(true);
       const res = await axiosInstance.get(
         `/api/v1/pool?pool_id=${poolId}&chain=${"near"}`

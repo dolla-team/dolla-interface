@@ -9,7 +9,6 @@ export default function useCreate({
   onCreateSuccess
 }: {
   token: any;
-  price: number;
   onCreateSuccess?: (poolId: number) => void;
 }) {
   const [creating, setCreating] = useState(false);
@@ -29,6 +28,7 @@ export default function useCreate({
           token.address,
           token.id // nftIds
         );
+
       executeTransaction({
         calls: [tx],
         onSuccess: async (receipt: any) => {

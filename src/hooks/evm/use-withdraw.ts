@@ -53,7 +53,7 @@ export default function useWithdraw(onSuccess: () => void) {
             onSuccess?.();
             toast.success({ title: "Withdraw success" });
             if (type === "coin") {
-              updateQuoteTokenBalance();
+              updateQuoteTokenBalance?.();
             }
           }
           reportHash({

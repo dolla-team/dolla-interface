@@ -25,7 +25,7 @@ export default function useUserRecords(props?: {
       const res = await axiosInstance.get(
         `/api/v1/user/records?limit=${pageLimit}&offset=${
           pageRef.current * pageLimit
-        }&chain=Berachain`
+        }&chain=near`
       );
 
       setRecords((prev) =>
@@ -62,7 +62,7 @@ export default function useUserRecords(props?: {
         const res = await axiosInstance.get(
           `/api/v1/user/records?limit=${pageLimit}&offset=${
             (userRecordsPageIndex - 1) * pageLimit
-          }&chain=Berachain`
+          }&chain=near`
         );
 
         setHasNextPage(res.data.data.has_next_page);

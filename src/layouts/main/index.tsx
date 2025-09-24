@@ -65,7 +65,7 @@ export default function MainLayout() {
         </div>
         <PageTabs />
       </div>
-      <Infos chain={isBtc ? "Berachain" : "solana"} />
+      <Infos />
       <div className="h-[calc(100vh-76px)] overflow-y-auto relative z-[2] bg-[#F0F0F0]">
         <Outlet />
       </div>

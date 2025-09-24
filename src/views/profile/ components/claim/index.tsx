@@ -38,7 +38,7 @@ const ClaimIndex = (props: any) => {
       const params = new URLSearchParams();
       params.set("limit", pageSize + "");
       params.set("offset", pageIndex * pageSize + "");
-      params.set("chain", "Berachain");
+      params.set("chain", "near");
       if (type === "player") {
         // 0: ALl
         // 1: Winner

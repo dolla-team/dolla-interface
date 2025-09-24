@@ -24,12 +24,14 @@ export default function useWithdraw() {
     fromToken,
     toToken,
     account,
-    amount
+    amount,
+    type = "token"
   }: {
     fromToken: any;
     toToken: any;
     account: string;
     amount: string;
+    type?: "nft" | "token";
   }) {
     try {
       setLoading(true);
@@ -51,22 +53,33 @@ export default function useWithdraw() {
       const _amount = Big(amount)
         .mul(10 ** fromToken.decimals)
         .toFixed(0);
-      const res = await quote({
-        dry: false,
-        swapType: "EXACT_INPUT",
-        slippageTolerance: 50,
-        originAsset: fromToken.assetId,
-        depositType: "ORIGIN_CHAIN",
-        destinationAsset: toToken.assetId,
-        amount: _amount,
-        refundTo: import.meta.env.VITE_NEAR_ACCOUNT_ID,
-        refundType: "ORIGIN_CHAIN",
-        recipient: account,
-        recipientType: "DESTINATION_CHAIN",
-        deadline: dayjs().add(1, "hour").toISOString()
-      });
 
-      const recipientAccount = res.quote.depositAddress;
+      let recipientAccount = "";
+
+      if (type === "token") {
+        const res = await quote({
+          dry: false,
+          swapType: "EXACT_INPUT",
+          slippageTolerance: 50,
+          originAsset: fromToken.assetId,
+          depositType: "ORIGIN_CHAIN",
+          destinationAsset: toToken.assetId,
+          amount: _amount,
+          refundTo: import.meta.env.VITE_NEAR_ACCOUNT_ID,
+          refundType: "ORIGIN_CHAIN",
+          recipient: account,
+          recipientType: "DESTINATION_CHAIN",
+          deadline: dayjs().add(1, "hour").toISOString()
+        });
+
+        recipientAccount = res.quote.depositAddress;
+      } else {
+        // Remove 0x prefix and pad to 64 characters with leading zeros
+        recipientAccount = account.startsWith("0x")
+          ? account.slice(2)
+          : account;
+        recipientAccount = recipientAccount.padStart(64, "0");
+      }
 
       const withdrawArgs = {
         withdraw_args: {
