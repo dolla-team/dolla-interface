@@ -139,6 +139,7 @@ export default function Infos({
 
 const Item = ({ item }: { item: any; index: number }) => {
   const randomIndex = Math.floor(Math.random() * config.length);
+
   return item.winner_user ? (
     <div className="flex items-center h-full gap-3 text-white transition-transform duration-200 hover:scale-105">
       <span className="text-[12px] text-[#D9D9D9] rounded">
@@ -151,7 +152,7 @@ const Item = ({ item }: { item: any; index: number }) => {
         )}
       >
         {Big(getAnchorPrice(item?.anchor_price, BASE_TOKEN.decimals)).toFixed(
-          0
+          2
         )}
         x
       </span>
@@ -167,7 +168,7 @@ const Item = ({ item }: { item: any; index: number }) => {
       <span className={clsx("text-lg font-bold drop-shadow-lg")}>
         $
         {Big(getAnchorPrice(item?.anchor_price, BASE_TOKEN.decimals)).toFixed(
-          0
+          2
         )}
       </span>
       <span className="text-xl drop-shadow-lg">

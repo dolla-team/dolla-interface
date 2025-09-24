@@ -4,10 +4,7 @@ import { useMemo, useState } from "react";
 import Big from "big.js";
 import ButtonV2 from "@/components/button/v2";
 import { getAnchorPrice, penaltyPercent } from "@/utils/pool";
-import useRequestCancel from "@/hooks/evm/use-request-cancel";
-import useCompleteCancel from "@/hooks/evm/use-complete-cancel";
-import useApprove from "@/hooks/evm/use-approve";
-import config from "@/config/bera";
+import useGameAction from "@/hooks/near/use-game-action";
 
 export default function CancelModal({
   open,
@@ -24,41 +21,44 @@ export default function CancelModal({
     return order?.reward_token_info?.[0] || {};
   }, [order]);
 
-  const { loading: cancelingMark, onMarkCancel } = useRequestCancel({
-    onCancelSuccess: () => {
-      onSuccess({
-        status: 5,
-        skipClose: true
-      });
-      onClose();
-    }
-  });
-  const { loading: cancelingRevert, onRevertCancel } = useCompleteCancel({
-    onCancelSuccess: (isEnded) => {
-      onSuccess({
-        status: isEnded ? 2 : 3
-      });
-      onClose();
-    }
-  });
+  const { pausing, resuming, canceling, pauseGame, cancelGame, resumeGame } =
+    useGameAction({
+      gameId: order?.pool_id,
+      onPauseSuccess: () => {
+        onSuccess({
+          status: 5,
+          skipClose: true
+        });
+        onClose();
+      },
+      onResumeSuccess: () => {
+        onSuccess({
+          status: 1
+        });
+        onClose();
+      },
+      onCancelSuccess: () => {
+        onSuccess({
+          status: 3
+        });
+        onClose();
+      }
+    });
+
   const [status, setStatus] = useState(0);
-  const { approve, approved, approving, checking } = useApprove({
-    token: config.purchaseToken,
-    spender: config.bettingContractAddress,
-    isMax: true,
-    amount: String(1)
-  });
+
   const [penalty, markable, completable] = useMemo(() => {
     const _penalty = Big(order?.accumulative_bids || 0)
       .times(penaltyPercent)
       .toString();
-    let _completable = false;
+    let _completable = true;
     if (order.status === 5) {
       setStatus(1);
-      _completable = Date.now() - order?.result_time * 1000 > 1000 * 60 * 10;
+      // _completable = Date.now() - order?.result_time * 1000 > 1000 * 60 * 10;
     }
 
-    const _markable = Date.now() - order?.time * 1000 > 1000 * 60 * 60 * 24 * 3;
+    // const _markable = Date.now() - order?.time * 1000 > 1000 * 60 * 60 * 24 * 3;
+    const _markable = true;
     return [_penalty, _markable, _completable];
   }, [order]);
 
@@ -147,41 +147,52 @@ export default function CancelModal({
             </div> */}
           </div>
         </div>
-        <div className="flex justify-end mt-[0px] px-[20px]">
+        <div className="flex justify-end mt-[0px] px-[20px] gap-[10px]">
           {status === 1 && (
-            <ButtonV2
-              className="!h-[40px] !text-[14px]"
-              loading={cancelingRevert}
-              disabled={cancelingRevert || !completable}
-              type="default"
-              onClick={() => {
-                if (cancelingRevert) {
-                  return;
-                }
-                onRevertCancel(order?.pool_id);
-              }}
-            >
-              Cancel
-            </ButtonV2>
+            <>
+              <ButtonV2
+                className="!h-[40px] !text-[14px]"
+                loading={resuming}
+                disabled={resuming || !completable}
+                type="primary"
+                onClick={() => {
+                  if (resuming) {
+                    return;
+                  }
+                  resumeGame();
+                }}
+              >
+                Resume
+              </ButtonV2>
+              <ButtonV2
+                className="!h-[40px] !text-[14px]"
+                loading={canceling}
+                disabled={canceling || !completable}
+                type="default"
+                onClick={() => {
+                  if (canceling) {
+                    return;
+                  }
+                  cancelGame();
+                }}
+              >
+                Cancel
+              </ButtonV2>
+            </>
           )}
           {status === 0 && (
             <ButtonV2
               className="!h-[40px] !text-[14px]"
-              loading={cancelingMark || checking || approving}
-              disabled={cancelingMark || !markable}
+              loading={pausing}
+              disabled={pausing || !markable}
               onClick={() => {
-                if (approving || checking) return;
-                if (!approved) {
-                  approve();
+                if (pausing || !markable) {
                   return;
                 }
-                if (cancelingMark || !markable) {
-                  return;
-                }
-                onMarkCancel(order?.pool_id);
+                pauseGame();
               }}
             >
-              {!approved ? "Approve" : "Pay Penalty"}
+              Pause
             </ButtonV2>
           )}
         </div>

@@ -1,5 +1,5 @@
 import AvatarAction from "./avatar-action";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import Button from "@/components/button";
 import { useAuth } from "@/contexts/auth";
 import DollaEye from "@/components/dolla-eye";
@@ -9,14 +9,17 @@ import Wallet from "@/sections/wallet";
 import Infos from "@/sections/infos";
 import UserInfo from "@/sections/user-info";
 import PageTabs from "./tabs";
-import useIsBtc from "@/hooks/use-is-btc";
+import { useEffect, useRef } from "react";
 
 export default function MainLayout() {
   const { userInfo, login } = useAuth() || {};
   // const isMobile = useIsMobile();
   const navigate = useNavigate();
-
-  const isBtc = useIsBtc();
+  const contentRef = useRef<HTMLDivElement>(null);
+  const pathname = useLocation();
+  useEffect(() => {
+    contentRef.current?.scrollTo(0, 0);
+  }, [pathname]);
 
   return (
     <div className="h-screen overflow-hidden bg-white relative">
@@ -66,7 +69,10 @@ export default function MainLayout() {
         <PageTabs />
       </div>
       <Infos />
-      <div className="h-[calc(100vh-76px)] overflow-y-auto relative z-[2] bg-[#F0F0F0]">
+      <div
+        className="h-[calc(100vh-76px)] overflow-y-auto relative z-[2] bg-[#F0F0F0]"
+        ref={contentRef}
+      >
         <Outlet />
       </div>
       <Wallet />

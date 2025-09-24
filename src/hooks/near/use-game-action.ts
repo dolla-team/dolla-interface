@@ -6,22 +6,36 @@ import { useNearKeyStore } from "@/stores/use-near-key";
 import { functionCall } from "near-api-js/lib/transaction";
 import { base_decode } from "near-api-js/lib/utils/serialize";
 import { QUOTE_TOKEN } from "@/config/btc";
+import useToast from "../use-toast";
 
 const THIRTY_TGAS = "300000000000000";
-export default function useGameAction({ gameId }: { gameId?: string }) {
+export default function useGameAction({
+  gameId,
+  onPauseSuccess,
+  onResumeSuccess,
+  onCancelSuccess
+}: {
+  gameId?: string;
+  onPauseSuccess?: () => void;
+  onResumeSuccess?: () => void;
+  onCancelSuccess?: () => void;
+}) {
   const { publicKey, privateKey } = useNearKeyStore();
   const keyPairSigner = useMemo(() => {
     return KeyPairSigner.fromSecretKey(("ed25519:" + privateKey) as any);
   }, [privateKey]);
-  const [loading, setLoading] = useState(false);
+  const [resuming, setResuming] = useState(false);
+  const [pausing, setPausing] = useState(false);
+  const [canceling, setCanceling] = useState(false);
+  const toast = useToast();
 
   async function pauseGame() {
     if (!keyPairSigner) {
       return;
     }
-
+    let toastId = toast.loading({ title: "Pausing game..." });
     try {
-      setLoading(true);
+      setPausing(true);
 
       const provider = getProvider();
       const { header } = await provider.block({ finality: "final" });
@@ -49,15 +63,21 @@ export default function useGameAction({ gameId }: { gameId?: string }) {
 
       const result: any = await provider.sendTransaction(signedTransaction);
 
+      toast.dismiss(toastId);
       if (result.status.SuccessValue) {
         console.log("success:", result);
+        toast.success({ title: "Paused game successfully" });
+        onPauseSuccess?.();
       } else {
         console.log("fail:", result);
+        toast.fail({ title: "Paused game failed" });
       }
     } catch (error) {
       console.error(error);
+      toast.dismiss(toastId);
+      toast.fail({ title: "Paused game failed" });
     } finally {
-      setLoading(false);
+      setPausing(false);
     }
   }
 
@@ -65,9 +85,9 @@ export default function useGameAction({ gameId }: { gameId?: string }) {
     if (!keyPairSigner) {
       return;
     }
-
+    let toastId = toast.loading({ title: "Resuming game..." });
     try {
-      setLoading(true);
+      setResuming(true);
 
       const provider = getProvider();
       const { header } = await provider.block({ finality: "final" });
@@ -95,15 +115,21 @@ export default function useGameAction({ gameId }: { gameId?: string }) {
 
       const result: any = await provider.sendTransaction(signedTransaction);
 
+      toast.dismiss(toastId);
       if (result.status.SuccessValue) {
         console.log("success:", result);
+        toast.success({ title: "Resumed game successfully" });
+        onResumeSuccess?.();
       } else {
+        toast.fail({ title: "Resumed game failed" });
         console.log("fail:", result);
       }
     } catch (error) {
       console.error(error);
+      toast.dismiss(toastId);
+      toast.fail({ title: "Resumed game failed" });
     } finally {
-      setLoading(false);
+      setResuming(false);
     }
   }
 
@@ -111,9 +137,9 @@ export default function useGameAction({ gameId }: { gameId?: string }) {
     if (!keyPairSigner) {
       return;
     }
-
+    let toastId = toast.loading({ title: "Canceling game..." });
     try {
-      setLoading(true);
+      setCanceling(true);
 
       const provider = getProvider();
       const { header } = await provider.block({ finality: "final" });
@@ -139,17 +165,23 @@ export default function useGameAction({ gameId }: { gameId?: string }) {
 
       const result: any = await provider.sendTransaction(signedTransaction);
 
+      toast.dismiss(toastId);
       if (result.status.SuccessValue) {
         console.log("success:", result);
+        toast.success({ title: "Canceled game successfully" });
+        onCancelSuccess?.();
       } else {
         console.log("fail:", result);
+        toast.fail({ title: "Canceled game failed" });
       }
 
       return result;
     } catch (error) {
       console.error(error);
+      toast.dismiss(toastId);
+      toast.fail({ title: "Canceled game failed" });
     } finally {
-      setLoading(false);
+      setCanceling(false);
     }
   }
 
@@ -167,6 +199,8 @@ export default function useGameAction({ gameId }: { gameId?: string }) {
     resumeGame,
     cancelGame,
     getAllGames,
-    loading
+    pausing,
+    resuming,
+    canceling
   };
 }
