@@ -48,7 +48,9 @@ export const AuthProvider: React.FC<{
     return privyItem || { address: "" };
   }, [wallets, isLoggedOut]);
 
-  const { account, fetchAccount } = useAccount(privyWallet?.address);
+  const { account, fetchAccount: updateNearAccount } = useAccount(
+    privyWallet?.address
+  );
   useGenerateKey(account);
 
   const {
@@ -214,7 +216,7 @@ export const AuthProvider: React.FC<{
         ready,
         user,
         nearAccount: account,
-        fetchAccount,
+        updateNearAccount,
         login,
         logout,
         onQueryUserInfo

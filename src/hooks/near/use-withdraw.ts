@@ -72,12 +72,12 @@ export default function useWithdraw() {
         withdraw_args: {
           ByAk: {
             amount: _amount,
-            token: { FT: [fromToken.address] },
+            token: { FT: fromToken.address },
             recipient_account: recipientAccount
           }
         }
       };
-
+      console.log("withdrawArgs:", JSON.stringify(withdrawArgs));
       const nonce = await getNonce(publicKey);
       const publicKeyObj = PublicKey.from(publicKey);
 
