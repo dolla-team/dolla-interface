@@ -60,7 +60,7 @@ const Content = () => {
       />
       <button
         onClick={() => {
-          navigate("/");
+          navigate(-1);
         }}
         className="button absolute top-[110px] left-[30px] w-[85px] h-[30px] z-[10] rounded-[8px] border border-[#3B3951] bg-[#FFFFFF1A] flex items-center justify-center gap-[8px]"
       >

@@ -1,16 +1,18 @@
 import { useMemo, useState } from "react";
-import { getNonce, getProvider, quote } from "./util";
+import { getNonce, getProvider } from "./util";
 import { KeyPairSigner, transactions } from "near-api-js";
 import { PublicKey } from "near-api-js/lib/utils/key_pair";
 import { functionCall } from "near-api-js/lib/transaction";
 import { base_decode } from "near-api-js/lib/utils/serialize";
 import { useNearKeyStore } from "@/stores/use-near-key";
-import Big from "big.js";
-import dayjs from "dayjs";
 import useToast from "@/hooks/use-toast";
+
 const THIRTY_TGAS = "300000000000000";
 
-export default function useWithdraw() {
+export default function usePlayerRefund(
+  poolId?: string,
+  onSuccess?: () => void
+) {
   const [loading, setLoading] = useState(false);
   const { publicKey, privateKey } = useNearKeyStore();
   const toast = useToast();
@@ -21,20 +23,8 @@ export default function useWithdraw() {
     return KeyPairSigner.fromSecretKey(("ed25519:" + privateKey) as any);
   }, [privateKey]);
 
-  async function withdraw({
-    fromToken,
-    toToken,
-    account,
-    amount,
-    type = "token"
-  }: {
-    fromToken: any;
-    toToken: any;
-    account: string;
-    amount: string;
-    type?: "nft" | "token";
-  }) {
-    let toastId = toast.loading({ title: "Withdrawing..." });
+  async function refund() {
+    let toastId = toast.loading({ title: "Refunding..." });
     try {
       setLoading(true);
 
@@ -54,47 +44,15 @@ export default function useWithdraw() {
 
       const provider = getProvider();
       const { header } = await provider.block({ finality: "final" });
-      const _amount = Big(amount)
-        .mul(10 ** fromToken.decimals)
-        .toFixed(0);
 
-      let recipientAccount = "";
-
-      if (type === "token") {
-        const res = await quote({
-          dry: false,
-          swapType: "EXACT_INPUT",
-          slippageTolerance: 50,
-          originAsset: fromToken.assetId,
-          depositType: "ORIGIN_CHAIN",
-          destinationAsset: toToken.assetId,
-          amount: _amount,
-          refundTo: import.meta.env.VITE_NEAR_ACCOUNT_ID,
-          refundType: "ORIGIN_CHAIN",
-          recipient: account,
-          recipientType: "DESTINATION_CHAIN",
-          deadline: dayjs().add(1, "hour").toISOString()
-        });
-
-        recipientAccount = res.quote.depositAddress;
-      } else {
-        // Remove 0x prefix and pad to 64 characters with leading zeros
-        recipientAccount = account.startsWith("0x")
-          ? account.slice(2)
-          : account;
-        recipientAccount = recipientAccount.padStart(64, "0");
-      }
-
-      const withdrawArgs = {
-        withdraw_args: {
+      const refundArgs = {
+        game_args: {
           ByAk: {
-            amount: _amount,
-            token: { FT: fromToken.address },
-            recipient_account: recipientAccount
+            game_id: Number(poolId)
           }
         }
       };
-      console.log("withdrawArgs:", JSON.stringify(withdrawArgs));
+      console.log("refundArgs:", JSON.stringify(refundArgs));
       const nonce = await getNonce(publicKey);
       const publicKeyObj = PublicKey.from(publicKey);
 
@@ -104,7 +62,7 @@ export default function useWithdraw() {
         import.meta.env.VITE_NEAR_ACCOUNT_ID,
         nonce,
         [
-          functionCall("withdraw", withdrawArgs, BigInt(THIRTY_TGAS), BigInt(0))
+          functionCall("refund_bet", refundArgs, BigInt(THIRTY_TGAS), BigInt(0))
         ],
         base_decode(header.hash)
       );
@@ -114,25 +72,28 @@ export default function useWithdraw() {
       );
       console.log("signedTransaction:", signedTransaction);
       const result: any = await provider.sendTransaction(signedTransaction);
-      toast.dismiss(toastId);
+
       if (result.status.SuccessValue) {
-        console.log("Withdraw success:", result);
-        toast.success({ title: "Withdraw success" });
+        toast.dismiss(toastId);
+        console.log("Claim success:", result);
+        toast.success({ title: "Claim success" });
+        onSuccess?.();
       } else {
-        console.log("Withdraw failed:", result);
-        toast.fail({ title: "Withdraw failed" });
+        toast.dismiss(toastId);
+        console.log("Claim failed:", result);
+        toast.fail({ title: "Claim failed" });
       }
     } catch (error) {
-      console.error("Withdraw error:", error);
       toast.dismiss(toastId);
-      toast.fail({ title: "Withdraw failed" });
+      toast.fail({ title: "Claim failed" });
+      console.error("Claim error:", error);
     } finally {
       setLoading(false);
     }
   }
 
   return {
-    withdraw,
+    refund,
     loading
   };
 }

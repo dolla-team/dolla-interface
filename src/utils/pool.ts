@@ -12,7 +12,7 @@ export const getPoolInfo = async (poolId: number) => {
 
 export const getAnchorPrice = (price: number, decimals: number = 18) => {
   if (price && !isNaN(price))
-    return Big(price * 1.2)
+    return Big(price * (1 + (window.oddOffset || 0.2)))
       .div(10 ** decimals)
       .toNumber();
   return 0;
@@ -20,7 +20,7 @@ export const getAnchorPrice = (price: number, decimals: number = 18) => {
 
 export const getReAnchorPrice = (pool: any) => {
   if (pool?.anchor_price)
-    return Big(pool.anchor_price)
+    return Big(pool.anchor_price * (1 + (window.oddOffset || 0.2)))
       .div(1.2)
       .div(10 ** decimals)
       .toNumber();
@@ -152,6 +152,3 @@ export const getProfitFee = (pool: any, opts?: { isLog?: boolean }) => {
   }
   return finalStageFee;
 };
-
-// 8% penalty
-export const penaltyPercent = 0.08;

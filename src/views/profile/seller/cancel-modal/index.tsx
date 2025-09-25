@@ -3,8 +3,9 @@ import { formatNumber } from "@/utils/format/number";
 import { useMemo, useState } from "react";
 import Big from "big.js";
 import ButtonV2 from "@/components/button/v2";
-import { getAnchorPrice, penaltyPercent } from "@/utils/pool";
+import { getAnchorPrice } from "@/utils/pool";
 import useGameAction from "@/hooks/near/use-game-action";
+import { useContractConfigStore } from "@/stores/use-contract-config";
 
 export default function CancelModal({
   open,
@@ -17,6 +18,7 @@ export default function CancelModal({
   onSuccess: (params: any) => void;
   order: any;
 }) {
+  const contractConfig = useContractConfigStore((store) => store.config);
   const rewardTokenInfo = useMemo(() => {
     return order?.reward_token_info?.[0] || {};
   }, [order]);
@@ -49,7 +51,7 @@ export default function CancelModal({
 
   const [penalty, markable, completable] = useMemo(() => {
     const _penalty = Big(order?.accumulative_bids || 0)
-      .times(penaltyPercent)
+      .times(contractConfig?.cancel_penalty_rate || 0)
       .toString();
     let _completable = true;
     if (order.status === 5) {
@@ -125,7 +127,12 @@ export default function CancelModal({
             <div className="text-[12px] font-[400] leading-[120%] mt-[5px]">
               The seller must pay an additional{" "}
               <span className="text-[#FFC42F] font-[600]">
-                {formatNumber(penaltyPercent * 100, 2, true)}% penalty
+                {formatNumber(
+                  contractConfig?.cancel_penalty_rate * 100,
+                  2,
+                  true
+                )}
+                % penalty
               </span>{" "}
               based on the total funds collected from bids.
             </div>

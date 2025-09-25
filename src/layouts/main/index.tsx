@@ -66,7 +66,7 @@ export default function MainLayout() {
             </>
           )}
         </div>
-        <PageTabs />
+        {/* <PageTabs /> */}
       </div>
       <Infos />
       <div

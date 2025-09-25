@@ -16,7 +16,7 @@ import DepositModal from "../deposit-modal";
 import { formatNumber } from "@/utils/format/number";
 import useClaimFunds from "@/hooks/evm/use-claim";
 import { useNavigate } from "react-router-dom";
-import { penaltyPercent } from "@/utils/pool";
+import { useContractConfigStore } from "@/stores/use-contract-config";
 
 const SellerMarkets = (props: any) => {
   const { className, poolsData, orders, loading, updatePoolsData } = props;
@@ -110,7 +110,7 @@ export default SellerMarkets;
 const MarketItem = (props: any) => {
   const { order, onDeposit, onCancel, onClaimSuccess } = props;
   const [claimed, setClaimed] = useState(order.is_claim);
-
+  const contractConfig = useContractConfigStore((store) => store.config);
   const { claim: onClaim, claiming } = useClaimFunds([order.pool_id], () => {
     setClaimed(true);
     onClaimSuccess();
@@ -196,8 +196,12 @@ const MarketItem = (props: any) => {
                           <li>
                             The seller must pay an additional{" "}
                             <span className="text-[#FFC42F] font-[600]">
-                              {formatNumber(penaltyPercent * 100, 2, true)}%
-                              penalty
+                              {formatNumber(
+                                contractConfig.cancel_penalty_rate * 100,
+                                2,
+                                true
+                              )}
+                              % penalty
                             </span>{" "}
                             based on the total funds collected from bids.
                           </li>
@@ -271,7 +275,7 @@ const MarketItem = (props: any) => {
         </div>
       }
       onClick={() => {
-        navigate(`/nft/detail/${order.pool_id}`);
+        navigate(`/btc/detail/${order.pool_id}`);
       }}
     />
   );
