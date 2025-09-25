@@ -14,7 +14,7 @@ export default function useBid(
   onTxFail: () => void
 ) {
   const [biding, setBiding] = useState(false);
-  const { address } = useAuth();
+  const { address, updateNearAccount } = useAuth();
   const { privateKey } = useNearKeyStore();
   const toast = useToast();
 
@@ -121,7 +121,7 @@ export default function useBid(
           console.log("bidResponse", bidResponse.data.data);
           // bidResponse.data.data.bid.is_winner = true;
           onSuccess(bidResponse.data.data);
-
+          updateNearAccount();
           return;
         }
         if (window.bidResultTimer) {

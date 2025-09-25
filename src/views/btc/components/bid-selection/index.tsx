@@ -5,6 +5,8 @@ import { useBtcContext } from "../../context";
 import { useMemo } from "react";
 import { useAuth } from "@/contexts/auth";
 import useBid from "@/hooks/near/use-bid";
+import { BET_UNIT } from "@/config";
+import { useContractConfigStore } from "@/stores/use-contract-config";
 
 export default function BidSelection({ tokenBalance }: any) {
   const { userInfo } = useAuth();
@@ -19,6 +21,8 @@ export default function BidSelection({ tokenBalance }: any) {
     onReset
   } = useBtcContext();
 
+  const contractConfig = useContractConfigStore((state) => state.config);
+
   const disabled = useMemo(() => {
     if (pool?.status !== 1) {
       return true;
@@ -26,7 +30,11 @@ export default function BidSelection({ tokenBalance }: any) {
     if (!userInfo?.user) {
       return true;
     }
-    if (Number(tokenBalance) < bids) {
+
+    if (
+      Number(tokenBalance) <
+      bids * (Number(BET_UNIT) / 1e6) + contractConfig.play_game_fee
+    ) {
       return true;
     }
     if (flipStatus === 0 || flipStatus === 6) {
