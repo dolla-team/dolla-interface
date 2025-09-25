@@ -1,5 +1,4 @@
 import { useState } from "react";
-import useConfig from "@/hooks/near/use-config";
 import { useUser } from "@privy-io/react-auth";
 import useAccount from "@/hooks/near/use-account";
 import useGameAction from "@/hooks/near/use-game-action";
@@ -12,6 +11,7 @@ import useApprove from "@/hooks/evm/use-approve";
 import beraConfig from "@/config/bera";
 import useToast from "@/hooks/use-toast";
 import useWithdrawEvm from "@/hooks/evm/use-withdraw";
+import { useContractConfigStore } from "@/stores/use-contract-config";
 
 // Constants
 const NFT_ADDRESS = "0x0ae4451B85A528b1Bc03D90F3Bc009962Fe737f7";
@@ -278,7 +278,8 @@ function AccountInfoSection({
 
 export default function Demo() {
   const { user } = useUser();
-  const { config } = useConfig();
+
+  const config = useContractConfigStore((state) => state.config);
   const { account } = useAccount(user?.wallet?.address || "");
 
   // Trading hooks

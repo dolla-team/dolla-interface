@@ -7,10 +7,10 @@ import useDeposit from "@/hooks/near/use-deposit";
 import { useUser } from "@privy-io/react-auth";
 import Big from "big.js";
 import { chainConfig } from "../utils/chainConfig";
-import useConfig from "@/hooks/near/use-config";
 import useToast from "@/hooks/use-toast";
 import Loading from "@/components/icons/loading";
 import useWalletStore from "@/stores/use-wallet";
+import { useContractConfigStore } from "@/stores/use-contract-config";
 
 const TOKENS = [
   {
@@ -49,8 +49,8 @@ export default function TokenSelector({
   const { generateDepositAddress } = useDeposit();
   const { user } = useUser();
   const [loading, setLoading] = useState(false);
-  const { config } = useConfig();
   const { fail } = useToast();
+  const config = useContractConfigStore((state) => state.config);
   const [selectedChain, setSelectedChain] = useState<any>(null);
   const [quote, setQuote] = useState<any>(null);
   const {
