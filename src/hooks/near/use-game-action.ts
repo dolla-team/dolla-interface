@@ -1,8 +1,8 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { getProvider, viewMethod, getNonce } from "./util";
-import { KeyPairSigner, transactions } from "near-api-js";
+import { transactions } from "near-api-js";
 import { PublicKey } from "near-api-js/lib/utils/key_pair";
-import { useNearKeyStore } from "@/stores/use-near-key";
+import useGenerateKey from "@/hooks/near/use-generate-key";
 import { functionCall } from "near-api-js/lib/transaction";
 import { base_decode } from "near-api-js/lib/utils/serialize";
 import { QUOTE_TOKEN } from "@/config/btc";
@@ -20,23 +20,17 @@ export default function useGameAction({
   onResumeSuccess?: () => void;
   onCancelSuccess?: () => void;
 }) {
-  const { publicKey, privateKey } = useNearKeyStore();
-  const keyPairSigner = useMemo(() => {
-    return KeyPairSigner.fromSecretKey(("ed25519:" + privateKey) as any);
-  }, [privateKey]);
+  const { generateKeyPair } = useGenerateKey();
   const [resuming, setResuming] = useState(false);
   const [pausing, setPausing] = useState(false);
   const [canceling, setCanceling] = useState(false);
   const toast = useToast();
 
   async function pauseGame() {
-    if (!keyPairSigner) {
-      return;
-    }
     let toastId = toast.loading({ title: "Pausing game..." });
     try {
       setPausing(true);
-
+      const { publicKey, keyPairSigner } = await generateKeyPair();
       const provider = getProvider();
       const { header } = await provider.block({ finality: "final" });
 
@@ -82,11 +76,9 @@ export default function useGameAction({
   }
 
   async function resumeGame() {
-    if (!keyPairSigner) {
-      return;
-    }
     let toastId = toast.loading({ title: "Resuming game..." });
     try {
+      const { publicKey, keyPairSigner } = await generateKeyPair();
       setResuming(true);
 
       const provider = getProvider();
@@ -134,10 +126,8 @@ export default function useGameAction({
   }
 
   async function cancelGame() {
-    if (!keyPairSigner) {
-      return;
-    }
     let toastId = toast.loading({ title: "Canceling game..." });
+    const { publicKey, keyPairSigner } = await generateKeyPair();
     try {
       setCanceling(true);
 

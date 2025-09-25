@@ -1,7 +1,7 @@
 import axiosInstance from "@/libs/axios";
 import { useState } from "react";
 import { useAuth } from "@/contexts/auth";
-import { useNearKeyStore } from "@/stores/use-near-key";
+import useGenerateKey from "@/hooks/near/use-generate-key";
 import useToast from "@/hooks/use-toast";
 import { KeyPair } from "near-api-js";
 import { viewMethod } from "./util";
@@ -15,17 +15,13 @@ export default function useBid(
 ) {
   const [biding, setBiding] = useState(false);
   const { address, updateNearAccount } = useAuth();
-  const { privateKey } = useNearKeyStore();
+  const { generateKeyPair } = useGenerateKey();
   const toast = useToast();
 
   // Function to sign a message using NEAR private key
-  const signMessage = (message: string): string | null => {
-    if (!privateKey) {
-      console.error("Private key not available");
-      return null;
-    }
-
+  const signMessage = async (message: string): Promise<string | null> => {
     try {
+      const { privateKey } = await generateKeyPair();
       // Create KeyPair from private key (add ed25519: prefix if not present)
       const fullPrivateKey = privateKey.startsWith("ed25519:")
         ? privateKey
@@ -79,7 +75,7 @@ export default function useBid(
       const payloadString = JSON.stringify(payload);
       console.log("payloadString", payloadString);
 
-      const signature = signMessage(payloadString + random_seed);
+      const signature = await signMessage(payloadString + random_seed);
       console.log("signature", signature, payloadString + random_seed);
 
       const response = await axiosInstance.post(`/api/v1/user/bid/data`, {

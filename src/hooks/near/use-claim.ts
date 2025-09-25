@@ -1,20 +1,16 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import dayjs from "dayjs";
 import { getNonce, getProvider, quote } from "./util";
-import { KeyPairSigner, transactions } from "near-api-js";
+import { transactions } from "near-api-js";
 import { PublicKey } from "near-api-js/lib/utils/key_pair";
 import { functionCall } from "near-api-js/lib/transaction";
 import { base_decode } from "near-api-js/lib/utils/serialize";
-import { useNearKeyStore } from "@/stores/use-near-key";
+import useGenerateKey from "@/hooks/near/use-generate-key";
 const THIRTY_TGAS = "300000000000000";
 
 export default function useClaim() {
   const [loading, setLoading] = useState(false);
-  const { publicKey, privateKey } = useNearKeyStore();
-
-  const keyPairSigner = useMemo(() => {
-    return KeyPairSigner.fromSecretKey(("ed25519:" + privateKey) as any);
-  }, [privateKey]);
+  const { generateKeyPair } = useGenerateKey();
 
   async function claim({
     gameId,
@@ -66,7 +62,8 @@ export default function useClaim() {
 
       const data = await quote(body);
 
-      if (data && keyPairSigner) {
+      if (data) {
+        const { publicKey, keyPairSigner } = await generateKeyPair();
         const depositAddress = data.quote.depositAddress;
         const provider = getProvider();
         const { header } = await provider.block({ finality: "final" });
@@ -115,13 +112,11 @@ export default function useClaim() {
   }
 
   async function refund({ gameId }: { gameId: string }) {
-    if (!keyPairSigner) {
-      return;
-    }
-
     try {
       const provider = getProvider();
       const { header } = await provider.block({ finality: "final" });
+
+      const { publicKey, keyPairSigner } = await generateKeyPair();
 
       const args = {
         game_args: {

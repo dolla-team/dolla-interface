@@ -1,14 +1,14 @@
 import { useState } from "react";
 import dayjs from "dayjs";
-import { useNearKeyStore } from "@/stores/use-near-key";
+import useGenerateKey from "@/hooks/near/use-generate-key";
 import { quote } from "./util";
 import useToast from "../use-toast";
 
 export default function useDeposit() {
   const [loading, setLoading] = useState(false);
   const [depositAddress, setDepositAddress] = useState<string | null>("");
-  const { publicKey } = useNearKeyStore();
   const { fail } = useToast();
+  const { generateKeyPair } = useGenerateKey();
   async function generateDepositAddress({
     swapType = "EXACT_INPUT",
     evmAddress,
@@ -40,6 +40,7 @@ export default function useDeposit() {
   }) {
     try {
       setLoading(true);
+      const { publicKey } = await generateKeyPair();
       const body = {
         dry: false,
         swapType,

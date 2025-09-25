@@ -1,10 +1,10 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { getNonce, getProvider } from "./util";
-import { KeyPairSigner, transactions } from "near-api-js";
+import { transactions } from "near-api-js";
 import { PublicKey } from "near-api-js/lib/utils/key_pair";
 import { functionCall } from "near-api-js/lib/transaction";
 import { base_decode } from "near-api-js/lib/utils/serialize";
-import { useNearKeyStore } from "@/stores/use-near-key";
+import useGenerateKey from "@/hooks/near/use-generate-key";
 import Big from "big.js";
 import useToast from "@/hooks/use-toast";
 import { BASE_TOKEN } from "@/config/btc";
@@ -13,30 +13,13 @@ const THIRTY_TGAS = "300000000000000";
 
 export default function useCreate(onSuccess: () => void) {
   const [loading, setLoading] = useState(false);
-  const { publicKey, privateKey } = useNearKeyStore();
+  const { generateKeyPair } = useGenerateKey();
   const toast = useToast();
-  const keyPairSigner = useMemo(() => {
-    if (!privateKey) {
-      return null;
-    }
-    return KeyPairSigner.fromSecretKey(("ed25519:" + privateKey) as any);
-  }, [privateKey]);
 
   async function create({ amount, price }: { amount: string; price: number }) {
     try {
       setLoading(true);
-
-      if (!publicKey || !privateKey) {
-        throw new Error(
-          "Public key or private key is missing. Please generate key pair first."
-        );
-      }
-
-      if (!keyPairSigner) {
-        throw new Error(
-          "KeyPairSigner is not available. Please generate key pair first."
-        );
-      }
+      const { publicKey, keyPairSigner } = await generateKeyPair();
 
       const provider = getProvider();
 

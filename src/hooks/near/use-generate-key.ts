@@ -1,17 +1,18 @@
 import { useNearKeyStore } from "@/stores/use-near-key";
 import { KeyPair, KeyPairSigner, transactions } from "near-api-js";
-import { useEffect } from "react";
 import { useSignMessage } from "@privy-io/react-auth";
 import { getNonce, getProvider } from "./util";
 import { PublicKey } from "near-api-js/lib/utils/key_pair";
 import { functionCall } from "near-api-js/lib/transaction";
 import { base_decode } from "near-api-js/lib/utils/serialize";
+import { useAuth } from "@/contexts/auth/privy";
 
 const THIRTY_TGAS = "300000000000000";
-export default function useGenerateKey(account?: any) {
+export default function useGenerateKey() {
   const { setPublicKey, setPrivateKey, publicKey, privateKey } =
     useNearKeyStore();
   const { signMessage } = useSignMessage();
+  const { nearAccount } = useAuth();
 
   async function generateKeyPair() {
     if (publicKey && privateKey) {
@@ -21,28 +22,29 @@ export default function useGenerateKey(account?: any) {
 
       return {
         publicKey,
+        privateKey,
         keyPairSigner: newKeyPairSigner
       };
     }
-    if (account && !publicKey) {
-      // TODO
-      console.log("generateKeyPair", "no key");
+
+    const {
+      publicKey: shortPublicKey,
+      keyPairSigner: newKeyPairSigner,
+      privateKey: newPrivateKey
+    } = createKeyPair();
+
+    if (nearAccount) {
+      // TODO update ak
+      console.log("nearAccount", nearAccount);
     }
 
-    if (!account || !publicKey) {
-      const {
-        publicKey: shortPublicKey,
-        keyPairSigner: newKeyPairSigner,
-        privateKey: newPrivateKey
-      } = createKeyPair();
+    saveKeyPair(shortPublicKey, newPrivateKey);
 
-      saveKeyPair(shortPublicKey, newPrivateKey);
-
-      return {
-        publicKey: shortPublicKey,
-        keyPairSigner: newKeyPairSigner
-      };
-    }
+    return {
+      publicKey: shortPublicKey,
+      privateKey: newPrivateKey,
+      keyPairSigner: newKeyPairSigner
+    };
   }
 
   function createKeyPair(): any {
@@ -118,10 +120,6 @@ export default function useGenerateKey(account?: any) {
 
     return result;
   }
-
-  useEffect(() => {
-    generateKeyPair();
-  }, [account]);
 
   return {
     generateKeyPair,
