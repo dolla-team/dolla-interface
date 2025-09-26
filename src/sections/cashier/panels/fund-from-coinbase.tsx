@@ -50,6 +50,7 @@ export default function FundFromCoinbase({ onBack }: { onBack: () => void }) {
         amount={amount}
         disabled={!amount || Number(amount) < minAmount || !coinBaseUrl}
         setAmount={setAmount}
+        minAmount={minAmount}
         onBack={onBack}
         onOrderIdCreated={() => {
           if (coinBaseUrl) {
