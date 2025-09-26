@@ -7,6 +7,7 @@ import useIsMobile from "@/hooks/use-is-mobile";
 import { useNavigate } from "react-router-dom";
 import chains from "@/config/chains";
 import useCopy from "@/hooks/use-copy";
+import { useAuth } from "@/contexts/auth";
 
 const BidHistory = (props: any) => {
   const {
@@ -22,6 +23,7 @@ const BidHistory = (props: any) => {
   const isMobile = useIsMobile();
   const navigate = useNavigate();
   const { onCopy } = useCopy();
+  const { address } = useAuth();
 
   const columns: any[] = [
     {
@@ -79,19 +81,39 @@ const BidHistory = (props: any) => {
     },
     {
       dataIndex: "results",
-      title: "Results",
+      title: "Prize",
       width: isMobile ? 140 : void 0,
       render: (record: any) => {
-        if (record.pool_info.status === 2) {
-          return <span className="text-[#10FFBF]">WON</span>;
+        if (
+          record.pool_info.winner_user?.toLowerCase() === address?.toLowerCase()
+        ) {
+          return (
+            <div className="bg-[#FFC42F] h-[30px] leading-[30px] rounded-[12px] px-[10px] font-[600] text-[12px]">
+              {formatNumber(
+                Number(record.reward_amount) /
+                  10 ** record.reward_token_info?.[0].decimals,
+                2,
+                true
+              )}{" "}
+              {record.reward_token_info?.[0].symbol}
+            </div>
+          );
         }
-        if (record.pool_info.status === 3) {
-          return <span className="text-[#8795A7]">Cancelled</span>;
+        let str = "";
+        if (
+          record.winner_point_reward &&
+          Number(record.winner_point_reward) !== 0
+        ) {
+          str += formatNumber(record.winner_point_reward, 0, true) + " pts";
         }
-        if (record.pool_info.status === 5) {
-          return <span className="text-[#8795A7]">Locked</span>;
+        if (
+          record.winner_ticket_number &&
+          Number(record.winner_ticket_number) !== 0
+        ) {
+          if (str) str += " + ";
+          str += record.winner_ticket_number + " tickets";
         }
-        return <span>-</span>;
+        return <span>{str || "-"}</span>;
       }
     }
   ];

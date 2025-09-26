@@ -113,8 +113,6 @@ const MarketItem = (props: any) => {
 
   const navigate = useNavigate();
 
-  console.log(order);
-
   const [time, cancelValid] = useMemo(() => {
     let _time = "-";
     let _cancelValid = false;
@@ -218,7 +216,7 @@ const MarketItem = (props: any) => {
                 >
                   <Button
                     className="!h-[28px] !px-[7px] !rounded-[8px] !bg-transparent border border-[#383F47] text-white"
-                    // disabled={!cancelValid}
+                    disabled={!cancelValid}
                     onClick={(e: any) => {
                       e.stopPropagation();
                       onCancel(e);
