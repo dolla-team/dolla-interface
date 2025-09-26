@@ -34,7 +34,7 @@ const BidHistory = (props: any) => {
           <div
             className="flex items-center gap-[7px] cursor-pointer"
             onClick={() => {
-              navigate(`/nft/detail/${record.pool_id}`);
+              navigate(`/btc/detail/${record.pool_id}`);
             }}
           >
             <div className="">#{record.pool_id}</div>
@@ -48,20 +48,19 @@ const BidHistory = (props: any) => {
       }
     },
     {
-      dataIndex: "nft",
-      title: "NFT",
+      dataIndex: "market_size",
+      title: "Market Size",
       width: 160,
       render: (record: any) => {
         return (
-          <div className="flex gap-[8px]">
-            <img
-              src={record?.reward_token_info?.[0]?.icon}
-              className="w-[22px] h-[22px] rounded-[6px]"
-            />
-            <div>
-              {record?.reward_token_info?.[0]?.name}{" "}
-              {record?.reward_token_info?.[0]?.token_id}
-            </div>
+          <div>
+            {formatNumber(
+              Number(record.reward_amount) /
+                10 ** record.reward_token_info?.[0].decimals,
+              2,
+              true
+            )}{" "}
+            {record.reward_token_info?.[0].symbol}
           </div>
         );
       }
@@ -112,7 +111,7 @@ const BidHistory = (props: any) => {
             <div className="text-[#5E6B7D]">
               {dayjs(record.updated_at).format("hh:mm D MMM, YYYY")}
             </div>
-            <div className="text-[#8E77FF] text-[14px] underline cursor-pointer">
+            <div className="text-[#0095FF] text-[14px] underline cursor-pointer">
               <a
                 href={`${currentChain?.blockExplorers?.default?.url}/tx/${
                   record.tx_hash

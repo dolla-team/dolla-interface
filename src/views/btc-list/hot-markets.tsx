@@ -13,6 +13,9 @@ export default function MoreMarkets() {
   const btcStore = useBtcStore();
   const navigate = useNavigate();
   const price = useMemo(() => {
+    if (BASE_TOKEN.address === "usdt.tether-token.near") {
+      return 1;
+    }
     if (!prices || prices.length === 0) return 0;
 
     return prices[0].last_price;

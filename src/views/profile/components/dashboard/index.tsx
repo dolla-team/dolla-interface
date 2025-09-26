@@ -12,7 +12,7 @@ import Popover, {
   PopoverTrigger
 } from "@/components/popover";
 import Badge from "../badge";
-import ButtonV2 from "@/components/button/v2";
+import Button from "@/components/button";
 import PopoverCard from "../popover-card";
 import { formatNumber } from "@/utils/format/number";
 import Big from "big.js";
@@ -30,7 +30,7 @@ const Dashboard = (props: any) => {
   return (
     <div
       className={clsx(
-        "text-white text-[14px] font-[400] leading-[100%] w-full p-[23px_29px_15px_13px] rounded-[16px] border border-[#383F47] bg-[radial-gradient(81.26%_82.97%_at_1.18%_2.95%,_rgba(111,_55,_255,_0.20)_0%,_rgba(0,_0,_0,_0.20)_100%)] bg-[#1A1E24]",
+        "text-[14px] font-[400] leading-[100%] w-full p-[23px_29px_15px_13px] rounded-[20px] border border-[#E4E4E4] bg-white",
         "max-md:p-[12px_10px_17px]",
         className
       )}
@@ -46,14 +46,18 @@ const Dashboard = (props: any) => {
               email={userInfo?.email}
             />
             <div className="flex flex-col gap-[14px]">
-              <div className="relative font-[DelaGothicOne] text-[20px] flex items-center gap-[9px]">
-                <div className="">
-                  {formatAddress(userInfo?.name || userInfo?.user, 3)}
+              <div className="relative text-[20px] flex items-center gap-[9px]">
+                <div className="font-bold text-[#2B3337]">
+                  {userInfo?.name || userInfo?.show_email}
                 </div>
                 {tab === "seller" && (
                   <div className="flex items-center gap-[7px]">
                     <Popover
-                      content={<PopoverCard>Player Engagement</PopoverCard>}
+                      content={
+                        <PopoverCard className="w-[140px]">
+                          Player Engagement
+                        </PopoverCard>
+                      }
                       placement={PopoverPlacement.Top}
                       trigger={PopoverTrigger.Hover}
                       closeDelayDuration={0}
@@ -63,7 +67,11 @@ const Dashboard = (props: any) => {
                       </Badge>
                     </Popover>
                     <Popover
-                      content={<PopoverCard>Cancellation Rate</PopoverCard>}
+                      content={
+                        <PopoverCard className="w-[140px]">
+                          Cancellation Rate
+                        </PopoverCard>
+                      }
                       placement={PopoverPlacement.Top}
                       trigger={PopoverTrigger.Hover}
                       closeDelayDuration={0}
@@ -86,7 +94,7 @@ const Dashboard = (props: any) => {
                 )}
               </div>
               <div className="flex items-center gap-[5px]">
-                <div className="text-[#ADBCCF]">
+                <div className="text-[#2B3337] text-[12px]">
                   {formatAddress(userInfo?.user)}
                 </div>
                 <button
@@ -137,12 +145,15 @@ const Dashboard = (props: any) => {
                     </div>
                   </div>
                 )}
-                <ButtonV2 soon disabled onClick={() => {}}>
-                  Invite frenz
-                </ButtonV2>
+                <Button
+                  className="border border-[#383F47]/30 h-[32px] w-[114px] !rounded-[8px]"
+                  onClick={() => {}}
+                >
+                  + Invite frenz
+                </Button>
               </div>
             )}
-            <div className="max-md:text-[12px] max-md:translate-y-[15px] max-md:absolute max-md:right-[0px] max-md:bottom-[20px]">
+            <div className="text-[#5E6B7D] text-[12px] max-md:translate-y-[15px] max-md:absolute max-md:right-[0px] max-md:bottom-[20px]">
               Joined{" "}
               {userInfo?.created_at
                 ? dayjs(userInfo.created_at).format("MMMM D, YYYY")
@@ -151,7 +162,7 @@ const Dashboard = (props: any) => {
           </div>
           {/*#endregion*/}
         </div>
-        <div className="w-full bg-[#383F47] h-[1px] mt-[20px] max-md:mt-[14px]" />
+        <div className="w-full bg-[#E4E4E4] h-[1px] mt-[20px] max-md:mt-[14px]" />
       </div>
       {tab === "player" ? <StatisticsPlayer /> : <StatisticsSeller />}
     </div>

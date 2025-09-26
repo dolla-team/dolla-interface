@@ -2,8 +2,6 @@ import Market from "@/views/btc/components/more-markets/market";
 import Button from "@/components/button";
 import dayjs from "dayjs";
 import CancelModal from "./cancel-modal";
-import DepositModal from "./deposit-modal";
-import useClaim from "@/hooks/evm/use-claim";
 import { useState } from "react";
 import Loading from "@/components/icons/loading";
 
@@ -19,7 +17,6 @@ export default function OrderList({
   loading: boolean;
 }) {
   const [cancelModal, setCancelModal] = useState(false);
-  const [depositModal, setDepositModal] = useState(false);
   const [currentOrder, setCurrentOrder] = useState<any>(null);
   if (orders.length === 0 && !loading) {
     return (
@@ -48,7 +45,6 @@ export default function OrderList({
           }}
           onDeposit={() => {
             setCurrentOrder(poolsData[order]);
-            setDepositModal(true);
           }}
           onClaimSuccess={() => {
             updatePoolsData(order, {
@@ -67,18 +63,6 @@ export default function OrderList({
               updatePoolsData(currentOrder.pool_id, params);
               setCurrentOrder(null);
               setCancelModal(false);
-            }}
-          />
-          <DepositModal
-            open={depositModal}
-            onClose={() => setDepositModal(false)}
-            order={currentOrder}
-            onSuccess={() => {
-              updatePoolsData(currentOrder.pool_id, {
-                status: 1
-              });
-              setCurrentOrder(null);
-              setDepositModal(false);
             }}
           />
         </>
@@ -101,9 +85,6 @@ const OrderItem = ({
   onClaimSuccess: () => void;
 }) => {
   const order = poolsData[orderId];
-  const { claim, claiming } = useClaim(order.pool_id, () => {
-    onClaimSuccess();
-  });
 
   return (
     <Market
@@ -116,29 +97,11 @@ const OrderItem = ({
             {dayjs(order.updated_at).format("HH:mm DD MMM, YYYY")}
           </span>
           <div className="flex items-center gap-[6px]">
-            {order.status === 0 && (
-              <Button
-                className="px-[10px] h-[26px] text-[12px"
-                onClick={onDeposit}
-                loading={claiming}
-              >
-                Deposit
-              </Button>
-            )}
-            {order.status === 2 && !order.is_claim && (
-              <Button
-                className="px-[10px] h-[26px] text-[12px]"
-                onClick={() => claim()}
-                loading={claiming}
-              >
-                Claim
-              </Button>
-            )}
-            {order.is_claim && (
+            {/* {order.is_claim && (
               <Button className="px-[10px] h-[26px] text-[12px]" disabled>
                 Claimed
               </Button>
-            )}
+            )} */}
             {order.status !== 3 && order.status !== 2 && (
               <Button
                 className="px-[10px] h-[26px] text-[12px] border border-[#2F3843] !bg-[#1A1E24] !text-[#ADBCCF]"

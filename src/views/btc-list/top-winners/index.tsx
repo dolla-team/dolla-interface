@@ -22,7 +22,9 @@ export default function TopWinners({ type }: { type: "winners" | "sellers" }) {
       {data.map((item, index) => (
         <TopWinnersItem key={item.id} data={item} level={index + 1} />
       ))}
-      {data.length === 0 && <Empty className="!pt-[20px]" text="No winners" />}
+      {data.length === 0 && (
+        <Empty className="!pt-[20px]" text={`No ${type}`} />
+      )}
     </TopWinnersContainer>
   );
 }

@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import PriceChart from "../nft-create/price-chart";
 import { BASE_TOKEN } from "@/config/btc";
 import { formatNumber } from "@/utils/format/number";
@@ -23,6 +23,7 @@ import Popover, {
 import useQuote from "./hooks/use-quote";
 import useWalletStore from "@/stores/use-wallet";
 import useCreate from "@/hooks/near/use-create";
+import PageBack from "@/views/profile/components/page-back";
 
 export default function BTCCreate() {
   const [amount, setAmount] = useState(1);
@@ -81,7 +82,8 @@ export default function BTCCreate() {
   }, [globalConfig]);
 
   return (
-    <div className="w-full text-[14px] font-[400] leading-[100%] pt-[40px] pb-[60px] max-md:pt-[80px]">
+    <div className="relativew-full text-[14px] font-[400] leading-[100%] pt-[40px] pb-[60px] max-md:pt-[80px]">
+      <PageBack className="!border-[#E4E4E4] !bg-[#FFFFFF] !text-[#8A87AA]" />
       <Title />
       <div className="w-[894px] mx-auto flex justify-between items-start gap-[15px] pt-[42px] max-md:w-full max-md:pt-[40px]">
         <div className="flex-1 w-0">

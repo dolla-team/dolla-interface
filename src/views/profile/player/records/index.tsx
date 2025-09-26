@@ -14,13 +14,9 @@ const Records = (props: any) => {
   return (
     <div
       className={clsx(
-        "w-full rounded-[16px] border border-[#383F47] p-[17px_22px_21px] mt-[20px] max-md:w-screen max-md:mt-0 max-md:p-[17px_0]",
+        "w-full rounded-[20px] border border-[#E4E4E4] bg-white p-[17px_22px_21px] mt-[20px] max-md:w-screen max-md:mt-0 max-md:p-[17px_0]",
         className
       )}
-      style={{
-        background:
-          "radial-gradient(27.7% 35.89% at 1.18% 2.95%, rgba(111, 55, 255, 0.20) 0%, rgba(0, 0, 0, 0.20) 100%), #1A1E24"
-      }}
     >
       <Switch
         tab={tab}
@@ -29,9 +25,9 @@ const Records = (props: any) => {
           { label: "Account", value: "account" }
         ]}
         onChange={setTab}
-        className="w-[241px] !border-[1px] !border-[#383F47] !rounded-[19px] !p-[4px] max-md:mx-auto"
+        className="w-[241px] !border-[1px] !border-[#E4E4E4] !rounded-[16px] !p-[4px] max-md:mx-auto !bg-[#F2F2F299]"
         cursorClassName="!rounded-[15px] !shadow-[unset]"
-        tabClassName="!px-[15px]"
+        tabClassName="!px-[20px] !text-[#2B3337]"
       />
       <div className="">
         <AnimatePresence>

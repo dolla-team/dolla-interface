@@ -7,7 +7,7 @@ const Badge = (props: any) => {
     <button
       type="button"
       className={clsx(
-        "cursor-pointer text-white font-[400] text-[12px] flex items-center gap-[4px] justify-center px-[9px] h-[20px] rounded-[10px] bg-black/20 backdrop-blur-[5px]",
+        "cursor-pointer text-white font-[400] text-[12px] flex items-center gap-[4px] justify-center px-[9px] h-[20px] rounded-[10px] bg-black",
         className
       )}
     >

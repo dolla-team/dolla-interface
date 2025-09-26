@@ -8,12 +8,13 @@ import LoadingMore from "@/components/loading/loading-more";
 import useCreatePoolList from "./hooks/use-create-pool-list";
 // import { INVATE_ACTIVE } from "@/config";
 import Header from "../header";
-import Dashboard from "../ components/dashboard/index";
+import Dashboard from "../components/dashboard/index";
 import { useState } from "react";
 import Tabs from "@/components/tabs";
 import { AnimatePresence } from "framer-motion";
 import SellerMarkets from "./markets";
 import Records from "./records";
+import PageBack from "../components/page-back";
 
 const TabsList = [
   {
@@ -54,10 +55,11 @@ export default function Seller() {
 
   return (
     <div
-      className="w-full h-screen overflow-y-auto pb-[30px] max-md:overflow-x-hidden max-md:pb-[70px]"
+      className="w-full pb-[60px] max-md:overflow-x-hidden max-md:pb-[70px] relative"
       ref={containerRef}
     >
-      <div className="pt-[30px] w-[933px] mx-auto max-md:w-full max-md:pt-[70px] max-md:bg-[url('/profile/bg.png')] max-md:bg-cover max-md:bg-no-repeat max-md:bg-[position:center_top_-44px]">
+      <PageBack />
+      <div className="relative z-1 pt-[30px] w-[933px] mx-auto max-md:w-full max-md:pt-[70px] max-md:bg-[url('/profile/bg.png')] max-md:bg-cover max-md:bg-no-repeat max-md:bg-[position:center_top_-44px]">
         <Header tab="seller" />
         <SwitchPanel className="max-md:w-full">
           <div className="max-md:px-[10px]">
@@ -69,8 +71,8 @@ export default function Seller() {
               onChangeTab={setTab}
               tabs={TabsList}
               className="!gap-[62px] max-md:!gap-[42px]"
-              tabClassName="!text-[18px] !pb-[14px]"
-              cursorClassName="!w-[30px] !bg-[#743EFF] left-1/2 -translate-x-1/2"
+              tabClassName="!text-[14px] !pb-[14px]"
+              cursorClassName="!w-[30px] !bg-[#000] left-1/2 -translate-x-1/2"
             />
           </div>
           <AnimatePresence>
@@ -107,6 +109,7 @@ export default function Seller() {
           </AnimatePresence>
         </SwitchPanel>
       </div>
+      <div className="w-full h-[284px] bg-black absolute top-0 left-0" />
     </div>
   );
 }

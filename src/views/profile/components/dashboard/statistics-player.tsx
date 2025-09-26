@@ -1,13 +1,11 @@
 import clsx from "clsx";
-import ButtonV2 from "@/components/button/v2";
+import Button from "@/components/button";
 import LabelValue from "../label-value";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { formatNumber } from "@/utils/format/number";
 import Big from "big.js";
 import { useAuth } from "@/contexts/auth";
-
 import Loading from "@/components/icons/loading";
-
 import useUserWinner from "@/hooks/use-user-winner";
 import ClaimModal from "../claim/modal";
 import useWalletStore from "@/stores/use-wallet";
@@ -46,9 +44,9 @@ const StatisticsPlayer = (props: any) => {
         className
       )}
     >
-      <div className="flex items-center justify-between gap-[10px] flex-1 max-md:justify-between max-md:w-full max-md:pl-[4px] max-md:pr-[10px]">
-        <div className="flex flex-col justify-center items-center gap-[15px] p-[20px_32px_33px] bg-[#743EFF] rounded-[16px] shrink-0">
-          <div className="">Wins</div>
+      <div className="flex items-center justify-between gap-[30px] max-md:justify-between max-md:w-full max-md:pl-[4px] max-md:pr-[10px]">
+        <div className="flex flex-col justify-center items-center gap-[15px] p-[20px_32px_33px] bg-black text-white rounded-[16px] shrink-0">
+          <div className="text-[12px]">Wins</div>
           <div className="font-[DelaGothicOne] text-[36px]">
             {formatNumber(userInfo?.winner, 2, true)}
           </div>
@@ -65,17 +63,17 @@ const StatisticsPlayer = (props: any) => {
         {/* <ButtonV2 className="" onClick={() => { }} disabled soon>
           Share
         </ButtonV2> */}
-        <ButtonV2
-          className="max-md:flex-1 !text-[14px]"
+        <Button
+          className="border border-[#383F47]/30 text-[#2B3337] w-[96px] h-[38px] !rounded-[8px] ml-[20px]"
           // disabled={Big(claimableAmount || 0).lte(0)}
           onClick={() => {
-            setClaimModalOpen(true);
+            // setClaimModalOpen(true);
           }}
         >
-          Claim
-        </ButtonV2>
+          Share
+        </Button>
       </div>
-      <div className="w-[1px] h-[70px] shrink-0 bg-[#423930] max-md:hidden"></div>
+      <div className="w-[1px] h-[70px] shrink-0 bg-[#E4E4E4] max-md:hidden"></div>
       <div className="flex items-center justify-between gap-[10px] flex-1 max-md:flex-col max-md:w-full max-md:gap-[15px]">
         <div className="flex items-center gap-[10px] max-md:w-full max-md:justify-between max-md:pr-[30px] max-md:pl-[7px]">
           <LabelValue label="Your Balance" className="whitespace-nowrap">
@@ -93,9 +91,10 @@ const StatisticsPlayer = (props: any) => {
           </LabelValue>
         </div>
         <div className="flex items-center justify-end gap-[8px] max-md:w-full max-md:justify-between max-md:gap-[10px]">
-          <ButtonV2
-            className="max-md:flex-1 !text-[14px]"
-            onClick={() => {
+          <Button
+            className="!bg-black text-white w-[96px] h-[38px] !rounded-[8px]"
+            onClick={(ev) => {
+              ev.stopPropagation();
               walletStore.set({
                 showWallet: true,
                 panelType: "deposit"
@@ -103,11 +102,11 @@ const StatisticsPlayer = (props: any) => {
             }}
           >
             Deposit
-          </ButtonV2>
-          <ButtonV2
-            className="max-md:flex-1 !text-[14px]"
-            type="default"
-            onClick={() => {
+          </Button>
+          <Button
+            className="border border-[#383F47]/30 text-[#2B3337] w-[96px] h-[38px] !rounded-[8px]"
+            onClick={(ev) => {
+              ev.stopPropagation();
               walletStore.set({
                 showWallet: true,
                 panelType: "withdraw"
@@ -115,7 +114,7 @@ const StatisticsPlayer = (props: any) => {
             }}
           >
             Withdraw
-          </ButtonV2>
+          </Button>
         </div>
       </div>
 

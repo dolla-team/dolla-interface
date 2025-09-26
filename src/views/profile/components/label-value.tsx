@@ -6,11 +6,11 @@ const LabelValue = (props: any) => {
   return (
     <div
       className={clsx(
-        "flex flex-col justify-center gap-[15px] text-white text-[14px] font-[400] leading-[100%]",
+        "flex flex-col justify-center gap-[15px] text-[14px] font-[400] leading-[100%]",
         className
       )}
     >
-      <div className="">{label}</div>
+      <div className="text-[12px] text-[#2B3337]">{label}</div>
       <div className={clsx("font-[DelaGothicOne] text-[16px]", valueClassName)}>
         {children}
       </div>

@@ -5,7 +5,7 @@ import SwitchPanel from "@/components/switch/switch-panel";
 // import Invite from "./invite";
 // import { INVATE_ACTIVE } from "@/config";
 import Header from "../header";
-import Dashboard from "../ components/dashboard/index";
+import Dashboard from "../components/dashboard/index";
 import Tabs from "@/components/tabs";
 import { useRef, useState, useEffect } from "react";
 import Radio from "@/components/radio";
@@ -15,6 +15,7 @@ import Records from "./records";
 import usePlayerHistory from "./hooks/use-player-history";
 import LoadingMore from "@/components/loading/loading-more";
 import { useDebounceFn } from "ahooks";
+import PageBack from "../components/page-back";
 
 const TabsList = [
   {
@@ -103,10 +104,11 @@ export default function Player() {
 
   return (
     <div
-      className="w-full h-screen overflow-y-auto pb-[30px] max-md:overflow-x-hidden max-md:pb-[70px]"
+      className="w-full pb-[60px] max-md:overflow-x-hidden max-md:pb-[70px] relative"
       ref={containerRef}
     >
-      <div className="pt-[30px] w-[933px] mx-auto max-md:w-full max-md:pt-[70px] max-md:bg-[url('/profile/bg.png')] max-md:bg-cover max-md:bg-no-repeat max-md:bg-[position:center_top_-44px]">
+      <PageBack />
+      <div className="relative z-1 pt-[30px] w-[933px] mx-auto max-md:w-full max-md:pt-[70px] max-md:bg-[url('/profile/bg.png')] max-md:bg-cover max-md:bg-no-repeat max-md:bg-[position:center_top_-44px]">
         <Header tab="player" />
         <SwitchPanel className="max-md:w-full">
           <div className="max-md:px-[10px]">
@@ -118,8 +120,8 @@ export default function Player() {
               onChangeTab={setTab}
               tabs={TabsList}
               className="!gap-[62px] max-md:!gap-[42px]"
-              tabClassName="!text-[18px] !pb-[14px]"
-              cursorClassName="!w-[30px] !bg-[#743EFF] left-1/2 -translate-x-1/2"
+              tabClassName="!text-[14px] !pb-[14px]"
+              cursorClassName="!w-[30px] !bg-[#000] left-1/2 -translate-x-1/2"
             />
             {tab === TabsList[0].key && (
               <div className="flex items-center justify-end gap-[15px] max-md:ml-auto max-md:mr-[10px]">
@@ -179,6 +181,7 @@ export default function Player() {
           </AnimatePresence>
         </SwitchPanel>
       </div>
+      <div className="w-full h-[284px] bg-black absolute top-0 left-0" />
     </div>
   );
 }

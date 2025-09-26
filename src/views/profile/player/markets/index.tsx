@@ -1,12 +1,12 @@
 import clsx from "clsx";
-import Market from "../../ components/market";
-import ButtonV2 from "@/components/button/v2";
+import Market from "../../components/market";
 import Empty from "@/components/empty";
-import MarketStatus, { EMarketStatus } from "../../ components/market-status";
+import MarketStatus, { EMarketStatus } from "../../components/market-status";
 import Loading from "@/components/icons/loading";
 import useClaimPenalty from "@/hooks/evm/use-claim-penalty";
 import { formatNumber } from "@/utils/format/number";
 import { useNavigate } from "react-router-dom";
+import Button from "@/components/button";
 
 const PlayerMarkets = (props: any) => {
   const { className, orders, loading, updatePoolsData } = props;
@@ -67,9 +67,9 @@ const MarketItem = (props: any) => {
         />
       }
       footer={
-        <div className="w-full px-[13px] bg-black/20 py-[17px] mt-[20px] relative z-[2] text-white text-center text-[12px] font-normal leading-[100%]">
+        <div className="w-full px-[13px] bg-black rounded-b-[20px] py-[17px] mt-[20px] relative z-[2] text-white text-center text-[12px] font-normal leading-[100%]">
           <div className="flex justify-between items-center gap-[10px]">
-            <div className="text-[#8795A7]">
+            <div>
               You bid
               {order.pool_status === EMarketStatus.Cancelled ? " / Refund" : ""}
             </div>
@@ -88,15 +88,15 @@ const MarketItem = (props: any) => {
                       <path
                         d="M6 11L10 15L17 8"
                         stroke="#2B3337"
-                        stroke-width="2"
-                        stroke-linecap="round"
+                        strokeWidth="2"
+                        strokeLinecap="round"
                       />
                     </svg>
                     <span>Claimed</span>
                   </div>
                 ) : (
-                  <ButtonV2
-                    className="!h-[24px] !rounded-[12px] !px-[10px] !text-[12px]"
+                  <Button
+                    className="w-[55px] h-[22px] !rounded-[6px] bg-linear-to-b from-[#FFF698] to-[#FFC42F]"
                     loading={claiming}
                     disabled={claiming}
                     onClick={(e: any) => {
@@ -105,9 +105,9 @@ const MarketItem = (props: any) => {
                     }}
                   >
                     Claim
-                  </ButtonV2>
+                  </Button>
                 ))}
-              <div className="">
+              <div>
                 {formatNumber(order.purchase_usd, 2, true, {
                   isShort: true,
                   isShortUppercase: true,

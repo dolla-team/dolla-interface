@@ -23,14 +23,14 @@ const Pagination = (props: any) => {
   return (
     <div
       className={clsx(
-        "flex items-center gap-[18px] text-white text-[14px] font-normal leading-[14px]",
+        "flex items-center gap-[18px] text-[#5E6B7D] text-[12px] font-normal leading-[14px]",
         className
       )}
     >
       <button
         type="button"
         className={clsx(
-          "w-[32px] h-[32px] rounded-[16px] border border-[#353042] flex items-center justify-center bg-black/20",
+          "w-[30px] h-[30px] rounded-[8px] border border-[#383F47]/30 flex items-center justify-center",
           current <= 1 ? "cursor-not-allowed" : "cursor-pointer"
         )}
         onClick={() => {
@@ -54,7 +54,7 @@ const Pagination = (props: any) => {
       <button
         type="button"
         className={clsx(
-          "w-[32px] h-[32px] rounded-[16px] border border-[#353042] flex items-center justify-center bg-black/20",
+          "w-[30px] h-[30px] rounded-[8px] border border-[#383F47]/30 flex items-center justify-center",
           !hasMore ? "cursor-not-allowed" : "cursor-pointer"
         )}
         onClick={() => {
@@ -87,8 +87,8 @@ const PaginationArrow = (props: any) => {
       <path
         opacity={active ? "1" : "0.3"}
         d="M6 1L1 7L6 13"
-        stroke="white"
-        stroke-width="1.5"
+        stroke="black"
+        strokeWidth="1.5"
       />
     </svg>
   );

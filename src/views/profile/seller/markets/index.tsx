@@ -1,20 +1,19 @@
 import clsx from "clsx";
-import Market from "../../ components/market";
-import ButtonV2 from "@/components/button/v2";
+import Market from "../../components/market";
+import Button from "@/components/button";
 import Empty from "@/components/empty";
-import MarketStatus, { EMarketStatus } from "../../ components/market-status";
+import MarketStatus, { EMarketStatus } from "../../components/market-status";
 import dayjs from "@/libs/dayjs";
 import Popover, {
   PopoverPlacement,
   PopoverTrigger
 } from "@/components/popover";
-import PopoverCard from "../../ components/popover-card";
+import PopoverCard from "../../components/popover-card";
 import CancelModal from "../cancel-modal";
 import { useMemo, useState } from "react";
 import Loading from "@/components/icons/loading";
 import DepositModal from "../deposit-modal";
 import { formatNumber } from "@/utils/format/number";
-import useClaimFunds from "@/hooks/evm/use-claim";
 import { useNavigate } from "react-router-dom";
 import { useContractConfigStore } from "@/stores/use-contract-config";
 
@@ -108,14 +107,13 @@ const SellerMarkets = (props: any) => {
 export default SellerMarkets;
 
 const MarketItem = (props: any) => {
-  const { order, onDeposit, onCancel, onClaimSuccess } = props;
-  const [claimed, setClaimed] = useState(order.is_claim);
+  const { order, onDeposit, onCancel } = props;
+
   const contractConfig = useContractConfigStore((store) => store.config);
-  const { claim: onClaim, claiming } = useClaimFunds([order.pool_id], () => {
-    setClaimed(true);
-    onClaimSuccess();
-  });
+
   const navigate = useNavigate();
+
+  console.log(order);
 
   const [time, cancelValid] = useMemo(() => {
     let _time = "-";
@@ -124,13 +122,13 @@ const MarketItem = (props: any) => {
     if (!order.time) {
       _time = "-";
     } else {
-      const diff = dayjs().diff(dayjs(order.time * 1000), "hours");
+      const diff = dayjs().diff(dayjs(order.time), "hours");
       if (diff < 24) {
-        _time = dayjs(order.time * 1000).toNow(true) + " ago";
+        _time = dayjs(order.time).toNow(true) + " ago";
       } else {
-        _time = dayjs(order.time * 1000).format("hh:mm D MMM, YYYY");
+        _time = dayjs(order.time).format("hh:mm D MMM, YYYY");
       }
-      _cancelValid = dayjs().isAfter(dayjs(order.time * 1000).add(72, "hours"));
+      _cancelValid = dayjs().isAfter(dayjs(order.time).add(72, "hours"));
       // _cancelValid = true;
     }
 
@@ -150,15 +148,12 @@ const MarketItem = (props: any) => {
         />
       }
       footer={
-        <div className="w-full px-[13px] bg-black/20 py-[12px] mt-[20px] relative z-[2] text-white text-center text-[12px] font-normal leading-[100%]">
+        <div className="w-full px-[13px] bg-black rounded-b-[20px] py-[17px] mt-[20px] relative z-[2] text-white text-center text-[12px] font-normal leading-[100%]">
           <div className="flex justify-between items-center gap-[10px]">
-            <div className="text-[#8795A7] text-[10px] whitespace-nowrap">
-              {time}
-            </div>
+            <div className="text-[10px] whitespace-nowrap">{time}</div>
             <div className="flex items-center justify-end gap-[7px]">
-              {order.status === EMarketStatus.Created && (
-                <ButtonV2
-                  type="primary"
+              {/* {order.status === EMarketStatus.Created && (
+                <Button
                   className="!h-[28px] !rounded-[8px] !text-[12px] !px-[5px] !font-[400]"
                   onClick={(e: any) => {
                     e.stopPropagation();
@@ -166,28 +161,28 @@ const MarketItem = (props: any) => {
                   }}
                 >
                   Deposit
-                </ButtonV2>
-              )}
+                </Button>
+              )} */}
 
               {![EMarketStatus.Cancelled, EMarketStatus.Winner].includes(
                 order.status
               ) && (
                 <Popover
                   content={
-                    <PopoverCard className="!w-[300px] text-[#BBACA6] text-[12px] leading-[120%] font-[400]">
+                    <PopoverCard className="!w-[300px] text-[#5E6B7D] text-[12px] leading-[120%] font-[400]">
                       <div className="flex items-center gap-[3px]">
                         <img
                           src="/profile/icon-warning.svg"
                           alt="warning"
                           className="w-[13px] h-[11px] shrink-0"
                         />
-                        <div className="text-[#FFC42F] leading-[100%]">
+                        <div className="text-[#000] leading-[100%]">
                           Early Closure Penalty
                         </div>
                       </div>
                       <div className="mt-[7px]">
                         If a seller decides to close the market{" "}
-                        <span className="text-[#FFC42F] font-[600]">
+                        <span className="text-[#000] font-[600]">
                           after the 72-hour
                         </span>{" "}
                         lock period without a winner:
@@ -195,7 +190,7 @@ const MarketItem = (props: any) => {
                         <ul className="list-disc pl-[20px]">
                           <li>
                             The seller must pay an additional{" "}
-                            <span className="text-[#FFC42F] font-[600]">
+                            <span className="text-[#000] font-[600]">
                               {formatNumber(
                                 contractConfig.cancel_penalty_rate * 100,
                                 2,
@@ -216,33 +211,31 @@ const MarketItem = (props: any) => {
                       </div>
                     </PopoverCard>
                   }
-                  placement={PopoverPlacement.BottomLeft}
+                  placement={PopoverPlacement.Top}
                   trigger={PopoverTrigger.Hover}
                   closeDelayDuration={0}
                   offset={30}
                 >
-                  <ButtonV2
-                    type="default"
-                    className="!h-[28px] !px-[7px] !rounded-[8px] !text-[12px] flex items-center gap-[3px]"
-                    disabled={!cancelValid}
+                  <Button
+                    className="!h-[28px] !px-[7px] !rounded-[8px] !bg-transparent border border-[#383F47] text-white"
+                    // disabled={!cancelValid}
                     onClick={(e: any) => {
                       e.stopPropagation();
                       onCancel(e);
                     }}
                   >
-                    <div className="">Cancel</div>
+                    <div className="mr-[4px]">Cancel</div>
                     <img
                       src="/profile/icon-warning.svg"
                       alt="warning"
                       className="w-[13px] h-[11px] shrink-0"
                     />
-                  </ButtonV2>
+                  </Button>
                 </Popover>
               )}
 
-              {order.status === EMarketStatus.Winner && !claimed && (
-                <ButtonV2
-                  type="primary"
+              {/* {order.status === EMarketStatus.Winner && !claimed && (
+                <Button
                   className="!h-[28px] !rounded-[8px] !text-[12px]"
                   onClick={(e: any) => {
                     e.stopPropagation();
@@ -252,18 +245,17 @@ const MarketItem = (props: any) => {
                   disabled={claiming}
                 >
                   Claim
-                </ButtonV2>
+                </Button>
               )}
 
               {claimed && (
-                <ButtonV2
-                  type="default"
+                <Button
                   disabled={true}
                   className="!h-[28px] !rounded-[8px] !text-[12px]"
                 >
                   Claimed
-                </ButtonV2>
-              )}
+                </Button>
+              )} */}
 
               {order.status === EMarketStatus.Cancelled && (
                 <div className="h-[28px] flex items-center justify-end text-[#8795A7]">

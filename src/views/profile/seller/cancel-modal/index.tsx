@@ -2,7 +2,7 @@ import Modal from "@/components/modal";
 import { formatNumber } from "@/utils/format/number";
 import { useMemo, useState } from "react";
 import Big from "big.js";
-import ButtonV2 from "@/components/button/v2";
+import Button from "@/components/button";
 import { getAnchorPrice } from "@/utils/pool";
 import useGameAction from "@/hooks/near/use-game-action";
 import { useContractConfigStore } from "@/stores/use-contract-config";
@@ -66,8 +66,8 @@ export default function CancelModal({
 
   return (
     <Modal onClose={onClose} open={open}>
-      <div className="w-[396px] pb-[20px] rounded-[16px] bg-[#2D2B35] border border-[#514A5D] text-[14px] font-[500] leading-[100%] text-white">
-        <div className="w-full pt-[20px] pb-[13px] px-[20px] bg-black/20 flex justify-between items-center">
+      <div className="w-[396px] pb-[20px] rounded-[16px] bg-[#FFFFFF] border border-[#E4E4E4] text-[14px] font-[500] leading-[100%] text-white">
+        <div className="w-full pt-[20px] rounded-t-[16px] pb-[13px] px-[20px] bg-black flex justify-between items-center">
           <div className="text-[16px] font-medium text-white">
             Cancel Market
           </div>
@@ -86,32 +86,37 @@ export default function CancelModal({
             </svg>
           </button>
         </div>
-        <div className="w-full px-[24px] py-[20px]">
+        <div className="w-full px-[24px] py-[20px] text-black">
           <div className="flex items-center text-[14px] mb-[20px] gap-[10px]">
-            <span className="text-[#BBACA6] font-[400]">Token</span>
+            <span className="font-[400]">Market Size</span>
             <div className="grow border-b border-dashed border-[#5E6B7D] opacity-50" />
-            <span className="text-white font-medium">
-              {rewardTokenInfo.name} {rewardTokenInfo.token_id}
+            <span className="font-medium">
+              {formatNumber(
+                (order?.reward_amount || 0) / 10 ** rewardTokenInfo.decimals,
+                0,
+                true
+              )}{" "}
+              {rewardTokenInfo.symbol}
             </span>
           </div>
           <div className="flex items-center text-[14px] mb-[20px] gap-[10px]">
-            <span className="text-[#BBACA6] font-[400]">Market Value</span>
+            <span className="font-[400]">Market Value</span>
             <div className="grow border-b border-dashed border-[#5E6B7D] opacity-50" />
-            <span className="text-white font-medium">
+            <span className="font-medium">
               ${formatNumber(getAnchorPrice(order?.anchor_price), 0, true)}
             </span>
           </div>
           <div className="flex items-center text-[14px] mb-[20px] gap-[10px]">
-            <span className="text-[#BBACA6] font-[400]">Total Players</span>
+            <span className="font-[400]">Total Players</span>
             <div className="grow border-b border-dashed border-[#5E6B7D] opacity-50" />
-            <span className="text-white font-medium">
+            <span className="font-medium">
               {formatNumber(order?.participants, 0, true)}
             </span>
           </div>
           <div className="flex items-center text-[14px] mb-[20px] gap-[10px]">
-            <span className="text-[#BBACA6] font-[400]">Total bids</span>
+            <span className="font-[400]">Total bids</span>
             <div className="grow border-b border-dashed border-[#5E6B7D] opacity-50" />
-            <span className="text-white font-medium">
+            <span className="font-medium">
               ${formatNumber(order?.accumulative_bids, 0, true)}
             </span>
           </div>
@@ -139,9 +144,9 @@ export default function CancelModal({
           </div>
           <div className="mt-[20px]">
             <div className="flex items-center text-[14px] gap-[10px]">
-              <span className="text-[#BBACA6] font-[400]">Penalty</span>
+              <span className="font-[400]">Penalty</span>
               <div className="grow border-b border-dashed border-[#5E6B7D]" />
-              <span className="text-white font-medium">
+              <span className="font-medium">
                 ${formatNumber(penalty, 2, true)}
               </span>
             </div>
@@ -157,11 +162,10 @@ export default function CancelModal({
         <div className="flex justify-end mt-[0px] px-[20px] gap-[10px]">
           {status === 1 && (
             <>
-              <ButtonV2
-                className="!h-[40px] !text-[14px]"
+              <Button
+                className="!h-[40px] !bg-text border border-[#1A1E24] !text-[14px] !text-black px-[30px]"
                 loading={resuming}
                 disabled={resuming || !completable}
-                type="primary"
                 onClick={() => {
                   if (resuming) {
                     return;
@@ -170,12 +174,11 @@ export default function CancelModal({
                 }}
               >
                 Resume
-              </ButtonV2>
-              <ButtonV2
-                className="!h-[40px] !text-[14px]"
+              </Button>
+              <Button
+                className="!h-[40px] !bg-[#1A1E24] !text-[14px] !text-white px-[30px]"
                 loading={canceling}
                 disabled={canceling || !completable}
-                type="default"
                 onClick={() => {
                   if (canceling) {
                     return;
@@ -184,12 +187,12 @@ export default function CancelModal({
                 }}
               >
                 Cancel
-              </ButtonV2>
+              </Button>
             </>
           )}
           {status === 0 && (
-            <ButtonV2
-              className="!h-[40px] !text-[14px]"
+            <Button
+              className="!h-[40px] !bg-[#1A1E24] !text-[14px] !text-white px-[30px]"
               loading={pausing}
               disabled={pausing || !markable}
               onClick={() => {
@@ -200,7 +203,7 @@ export default function CancelModal({
               }}
             >
               Pause
-            </ButtonV2>
+            </Button>
           )}
         </div>
       </div>

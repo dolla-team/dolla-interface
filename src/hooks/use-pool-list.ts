@@ -20,7 +20,7 @@ export default function usePoolList(props?: {
   } = props ?? {};
 
   const [poolList, setPoolList] = useState<any[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [sortField, setSortField] = useState("hitting");
   const [sortOrder, setSortOrder] = useState("desc");
   const [collection, setCollection] = useState<any>();

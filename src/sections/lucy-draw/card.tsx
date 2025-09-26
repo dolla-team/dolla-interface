@@ -30,12 +30,12 @@ export default function LucyDrawCard({
           <span
             className="text-white text-[24px] font-[800]"
             style={{
-              textShadow: "0px 0px 10px #8465FF"
+              textShadow: "0px 0px 10px #FFC42F"
             }}
           >
             Lucky Draw
           </span>
-          <div className="text-white text-[10px] px-[8px] py-[3px] bg-[#6F37FF] rounded-[12px]">
+          <div className="text-black text-[10px] px-[8px] py-[3px] bg-[#FFC42F] rounded-[12px]">
             #{currentRound}
           </div>
         </div>

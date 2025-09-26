@@ -36,7 +36,8 @@ export default function Switch({
         <button
           key={item.value}
           className={clsx(
-            "px-[10px] h-full rounded-[6px] button relative text-white",
+            "px-[10px] h-full rounded-[6px] button relative",
+            tab === item.value ? "text-[#2B3337]" : "text-white",
             tabClassName
           )}
           onClick={() => {
@@ -69,7 +70,7 @@ export default function Switch({
                 cursorClassName
               )}
               style={{
-                background: type === "card" ? "#743EFF" : "#743EFF"
+                background: type === "card" ? "#FFC42F" : "#FFC42F"
               }}
             />
           )}

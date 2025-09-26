@@ -3,17 +3,17 @@ import { motion } from "framer-motion";
 import { formatNumber } from "@/utils/format/number";
 import { useMemo } from "react";
 import { getAnchorPrice } from "@/utils/pool";
-import MarketActiveBg from "./market-active-bg";
 import useIsMobile from "@/hooks/use-is-mobile";
 import { formatAddress } from "@/utils/format/address";
 import Avatar from "@/components/avatar";
+import BtcImg from "@/views/btc-list/markets/btc-bg";
+import { BASE_TOKEN } from "@/config/btc";
 
 export default function Market({
   data,
   className,
   footer,
   header,
-  isAcitveBg = true,
   onClick = () => {},
   isForceNormal,
   isActive
@@ -39,99 +39,62 @@ export default function Market({
   return (
     <div
       className={clsx(
-        "cursor-pointer group shrink-0 rounded-[16px] border-[1px] border-[#383F47] bg-[radial-gradient(81.26%_82.97%_at_1.18%_2.95%,_rgba(111,_55,_255,_0.20)_0%,_rgba(0,_0,_0,_0.20)_100%)] bg-[#1A1E24] transition-all duration-300 relative",
+        "cursor-pointer group shrink-0 rounded-[20px] border-[1px] border-[#E4E4E4] bg-black transition-all duration-300 relative",
         isActive
           ? "shadow-[0px_0px_20px_0px_rgba(255,_239,_67,_0.60)] bg-[url('/btc/bg-market-active-border.svg')] bg-[length:344px_222px] bg-no-repeat bg-center"
           : "",
         isMobile
           ? ""
-          : "hover:border-[#743EFF] hover:scale-[1.05] hover:shadow-[0px_0px_20px_0px_rgba(116,_62,_255,_0.60)]",
+          : "hover:scale-[1.05] hover:shadow-[0px_0px_20px_0px_rgba(0,0,0,0.10)]",
         className
       )}
       onClick={onClick}
     >
       {header}
-      {isAcitveBg &&
-        (isActive ? (
-          <img
-            src="/btc/bg-market-active.png"
-            alt=""
-            className="w-[340px] h-[218px] absolute left-0 top-0 object-center object-contain"
-          />
-        ) : (
-          <MarketActiveBg />
-        ))}
-      <div className="relative z-[2]">
-        <div
-          className={clsx(
-            "",
-            isForceNormal
-              ? ""
-              : "max-md:flex max-md:justify-between max-md:p-[23px_16px_0_12px]"
-          )}
-        >
-          <div
-            className={clsx(
-              "pt-[14px] px-[12px]",
-              isForceNormal ? "" : "max-md:px-0 max-md:pt-0"
-            )}
-          >
-            {!isForceNormal && isMobile && (
-              <div className="text-[14px] font-[400] text-white">
-                Market #{data?.pool_id}
-              </div>
-            )}
-            <div
-              className={clsx(
-                "flex items-center justify-between",
-                isForceNormal ? "" : "max-md:mt-[9px]"
-              )}
-            >
-              <div className="flex items-center gap-[6px]"></div>
-              {data?.nft_ids && (
-                <span className="text-[12px] text-[#8795A7]">
-                  #{data?.nft_ids}
-                </span>
-              )}
+      <div className="relative z-[2] bg-white rounded-[18px] pt-[20px]">
+        <div className="flex items-center justify-between px-[12px]">
+          <div className="flex items-center gap-[6px]">
+            <Avatar
+              size={20}
+              address={data?.user_info?.user}
+              email={data?.user_info?.email}
+            />
+            <div className="text-[12px]">
+              {data?.user_info?.email || formatAddress(data?.user_info?.user)}
             </div>
           </div>
-          <div
-            className={clsx("flex items-center gap-[10px] px-[12px] pt-[10px]")}
-          >
-            <img
-              className="w-[72px] h-[72px] rounded-[10px] border-[2px] border-[#999677]"
-              src={data?.reward_token_info?.[0]?.icon}
+          <div className="text-[12px] text-[#5E6B7D]">#{data?.pool_id}</div>
+        </div>
+        <div className="flex justify-center items-center gap-[10px] mt-[20px]">
+          {data?.reward_amount && (
+            <BtcImg
+              amount={String(
+                data.reward_amount / 10 ** data.reward_token_info?.[0].decimals
+              )}
+              id={data?.pool_id}
             />
-            <div className="grow">
-              <div className="text-[12px] text-white">
-                {data?.reward_token_info?.[0]?.name}{" "}
-                {data?.reward_token_info?.[0]?.token_id}
-              </div>
-              <div className="flex items-center gap-[8px] mt-[6px]">
-                <Avatar
-                  size={20}
-                  address={data?.user_info?.user}
-                  email={data?.user_info?.email}
-                />
-                <div className="text-[12px] text-white">
-                  {data?.user_info?.email ||
-                    formatAddress(data?.user_info?.user)}
-                </div>
-              </div>
-              <div className="flex justify-between items-center text-[12px] text-[#8795A7] mt-[6px]">
-                <span>Valued</span>
-                <span className="text-right">
-                  {formatNumber(anchorPrice, 0, true, {
-                    prefix: "$"
-                  })}
-                </span>
-              </div>
+          )}
+          <div>
+            <div className="text-[26px] font-[DelaGothicOne] text-[#2B3337]">
+              {data.reward_token_info?.[0]?.name}
+            </div>
+            <div className="text-[12px] font-[300] text-[#5E6B7D]">
+              $
+              {formatNumber(
+                getAnchorPrice(
+                  data?.anchor_price,
+                  data.reward_token_info?.[0].decimals
+                ),
+                2,
+                true
+              )}
             </div>
           </div>
         </div>
+
         <div
           className={clsx(
-            "px-[12px] flex items-center justify-between text-[12px] text-white",
+            "px-[12px] flex items-center justify-between text-[12px]",
             isActive
               ? "mt-[23px] font-[DelaGothicOne] text-[#FFE9B2]"
               : "mt-[16px]"
@@ -140,31 +103,28 @@ export default function Market({
           <div className="flex items-center gap-[5px]">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="17"
-              height="20"
-              viewBox="0 0 17 20"
+              width="14"
+              height="17"
+              viewBox="0 0 14 17"
               fill="none"
             >
               <path
-                d="M8.33598 0.00373027C10.7664 0.0628534 12.7038 0.80102 14.1475 2.21857C15.5911 3.6361 16.2852 5.4885 16.2295 7.77521C16.175 10.0142 15.3918 11.8066 13.8809 13.1522C13.2686 13.6975 12.5798 14.1247 11.8165 14.4393C13.7619 15.4125 14.5475 17.1286 14.6153 18.1453C14.5956 18.1578 12.3884 19.5555 8.28715 19.5555C4.18941 19.5554 2.20831 18.16 2.18754 18.1453C2.38412 17.1627 3.07711 15.527 4.83891 14.5399C3.79126 14.1698 2.87344 13.6132 2.08696 12.8651C0.643273 11.4475 -0.051528 9.61888 0.00297316 7.37971C0.0587088 5.09315 0.841831 3.27706 2.35258 1.93146C3.91112 0.586999 5.9057 -0.055334 8.33598 0.00373027Z"
-                fill={isActive ? "#FFE9B2" : "#ADBCCF"}
+                d="M6.86523 0.00292969C8.86676 0.0516192 10.4624 0.659753 11.6514 1.82715C12.8403 2.99454 13.412 4.52007 13.3662 6.40332C13.3213 8.24703 12.6766 9.72293 11.4326 10.8311C10.9282 11.2803 10.3602 11.6325 9.73145 11.8916C11.3337 12.6931 11.9803 14.106 12.0361 14.9434C12.0066 14.9621 10.1901 16.1045 6.8252 16.1045C3.43269 16.1044 1.80176 14.9434 1.80176 14.9434C1.96364 14.1342 2.5346 12.7876 3.98535 11.9746C3.12255 11.6699 2.36646 11.2109 1.71875 10.5947C0.530048 9.42739 -0.0419363 7.92196 0.00292969 6.07812C0.048768 4.19487 0.694169 2.69902 1.93848 1.59082C3.2219 0.483811 4.86405 -0.0456682 6.86523 0.00292969Z"
+                fill="#5E6B7D"
               />
               <path
-                d="M5.18359 4.81055L5.18359 6.81268"
-                stroke="black"
-                stroke-width="1.6"
-                stroke-linecap="round"
-              />
-              <path
-                d="M11.924 5.20996L9.9895 5.72815"
-                stroke="black"
-                strokeWidth="1.6"
+                d="M4.26941 3.96143L4.26941 5.61024"
+                stroke="white"
                 strokeLinecap="round"
               />
               <path
-                d="M5.38489 9.81556C6.98704 10.8166 10.3916 10.6164 11.9938 8.41406"
-                stroke="black"
-                strokeWidth="1.6"
+                d="M9.82027 4.29053L8.22718 4.71727"
+                stroke="white"
+                strokeLinecap="round"
+              />
+              <path
+                d="M4.43509 8.08337C5.75452 8.90778 8.5583 8.7429 9.87772 6.9292"
+                stroke="white"
                 strokeLinecap="round"
               />
             </svg>
@@ -180,14 +140,14 @@ export default function Market({
           <div className="flex items-center gap-[5px]">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="17"
-              viewBox="0 0 16 17"
+              width="13"
+              height="14"
+              viewBox="0 0 13 14"
               fill="none"
             >
               <path
-                d="M15.6611 14.6255C15.6687 15.3982 11.9942 16.9995 7.72656 16.9995C3.4594 16.9994 0.000447388 15.4539 0 14.6812L0.0078125 12.3628C0.879943 12.878 3.63805 13.9086 7.72656 13.9087C11.8153 13.9087 14.7889 13.1355 15.6611 12.3628V14.6255ZM15.6611 9.21631C15.6687 9.98904 11.9942 11.5903 7.72656 11.5903C3.45913 11.5902 0 10.0447 0 9.27197L0.0078125 6.95361C0.879832 7.46875 3.63789 8.49943 7.72656 8.49951C11.8155 8.49951 14.7891 7.72633 15.6611 6.95361V9.21631ZM7.73438 -0.000488281C12.002 -0.000488281 15.4619 1.38327 15.4619 3.09033C15.4617 4.79733 12.0019 6.18115 7.73438 6.18115C3.46703 6.18106 0.00799003 4.79727 0.0078125 3.09033C0.0078125 1.38333 3.46692 -0.000392673 7.73438 -0.000488281Z"
-                fill={isActive ? "#FFE9B2" : "#ADBCCF"}
+                d="M12.8975 12.0449C12.9037 12.6813 9.87782 14 6.36328 14C2.8488 14 0 12.7272 0 12.0908L0.00585938 10.1816C0.723974 10.6059 2.99593 11.4541 6.36328 11.4541C9.73069 11.4541 12.1793 10.818 12.8975 10.1816V12.0449ZM12.8975 7.59082C12.9035 8.2272 9.87775 9.5459 6.36328 9.5459C2.84937 9.54587 0.000930709 8.27318 0 7.63672L0.00585938 5.72754C0.723974 6.15178 2.99593 6.99998 6.36328 7C9.7304 7 12.1791 6.36385 12.8975 5.72754V7.59082ZM6.37012 0C9.88453 5.75454e-05 12.7334 1.14012 12.7334 2.5459C12.7328 3.95147 9.88416 5.09076 6.37012 5.09082C2.85595 5.09082 0.0064589 3.95151 0.00585938 2.5459C0.00585938 1.14008 2.85558 0 6.37012 0Z"
+                fill="#5E6B7D"
               />
             </svg>
             <span
@@ -254,16 +214,17 @@ export default function Market({
         </div>
         {footer}
       </div>
+
       {data.status === 2 && (
         <div className="w-full h-full rounded-[16px] absolute top-0 left-0 z-[2] bg-[#00000080]">
-          <div className="flex justify-center mt-[100px]">
-            <div className="p-[2px] pr-[10px] min-w-[100px] inline-flex gap-[3px] rounded-[12px] bg-[#FFFFFF1A] backdrop-blur-[25px]">
+          <div className="flex justify-center mt-[80px]">
+            <div className="p-[4px] pr-[10px] min-w-[100px] inline-flex gap-[3px] rounded-[16px] bg-white border border-[#E4E4E4] backdrop-blur-[25px]">
               <Avatar
                 address={data?.winner_user}
                 email={data?.winner_user_info?.email}
                 size={24}
               />
-              <div className="text-[12px] font-semibold text-white leading-[24px]">
+              <div className="text-[12px] text-[#2B3337] leading-[24px]">
                 {data?.winner_user_info?.email ||
                   formatAddress(
                     data?.winner_user || data?.pool_info?.winner_user

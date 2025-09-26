@@ -7,7 +7,6 @@ import Big from "big.js";
 import { ESellerRecordsType } from "../hooks/use-create-pool-list";
 import useIsMobile from "@/hooks/use-is-mobile";
 import { useNavigate } from "react-router-dom";
-import chains from "@/config/chains";
 
 const Records = (props: any) => {
   const {
@@ -98,15 +97,7 @@ const Records = (props: any) => {
       width: isMobile ? 200 : 170,
       align: GridTableAlign.Right,
       render: (record: any) => {
-        const currentChain = Object.values(chains).find(
-          (it: any) => it.name.toLowerCase() === record.chain?.toLowerCase()
-        );
-        let txUrl: any;
-        if (currentChain) {
-          txUrl = `${currentChain?.blockExplorers?.default?.url}/tx/${
-            record.tx_hash
-          }?cluster=${import.meta.env.VITE_SOLANA_CLUSTER_NAME}`;
-        }
+        const txUrl = `https://nearblocks.io/txns/${record.tx_hash}`;
         return (
           <div
             className="flex justify-end items-center gap-[11px] cursor-pointer"
@@ -115,14 +106,20 @@ const Records = (props: any) => {
               window.open(txUrl, "_blank");
             }}
           >
-            <div className="text-[#8795A7]">
-              {dayjs(record.updated_at).format("hh:mm D MMM, YYYY")}
-            </div>
-            <img
-              src="/profile/icon-share.svg"
-              alt="share"
-              className="w-[9px] h-[9px] shrink-0"
-            />
+            <div>{dayjs(record.updated_at).format("hh:mm D MMM, YYYY")}</div>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="11"
+              height="11"
+              viewBox="0 0 11 11"
+              fill="none"
+            >
+              <path
+                d="M1 9.5L9.5 1M9.5 1H1M9.5 1V9.5"
+                stroke="#828E9E"
+                strokeWidth="1.5"
+              />
+            </svg>
           </div>
         );
       }
@@ -132,7 +129,7 @@ const Records = (props: any) => {
   return (
     <div
       className={clsx(
-        "mt-[20px] max-md:w-screen max-md:mt-0 max-md:p-[17px_0]",
+        "mt-[20px] max-md:w-screen max-md:mt-0 max-md:p-[17px_0] bg-white border border-[#E4E4E4] rounded-[16px] p-[20px]",
         className
       )}
     >
