@@ -5,41 +5,36 @@ import { PublicKey } from "near-api-js/lib/utils/key_pair";
 import { functionCall } from "near-api-js/lib/transaction";
 import { base_decode } from "near-api-js/lib/utils/serialize";
 import useGenerateKey from "@/hooks/near/use-generate-key";
-import Big from "big.js";
 import useToast from "@/hooks/use-toast";
-import { BASE_TOKEN } from "@/config/btc";
-import { BET_UNIT } from "@/config";
+
 const THIRTY_TGAS = "300000000000000";
 
-export default function useCreate(onSuccess: () => void) {
+export default function usePlayerRefund(
+  poolId?: string,
+  onSuccess?: () => void
+) {
   const [loading, setLoading] = useState(false);
   const { generateKeyPair } = useGenerateKey();
   const toast = useToast();
 
-  async function create({ amount, price }: { amount: string; price: number }) {
+  async function refund() {
+    let toastId = toast.loading({ title: "Refunding..." });
     try {
       setLoading(true);
+
       const { publicKey, keyPairSigner } = await generateKeyPair();
 
       const provider = getProvider();
-
       const { header } = await provider.block({ finality: "final" });
 
-      const _amount = Big(amount)
-        .mul(10 ** BASE_TOKEN.decimals)
-        .toFixed(0);
-
-      const args = {
-        create_args: {
+      const refundArgs = {
+        game_args: {
           ByAk: {
-            amount: _amount,
-            bid_unit: BET_UNIT,
-            bep: Big(_amount).mul(price).toFixed(0),
-            prize: { FT: BASE_TOKEN.address }
+            game_id: Number(poolId)
           }
         }
       };
-
+      console.log("refundArgs:", JSON.stringify(refundArgs));
       const nonce = await getNonce(publicKey);
       const publicKeyObj = PublicKey.from(publicKey);
 
@@ -48,7 +43,9 @@ export default function useCreate(onSuccess: () => void) {
         publicKeyObj,
         import.meta.env.VITE_NEAR_ACCOUNT_ID,
         nonce,
-        [functionCall("create_game", args, BigInt(THIRTY_TGAS), BigInt(0))],
+        [
+          functionCall("refund_bet", refundArgs, BigInt(THIRTY_TGAS), BigInt(0))
+        ],
         base_decode(header.hash)
       );
 
@@ -57,23 +54,28 @@ export default function useCreate(onSuccess: () => void) {
       );
       console.log("signedTransaction:", signedTransaction);
       const result: any = await provider.sendTransaction(signedTransaction);
-      console.log("result:", result);
+
       if (result.status.SuccessValue) {
-        toast.success({ title: "Create success" });
+        toast.dismiss(toastId);
+        console.log("Claim success:", result);
+        toast.success({ title: "Claim success" });
         onSuccess?.();
       } else {
-        toast.fail({ title: "Create failed" });
+        toast.dismiss(toastId);
+        console.log("Claim failed:", result);
+        toast.fail({ title: "Claim failed" });
       }
     } catch (error) {
-      console.error("Create error:", error);
-      toast.fail({ title: "Create failed" });
+      toast.dismiss(toastId);
+      toast.fail({ title: "Claim failed" });
+      console.error("Claim error:", error);
     } finally {
       setLoading(false);
     }
   }
 
   return {
-    create,
+    refund,
     loading
   };
 }

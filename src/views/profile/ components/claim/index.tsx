@@ -3,9 +3,7 @@ import ButtonV2 from "@/components/button/v2";
 import { formatAddress } from "@/utils/format/address";
 import { formatNumber } from "@/utils/format/number";
 import Big from "big.js";
-import useClaim from "@/hooks/evm/use-claim";
-import { useMemo } from "react";
-import useClaimReward from "@/hooks/evm/use-claim-rewards";
+import useClaim from "@/hooks/near/use-player-refund";
 import { useNavigate } from "react-router-dom";
 import { getProfitFee } from "@/utils/pool";
 import GridTable from "@/components/grid-table";
@@ -38,7 +36,7 @@ const ClaimIndex = (props: any) => {
       const params = new URLSearchParams();
       params.set("limit", pageSize + "");
       params.set("offset", pageIndex * pageSize + "");
-      params.set("chain", "Berachain");
+      params.set("chain", "near");
       if (type === "player") {
         // 0: ALl
         // 1: Winner
@@ -209,22 +207,12 @@ const ClaimIndex = (props: any) => {
 export default ClaimIndex;
 
 const ClaimButton = (props: any) => {
-  const { onAfterSuccess, item, type } = props;
+  const { onAfterSuccess, item } = props;
 
-  const { claim: onSellerClaim, claiming: sellerClaiming } = useClaim(
-    [item.pool_id],
+  const { refund: onClaim, loading: claiming } = useClaim(
+    item.pool_id,
     onAfterSuccess
   );
-  const { claim: onPlayerClaim, claiming: playerClaiming } =
-    useClaimReward(onAfterSuccess);
-
-  const [onClaim, claiming] = useMemo(() => {
-    const isPlayer = type === "player";
-    if (isPlayer) {
-      return [onPlayerClaim, playerClaiming];
-    }
-    return [onSellerClaim, sellerClaiming];
-  }, [onSellerClaim, sellerClaiming, onPlayerClaim, playerClaiming, type]);
 
   return (
     <ButtonV2
@@ -232,7 +220,7 @@ const ClaimButton = (props: any) => {
       loading={claiming}
       disabled={claiming || item.is_claim}
       onClick={() => {
-        onClaim(item.pool_id);
+        onClaim();
       }}
     >
       {item.is_claim ? "Claimed" : "Claim"}

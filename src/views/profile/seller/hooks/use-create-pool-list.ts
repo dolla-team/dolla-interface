@@ -26,7 +26,7 @@ export default function useCreatePoolList() {
       const response = await axiosInstance.get(
         `/api/v1/user/create/pool/list?limit=${pageSize}&offset=${
           pageRef.current * pageSize
-        }&status=-1&chain=Berachain`
+        }&status=-1&chain=near`
       );
       const poolIds: number[] = [];
       response.data.data.list.forEach((item: any) => {
@@ -61,7 +61,7 @@ export default function useCreatePoolList() {
       if (!userInfo?.user) return [];
       try {
         const response = await axiosInstance.get(
-          `/api/v1/user/records/seller?limit=${recordsPageSize}&chain=Berachain&offset=${
+          `/api/v1/user/records/seller?limit=${recordsPageSize}&chain=near&offset=${
             (recordsPageIndex - 1) * pageSize
           }`
         );

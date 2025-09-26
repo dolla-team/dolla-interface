@@ -5,7 +5,6 @@ import { formatNumber } from "@/utils/format/number";
 import { useEffect, useMemo } from "react";
 import Action from "@/views/nft-create/action";
 import Button from "@/components/button/v2";
-import useMintNft from "./hooks/use-mint-nft";
 import useTokenPrice from "@/hooks/use-token-price";
 
 const ITEMS = [
@@ -50,7 +49,7 @@ export default function ListPrice({
     onSetListPrice(prices[0].floor_price);
     return prices[0];
   }, [prices]);
-  const { mintNft, minting } = useMintNft(token?.address, onSuccess);
+
   useEffect(() => {
     if (price) {
       onSetListPrice(price.floor_price);
@@ -136,15 +135,6 @@ export default function ListPrice({
                 onSuccess("create");
               }}
             />
-          ) : token?.address?.toLocaleLowerCase() ===
-            "0x2b517b73555598f0b1a0985a04c8cf76d5f54e8b" ? (
-            <Button
-              loading={minting}
-              className="button w-full h-[40px] mt-[20px]"
-              onClick={mintNft}
-            >
-              Mint NFT
-            </Button>
           ) : (
             <Button className="button w-full h-[40px] mt-[20px]" disabled>
               No nft fund

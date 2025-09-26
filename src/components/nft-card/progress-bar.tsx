@@ -77,9 +77,6 @@ export default function ProgressBar({
           )}
         </div>
       </div>
-      {progress >= 100 && (
-        <div className="text-[12px] font-semibold text-[#6F37FF]">Spilled</div>
-      )}
     </div>
   );
 }

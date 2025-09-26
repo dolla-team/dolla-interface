@@ -76,24 +76,6 @@ export default [
       },
       {
         indexed: false,
-        internalType: "bytes16",
-        name: "action",
-        type: "bytes16"
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "bidUnit",
-        type: "uint256"
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "bep",
-        type: "uint256"
-      },
-      {
-        indexed: false,
         internalType: "uint256",
         name: "nftId",
         type: "uint256"
@@ -233,21 +215,6 @@ export default [
         type: "address"
       },
       {
-        internalType: "bytes16",
-        name: "action",
-        type: "bytes16"
-      },
-      {
-        internalType: "uint256",
-        name: "bidUnit",
-        type: "uint256"
-      },
-      {
-        internalType: "uint256",
-        name: "bep",
-        type: "uint256"
-      },
-      {
         internalType: "uint256",
         name: "nftId",
         type: "uint256"
@@ -273,17 +240,22 @@ export default [
     outputs: [
       {
         internalType: "address",
-        name: "nftContract",
-        type: "address"
-      },
-      {
-        internalType: "address",
         name: "userAddress",
         type: "address"
       },
       {
         internalType: "uint256",
         name: "nftId",
+        type: "uint256"
+      },
+      {
+        internalType: "address",
+        name: "nftContract",
+        type: "address"
+      },
+      {
+        internalType: "uint256",
+        name: "nearBlock",
         type: "uint256"
       }
     ],
@@ -301,21 +273,6 @@ export default [
         internalType: "address",
         name: "userAddress",
         type: "address"
-      },
-      {
-        internalType: "bytes16",
-        name: "action",
-        type: "bytes16"
-      },
-      {
-        internalType: "uint256",
-        name: "bidUnit",
-        type: "uint256"
-      },
-      {
-        internalType: "uint256",
-        name: "bep",
-        type: "uint256"
       },
       {
         internalType: "uint256",
@@ -435,16 +392,6 @@ export default [
         internalType: "address",
         name: "nftContract",
         type: "address"
-      },
-      {
-        internalType: "uint256",
-        name: "bidUnit",
-        type: "uint256"
-      },
-      {
-        internalType: "uint256",
-        name: "bep",
-        type: "uint256"
       },
       {
         internalType: "uint256",

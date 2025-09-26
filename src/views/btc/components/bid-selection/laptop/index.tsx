@@ -19,7 +19,7 @@ export default function BidSelection({
   tokenBalance: string;
   disabled: boolean;
   bids: number;
-  pool: string;
+  pool: any;
   flipStatus: number;
   onChangeBids: (bids: number) => void;
   onBidClick: () => void;
@@ -36,7 +36,6 @@ export default function BidSelection({
               e.stopPropagation();
               set({
                 showWallet: true,
-                showUserInfo: false,
                 panelType: "deposit"
               });
             }}
@@ -62,13 +61,13 @@ export default function BidSelection({
           <div
             key={`bids-${item}`}
             className={clsx(
-              "relative flex items-center justify-center",
+              "relative flex items-center justify-center button",
               item === 100 && "w-[139px] h-[73px]",
               item === 50 && "w-[133px] h-[68px]",
               item === 10 && "w-[120px] h-[62px]",
               item === 5 && "w-[118px] h-[56px]",
               item === 1 && "w-[110px] h-[47px]",
-              disabled ? "opacity-50" : "button"
+              pool?.status !== 1 ? "opacity-50" : "button"
             )}
             onClick={() => onChangeBids(item)}
           >

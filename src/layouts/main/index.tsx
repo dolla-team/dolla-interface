@@ -1,5 +1,5 @@
 import AvatarAction from "./avatar-action";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import Button from "@/components/button";
 import { useAuth } from "@/contexts/auth";
 import DollaEye from "@/components/dolla-eye";
@@ -8,18 +8,22 @@ import EstGas from "@/sections/est-gas";
 import Wallet from "@/sections/wallet";
 import Infos from "@/sections/infos";
 import UserInfo from "@/sections/user-info";
-import PageTabs from "./tabs";
-import useIsBtc from "@/hooks/use-is-btc";
+import useWalletStore from "@/stores/use-wallet";
+import { useEffect, useRef } from "react";
 
 export default function MainLayout() {
   const { userInfo, login } = useAuth() || {};
   // const isMobile = useIsMobile();
   const navigate = useNavigate();
-
-  const isBtc = useIsBtc();
+  const contentRef = useRef<HTMLDivElement>(null);
+  const walletStore = useWalletStore();
+  const pathname = useLocation();
+  useEffect(() => {
+    contentRef.current?.scrollTo(0, 0);
+  }, [pathname]);
 
   return (
-    <div className="h-screen overflow-hidden bg-white relative">
+    <div className="h-screen w-screen overflow-hidden bg-white relative">
       {/* header */}
       <div className="flex justify-between items-center h-[76px] sticky top-0 bg-white z-[20]">
         <div className="flex items-center gap-[30px] pl-[30px]">
@@ -63,14 +67,22 @@ export default function MainLayout() {
             </>
           )}
         </div>
-        <PageTabs />
+        {/* <PageTabs /> */}
       </div>
-      <Infos chain={isBtc ? "Berachain" : "solana"} />
-      <div className="h-[calc(100vh-76px)] overflow-y-auto relative z-[2] bg-[#F0F0F0]">
-        <Outlet />
+      <Infos />
+      <div className="flex h-full">
+        <div
+          className="h-[calc(100vh-76px)] overflow-y-auto relative z-[2] bg-[#F0F0F0]"
+          style={{
+            width: walletStore.showUserInfo ? window.innerWidth - 294 : "100%"
+          }}
+          ref={contentRef}
+        >
+          <Outlet />
+        </div>
+        <UserInfo />
       </div>
       <Wallet />
-      <UserInfo />
     </div>
   );
 }

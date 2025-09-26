@@ -6,13 +6,13 @@ import { formatAddress } from "@/utils/format/address";
 import Big from "big.js";
 import { getAnchorPrice } from "@/utils/pool";
 import useWalletStore from "@/stores/use-wallet";
+import { BASE_TOKEN } from "@/config/btc";
 
 interface ScrollProps {
   className?: string;
   speed?: number;
   height?: number;
   autoPlay?: boolean;
-  chain: "solana" | "Berachain";
 }
 
 const config: any[] = [
@@ -42,8 +42,7 @@ export default function Infos({
   className = "",
   speed = 120,
   height = 36,
-  autoPlay = true,
-  chain
+  autoPlay = true
 }: ScrollProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [containerWidth, setContainerWidth] = useState(0);
@@ -52,12 +51,6 @@ export default function Infos({
   const [data, setData] = useState<any[]>([]);
   const walletStore = useWalletStore();
   const controls = useAnimationControls();
-
-  useEffect(() => {
-    if (containerRef.current) {
-      setContainerWidth(containerRef.current.offsetWidth);
-    }
-  }, []);
 
   useEffect(() => {
     if (!data?.length) return;
@@ -95,7 +88,7 @@ export default function Infos({
 
     const getData = async () => {
       const res = await axiosInstance.get(
-        `/api/v1/pool/scroll/list?list=10&chain=solana`
+        `/api/v1/pool/scroll/list?list=10&chain=near`
       );
 
       setData(res.data.data);
@@ -146,6 +139,7 @@ export default function Infos({
 
 const Item = ({ item }: { item: any; index: number }) => {
   const randomIndex = Math.floor(Math.random() * config.length);
+
   return item.winner_user ? (
     <div className="flex items-center h-full gap-3 text-white transition-transform duration-200 hover:scale-105">
       <span className="text-[12px] text-[#D9D9D9] rounded">
@@ -157,7 +151,10 @@ const Item = ({ item }: { item: any; index: number }) => {
           config[randomIndex].color
         )}
       >
-        {Big(getAnchorPrice(item?.anchor_price, 8)).toFixed(0)}x
+        {Big(getAnchorPrice(item?.anchor_price, BASE_TOKEN.decimals)).toFixed(
+          2
+        )}
+        x
       </span>
       <span className="text-xl drop-shadow-lg">
         {config[randomIndex].emoji}
@@ -169,7 +166,10 @@ const Item = ({ item }: { item: any; index: number }) => {
         {item.nft_ids ? "New NFT Listed" : "New Market Listed"}
       </span>
       <span className={clsx("text-lg font-bold drop-shadow-lg")}>
-        ${Big(getAnchorPrice(item?.anchor_price, 8)).toFixed(0)}
+        $
+        {Big(getAnchorPrice(item?.anchor_price, BASE_TOKEN.decimals)).toFixed(
+          2
+        )}
       </span>
       <span className="text-xl drop-shadow-lg">
         {config[randomIndex].emoji}

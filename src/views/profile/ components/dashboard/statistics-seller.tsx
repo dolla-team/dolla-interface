@@ -5,18 +5,15 @@ import Badge from "../badge";
 import { formatNumber } from "@/utils/format/number";
 import Big from "big.js";
 import { useAuth } from "@/contexts/auth";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import ClaimModal from "../claim/modal";
 import { getProfitFee } from "@/utils/pool";
 
 const StatisticsPlayer = (props: any) => {
   const { className } = props;
 
-  const { onQueryUserInfo, userInfo } = useAuth();
+  const { userInfo } = useAuth();
   const navigate = useNavigate();
-
-  const [claimModalOpen, setClaimModalOpen] = useState(false);
 
   const [onSellTotalAmount, claimableValue] = useMemo(() => {
     const _result: any = [Big(0), Big(0)];
@@ -74,7 +71,7 @@ const StatisticsPlayer = (props: any) => {
             isShortUppercase: true
           })}
         </LabelValue>
-        <LabelValue
+        {/* <LabelValue
           label="Claimable"
           className=""
           valueClassName="flex items-center gap-[13px]"
@@ -87,16 +84,7 @@ const StatisticsPlayer = (props: any) => {
               round: Big.roundDown
             })}
           </div>
-          <ButtonV2
-            className="!text-[14px]"
-            // disabled={Big(claimableValue || 0).lte(0)}
-            onClick={() => {
-              setClaimModalOpen(true);
-            }}
-          >
-            Claim
-          </ButtonV2>
-        </LabelValue>
+        </LabelValue> */}
       </div>
       <div className="flex items-center gap-[10px] flex-2 justify-between max-md:flex-col max-md:w-full">
         <LabelValue
@@ -175,13 +163,6 @@ const StatisticsPlayer = (props: any) => {
           </ButtonV2>
         </LabelValue>
       </div>
-      <ClaimModal
-        type="seller"
-        open={claimModalOpen}
-        onClose={() => {
-          setClaimModalOpen(false);
-        }}
-      />
     </div>
   );
 };

@@ -1,32 +1,36 @@
-import { useMemo, useState } from "react";
-import dayjs from "dayjs";
-import { getProvider, quote, viewMethod, getNonce } from "./util";
-import { KeyPairSigner, transactions } from "near-api-js";
+import { useState } from "react";
+import { getProvider, viewMethod, getNonce } from "./util";
+import { transactions } from "near-api-js";
 import { PublicKey } from "near-api-js/lib/utils/key_pair";
-import { useNearKeyStore } from "@/stores/use-near-key";
+import useGenerateKey from "@/hooks/near/use-generate-key";
 import { functionCall } from "near-api-js/lib/transaction";
 import { base_decode } from "near-api-js/lib/utils/serialize";
-import Big from "big.js";
+import { QUOTE_TOKEN } from "@/config/btc";
+import useToast from "../use-toast";
 
 const THIRTY_TGAS = "300000000000000";
-export default function useGameAction({ gameId }: { gameId?: string }) {
-  const { publicKey, privateKey } = useNearKeyStore();
-  const keyPairSigner = useMemo(() => {
-    return KeyPairSigner.fromSecretKey(("ed25519:" + privateKey) as any);
-  }, [privateKey]);
-  const [loading, setLoading] = useState(false);
-  const [createGameAddress, setCreateGameAddress] = useState<string | null>(
-    null
-  );
+export default function useGameAction({
+  gameId,
+  onPauseSuccess,
+  onResumeSuccess,
+  onCancelSuccess
+}: {
+  gameId?: string;
+  onPauseSuccess?: () => void;
+  onResumeSuccess?: () => void;
+  onCancelSuccess?: () => void;
+}) {
+  const { generateKeyPair } = useGenerateKey();
+  const [resuming, setResuming] = useState(false);
+  const [pausing, setPausing] = useState(false);
+  const [canceling, setCanceling] = useState(false);
+  const toast = useToast();
 
   async function pauseGame() {
-    if (!keyPairSigner) {
-      return;
-    }
-
+    let toastId = toast.loading({ title: "Pausing game..." });
     try {
-      setLoading(true);
-
+      setPausing(true);
+      const { publicKey, keyPairSigner } = await generateKeyPair();
       const provider = getProvider();
       const { header } = await provider.block({ finality: "final" });
 
@@ -53,25 +57,29 @@ export default function useGameAction({ gameId }: { gameId?: string }) {
 
       const result: any = await provider.sendTransaction(signedTransaction);
 
+      toast.dismiss(toastId);
       if (result.status.SuccessValue) {
         console.log("success:", result);
+        toast.success({ title: "Paused game successfully" });
+        onPauseSuccess?.();
       } else {
         console.log("fail:", result);
+        toast.fail({ title: "Paused game failed" });
       }
     } catch (error) {
       console.error(error);
+      toast.dismiss(toastId);
+      toast.fail({ title: "Paused game failed" });
     } finally {
-      setLoading(false);
+      setPausing(false);
     }
   }
 
   async function resumeGame() {
-    if (!keyPairSigner) {
-      return;
-    }
-
+    let toastId = toast.loading({ title: "Resuming game..." });
     try {
-      setLoading(true);
+      const { publicKey, keyPairSigner } = await generateKeyPair();
+      setResuming(true);
 
       const provider = getProvider();
       const { header } = await provider.block({ finality: "final" });
@@ -99,30 +107,38 @@ export default function useGameAction({ gameId }: { gameId?: string }) {
 
       const result: any = await provider.sendTransaction(signedTransaction);
 
+      toast.dismiss(toastId);
       if (result.status.SuccessValue) {
         console.log("success:", result);
+        toast.success({ title: "Resumed game successfully" });
+        onResumeSuccess?.();
       } else {
+        toast.fail({ title: "Resumed game failed" });
         console.log("fail:", result);
       }
     } catch (error) {
       console.error(error);
+      toast.dismiss(toastId);
+      toast.fail({ title: "Resumed game failed" });
     } finally {
-      setLoading(false);
+      setResuming(false);
     }
   }
 
   async function cancelGame() {
-    if (!keyPairSigner) {
-      return;
-    }
-
+    let toastId = toast.loading({ title: "Canceling game..." });
+    const { publicKey, keyPairSigner } = await generateKeyPair();
     try {
-      setLoading(true);
+      setCanceling(true);
 
       const provider = getProvider();
       const { header } = await provider.block({ finality: "final" });
 
-      const gameArgs = { game_args: { ByAk: { game_id: Number(gameId) } } };
+      const gameArgs = {
+        game_args: {
+          ByAk: { game_id: Number(gameId), token: { FT: QUOTE_TOKEN.address } }
+        }
+      };
       const nonce = await getNonce(publicKey);
       const transaction = transactions.createTransaction(
         import.meta.env.VITE_NEAR_ACCOUNT_ID,
@@ -139,17 +155,23 @@ export default function useGameAction({ gameId }: { gameId?: string }) {
 
       const result: any = await provider.sendTransaction(signedTransaction);
 
+      toast.dismiss(toastId);
       if (result.status.SuccessValue) {
         console.log("success:", result);
+        toast.success({ title: "Canceled game successfully" });
+        onCancelSuccess?.();
       } else {
         console.log("fail:", result);
+        toast.fail({ title: "Canceled game failed" });
       }
 
       return result;
     } catch (error) {
       console.error(error);
+      toast.dismiss(toastId);
+      toast.fail({ title: "Canceled game failed" });
     } finally {
-      setLoading(false);
+      setCanceling(false);
     }
   }
 
@@ -167,7 +189,8 @@ export default function useGameAction({ gameId }: { gameId?: string }) {
     resumeGame,
     cancelGame,
     getAllGames,
-    loading,
-    createGameAddress
+    pausing,
+    resuming,
+    canceling
   };
 }

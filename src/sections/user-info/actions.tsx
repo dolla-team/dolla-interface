@@ -1,11 +1,13 @@
 import { useAuth } from "@/contexts/auth";
 import { useNavigate } from "react-router-dom";
 import useIsBtc from "@/hooks/use-is-btc";
+import useWalletStore from "@/stores/use-wallet";
 
 export default function Actions() {
   const navigate = useNavigate();
   const { logout } = useAuth();
   const isBtc = useIsBtc();
+  const walletStore = useWalletStore();
   return (
     <div className="absolute bottom-0 right-0 border-t border-[#313038] px-[20px] pt-[12px] w-full">
       {MENU.map((item) => (
@@ -15,19 +17,14 @@ export default function Actions() {
           onClick={(e) => {
             if (item.key === "logout") {
               logout();
-              return;
             } else if (item.key === "invite") {
-              return;
             } else if (item.key === "portfolio") {
               navigate("/portfolio/player");
-              return;
             } else if (item.key === "create-market") {
               navigate(isBtc ? "/btc/create" : "/nft/create");
-              return;
             } else if (item.key === "claim") {
               e.stopPropagation();
               // claimTestCoin();
-              return;
             }
           }}
         >

@@ -31,7 +31,7 @@ export default function usePlayerHistory() {
         (joinedPoolListPageIndex - 1) * joinedPoolListPageSize + ""
       );
       url.searchParams.set("pool_status", joinedPoolListStatus);
-      url.searchParams.set("chain", "Berachain");
+      url.searchParams.set("chain", "near");
       try {
         const response = await axiosInstance.get(
           `/api/v1/user/joined_market?${url.searchParams.toString()}`
@@ -92,7 +92,7 @@ export default function usePlayerHistory() {
     setLoading(true);
     try {
       const response = await axiosInstance.get(
-        `/api/v1/user/player/history?limit=${pageSize}&chain=Berachain&offset=${
+        `/api/v1/user/player/history?limit=${pageSize}&chain=near&offset=${
           (_page - 1) * pageSize
         }`
       );

@@ -27,12 +27,8 @@ import useCreate from "@/hooks/near/use-create";
 
 export default function BTCCreate() {
   const [amount, setAmount] = useState(1);
-  const {
-    userInfo,
-    isLoading,
-    address: evmAddress,
-    nearAccount
-  } = useAuth() || {};
+  const { userInfo, isLoading, updateNearAccount, nearAccount } =
+    useAuth() || {};
   const { token } = useQuote();
   const tokenBalance = nearAccount?.balance;
   const { data: referenceData, loading: referenceDataLoading } =
@@ -51,7 +47,9 @@ export default function BTCCreate() {
     return _p;
   }, [prices]);
 
-  const { create: onCreate, loading: creating } = useCreate(() => {});
+  const { create: onCreate, loading: creating } = useCreate(() => {
+    updateNearAccount?.();
+  });
 
   const errorTips = useMemo(() => {
     if (pricePerBTC === 0) {
@@ -61,7 +59,7 @@ export default function BTCCreate() {
       return "Insufficient Balance";
     }
     return "";
-  }, [amount, pricePerBTC]);
+  }, [amount, pricePerBTC, nearAccount?.prizeBalance]);
 
   const [poolBidsOvermarket] = useMemo(() => {
     return [
@@ -130,7 +128,9 @@ export default function BTCCreate() {
                       fontSize: isActive ? 20 : 16
                     }}
                   >
-                    <div className="text-[14px] font-[800]">{item} BTC</div>
+                    <div className="text-[14px] font-[800]">
+                      {item} {BASE_TOKEN.symbol}
+                    </div>
                     <div className={clsx("text-[12px]")}>
                       ~${formatNumber(item * pricePerBTC, 0, true)}
                     </div>
@@ -377,7 +377,6 @@ const DepositBTC = (props: any) => {
               walletStore.set({
                 showWallet: true,
                 panelType: "deposit",
-                showUserInfo: false,
                 defaultDepositToken: token.symbol,
                 defaultDepositAmount: amount
               });

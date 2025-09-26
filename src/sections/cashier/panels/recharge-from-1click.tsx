@@ -1,7 +1,6 @@
 import BackIcon from "@/sections/wallet/back-icon";
 import TokenSelector from "./token-selector";
 import Recharge from "./recharge";
-import config from "@/config/bera";
 import { useMemo, useState } from "react";
 import { chainConfig } from "../utils/chainConfig";
 import Big from "big.js";
@@ -17,14 +16,13 @@ export default function RechargeFrom1click({
 
   const rechargeToken = useMemo(() => {
     return {
-      ...config.purchaseToken,
       chainName: chainConfig[token?.blockchain]?.name,
       chainLogo: chainConfig[token?.blockchain]?.icon,
       symbol: token?.symbol,
-      address: qoute?.depositAddress,
+      address: token?.contractAddress,
       icon: token?.icon
     };
-  }, [qoute, token, config]);
+  }, [token]);
 
   return (
     <div className="pb-[20px] relative">
@@ -74,7 +72,7 @@ export default function RechargeFrom1click({
                     fund your Dolla wallet. This address can only be used one time.
                 </div> */}
           <div className="pt-[50px]">
-            <Recharge token={rechargeToken} />
+            <Recharge token={rechargeToken} address={qoute?.depositAddress} />
 
             <div className="flex justify-between items-center mt-[20px] px-[10px]">
               <div className="text-[14px] text-[#8A87AA]">Minimum Receive</div>

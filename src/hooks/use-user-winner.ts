@@ -1,9 +1,7 @@
 import { useAuth } from "@/contexts/auth";
 import axiosInstance from "@/libs/axios";
 import { useEffect, useState, useMemo } from "react";
-import { TOKEN } from "@/config/btc";
-import config from "@/config/bera";
-import useTokenBalance from "./evm/use-token-balance";
+
 import Big from "big.js";
 
 export default function useUserWinner() {
@@ -11,15 +9,11 @@ export default function useUserWinner() {
   const [btcs, setBtcs] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const { userInfo } = useAuth();
-  // const { tokenBalance } = useTokenBalance(TOKEN);
-  const { tokenBalance: coinBalance } = useTokenBalance(config.purchaseToken);
 
   const fetchNfts = async () => {
     try {
       setLoading(true);
-      const res = await axiosInstance.get(
-        "/api/v1/user/winning?chain=Berachain"
-      );
+      const res = await axiosInstance.get("/api/v1/user/winning?chain=near");
       const _nfts: any = [];
       const _btcs: any = [];
 

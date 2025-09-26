@@ -22,7 +22,6 @@ import useUserInfoStore from "@/stores/use-user-info";
 import { ethers } from "ethers";
 import useUserNft from "@/hooks/evm/use-user-nft";
 import useAccount from "@/hooks/near/use-account";
-import useGenerateKey from "@/hooks/near/use-generate-key";
 
 export const AuthContext = React.createContext<any | null>(null);
 
@@ -48,8 +47,9 @@ export const AuthProvider: React.FC<{
     return privyItem || { address: "" };
   }, [wallets, isLoggedOut]);
 
-  const { account, fetchAccount } = useAccount(privyWallet?.address);
-  useGenerateKey(account);
+  const { account, fetchAccount: updateNearAccount } = useAccount(
+    privyWallet?.address
+  );
 
   const {
     info: userInfo,
@@ -214,7 +214,7 @@ export const AuthProvider: React.FC<{
         ready,
         user,
         nearAccount: account,
-        fetchAccount,
+        updateNearAccount,
         login,
         logout,
         onQueryUserInfo

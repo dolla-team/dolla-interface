@@ -1,6 +1,6 @@
 const config: Record<string, any> = {
   testnet: {
-    bettingContractAddress: "0x580095b0Fd186309AeDCBE333f12eB08b8f0ec83"
+    bettingContractAddress: "0xE2FA738637795B355feC1B2F745e9C2b4cF2c01D"
   },
   mainnet: {
     bettingContractAddress: "",

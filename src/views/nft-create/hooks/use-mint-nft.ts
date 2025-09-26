@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Contract, ethers } from "ethers";
 import nftAbi from "@/config/abis/evm-nft";
 import useToast from "@/hooks/use-toast";
@@ -10,6 +10,7 @@ export default function useMintNft(
   onSuccess?: () => void
 ) {
   const [minting, setMinting] = useState(false);
+  const [nftNumber, setNftNumber] = useState(0);
   const { wallet } = useAuth();
 
   const toast = useToast();
@@ -53,5 +54,20 @@ export default function useMintNft(
     }
   };
 
-  return { mintNft, minting };
+  const fetchNftNumber = async () => {
+    const ethereumProvider = await wallet?.getEthereumProvider();
+    if (!ethereumProvider || !nftAddress) {
+      return;
+    }
+    const provider = new ethers.providers.Web3Provider(ethereumProvider);
+    const NftContract = new Contract(nftAddress, nftAbi, provider);
+    const balance = await NftContract.balanceOf(wallet?.address);
+    setNftNumber(Number(balance));
+  };
+
+  useEffect(() => {
+    if (nftAddress && wallet) fetchNftNumber();
+  }, [nftAddress, wallet]);
+
+  return { mintNft, minting, nftNumber };
 }

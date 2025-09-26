@@ -29,7 +29,7 @@ export default function WithdrawPanel({ onBack }: { onBack: () => void }) {
         activeClassName="!text-white"
         cursorClassName="!bg-[#743EFF] h-[30px] rounded-[16px]"
       />
-      {walletStore.withdrawType === "token" && <Withdraw />}
+      {/* {walletStore.withdrawType === "token" && <Withdraw />} */}
       {walletStore.withdrawType === "nft" && <WithdrawNft />}
     </div>
   );
