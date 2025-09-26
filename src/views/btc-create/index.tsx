@@ -377,7 +377,6 @@ const DepositBTC = (props: any) => {
               walletStore.set({
                 showWallet: true,
                 panelType: "deposit",
-                showUserInfo: false,
                 defaultDepositToken: token.symbol,
                 defaultDepositAmount: amount
               });

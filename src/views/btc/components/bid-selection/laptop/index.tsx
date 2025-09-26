@@ -36,7 +36,6 @@ export default function BidSelection({
               e.stopPropagation();
               set({
                 showWallet: true,
-                showUserInfo: false,
                 panelType: "deposit"
               });
             }}

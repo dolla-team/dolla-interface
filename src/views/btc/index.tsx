@@ -20,6 +20,8 @@ import UserInfo from "@/sections/user-info";
 import Wallet from "@/sections/wallet";
 import "@/libs/howl";
 import { useNavigate } from "react-router-dom";
+import useWalletStore from "@/stores/use-wallet";
+import { useEffect } from "react";
 
 // import ProvablyFair from "@/sections/provably-fair";
 
@@ -38,6 +40,15 @@ const Content = () => {
   const isMobile = useIsMobile();
   const { pool } = useBtcContext();
   const navigate = useNavigate();
+  const walletStore = useWalletStore();
+
+  useEffect(() => {
+    walletStore.set({ showUserInfo: false });
+
+    return () => {
+      walletStore.set({ showUserInfo: true });
+    };
+  }, []);
   return (
     <div
       className={clsx(

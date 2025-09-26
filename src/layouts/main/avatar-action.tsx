@@ -9,7 +9,7 @@ export default function AvatarAction() {
   const { user } = useUser();
 
   // const { claiming, claimTestCoin } = useClaimTestCoin();
-  const { set } = useWalletStore();
+  const { set, showUserInfo } = useWalletStore();
 
   return (
     <div className="relative group flex items-center gap-[10px]">
@@ -19,7 +19,6 @@ export default function AvatarAction() {
             e.stopPropagation();
             set({
               showWallet: true,
-              showUserInfo: false,
               defaultDepositToken: null,
               defaultDepositAmount: null,
               panelType: "info"
@@ -36,7 +35,7 @@ export default function AvatarAction() {
           className="shrink-0 button border-[2px] border-[#1B1A23]"
           onClick={(e: any) => {
             e.stopPropagation();
-            set({ showUserInfo: true, showWallet: false });
+            set({ showUserInfo: !showUserInfo });
           }}
         />
       )}

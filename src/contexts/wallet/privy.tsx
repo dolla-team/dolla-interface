@@ -38,7 +38,7 @@ export default function WalletProvider({
       config={{
         appearance: {
           accentColor: "#6F37FF",
-          theme: "#1a1e24",
+          theme: "#FFC42F",
           showWalletLoginFirst: false,
           logo: "/logo.svg",
           walletChainType: "ethereum-and-solana",

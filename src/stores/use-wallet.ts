@@ -14,7 +14,7 @@ interface WalletState {
 
 const useWalletStore = create<WalletState>((set, get) => ({
   showWallet: false,
-  showUserInfo: false,
+  showUserInfo: true,
   showInfos: false,
   panelType: "info",
   withdrawType: "token",

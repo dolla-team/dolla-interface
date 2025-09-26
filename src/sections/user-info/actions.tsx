@@ -26,9 +26,6 @@ export default function Actions() {
               e.stopPropagation();
               // claimTestCoin();
             }
-            walletStore.set({
-              showUserInfo: false
-            });
           }}
         >
           {item.icon}

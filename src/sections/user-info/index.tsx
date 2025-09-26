@@ -4,22 +4,10 @@ import Actions from "./actions";
 import Level from "./level";
 import Info from "./info";
 import StarterObjectives from "./starter-objectives";
-import { useEffect } from "react";
 import clsx from "clsx";
 
 export default function Laptop() {
   const walletStore = useWalletStore();
-
-  useEffect(() => {
-    const handleToggle = () => {
-      walletStore.set({ showUserInfo: false });
-    };
-
-    document.addEventListener("click", handleToggle);
-    return () => {
-      document.removeEventListener("click", handleToggle);
-    };
-  }, []);
 
   return (
     <>
@@ -27,9 +15,9 @@ export default function Laptop() {
       <AnimatePresence>
         {walletStore.showUserInfo && (
           <motion.div
-            initial={{ x: 352 }}
+            initial={{ x: 294 }}
             animate={{ x: 0 }}
-            exit={{ x: 352 }}
+            exit={{ x: 294 }}
             transition={{
               type: "spring",
               stiffness: 300,
@@ -37,7 +25,7 @@ export default function Laptop() {
               duration: 0.3
             }}
             className={clsx(
-              "fixed bottom-0 right-0 z-[100] w-[352px] bg-[#1C1C23]",
+              "fixed bottom-0 right-0 z-[100] w-[294px] bg-[#1C1C23]",
               walletStore.showInfos
                 ? "h-[calc(100%-112px)]"
                 : "h-[calc(100%-76px)]"
