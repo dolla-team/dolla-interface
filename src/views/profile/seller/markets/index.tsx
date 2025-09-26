@@ -130,8 +130,8 @@ const MarketItem = (props: any) => {
       } else {
         _time = dayjs(order.time * 1000).format("hh:mm D MMM, YYYY");
       }
-      // _cancelValid = dayjs().isAfter(dayjs(order.time * 1000).add(72, "hours"));
-      _cancelValid = true;
+      _cancelValid = dayjs().isAfter(dayjs(order.time * 1000).add(72, "hours"));
+      // _cancelValid = true;
     }
 
     return [_time, _cancelValid];

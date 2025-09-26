@@ -13,7 +13,6 @@ import { useConfigStore } from "@/stores/use-config";
 import Big from "big.js";
 import useIsMobile from "@/hooks/use-is-mobile";
 import Modal from "@/components/modal";
-import useConfig from "@/hooks/use-config";
 import { useAuth } from "@/contexts/auth";
 import { formatAddress } from "@/utils/format/address";
 import Loading from "@/components/icons/loading";
@@ -30,7 +29,7 @@ export default function BTCCreate() {
   const { userInfo, isLoading, updateNearAccount, nearAccount } =
     useAuth() || {};
   const { token } = useQuote();
-  const tokenBalance = nearAccount?.balance;
+  const tokenBalance = nearAccount?.prizeBalance;
   const { data: referenceData, loading: referenceDataLoading } =
     useReferenceData({ token: BASE_TOKEN, amount });
 
@@ -42,6 +41,9 @@ export default function BTCCreate() {
   const [depositModalOpen, setDepositModalOpen] = useState(false);
 
   const pricePerBTC = useMemo(() => {
+    if (BASE_TOKEN.address === "usdt.tether-token.near") {
+      return 1;
+    }
     if (!prices || prices?.length === 0) return 0;
     const _p = prices[0].last_price;
     return _p;

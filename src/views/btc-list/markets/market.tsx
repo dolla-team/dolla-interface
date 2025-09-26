@@ -3,7 +3,7 @@ import columns from "./columns";
 import { formatAddress } from "@/utils/format/address";
 import { formatNumber } from "@/utils/format/number";
 import ProgressBar from "@/components/nft-card/progress-bar";
-import BtcImg from "./btc";
+import BtcImg from "./btc-bg";
 
 export default function Market({
   data,
@@ -28,16 +28,7 @@ export default function Market({
           )}
           {column.dataIndex === "market" && (
             <div className="flex items-center gap-[16px]">
-              {data.nft_ids ? (
-                <img
-                  src={data.reward_token_info?.[0]?.icon}
-                  alt="token"
-                  className="w-[52px] h-[52px] rounded-[10px]"
-                />
-              ) : (
-                <BtcImg amount={data.amount} />
-              )}
-
+              <BtcImg amount={data.amount} id={data.pool_id} />
               <div>
                 <div className="text-[14px] text-black font-semibold">
                   {data.reward_token_info?.[0]?.name}
