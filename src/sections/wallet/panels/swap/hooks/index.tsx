@@ -5,9 +5,11 @@ import useTrade from "./use-trade";
 import Big from "big.js";
 import { useAccount } from "@/hooks/evm/use-account";
 import { tokens } from "../config";
+import { useAuth } from "@/contexts/auth";
 
 export function useSwap(props?: any) {
   const { dapp } = props ?? {};
+  const { updateNearAccount } = useAuth();
 
   const [inputCurrencyAmount, setInputCurrencyAmount] = useState("");
   const [outputCurrencyAmount, setOutputCurrencyAmount] = useState("");
@@ -42,10 +44,10 @@ export function useSwap(props?: any) {
   const { prices, loading: pricesLoading } = useTokenPrice(tokenIds);
 
   const { loading, trade, onQuoter, onSwap } = useTrade({
-    onSuccess: (trade: any) => {
+    onSuccess: () => {
       setUpdater(Date.now());
       runQuoter();
-      // onSuccess?.(trade);
+      updateNearAccount();
     }
   });
 

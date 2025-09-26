@@ -5,9 +5,11 @@ import Level from "./level";
 import Info from "./info";
 import StarterObjectives from "./starter-objectives";
 import clsx from "clsx";
+import { useAuth } from "@/contexts/auth";
 
 export default function Laptop() {
   const walletStore = useWalletStore();
+  const { nearAccount } = useAuth();
 
   return (
     <>
@@ -39,12 +41,14 @@ export default function Laptop() {
               <Level />
               <div className="flex justify-between items-center text-white mt-[26px]">
                 <div className="text-[10px]">Total bid</div>
-                <div className="text-[12px] font-medium">$1</div>
+                <div className="text-[12px] font-medium">
+                  ${nearAccount?.acc_bets}
+                </div>
               </div>
-              <div className="flex justify-between items-center text-white mt-[10px]">
+              {/* <div className="flex justify-between items-center text-white mt-[10px]">
                 <div className="text-[10px]">Played</div>
                 <div className="text-[12px] font-medium">1</div>
-              </div>
+              </div> */}
             </div>
             <StarterObjectives />
             <Actions />

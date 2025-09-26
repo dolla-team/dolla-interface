@@ -1,7 +1,11 @@
 import clsx from "clsx";
 import Button from "@/components/button";
+import useWalletStore from "@/stores/use-wallet";
+import { useNavigate } from "react-router-dom";
 
 export default function StarterObjectives() {
+  const walletStore = useWalletStore();
+  const navigate = useNavigate();
   return (
     <div className="border-t border-[#313038] px-[20px] py-[8px] text-white">
       <div className="flex items-center justify-between">
@@ -11,14 +15,38 @@ export default function StarterObjectives() {
           <span className="text-[10px]"> 0/3</span>
         </div>
       </div>
-      <Item type="Follow" />
-      <Item type="Deposit" />
-      <Item type="Bid" />
+      <Item
+        type="Follow"
+        onClick={() => {
+          // window.open("https://x.com/nearintents", "_blank");
+        }}
+      />
+      <Item
+        type="Deposit"
+        onClick={() => {
+          walletStore.set({
+            panelType: "deposit",
+            showWallet: true
+          });
+        }}
+      />
+      <Item
+        type="Bid"
+        onClick={() => {
+          navigate("/btc/detail");
+        }}
+      />
     </div>
   );
 }
 
-const Item = ({ type }: { type: "Follow" | "Deposit" | "Bid" }) => {
+const Item = ({
+  type,
+  onClick
+}: {
+  type: "Follow" | "Deposit" | "Bid";
+  onClick: () => void;
+}) => {
   return (
     <div
       className={clsx(
@@ -31,7 +59,10 @@ const Item = ({ type }: { type: "Follow" | "Deposit" | "Bid" }) => {
           {type === "Deposit" && "Deposit at least $100"}
           {type === "Bid" && "Bid at least 10 times"}
         </span>
-        <Button className="px-[7px] h-[26px] text-[10px] !rounded-[8px]">
+        <Button
+          className="px-[7px] h-[26px] text-[10px] !rounded-[8px]"
+          onClick={onClick}
+        >
           {type} {type === "Bid" && "now"}
         </Button>
         {/* <div className="flex items-center gap-[6px]">

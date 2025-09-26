@@ -132,7 +132,7 @@ export default function useTrade({ onSuccess }: any) {
 
   const onSwap = useCallback(async () => {
     setLoading(true);
-    let toastId = toast.loading({ title: "Confirming..." });
+    let toastId = toast.loading({ title: "Swapping..." });
     try {
       const { publicKey, keyPairSigner } = await generateKeyPair();
       const provider = getProvider();
@@ -146,7 +146,7 @@ export default function useTrade({ onSuccess }: any) {
           }
         }
       };
-      console.log("withdrawArgs:", JSON.stringify(withdrawArgs));
+      console.log("swapArgs:", JSON.stringify(withdrawArgs));
       const nonce = await getNonce(publicKey);
       const publicKeyObj = PublicKey.from(publicKey);
 
