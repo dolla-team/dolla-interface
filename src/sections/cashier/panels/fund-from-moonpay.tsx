@@ -48,6 +48,7 @@ export default function FundFromCoinbase({ onBack }: { onBack: () => void }) {
         disabled={!amount || Number(amount) < 20 || !moonpayUrl}
         setAmount={setAmount}
         onBack={onBack}
+        minAmount={20}
         onOrderIdCreated={() => {
           if (moonpayUrl) {
             const features = getWindowSize(800, 600);

@@ -9,7 +9,8 @@ export default function FundFromCex({
   disabled,
   setAmount,
   onBack,
-  onOrderIdCreated
+  onOrderIdCreated,
+  minAmount
 }: {
   loading?: boolean;
   amount: string;
@@ -17,6 +18,7 @@ export default function FundFromCex({
   setAmount: (v: string) => void;
   onBack: () => void;
   onOrderIdCreated: () => void;
+  minAmount: number;
 }) {
   const inputRef = useRef<HTMLInputElement>(null);
   useEffect(() => {
@@ -36,7 +38,7 @@ export default function FundFromCex({
       </div>
 
       <div className="mt-[40px] mb-[32px] text-black text-[14px] text-center">
-        Enter an amount
+        Enter an amount (min {minAmount})
       </div>
       <div className="flex flex-col items-center mb-[40px] ">
         <div
