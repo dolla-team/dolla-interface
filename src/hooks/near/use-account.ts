@@ -19,7 +19,7 @@ export default function useAccount(evmAddress: string) {
 
       if (res?.ft_tokens) {
         quoteBalance = res.ft_tokens[`{"FT":"${QUOTE_TOKEN.address}"}`];
-        prizeBalance = res.ft_tokens[`{"FT":"${BASE_TOKEN.address}"}`];
+        prizeBalance = res.ft_tokens[`{"FT":"${BASE_TOKEN.address}"}`] || "0";
       }
       /**
         acc_bet_amount: "0",

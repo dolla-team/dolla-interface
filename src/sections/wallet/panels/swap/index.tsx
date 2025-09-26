@@ -1,18 +1,16 @@
 import Big from "big.js";
 import ExchangeIcon from "./components/exchange-icon";
 import TokenAmount from "./components/token-amount";
-import { dapp } from "./config/dapp";
 import { useSwap } from "./hooks";
 import Result from "./components/result";
 import Fees from "./components/fees";
 import SubmitBtn from "./components/submit-button";
-import { DEFAULT_CHAIN_ID } from "./config";
 import TokenSelector from "./components/token-selector";
-import chains from "@/config/chains";
 import BackIcon from "../../back-icon";
+import { useMemo } from "react";
 
 export default function Swap(props?: any) {
-  const { outputCurrencyReadonly = false, from, onBack } = props ?? {};
+  const { outputCurrencyReadonly = false, onBack } = props ?? {};
 
   const {
     inputCurrency,
@@ -37,16 +35,20 @@ export default function Swap(props?: any) {
     errorTips,
     onSwap,
     displayCurrencySelect,
-    chainId,
     selectedTokenAddress,
     tokens,
     account,
-    addImportToken,
     onSelectToken
   } = useSwap({
-    ...props,
-    dapp
+    ...props
   });
+
+  const tokenPrices = useMemo(() => {
+    return prices?.reduce((acc: any, price: any) => {
+      acc[price.symbol] = price.last_price;
+      return acc;
+    }, {});
+  }, [prices]);
 
   return (
     <div className="px-[20px] pt-[30px] text-white">
@@ -62,7 +64,7 @@ export default function Swap(props?: any) {
           type="in"
           currency={inputCurrency}
           amount={inputCurrencyAmount}
-          prices={prices}
+          prices={tokenPrices}
           account
           onCurrencySelectOpen={() => {
             setDisplayCurrencySelect(true);
@@ -95,7 +97,7 @@ export default function Swap(props?: any) {
           currency={outputCurrency}
           amount={outputCurrencyAmount}
           disabled
-          prices={prices}
+          prices={tokenPrices}
           account
           outputCurrencyReadonly={outputCurrencyReadonly}
           onCurrencySelectOpen={() => {
@@ -131,38 +133,24 @@ export default function Swap(props?: any) {
         )}
 
         <SubmitBtn
-          chain={{
-            chainId: DEFAULT_CHAIN_ID
-          }}
           amount={inputCurrencyAmount}
           spender={trade?.routerAddress}
           errorTips={errorTips}
           token={inputCurrency}
           loading={loading}
           onClick={onSwap}
-          disabled={trade?.noPair || !trade?.txn}
+          disabled={trade?.noPair}
           onRefresh={() => {
             runQuoter(trade?.name);
           }}
           updater={`button-${updater}`}
         />
-        {from === "marketplace" && (
-          <div className="text-center  mt-[12px]">
-            <a href="/bridge" className="underline text-[14px] text-[#3D405A]">
-              Bridge Assets to Berachain
-            </a>
-          </div>
-        )}
       </div>
       <TokenSelector
         display={displayCurrencySelect}
-        chainIdNotSupport={chainId !== DEFAULT_CHAIN_ID}
         selectedTokenAddress={selectedTokenAddress}
-        chainId={DEFAULT_CHAIN_ID}
         tokens={tokens}
         account={account}
-        explor={chains[DEFAULT_CHAIN_ID].blockExplorers.default.url}
-        onImport={addImportToken}
         onClose={() => {
           setDisplayCurrencySelect(false);
         }}

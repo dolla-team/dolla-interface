@@ -29,7 +29,7 @@ export default function Info({
           </div>
         </div>
         <div className="text-[12px] text-[#8A87AA] text-center">
-          Dolla NFT supports HONEY as bet coin.{" "}
+          Dolla supports {QUOTE_TOKEN.symbol} as bet coin.{" "}
         </div>
         <div className="px-[20px] flex items-center gap-[14px] mt-[16px]">
           {PANELS.map((panel) => (
@@ -142,10 +142,10 @@ const TABS = [
     label: "Token",
     key: 0
   },
-  {
-    label: "NFTs",
-    key: 1
-  },
+  // {
+  //   label: "NFTs",
+  //   key: 1
+  // },
   {
     label: "Transaction History",
     key: 2

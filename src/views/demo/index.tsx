@@ -165,7 +165,7 @@ function TradingOperationsSection({
         assetId:
           "nep141:arb-0xaf88d065e77c8cc2239327c5edb3a432268e5831.omft.near"
       },
-      account: "0x229E549c97C22b139b8C05fba770D94C086853d8",
+      account: "dollastg.near",
       amount: "0.5"
     });
   };

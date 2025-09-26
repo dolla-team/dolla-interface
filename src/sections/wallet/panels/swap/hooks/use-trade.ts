@@ -1,37 +1,33 @@
-import Big from "big.js";
 import { useCallback, useRef, useState } from "react";
 import useToast from "@/hooks/use-toast";
-import quoter from "@/sdks/smart-router";
-import { useAccount } from "@/hooks/evm/use-account";
+import { getNonce, getProvider, quote } from "@/hooks/near/util";
+import { transactions } from "near-api-js";
+import { PublicKey } from "near-api-js/lib/utils/key_pair";
+import { functionCall } from "near-api-js/lib/transaction";
+import { base_decode } from "near-api-js/lib/utils/serialize";
 import { useSettingsStore } from "../stores/settings";
-import useGelatonetwork from "@/hooks/evm/use-gelatonetwork";
+import dayjs from "dayjs";
+import Big from "big.js";
+import useGenerateKey from "@/hooks/near/use-generate-key";
+import { useAuth } from "@/contexts/auth";
 
-export default function useTrade({ chainId, template, from, onSuccess }: any) {
+const THIRTY_TGAS = "300000000000000";
+
+export default function useTrade({ onSuccess }: any) {
   const slippage: any = useSettingsStore((store: any) => store.slippage);
   const [loading, setLoading] = useState(false);
   const [trade, setTrade] = useState<any>();
-  const { account, provider } = useAccount();
   const toast = useToast();
   const lastestCachedKey = useRef("");
   const cachedTokens = useRef<any>(null);
   const prices = {};
-  const { executeTransaction } = useGelatonetwork();
+  const { generateKeyPair } = useGenerateKey();
+  const { address } = useAuth();
 
   const onQuoter = useCallback(
-    async ({
-      inputCurrency,
-      outputCurrency,
-      inputCurrencyAmount,
-      template: _template
-    }: any) => {
+    async ({ inputCurrency, outputCurrency, inputCurrencyAmount }: any) => {
       setTrade(null);
-      if (
-        !inputCurrency ||
-        !outputCurrency ||
-        !inputCurrencyAmount ||
-        !provider ||
-        !account
-      ) {
+      if (!inputCurrency || !outputCurrency || !inputCurrencyAmount) {
         return;
       }
 
@@ -40,21 +36,33 @@ export default function useTrade({ chainId, template, from, onSuccess }: any) {
       try {
         setLoading(true);
 
-        const params: any = {
-          inputCurrency,
-          outputCurrency,
-          inputAmount: inputCurrencyAmount,
-          slippage: slippage / 100 || 0.005,
-          account
-        };
+        const { publicKey } = await generateKeyPair();
 
-        if (typeof template === "string") {
-          params.template = template;
-        } else {
-          params.templates = template;
-        }
+        const _amount = Big(inputCurrencyAmount)
+          .mul(10 ** inputCurrency.decimals)
+          .toFixed(0);
 
-        const data = await quoter(params);
+        const data = await quote({
+          dry: false,
+          swapType: "EXACT_INPUT",
+          slippageTolerance: 50,
+          originAsset: inputCurrency.assetId,
+          depositType: "ORIGIN_CHAIN",
+          destinationAsset: outputCurrency.assetId,
+          amount: _amount,
+          refundTo: import.meta.env.VITE_NEAR_ACCOUNT_ID,
+          refundType: "ORIGIN_CHAIN",
+          recipient: import.meta.env.VITE_NEAR_ACCOUNT_ID,
+          recipientType: "DESTINATION_CHAIN",
+          deadline: dayjs().add(1, "hour").toISOString(),
+          customRecipientMsg: JSON.stringify({
+            u: {
+              Evm: address.replace(/^0x/, "").toLowerCase()
+            },
+            b: "Deposit",
+            k: publicKey
+          })
+        });
 
         if (!data) {
           throw new Error("No Data.");
@@ -68,18 +76,11 @@ export default function useTrade({ chainId, template, from, onSuccess }: any) {
           return;
         }
 
-        const response = await fetch(
-          `https://backend.kodiak.finance/quote?protocols=v2%2Cv3%2Cmixed&tokenInAddress=${
-            inputCurrency.isNative ? "BERA" : inputCurrency.address
-          }&tokenInChainId=80094&tokenOutAddress=${
-            outputCurrency.address
-          }&tokenOutChainId=80094&amount=${Big(inputCurrencyAmount)
-            .mul(10 ** inputCurrency.decimals)
-            .toString()}&type=exactIn&recipient=${account}&slippageTolerance=1&refCode=4`
-        );
-        const result = await response.json();
+        let priceImpact = Big(data.quote.amountInUsd)
+          .minus(data.quote.amountOutUsd)
+          .div(data.quote.amountInUsd)
+          .mul(100);
 
-        let priceImpact = Big(result.priceImpact).mul(100);
         let priceImpactType = 0;
 
         if (Big(priceImpact).gt(100)) {
@@ -100,25 +101,22 @@ export default function useTrade({ chainId, template, from, onSuccess }: any) {
           priceImpactType = 2;
         }
 
-        const gasUsd = Big(Number(result.gasUseEstimateUSD)).toFixed(18);
+        // const gasUsd = Big(Number(result.gasUseEstimateUSD)).toFixed(18);
 
         const trade = {
           inputCurrency,
           outputCurrency,
           inputCurrencyAmount,
-          name: "Kodiak",
-          txn: {
-            ...result.methodParameters,
-            value: Number(result.methodParameters.value)
-          },
-          routerAddress: result.methodParameters.to,
+          name: "Near Intents",
           noPair: false,
-          outputCurrencyAmount: result.quoteDecimals,
+          amount: _amount,
+          outputCurrencyAmount: data.quote.amountOutUsd,
           routerStr: `${inputCurrency.symbol} -> ${outputCurrency.symbol}`,
           isGasEnough: true,
           priceImpact: priceImpact.toFixed(2),
           priceImpactType,
-          gasUsd: gasUsd
+          gasUsd: 0,
+          recipientAccount: data.quote.depositAddress
         };
 
         setTrade(trade);
@@ -129,61 +127,54 @@ export default function useTrade({ chainId, template, from, onSuccess }: any) {
         setLoading(false);
       }
     },
-    [account, provider, slippage, prices, cachedTokens]
+    [slippage, prices, cachedTokens]
   );
 
   const onSwap = useCallback(async () => {
-    if (!provider) return;
-
     setLoading(true);
     let toastId = toast.loading({ title: "Confirming..." });
     try {
-      executeTransaction({
-        calls: [trade.txn],
-        onSuccess: (receipt: any) => {
-          const { status, transactionHash } = receipt;
-          toast.dismiss(toastId);
-          setLoading(false);
-          if (status === 1) {
-            toast.success({
-              title: `Swap Successful!`,
-              tx: transactionHash,
-              chainId
-            });
-            onSuccess?.({
-              inputCurrency: trade.inputCurrency,
-              outputCurrency: trade.outputCurrency,
-              inputCurrencyAmount: trade.inputCurrencyAmount,
-              outputCurrencyAmount: trade.outputCurrencyAmount,
-              transactionHash: transactionHash,
-              tradeFrom: trade.name
-            });
-          } else {
-            toast.fail({ title: `Swap failed!` });
+      const { publicKey, keyPairSigner } = await generateKeyPair();
+      const provider = getProvider();
+      const { header } = await provider.block({ finality: "final" });
+      const withdrawArgs = {
+        withdraw_args: {
+          ByAk: {
+            amount: trade.amount,
+            token: { FT: trade.inputCurrency.address },
+            recipient_account: trade.recipientAccount
           }
-        },
-        onError: () => {
-          setLoading(false);
-          toast.dismiss(toastId);
-          toast.fail({
-            title: "Swap failed!"
-          });
         }
-      });
-      // addAction({
-      //   type: "Swap",
-      //   inputCurrencyAmount: trade.inputCurrencyAmount,
-      //   inputCurrency: trade.inputCurrency,
-      //   outputCurrencyAmount: trade.outputCurrencyAmount,
-      //   outputCurrency: trade.outputCurrency,
-      //   template:
-      //     wethAddress === trade.routerAddress ? "Wrap and Unwrap" : trade.name,
-      //   status,
-      //   transactionHash,
-      //   add: 0,
-      //   token_in_currency: trade.inputCurrency,
-      //   token_out_currency: trade.outputCurrency
-      // });
+      };
+      console.log("withdrawArgs:", JSON.stringify(withdrawArgs));
+      const nonce = await getNonce(publicKey);
+      const publicKeyObj = PublicKey.from(publicKey);
+
+      const transaction = transactions.createTransaction(
+        import.meta.env.VITE_NEAR_ACCOUNT_ID,
+        publicKeyObj,
+        import.meta.env.VITE_NEAR_ACCOUNT_ID,
+        nonce,
+        [
+          functionCall("withdraw", withdrawArgs, BigInt(THIRTY_TGAS), BigInt(0))
+        ],
+        base_decode(header.hash)
+      );
+
+      const [, signedTransaction] = await keyPairSigner.signTransaction(
+        transaction
+      );
+      console.log("signedTransaction:", signedTransaction);
+      const result: any = await provider.sendTransaction(signedTransaction);
+      toast.dismiss(toastId);
+      if (result.status.SuccessValue !== undefined) {
+        console.log("Swap success:", result);
+        toast.success({ title: "Swap success" });
+        onSuccess?.();
+      } else {
+        console.log("Swap failed:", result);
+        toast.fail({ title: "Swap failed" });
+      }
     } catch (err: any) {
       toast.dismiss(toastId);
       toast.fail({
@@ -194,7 +185,7 @@ export default function useTrade({ chainId, template, from, onSuccess }: any) {
       console.log(err);
       setLoading(false);
     }
-  }, [account, provider, trade]);
+  }, [trade]);
 
   return { loading, trade, onQuoter, onSwap };
 }

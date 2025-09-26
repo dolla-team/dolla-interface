@@ -1,3 +1,3 @@
-import { berachain, berachainTestnetbArtio } from "viem/chains";
+import { BASE_TOKEN, QUOTE_TOKEN } from "@/config/btc";
 
-export const DEFAULT_CHAIN_ID = berachain.id;
+export const tokens = [BASE_TOKEN, QUOTE_TOKEN];

@@ -1,46 +1,48 @@
 "use client";
 import { useMemo, useEffect, useState } from "react";
-import Loading from "@/components/icons/loading";
 import Range from "@/components/range";
 import { motion } from "framer-motion";
 import Big from "big.js";
 import LazyImage from "@/components/layz-image";
 import clsx from "clsx";
-import useTokenBalance from "@/hooks/evm/use-token-balance";
+import { useAuth } from "@/contexts/auth";
 import { balanceFormated } from "../utils/balance";
+import { formatNumber } from "@/utils/format/number";
 
 export default function TokenAmount({
   className,
   type,
   amount,
-  disabled,
   currency,
   prices,
   outputCurrencyReadonly,
   onCurrencySelectOpen,
   onAmountChange,
   onUpdateCurrencyBalance,
-  updater,
   isPrice = true,
   balanceLabel = "balance",
-  balanceClassName = "",
   balancePercentClassName,
   balanceContainerClassName,
   inputDisabled,
   isRange = true,
   currencyClassName
 }: any) {
-  const tokenPrice = useMemo(
+  const { nearAccount } = useAuth();
+  const [tokenPrice, tokenBalance] = useMemo(
     () =>
-      currency && prices ? prices[currency.priceKey || currency.symbol] : 0,
+      currency
+        ? [
+            currency && prices
+              ? prices[currency.priceKey || currency.symbol]
+              : 0,
+            currency?.isBaseToken
+              ? nearAccount?.prizeBalance
+              : nearAccount?.balance
+          ]
+        : [0, "0"],
     [prices, currency]
   );
 
-  const { tokenBalance, isLoading, update } = useTokenBalance({
-    address: currency?.isNative ? "native" : currency?.address,
-    decimals: currency?.decimals,
-    chainId: currency?.chainId
-  });
   const [percent, setPercent] = useState<any>(0);
   const handleRangeChange = (e: any, isAmountChange = true) => {
     const formatedBalance = balanceFormated(tokenBalance);
@@ -49,7 +51,7 @@ export default function TokenAmount({
     setPercent(_percent);
     isAmountChange &&
       onAmountChange?.(
-        Big(tokenBalance)
+        Big(tokenBalance || "0")
           .times(Big(_percent).div(100))
           .toFixed(currency?.decimals)
           .replace(/[.]?0+$/, "")
@@ -70,10 +72,6 @@ export default function TokenAmount({
     if (tokenBalance && onUpdateCurrencyBalance)
       onUpdateCurrencyBalance(tokenBalance);
   }, [tokenBalance]);
-
-  useEffect(() => {
-    update();
-  }, [updater]);
 
   return (
     <div
@@ -166,7 +164,7 @@ export default function TokenAmount({
           const formatedBalance = balanceFormated(tokenBalance);
           if (["-", "Loading", "0"].includes(formatedBalance)) return;
           onAmountChange?.(tokenBalance);
-          setRange(tokenBalance);
+          setRange(tokenBalance || "0");
         }}
         className={clsx(
           "flex items-center justify-between text-[#8A87AA] mt-[6px] font-medium text-[12px]",
@@ -174,19 +172,7 @@ export default function TokenAmount({
         )}
       >
         <div className="flex items-center gap-[4px]">
-          {balanceLabel}:{" "}
-          {isLoading ? (
-            <Loading size={12} />
-          ) : (
-            <span
-              className={balanceClassName}
-              style={{
-                textDecoration: disabled ? "none" : "underline"
-              }}
-            >
-              {currency ? balanceFormated(tokenBalance) : "-"}
-            </span>
-          )}
+          {balanceLabel}: {formatNumber(tokenBalance, 2, true)}
         </div>
         {isPrice && (
           <div>

@@ -1,15 +1,13 @@
 import { useEffect, useMemo, useState } from "react";
-import { useImportTokensStore } from "../stores/import-tokens";
 import useTokenPrice from "@/hooks/use-token-price";
 import { useDebounceFn } from "ahooks";
 import useTrade from "./use-trade";
-import { uniqBy } from "lodash-es";
 import Big from "big.js";
-import { DEFAULT_CHAIN_ID } from "../config";
 import { useAccount } from "@/hooks/evm/use-account";
+import { tokens } from "../config";
 
 export function useSwap(props?: any) {
-  const { dapp, from } = props ?? {};
+  const { dapp } = props ?? {};
 
   const [inputCurrencyAmount, setInputCurrencyAmount] = useState("");
   const [outputCurrencyAmount, setOutputCurrencyAmount] = useState("");
@@ -30,23 +28,20 @@ export function useSwap(props?: any) {
   const tokenIds = useMemo(() => {
     return [
       {
-        chain: "berachain",
-        address: inputCurrency?.address,
+        chain: "near",
+        address: inputCurrency?.address
       },
       {
-        chain: "berachain",
-        address: outputCurrency?.address,
+        chain: "near",
+        address: outputCurrency?.address
       }
     ];
   }, [inputCurrency, outputCurrency]);
 
   const { chainId, account } = useAccount();
-  const { importTokens, addImportToken }: any = useImportTokensStore();
   const { prices, loading: pricesLoading } = useTokenPrice(tokenIds);
+
   const { loading, trade, onQuoter, onSwap } = useTrade({
-    chainId: chainId,
-    template: dapp.name,
-    from: from,
     onSuccess: (trade: any) => {
       setUpdater(Date.now());
       runQuoter();
@@ -68,19 +63,6 @@ export function useSwap(props?: any) {
       wait: 500
     }
   );
-
-  const tokens = useMemo(() => {
-    return uniqBy(
-      [
-        ...(dapp.tokens[DEFAULT_CHAIN_ID] || []),
-        ...(importTokens[DEFAULT_CHAIN_ID] || [])
-      ].map((token: any) => ({
-        ...token,
-        address: token.address.toLowerCase()
-      })),
-      "address"
-    );
-  }, [importTokens, dapp]);
 
   const onSelectToken = (token: any) => {
     let _inputCurrency: any = inputCurrency;
@@ -159,13 +141,12 @@ export function useSwap(props?: any) {
     selectType,
     setSelectType,
     tokens,
-    addImportToken,
     prices,
     pricesLoading,
     loading,
     trade,
     onQuoter,
     runQuoter,
-    onSwap,
+    onSwap
   };
 }

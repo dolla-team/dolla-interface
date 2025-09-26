@@ -1,5 +1,5 @@
 import { motion, useAnimationControls } from "framer-motion";
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import clsx from "clsx";
 import axiosInstance from "@/libs/axios";
 import { formatAddress } from "@/utils/format/address";
@@ -137,8 +137,10 @@ export default function Infos({
   );
 }
 
-const Item = ({ item }: { item: any; index: number }) => {
-  const randomIndex = Math.floor(Math.random() * config.length);
+const Item = ({ item, index }: { item: any; index: number }) => {
+  const randomIndex = useMemo(() => {
+    return Math.floor(Math.random() * config.length);
+  }, [index]);
 
   return item.winner_user ? (
     <div className="flex items-center h-full gap-3 text-white transition-transform duration-200 hover:scale-105">

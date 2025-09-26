@@ -5,6 +5,7 @@ import usePoolList from "@/hooks/use-pool-list";
 import Loading from "@/components/icons/loading";
 import { useNavigate } from "react-router-dom";
 import clsx from "clsx";
+import { BASE_TOKEN } from "@/config/btc";
 
 export default function Markets() {
   const navigate = useNavigate();
@@ -31,9 +32,9 @@ export default function Markets() {
         <div className="flex items-center h-[40px] p-[2px] bg-[#0000000D] border border-[#F2F2F233] rounded-[10px]">
           {[
             { label: "All", key: 0 },
-            { label: "1 BTC", key: 1 },
-            { label: "0.1 BTC", key: 0.1 },
-            { label: "0.01 BTC", key: 0.01 }
+            { label: "1 BTC", key: 1 * 10 ** BASE_TOKEN.decimals },
+            { label: "0.1 BTC", key: 0.1 * 10 ** BASE_TOKEN.decimals },
+            { label: "0.01 BTC", key: 0.01 * 10 ** BASE_TOKEN.decimals }
           ].map((item) => (
             <button
               key={item.key}

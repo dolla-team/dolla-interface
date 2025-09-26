@@ -97,18 +97,18 @@ export default function useWithdraw() {
       console.log("signedTransaction:", signedTransaction);
       const result: any = await provider.sendTransaction(signedTransaction);
       toast.dismiss(toastId);
-      if (result.status.SuccessValue) {
+      if (result.status.SuccessValue !== undefined) {
         console.log("Withdraw success:", result);
         toast.success({ title: "Withdraw success" });
       } else {
         console.log("Withdraw failed:", result);
         toast.fail({ title: "Withdraw failed" });
       }
+      setLoading(false);
     } catch (error) {
       console.error("Withdraw error:", error);
       toast.dismiss(toastId);
       toast.fail({ title: "Withdraw failed" });
-    } finally {
       setLoading(false);
     }
   }
