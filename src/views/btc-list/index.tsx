@@ -12,8 +12,8 @@ export default function Home() {
       <Banner />
       <HotMarkets />
       <Markets />
-      <div className="flex items-center gap-[22px] h-[154px] mt-[30px]">
-        <div className="w-1/3">
+      <div className="flex items-center gap-[22px] h-[200px] mt-[30px]">
+        <div className="w-1/3 h-full">
           <LucyDraw tokenBalance={nearAccount?.balance} />
         </div>
         <div className="w-1/3 h-full">

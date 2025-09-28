@@ -2,6 +2,7 @@ import Bottoms from "./bottoms";
 import Timer from "./timer";
 import useIsMobile from "@/hooks/use-is-mobile";
 import clsx from "clsx";
+import { formatNumber } from "@/utils/format/number";
 
 export default function LucyDrawCard({
   currentRound,
@@ -22,7 +23,7 @@ export default function LucyDrawCard({
         "border border-[#F2F2F233] overflow-hidden w-full",
         isMobile
           ? "rounded-t-[16px] pt-[12px]"
-          : "rounded-[12px] bg-[url('/lucky-draw.png')] bg-[#1C1C23] bg-no-repeat bg-center bg-cover"
+          : "rounded-[12px] h-full bg-[url('/lucky-draw.png')] bg-[#1C1C23] bg-no-repeat bg-center bg-cover"
       )}
     >
       <div className="z-[5] relative backdrop-filter-[10px] px-[16px] pt-[2px] pb-[10px] rounded-t-[12px]">
@@ -30,7 +31,7 @@ export default function LucyDrawCard({
           <span
             className="text-white text-[24px] font-[800]"
             style={{
-              textShadow: "0px 0px 10px #FFC42F"
+              textShadow: "0px 0px 10px #8465FF"
             }}
           >
             Lucky Draw
@@ -56,27 +57,21 @@ export default function LucyDrawCard({
                 ${prizeAmount.toLocaleString()}
               </span>
             </div>
-            <Timer
-              onTimeUp={() => {
-                if (currentRound) {
-                  setStatus(1);
-                  fetchResult();
-                }
-              }}
-              currentRound={currentRound}
-              className={
-                isMobile ? "w-[180px] h-[46px] px-[26px] text-[16px]" : ""
-              }
-              size={isMobile ? 22 : 14}
-              key={currentRound}
-            />
           </div>
-          <button
-            className="button underline text-white text-[12px]"
-            onClick={() => setIsHistoryOpen(true)}
-          >
-            History
-          </button>
+          <Timer
+            onTimeUp={() => {
+              if (currentRound) {
+                setStatus(1);
+                fetchResult();
+              }
+            }}
+            currentRound={currentRound}
+            className={
+              isMobile ? "w-[180px] h-[46px] px-[26px] text-[16px]" : ""
+            }
+            size={isMobile ? 22 : 14}
+            key={currentRound}
+          />
         </div>
         {/* <div
           className={clsx(
@@ -92,14 +87,25 @@ export default function LucyDrawCard({
           </span>
         </div> */}
       </div>
+      <div className="flex items-center justify-between px-[20px] text-white">
+        <div>
+          <div className="text-[10px]">Participation</div>
+          <div className="text-[14px]">
+            {formatNumber(participation, 0, true)}
+          </div>
+        </div>
+        <div>
+          <div className="text-[10px]">You Auto Joined</div>
+          <div className="text-[14px]">{tickets}</div>
+        </div>
+      </div>
 
       <div className={clsx("relative", isMobile ? "h-[110px]" : "h-[70px]")}>
         <Bottoms
           status={status}
-          tickets={tickets}
           onBuyTicket={() => setShowBuyTicket(true)}
           winningList={winningList}
-          participation={participation}
+          setIsHistoryOpen={setIsHistoryOpen}
         />
       </div>
     </div>

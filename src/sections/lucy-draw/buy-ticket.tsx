@@ -47,11 +47,11 @@ export default function BuyTicket({
     <Modal open={showBuyTicket} onClose={onClose} isForceNormal={isMobile}>
       <div
         className={clsx(
-          "rounded-[16px] border border-[#6A5D3A] bg-[#35302B] h-[444px] w-[378px]",
+          "rounded-[16px] border border-[#E4E4E4] bg-white h-[444px] w-[378px]",
           isMobile && "max-w-[90vw]"
         )}
       >
-        <div className="h-[54px] bg-[#00000033] rounded-t-[16px] flex items-center justify-between px-[16px]">
+        <div className="h-[54px] bg-[#000000] rounded-t-[16px] flex items-center justify-between px-[16px]">
           <div className="text-[20px] text-white">Buy Ticket</div>
           <button className="w-[24px] h-[24px] button" onClick={onClose}>
             <svg
@@ -70,9 +70,7 @@ export default function BuyTicket({
         </div>
         <div className="bg-[url(/btc/ticket3.png)] w-[186px] h-[126px] bg-no-repeat bg-center bg-contain mx-auto mt-[16px]" />
         <div className="flex justify-center items-center gap-[8px]">
-          <span className="text-white text-[16px] font-[DelaGothicOne]">
-            {ticket}
-          </span>
+          <span className="text-[16px] font-[DelaGothicOne]">{ticket}</span>
           <PointIcon />
         </div>
         <div
@@ -81,7 +79,7 @@ export default function BuyTicket({
             isMobile ? "w-[calc(100%-40px)]" : "w-[338px]"
           )}
         >
-          <div className="flex items-center justify-between text-[14px] text-[#BBACA6]">
+          <div className="flex items-center justify-between text-[14px]">
             <span>Amount</span>
             <span
               className="underline button"

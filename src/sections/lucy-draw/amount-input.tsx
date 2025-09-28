@@ -10,10 +10,10 @@ export default function AmountInput({
   max: number;
 }) {
   return (
-    <div className="w-full rounded-[10px] bg-[#00000033] flex items-center justify-between p-[10px] mt-[6px]">
+    <div className="w-full rounded-[10px] border border-[#E4E4E4] flex items-center justify-between p-[10px] mt-[6px]">
       <button
         className={clsx(
-          "w-[24px] h-[24px] rounded-full border border-[#6A5D3A] bg-[#00000033] flex justify-center items-center shrink-0",
+          "w-[24px] h-[24px] rounded-full border border-black flex justify-center items-center shrink-0",
           amount === 1 ? "opacity-50" : "button"
         )}
         onClick={() => {
@@ -31,12 +31,12 @@ export default function AmountInput({
         >
           <path
             d="M9.59961 1.54492H0V0.0449219H9.59961V1.54492Z"
-            fill="white"
+            fill="black"
           />
         </svg>
       </button>
       <input
-        className="w-[calc(100%-78px)] text-center text-white text-[14px] font-[DelaGothicOne] shrink-1"
+        className="w-[calc(100%-78px)] text-center text-[14px] font-[DelaGothicOne] shrink-1"
         value={amount}
         onChange={(e) => {
           if (!isNaN(Number(e.target.value))) {
@@ -46,7 +46,7 @@ export default function AmountInput({
       />
       <button
         className={clsx(
-          "w-[24px] h-[24px] rounded-full border border-[#6A5D3A] bg-[#00000033] flex justify-center items-center shrink-0",
+          "w-[24px] h-[24px] rounded-full border border-black flex justify-center items-center shrink-0",
           amount === Number(max) ? "opacity-50" : "button"
         )}
         onClick={() => {
@@ -64,7 +64,7 @@ export default function AmountInput({
         >
           <path
             d="M5.54492 4.04492H9.59961V5.54492H5.54492V9.59961H4.04492V5.54492H0V4.04492H4.04492V0H5.54492V4.04492Z"
-            fill="white"
+            fill="black"
           />
         </svg>
       </button>

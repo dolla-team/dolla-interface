@@ -8,12 +8,12 @@ export default function TopWinners({ type }: { type: "winners" | "sellers" }) {
   const [data, setData] = useState<any[]>([]);
   useEffect(() => {
     const getData = async () => {
-      const res = await axiosInstance.get("/api/v1/pool/winner/bid/recommend");
+      const res = await axiosInstance.get(`/api/v1/user/top/winners?limit=10`);
 
       setData(res.data.data);
     };
 
-    getData();
+    if (type === "winners") getData();
   }, []);
   return (
     <TopWinnersContainer

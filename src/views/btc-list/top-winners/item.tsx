@@ -24,8 +24,7 @@ export default function TopWinnersItem({
         <div>
           <div className="text-[10px] text-black/30">Winner</div>
           <div className="text-[12px] text-black font-semibold">
-            {data?.pool_info?.winner_user_email ||
-              formatAddress(data?.pool_info?.winner_user)}{" "}
+            {data?.pool_info?.winner_user_email || formatAddress(data?.user)}{" "}
           </div>
         </div>
       </div>

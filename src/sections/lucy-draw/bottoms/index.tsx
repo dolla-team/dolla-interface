@@ -6,25 +6,22 @@ import useIsMobile from "@/hooks/use-is-mobile";
 
 export default function Bottoms({
   status,
-  tickets,
   onBuyTicket,
   winningList = [],
-  participation
+  setIsHistoryOpen
 }: {
   status: number;
-  tickets: number;
   onBuyTicket: () => void;
   winningList: any[];
-  participation: number;
+  setIsHistoryOpen: (open: boolean) => void;
 }) {
   const isMobile = useIsMobile();
   return (
     <>
       {status === 0 && (
         <TicketBottom
-          tickets={tickets}
           onBuyTicket={onBuyTicket}
-          participation={participation}
+          setIsHistoryOpen={setIsHistoryOpen}
         />
       )}
       {status === 1 && (
