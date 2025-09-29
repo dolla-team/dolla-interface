@@ -16,9 +16,7 @@ interface FundOption {
 
 export default function FundList({ onBack }: { onBack: () => void }) {
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
-  const { userInfo } = useAuth();
 
-  const { onCopy } = useCopy();
   const fundOptions: FundOption[] = [
     // {
     //   id: "bridge",

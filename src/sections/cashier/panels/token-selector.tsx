@@ -11,28 +11,15 @@ import useToast from "@/hooks/use-toast";
 import Loading from "@/components/icons/loading";
 import useWalletStore from "@/stores/use-wallet";
 import { useContractConfigStore } from "@/stores/use-contract-config";
+import { BASE_TOKEN, QUOTE_TOKEN } from "@/config/btc";
 
-const TOKENS = [
-  {
-    symbol: "USDC",
-    icon: "/tokens/usdc.png",
-    address:
-      "nep141:17208628f84f5d6ad33f0da3bbbeb27ffcb398eac501a31bd6ad2011e36133a1",
-    decimals: 6
-  }
-  // {
-  //   symbol: "BTC",
-  //   icon: "/tokens/btc.png",
-  //   address: "nep141:nbtc.bridge.near",
-  //   decimals: 8
-  // },
-  // {
-  //   symbol: "USDT",
-  //   icon: "/tokens/usdt.png",
-  //   address: "nep141:usdt.tether-token.near",
-  //   decimals: 6
-  // }
-];
+const TOKENS = [QUOTE_TOKEN, BASE_TOKEN].map((item) => ({
+  symbol: item.symbol,
+  icon: item.icon,
+  address: item.assetId,
+  decimals: item.decimals
+}));
+
 export default function TokenSelector({
   onTokenSelect,
   onQoute,

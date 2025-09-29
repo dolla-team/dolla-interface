@@ -3,6 +3,7 @@ import ItemLevel from "./item-level";
 import { formatAddress } from "@/utils/format/address";
 import { getAnchorPrice } from "@/utils/pool";
 import Big from "big.js";
+import clsx from "clsx";
 
 export default function TopWinnersItem({
   data,
@@ -12,7 +13,14 @@ export default function TopWinnersItem({
   level: number;
 }) {
   return (
-    <div className="w-full h-[48px] mt-[5px] px-[10px] relative flex items-center justify-between rounded-[10px] border border-[#F2F2F233] bg-linear-to-r from-[#D565C4]/10 to-[#8C8C8C]/10">
+    <div
+      className={clsx(
+        `w-full h-[48px] mt-[5px] px-[10px] relative flex items-center justify-between rounded-[10px] border border-[#F2F2F233] bg-linear-to-r to-[#8C8C8C]/10`,
+        level === 1 && "from-[#D565C4]/10",
+        level === 2 && "from-[#F87168]/10",
+        level === 3 && "from-[#F87168]/10"
+      )}
+    >
       <ItemLevel
         level={level}
         className="absolute top-[-10px] left-[-10px] z-[2]"

@@ -1,8 +1,7 @@
 import BackIcon from "@/sections/wallet/back-icon";
 import TokenSelector from "./token-selector";
 import Recharge from "./recharge";
-import { useMemo, useState } from "react";
-import { chainConfig } from "../utils/chainConfig";
+import { useState } from "react";
 import Big from "big.js";
 
 export default function RechargeFrom1click({
@@ -13,16 +12,6 @@ export default function RechargeFrom1click({
   const [token, setToken] = useState<any>(null);
   const [qoute, setQoute] = useState<any>(null);
   const [showAddress, setShowAddress] = useState(false);
-
-  const rechargeToken = useMemo(() => {
-    return {
-      chainName: chainConfig[token?.blockchain]?.name,
-      chainLogo: chainConfig[token?.blockchain]?.icon,
-      symbol: token?.symbol,
-      address: token?.contractAddress,
-      icon: token?.icon
-    };
-  }, [token]);
 
   return (
     <div className="pb-[20px] relative">
@@ -72,7 +61,7 @@ export default function RechargeFrom1click({
                     fund your Dolla wallet. This address can only be used one time.
                 </div> */}
           <div className="pt-[50px]">
-            <Recharge token={rechargeToken} address={qoute?.depositAddress} />
+            <Recharge token={token} address={qoute?.depositAddress} />
 
             <div className="flex justify-between items-center mt-[20px] px-[10px]">
               <div className="text-[14px] text-[#8A87AA]">Minimum Receive</div>
