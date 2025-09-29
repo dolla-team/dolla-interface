@@ -18,7 +18,9 @@ export default function Top() {
             className="border-2 border-[#FFFFFFCC] rounded-[6px]"
           />
           <div className="text-black">
-            <div className="text-[20px] font-bold whitespace-nowrap text-ellipsis overflow-hidden w-[70%]">{userInfo?.show_email}</div>
+            <div className="text-[20px] font-bold whitespace-nowrap text-ellipsis overflow-hidden">
+              {userInfo?.show_email}
+            </div>
             <div className="flex items-center gap-[3px]">
               <span className="text-[12px]">
                 {formatAddress(userInfo?.user)}
@@ -45,10 +47,10 @@ export default function Top() {
             </div>
           </div>
         </div>
-        <div className="flex items-center border border-[#E4E4E4] rounded-full bg-[#F2F2F299] px-[10px] gap-[4px]">
+        {/* <div className="flex items-center border border-[#E4E4E4] rounded-full bg-[#F2F2F299] px-[10px] gap-[4px]">
           <div className="w-[7px] h-[7px] rounded-full bg-[#10FFBF]" />
           <img className="w-[20px] h-[20px]" src="/chains/bera-1.png" />
-        </div>
+        </div> */}
       </div>
     </div>
   );

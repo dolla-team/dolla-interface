@@ -16,17 +16,17 @@ export default function Laptop() {
   const colorStyle = useMemo(() => {
     return !isBtc
       ? {
-        background:
-          "radial-gradient(75.31% 36.96% at 1.18% 2.95%, rgba(111, 55, 255, 0.2) 0%, rgba(255, 255, 255, 0.2) 100%), linear-gradient(0deg, #FFFFFF 0%, #FFFFFF 100%)"
-      }
+          background:
+            "radial-gradient(75.31% 36.96% at 1.18% 2.95%, rgba(111, 55, 255, 0.2) 0%, rgba(255, 255, 255, 0.2) 100%), linear-gradient(0deg, #FFFFFF 0%, #FFFFFF 100%)"
+        }
       : {
-        background:
-          "radial-gradient(75.31% 36.96% at 1.18% 2.95%, rgba(255, 196, 47, 0.2) 0%, rgba(255, 255, 255, 0.2) 100%), linear-gradient(0deg, #FFFFFF 0%, #FFFFFF 100%)"
-      };
+          background:
+            "radial-gradient(75.31% 36.96% at 1.18% 2.95%, rgba(255, 196, 47, 0.2) 0%, rgba(255, 255, 255, 0.2) 100%), linear-gradient(0deg, #FFFFFF 0%, #FFFFFF 100%)"
+        };
   }, [isBtc]);
 
   const handleToggle = () => {
-    walletStore.set({ showWallet: false });
+    walletStore.init();
   };
 
   useEffect(() => {
@@ -55,9 +55,13 @@ export default function Laptop() {
               "fixed bottom-0 right-0 z-[100] w-[416px] bg-[#141519CC] rounded-l-[20px] h-full"
             )}
           >
-            <div className="h-full rounded-l-[20px] ml-[40px]" style={colorStyle} onClick={(e: any) => {
-              e.stopPropagation();
-            }}>
+            <div
+              className="h-full rounded-l-[20px] ml-[40px]"
+              style={colorStyle}
+              onClick={(e: any) => {
+                e.stopPropagation();
+              }}
+            >
               {walletStore.panelType === "info" && (
                 <Info
                   onTabChange={(tab: string) => {
@@ -90,8 +94,19 @@ export default function Laptop() {
               )}
             </div>
             <div className="absolute top-[30px] left-[15px] cursor-pointer">
-              <svg width="10" height="18" viewBox="0 0 10 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M1 1L8 9L1 17" stroke="white" stroke-width="2" stroke-linecap="round" />
+              <svg
+                width="10"
+                height="18"
+                viewBox="0 0 10 18"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M1 1L8 9L1 17"
+                  stroke="white"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                />
               </svg>
             </div>
           </motion.div>

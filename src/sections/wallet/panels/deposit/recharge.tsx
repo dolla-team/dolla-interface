@@ -3,18 +3,21 @@ import { QRCodeSVG } from "qrcode.react";
 import useCopy from "@/hooks/use-copy";
 import clsx from "clsx";
 import { formatAddress } from "@/utils/format/address";
+import { chainConfig } from "../../chain-config";
 
 export default function Recharge({
   token,
   className,
   tokenPanelClassName,
-  address
+  address,
+  chain
 }: {
   token: any;
   className?: string;
   tokenPanelClassName?: string;
   address?: string;
   loading?: boolean;
+  chain?: any;
 }) {
   const rechargeToken = token;
   const depositAddress = address || rechargeToken.depositAddress;
@@ -49,10 +52,12 @@ export default function Recharge({
             <div className="relative">
               <div className="flex items-center gap-[5px]">
                 <img
-                  src={token.chainLogo}
+                  src={chainConfig[chain.blockchain]?.icon}
                   className="object-cover w-[17px] h-[17px]"
                 />
-                <div className="text-[12px] text-black">{token.chainName}</div>
+                <div className="text-[12px] text-black">
+                  {chainConfig[chain.blockchain]?.name || chain.blockchain}
+                </div>
               </div>
               <div className="text-[10px] text-black/60">
                 {formatAddress(token.address, 10)}

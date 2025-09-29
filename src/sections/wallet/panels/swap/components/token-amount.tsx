@@ -76,7 +76,7 @@ export default function TokenAmount({
   return (
     <div
       className={clsx(
-        "border border-[#383F47] rounded-[10px] p-[11px_11px_17px_12px] bg-[#1A1E24] leading-[100%]",
+        "border border-[#8A87AA4D] rounded-[10px] p-[11px_11px_17px_12px] leading-[100%]",
         className
       )}
     >
@@ -84,7 +84,7 @@ export default function TokenAmount({
         <div
           className={`${
             outputCurrencyReadonly ? "" : "border"
-          } flex items-center justify-between border-[#373737] rounded-[8px] w-[176px] h-[46px] px-[7px] cursor-pointer ${
+          } flex items-center justify-between border-[#8A87AA4D] rounded-[8px] w-[176px] h-[46px] px-[7px] cursor-pointer ${
             currencyClassName ?? ""
           }`}
           onClick={() => {
@@ -118,7 +118,7 @@ export default function TokenAmount({
                   />
                 )}
               </div>
-              <div className="text-[14px] text-white flex-1 w-0 truncate">
+              <div className="text-[14px] flex-1 w-0 truncate">
                 {currency?.symbol}
               </div>
             </div>
@@ -145,7 +145,7 @@ export default function TokenAmount({
         </div>
         <div className="flex-1">
           <input
-            className="w-[100%] h-[100%] text-[26px] text-right text-white"
+            className="w-[100%] h-[100%] text-[26px] text-right"
             value={amount}
             onChange={(ev) => {
               if (isNaN(Number(ev.target.value))) return;

@@ -12,13 +12,13 @@ export default function useContractConfig() {
         config: {
           ...res,
           cancel_penalty_rate: res.cancel_penalty_rate / 1e4,
-          odds_offset: res.odds_offset / 1e6,
+          odds_offset: res.odds_offset / 1e4,
           play_game_fee: res.play_game_fee / 1e6,
           resume_game_fee: res.resume_game_fee / 1e6,
           change_ak_fee: res.change_ak_fee / 1e6
         }
       });
-      window.oddOffset = res.odds_offset / 1e6;
+      window.oddOffset = res.odds_offset / 1e4;
     } catch (error) {
       console.error(error);
     }

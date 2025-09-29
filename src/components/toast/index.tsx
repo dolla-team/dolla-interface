@@ -11,7 +11,7 @@ export default function Toast({ type, title, text, closeToast }: any) {
   return (
     <div
       className={clsx(
-        "rounded-[12px] border border-[#743EFF] px-[12px] py-[8px] flex gap-[10px] w-[288px] items-center md:w-[288px] max-md:w-[calc(100vw-32px)]",
+        "rounded-[12px] px-[12px] py-[8px] flex gap-[10px] w-[288px] items-center md:w-[288px] max-md:w-[calc(100vw-32px)]",
         isAndroidDevice
           ? "bg-[#35302B]"
           : "bg-[#35302B]/30 backdrop-blur-[10px]"

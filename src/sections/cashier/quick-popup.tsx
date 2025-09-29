@@ -1,4 +1,4 @@
-import Recharge from "./panels/recharge";
+import Recharge from "../wallet/panels/deposit/recharge";
 import { motion } from "framer-motion";
 import { useState, useImperativeHandle, useEffect } from "react";
 import config from "@/config/bera";

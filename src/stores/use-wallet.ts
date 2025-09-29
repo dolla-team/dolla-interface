@@ -5,23 +5,35 @@ interface WalletState {
   showUserInfo: boolean;
   showInfos: boolean;
   panelType: "info" | "deposit" | "withdraw" | "swap";
+  depositPanelType: "fund-list" | "token-selector" | "input";
+  depositMethod: "centralized-exchange" | "coinbase";
+  withdrawPanelType: "token-selector" | "input";
   withdrawType: "token" | "nft";
-  defaultDepositToken: any;
+  selectedToken: any;
   defaultDepositAmount: any;
   set: (params: any) => void;
   get: () => WalletState;
+  init: () => void;
 }
 
-const useWalletStore = create<WalletState>((set, get) => ({
+const initialState = {
   showWallet: false,
   showUserInfo: true,
   showInfos: false,
   panelType: "info",
+  depositPanelType: "fund-list",
+  depositMethod: "centralized-exchange",
+  withdrawPanelType: "token-selector",
   withdrawType: "token",
-  defaultDepositToken: null,
-  defaultDepositAmount: null,
+  selectedToken: null,
+  defaultDepositAmount: null
+} as WalletState;
+
+const useWalletStore = create<WalletState>((set, get) => ({
+  ...initialState,
   set: (params) => set(() => ({ ...params })),
-  get: () => get()
+  get: () => get(),
+  init: () => set(() => initialState)
 }));
 
 export default useWalletStore;

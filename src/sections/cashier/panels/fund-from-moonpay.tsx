@@ -4,7 +4,7 @@ import { useAuth } from "@/contexts/auth";
 import useBroadcatChannel from "@/hooks/use-broadcat-channel";
 import { toast } from "react-toastify";
 import useMoonpay from "@/hooks/use-moonpay";
-import { getWindowSize } from "../utils/getWindowSize";
+import { getWindowSize } from "../../wallet/get-window-size";
 
 export default function FundFromCoinbase({ onBack }: { onBack: () => void }) {
   const { address, userInfo } = useAuth();

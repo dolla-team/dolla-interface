@@ -1,32 +1,27 @@
 import { useState } from "react";
-import { getNonce, getProvider, quote } from "./util";
+import { getNonce, getProvider } from "./util";
 import { transactions } from "near-api-js";
 import { PublicKey } from "near-api-js/lib/utils/key_pair";
 import { functionCall } from "near-api-js/lib/transaction";
 import { base_decode } from "near-api-js/lib/utils/serialize";
 import useGenerateKey from "@/hooks/near/use-generate-key";
 import Big from "big.js";
-import dayjs from "dayjs";
 import useToast from "@/hooks/use-toast";
 const THIRTY_TGAS = "300000000000000";
 
-export default function useWithdraw() {
+export default function useWithdraw(onSuccess?: () => void) {
   const [loading, setLoading] = useState(false);
   const { generateKeyPair } = useGenerateKey();
   const toast = useToast();
 
   async function withdraw({
     fromToken,
-    toToken,
-    account,
     amount,
-    type = "token"
+    recipientAccount = ""
   }: {
     fromToken: any;
-    toToken: any;
-    account: string;
     amount: string;
-    type?: "nft" | "token";
+    recipientAccount?: string;
   }) {
     let toastId = toast.loading({ title: "Withdrawing..." });
     try {
@@ -40,32 +35,30 @@ export default function useWithdraw() {
         .mul(10 ** fromToken.decimals)
         .toFixed(0);
 
-      let recipientAccount = "";
+      // if (type === "token") {
+      //   const res = await quote({
+      //     dry: false,
+      //     swapType: "EXACT_INPUT",
+      //     slippageTolerance: 50,
+      //     originAsset: fromToken.assetId,
+      //     depositType: "ORIGIN_CHAIN",
+      //     destinationAsset: toToken.assetId,
+      //     amount: _amount,
+      //     refundTo: import.meta.env.VITE_NEAR_ACCOUNT_ID,
+      //     refundType: "ORIGIN_CHAIN",
+      //     recipient: account,
+      //     recipientType: "DESTINATION_CHAIN",
+      //     deadline: dayjs().add(1, "hour").toISOString()
+      //   });
 
-      if (type === "token") {
-        const res = await quote({
-          dry: false,
-          swapType: "EXACT_INPUT",
-          slippageTolerance: 50,
-          originAsset: fromToken.assetId,
-          depositType: "ORIGIN_CHAIN",
-          destinationAsset: toToken.assetId,
-          amount: _amount,
-          refundTo: import.meta.env.VITE_NEAR_ACCOUNT_ID,
-          refundType: "ORIGIN_CHAIN",
-          recipient: account,
-          recipientType: "DESTINATION_CHAIN",
-          deadline: dayjs().add(1, "hour").toISOString()
-        });
-
-        recipientAccount = res.quote.depositAddress;
-      } else {
-        // Remove 0x prefix and pad to 64 characters with leading zeros
-        recipientAccount = account.startsWith("0x")
-          ? account.slice(2)
-          : account;
-        recipientAccount = recipientAccount.padStart(64, "0");
-      }
+      //   recipientAccount = res.quote.depositAddress;
+      // } else {
+      //   // Remove 0x prefix and pad to 64 characters with leading zeros
+      //   recipientAccount = account.startsWith("0x")
+      //     ? account.slice(2)
+      //     : account;
+      //   recipientAccount = recipientAccount.padStart(64, "0");
+      // }
 
       const withdrawArgs = {
         withdraw_args: {
@@ -100,6 +93,7 @@ export default function useWithdraw() {
       if (result.status.SuccessValue !== undefined) {
         console.log("Withdraw success:", result);
         toast.success({ title: "Withdraw success" });
+        onSuccess?.();
       } else {
         console.log("Withdraw failed:", result);
         toast.fail({ title: "Withdraw failed" });

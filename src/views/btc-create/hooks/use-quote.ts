@@ -6,7 +6,8 @@ export default function useQuote() {
       symbol: BASE_TOKEN.symbol,
       icon: BASE_TOKEN.icon,
       address: BASE_TOKEN.address,
-      decimals: BASE_TOKEN.decimals
+      decimals: BASE_TOKEN.decimals,
+      ...BASE_TOKEN
     }
   };
 }

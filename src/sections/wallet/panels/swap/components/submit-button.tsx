@@ -9,14 +9,20 @@ export default function SubmitBtn({
 }: any) {
   if (loading) {
     return (
-      <Button loading className="h-[42px] !bg-[#FFC42F] w-full mt-[16px]">
+      <Button
+        loading
+        className="h-[42px] !bg-black w-full mt-[16px] !text-white"
+      >
         Swap
       </Button>
     );
   }
   if (errorTips) {
     return (
-      <Button className="h-[42px] !bg-[#FFC42F] w-full mt-[16px]" disabled>
+      <Button
+        className="h-[42px] !bg-black w-full mt-[16px] !text-white"
+        disabled
+      >
         {errorTips}
       </Button>
     );
@@ -26,7 +32,7 @@ export default function SubmitBtn({
     <Button
       onClick={onClick}
       disabled={disabled}
-      className="h-[42px] !bg-[#FFC42F] w-full mt-[16px]"
+      className="h-[42px] !bg-black w-full mt-[16px] !text-white"
     >
       {children ? children : "Swap"}
     </Button>

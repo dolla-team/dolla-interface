@@ -9,7 +9,7 @@ export default function Range({
   style,
   className,
   debounceWait = 1000,
-  color = "#743EFF",
+  color = "#FFC42F",
   inputClassName,
   activeBarClassName,
   disabled
@@ -52,7 +52,7 @@ export default function Range({
       />
       <div
         className={clsx(
-          "absolute top-0 left-0 h-[8px] rounded-[16px] bg-[#743EFF]",
+          "absolute top-0 left-0 h-[8px] rounded-[16px] bg-[#FFC42F]",
           disabled && "opacity-50",
           activeBarClassName
         )}

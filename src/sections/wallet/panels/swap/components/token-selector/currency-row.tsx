@@ -44,7 +44,7 @@ export default function CurrencyRow({
   return (
     <div
       className={clsx(
-        "py-[10px] flex justify-between items-center rounded-[10px] cursor-pointer hover:bg-[rgba(151,154,190,0.1)] transition-colors",
+        "p-[10px] flex justify-between items-center rounded-[10px] cursor-pointer hover:bg-[rgba(151,154,190,0.1)] transition-colors",
         isActive &&
           "bg-[var(--dex-hover-bg-color)] pointer-events-none opacity-80"
       )}

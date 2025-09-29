@@ -4,8 +4,13 @@ import Big from "big.js";
 import { BASE_TOKEN, QUOTE_TOKEN } from "@/config/btc";
 import useTokenPrice from "@/hooks/use-token-price";
 import { useMemo } from "react";
+import clsx from "clsx";
 
-export default function Tokens() {
+export default function Tokens({
+  onClick
+}: {
+  onClick?: (token: any) => void;
+}) {
   const { nearAccount } = useAuth() || {};
 
   const tokenIds = useMemo(() => {
@@ -29,11 +34,13 @@ export default function Tokens() {
         balance={nearAccount?.balance}
         price={prices[0]?.last_price || 1}
         token={QUOTE_TOKEN}
+        onClick={onClick}
       />
       <Item
         balance={nearAccount?.prizeBalance}
         price={prices[1]?.last_price || 1}
         token={BASE_TOKEN}
+        onClick={onClick}
       />
     </div>
   );
@@ -42,14 +49,24 @@ export default function Tokens() {
 const Item = ({
   balance,
   price,
-  token
+  token,
+  onClick
 }: {
   balance: string;
   price: number;
   token: any;
+  onClick?: (token: any) => void;
 }) => {
   return (
-    <div className="flex justify-between items-center mb-[10px]">
+    <div
+      className={clsx(
+        "flex justify-between items-center rounded-[10px] p-[10px]",
+        onClick && "cursor-pointer hover:bg-[#0000001A] duration-300"
+      )}
+      onClick={() => {
+        onClick?.(token);
+      }}
+    >
       <div className="flex items-center gap-[14px]">
         <div className="w-[32px] h-[32px] rounded-full relative">
           <img src={token.icon} className="w-full h-full object-cover" />

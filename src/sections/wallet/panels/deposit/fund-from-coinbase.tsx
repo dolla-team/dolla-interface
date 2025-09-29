@@ -4,7 +4,7 @@ import FundFromCex from "./fund-from-cex";
 import { useAuth } from "@/contexts/auth";
 import useBroadcatChannel from "@/hooks/use-broadcat-channel";
 import { toast } from "react-toastify";
-import { getWindowSize } from "../utils/getWindowSize";
+import { getWindowSize } from "../../get-window-size";
 
 const minAmount = 10;
 export default function FundFromCoinbase({ onBack }: { onBack: () => void }) {
