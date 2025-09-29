@@ -110,7 +110,7 @@ export default function RechargeFrom1click() {
               Input Deposit Amount
             </div>
 
-            <div className="w-full bg-white rounded-[12px] border border-[#E5E7EB] p-[16px] flex items-center justify-between">
+            <div className="w-full bg-white rounded-[12px] border border-[#E5E7EB] px-[16px] h-[60px] flex items-center justify-between">
               <div className="relative flex-1">
                 <button className="w-full flex items-center gap-[12px] bg-white cursor-pointer rounded-[8px]">
                   <div className="relative">
