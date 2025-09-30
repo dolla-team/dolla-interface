@@ -6,7 +6,7 @@ import { useRequest } from "ahooks";
 import useTokenPrice from "@/hooks/use-token-price";
 import Big from "big.js";
 
-const pageSize = 10;
+const pageSize = 100;
 
 export default function useCreatePoolList() {
   const [loading, setLoading] = useState(false);
@@ -17,7 +17,7 @@ export default function useCreatePoolList() {
   const poolsData = useRef<any>({});
 
   const [recordsPageIndex, setRecordsPageIndex] = useState(1);
-  const [recordsPageSize] = useState(10);
+  const [recordsPageSize] = useState(100);
   const [recordsPageHasNextPage, setRecordsPageHasNextPage] = useState(true);
 
   const getCreatePoolList = async () => {

@@ -7,7 +7,7 @@ import useIsMobile from "@/hooks/use-is-mobile";
 import { formatAddress } from "@/utils/format/address";
 import Avatar from "@/components/avatar";
 import BtcImg from "@/views/btc-list/markets/btc-bg";
-import { BASE_TOKEN } from "@/config/btc";
+import MarketStatus from "../market-status";
 
 export default function Market({
   data,
@@ -15,7 +15,6 @@ export default function Market({
   footer,
   header,
   onClick = () => {},
-  isForceNormal,
   isActive
 }: {
   data: any;
@@ -35,6 +34,9 @@ export default function Market({
   }, [data]);
 
   const isMobile = useIsMobile();
+  const amount = String(
+    data.reward_amount / 10 ** data.reward_token_info?.[0].decimals
+  );
 
   return (
     <div
@@ -53,41 +55,31 @@ export default function Market({
       {header}
       <div className="relative z-[2] bg-white rounded-[18px] pt-[20px]">
         <div className="flex items-center justify-between px-[12px]">
-          <div className="flex items-center gap-[6px]">
-            <Avatar
-              size={20}
-              address={data?.user_info?.user}
-              email={data?.user_info?.email}
-            />
-            <div className="text-[12px]">
-              {data?.user_info?.email || formatAddress(data?.user_info?.user)}
+          <div className="flex items-center gap-[12px]">
+            {data?.reward_amount && (
+              <BtcImg amount={amount} id={data?.pool_id} />
+            )}
+            <div>
+              <div className="text-[18px] text-[#2B3337] font-bold">
+                {amount} {data.reward_token_info?.[0]?.symbol}
+              </div>
+              <div className="flex items-center gap-[6px]">
+                <Avatar
+                  size={20}
+                  address={data?.user_info?.user}
+                  email={data?.user_info?.email}
+                />
+                <div className="text-[12px]">
+                  {data?.user_info?.email ||
+                    formatAddress(data?.user_info?.user)}
+                </div>
+              </div>
             </div>
           </div>
-          <div className="text-[12px] text-[#5E6B7D]">#{data?.pool_id}</div>
-        </div>
-        <div className="flex justify-center items-center gap-[10px] mt-[20px]">
-          {data?.reward_amount && (
-            <BtcImg
-              amount={String(
-                data.reward_amount / 10 ** data.reward_token_info?.[0].decimals
-              )}
-              id={data?.pool_id}
-            />
-          )}
           <div>
-            <div className="text-[26px] font-[DelaGothicOne] text-[#2B3337]">
-              {data.reward_token_info?.[0]?.name}
-            </div>
-            <div className="text-[12px] font-[300] text-[#5E6B7D]">
-              $
-              {formatNumber(
-                getAnchorPrice(
-                  data?.anchor_price,
-                  data.reward_token_info?.[0].decimals
-                ),
-                2,
-                true
-              )}
+            <MarketStatus value={data?.status} market={data} />
+            <div className="text-[12px] text-[#5E6B7D] text-right mt-[4px]">
+              #{data?.pool_id}
             </div>
           </div>
         </div>
@@ -164,7 +156,7 @@ export default function Market({
         </div>
         <div
           className={clsx(
-            "mt-[15px] rounded-[6px] relative mx-[11px]",
+            "mt-[10px] rounded-[6px] relative mx-[11px]",
             isActive
               ? "h-[6px] bg-white/10 border border-[#948254]"
               : "h-[3px] bg-[#191E27]"

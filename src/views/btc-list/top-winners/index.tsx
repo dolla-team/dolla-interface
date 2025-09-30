@@ -8,19 +8,28 @@ export default function TopWinners({ type }: { type: "winners" | "sellers" }) {
   const [data, setData] = useState<any[]>([]);
   useEffect(() => {
     const getData = async () => {
-      const res = await axiosInstance.get(`/api/v1/user/top/winners?limit=10`);
+      const res = await axiosInstance.get(
+        type === "winners"
+          ? `/api/v1/user/top/winners?limit=10`
+          : `/api/v1/user/top/seller?limit=10&chain=near`
+      );
 
       setData(res.data.data);
     };
 
-    if (type === "winners") getData();
+    getData();
   }, []);
   return (
     <TopWinnersContainer
       title={type === "winners" ? "Top BTC Winners" : "Top BTC Sellers"}
     >
       {data.map((item, index) => (
-        <TopWinnersItem key={item.id} data={item} level={index + 1} />
+        <TopWinnersItem
+          key={item.id}
+          data={item}
+          level={index + 1}
+          type={type}
+        />
       ))}
       {data.length === 0 && (
         <Empty className="!pt-[20px]" text={`No ${type}`} />

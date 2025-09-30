@@ -2,7 +2,7 @@ import clsx from "clsx";
 import Market from "../../components/market";
 import Button from "@/components/button";
 import Empty from "@/components/empty";
-import MarketStatus, { EMarketStatus } from "../../components/market-status";
+import { EMarketStatus } from "../../components/market-status";
 import dayjs from "@/libs/dayjs";
 import Popover, {
   PopoverPlacement,
@@ -27,7 +27,7 @@ const SellerMarkets = (props: any) => {
   return (
     <div
       className={clsx(
-        "w-full grid gap-x-[15px] gap-y-[20px] mt-[25px]",
+        "w-full grid gap-x-[15px] gap-y-[20px]",
         orders?.length > 0 ? "grid-cols-3" : "grid-cols-1",
         "max-md:grid-cols-1 max-md:gap-y-[14px] max-md:mt-[14px]",
         className
@@ -107,7 +107,7 @@ const SellerMarkets = (props: any) => {
 export default SellerMarkets;
 
 const MarketItem = (props: any) => {
-  const { order, onDeposit, onCancel } = props;
+  const { order, onCancel } = props;
 
   const contractConfig = useContractConfigStore((store) => store.config);
 
@@ -138,15 +138,8 @@ const MarketItem = (props: any) => {
       isAcitveBg={false}
       className="!w-full !h-[unset]"
       data={order}
-      header={
-        <MarketStatus
-          value={order.status}
-          market={order}
-          className="absolute z-[2] left-[12px] top-[-12px]"
-        />
-      }
       footer={
-        <div className="w-full px-[13px] bg-black rounded-b-[20px] py-[17px] mt-[20px] relative z-[2] text-white text-center text-[12px] font-normal leading-[100%]">
+        <div className="w-full px-[13px] bg-black rounded-b-[20px] py-[10px] mt-[10px] relative z-[2] text-white text-center text-[12px] font-normal leading-[100%]">
           <div className="flex justify-between items-center gap-[10px]">
             <div className="text-[10px] whitespace-nowrap">{time}</div>
             <div className="flex items-center justify-end gap-[7px]">

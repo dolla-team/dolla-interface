@@ -133,6 +133,7 @@ const Records = (props: any) => {
         className
       )}
     >
+      <div className="text-[14px] text-[#2B3337] pb-[20px]">Records</div>
       <GridTable
         data={records}
         columns={columns}

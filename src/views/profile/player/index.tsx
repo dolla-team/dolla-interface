@@ -16,6 +16,8 @@ import usePlayerHistory from "./hooks/use-player-history";
 import LoadingMore from "@/components/loading/loading-more";
 import { useDebounceFn } from "ahooks";
 import PageBack from "../components/page-back";
+import Bg from "../components/bg";
+import ProfileTabs from "../components/tabs";
 
 const TabsList = [
   {
@@ -109,10 +111,11 @@ export default function Player() {
     >
       <PageBack />
       <div className="relative z-1 pt-[30px] w-[933px] mx-auto max-md:w-full max-md:pt-[70px] max-md:bg-[url('/profile/bg.png')] max-md:bg-cover max-md:bg-no-repeat max-md:bg-[position:center_top_-44px]">
-        <Header tab="player" />
+        <Header />
+        <ProfileTabs tab="player" />
         <SwitchPanel className="max-md:w-full">
           <div className="max-md:px-[10px]">
-            <Dashboard tab="player" className="mt-[49px] max-md:mt-[20px]" />
+            <Dashboard tab="player" className="mt-[20px] max-md:mt-[20px]" />
           </div>
           <div className="flex justify-between items-center gap-[10px] mt-[44px] max-md:flex-col max-md:mt-[20px]">
             <Tabs
@@ -181,7 +184,7 @@ export default function Player() {
           </AnimatePresence>
         </SwitchPanel>
       </div>
-      <div className="w-full h-[284px] bg-black absolute top-0 left-0" />
+      <Bg />
     </div>
   );
 }

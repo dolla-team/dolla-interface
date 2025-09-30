@@ -6,7 +6,7 @@ export default function PageBack({ className }: { className?: string }) {
   return (
     <button
       className={clsx(
-        "absolute z-[10] top-[50px] left-[30px] text-[#FFFFFF] button flex justify-center items-center gap-[5px] h-[34px] w-[88px] rounded-[16px] border border-[#555555] bg-[#FFFFFF33]",
+        "absolute z-[10] top-[30px] left-[30px] text-[#FFFFFF] button flex justify-center items-center gap-[5px] h-[34px] w-[88px] rounded-[16px] border border-[#555555] bg-[#FFFFFF33]",
         className
       )}
       onClick={() => {

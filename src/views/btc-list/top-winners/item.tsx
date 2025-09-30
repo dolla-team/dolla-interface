@@ -7,10 +7,12 @@ import clsx from "clsx";
 
 export default function TopWinnersItem({
   data,
-  level
+  level,
+  type
 }: {
   data: any;
   level: number;
+  type: "winners" | "sellers";
 }) {
   return (
     <div
@@ -30,16 +32,19 @@ export default function TopWinnersItem({
           <Avatar address="0x1234567890" size={36} className="rounded-full" />
         </div>
         <div>
-          <div className="text-[10px] text-black/30">Winner</div>
+          <div className="text-[10px] text-black/30">
+            {type === "winners" ? "Winner" : "Seller"}
+          </div>
           <div className="text-[12px] text-black font-semibold">
-            {data?.pool_info?.winner_user_email || formatAddress(data?.user)}{" "}
+            {data?.winner_user_info?.winner_user_email ||
+              formatAddress(data?.user)}{" "}
           </div>
         </div>
       </div>
       <div>
         <div className="text-[10px] text-black/30">Return</div>
         <div className="text-[12px] text-black text-right font-semibold">
-          {Big(getAnchorPrice(data?.pool_info?.anchor_price)).toFixed(0)}x
+          {Big(getAnchorPrice(data?.anchor_price, 6)).toFixed(2)}x
         </div>
       </div>
     </div>
