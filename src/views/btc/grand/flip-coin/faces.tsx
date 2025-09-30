@@ -35,8 +35,8 @@ export const FrontFace = ({ size = 62, thickness }: any) => {
             y2="93"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#C18B00" />
-            <stop offset="1" stop-color="#E7B22A" />
+            <stop stopColor="#C18B00" />
+            <stop offset="1" stopColor="#E7B22A" />
           </linearGradient>
         </defs>
       </svg>

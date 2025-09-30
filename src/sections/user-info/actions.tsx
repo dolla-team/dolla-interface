@@ -89,7 +89,7 @@ const MENU = [
         <path
           d="M8.91304 1L1 1V14H8.91304M6.08696 7.19048H14M14 7.19048L10.6087 3.47619M14 7.19048L10.6087 10.9048"
           stroke="white"
-          stroke-width="2"
+          strokeWidth="2"
         />
       </svg>
     )

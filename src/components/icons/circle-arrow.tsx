@@ -20,10 +20,10 @@ export default function CircleArrow({
       <path
         d="M11 0.5C16.799 0.5 21.5 5.20101 21.5 11C21.5 16.799 16.799 21.5 11 21.5C5.20101 21.5 0.5 16.799 0.5 11C0.5 5.20101 5.20101 0.5 11 0.5Z"
         fill="black"
-        fill-opacity="0.2"
+        fillOpacity="0.2"
         stroke="#6A5D3A"
       />
-      <path d="M10 7L13 11L10 15" stroke="white" stroke-width="1.5" />
+      <path d="M10 7L13 11L10 15" stroke="white" strokeWidth="1.5" />
     </svg>
   );
 }

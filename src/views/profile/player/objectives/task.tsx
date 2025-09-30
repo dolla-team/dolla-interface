@@ -1,7 +1,23 @@
-import Button from "@/components/button";
 import clsx from "clsx";
+import useTaskAction from "@/hooks/task/use-task-action";
+import Button from "@/components/button";
 
-export default function Task({ className }: { className?: string }) {
+export default function Task({
+  className,
+  task
+}: {
+  className?: string;
+  task: any;
+}) {
+  const {
+    buttonText,
+    handleTaskAction,
+    loading,
+    completed,
+    claimed,
+    progress
+  } = useTaskAction(task);
+
   return (
     <div
       className={clsx(
@@ -10,34 +26,42 @@ export default function Task({ className }: { className?: string }) {
       )}
     >
       <div className="flex items-center justify-between">
-        <div className="text-[14px] text-black">Follow us on X</div>
-        {/* <Button className="!bg-black h-[32px] min-w-[60px] !rounded-[8px] text-white button">
-          X
-        </Button> */}
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="20"
-          height="20"
-          viewBox="0 0 20 20"
-          fill="none"
-        >
-          <circle cx="10" cy="10" r="10" fill="#00DAA0" />
-          <path
-            d="M5.50049 10.5L9.00049 13.5L14.0001 7"
-            stroke="black"
-            strokeWidth="2"
-            strokeLinecap="round"
-          />
-        </svg>
+        <div className="text-[14px] text-black">{task.title}</div>
+        {!claimed && (
+          <Button
+            className="!bg-black h-[32px] min-w-[60px] px-[10px] !rounded-[8px] text-white button"
+            loading={loading}
+            onClick={() => handleTaskAction()}
+          >
+            {completed ? "Claim" : buttonText}
+          </Button>
+        )}
+        {claimed && (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 20 20"
+            fill="none"
+          >
+            <circle cx="10" cy="10" r="10" fill="#00DAA0" />
+            <path
+              d="M5.50049 10.5L9.00049 13.5L14.0001 7"
+              stroke="black"
+              strokeWidth="2"
+              strokeLinecap="round"
+            />
+          </svg>
+        )}
       </div>
       <div className="text-[#666666] text-[10px] mt-[6px]">
-        Like tweets on our official X account.
+        {task.description}
       </div>
-      <div className="mt-[10px] flex items-center gap-[20px]">
+      <div className="mt-[10px] flex justify-between items-center">
         <div className="mt-[6px] w-[260px] h-[6px] rounded-[3px] bg-[#BDDCD4] backdrop-blur-[25px]">
           <div
             className="h-full bg-[#00CA94] rounded-[3px]"
-            style={{ width: "50%" }}
+            style={{ width: `${progress * 100}%` }}
           />
         </div>
         <div className="p-[5px] rounded-[12px] border border-[#383F47]/30 flex gap-[3px] items-center h-[24px]">
@@ -54,7 +78,7 @@ export default function Task({ className }: { className?: string }) {
               fill="white"
             />
           </svg>
-          <div className="text-[12px] font-[500]">50</div>
+          <div className="text-[12px] font-[500]">{task.points}</div>
         </div>
       </div>
     </div>

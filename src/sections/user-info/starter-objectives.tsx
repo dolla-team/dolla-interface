@@ -1,80 +1,75 @@
 import clsx from "clsx";
 import Button from "@/components/button";
-import useWalletStore from "@/stores/use-wallet";
-import { useNavigate } from "react-router-dom";
+import useTaskCurrent from "@/hooks/task/use-task-current";
+import Loading from "@/components/icons/loading";
+import useTaskAction from "@/hooks/task/use-task-action";
 
 export default function StarterObjectives() {
-  const walletStore = useWalletStore();
-  const navigate = useNavigate();
+  const { tasks, loading } = useTaskCurrent();
   return (
-    <div className="border-t border-[#313038] px-[20px] py-[8px] text-white">
-      <div className="flex items-center justify-between">
+    <div className="border-t border-[#313038] px-[20px] py-[8px] text-white h-[calc(100%-370px)]">
+      <div className="flex items-center justify-between pb-[10px]">
         <div className="text-[10px]">Starter Objectives</div>
-        <div>
+        {/* <div>
           <span className="text-[8px] text-white/30">Completed </span>
           <span className="text-[10px]"> 0/3</span>
-        </div>
+        </div> */}
       </div>
-      <Item
-        type="Follow"
-        onClick={() => {
-          // window.open("https://x.com/nearintents", "_blank");
-        }}
-      />
-      <Item
-        type="Deposit"
-        onClick={() => {
-          walletStore.set({
-            panelType: "deposit",
-            showWallet: true
-          });
-        }}
-      />
-      <Item
-        type="Bid"
-        onClick={() => {
-          navigate("/btc/detail");
-        }}
-      />
+      {loading ? (
+        <div className="flex items-center justify-center pt-[50px]">
+          <Loading />
+        </div>
+      ) : (
+        <div className="h-[calc(100%-20px)] overflow-y-auto flex flex-col gap-[10px]">
+          {tasks.map((task) => (
+            <Item key={task.id} task={task} />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
 
-const Item = ({
-  type,
-  onClick
-}: {
-  type: "Follow" | "Deposit" | "Bid";
-  onClick: () => void;
-}) => {
+const Item = ({ task }: { task: any }) => {
+  const {
+    buttonText,
+    pastButtonText,
+    handleTaskAction,
+    loading,
+    completed,
+    claimed,
+    progress
+  } = useTaskAction(task);
+
   return (
     <div
       className={clsx(
-        "rounded-[10px] border border-[#F2F2F233] bg-[#F2F2F21A] backdrop-blur-[25px] mt-[10px] p-[10px] text-white"
+        "rounded-[10px] border border-[#F2F2F233] bg-[#F2F2F21A] backdrop-blur-[25px] p-[10px] text-white"
       )}
     >
       <div className="flex items-center justify-between">
-        <span className="text-[10px]">
-          {type === "Follow" && "Follow us on X"}
-          {type === "Deposit" && "Deposit at least $100"}
-          {type === "Bid" && "Bid at least 10 times"}
-        </span>
-        <Button
-          className="px-[7px] h-[26px] text-[10px] !rounded-[8px]"
-          onClick={onClick}
-        >
-          {type} {type === "Bid" && "now"}
-        </Button>
-        {/* <div className="flex items-center gap-[6px]">
-          <span className="text-[8px] text-white/30">{type}ed</span>
-          <CheckIcon />
-        </div> */}
+        <span className="text-[10px]">{task.title}</span>
+        {claimed && (
+          <div className="flex items-center gap-[6px]">
+            <span className="text-[8px] text-white/30">{pastButtonText}</span>
+            <CheckIcon />
+          </div>
+        )}
+        {!claimed && (
+          <Button
+            className="px-[7px] h-[26px] text-[10px] !rounded-[8px] min-w-[60px]"
+            loading={loading}
+            onClick={() => handleTaskAction()}
+          >
+            {completed ? "Claim" : buttonText}
+          </Button>
+        )}
       </div>
 
       <div className="w-full h-[6px] bg-[#F2F2F21A] rounded-[3px] backdrop-blur-[25px] mt-[10px]">
         <div
           className="h-full bg-[#00FFBB] rounded-[3px]"
-          style={{ width: `0%` }}
+          style={{ width: `${progress * 100}%` }}
         />
       </div>
     </div>

@@ -16,8 +16,8 @@ export default function BtnBg({ className }: { className?: string }) {
       <path
         d="M151.656 1L151.997 1.00684C155.499 1.13869 158.621 3.29642 159.971 6.55273L170.336 31.5527C172.793 37.479 168.438 44 162.022 44H21.3438C17.7048 44 14.4231 41.8087 13.0293 38.4473L2.66406 13.4473C0.206823 7.52098 4.56202 1 10.9775 1H151.656Z"
         stroke="url(#paint1_linear_2966_7170)"
-        stroke-opacity="0.6"
-        stroke-width="2"
+        strokeOpacity="0.6"
+        strokeWidth="2"
       />
       <defs>
         <linearGradient

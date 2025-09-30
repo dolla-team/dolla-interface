@@ -1,6 +1,6 @@
 const Button = ({
   children,
-  onClick,
+  onClick
 }: {
   children: React.ReactNode;
   onClick: () => void;
@@ -47,8 +47,8 @@ export const ExitBtn = ({ onClick }: { onClick: () => void }) => {
         <path
           d="M1 4H7M7 4L4.27778 1M7 4L4.27778 7"
           stroke="#EA5355"
-          stroke-width="1.6"
-          stroke-linecap="round"
+          strokeWidth="1.6"
+          strokeLinecap="round"
         />
       </svg>
     </Button>

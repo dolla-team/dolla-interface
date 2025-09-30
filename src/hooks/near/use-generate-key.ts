@@ -1,18 +1,15 @@
 import { useNearKeyStore } from "@/stores/use-near-key";
-import { KeyPair, KeyPairSigner, transactions } from "near-api-js";
+import { KeyPair, KeyPairSigner } from "near-api-js";
 import { useSignMessage } from "@privy-io/react-auth";
-import { getNonce, getProvider } from "./util";
-import { PublicKey } from "near-api-js/lib/utils/key_pair";
-import { functionCall } from "near-api-js/lib/transaction";
-import { base_decode } from "near-api-js/lib/utils/serialize";
+import { viewMethod } from "./util";
 import { useAuth } from "@/contexts/auth/privy";
+import { QUOTE_TOKEN } from "@/config/btc";
 
-const THIRTY_TGAS = "300000000000000";
 export default function useGenerateKey() {
   const { setPublicKey, setPrivateKey, publicKey, privateKey } =
     useNearKeyStore();
   const { signMessage } = useSignMessage();
-  const { nearAccount } = useAuth();
+  const { nearAccount, address } = useAuth();
 
   async function generateKeyPair() {
     if (publicKey && privateKey) {
@@ -35,7 +32,7 @@ export default function useGenerateKey() {
 
     if (nearAccount) {
       // TODO update ak
-      console.log("nearAccount", nearAccount);
+      await updateAk({ publicKey: shortPublicKey });
     }
 
     saveKeyPair(shortPublicKey, newPrivateKey);
@@ -63,62 +60,32 @@ export default function useGenerateKey() {
     setPrivateKey(privateKey);
   }
 
-  async function updateAk({
-    evmAddress,
-    publicKey,
-    nonce
-  }: {
-    evmAddress: string;
-    publicKey: string;
-    nonce: number;
-  }) {
-    const payload = {
-      user_id: {
-        Evm: evmAddress.toLowerCase()
-      },
-      ak: publicKey,
-      nonce: nonce
-    };
-
-    const signatureData = await signMessage({
-      message: JSON.stringify(payload)
+  async function updateAk({ publicKey }: any) {
+    if (!address) return;
+    const res = await viewMethod({
+      method: "get_account",
+      args: { user_id: { Evm: address.replace(/^0x/, "").toLowerCase() } }
     });
-
-    console.log("signature:", signatureData);
-
-    const provider = getProvider();
-    const { header } = await provider.block({ finality: "final" });
-
-    const argas = {
-      update_user_ak_args: {
-        payload,
-        signature: signatureData.signature.replace(/^0x/, "")
+    const payload = {
+      ak: publicKey,
+      nonce: res.nonce,
+      gas_token: { FT: QUOTE_TOKEN.address },
+      fee_token: { FT: QUOTE_TOKEN.address },
+      deadline: String(Date.now() + 1000 * 60 * 60),
+      user_id: {
+        Evm: address.slice(2).toLowerCase()
       }
     };
 
-    console.log("argas:", argas);
+    const payloadString = JSON.stringify(payload);
 
-    const signNonce = await getNonce(publicKey);
-    const transaction = transactions.createTransaction(
-      import.meta.env.VITE_NEAR_ACCOUNT_ID,
-      PublicKey.from(publicKey),
-      import.meta.env.VITE_NEAR_ACCOUNT_ID,
-      signNonce,
-      [functionCall("update_user_ak", argas, BigInt(THIRTY_TGAS), BigInt(1))],
-      base_decode(header.hash)
-    );
+    const _signature = await signMessage({
+      message: payloadString
+    });
 
-    const keyPairSigner = KeyPairSigner.fromSecretKey(
-      ("ed25519:" + privateKey) as any
-    );
+    const signature = _signature.signature.replace(/^0x/, "");
 
-    const [, signedTransaction] = await keyPairSigner.signTransaction(
-      transaction
-    );
-
-    const result = await provider.sendTransaction(signedTransaction);
-
-    return result;
+    console.log("signature", signature, payloadString);
   }
 
   return {

@@ -104,8 +104,8 @@ export default function Laptop() {
                 <path
                   d="M1 1L8 9L1 17"
                   stroke="white"
-                  stroke-width="2"
-                  stroke-linecap="round"
+                  strokeWidth="2"
+                  strokeLinecap="round"
                 />
               </svg>
             </div>

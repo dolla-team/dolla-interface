@@ -119,8 +119,8 @@ const Circle = ({
           gradientUnits="userSpaceOnUse"
           gradientTransform="translate(89 89) rotate(90) scale(89)"
         >
-          <stop stop-color="#6F37FF" stop-opacity="0" />
-          <stop offset="1" stop-color="#6F37FF" />
+          <stop stopColor="#6F37FF" stopOpacity="0" />
+          <stop offset="1" stopColor="#6F37FF" />
         </radialGradient>
       </defs>
     </motion.svg>

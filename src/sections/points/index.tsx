@@ -109,8 +109,8 @@ export default function Points({ className }: { className?: string }) {
               cy="22"
               r="20"
               stroke="url(#paint0_linear_1991_3580)"
-              stroke-width="3"
-              stroke-linecap="round"
+              strokeWidth="3"
+              strokeLinecap="round"
               style={{
                 strokeWidth: 3,
                 strokeLinecap: "round"
@@ -140,8 +140,8 @@ export default function Points({ className }: { className?: string }) {
                 y2="2"
                 gradientUnits="userSpaceOnUse"
               >
-                <stop stop-color="#FFEF43" />
-                <stop offset="1" stop-color="#FFC42F" />
+                <stop stopColor="#FFEF43" />
+                <stop offset="1" stopColor="#FFC42F" />
               </linearGradient>
             </defs>
           </motion.svg>

@@ -15,7 +15,7 @@ const checkIcon = (
     <path
       d="M1 5L6 10L15 1"
       stroke="currentColor"
-      stroke-width="2"
+      strokeWidth="2"
       strokeLinecap="round"
     />
   </svg>

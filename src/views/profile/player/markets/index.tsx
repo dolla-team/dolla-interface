@@ -98,6 +98,7 @@ const PlayerMarkets = (props: any) => {
             orders.map((order: any) => {
               return (
                 <MarketItem
+                  key={order.id}
                   order={order}
                   onClaimSuccess={() => {
                     updatePoolsData(order.id, {

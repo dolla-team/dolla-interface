@@ -32,7 +32,15 @@ export default function useUserInfo(address?: string) {
           });
         }
       }
-      setInfo(res.data.data);
+      const progress = (() => {
+        if (!_info?.current_points || !_info?.next_level_points) {
+          return 0;
+        }
+        return (_info.current_points / _info.next_level_points) * 100;
+      })();
+
+      _info.points_progress = progress;
+      setInfo(_info);
       getUserPrize();
     } catch (err) {
       console.log("err", err);

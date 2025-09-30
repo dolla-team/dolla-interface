@@ -12,6 +12,7 @@ import beraConfig from "@/config/bera";
 import useToast from "@/hooks/use-toast";
 import useWithdrawEvm from "@/hooks/evm/use-withdraw";
 import { useContractConfigStore } from "@/stores/use-contract-config";
+import useGenerateKey from "@/hooks/near/use-generate-key";
 
 // Constants
 const NFT_ADDRESS = "0x0ae4451B85A528b1Bc03D90F3Bc009962Fe737f7";
@@ -218,6 +219,78 @@ function TradingOperationsSection({
   );
 }
 
+// Update Key Section Component
+function UpdateKeySection({
+  onUpdateKey,
+  updating
+}: {
+  onUpdateKey: () => Promise<any>;
+  updating: boolean;
+}) {
+  const [result, setResult] = useState<any>(null);
+  const [showResult, setShowResult] = useState(false);
+  const toast = useToast();
+
+  const handleUpdateKey = async () => {
+    try {
+      const keyResult = await onUpdateKey();
+      setResult(keyResult);
+      setShowResult(true);
+      toast.success({ title: "Key updated successfully" });
+    } catch (error) {
+      console.error("Update key error:", error);
+      toast.fail({ title: "Update key failed" });
+    }
+  };
+
+  return (
+    <div className="space-y-4">
+      <h2 className="text-xl font-semibold text-gray-800">Update Key Demo</h2>
+
+      <div className="bg-gray-50 p-4 rounded-lg">
+        <div className="space-y-3">
+          <Button
+            className="w-full h-10 !bg-indigo-600 text-white rounded-lg transition-colors border border-indigo-600"
+            onClick={handleUpdateKey}
+            loading={updating}
+            disabled={updating}
+          >
+            {updating ? "Updating Key..." : "Update Key"}
+          </Button>
+
+          {result && (
+            <div className="space-y-2">
+              <Button
+                className="w-full h-8 !bg-gray-600 text-white rounded text-sm border border-gray-600"
+                onClick={() => setShowResult(!showResult)}
+              >
+                {showResult ? "Hide" : "Show"} Result
+              </Button>
+
+              {showResult && (
+                <div className="mt-3 space-y-2">
+                  <div>
+                    <span className="text-xs text-gray-500">Public Key:</span>
+                    <pre className="text-xs bg-white p-2 rounded border overflow-auto">
+                      {result.publicKey}
+                    </pre>
+                  </div>
+                  <div>
+                    <span className="text-xs text-gray-500">Private Key:</span>
+                    <pre className="text-xs bg-white p-2 rounded border overflow-auto">
+                      {result.privateKey}
+                    </pre>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // Account Info Section Component
 function AccountInfoSection({
   account,
@@ -296,6 +369,10 @@ export default function Demo() {
     gameId: "0"
   });
 
+  // Update key hook
+  const { updateAk: onUpdateKey, createKeyPair } = useGenerateKey();
+  const [updating, setUpdating] = useState(false);
+
   // NFT hooks
   const { nftNumber } = useMintNft(NFT_ADDRESS);
   const { approve, approved, approving, checking } = useApprove({
@@ -314,6 +391,17 @@ export default function Demo() {
     },
     onCreateSuccess: () => console.log("NFT pool created successfully")
   });
+
+  // Wrapper for onUpdateKey with loading state
+  const handleUpdateKey = async () => {
+    setUpdating(true);
+    try {
+      const { publicKey } = createKeyPair();
+      await onUpdateKey({ publicKey });
+    } finally {
+      setUpdating(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">
@@ -341,12 +429,16 @@ export default function Demo() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <UpdateKeySection onUpdateKey={handleUpdateKey} updating={updating} />
           <GameManagementSection
             getAllGames={getAllGames}
             pauseGame={pauseGame}
             resumeGame={resumeGame}
             cancelGame={cancelGame}
           />
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <TradingOperationsSection
             withdraw={withdraw}
             withdrawing={withdrawing}

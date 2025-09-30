@@ -1,6 +1,6 @@
 import clsx from "clsx";
 
-export default function MarketActiveBg(props?: { className?: string; }) {
+export default function MarketActiveBg(props?: { className?: string }) {
   const { className } = props ?? {};
 
   return (
@@ -10,7 +10,10 @@ export default function MarketActiveBg(props?: { className?: string; }) {
       height="100%"
       viewBox="0 0 340 218"
       fill="none"
-      className={clsx("absolute top-0 left-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300", className)}
+      className={clsx(
+        "absolute top-0 left-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300",
+        className
+      )}
     >
       <mask
         id="mask0_56_17"
@@ -38,8 +41,8 @@ export default function MarketActiveBg(props?: { className?: string; }) {
           gradientUnits="userSpaceOnUse"
           gradientTransform="translate(169.585 52.5894) rotate(90) scale(182.411 182.408)"
         >
-          <stop stop-color="#9A8C4D" />
-          <stop offset="1" stop-color="#222A35" />
+          <stop stopColor="#9A8C4D" />
+          <stop offset="1" stopColor="#222A35" />
         </radialGradient>
       </defs>
     </svg>

@@ -41,8 +41,8 @@ export default function MarketActiveBg(props?: { className?: string }) {
           gradientUnits="userSpaceOnUse"
           gradientTransform="translate(169.585 52.5894) rotate(90) scale(182.411 182.408)"
         >
-          <stop stop-color="#9A8C4D" />
-          <stop offset="1" stop-color="#222A35" />
+          <stop stopColor="#9A8C4D" />
+          <stop offset="1" stopColor="#222A35" />
         </radialGradient>
       </defs>
     </svg>

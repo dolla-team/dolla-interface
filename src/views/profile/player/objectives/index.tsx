@@ -4,9 +4,14 @@ import SwitchPanel from "@/components/switch/switch-panel";
 import { useState } from "react";
 import Progress from "./progress";
 import Complete from "./complete";
+import useTask from "@/hooks/task/use-task";
+import { useAuth } from "@/contexts/auth";
 
 export default function Objectives({ dataHeight }: { dataHeight: number }) {
   const [tab, setTab] = useState("progress");
+  const { progressTasks, completedTasks, loading } = useTask();
+  const { userInfo } = useAuth();
+
   return (
     <div
       className={`
@@ -29,18 +34,20 @@ export default function Objectives({ dataHeight }: { dataHeight: number }) {
           <div className="text-[18px] font-[600]">Level</div>
           <div className="flex items-center gap-[6px]">
             <LevelIcon size={30} />
-            <span className="text-[14px] font-[600]">Lv. 1</span>
+            <span className="text-[14px] font-[600]">
+              Lv. {userInfo?.level}
+            </span>
           </div>
         </div>
         <div className="mt-[6px] w-full h-[6px] rounded-[3px] bg-[#000]/15 backdrop-blur-[25px]">
           <div
             className="h-full bg-black rounded-[3px]"
-            style={{ width: "50%" }}
+            style={{ width: `${userInfo?.points_progress || 0}%` }}
           />
         </div>
         <div className="flex justify-between items-center text-[#8C8B8B] text-[10px] mt-[10px]">
-          <span>PTS 45</span>
-          <span>Next Level 200</span>
+          <span>PTS {userInfo?.current_points}</span>
+          <span>Next Level {userInfo?.next_level_points}</span>
         </div>
         <Switch
           tab={tab}
@@ -62,8 +69,12 @@ export default function Objectives({ dataHeight }: { dataHeight: number }) {
             maxHeight: dataHeight + 304
           }}
         >
-          {tab === "progress" && <Progress />}
-          {tab === "complete" && <Complete />}
+          {tab === "progress" && (
+            <Progress tasks={progressTasks} loading={loading} />
+          )}
+          {tab === "complete" && (
+            <Complete tasks={completedTasks} loading={loading} />
+          )}
         </div>
       </SwitchPanel>
     </div>

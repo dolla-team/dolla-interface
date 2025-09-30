@@ -38,8 +38,8 @@ export default function Market({ className }: { className?: string }) {
               <path
                 d="M5.18359 4.81055L5.18359 6.81268"
                 stroke="black"
-                stroke-width="1.6"
-                stroke-linecap="round"
+                strokeWidth="1.6"
+                strokeLinecap="round"
               />
               <path
                 d="M11.924 5.20996L9.9895 5.72815"

@@ -79,8 +79,8 @@ export default function Cancel({ data }: { data: any }) {
             <path
               d="M6 11L10 15L17 8"
               stroke="#2B3337"
-              stroke-width="2"
-              stroke-linecap="round"
+              strokeWidth="2"
+              strokeLinecap="round"
             />
           </svg>
           <span>Claimed</span>
