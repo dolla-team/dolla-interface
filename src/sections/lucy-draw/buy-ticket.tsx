@@ -98,7 +98,7 @@ export default function BuyTicket({
         </div>
         <button
           className={clsx(
-            "h-[40px] bg-linear-to-b from-[#FFF698] to-[#FFC42F] rounded-[8px] text-[14px] font-[DelaGothicOne] text-black ml-[20px] mt-[30px]",
+            "h-[40px] bg-[#FFC42F] rounded-[8px] text-[14px] text-black ml-[20px] mt-[30px]",
             isDisabled ? "opacity-50" : "button",
             isMobile ? "w-[calc(100%-40px)]" : "w-[338px]"
           )}
