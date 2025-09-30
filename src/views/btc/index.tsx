@@ -13,15 +13,12 @@ import useIsMobile from "@/hooks/use-is-mobile";
 import clsx from "clsx";
 // import MarketsModal from "./components/more-markets/mobile/modal";
 import { useAuth } from "@/contexts/auth";
-import Button from "@/components/button";
-import EstGas from "@/sections/est-gas";
-import AvatarAction from "@/layouts/main/avatar-action";
-import UserInfo from "@/sections/user-info";
-import Wallet from "@/sections/wallet";
 import "@/libs/howl";
 import { useNavigate } from "react-router-dom";
 import useWalletStore from "@/stores/use-wallet";
 import { useEffect } from "react";
+import { ShareBtn, CloseBtn } from "./share-btn";
+import Loading from "./loading";
 
 // import ProvablyFair from "@/sections/provably-fair";
 
@@ -31,12 +28,13 @@ export default function NewBTC() {
   return (
     <CannonCoinsProvider>
       <Content />
+      <Loading />
     </CannonCoinsProvider>
   );
 }
 
 const Content = () => {
-  const { userInfo, login, nearAccount } = useAuth() || {};
+  const { nearAccount } = useAuth() || {};
   const isMobile = useIsMobile();
   const { pool } = useBtcContext();
   const navigate = useNavigate();
@@ -54,7 +52,8 @@ const Content = () => {
       className={clsx(
         "h-[100dvh] relative",
         isMobile && "flex flex-col",
-        isMobile && pool?.status !== 1 ? "overflow-y-auto" : "overflow-hidden"
+        isMobile && pool?.status !== 1 ? "overflow-y-auto" : "overflow-hidden",
+        !isMobile && "bg-blend-luminosity"
       )}
       style={{
         background: isMobile
@@ -69,45 +68,10 @@ const Content = () => {
           navigate("/");
         }}
       />
-      <button
-        onClick={() => {
-          navigate(-1);
-        }}
-        className="button absolute top-[110px] left-[30px] w-[85px] h-[30px] z-[10] rounded-[8px] border border-[#3B3951] bg-[#FFFFFF1A] flex items-center justify-center gap-[8px]"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="13"
-          height="9"
-          viewBox="0 0 13 9"
-          fill="none"
-        >
-          <path
-            d="M11.1 4.4839L2 4.4839M2 4.4839L5.03333 7.96777M2 4.4839L5.03333 1.00003"
-            stroke="#FFE9B2"
-            strokeWidth="2"
-            strokeLinecap="round"
-          />
-        </svg>
-        <span className="text-[#FFE9B2] text-[12px]">Back</span>
-      </button>
-      <div className="absolute top-[10px] right-[30px] z-[10] flex items-center gap-[12px]">
-        <EstGas className="!bg-transparent !border-[#454545]" />
 
-        {!userInfo ? (
-          <Button onClick={login} className="w-[100px] h-[36px]">
-            Connect
-          </Button>
-        ) : (
-          <>
-            <AvatarAction />
-            {/* <Menu
-            onClick={() => {
-              logout();
-            }}
-          /> */}
-          </>
-        )}
+      <div className="absolute top-[10px] right-[30px] z-[10] flex items-center gap-[20px]">
+        <ShareBtn />
+        <CloseBtn />
       </div>
       {!isMobile && <Header className="h-[214px]" />}
       <MarketInfo />
@@ -123,8 +87,6 @@ const Content = () => {
       {!isMobile && <TopWinner />}
       {!isMobile && <Music />}
       {/* {isMobile && <MarketsModal />} */}
-      <Wallet />
-      <UserInfo />
     </div>
   );
 };

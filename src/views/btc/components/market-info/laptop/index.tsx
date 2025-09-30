@@ -4,7 +4,9 @@ import { formatNumber } from "@/utils/format/number";
 import clsx from "clsx";
 import { PlayerIcon, BidsIcon } from "../icons";
 import RollingDigitDisplay from "@/components/rolling-digit";
-// import ShareBtn from "./share-btn";
+import Avatar from "@/components/avatar";
+import SellerLevel from "@/components/seller-level";
+import { formatAddress } from "@/utils/format/address";
 
 export default function MarketInfo() {
   const { poolAmount, pool } = useBtcContext();
@@ -13,27 +15,29 @@ export default function MarketInfo() {
     pool?.status !== 2 && (
       <div className="absolute left-[20px] bottom-[24%] w-[244px]">
         <div className="flex items-center justify-between">
-          <div>
-            <span className="text-[#D9D9D9] text-[20px]">Market </span>
-            <span
-              className={clsx(
-                "font-[DelaGothicOne] text-[20px] bg-clip-text",
-                pool?.status === 3
-                  ? "bg-[linear-gradient(180deg,#C3C3C3_0%,#787878_100%)]"
-                  : "bg-[linear-gradient(180deg,#FFF698_0%,#FFC42F_100%)]"
-              )}
-              style={{
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent"
-              }}
-            >
-              {" "}
-              #{pool?.pool_id}
-            </span>
+          <div className="h-[40px] flex items-center gap-[12px]">
+            <div className="w-[39px] h-[39px] bg-linear-to-b from-[#FFC42F] to-[#99761C] rounded-[12px] p-[2px]">
+              <Avatar
+                size={35}
+                address={pool?.user_info?.address}
+                email={pool?.user_info?.email}
+                className="rounded-[12px]"
+              />
+            </div>
+            <div>
+              <div className="flex items-center gap-[4px]">
+                <span className="text-[14px] text-white">Seller</span>
+                <SellerLevel />
+              </div>
+              <div className="">
+                <span className="text-[14px] text-white">
+                  {pool?.user ? formatAddress(pool.user) : "-"}
+                </span>
+              </div>
+            </div>
           </div>
-          {/* <ShareBtn /> */}
         </div>
-        <div className="flex items-center w-[282px] h-[74px] px-[16px] mt-[10px] rounded-[8px] border border-[#3B3951] bg-[#FFFFFF1A] backdrop-blur-[10px]">
+        <div className="flex items-center w-[282px] h-[74px] px-[16px] mt-[10px] rounded-[8px] bg-[#FFFFFF1A] backdrop-blur-[10px]">
           <div className="w-1/2">
             <div
               className={clsx(

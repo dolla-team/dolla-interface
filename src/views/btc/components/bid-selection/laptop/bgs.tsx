@@ -51,46 +51,41 @@ export const BalanceBg = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="334"
-      height="77"
-      viewBox="0 0 334 77"
+      width="192"
+      height="63"
+      viewBox="0 0 192 63"
       fill="none"
       className="absolute top-0 left-0"
     >
-      <path
-        d="M2.90016 28.783C1.96375 24.101 5.27209 19.6528 10.0311 19.2648C33.3372 17.3644 98.6643 12.2139 160.072 9C223.553 5.67757 287.874 3.04505 307.843 2.24852C311.56 2.10029 314.839 4.53827 315.822 8.12536L331.373 64.8861C332.767 69.9773 328.936 75 323.657 75H18.702C14.8885 75 11.6052 72.3083 10.8573 68.5689L2.90016 28.783Z"
-        fill="url(#paint0_linear_1746_1164)"
-        fillOpacity="0.2"
-      />
-      <path
-        d="M307.804 1.24902C311.992 1.08212 315.682 3.83275 316.786 7.86133L332.337 64.6221C333.906 70.3496 329.596 75.9998 323.657 76H18.7021C14.412 76 10.7183 72.9715 9.87695 68.7646L1.91992 28.9795C0.867834 23.7191 4.58674 18.7059 9.9502 18.2686C33.2592 16.3679 98.5977 11.2156 160.02 8.00098C223.507 4.67822 287.833 2.0456 307.804 1.24902Z"
-        stroke="url(#paint1_linear_1746_1164)"
-        strokeOpacity="0.6"
-        strokeWidth="2"
-      />
+      <foreignObject x="-50" y="-49.5984" width="291.4" height="162.598">
+        <div
+          style={{
+            backdropFilter: "blur(25px)",
+            clipPath: "url(#bgblur_0_4184_1187_clip_path)",
+            height: "100%",
+            width: "100%"
+          }}
+        ></div>
+      </foreignObject>
+      <g data-figma-bg-blur-radius="50">
+        <path
+          d="M1 11.4018C1 5.72451 5.72085 1.18602 11.3937 1.40956L164.874 7.45734C168.633 7.60546 171.991 9.85053 173.564 13.2676L189.471 47.818C192.521 54.4433 187.681 62 180.387 62H11C5.47715 62 1 57.5228 1 52V11.4018Z"
+          fill="#F2F2F2"
+          fillOpacity="0.1"
+        />
+        <path
+          d="M11.4131 0.910156L164.894 6.95801C168.84 7.11353 172.366 9.47074 174.018 13.0586L189.925 47.6084C193.128 54.565 188.045 62.5 180.387 62.5H11C5.20101 62.5 0.5 57.799 0.5 52V11.4014C0.50024 5.44053 5.45685 0.675638 11.4131 0.910156Z"
+          stroke="#F2F2F2"
+          strokeOpacity="0.2"
+        />
+      </g>
       <defs>
-        <linearGradient
-          id="paint0_linear_1746_1164"
-          x1="167.644"
-          y1="4.43333"
-          x2="167.644"
-          y2="75"
-          gradientUnits="userSpaceOnUse"
+        <clipPath
+          id="bgblur_0_4184_1187_clip_path"
+          transform="translate(50 49.5984)"
         >
-          <stop stopColor="#DEDEDE" />
-          <stop offset="1" stopColor="#555555" stopOpacity="0" />
-        </linearGradient>
-        <linearGradient
-          id="paint1_linear_1746_1164"
-          x1="167.644"
-          y1="4.43333"
-          x2="167.644"
-          y2="75"
-          gradientUnits="userSpaceOnUse"
-        >
-          <stop stopColor="#9F9F9F" />
-          <stop offset="1" stopColor="#323232" stopOpacity="0" />
-        </linearGradient>
+          <path d="M1 11.4018C1 5.72451 5.72085 1.18602 11.3937 1.40956L164.874 7.45734C168.633 7.60546 171.991 9.85053 173.564 13.2676L189.471 47.818C192.521 54.4433 187.681 62 180.387 62H11C5.47715 62 1 57.5228 1 52V11.4018Z" />
+        </clipPath>
       </defs>
     </svg>
   );
@@ -101,29 +96,16 @@ export const Bg100 = ({ active }: { active: boolean }) => {
     <>
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        width="135"
+        width="113"
         height="73"
-        viewBox="0 0 135 73"
+        viewBox="0 0 113 73"
         fill="none"
         className="absolute top-0 left-0"
       >
         <path
-          d="M19.1724 5.8008C20.2524 2.37269 23.4862 0.0857307 27.0783 0.209596L126.589 3.64101C131.844 3.82219 135.498 8.93586 133.967 13.9656L117.726 67.3293C116.701 70.6978 113.594 73 110.072 73H8.90822C3.50327 73 -0.346234 67.7511 1.27799 62.596L19.1724 5.8008Z"
-          fill="url(#paint0_linear_2716_3526)"
+          d="M8.69963 14.8022C9.46174 10.2295 13.2667 6.78013 17.892 6.46881L101.586 0.835544C107.961 0.40644 113.098 5.98465 112.146 12.303L104.282 64.49C103.545 69.3822 99.3414 73 94.394 73H10.8046C4.62521 73 -0.0752212 67.4513 0.940665 61.356L8.69963 14.8022Z"
+          fill="#FFC42F"
         />
-        <defs>
-          <linearGradient
-            id="paint0_linear_2716_3526"
-            x1="63.5"
-            y1="0"
-            x2="63.5"
-            y2="73"
-            gradientUnits="userSpaceOnUse"
-          >
-            <stop stopColor="#FFF698" />
-            <stop offset="1" stopColor="#FFC42F" />
-          </linearGradient>
-        </defs>
       </svg>
       <img
         className="absolute bottom-[-10px] left-0"
@@ -134,46 +116,41 @@ export const Bg100 = ({ active }: { active: boolean }) => {
   ) : (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="139"
-      height="77"
-      viewBox="0 0 139 77"
+      width="115"
+      height="75"
+      viewBox="0 0 115 75"
       fill="none"
       className="absolute top-0 left-0"
     >
-      <path
-        d="M21.1724 7.8008C22.2524 4.37269 25.4862 2.08573 29.0783 2.2096L128.589 5.64101C133.844 5.82219 137.498 10.9359 135.967 15.9656L119.726 69.3293C118.701 72.6978 115.594 75 112.072 75H10.9082C5.50327 75 1.65377 69.7511 3.27799 64.596L21.1724 7.8008Z"
-        fill="url(#paint0_linear_1746_1180)"
-        fillOpacity="0.2"
-      />
-      <path
-        d="M29.1123 1.20996L128.624 4.6416C134.535 4.8456 138.646 10.5985 136.924 16.2568L120.683 69.6201C119.529 73.4097 116.033 76 112.072 76H10.9082C4.82778 76 0.497304 70.0953 2.32422 64.2959L20.2188 7.5C21.4339 3.6437 25.0715 1.07082 29.1123 1.20996Z"
-        stroke="url(#paint1_linear_1746_1180)"
-        strokeOpacity="0.6"
-        strokeWidth="2"
-      />
+      <foreignObject x="-49.1982" y="-49.1877" width="213.458" height="174.188">
+        <div
+          style={{
+            backdropFilter: "blur(25px)",
+            clipPath: "url(#bgblur_0_4184_1332_clip_path)",
+            height: "100%",
+            width: "100%"
+          }}
+        ></div>
+      </foreignObject>
+      <g data-figma-bg-blur-radius="50">
+        <path
+          d="M9.69963 15.8022C10.4617 11.2295 14.2667 7.78013 18.892 7.46881L102.586 1.83554C108.961 1.40644 114.098 6.98465 113.146 13.303L105.282 65.49C104.545 70.3822 100.341 74 95.394 74H11.8046C5.62521 74 0.924779 68.4513 1.94067 62.356L9.69963 15.8022Z"
+          fill="#F2F2F2"
+          fill-opacity="0.1"
+        />
+        <path
+          d="M102.553 1.33691C109.247 0.886415 114.64 6.74369 113.641 13.3779L105.776 65.5645C105.002 70.7013 100.588 74.5 95.3936 74.5H11.8047C5.31632 74.5 0.380585 68.6735 1.44727 62.2734L9.20605 15.7197C10.0064 10.9185 14.0019 7.29661 18.8584 6.96973L102.553 1.33691Z"
+          stroke="#F2F2F2"
+          stroke-opacity="0.2"
+        />
+      </g>
       <defs>
-        <linearGradient
-          id="paint0_linear_1746_1180"
-          x1="69.5"
-          y1="4.43333"
-          x2="69.5"
-          y2="75"
-          gradientUnits="userSpaceOnUse"
+        <clipPath
+          id="bgblur_0_4184_1332_clip_path"
+          transform="translate(49.1982 49.1877)"
         >
-          <stop stopColor="#DEDEDE" />
-          <stop offset="1" stopColor="#555555" stopOpacity="0" />
-        </linearGradient>
-        <linearGradient
-          id="paint1_linear_1746_1180"
-          x1="69.5"
-          y1="4.43333"
-          x2="69.5"
-          y2="75"
-          gradientUnits="userSpaceOnUse"
-        >
-          <stop stopColor="#9F9F9F" />
-          <stop offset="1" stopColor="#323232" stopOpacity="0" />
-        </linearGradient>
+          <path d="M9.69963 15.8022C10.4617 11.2295 14.2667 7.78013 18.892 7.46881L102.586 1.83554C108.961 1.40644 114.098 6.98465 113.146 13.303L105.282 65.49C104.545 70.3822 100.341 74 95.394 74H11.8046C5.62521 74 0.924779 68.4513 1.94067 62.356L9.69963 15.8022Z" />
+        </clipPath>
       </defs>
     </svg>
   );
@@ -184,29 +161,16 @@ export const Bg50 = ({ active }: { active: boolean }) => {
     <>
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        width="129"
-        height="68"
-        viewBox="0 0 129 68"
+        width="112"
+        height="65"
+        viewBox="0 0 112 65"
         fill="none"
         className="absolute top-0 left-0"
       >
         <path
-          d="M16.2318 6.01187C17.2703 2.48109 20.5836 0.11432 24.2604 0.277007L120.878 4.55212C126.042 4.7806 129.636 9.7723 128.217 14.7421L114.658 62.1978C113.677 65.6322 110.537 68 106.966 68H8.69178C3.35092 68 -0.490149 62.8665 1.01686 57.7427L16.2318 6.01187Z"
-          fill="url(#paint0_linear_2716_3477)"
+          d="M7.66889 13.8535C8.44784 9.25775 12.2987 5.80969 16.9523 5.54121L100.661 0.711868C107.013 0.345376 112.088 5.92673 111.121 12.2158L104.305 56.5206C103.554 61.3989 99.3565 65 94.4208 65H10.8375C4.64701 65 -0.0563377 59.4324 0.97815 53.3289L7.66889 13.8535Z"
+          fill="#FFC42F"
         />
-        <defs>
-          <linearGradient
-            id="paint0_linear_2716_3477"
-            x1="60.6727"
-            y1="0"
-            x2="60.6727"
-            y2="68"
-            gradientUnits="userSpaceOnUse"
-          >
-            <stop stopColor="#FFF698" />
-            <stop offset="1" stopColor="#FFC42F" />
-          </linearGradient>
-        </defs>
       </svg>
       <img
         className="absolute bottom-0 left-0"
@@ -217,46 +181,41 @@ export const Bg50 = ({ active }: { active: boolean }) => {
   ) : (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="133"
-      height="72"
-      viewBox="0 0 133 72"
+      width="114"
+      height="67"
+      viewBox="0 0 114 67"
       fill="none"
       className="absolute top-0 left-0"
     >
-      <path
-        d="M18.2318 8.01187C19.2703 4.48109 22.5836 2.11432 26.2604 2.27701L122.878 6.55212C128.042 6.7806 131.636 11.7723 130.217 16.7421L116.658 64.1978C115.677 67.6322 112.537 70 108.966 70H10.6918C5.35092 70 1.50985 64.8665 3.01686 59.7427L18.2318 8.01187Z"
-        fill="url(#paint0_linear_1746_1172)"
-        fillOpacity="0.2"
-      />
-      <path
-        d="M26.3047 1.27832L122.922 5.55273C128.731 5.80977 132.775 11.4256 131.178 17.0166L117.619 64.4727C116.515 68.3362 112.984 70.9999 108.966 71H10.6914C4.68326 70.9998 0.362558 65.225 2.05762 59.4609L17.2725 7.72949C18.4408 3.75748 22.1684 1.0953 26.3047 1.27832Z"
-        stroke="url(#paint1_linear_1746_1172)"
-        strokeOpacity="0.6"
-        strokeWidth="2"
-      />
+      <foreignObject x="-49.165" y="-49.3053" width="212.405" height="166.305">
+        <div
+          style={{
+            backdropFilter: "blur(25px)",
+            clipPath: "url(#bgblur_0_4184_1331_clip_path)",
+            height: "100%",
+            width: "100%"
+          }}
+        ></div>
+      </foreignObject>
+      <g data-figma-bg-blur-radius="50">
+        <path
+          d="M8.66889 14.8535C9.44784 10.2578 13.2987 6.80969 17.9523 6.54121L101.661 1.71187C108.013 1.34538 113.088 6.92673 112.121 13.2158L105.305 57.5206C104.554 62.3989 100.357 66 95.4208 66H11.8375C5.64701 66 0.943662 60.4324 1.97815 54.3289L8.66889 14.8535Z"
+          fill="#F2F2F2"
+          fillOpacity="0.1"
+        />
+        <path
+          d="M101.632 1.21289C108.302 0.828073 113.631 6.68842 112.615 13.292L105.799 57.5967C105.011 62.7189 100.603 66.5 95.4209 66.5H11.8379C5.33784 66.5 0.39914 60.6538 1.48535 54.2451L8.17578 14.7695C8.99384 9.94417 13.0377 6.32388 17.9238 6.04199L101.632 1.21289Z"
+          stroke="#F2F2F2"
+          strokeOpacity="0.2"
+        />
+      </g>
       <defs>
-        <linearGradient
-          id="paint0_linear_1746_1172"
-          x1="66.5"
-          y1="4.26667"
-          x2="66.5"
-          y2="70"
-          gradientUnits="userSpaceOnUse"
+        <clipPath
+          id="bgblur_0_4184_1331_clip_path"
+          transform="translate(49.165 49.3053)"
         >
-          <stop stopColor="#DEDEDE" />
-          <stop offset="1" stopColor="#555555" stopOpacity="0" />
-        </linearGradient>
-        <linearGradient
-          id="paint1_linear_1746_1172"
-          x1="66.5"
-          y1="4.26667"
-          x2="66.5"
-          y2="70"
-          gradientUnits="userSpaceOnUse"
-        >
-          <stop stopColor="#9F9F9F" />
-          <stop offset="1" stopColor="#323232" stopOpacity="0" />
-        </linearGradient>
+          <path d="M8.66889 14.8535C9.44784 10.2578 13.2987 6.80969 17.9523 6.54121L101.661 1.71187C108.013 1.34538 113.088 6.92673 112.121 13.2158L105.305 57.5206C104.554 62.3989 100.357 66 95.4208 66H11.8375C5.64701 66 0.943662 60.4324 1.97815 54.3289L8.66889 14.8535Z" />
+        </clipPath>
       </defs>
     </svg>
   );
@@ -267,29 +226,16 @@ export const Bg10 = ({ active }: { active: boolean }) => {
     <>
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        width="116"
-        height="62"
-        viewBox="0 0 116 62"
+        width="111"
+        height="61"
+        viewBox="0 0 111 61"
         fill="none"
         className="absolute top-0 left-0"
       >
         <path
-          d="M13.3038 6.18614C14.295 2.57129 17.6631 0.129275 21.4069 0.311016L108.139 4.5213C113.218 4.76789 116.782 9.62958 115.487 14.5478L104.569 56.0359C103.645 59.5505 100.467 62 96.8329 62H8.48883C3.20932 62 -0.622485 56.9761 0.773596 51.8845L13.3038 6.18614Z"
-          fill="url(#paint0_linear_2716_3456)"
+          d="M6.57946 15.5288C7.41763 11.0866 11.1318 7.75909 15.6391 7.41238L99.3049 0.976543C105.768 0.479386 110.989 6.16809 109.94 12.5648L103.374 52.6177C102.582 57.4517 98.4043 61 93.5059 61H10.0632C3.79722 61 -0.92515 55.3033 0.236619 49.1459L6.57946 15.5288Z"
+          fill="#FFC42F"
         />
-        <defs>
-          <linearGradient
-            id="paint0_linear_2716_3456"
-            x1="54.5468"
-            y1="0"
-            x2="54.5468"
-            y2="62"
-            gradientUnits="userSpaceOnUse"
-          >
-            <stop stopColor="#FFF698" />
-            <stop offset="1" stopColor="#FFC42F" />
-          </linearGradient>
-        </defs>
       </svg>
       <img
         className="absolute bottom-0 left-0"
@@ -300,46 +246,41 @@ export const Bg10 = ({ active }: { active: boolean }) => {
   ) : (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="120"
-      height="66"
-      viewBox="0 0 120 66"
+      width="113"
+      height="63"
+      viewBox="0 0 113 63"
       fill="none"
       className="absolute top-0 left-0"
     >
-      <path
-        d="M15.3038 8.18614C16.295 4.57129 19.6631 2.12928 23.4069 2.31102L110.139 6.5213C115.218 6.76789 118.782 11.6296 117.487 16.5478L106.569 58.0359C105.645 61.5505 102.467 64 98.8329 64H10.4888C5.20932 64 1.37752 58.9761 2.7736 53.8845L15.3038 8.18614Z"
-        fill="url(#paint0_linear_1746_1173)"
-        fillOpacity="0.2"
-      />
-      <path
-        d="M23.4551 1.3125L110.188 5.52246C115.902 5.80005 119.91 11.2698 118.454 16.8027L107.536 58.29C106.496 62.2438 102.921 64.9999 98.833 65H10.4893C4.5498 65 0.23898 59.3482 1.80957 53.6201L14.3398 7.92188C15.4549 3.85528 19.2434 1.1082 23.4551 1.3125Z"
-        stroke="url(#paint1_linear_1746_1173)"
-        strokeOpacity="0.6"
-        strokeWidth="2"
-      />
+      <foreignObject x="-49.9399" y="-49.0538" width="212.015" height="162.054">
+        <div
+          style={{
+            backdropFilter: "blur(25px)",
+            clipPath: "url(#bgblur_0_4184_1330_clip_path)",
+            height: "100%",
+            width: "100%"
+          }}
+        ></div>
+      </foreignObject>
+      <g data-figma-bg-blur-radius="50">
+        <path
+          d="M7.57946 16.5288C8.41763 12.0866 12.1318 8.75909 16.6391 8.41238L100.305 1.97654C106.768 1.47939 111.989 7.16809 110.94 13.5648L104.374 53.6177C103.582 58.4517 99.4043 62 94.5059 62H11.0632C4.79722 62 0.0748504 56.3033 1.23662 50.1459L7.57946 16.5288Z"
+          fill="#F2F2F2"
+          fillOpacity="0.1"
+        />
+        <path
+          d="M100.267 1.47754C107.053 0.955561 112.535 6.92902 111.434 13.6455L104.867 53.6982C104.035 58.7739 99.6492 62.5 94.5059 62.5H11.0635C4.48416 62.5 -0.474739 56.518 0.745117 50.0527L7.08789 16.4365C7.96795 11.7722 11.868 8.2782 16.6006 7.91406L100.267 1.47754Z"
+          stroke="#F2F2F2"
+          strokeOpacity="0.2"
+        />
+      </g>
       <defs>
-        <linearGradient
-          id="paint0_linear_1746_1173"
-          x1="60"
-          y1="4.06667"
-          x2="60"
-          y2="64"
-          gradientUnits="userSpaceOnUse"
+        <clipPath
+          id="bgblur_0_4184_1330_clip_path"
+          transform="translate(49.9399 49.0538)"
         >
-          <stop stopColor="#DEDEDE" />
-          <stop offset="1" stopColor="#555555" stopOpacity="0" />
-        </linearGradient>
-        <linearGradient
-          id="paint1_linear_1746_1173"
-          x1="60"
-          y1="4.06667"
-          x2="60"
-          y2="64"
-          gradientUnits="userSpaceOnUse"
-        >
-          <stop stopColor="#9F9F9F" />
-          <stop offset="1" stopColor="#323232" stopOpacity="0" />
-        </linearGradient>
+          <path d="M7.57946 16.5288C8.41763 12.0866 12.1318 8.75909 16.6391 8.41238L100.305 1.97654C106.768 1.47939 111.989 7.16809 110.94 13.5648L104.374 53.6177C103.582 58.4517 99.4043 62 94.5059 62H11.0632C4.79722 62 0.0748504 56.3033 1.23662 50.1459L7.57946 16.5288Z" />
+        </clipPath>
       </defs>
     </svg>
   );
@@ -432,72 +373,140 @@ export const Bg1 = ({ active }: { active: boolean }) => {
   return active ? (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="108"
-      height="47"
-      viewBox="0 0 108 47"
+      width="117"
+      height="53"
+      viewBox="0 0 117 53"
       fill="none"
       className="absolute top-0 left-0"
     >
       <path
-        d="M9.23401 6.38474C10.2585 2.68076 13.772 0.228619 17.6021 0.5445L100.658 7.39444C104.807 7.73664 108 11.204 108 15.3674V39C108 43.4183 104.418 47 100 47H8.51314C3.22621 47 -0.606763 41.9629 0.802659 36.8673L9.23401 6.38474Z"
-        fill="url(#paint0_linear_1771_2006)"
+        d="M12.5733 12.5814C14.0639 9.153 17.3424 6.84234 21.0724 6.59128L106.106 0.867885C112.633 0.428571 117.817 6.2711 116.604 12.6994L110.537 44.8541C109.646 49.5786 105.518 53 100.71 53H10.2521C3.05044 53 -1.79008 45.6172 1.08142 39.0127L12.5733 12.5814Z"
+        fill="#FFC42F"
       />
-      <defs>
-        <linearGradient
-          id="paint0_linear_1771_2006"
-          x1="49.8345"
-          y1="0"
-          x2="49.8345"
-          y2="47"
-          gradientUnits="userSpaceOnUse"
-        >
-          <stop stopColor="#FFF698" />
-          <stop offset="1" stopColor="#FFC42F" />
-        </linearGradient>
-      </defs>
     </svg>
   ) : (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="112"
-      height="51"
-      viewBox="0 0 112 51"
+      width="119"
+      height="55"
+      viewBox="0 0 119 55"
       fill="none"
       className="absolute top-0 left-0"
     >
-      <path
-        d="M11.234 8.38474C12.2585 4.68076 15.772 2.22862 19.6021 2.5445L102.658 9.39444C106.807 9.73664 110 13.204 110 17.3674V41C110 45.4183 106.418 49 102 49H10.5131C5.22621 49 1.39324 43.9629 2.80266 38.8673L11.234 8.38474Z"
-        fill="url(#paint0_linear_1611_371)"
-        fillOpacity="0.2"
-      />
-      <path
-        d="M10.2705 8.11816C11.4231 3.95123 15.3758 1.19249 19.6846 1.54785L102.74 8.39746C107.408 8.78265 111 12.6837 111 17.3672V41C111 45.9706 106.971 50 102 50H10.5127C4.56513 49.9997 0.253308 44.333 1.83887 38.6006L10.2705 8.11816Z"
-        stroke="url(#paint1_linear_1611_371)"
-        strokeOpacity="0.6"
-        strokeWidth="2"
-      />
+      <foreignObject x="-49.7598" y="-49.1555" width="218.541" height="154.156">
+        <div
+          style={{
+            backdropFilter: "blur(25px)",
+            clipPath: "url(#bgblur_0_4184_1329_clip_path)",
+            height: "100%",
+            width: "100%"
+          }}
+        ></div>
+      </foreignObject>
+      <g data-figma-bg-blur-radius="50">
+        <path
+          d="M13.5733 13.5814C15.0639 10.153 18.3424 7.84234 22.0724 7.59128L107.106 1.86788C113.633 1.42857 118.817 7.2711 117.604 13.6994L111.537 45.8541C110.646 50.5786 106.518 54 101.71 54H11.2521C4.05044 54 -0.790082 46.6172 2.08142 40.0127L13.5733 13.5814Z"
+          fill="#F2F2F2"
+          fillOpacity="0.1"
+        />
+        <path
+          d="M107.072 1.36914C113.925 0.907946 119.369 7.0424 118.096 13.792L112.028 45.9473C111.092 50.9078 106.758 54.5 101.71 54.5H11.252C3.69029 54.4999 -1.39198 46.7481 1.62305 39.8135L13.1152 13.3818C14.6805 9.78219 18.1227 7.35638 22.0391 7.09277L107.072 1.36914Z"
+          stroke="#F2F2F2"
+          strokeOpacity="0.2"
+        />
+      </g>
       <defs>
+        <clipPath
+          id="bgblur_0_4184_1329_clip_path"
+          transform="translate(49.7598 49.1555)"
+        >
+          <path d="M13.5733 13.5814C15.0639 10.153 18.3424 7.84234 22.0724 7.59128L107.106 1.86788C113.633 1.42857 118.817 7.2711 117.604 13.6994L111.537 45.8541C110.646 50.5786 106.518 54 101.71 54H11.2521C4.05044 54 -0.790082 46.6172 2.08142 40.0127L13.5733 13.5814Z" />
+        </clipPath>
+      </defs>
+    </svg>
+  );
+};
+
+export const Bg = ({ className }: { className?: string }) => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="1512"
+      height="192"
+      viewBox="0 0 1512 192"
+      fill="none"
+      preserveAspectRatio="none"
+      className={className}
+    >
+      <g filter="url(#filter0_d_4184_1185)">
+        <path
+          d="M531.943 71.2216L0 32V614H1513V32L979.061 71.2242C972.455 71.7095 966.517 75.434 963.205 81.1704L936.773 126.952C933.201 133.14 926.598 136.952 919.453 136.952H591.547C584.402 136.952 577.799 133.14 574.227 126.952L547.793 81.1675C544.482 75.4327 538.547 71.7085 531.943 71.2216Z"
+          fill="url(#paint0_radial_4184_1185)"
+          shapeRendering="crispEdges"
+        />
+        <path
+          d="M1513.5 614.5H-0.5V31.4619L0.0371094 31.501L531.979 70.7227C538.748 71.2217 544.832 75.0391 548.226 80.917L574.659 126.702C578.142 132.735 584.58 136.452 591.547 136.452H919.453C926.42 136.452 932.858 132.735 936.341 126.702L962.772 80.9209C966.167 75.0411 972.253 71.223 979.024 70.7256L1512.96 31.501L1513.5 31.4619V614.5Z"
+          stroke="url(#paint1_linear_4184_1185)"
+          shapeRendering="crispEdges"
+        />
+      </g>
+      <defs>
+        <filter
+          id="filter0_d_4184_1185"
+          x="-31"
+          y="0.923584"
+          width="1575"
+          height="644.076"
+          filterUnits="userSpaceOnUse"
+          colorInterpolationFilters="sRGB"
+        >
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
+          <feColorMatrix
+            in="SourceAlpha"
+            type="matrix"
+            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+            result="hardAlpha"
+          />
+          <feOffset />
+          <feGaussianBlur stdDeviation="15" />
+          <feComposite in2="hardAlpha" operator="out" />
+          <feColorMatrix
+            type="matrix"
+            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.3 0"
+          />
+          <feBlend
+            mode="normal"
+            in2="BackgroundImageFix"
+            result="effect1_dropShadow_4184_1185"
+          />
+          <feBlend
+            mode="normal"
+            in="SourceGraphic"
+            in2="effect1_dropShadow_4184_1185"
+            result="shape"
+          />
+        </filter>
+        <radialGradient
+          id="paint0_radial_4184_1185"
+          cx="0"
+          cy="0"
+          r="1"
+          gradientUnits="userSpaceOnUse"
+          gradientTransform="translate(756.5 137) rotate(-90) scale(184.5 445.97)"
+        >
+          <stop stopColor="#423A33" />
+          <stop offset="1" />
+        </radialGradient>
         <linearGradient
-          id="paint0_linear_1611_371"
-          x1="55"
-          y1="3.56667"
-          x2="55"
-          y2="49"
+          id="paint1_linear_4184_1185"
+          x1="756.5"
+          y1="32"
+          x2="756.5"
+          y2="137"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stopColor="#DEDEDE" />
-          <stop offset="1" stopColor="#555555" stopOpacity="0" />
-        </linearGradient>
-        <linearGradient
-          id="paint1_linear_1611_371"
-          x1="55"
-          y1="3.56667"
-          x2="55"
-          y2="49"
-          gradientUnits="userSpaceOnUse"
-        >
-          <stop stopColor="#9F9F9F" />
-          <stop offset="1" stopColor="#323232" stopOpacity="0" />
+          <stop stopColor="#614D2D" stopOpacity="0" />
+          <stop offset="1" stopColor="#C79E5C" />
         </linearGradient>
       </defs>
     </svg>

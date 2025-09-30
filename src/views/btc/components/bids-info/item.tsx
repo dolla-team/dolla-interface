@@ -4,7 +4,7 @@ import dayjs from "dayjs";
 
 export default function Item({ data }: any) {
   return (
-    <div className="w-[248px] h-[42px] mt-[10px] p-[6px] rounded-[23px] border border-[#FFE9B2] bg-white/10 backdrop-blur-[10px] flex items-center">
+    <div className="w-[248px] h-[42px] mt-[10px] p-[6px] rounded-[10px] border border-[#F2F2F233] bg-[#F2F2F21A] backdrop-blur-[10px] flex items-center">
       <Avatar
         address={data.user}
         email={data.user_email}

@@ -14,7 +14,7 @@ export default function TopWinners({ type }: { type: "winners" | "sellers" }) {
           : `/api/v1/user/top/seller?limit=10&chain=near`
       );
 
-      setData(res.data.data);
+      setData(res.data.data || []);
     };
 
     getData();

@@ -151,12 +151,7 @@ export default function Points({ className }: { className?: string }) {
           />
         </div>
 
-        <span
-          className={clsx(
-            "text-[#FFEF43] font-bold font-[DelaGothicOne]",
-            isMobile ? "text-[18px]" : "text-[20px]"
-          )}
-        >
+        <span className={clsx("text-white font-[600] text-[16px]")}>
           x
           {isMobile
             ? formatNumber(prize.points, 0, true, { isShort: false })

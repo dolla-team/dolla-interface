@@ -55,30 +55,27 @@ export default function Header({ className }: { className?: string }) {
       {bids === 1 && (
         <Light className="absolute top-[0px] left-[50%] translate-x-[-50%] z-[1] pointer-events-none" />
       )}
-      <div className="absolute z-[3] top-[46px] left-[50%] translate-x-[-50%] h-[40px] flex items-center gap-[12px]">
-        <div className="w-[39px] h-[39px] bg-linear-to-b from-[#FFC42F] to-[#99761C] rounded-[12px] p-[2px]">
-          <Avatar
-            size={35}
-            address={pool?.user_info?.address}
-            email={pool?.user_info?.email}
-            className="rounded-[12px]"
-          />
-        </div>
-        <div>
-          <div className="flex items-center gap-[4px]">
-            <span className="text-[16px] text-[#FFE9B2]">Seller</span>
-            <SellerLevel />
-          </div>
-          <div className="">
-            <span className="text-[18px] text-[#FFE9B2] font-[BlackHanSans]">
-              {pool?.user ? formatAddress(pool.user) : "-"}
-            </span>
-          </div>
-        </div>
+      <div className="absolute z-[3] top-[30px] left-[50%] translate-x-[-50%] h-[40px] flex items-center gap-[12px]">
+        <span className="text-[#D9D9D9] text-[18px]">Market</span>
+        <span
+          className={clsx(
+            "text-[18px] bg-clip-text",
+            pool?.status === 3
+              ? "bg-[linear-gradient(180deg,#C3C3C3_0%,#787878_100%)]"
+              : "bg-[linear-gradient(180deg,#FFF698_0%,#FFC42F_100%)]"
+          )}
+          style={{
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent"
+          }}
+        >
+          {" "}
+          #{pool?.pool_id}
+        </span>
       </div>
       <div
         className={clsx(
-          "absolute top-[80px] z-[2] w-full text-center font-[DelaGothicOne]",
+          "absolute top-[70px] z-[2] w-full text-center font-[DelaGothicOne]",
           pool?.status === 3 ? "text-[#B2B2B2]" : "text-[#FFF79E]"
         )}
         style={{
@@ -88,7 +85,7 @@ export default function Header({ className }: { className?: string }) {
       >
         <div
           className={clsx(
-            "bg-clip-text relative inline-block text-[62px]",
+            "bg-clip-text relative inline-block text-[56px]",
             pool?.status === 3
               ? "bg-[radial-gradient(50%_50%_at_50%_50%,#C3C3C3_0%,#787878_100%)]"
               : "bg-[radial-gradient(50%_50%_at_50%_50%,#FFEF43_0%,#FFC42F_100%)]"
@@ -102,7 +99,7 @@ export default function Header({ className }: { className?: string }) {
             ${formatNumber(pool?.value, 0, true)}
           </span>
 
-          {!!prev && (
+          {/* {!!prev && (
             <div className="absolute left-[-180px] top-[-20px] flex items-center gap-[8px]">
               <TriIcon
                 className="button"
@@ -125,12 +122,12 @@ export default function Header({ className }: { className?: string }) {
                 }}
               />
             </div>
-          )}
+          )} */}
         </div>
         <div />
         <div
           className={clsx(
-            "bg-clip-text top-[-6px] inline-block relative text-[26px]",
+            "bg-clip-text top-[-6px] inline-block relative text-[20px]",
             pool?.status === 3
               ? "bg-[radial-gradient(50%_50%_at_50%_50%,#A3A3A3_0%,#787878_100%)]"
               : "bg-[radial-gradient(50%_50%_at_50%_50%,#FFEF43_0%,#FFC42F_100%)]"
