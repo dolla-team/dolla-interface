@@ -20,9 +20,6 @@ export default function MainLayout() {
   const pathname = useLocation();
   useEffect(() => {
     contentRef.current?.scrollTo(0, 0);
-    if (pathname.pathname.includes("/portfolio")) {
-      walletStore.set({ showUserInfo: false });
-    }
   }, [pathname]);
 
   return (
@@ -77,13 +74,17 @@ export default function MainLayout() {
         <div
           className="h-[calc(100vh-76px)] overflow-y-auto relative z-[2] bg-[#F0F0F0]"
           style={{
-            width: walletStore.showUserInfo ? window.innerWidth - 294 : "100%"
+            width:
+              walletStore.showUserInfo &&
+              !pathname.pathname.includes("/portfolio")
+                ? window.innerWidth - 294
+                : "100%"
           }}
           ref={contentRef}
         >
           <Outlet />
         </div>
-        <UserInfo />
+        {!pathname.pathname.includes("/portfolio") && <UserInfo />}
       </div>
       <Wallet />
     </div>

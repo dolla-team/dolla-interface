@@ -11,7 +11,7 @@ import ClaimModal from "../claim/modal";
 import useWalletStore from "@/stores/use-wallet";
 
 const StatisticsPlayer = (props: any) => {
-  const { className } = props;
+  const { className, onShare } = props;
   const walletStore = useWalletStore();
   const { userInfo, nearAccount } = useAuth();
 
@@ -66,9 +66,7 @@ const StatisticsPlayer = (props: any) => {
             <Button
               className="border border-[#383F47]/30 text-[#2B3337] w-[96px] h-[38px] !rounded-[8px] ml-[20px]"
               // disabled={Big(claimableAmount || 0).lte(0)}
-              onClick={() => {
-                // setClaimModalOpen(true);
-              }}
+              onClick={onShare}
             >
               Share
             </Button>

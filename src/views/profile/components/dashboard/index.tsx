@@ -2,7 +2,6 @@ import clsx from "clsx";
 import Avatar from "@/components/avatar";
 import { useAuth } from "@/contexts/auth";
 import { formatAddress } from "@/utils/format/address";
-import { useState } from "react";
 import dayjs from "dayjs";
 import StatisticsPlayer from "./statistics-player";
 import StatisticsSeller from "./statistics-seller";
@@ -14,6 +13,14 @@ import Twitter from "@/components/icons/twitter";
 import TG from "@/components/icons/tg";
 import { useGlobalStore } from "@/stores/use-global";
 import useReferralList from "@/hooks/airdrop/use-referral-list";
+import Popover, {
+  PopoverPlacement,
+  PopoverTrigger
+} from "@/components/popover";
+import PopoverCard from "../popover-card";
+import Badge from "../badge";
+import { formatNumber } from "@/utils/format/number";
+import Big from "big.js";
 
 const Dashboard = (props: any) => {
   const { className, tab } = props;
@@ -38,10 +45,54 @@ const Dashboard = (props: any) => {
           email={userInfo?.email}
         />
         <div className="flex justify-center items-center gap-[6px] mt-[8px]">
-          <div className="font-bold text-[#2B3337] text-[20px]">
-            {userInfo?.name || userInfo?.show_email}
+          <div className="flex items-center gap-[6px]">
+            <div className="font-bold text-[#2B3337] text-[20px]">
+              {userInfo?.name || userInfo?.show_email}
+            </div>
+            {tab === "seller" && (
+              <div className="flex items-center gap-[7px]">
+                <Popover
+                  content={
+                    <PopoverCard className="w-[140px]">
+                      Player Engagement
+                    </PopoverCard>
+                  }
+                  placement={PopoverPlacement.Top}
+                  trigger={PopoverTrigger.Hover}
+                  closeDelayDuration={0}
+                >
+                  <Badge icon="/profile/icon-user.svg">
+                    {formatNumber(userInfo?.player_engagement, 0, true)}
+                  </Badge>
+                </Popover>
+                <Popover
+                  content={
+                    <PopoverCard className="w-[140px]">
+                      Cancellation Rate
+                    </PopoverCard>
+                  }
+                  placement={PopoverPlacement.Top}
+                  trigger={PopoverTrigger.Hover}
+                  closeDelayDuration={0}
+                >
+                  <Badge icon="/profile/icon-cancel.svg">
+                    {Big(userInfo?.created || 0).gt(0) &&
+                    Big(userInfo?.cancel || 0).gt(0)
+                      ? formatNumber(
+                          Big(userInfo?.cancel)
+                            .div(userInfo?.created)
+                            .times(100),
+                          2,
+                          true
+                        )
+                      : 0}
+                    %
+                  </Badge>
+                </Popover>
+              </div>
+            )}
           </div>
-          <SellerLevel isSmall />
+          {tab === "player" && <SellerLevel isSmall />}
         </div>
         <div className="flex items-center gap-[3px] mt-[8px]">
           <span className="text-[12px] text-[#2B3337]">
@@ -114,7 +165,15 @@ const Dashboard = (props: any) => {
           {/*#endregion*/}
         </div>
       </div>
-      {tab === "player" ? <StatisticsPlayer /> : <StatisticsSeller />}
+      {tab === "player" ? (
+        <StatisticsPlayer
+          onShare={() => {
+            onCopy(`${window.location.origin}?code=${globalStore.code}`);
+          }}
+        />
+      ) : (
+        <StatisticsSeller />
+      )}
     </div>
   );
 };

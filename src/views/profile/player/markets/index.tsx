@@ -22,15 +22,15 @@ const PlayerMarkets = (props: any) => {
         <div className="flex items-center gap-[10px]">
           {[
             {
-              key: "live",
+              key: "0,1",
               label: "Live"
             },
             {
-              key: "ended",
+              key: "3",
               label: "Ended"
             },
             {
-              key: "cancelled",
+              key: "5",
               label: "Cancelled"
             }
           ].map((item) => {
