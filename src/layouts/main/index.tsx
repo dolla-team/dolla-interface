@@ -10,6 +10,7 @@ import Infos from "@/sections/infos";
 import UserInfo from "@/sections/user-info";
 import useWalletStore from "@/stores/use-wallet";
 import { useEffect, useRef } from "react";
+import PageTabs from "./tabs";
 
 export default function MainLayout() {
   const { userInfo, login } = useAuth() || {};
@@ -67,7 +68,7 @@ export default function MainLayout() {
             </>
           )}
         </div>
-        {/* <PageTabs /> */}
+        <PageTabs />
       </div>
       <Infos />
       <div className="flex h-full">

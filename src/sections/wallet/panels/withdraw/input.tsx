@@ -186,7 +186,7 @@ export default function WithdrawInput() {
           onSelect={(chain: any) => {
             setChain(chain);
           }}
-          className="max-h-[calc(100vh-440px)]"
+          className="max-h-[calc(100vh-460px)]"
         />
 
         <div className="absolute bottom-0 left-0 right-0">
@@ -203,7 +203,7 @@ export default function WithdrawInput() {
           </div>
           <button
             disabled={loading || withdrawing || !quoteData}
-            className="w-full mt-[20px] bg-black cursor-pointer text-white text-[14px] font-[400] rounded-[12px] py-[14px] transition-colors duration-200 hover:bg-[#222] disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full mt-[10px] bg-black cursor-pointer text-white text-[14px] font-[400] rounded-[12px] py-[14px] transition-colors duration-200 hover:bg-[#222] disabled:opacity-50 disabled:cursor-not-allowed"
             onClick={() => {
               if (!quoteData?.depositAddress) return;
               withdraw({
@@ -219,6 +219,28 @@ export default function WithdrawInput() {
               errorTips || "Confirm"
             )}
           </button>
+          <div className="flex items-center justify-center text-[#FF4372] text-[14px] mt-[6px] gap-[4px]">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="21"
+              viewBox="0 0 13 11"
+              fill="none"
+            >
+              <path
+                d="M5.63398 0.499999C6.01888 -0.166667 6.98113 -0.166667 7.36603 0.5L12.1292 8.75C12.5141 9.41667 12.0329 10.25 11.2631 10.25H1.73686C0.967059 10.25 0.485935 9.41667 0.870835 8.75L5.63398 0.499999Z"
+                fill="#FF4372"
+              />
+              <path
+                d="M5.85 6.7V2H7.13V6.7H5.85ZM6.5 9.14C6.22667 9.14 5.99667 9.05333 5.81 8.88C5.63 8.7 5.54 8.47 5.54 8.19C5.54 7.91 5.63 7.68333 5.81 7.51C5.99667 7.33 6.22667 7.24 6.5 7.24C6.76667 7.24 6.99 7.33 7.17 7.51C7.35 7.68333 7.44 7.91 7.44 8.19C7.44 8.47 7.35 8.7 7.17 8.88C6.99 9.05333 6.76667 9.14 6.5 9.14Z"
+                fill="white"
+              />
+            </svg>
+            <span>
+              Make sure to send it to{" "}
+              <span className="font-bold">{chain?.name}</span>
+            </span>
+          </div>
         </div>
       </div>
     </div>

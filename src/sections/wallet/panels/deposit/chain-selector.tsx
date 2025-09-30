@@ -38,7 +38,13 @@ export default function ChainSelector({
         {usedChains.map((network) => (
           <div
             key={network.name}
-            onClick={() => onSelect(network)}
+            onClick={() => {
+              onSelect({
+                ...network,
+                name:
+                  chainConfig[network?.blockchain]?.name || network.blockchain
+              });
+            }}
             className={clsx(
               "flex items-center gap-[12px] px-[16px] py-[14px] rounded-[10px] cursor-pointer transition-colors",
               selectedChain?.blockchain === network.blockchain

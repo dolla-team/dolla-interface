@@ -29,7 +29,7 @@ export default function ProgressBar({
           className="h-[6px] rounded-[12px] shadow-[0px_0px_6px_0px_#FFC42F]"
           style={{
             background: !isNft
-              ? "linear-gradient(90deg, #A2623D 0%, #FFC42F 50%, #FFE9B2 100%)"
+              ? "linear-gradient(90deg, #FFE9B2 0%, #FFC42F 50%, #F88E51 100%)"
               : "linear-gradient(90deg, #6F37FF 0%, #00FFBB 100%)",
             width: `${Math.min(progress, 100)}%`
           }}

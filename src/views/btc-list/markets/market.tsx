@@ -61,12 +61,19 @@ export default function Market({
             <div className="text-[14px] text-black">{data.participants}</div>
           )}
           {column.dataIndex === "hitting" && (
-            <ProgressBar
-              type="basic"
-              progress={data.progress}
-              className="w-full"
-              isNft={!!data.nft_ids}
-            />
+            <div className="w-full">
+              {data.progress >= 100 && (
+                <div className="text-[#2B3337] text-[12px] mb-[10px] pl-[10px]">
+                  Spilled!
+                </div>
+              )}
+              <ProgressBar
+                type="basic"
+                progress={data.progress}
+                className="w-full"
+                isNft={!!data.nft_ids}
+              />
+            </div>
           )}
         </div>
       ))}

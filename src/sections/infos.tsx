@@ -142,6 +142,10 @@ const Item = ({ item, index }: { item: any; index: number }) => {
     return Math.floor(Math.random() * config.length);
   }, [index]);
 
+  const anchorPrice = Big(
+    getAnchorPrice(item?.anchor_price, BASE_TOKEN.decimals)
+  ).toFixed(2);
+
   return item.winner_user ? (
     <div className="flex items-center h-full gap-3 text-white transition-transform duration-200 hover:scale-105">
       <span className="text-[12px] text-[#D9D9D9] rounded">
@@ -153,10 +157,7 @@ const Item = ({ item, index }: { item: any; index: number }) => {
           config[randomIndex].color
         )}
       >
-        {Big(getAnchorPrice(item?.anchor_price, BASE_TOKEN.decimals)).toFixed(
-          2
-        )}
-        x
+        {anchorPrice}x
       </span>
       <span className="text-xl drop-shadow-lg">
         {config[randomIndex].emoji}
@@ -168,10 +169,7 @@ const Item = ({ item, index }: { item: any; index: number }) => {
         {item.nft_ids ? "New NFT Listed" : "New Market Listed"}
       </span>
       <span className={clsx("text-lg font-bold drop-shadow-lg")}>
-        $
-        {Big(getAnchorPrice(item?.anchor_price, BASE_TOKEN.decimals)).toFixed(
-          2
-        )}
+        ${anchorPrice}
       </span>
       <span className="text-xl drop-shadow-lg">
         {config[randomIndex].emoji}

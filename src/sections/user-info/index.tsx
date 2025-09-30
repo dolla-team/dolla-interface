@@ -42,13 +42,15 @@ export default function Laptop() {
               <div className="flex justify-between items-center text-white mt-[26px]">
                 <div className="text-[10px]">Total bid</div>
                 <div className="text-[12px] font-medium">
-                  ${nearAccount?.acc_bets}
+                  ${nearAccount?.acc_bet_amount}
                 </div>
               </div>
-              {/* <div className="flex justify-between items-center text-white mt-[10px]">
+              <div className="flex justify-between items-center text-white mt-[10px]">
                 <div className="text-[10px]">Played</div>
-                <div className="text-[12px] font-medium">1</div>
-              </div> */}
+                <div className="text-[12px] font-medium">
+                  {nearAccount?.acc_bets}
+                </div>
+              </div>
             </div>
             <StarterObjectives />
             <Actions />
