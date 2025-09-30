@@ -20,6 +20,9 @@ export default function MainLayout() {
   const pathname = useLocation();
   useEffect(() => {
     contentRef.current?.scrollTo(0, 0);
+    if (pathname.pathname.includes("/portfolio")) {
+      walletStore.set({ showUserInfo: false });
+    }
   }, [pathname]);
 
   return (
