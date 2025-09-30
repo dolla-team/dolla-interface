@@ -56,8 +56,6 @@ const StatisticsPlayer = (props: any) => {
     return _result;
   }, [userInfo]);
 
-  console.log(userInfo);
-
   return (
     <div
       className={clsx(

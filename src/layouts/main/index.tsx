@@ -19,8 +19,20 @@ export default function MainLayout() {
   const contentRef = useRef<HTMLDivElement>(null);
   const globalStore = useGlobalStore();
   const pathname = useLocation();
+  const prevUserInfoStatus = useRef(false);
   useEffect(() => {
     contentRef.current?.scrollTo(0, 0);
+    if (pathname.pathname.includes("portfolio")) {
+      if (globalStore.showUserInfo) {
+        globalStore.set({ showUserInfo: false });
+        prevUserInfoStatus.current = true;
+      }
+    } else {
+      if (prevUserInfoStatus.current) {
+        globalStore.set({ showUserInfo: true });
+      }
+      prevUserInfoStatus.current = false;
+    }
   }, [pathname]);
 
   return (
