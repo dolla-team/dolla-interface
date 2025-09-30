@@ -25,9 +25,10 @@ const Records = (props: any) => {
           { label: "Account", value: "account" }
         ]}
         onChange={setTab}
-        className="w-[241px] !border-[1px] !border-[#E4E4E4] !rounded-[16px] !p-[4px] max-md:mx-auto !bg-[#F2F2F299]"
-        cursorClassName="!rounded-[15px] !shadow-[unset]"
-        tabClassName="!px-[20px] !text-[#2B3337]"
+        className="w-[241px] !border-[1px] !border-[#E4E4E4] !rounded-[10px] !p-[0px] max-md:mx-auto !bg-[#F2F2F299]"
+        cursorClassName="!rounded-[10px] !bg-[#1A1E24] !shadow-[unset]"
+        tabClassName="!px-[20px]"
+        activeClassName="!text-white"
       />
       <div className="">
         <AnimatePresence>

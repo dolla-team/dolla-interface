@@ -97,17 +97,17 @@ export default function usePlayerHistory() {
         }`
       );
 
-      setData(
-        response.data.data.list.map((item: any) => {
-          return {
-            ...item,
-            purchase_amount: Big(item.purchase_amount || 0)
-              .div(10 ** item.purchase_token_info.decimals)
-              .toString(),
-            rewardTokenInfo: item.reward_token_info?.[0] || {}
-          };
-        })
-      );
+      const list = response.data.data.list.map((item: any) => {
+        return {
+          ...item,
+          purchase_amount: Big(item.purchase_amount || 0)
+            .div(10 ** item.purchase_token_info.decimals)
+            .toString(),
+          rewardTokenInfo: item.reward_token_info?.[0] || {}
+        };
+      });
+
+      setData(list);
       setHasMore(response.data.data.list.length === pageSize);
     } catch (error) {
       console.log(error);

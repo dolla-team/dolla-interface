@@ -29,7 +29,7 @@ const BidHistory = (props: any) => {
     {
       dataIndex: "marketId",
       title: "Market ID",
-      width: isMobile ? 100 : 130,
+      width: "10%",
       fixed: true,
       render: (record: any) => {
         return (
@@ -52,7 +52,7 @@ const BidHistory = (props: any) => {
     {
       dataIndex: "market_size",
       title: "Market Size",
-      width: 160,
+      width: "15%",
       render: (record: any) => {
         return (
           <div>
@@ -70,7 +70,7 @@ const BidHistory = (props: any) => {
     {
       dataIndex: "purchase_amount",
       title: "Bid",
-      width: 170,
+      width: "20%",
       render: (record: any) => {
         return `${formatNumber(record.purchase_amount, 4, true, {
           isShort: true,
@@ -180,6 +180,7 @@ const BidHistory = (props: any) => {
   return (
     <div className={clsx("mt-[20px]", className)}>
       <GridTable
+        // data={[...data, ...data].slice(0, 10)}
         data={data}
         columns={columns}
         loading={loading}

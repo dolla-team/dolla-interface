@@ -13,6 +13,7 @@ type SwitchProps = Omit<ComponentProps<"div">, "onChange"> & {
   type?: "card" | "line";
   tabClassName?: string;
   cursorClassName?: string;
+  activeClassName?: string;
 };
 
 export default function Switch({
@@ -22,7 +23,8 @@ export default function Switch({
   className,
   type = "card",
   tabClassName,
-  cursorClassName
+  cursorClassName,
+  activeClassName
 }: SwitchProps) {
   const prevI = useRef<number[]>([0]);
   return (
@@ -37,8 +39,8 @@ export default function Switch({
           key={item.value}
           className={clsx(
             "px-[10px] h-full rounded-[6px] button relative",
-            tab === item.value ? "text-[#2B3337]" : "text-white",
-            tabClassName
+            tabClassName,
+            tab === item.value ? activeClassName : ""
           )}
           onClick={() => {
             onChange(item.value);

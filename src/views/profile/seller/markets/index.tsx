@@ -26,39 +26,32 @@ const SellerMarkets = (props: any) => {
 
   return (
     <div
-      className={clsx(
-        "w-full grid gap-x-[15px] gap-y-[20px]",
-        orders?.length > 0 ? "grid-cols-3" : "grid-cols-1",
-        "max-md:grid-cols-1 max-md:gap-y-[14px] max-md:mt-[14px]",
-        className
-      )}
+      className={clsx("w-full flex flex-wrap gap-[15px] mt-[20px]", className)}
     >
       {loading && !orders?.length ? (
         <div className="py-[100px] flex items-center justify-center">
           <Loading size={20} />
         </div>
       ) : orders?.length > 0 ? (
-        orders.map((item: any, index: number) => {
+        [...orders, ...orders].map((item: any) => {
           const order = poolsData[item];
           return (
-            <div key={index} className="relative pt-[12px]">
-              <MarketItem
-                order={order}
-                onDeposit={() => {
-                  setCurrentOrder(order);
-                  setDepositMarketVisible(true);
-                }}
-                onCancel={() => {
-                  setCurrentOrder(order);
-                  setCancelMarketVisible(true);
-                }}
-                onClaimSuccess={() => {
-                  updatePoolsData(order.pool_id, {
-                    is_claim: true
-                  });
-                }}
-              />
-            </div>
+            <MarketItem
+              order={order}
+              onDeposit={() => {
+                setCurrentOrder(order);
+                setDepositMarketVisible(true);
+              }}
+              onCancel={() => {
+                setCurrentOrder(order);
+                setCancelMarketVisible(true);
+              }}
+              onClaimSuccess={() => {
+                updatePoolsData(order.pool_id, {
+                  is_claim: true
+                });
+              }}
+            />
           );
         })
       ) : (
@@ -136,7 +129,7 @@ const MarketItem = (props: any) => {
   return (
     <Market
       isAcitveBg={false}
-      className="!w-full !h-[unset]"
+      className="!w-[288px] !h-[unset]"
       data={order}
       footer={
         <div className="w-full px-[13px] bg-black rounded-b-[20px] py-[10px] mt-[10px] relative z-[2] text-white text-center text-[12px] font-normal leading-[100%]">

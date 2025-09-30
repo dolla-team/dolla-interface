@@ -41,7 +41,7 @@ export default function Market({
   return (
     <div
       className={clsx(
-        "cursor-pointer group shrink-0 rounded-[20px] border-[1px] border-[#E4E4E4] bg-black transition-all duration-300 relative",
+        "w-[300px] cursor-pointer group shrink-0 rounded-[20px] border-[1px] border-[#E4E4E4] bg-black transition-all duration-300 relative",
         isActive
           ? "shadow-[0px_0px_20px_0px_rgba(255,_239,_67,_0.60)] bg-[url('/btc/bg-market-active-border.svg')] bg-[length:344px_222px] bg-no-repeat bg-center"
           : "",

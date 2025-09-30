@@ -12,6 +12,7 @@ import SellerLevel from "@/components/seller-level";
 import useCopy from "@/hooks/use-copy";
 import CopyIcon from "@/components/icons/copy";
 import Twitter from "@/components/icons/twitter";
+import TG from "@/components/icons/tg";
 
 const Dashboard = (props: any) => {
   const { className, tab } = props;
@@ -60,9 +61,12 @@ const Dashboard = (props: any) => {
       <div className="w-full pl-[13px] max-md:pl-0">
         <div className="w-full flex justify-between gap-[10px] max-md:relative">
           {/*#region User Info*/}
-          <div className="flex gap-[5px]">
+          <div className="flex gap-[14px]">
             <button className="w-[32px] h-[32px] border border-[#383F47]/30 rounded-[8px] button flex items-center justify-center">
               <Twitter />
+            </button>
+            <button className="w-[32px] h-[32px] border border-[#383F47]/30 rounded-[8px] button flex items-center justify-center">
+              <TG />
             </button>
           </div>
           {/*#endregion*/}
