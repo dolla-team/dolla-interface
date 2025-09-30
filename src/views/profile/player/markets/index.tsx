@@ -44,6 +44,7 @@ const PlayerMarkets = (props: any) => {
                     : "border-[#E4E4E4]"
                 )}
                 onClick={() => {
+                  if (status === item.key) return;
                   onStatusChange(item.key);
                 }}
               >
