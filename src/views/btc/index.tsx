@@ -15,8 +15,6 @@ import clsx from "clsx";
 import { useAuth } from "@/contexts/auth";
 import "@/libs/howl";
 import { useNavigate } from "react-router-dom";
-import useWalletStore from "@/stores/use-wallet";
-import { useEffect } from "react";
 import { ShareBtn, CloseBtn } from "./share-btn";
 import Loading from "./loading";
 
@@ -38,15 +36,7 @@ const Content = () => {
   const isMobile = useIsMobile();
   const { pool } = useBtcContext();
   const navigate = useNavigate();
-  const walletStore = useWalletStore();
 
-  useEffect(() => {
-    walletStore.set({ showUserInfo: false });
-
-    return () => {
-      walletStore.set({ showUserInfo: true });
-    };
-  }, []);
   return (
     <div
       className={clsx(

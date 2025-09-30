@@ -8,16 +8,16 @@ import EstGas from "@/sections/est-gas";
 import Wallet from "@/sections/wallet";
 import Infos from "@/sections/infos";
 import UserInfo from "@/sections/user-info";
-import useWalletStore from "@/stores/use-wallet";
 import { useEffect, useRef } from "react";
 import PageTabs from "./tabs";
+import { useGlobalStore } from "@/stores/use-global";
 
 export default function MainLayout() {
   const { userInfo, login } = useAuth() || {};
   // const isMobile = useIsMobile();
   const navigate = useNavigate();
   const contentRef = useRef<HTMLDivElement>(null);
-  const walletStore = useWalletStore();
+  const globalStore = useGlobalStore();
   const pathname = useLocation();
   useEffect(() => {
     contentRef.current?.scrollTo(0, 0);
@@ -75,17 +75,13 @@ export default function MainLayout() {
         <div
           className="h-[calc(100vh-76px)] overflow-y-auto relative z-[2] bg-[#F0F0F0]"
           style={{
-            width:
-              walletStore.showUserInfo &&
-              !pathname.pathname.includes("/portfolio")
-                ? window.innerWidth - 294
-                : "100%"
+            width: globalStore.showUserInfo ? window.innerWidth - 294 : "100%"
           }}
           ref={contentRef}
         >
           <Outlet />
         </div>
-        {!pathname.pathname.includes("/portfolio") && <UserInfo />}
+        <UserInfo />
       </div>
       <Wallet />
     </div>

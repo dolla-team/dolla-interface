@@ -2,7 +2,6 @@ import { create } from "zustand/index";
 
 interface WalletState {
   showWallet: boolean;
-  showUserInfo: boolean;
   showInfos: boolean;
   panelType: "info" | "deposit" | "withdraw" | "swap";
   depositPanelType: "fund-list" | "token-selector" | "input";
@@ -18,8 +17,7 @@ interface WalletState {
 
 const initialState = {
   showWallet: false,
-  showUserInfo: true,
-  showInfos: false,
+  showInfos: true,
   panelType: "info",
   depositPanelType: "fund-list",
   depositMethod: "centralized-exchange",

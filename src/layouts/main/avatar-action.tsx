@@ -2,14 +2,14 @@ import Avatar from "@/components/avatar";
 import { useAuth } from "@/contexts/auth";
 import { useUser } from "@privy-io/react-auth";
 import AvatarCashier from "./avatar-cashier";
-import useWalletStore from "@/stores/use-wallet";
+import { useGlobalStore } from "@/stores/use-global";
 
 export default function AvatarAction() {
   const { userInfo, nearAccount, address } = useAuth();
   const { user } = useUser();
 
   // const { claiming, claimTestCoin } = useClaimTestCoin();
-  const { set, showUserInfo } = useWalletStore();
+  const { set, showUserInfo } = useGlobalStore();
 
   return (
     <div className="relative group flex items-center gap-[10px]">

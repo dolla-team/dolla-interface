@@ -1,13 +1,15 @@
 import { motion, AnimatePresence } from "framer-motion";
-import useWalletStore from "@/stores/use-wallet";
 import Actions from "./actions";
 import Level from "./level";
 import Info from "./info";
 import StarterObjectives from "./starter-objectives";
 import clsx from "clsx";
 import { useAuth } from "@/contexts/auth";
+import { useGlobalStore } from "@/stores/use-global";
+import useWalletStore from "@/stores/use-wallet";
 
 export default function Laptop() {
+  const globalStore = useGlobalStore();
   const walletStore = useWalletStore();
   const { nearAccount } = useAuth();
 
@@ -15,7 +17,7 @@ export default function Laptop() {
     <>
       {/* Main panel with slide animation */}
       <AnimatePresence>
-        {walletStore.showUserInfo && (
+        {globalStore.showUserInfo && (
           <motion.div
             initial={{ x: 294 }}
             animate={{ x: 0 }}
