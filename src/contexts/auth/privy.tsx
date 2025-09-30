@@ -22,6 +22,7 @@ import useUserInfoStore from "@/stores/use-user-info";
 import { ethers } from "ethers";
 import useUserNft from "@/hooks/evm/use-user-nft";
 import useAccount from "@/hooks/near/use-account";
+import useCode from "@/hooks/airdrop/use-code";
 
 export const AuthContext = React.createContext<any | null>(null);
 
@@ -33,7 +34,7 @@ export const AuthProvider: React.FC<{
   useConfig();
   const { wallets } = useWallets();
   const { wallets: solanaWallets } = useSolanaWallets();
-
+  const { getCode, bindingCode } = useCode();
   const timer = useRef<any>(0);
   const [logining, setLogining] = useState(false);
   const [accountRefresher, setAccountRefresher] = useState(-1);
@@ -73,11 +74,17 @@ export const AuthProvider: React.FC<{
         localStorage.getItem("_AK_TOKEN_") || "{}"
       ).address;
 
+      if (loginedAddress) {
+        getCode();
+        bindingCode();
+      }
+
       if (privyWallet?.address === loginedAddress) {
         await onQueryUserInfo();
         setAccountRefresher(1);
         return;
       }
+
       setLogining(true);
       sign();
     },

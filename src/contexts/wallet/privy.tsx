@@ -37,8 +37,8 @@ export default function WalletProvider({
       clientId={import.meta.env.VITE_PRIVY_CLIENT_ID as string}
       config={{
         appearance: {
-          accentColor: "#6F37FF",
-          theme: "#FFC42F",
+          accentColor: "#FFC42F",
+          theme: "#fff",
           showWalletLoginFirst: false,
           logo: "/logo.svg",
           walletChainType: "ethereum-and-solana",

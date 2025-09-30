@@ -4,6 +4,7 @@ import { createJSONStorage, persist } from "zustand/middleware";
 interface GlobalState {
   chainId: string;
   playBgm: boolean;
+  code: string;
   set: (params: any) => void;
 }
 
@@ -12,6 +13,7 @@ export const useGlobalStore = create(
     (set) => ({
       chainId: "",
       playBgm: true,
+      code: "",
       set: (params) => set(() => ({ ...params }))
     }),
     {

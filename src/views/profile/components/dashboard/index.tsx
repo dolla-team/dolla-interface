@@ -7,21 +7,20 @@ import dayjs from "dayjs";
 import StatisticsPlayer from "./statistics-player";
 import StatisticsSeller from "./statistics-seller";
 import Button from "@/components/button";
-import useIsMobile from "@/hooks/use-is-mobile";
 import SellerLevel from "@/components/seller-level";
 import useCopy from "@/hooks/use-copy";
 import CopyIcon from "@/components/icons/copy";
 import Twitter from "@/components/icons/twitter";
 import TG from "@/components/icons/tg";
+import { useGlobalStore } from "@/stores/use-global";
+import useReferralList from "@/hooks/airdrop/use-referral-list";
 
 const Dashboard = (props: any) => {
   const { className, tab } = props;
-
+  const globalStore = useGlobalStore();
   const { userInfo } = useAuth();
-
+  const { referralData } = useReferralList();
   const { onCopy } = useCopy();
-
-  const [inviteFrenz] = useState([]);
 
   return (
     <div
@@ -73,29 +72,34 @@ const Dashboard = (props: any) => {
           {/*#region Invite frenz*/}
           <div className="flex flex-col gap-[12px] items-end">
             <div className="flex justify-end gap-[13px] mt-[-10px] items-center">
-              {inviteFrenz.length > 0 && (
+              {Number(referralData?.total_num) > 0 && (
                 <div className="flex items-center gap-[6px] h-[32px] bg-[#F2F2F299] border border-[#E4E4E4] rounded-[16px] pl-[5px] pr-[14px]">
                   <div className="flex items-center">
-                    {inviteFrenz.slice(0, 5).map((item: any, index: number) => (
-                      <img
-                        key={index}
-                        src={item.avatar}
-                        alt=""
-                        className={clsx(
-                          "w-[26px] h-[26px] rounded-full border-[2px] border-[#383F47] shrink-0",
-                          index > 0 && "ml-[-8px]"
-                        )}
-                      />
-                    ))}
+                    {referralData.list
+                      ?.slice(0, 5)
+                      .map((item: any, index: number) => (
+                        <Avatar
+                          key={index}
+                          address={item.user}
+                          email={item.user_email}
+                          size={26}
+                          className={clsx(
+                            "rounded-full border-[2px] border-[#383F47] shrink-0",
+                            index > 0 && "ml-[-8px]"
+                          )}
+                        />
+                      ))}
                   </div>
                   <div className="[text-shaow:0px_1px_0px_#000]">
-                    {inviteFrenz.length || 0}
+                    {Number(referralData?.total_num) || 0}
                   </div>
                 </div>
               )}
               <Button
                 className="border border-[#383F47]/30 h-[32px] w-[114px] !rounded-[8px]"
-                onClick={() => {}}
+                onClick={() => {
+                  onCopy(`${window.location.origin}?code=${globalStore.code}`);
+                }}
               >
                 + Invite frenz
               </Button>

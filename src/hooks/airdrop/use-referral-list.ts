@@ -1,12 +1,14 @@
+import { useAuth } from "@/contexts/auth";
 import axiosInstance from "@/libs/axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const LIMIT = 10;
 
 export default function useReferralList() {
   const [loading, setLoading] = useState(false);
-  const [referralList, setReferralList] = useState<any[]>([]);
+  const [referralData, setReferralData] = useState<any>({});
   const [currentPage, setCurrentPage] = useState(1);
+  const { userInfo } = useAuth();
 
   const getReferralList = async (page: number = 1) => {
     try {
@@ -18,7 +20,8 @@ export default function useReferralList() {
           offset
         }
       });
-      setReferralList(res.data.data);
+      setReferralData(res.data.data);
+
       setCurrentPage(page);
       return res.data.data;
     } catch (err) {
@@ -39,11 +42,16 @@ export default function useReferralList() {
     }
   };
 
+  useEffect(() => {
+    if (userInfo?.user) {
+      getReferralList();
+    }
+  }, [userInfo]);
+
   return {
     loading,
-    referralList,
+    referralData,
     currentPage,
-    getReferralList,
     nextPage,
     prevPage
   };
