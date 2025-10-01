@@ -1,12 +1,12 @@
 import clsx from "clsx";
 import Button from "@/components/button";
-import useTaskCurrent from "@/hooks/task/use-task-current";
 import Loading from "@/components/icons/loading";
 import useTaskAction from "@/hooks/task/use-task-action";
 import { useAuth } from "@/contexts/auth";
+import useTaskStore from "@/stores/use-task";
 
 export default function StarterObjectives() {
-  const { tasks, loading, fetchTasks } = useTaskCurrent();
+  const taskStore = useTaskStore();
   const { onQueryUserInfo } = useAuth();
   return (
     <div className="border-t border-[#313038] px-[20px] py-[8px] text-white h-[calc(100%-370px)]">
@@ -17,18 +17,17 @@ export default function StarterObjectives() {
           <span className="text-[10px]"> 0/3</span>
         </div> */}
       </div>
-      {loading ? (
+      {taskStore.loading ? (
         <div className="flex items-center justify-center pt-[50px]">
           <Loading />
         </div>
       ) : (
         <div className="h-[calc(100%-20px)] overflow-y-auto flex flex-col gap-[10px]">
-          {tasks.map((task) => (
+          {taskStore.tasks.map((task) => (
             <Item
               key={task.id}
               task={task}
               onSuccess={() => {
-                fetchTasks();
                 onQueryUserInfo();
               }}
             />

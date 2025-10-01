@@ -11,6 +11,7 @@ import UserInfo from "@/sections/user-info";
 import { useEffect, useRef } from "react";
 import PageTabs from "./tabs";
 import { useGlobalStore } from "@/stores/use-global";
+import useTaskCurrent from "@/hooks/task/use-task-current";
 
 export default function MainLayout() {
   const { userInfo, login } = useAuth() || {};
@@ -20,6 +21,8 @@ export default function MainLayout() {
   const globalStore = useGlobalStore();
   const pathname = useLocation();
   const prevUserInfoStatus = useRef(false);
+  const { fetchTasks } = useTaskCurrent();
+
   useEffect(() => {
     contentRef.current?.scrollTo(0, 0);
     if (pathname.pathname.includes("portfolio")) {
@@ -34,6 +37,12 @@ export default function MainLayout() {
       prevUserInfoStatus.current = false;
     }
   }, [pathname]);
+
+  useEffect(() => {
+    if (userInfo?.user) {
+      fetchTasks();
+    }
+  }, [userInfo?.user]);
 
   return (
     <div className="h-screen w-screen overflow-hidden bg-white relative">

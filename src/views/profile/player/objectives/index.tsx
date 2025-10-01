@@ -4,12 +4,12 @@ import SwitchPanel from "@/components/switch/switch-panel";
 import { useState } from "react";
 import Progress from "./progress";
 import Complete from "./complete";
-import useTask from "@/hooks/task/use-task";
 import { useAuth } from "@/contexts/auth";
+import useTaskStore from "@/stores/use-task";
 
 export default function Objectives({ dataHeight }: { dataHeight: number }) {
   const [tab, setTab] = useState("progress");
-  const { progressTasks, completedTasks, loading, fetchTasks } = useTask();
+  const taskStore = useTaskStore();
   const { userInfo, onQueryUserInfo } = useAuth();
 
   return (
@@ -71,16 +71,18 @@ export default function Objectives({ dataHeight }: { dataHeight: number }) {
         >
           {tab === "progress" && (
             <Progress
-              tasks={progressTasks}
-              loading={loading}
+              tasks={taskStore.progressTasks}
+              loading={taskStore.loading}
               onSuccess={() => {
-                fetchTasks();
                 onQueryUserInfo();
               }}
             />
           )}
           {tab === "complete" && (
-            <Complete tasks={completedTasks} loading={loading} />
+            <Complete
+              tasks={taskStore.completedTasks}
+              loading={taskStore.loading}
+            />
           )}
         </div>
       </SwitchPanel>

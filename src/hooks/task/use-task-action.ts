@@ -6,6 +6,7 @@ import useCopy from "../use-copy";
 import { useGlobalStore } from "@/stores/use-global";
 import useTaskComplete from "./use-task-complete";
 import useTaskClaim from "./use-task-claim";
+import useTaskCurrent from "./use-task-current";
 
 export default function useTaskAction(task: any, onSuccess?: () => void) {
   const walletStore = useWalletStore();
@@ -13,7 +14,7 @@ export default function useTaskAction(task: any, onSuccess?: () => void) {
   const [completed, setCompleted] = useState(false);
   const [claimed, setClaimed] = useState(false);
   const [progress, setProgress] = useState(0);
-
+  const { fetchTasks } = useTaskCurrent();
   const navigate = useNavigate();
   const { onCopy } = useCopy();
 
@@ -23,6 +24,7 @@ export default function useTaskAction(task: any, onSuccess?: () => void) {
   });
   const { claimTask, loading: claimLoading } = useTaskClaim(() => {
     setClaimed(true);
+    fetchTasks();
     onSuccess?.();
   });
 
