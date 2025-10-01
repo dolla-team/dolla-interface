@@ -71,7 +71,7 @@ export default function useGenerateKey() {
       nonce: res.nonce,
       gas_token: { FT: QUOTE_TOKEN.address },
       fee_token: { FT: QUOTE_TOKEN.address },
-      deadline: String(Date.now() + 1000 * 60 * 60),
+      deadline: String(Date.now() + 1000 * 60 * 60 * 2),
       user_id: {
         Evm: address.slice(2).toLowerCase()
       }
