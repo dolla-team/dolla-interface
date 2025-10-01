@@ -4,6 +4,7 @@ import { useSignMessage } from "@privy-io/react-auth";
 import { viewMethod } from "./util";
 import { useAuth } from "@/contexts/auth/privy";
 import { QUOTE_TOKEN } from "@/config/btc";
+import axiosInstance from "@/libs/axios";
 
 export default function useGenerateKey() {
   const { setPublicKey, setPrivateKey, publicKey, privateKey } =
@@ -31,7 +32,6 @@ export default function useGenerateKey() {
     } = createKeyPair();
 
     if (nearAccount) {
-      // TODO update ak
       await updateAk({ publicKey: shortPublicKey });
     }
 
@@ -67,14 +67,14 @@ export default function useGenerateKey() {
       args: { user_id: { Evm: address.replace(/^0x/, "").toLowerCase() } }
     });
     const payload = {
-      ak: publicKey,
-      nonce: res.nonce,
-      gas_token: { FT: QUOTE_TOKEN.address },
-      fee_token: { FT: QUOTE_TOKEN.address },
-      deadline: String(Date.now() + 1000 * 60 * 60 * 2),
       user_id: {
         Evm: address.slice(2).toLowerCase()
-      }
+      },
+      ak: publicKey,
+      fee_token: { FT: QUOTE_TOKEN.address },
+      gas_token: { FT: QUOTE_TOKEN.address },
+      nonce: res.nonce,
+      deadline: String(Date.now() + 1000 * 60 * 60 * 6)
     };
 
     const payloadString = JSON.stringify(payload);
@@ -85,7 +85,11 @@ export default function useGenerateKey() {
 
     const signature = _signature.signature.replace(/^0x/, "");
 
-    console.log("signature", signature, payloadString);
+    const response = await axiosInstance.put(`/api/v1/user/publickey`, {
+      payload: payloadString,
+      signature
+    });
+    console.log("response", response);
   }
 
   return {

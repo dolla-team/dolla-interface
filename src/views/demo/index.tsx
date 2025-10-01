@@ -353,7 +353,8 @@ export default function Demo() {
   const { user } = useUser();
 
   const config = useContractConfigStore((state) => state.config);
-  const { account } = useAccount(user?.wallet?.address || "");
+  // const { account } = useAccount(user?.wallet?.address || "");
+  const { account } = useAccount("0xbede1d86148441ab80e4917ffe727990e74387ec");
 
   // Trading hooks
   const { withdraw, loading: withdrawing } = useWithdraw();
@@ -370,7 +371,11 @@ export default function Demo() {
   });
 
   // Update key hook
-  const { updateAk: onUpdateKey, createKeyPair } = useGenerateKey();
+  const {
+    updateAk: onUpdateKey,
+    createKeyPair,
+    saveKeyPair
+  } = useGenerateKey();
   const [updating, setUpdating] = useState(false);
 
   // NFT hooks
@@ -396,8 +401,9 @@ export default function Demo() {
   const handleUpdateKey = async () => {
     setUpdating(true);
     try {
-      const { publicKey } = createKeyPair();
+      const { publicKey, privateKey } = createKeyPair();
       await onUpdateKey({ publicKey });
+      saveKeyPair(publicKey, privateKey);
     } finally {
       setUpdating(false);
     }

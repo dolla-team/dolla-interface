@@ -33,7 +33,7 @@ const SellerMarkets = (props: any) => {
           <Loading size={20} />
         </div>
       ) : orders?.length > 0 ? (
-        [...orders, ...orders].map((item: any) => {
+        orders.map((item: any) => {
           const order = poolsData[item];
           return (
             <MarketItem

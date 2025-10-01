@@ -25,12 +25,13 @@ const StatisticsPlayer = (props: any) => {
     if (!userInfo) {
       return _result;
     }
+    console.log("userInfo", userInfo);
 
     if (userInfo.on_sell) {
       _result[0] = userInfo.on_sell
         .filter(
           (item: any) =>
-            item.reward_token_info?.[0]?.symbol === BASE_TOKEN.symbol
+            item.reward_token_info?.[0]?.address === BASE_TOKEN.address
         )
         .reduce(
           (acc: any, item: any) =>

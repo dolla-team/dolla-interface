@@ -159,9 +159,7 @@ const Item = ({ item, index }: { item: any; index: number }) => {
       >
         {anchorPrice}x
       </span>
-      <span className="text-xl drop-shadow-lg">
-        {config[randomIndex].emoji}
-      </span>
+      <span className="text-xl drop-shadow-lg">🚀</span>
     </div>
   ) : (
     <div className="flex items-center h-full gap-3 text-white transition-transform duration-200 hover:scale-105">
@@ -171,9 +169,7 @@ const Item = ({ item, index }: { item: any; index: number }) => {
       <span className={clsx("text-lg font-bold drop-shadow-lg")}>
         ${anchorPrice}
       </span>
-      <span className="text-xl drop-shadow-lg">
-        {config[randomIndex].emoji}
-      </span>
+      <span className="text-xl drop-shadow-lg">🎯</span>
     </div>
   );
 };
