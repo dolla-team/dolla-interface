@@ -2,6 +2,9 @@ export const getButtonText = (task: any) => {
   if (task.is_completed && !task.is_claimed) {
     return ["Claim", "Claimed"];
   }
+  if (task.category === 5) {
+    return ["Create", "Created"];
+  }
   if (task.category === 4) {
     return ["Swap", "Swapped"];
   }
@@ -11,7 +14,6 @@ export const getButtonText = (task: any) => {
   if (task.category === 2) {
     return ["Deposit", "Deposited"];
   }
-
   if (task.category === 1) {
     return ["Invite", "Invited"];
   }

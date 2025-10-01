@@ -35,6 +35,10 @@ export default function useTaskAction(task: any, onSuccess?: () => void) {
       await claimTask(task.id);
       return;
     }
+    if (task.category === 5) {
+      navigate("/btc/create");
+      return;
+    }
     if (task.category === 4) {
       walletStore.set({ panelType: "swap", showWallet: true });
       return;
