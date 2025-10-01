@@ -3,10 +3,12 @@ import Loading from "@/components/icons/loading";
 
 export default function Progress({
   tasks,
-  loading
+  loading,
+  onSuccess
 }: {
   tasks: any;
   loading: boolean;
+  onSuccess: () => void;
 }) {
   return (
     <div>
@@ -19,7 +21,12 @@ export default function Progress({
           <div key={task.title}>
             <div className="text-[14px] font-[600] mt-[20px]">{task.title}</div>
             {task.list.map((item: any) => (
-              <Task key={item.id} className="mt-[10px]" task={item} />
+              <Task
+                key={item.id}
+                className="mt-[10px]"
+                task={item}
+                onSuccess={onSuccess}
+              />
             ))}
           </div>
         ))

@@ -27,8 +27,8 @@ export default function RedeemSelectionItem({
         className
       )}
     >
-      <img className="w-[100px] h-[100px] mx-auto mt-[20px]" src={data.icon} />
-      <div className="text-white text-center text-[20px] font-[DelaGothicOne]">
+      <img className="w-[80px] h-[80px] mx-auto mt-[20px]" src={data.icon} />
+      <div className="text-center text-[18px] font-bold mt-[20px]">
         {data.token_volume} {data.name}
       </div>
       <button

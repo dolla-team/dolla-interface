@@ -14,19 +14,26 @@ export default function usePoolRecommend(
   const getPoolRecommend = async (volume?: string) => {
     try {
       setLoading(true);
-      // const response = await axiosInstance.get(
-      //   `/api/v1/pool/recommend?token_status=${tokenStatus}&chain=${"near"}${
-      //     volume ? `&volume=${volume}` : ""
-      //   }`
-      // );
 
-      const response = await axiosInstance.get(
-        `/api/v1/pool/list?limit=1&offset=0&sort_field=accumulative_bids&sort_order=asc&status=1&chain=near&token_status=${tokenStatus}${
-          volume ? "&volume=" + volume : ""
-        }`
-      );
+      let data = null;
 
-      setData(response.data.data?.list?.[0]);
+      if (volume) {
+        const response = await axiosInstance.get(
+          `/api/v1/pool/list?limit=1&offset=0&sort_field=accumulative_bids&sort_order=asc&status=1&chain=near&token_status=${tokenStatus}${
+            volume ? "&volume=" + volume : ""
+          }`
+        );
+        data = response.data.data?.list?.[0];
+      } else {
+        const response = await axiosInstance.get(
+          `/api/v1/pool/recommend?token_status=${tokenStatus}&chain=${"near"}${
+            volume ? `&volume=${volume}` : ""
+          }`
+        );
+        data = response.data.data?.[0];
+      }
+
+      setData(data);
       setLoading(false);
     } catch (error) {
       console.log(error);

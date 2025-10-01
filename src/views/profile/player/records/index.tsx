@@ -1,8 +1,8 @@
 import Switch from "@/components/switch";
 import SwitchPanel from "@/components/switch/switch-panel";
 import clsx from "clsx";
-import { AnimatePresence, rgba } from "framer-motion";
-import { useState } from "react";
+import { AnimatePresence } from "framer-motion";
+import { memo, useState } from "react";
 import BidHistory from "./bid-history";
 import Account from "./account";
 
@@ -48,4 +48,4 @@ const Records = (props: any) => {
   );
 };
 
-export default Records;
+export default memo(Records);

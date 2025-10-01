@@ -19,7 +19,7 @@ export default function Music() {
   }, [isPlaying]);
   return (
     <div
-      className="absolute right-[20px] bottom-[20px] button"
+      className="absolute right-[20px] bottom-[20px] button z-[50]"
       onClick={() => {
         globalStore.set({
           playBgm: !isPlaying

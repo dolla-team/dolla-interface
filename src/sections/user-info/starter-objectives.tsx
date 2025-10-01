@@ -3,9 +3,11 @@ import Button from "@/components/button";
 import useTaskCurrent from "@/hooks/task/use-task-current";
 import Loading from "@/components/icons/loading";
 import useTaskAction from "@/hooks/task/use-task-action";
+import { useAuth } from "@/contexts/auth";
 
 export default function StarterObjectives() {
-  const { tasks, loading } = useTaskCurrent();
+  const { tasks, loading, fetchTasks } = useTaskCurrent();
+  const { onQueryUserInfo } = useAuth();
   return (
     <div className="border-t border-[#313038] px-[20px] py-[8px] text-white h-[calc(100%-370px)]">
       <div className="flex items-center justify-between pb-[10px]">
@@ -22,7 +24,14 @@ export default function StarterObjectives() {
       ) : (
         <div className="h-[calc(100%-20px)] overflow-y-auto flex flex-col gap-[10px]">
           {tasks.map((task) => (
-            <Item key={task.id} task={task} />
+            <Item
+              key={task.id}
+              task={task}
+              onSuccess={() => {
+                fetchTasks();
+                onQueryUserInfo();
+              }}
+            />
           ))}
         </div>
       )}
@@ -30,7 +39,7 @@ export default function StarterObjectives() {
   );
 }
 
-const Item = ({ task }: { task: any }) => {
+const Item = ({ task, onSuccess }: { task: any; onSuccess: () => void }) => {
   const {
     buttonText,
     pastButtonText,
@@ -39,7 +48,7 @@ const Item = ({ task }: { task: any }) => {
     completed,
     claimed,
     progress
-  } = useTaskAction(task);
+  } = useTaskAction(task, onSuccess);
 
   return (
     <div

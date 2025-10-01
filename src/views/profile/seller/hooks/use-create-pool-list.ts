@@ -136,7 +136,7 @@ export default function useCreatePoolList() {
     if (userInfo?.user) {
       getCreatePoolList();
     }
-  }, [userInfo]);
+  }, [userInfo?.user]);
 
   useEffect(() => {
     onQueryUserInfo();

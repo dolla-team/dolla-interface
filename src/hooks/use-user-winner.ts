@@ -57,7 +57,7 @@ export default function useUserWinner() {
     if (userInfo?.user) {
       fetchNfts();
     }
-  }, [userInfo]);
+  }, [userInfo?.user]);
 
   const [totalAmount] = useMemo(() => {
     return [

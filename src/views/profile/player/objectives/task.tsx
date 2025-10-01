@@ -4,10 +4,12 @@ import Button from "@/components/button";
 
 export default function Task({
   className,
-  task
+  task,
+  onSuccess
 }: {
   className?: string;
   task: any;
+  onSuccess: () => void;
 }) {
   const {
     buttonText,
@@ -16,7 +18,7 @@ export default function Task({
     completed,
     claimed,
     progress
-  } = useTaskAction(task);
+  } = useTaskAction(task, onSuccess);
 
   return (
     <div
@@ -31,7 +33,10 @@ export default function Task({
           <Button
             className="!bg-black h-[32px] min-w-[60px] px-[10px] !rounded-[8px] text-white button"
             loading={loading}
-            onClick={() => handleTaskAction()}
+            onClick={(e: any) => {
+              e.stopPropagation();
+              handleTaskAction();
+            }}
           >
             {completed ? "Claim" : buttonText}
           </Button>

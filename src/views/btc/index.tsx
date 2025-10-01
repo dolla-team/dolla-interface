@@ -17,6 +17,7 @@ import "@/libs/howl";
 import { useNavigate } from "react-router-dom";
 import { ShareBtn, CloseBtn } from "./share-btn";
 import Loading from "./loading";
+import Wallet from "@/sections/wallet";
 
 // import ProvablyFair from "@/sections/provably-fair";
 
@@ -77,6 +78,7 @@ const Content = () => {
       {!isMobile && <TopWinner />}
       {!isMobile && <Music />}
       {/* {isMobile && <MarketsModal />} */}
+      <Wallet />
     </div>
   );
 };

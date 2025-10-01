@@ -32,13 +32,14 @@ export default function useTaskList() {
   );
   const [loading, setLoading] = useState(false);
   const { userInfo } = useAuth();
+  const [initialized, setInitialized] = useState(true);
 
   // Fetch task list from API
   const fetchTasks = async () => {
     try {
-      setLoading(true);
-      setCompletedTasks([]);
-      setProgressTasks(Object.values(initProgressTasks));
+      if (initialized) setLoading(true);
+
+      setInitialized(false);
 
       const response = await axiosInstance.get("/api/v1/task_list");
       // Handle different response structures
@@ -67,7 +68,7 @@ export default function useTaskList() {
     if (userInfo?.user) {
       fetchTasks();
     }
-  }, [userInfo]);
+  }, [userInfo?.user]);
 
   return {
     completedTasks,

@@ -1,6 +1,6 @@
 import Tabs from "@/components/tabs";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import useIsBtc from "@/hooks/use-is-btc";
 import clsx from "clsx";
 
@@ -8,6 +8,18 @@ export default function PageTabs() {
   const isBtc = useIsBtc();
   const [tab, setTab] = useState(isBtc ? 0 : 1);
   const navigate = useNavigate();
+  const pathname = useLocation();
+
+  useEffect(() => {
+    if (!pathname?.pathname) return;
+    if (pathname.pathname.includes("portfolio")) {
+      setTab(1);
+    } else if (pathname.pathname.includes("create")) {
+      setTab(2);
+    } else if (pathname.pathname === "/") {
+      setTab(0);
+    }
+  }, [pathname?.pathname]);
 
   return (
     <Tabs

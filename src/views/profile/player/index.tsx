@@ -6,11 +6,10 @@ import SwitchPanel from "@/components/switch/switch-panel";
 // import { INVATE_ACTIVE } from "@/config";
 import Header from "../header";
 import Dashboard from "../components/dashboard/index";
-import { useRef, useEffect } from "react";
+import { useRef, useMemo } from "react";
 import PlayerMarkets from "./markets";
 import Records from "./records";
 import usePlayerHistory from "./hooks/use-player-history";
-import { useDebounceFn } from "ahooks";
 import PageBack from "../components/page-back";
 import Bg from "../components/bg";
 import ProfileTabs from "../components/tabs";
@@ -34,58 +33,10 @@ export default function Player() {
   } = usePlayerHistory();
 
   const containerRef = useRef<any>(null);
-  const marketsBottomRef = useRef<any>(null);
 
-  const { run: handleLoadMore } = useDebounceFn(
-    () => {
-      if (
-        joinedPoolListData.length > 0 &&
-        joinedPoolListHasNextPage &&
-        !joinedPoolListLoading
-      ) {
-        onJoinedPoolListPageChange(joinedPoolListPageIndex + 1);
-      }
-    },
-    {
-      wait: 500
-    }
-  );
-
-  useEffect(() => {
-    if (!marketsBottomRef.current || joinedPoolListData.length === 0) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (
-            entry.isIntersecting &&
-            joinedPoolListHasNextPage &&
-            !joinedPoolListLoading
-          ) {
-            handleLoadMore();
-          }
-        });
-      },
-      {
-        root: null,
-        rootMargin: "200px",
-        threshold: 0.1
-      }
-    );
-
-    observer.observe(marketsBottomRef.current);
-
-    return () => {
-      if (marketsBottomRef.current) {
-        observer.unobserve(marketsBottomRef.current);
-      }
-    };
-  }, [
-    joinedPoolListData.length,
-    joinedPoolListHasNextPage,
-    joinedPoolListLoading,
-    joinedPoolListPageIndex
-  ]);
+  const dataHeight = useMemo(() => {
+    return data?.length * 50;
+  }, [data]);
 
   return (
     <div
@@ -101,7 +52,7 @@ export default function Player() {
             <Dashboard tab="player" className="mt-[20px] max-md:mt-[20px]" />
           </div>
           <div className="mt-[15px] flex gap-[20px]">
-            <Objectives dataHeight={data?.length * 50} />
+            <Objectives dataHeight={dataHeight} />
             <div className="w-[780px]">
               <PlayerMarkets
                 orders={joinedPoolListData}

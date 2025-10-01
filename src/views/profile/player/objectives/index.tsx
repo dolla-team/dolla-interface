@@ -9,8 +9,8 @@ import { useAuth } from "@/contexts/auth";
 
 export default function Objectives({ dataHeight }: { dataHeight: number }) {
   const [tab, setTab] = useState("progress");
-  const { progressTasks, completedTasks, loading } = useTask();
-  const { userInfo } = useAuth();
+  const { progressTasks, completedTasks, loading, fetchTasks } = useTask();
+  const { userInfo, onQueryUserInfo } = useAuth();
 
   return (
     <div
@@ -70,7 +70,14 @@ export default function Objectives({ dataHeight }: { dataHeight: number }) {
           }}
         >
           {tab === "progress" && (
-            <Progress tasks={progressTasks} loading={loading} />
+            <Progress
+              tasks={progressTasks}
+              loading={loading}
+              onSuccess={() => {
+                fetchTasks();
+                onQueryUserInfo();
+              }}
+            />
           )}
           {tab === "complete" && (
             <Complete tasks={completedTasks} loading={loading} />

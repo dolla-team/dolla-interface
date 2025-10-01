@@ -98,7 +98,7 @@ export default function BTCCreate() {
                       setDepositModalOpen(true);
                     }}
                   >
-                    Deposit BTC
+                    Deposit
                   </div>
                 )}
               </div>
@@ -158,7 +158,7 @@ export default function BTCCreate() {
             </div>
             {errorTips === "Insufficient Balance" && (
               <div className="text-[12px] text-[#F87168] text-center mt-[20px]">
-                Insufficient Balance, deposit BTC first
+                Insufficient Balance, deposit first
               </div>
             )}
             <div className="mt-[36px] rounded-[12px] bg-[#FFFFFF99] p-[24px] w-full max-md:mt-[40px] max-md:px-[12px]">
@@ -390,7 +390,7 @@ const DepositBTC = (props: any) => {
               });
             }}
           >
-            Deposit BTC
+            Deposit
           </Button>
         </div>
       </div>

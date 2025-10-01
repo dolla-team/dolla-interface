@@ -46,7 +46,7 @@ export default function useReferralList() {
     if (userInfo?.user) {
       getReferralList();
     }
-  }, [userInfo]);
+  }, [userInfo?.user]);
 
   return {
     loading,

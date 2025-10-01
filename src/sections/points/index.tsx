@@ -12,6 +12,7 @@ import useIsMobile from "@/hooks/use-is-mobile";
 
 export default function Points({ className }: { className?: string }) {
   const { prize } = useUserInfoStore();
+
   const { config } = useConfigStore();
   const isMobile = useIsMobile();
   const [items, itemsMap, minPoints] = useMemo(() => {
@@ -23,17 +24,16 @@ export default function Points({ className }: { className?: string }) {
       let name = "";
 
       if (item.token.toLowerCase() === BASE_TOKEN.address.toLowerCase()) {
-        icon = BASE_TOKEN.pointIcon;
+        icon = BASE_TOKEN.pointsIcon;
         name = BASE_TOKEN.name;
       } else if (
         item.token.toLowerCase() === QUOTE_TOKEN.address.toLowerCase()
       ) {
         icon =
-          item.token_volume === "1" ? "/points/bid.png" : QUOTE_TOKEN.pointIcon;
+          item.token_volume === "1"
+            ? "/points/bid.png"
+            : QUOTE_TOKEN.pointsIcon;
         name = item.token_volume === "1" ? "Free Bid" : QUOTE_TOKEN.name;
-      } else if (item.token === "SOL") {
-        icon = "/points/solana.png";
-        name = "SOL";
       }
       _itemsMap[item.token + "_" + item.token_volume] = { name };
 

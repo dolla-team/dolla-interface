@@ -116,7 +116,7 @@ export default function useUserRecords(props?: {
       pageRef.current = 0;
       onQueryRecords();
     }
-  }, [userInfo]);
+  }, [userInfo?.user]);
 
   return {
     loading,

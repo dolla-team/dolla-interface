@@ -19,6 +19,11 @@ export default function useUserPrize() {
             response.data.data.ticket.use_number
         }
       });
+      // set({
+      //   prize: {
+      //     points: 100
+      //   }
+      // });
     } catch (err) {}
   };
 

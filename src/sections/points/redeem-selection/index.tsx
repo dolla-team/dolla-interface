@@ -39,11 +39,11 @@ export default function RedeemSelection({
       <Modal open={showRedeemSelection} onClose={close}>
         <div
           className={clsx(
-            " rounded-[16px] border border-[#6A5D3A] bg-[#35302B]",
+            " rounded-[16px] border border-[#E4E4E4] bg-white",
             isMobile ? "w-full" : "w-[814px] h-[422px]"
           )}
         >
-          <div className="h-[54px] bg-[#00000033] rounded-t-[16px] flex items-center justify-between px-[16px]">
+          <div className="h-[54px] bg-[#000000] rounded-t-[16px] flex items-center justify-between px-[16px]">
             <div className="text-[20px] text-white">Points Redemption</div>
             <button className="w-[24px] h-[24px] button" onClick={close}>
               <svg
@@ -73,7 +73,7 @@ export default function RedeemSelection({
                   address={userInfo?.user}
                   email={userInfo?.email}
                 />
-                <div className="font-[DelaGothicOne] text-white flex items-center">
+                <div className="font-[DelaGothicOne] flex items-center">
                   <div className={isMobile ? "text-[16px]" : "text-[20px]"}>
                     {userInfo?.name || formatAddress(userInfo?.user)}
                   </div>

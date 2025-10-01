@@ -10,7 +10,7 @@ export default function useTaskCurrent() {
   // Fetch task list from API
   const fetchTasks = useCallback(async () => {
     try {
-      setLoading(true);
+      if (tasks.length === 0) setLoading(true);
 
       const response = await axiosInstance.get("/api/v1/task_current");
 
@@ -36,7 +36,7 @@ export default function useTaskCurrent() {
     if (userInfo?.user) {
       fetchTasks();
     }
-  }, [userInfo]);
+  }, [userInfo?.user]);
 
   return {
     tasks,

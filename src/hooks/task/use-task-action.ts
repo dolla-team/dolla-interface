@@ -7,7 +7,7 @@ import { useGlobalStore } from "@/stores/use-global";
 import useTaskComplete from "./use-task-complete";
 import useTaskClaim from "./use-task-claim";
 
-export default function useTaskAction(task: any) {
+export default function useTaskAction(task: any, onSuccess?: () => void) {
   const walletStore = useWalletStore();
   const globalStore = useGlobalStore();
   const [completed, setCompleted] = useState(false);
@@ -23,6 +23,7 @@ export default function useTaskAction(task: any) {
   });
   const { claimTask, loading: claimLoading } = useTaskClaim(() => {
     setClaimed(true);
+    onSuccess?.();
   });
 
   const [buttonText, pastButtonText] = useMemo(() => {

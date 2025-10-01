@@ -46,7 +46,7 @@ export default function useUserWinnerList() {
     if (userInfo?.user) {
       fetchUserWinnerList();
     }
-  }, [userInfo]);
+  }, [userInfo?.user]);
 
   return {
     currentWinner,

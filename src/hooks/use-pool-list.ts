@@ -126,7 +126,7 @@ export default function usePoolList(props?: {
     if (userInfo?.user) {
       onQueryPoolListDebounced();
     }
-  }, [userInfo, sortOrder, sortField, collection, volume]);
+  }, [userInfo?.user, sortOrder, sortField, collection, volume]);
 
   return {
     poolList,

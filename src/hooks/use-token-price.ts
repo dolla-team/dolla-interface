@@ -37,7 +37,7 @@ export default function useTokenPrice(tokens: any) {
     if (Array.isArray(tokens) && tokens.filter((item) => !!item).length === 0)
       return;
     fetchPrice();
-  }, [userInfo, tokens]);
+  }, [userInfo?.user, tokens]);
 
   return { prices, loading };
 }

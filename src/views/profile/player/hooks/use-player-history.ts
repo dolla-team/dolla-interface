@@ -11,7 +11,7 @@ export default function usePlayerHistory() {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<any[]>([]);
   const [page, setPage] = useState(1);
-  const { userInfo, onQueryUserInfo } = useAuth();
+  const { userInfo } = useAuth();
   const [hasMore, setHasMore] = useState(true);
 
   const [joinedPoolListData, setJoinedPoolListData] = useState<any>([]);
@@ -120,11 +120,7 @@ export default function usePlayerHistory() {
     if (userInfo?.user) {
       getRecords(1);
     }
-  }, [userInfo]);
-
-  useEffect(() => {
-    onQueryUserInfo();
-  }, []);
+  }, [userInfo?.user]);
 
   const onPageChange = (_page: number) => {
     setPage(_page);
@@ -138,7 +134,6 @@ export default function usePlayerHistory() {
     loading,
     hasMore,
     onPageChange,
-
     joinedPoolListHasNextPage,
     joinedPoolListPageIndex,
     joinedPoolListLoading,
