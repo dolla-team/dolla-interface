@@ -18,7 +18,7 @@ export default function useAccount(evmAddress: string) {
       let prizeBalance = "0";
 
       if (res?.ft_tokens) {
-        quoteBalance = res.ft_tokens[`{"FT":"${QUOTE_TOKEN.address}"}`];
+        quoteBalance = res.ft_tokens[`{"FT":"${QUOTE_TOKEN.address}"}`] || "0";
         prizeBalance = res.ft_tokens[`{"FT":"${BASE_TOKEN.address}"}`] || "0";
       }
       /**

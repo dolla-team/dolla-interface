@@ -9,6 +9,7 @@ export default function useDeposit() {
   const [depositAddress, setDepositAddress] = useState<string | null>("");
   const { fail } = useToast();
   const { generateKeyPair } = useGenerateKey();
+
   async function generateDepositAddress({
     swapType = "EXACT_INPUT",
     evmAddress,
@@ -39,8 +40,12 @@ export default function useDeposit() {
     getFullQuote?: boolean;
   }) {
     try {
-      setLoading(true);
       const { publicKey } = await generateKeyPair();
+      if (!publicKey) {
+        throw new Error("Public key not found");
+      }
+      setLoading(true);
+
       const body = {
         dry: false,
         swapType,

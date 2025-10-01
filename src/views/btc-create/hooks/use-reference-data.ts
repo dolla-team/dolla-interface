@@ -23,6 +23,7 @@ export function useReferenceData(props: any) {
         ) {
           return [];
         }
+
         return response.data.data;
       } catch (err: any) {
         console.log("get reference list failed: %o", err);
@@ -35,13 +36,9 @@ export function useReferenceData(props: any) {
 
   const [data] = useMemo(() => {
     if (!referenceList || !token) return [];
+
     const _data = referenceList.find((item: any) => {
-      return (
-        item.reward_token.toLowerCase() === token.address.toLowerCase() &&
-        Big(item.reward_amount || 0)
-          .div(10 ** token.decimals)
-          .eq(amount || 0)
-      );
+      return item.reward_token.toLowerCase() === token.address.toLowerCase();
     });
     return [_data];
   }, [referenceList, token, amount]);
