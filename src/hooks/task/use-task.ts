@@ -4,7 +4,7 @@ import { useAuth } from "@/contexts/auth";
 
 const initProgressTasks: any = {
   "0": {
-    title: "Social Objectives",
+    title: "Social Tasks",
     list: []
   },
   "1": {
