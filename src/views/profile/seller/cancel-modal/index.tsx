@@ -59,11 +59,11 @@ export default function CancelModal({
       // _completable = Date.now() - order?.result_time * 1000 > 1000 * 60 * 10;
     }
 
-    const _markable = Date.now() - order?.time * 1000 > 1000 * 60 * 60 * 24 * 3;
+    const _markable = Date.now() - order?.time > 1000 * 60 * 60 * 24 * 3;
     // const _markable = true;
     return [_penalty, _markable, _completable];
   }, [order]);
-
+  console.log(66, order);
   return (
     <Modal onClose={onClose} open={open}>
       <div className="w-[396px] pb-[20px] rounded-[16px] bg-[#FFFFFF] border border-[#E4E4E4] text-[14px] font-[500] leading-[100%] text-white">
