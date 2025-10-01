@@ -19,10 +19,12 @@ import {
 } from "@privy-io/react-auth";
 import useConfig from "@/hooks/use-config";
 import useUserInfoStore from "@/stores/use-user-info";
+import { useNearKeyStore } from "@/stores/use-near-key";
 import { ethers } from "ethers";
 import useUserNft from "@/hooks/evm/use-user-nft";
 import useAccount from "@/hooks/near/use-account";
 import useCode from "@/hooks/airdrop/use-code";
+import { useGlobalStore } from "@/stores/use-global";
 
 export const AuthContext = React.createContext<any | null>(null);
 
@@ -31,6 +33,9 @@ export const AuthProvider: React.FC<{
 }> = ({ children }) => {
   const { logout: privyLogout, login: privyLogin, ready } = usePrivy();
   const { user } = useUser();
+  const { setPublicKey, setPrivateKey } = useNearKeyStore();
+  const globalStore = useGlobalStore();
+
   useConfig();
   const { wallets } = useWallets();
   const { wallets: solanaWallets } = useSolanaWallets();
@@ -39,7 +44,7 @@ export const AuthProvider: React.FC<{
   const [logining, setLogining] = useState(false);
   const [accountRefresher, setAccountRefresher] = useState(-1);
   const [isLoggedOut, setIsLoggedOut] = useState(false);
-  const { set: setUserInfoStore } = useUserInfoStore();
+  const userInfoStore = useUserInfoStore();
 
   const privyWallet = useMemo(() => {
     if (isLoggedOut) return { address: "" };
@@ -174,12 +179,10 @@ export const AuthProvider: React.FC<{
     localStorage.removeItem("_AK_TOKEN_");
     setInfo(null);
     setAccountRefresher(0);
-    setUserInfoStore({
-      prize: {
-        points: 0,
-        tickets: 0
-      }
-    });
+    setPublicKey(null);
+    setPrivateKey(null);
+    userInfoStore.init();
+    globalStore.init();
   }, [privyWallet?.address, privyLogout, wallets, solanaWallets]);
 
   useEffect(() => {

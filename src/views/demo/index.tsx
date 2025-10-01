@@ -13,6 +13,7 @@ import useToast from "@/hooks/use-toast";
 import useWithdrawEvm from "@/hooks/evm/use-withdraw";
 import { useContractConfigStore } from "@/stores/use-contract-config";
 import useGenerateKey from "@/hooks/near/use-generate-key";
+import { useGlobalStore } from "@/stores/use-global";
 
 // Constants
 const NFT_ADDRESS = "0x0ae4451B85A528b1Bc03D90F3Bc009962Fe737f7";
@@ -351,7 +352,7 @@ function AccountInfoSection({
 
 export default function Demo() {
   const { user } = useUser();
-
+  const globalStore = useGlobalStore();
   const config = useContractConfigStore((state) => state.config);
   // const { account } = useAccount(user?.wallet?.address || "");
   const { account } = useAccount("0xbede1d86148441ab80e4917ffe727990e74387ec");

@@ -7,7 +7,15 @@ interface GlobalState {
   code: string;
   showUserInfo: boolean;
   set: (params: any) => void;
+  init: () => void;
 }
+
+const initialState = {
+  chainId: "",
+  playBgm: true,
+  code: "",
+  showUserInfo: true
+} as GlobalState;
 
 export const useGlobalStore = create(
   persist<GlobalState>(
@@ -16,7 +24,8 @@ export const useGlobalStore = create(
       playBgm: true,
       code: "",
       showUserInfo: true,
-      set: (params) => set(() => ({ ...params }))
+      set: (params) => set(() => ({ ...params })),
+      init: () => set(() => initialState)
     }),
     {
       name: "_global",
