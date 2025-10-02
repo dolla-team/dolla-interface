@@ -90,10 +90,12 @@ const router = createBrowserRouter([
   },
   {
     path: "btc/detail",
+    errorElement: <ErrorPage />,
     element: <LazyBtc />
   },
   {
     path: "btc/detail/:poolId",
+    errorElement: <ErrorPage />,
     element: <LazyBtc />
   },
   {

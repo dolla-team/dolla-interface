@@ -1,5 +1,6 @@
 import { motion, AnimatePresence } from "framer-motion";
 import WinResultContent from "./content";
+import ReactDOM from "react-dom";
 
 export default function WinResult({
   currentWinner,
@@ -7,7 +8,7 @@ export default function WinResult({
   claim,
   onShowHistory
 }: any) {
-  return (
+  return ReactDOM.createPortal(
     <AnimatePresence>
       {currentWinner && (
         <motion.div
@@ -15,7 +16,7 @@ export default function WinResult({
           animate={{ x: 0, opacity: 1 }} // Animate to center
           exit={{ x: 300, opacity: 0 }} // Slide out to right
           transition={{ type: "spring", stiffness: 400, damping: 30 }}
-          className="w-[250px] h-[104px] rounded-[12px] bg-linear-to-b from-[#4FFF61] to-[#2F993A] text-black py-[6px] px-[10px] mb-[10px]"
+          className="fixed bottom-[10px] right-[10px] z-[50] w-[250px] h-[104px] rounded-[12px] bg-linear-to-b from-[#4FFF61] to-[#2F993A] text-black py-[6px] px-[10px] mb-[10px]"
         >
           <WinResultContent
             onShowHistory={onShowHistory}
@@ -25,6 +26,7 @@ export default function WinResult({
           />
         </motion.div>
       )}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body
   );
 }
