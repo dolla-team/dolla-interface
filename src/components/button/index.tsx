@@ -8,7 +8,8 @@ export default function Button({
   onClick = () => {},
   className,
   loading,
-  isPrimary = true
+  isPrimary = true,
+  soon
 }: {
   children?: React.ReactNode;
   onClick?: (ev: any) => void;
@@ -16,6 +17,7 @@ export default function Button({
   className?: string;
   loading?: boolean;
   isPrimary?: boolean;
+  soon?: boolean;
 }) {
   const size = useMemo(() => {
     if (className?.includes("h-")) {
@@ -31,12 +33,19 @@ export default function Button({
       onClick={onClick}
       disabled={disabled}
       className={clsx(
-        "rounded-[12px] flex items-center justify-center",
+        "rounded-[12px] flex items-center justify-center relative",
         isPrimary && "bg-white text-[12px] text-[#2B3337] font-[500]",
         className,
-        disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer button"
+        disabled
+          ? "opacity-50 cursor-not-allowed"
+          : !soon && "cursor-pointer button"
       )}
     >
+      {soon && (
+        <div className="absolute right-[-10px] top-[-10px] flex justify-center items-center text-[12px] font-[500] text-white h-[20px] px-[5px] rounded-[6px] bg-[#4C4C4C]">
+          soon
+        </div>
+      )}
       {loading ? <Loading size={Math.min(size, 20)} /> : children}
     </button>
   );

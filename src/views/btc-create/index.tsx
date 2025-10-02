@@ -368,7 +368,7 @@ const DepositBTC = (props: any) => {
     <div className="w-[316px] shrink-0 max-md:w-full">
       {!isMobile && <div className="text-white">Account</div>}
       <div className="w-full rounded-[16px] bg-[#1C1C23] mt-[10px] max-md:rounded-b-[0] max-md:mt-0">
-        <div className="w-full rounded-t-[16px] bg-black/20 p-[18px_15px]">
+        <div className="w-full p-[18px_15px]">
           <div className="text-white text-[14px]">
             {formatAddress(userInfo?.user)}
           </div>
