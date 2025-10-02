@@ -2,6 +2,7 @@ import axiosInstance from "@/libs/axios";
 import EstGasIcon from "./est-gas-icon";
 import clsx from "clsx";
 import { useEffect, useState } from "react";
+import { formatNumber } from "@/utils/format/number";
 
 export default function EstGas({ className }: any) {
   const [gas, setGas] = useState<any>(null);
@@ -29,25 +30,29 @@ export default function EstGas({ className }: any) {
         <div className="flex items-center justify-between">
           <span>Bid</span>
           <span>
-            ~ ${gas?.bid.min} - ${gas?.bid.max}
+            ~ ${formatNumber(gas?.bid.min_usd, 3, true)} - $
+            {formatNumber(gas?.bid.max_usd, 3, true)}
           </span>
         </div>
         <div className="flex items-center justify-between">
           <span>Market Creation</span>
           <span>
-            ~ ${gas?.market_creation.min} - ${gas?.market_creation.max}
+            ~ ${formatNumber(gas?.market_creation.min_usd, 3, true)} - $
+            {formatNumber(gas?.market_creation.max_usd, 3, true)}
           </span>
         </div>
         <div className="flex items-center justify-between">
           <span>Withdraw</span>
           <span>
-            ~ ${gas?.withdraw.min} - ${gas?.withdraw.max}
+            ~ ${formatNumber(gas?.withdraw.min_usd, 3, true)} - $
+            {formatNumber(gas?.withdraw.max_usd, 3, true)}
           </span>
         </div>
         <div className="flex items-center justify-between">
           <span>Claim</span>
           <span>
-            ~ ${gas?.claim.min} - ${gas?.claim.max}
+            ~ ${formatNumber(gas?.claim.min_usd, 3, true)} - $
+            {formatNumber(gas?.claim.max_usd, 3, true)}
           </span>
         </div>
       </div>
