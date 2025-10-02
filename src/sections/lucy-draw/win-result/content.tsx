@@ -1,6 +1,7 @@
 import clsx from "clsx";
 import Loading from "@/components/icons/loading";
 import useIsMobile from "@/hooks/use-is-mobile";
+import { formatNumber } from "@/utils/format/number";
 
 export default function WinResultContent({
   onShowHistory,
@@ -27,7 +28,7 @@ export default function WinResultContent({
           isMobile && "text-center leading-[100%] mt-[16px]"
         )}
       >
-        You won ${currentWinner.volume} from Lucky Draw #
+        You won ${formatNumber(currentWinner.volume, 3, true)} from Lucky Draw #
         {currentWinner.prize_draw_id}.{" "}
       </div>
       {/* Action buttons */}

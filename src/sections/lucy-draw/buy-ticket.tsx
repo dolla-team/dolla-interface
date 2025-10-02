@@ -2,13 +2,13 @@ import Modal from "@/components/modal";
 import { useMemo, useState } from "react";
 import PointIcon from "@/components/icons/point-icon";
 import clsx from "clsx";
-import { QUOTE_TOKEN } from "@/config/btc";
-import useTransfer from "@/hooks/solana/use-transfer";
+import useTransfer from "@/hooks/near/use-transfer";
 import Loading from "@/components/icons/loading";
-import useUserInfoStore from "@/stores/use-user-info";
 import AmountInput from "./amount-input";
-import config from "@/config/solana";
 import useIsMobile from "@/hooks/use-is-mobile";
+import { BET_UNIT } from "@/config";
+import Big from "big.js";
+import useUserPrize from "@/hooks/use-user-prize";
 
 export default function BuyTicket({
   showBuyTicket,
@@ -21,26 +21,15 @@ export default function BuyTicket({
 }) {
   const isMobile = useIsMobile();
   const [ticket, setTicket] = useState(1);
-  const userInfoStore = useUserInfoStore();
 
   const isDisabled = useMemo(() => {
-    return ticket > Number(tokenBalance);
+    return Big(ticket).gt(Big(tokenBalance || 0).mul(BET_UNIT));
   }, [ticket, tokenBalance]);
 
-  const { onTransfer, transferring } = useTransfer({
-    token: QUOTE_TOKEN,
-    type: "buy_ticket",
-    onTransferSuccess: (amount) => {
-      userInfoStore.set({
-        prize: {
-          ...userInfoStore.prize,
-          tickets: userInfoStore.prize.tickets + amount
-        }
-      });
-      setTimeout(() => {
-        onClose();
-      }, 500);
-    }
+  const { getUserPrize } = useUserPrize();
+
+  const { transfer: onTransfer, loading: transferring } = useTransfer(() => {
+    getUserPrize();
   });
 
   return (
@@ -104,7 +93,7 @@ export default function BuyTicket({
           )}
           onClick={() => {
             if (isDisabled) return;
-            onTransfer(ticket, config.ticket_account);
+            onTransfer(ticket);
           }}
         >
           {isDisabled ? (
