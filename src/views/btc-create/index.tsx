@@ -24,6 +24,7 @@ import useQuote from "./hooks/use-quote";
 import useWalletStore from "@/stores/use-wallet";
 import useCreate from "@/hooks/near/use-create";
 import PageBack from "@/views/profile/components/page-back";
+import { useNavigate } from "react-router-dom";
 
 export default function BTCCreate() {
   const [amount, setAmount] = useState(1);
@@ -37,7 +38,7 @@ export default function BTCCreate() {
   const globalConfig = useConfigStore((state) => state.config);
 
   const isMobile = useIsMobile();
-
+  const navigate = useNavigate();
   const { prices } = useTokenPrice(BASE_TOKEN);
   const [depositModalOpen, setDepositModalOpen] = useState(false);
 
@@ -52,6 +53,7 @@ export default function BTCCreate() {
 
   const { create: onCreate, loading: creating } = useCreate(() => {
     updateNearAccount?.();
+    navigate("/profile/seller");
   });
 
   const errorTips = useMemo(() => {
