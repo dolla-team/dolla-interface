@@ -66,7 +66,7 @@ export default function Objectives({ dataHeight }: { dataHeight: number }) {
         <div
           className="overflow-y-auto"
           style={{
-            maxHeight: dataHeight + 304
+            maxHeight: (dataHeight || 240) + 304
           }}
         >
           {tab === "progress" && (
