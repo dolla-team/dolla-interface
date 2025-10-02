@@ -12,7 +12,7 @@ export default function useGenerateKey() {
   const { signMessage } = useSignMessage();
   const { nearAccount, address } = useAuth();
 
-  async function generateKeyPair() {
+  async function generateKeyPair(isDeposit = false) {
     if (publicKey && privateKey) {
       const newKeyPairSigner = KeyPairSigner.fromSecretKey(
         ("ed25519:" + privateKey) as any
@@ -31,7 +31,7 @@ export default function useGenerateKey() {
       privateKey: newPrivateKey
     } = createKeyPair();
 
-    if (nearAccount) {
+    if (nearAccount && !isDeposit) {
       await updateAk({ publicKey: shortPublicKey });
     }
 
@@ -85,11 +85,10 @@ export default function useGenerateKey() {
 
     const signature = _signature.signature.replace(/^0x/, "");
 
-    const response = await axiosInstance.put(`/api/v1/user/publickey`, {
+    await axiosInstance.put(`/api/v1/user/publickey`, {
       payload: payloadString,
       signature
     });
-    console.log("response", response);
   }
 
   return {

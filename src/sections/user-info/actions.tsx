@@ -4,7 +4,7 @@ import useIsBtc from "@/hooks/use-is-btc";
 
 export default function Actions() {
   const navigate = useNavigate();
-  const { logout } = useAuth();
+  const { logout, address, login } = useAuth();
   const isBtc = useIsBtc();
 
   return (
@@ -31,6 +31,52 @@ export default function Actions() {
           <span className="text-[12px] text-white">{item.label}</span>
         </button>
       ))}
+      <button
+        className="flex button items-center gap-[8px] w-full h-[40px] mb-[10px] rounded-[10px] bg-[#F2F2F21A] backdrop-blur-[25px] pl-[12px]"
+        onClick={() => {
+          address ? logout() : login();
+        }}
+      >
+        {address ? (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="15"
+            viewBox="0 0 16 15"
+            fill="none"
+          >
+            <path
+              d="M8.91304 1L1 1V14H8.91304M6.08696 7.19048H14M14 7.19048L10.6087 3.47619M14 7.19048L10.6087 10.9048"
+              stroke="white"
+              strokeWidth="2"
+            />
+          </svg>
+        ) : (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="15"
+            viewBox="0 0 13 13"
+            fill="none"
+          >
+            <path
+              d="M8 1L1 1V11.5H8"
+              stroke="white"
+              strokeWidth="1.8"
+              strokeLinejoin="round"
+            />
+            <path
+              d="M9.5 3L5.5 6M5.5 6H12.5M5.5 6L9.5 9"
+              stroke="white"
+              strokeWidth="1.8"
+              strokeLinejoin="round"
+            />
+          </svg>
+        )}
+        <span className="text-[12px] text-white">
+          {address ? "Disconnect" : "Connect"}
+        </span>
+      </button>
     </div>
   );
 }
@@ -70,26 +116,6 @@ const MENU = [
         <path
           d="M9 0C13.9706 0 18 4.02944 18 9C18 13.9706 13.9706 18 9 18C4.02944 18 0 13.9706 0 9C0 4.02944 4.02944 0 9 0ZM9 2C5.13401 2 2 5.13401 2 9C2 12.866 5.13401 16 9 16C12.866 16 16 12.866 16 9C16 5.13401 12.866 2 9 2ZM10 8H13V10H10V13H8V10H5V8H8V5H10V8Z"
           fill="white"
-        />
-      </svg>
-    )
-  },
-  {
-    key: "logout",
-    label: "Disconnect",
-    isActive: true,
-    icon: (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="16"
-        height="15"
-        viewBox="0 0 16 15"
-        fill="none"
-      >
-        <path
-          d="M8.91304 1L1 1V14H8.91304M6.08696 7.19048H14M14 7.19048L10.6087 3.47619M14 7.19048L10.6087 10.9048"
-          stroke="white"
-          strokeWidth="2"
         />
       </svg>
     )

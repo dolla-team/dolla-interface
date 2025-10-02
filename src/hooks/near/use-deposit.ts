@@ -40,7 +40,7 @@ export default function useDeposit() {
     getFullQuote?: boolean;
   }) {
     try {
-      const { publicKey } = await generateKeyPair();
+      const { publicKey } = await generateKeyPair(true);
       if (!publicKey) {
         throw new Error("Public key not found");
       }
