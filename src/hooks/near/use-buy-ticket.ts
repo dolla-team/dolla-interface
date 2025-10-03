@@ -13,10 +13,10 @@ import Big from "big.js";
 
 const THIRTY_TGAS = "300000000000000";
 
-export default function useTransfer(onSuccess?: () => void) {
+export default function useBuyTicket(onSuccess?: () => void) {
   const [loading, setLoading] = useState(false);
   const { generateKeyPair } = useGenerateKey();
-  const { address, updateNearAccount } = useAuth();
+  const { updateNearAccount, address } = useAuth();
   const toast = useToast();
 
   async function transfer(ticket: number) {
@@ -35,11 +35,15 @@ export default function useTransfer(onSuccess?: () => void) {
             amount: Big(ticket).mul(BET_UNIT).toFixed(0),
             token: { FT: QUOTE_TOKEN.address },
             recipient: {
-              Evm: address.slice(2).toLowerCase()
+              Evm: "43fe6fcbc6eb7d4735589d2c2951d366d968fe75"
             },
             as_gift: false
           }
-        }
+        },
+        memo: JSON.stringify({
+          type: "dolla_buy_ticket",
+          address: address
+        })
       };
 
       const nonce = await getNonce(publicKey);
