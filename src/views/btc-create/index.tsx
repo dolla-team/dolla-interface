@@ -105,7 +105,7 @@ export default function BTCCreate() {
                 )}
               </div>
               <div className="mt-[13px] flex items-center gap-[10px] h-[97px] max-md:grid max-md:grid-cols-2 max-md:h-[unset]">
-                {[1, 0.1, 0.001].map((item, index) => {
+                {[1, 0.1, 0.01].map((item, index) => {
                   const isActive = amount === item;
                   return (
                     <motion.div
@@ -403,7 +403,9 @@ const DepositBTC = (props: any) => {
 const Title = () => {
   return (
     <div className="flex items-center justify-center gap-[10px] text-white">
-      <span className="text-[20px] font-[500]">Create BTC Market</span>
+      <span className="text-[20px] font-[500]">
+        Create {BASE_TOKEN.symbol} Market
+      </span>
       <Popover
         trigger={PopoverTrigger.Hover}
         placement={PopoverPlacement.Bottom}

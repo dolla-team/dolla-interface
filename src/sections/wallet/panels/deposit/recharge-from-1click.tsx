@@ -150,7 +150,7 @@ export default function RechargeFrom1click() {
                         : numericValue;
                     setAmount(validValue);
                   }}
-                  className="text-[24px] text-black text-right bg-transparent border-none outline-none w-[80px]"
+                  className="text-[24px] text-black text-right bg-transparent border-none outline-none w-[120px]"
                   placeholder="0"
                 />
               </div>
