@@ -1,12 +1,13 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { getButtonText } from "./util";
 import useWalletStore from "@/stores/use-wallet";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import useCopy from "../use-copy";
 import { useGlobalStore } from "@/stores/use-global";
 import useTaskComplete from "./use-task-complete";
 import useTaskClaim from "./use-task-claim";
 import useTaskCurrent from "./use-task-current";
+import useTaskStore from "@/stores/use-task";
 
 export default function useTaskAction(task: any, onSuccess?: () => void) {
   const walletStore = useWalletStore();
@@ -17,6 +18,8 @@ export default function useTaskAction(task: any, onSuccess?: () => void) {
   const { fetchTasks } = useTaskCurrent();
   const navigate = useNavigate();
   const { onCopy } = useCopy();
+  const taskStore = useTaskStore();
+  const pathname = useLocation();
 
   const { completeTask, loading: completeLoading } = useTaskComplete(() => {
     setCompleted(true);
@@ -46,7 +49,11 @@ export default function useTaskAction(task: any, onSuccess?: () => void) {
       return;
     }
     if (task.category === 3) {
-      navigate("/btc/detail");
+      navigate("/");
+      setTimeout(() => {
+        taskStore.set({ isBid: true });
+      }, 300);
+      // navigate("/btc/detail");
       return;
     }
     if (task.category === 2) {

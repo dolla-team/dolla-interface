@@ -6,6 +6,7 @@ interface TaskState {
   completedTasks: any[];
   loading: boolean;
   initialized: boolean;
+  isBid: boolean;
   set: (params: any) => void;
 }
 
@@ -38,6 +39,7 @@ const useTaskStore = create<TaskState>((set) => ({
   completedTasks: [],
   loading: false,
   initialized: false,
+  isBid: true,
   set: (params) => set(() => ({ ...params }))
 }));
 

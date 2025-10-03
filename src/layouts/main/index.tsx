@@ -12,9 +12,11 @@ import { useEffect, useRef } from "react";
 import PageTabs from "./tabs";
 import { useGlobalStore } from "@/stores/use-global";
 import useTaskCurrent from "@/hooks/task/use-task-current";
+import useTaskStore from "@/stores/use-task";
 
 export default function MainLayout() {
   const { userInfo, login } = useAuth() || {};
+  const taskStore = useTaskStore();
   // const isMobile = useIsMobile();
   const navigate = useNavigate();
   const contentRef = useRef<HTMLDivElement>(null);
@@ -24,7 +26,6 @@ export default function MainLayout() {
   const { fetchTasks } = useTaskCurrent();
 
   useEffect(() => {
-    contentRef.current?.scrollTo(0, 0);
     if (pathname.pathname.includes("portfolio")) {
       if (globalStore.showUserInfo) {
         globalStore.set({ showUserInfo: false });
@@ -36,7 +37,17 @@ export default function MainLayout() {
       }
       prevUserInfoStatus.current = false;
     }
+    contentRef.current?.scrollTo(0, 0);
+    if (taskStore.isBid) {
+      taskStore.set({ isBid: false });
+    }
   }, [pathname]);
+
+  useEffect(() => {
+    if (taskStore.isBid) {
+      contentRef.current?.scrollTo(0, 560);
+    }
+  }, [taskStore.isBid]);
 
   useEffect(() => {
     if (userInfo?.user) {
@@ -96,7 +107,8 @@ export default function MainLayout() {
         <div
           className="h-[calc(100vh-76px)] overflow-y-auto relative z-[2] bg-[#F0F0F0]"
           style={{
-            width: globalStore.showUserInfo ? window.innerWidth - 294 : "100%"
+            width: globalStore.showUserInfo ? window.innerWidth - 294 : "100%",
+            scrollBehavior: "smooth"
           }}
           ref={contentRef}
         >

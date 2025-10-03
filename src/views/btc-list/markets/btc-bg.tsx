@@ -1,3 +1,5 @@
+import { BASE_TOKEN } from "@/config/btc";
+
 const amountConfig: Record<
   string,
   { textColor: string; bgColor: string[]; borderColor: string[] }
@@ -19,7 +21,15 @@ const amountConfig: Record<
   }
 };
 
-export default function BTCBg({ amount, id }: { amount: string; id: string }) {
+export default function BTCBg({
+  amount,
+  id,
+  name
+}: {
+  amount: string;
+  id: string;
+  name: string;
+}) {
   const config = amountConfig[amount];
   return (
     <div className="w-[52px] h-[52px] relative">
@@ -210,7 +220,7 @@ export default function BTCBg({ amount, id }: { amount: string; id: string }) {
           WebkitTextFillColor: "transparent"
         }}
       >
-        {amount} BTC
+        {amount} {name || BASE_TOKEN.symbol}
       </span>
     </div>
   );

@@ -6,9 +6,11 @@ import Loading from "@/components/icons/loading";
 import { useNavigate } from "react-router-dom";
 import clsx from "clsx";
 import { BASE_TOKEN } from "@/config/btc";
+import useTaskStore from "@/stores/use-task";
 
 export default function Markets() {
   const navigate = useNavigate();
+  const taskStore = useTaskStore();
   const {
     poolList,
     loading,
@@ -24,7 +26,14 @@ export default function Markets() {
   });
 
   return (
-    <div className="w-full bg-white mt-[30px] rounded-[16px] border border-[#F2F2F233] px-[30px] py-[20px]">
+    <div
+      className={clsx(
+        "w-full bg-white mt-[30px] rounded-[16px] border px-[30px] py-[20px]",
+        taskStore.isBid
+          ? "border-[#FFC42F]/30 shadow-[0_0_20px_20px_rgba(255,196,47,0.5)]"
+          : " border-[#F2F2F233]"
+      )}
+    >
       <div className="flex items-center justify-between">
         <div className="text-[20px] text-black font-[700] mb-[10px]">
           All Markets

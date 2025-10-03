@@ -84,7 +84,7 @@ export default function Actions() {
 const MENU = [
   {
     key: "portfolio",
-    label: "Portfolio",
+    label: "Profile",
     isActive: true,
     icon: (
       <svg
