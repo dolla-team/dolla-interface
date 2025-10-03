@@ -17,12 +17,14 @@
 // };
 
 export const BASE_TOKEN: Record<string, any> = {
-  assetId:
-    "nep141:2260fac5e5542a773aa44fbcfedf7c193bc2c599.factory.bridge.near",
-  address: "2260fac5e5542a773aa44fbcfedf7c193bc2c599.factory.bridge.near",
+  // assetId:
+  //   "nep141:2260fac5e5542a773aa44fbcfedf7c193bc2c599.factory.bridge.near",
+  // address: "2260fac5e5542a773aa44fbcfedf7c193bc2c599.factory.bridge.near",
+  assetId: "nep141:nbtc.bridge.near",
+  address: "nbtc.bridge.near",
   decimals: 8,
   chain: "near",
-  name: "wBTC",
+  name: "BTC",
   symbol: "BTC",
   icon: "/tokens/btc.png",
   pointsIcon: "/tokens/btc.png",
