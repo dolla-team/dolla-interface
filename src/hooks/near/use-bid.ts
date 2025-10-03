@@ -90,18 +90,24 @@ export default function useBid(
         throw new Error("Bid failed");
       }
 
+      let count = 0;
+
       const loopBidData = async () => {
         const result = await axiosInstance.get(
           `/api/v1/user/bid/data/detail?id=${response.data.data}`
         );
         if (result.data.data?.tx_hash) {
           loopBidResult(result.data.data.tx_hash);
-        } else {
-          if (window.bidDataTimer) {
-            clearTimeout(window.bidDataTimer);
-          }
-          window.bidDataTimer = setTimeout(loopBidData, 1000);
+          return;
         }
+        if (count > 15) {
+          throw new Error("Bid failed");
+        }
+        if (window.bidDataTimer) {
+          clearTimeout(window.bidDataTimer);
+        }
+        count++;
+        window.bidDataTimer = setTimeout(loopBidData, 1000);
       };
 
       const loopBidResult = async (hash: string) => {

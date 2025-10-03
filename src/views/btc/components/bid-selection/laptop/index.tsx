@@ -34,7 +34,7 @@ export default function BidSelection({
             <span className="text-[16px] text-white">PTS</span>
             <Points />
           </div>
-          <div className="flex items-center justify-center mt-[20px] relative w-[192px] h-[62px]">
+          <div className="flex items-center justify-center mt-[30px] relative w-[192px] h-[62px]">
             <BalanceBg />
             <CashierEntry
               onClick={(e: any) => {
@@ -61,7 +61,7 @@ export default function BidSelection({
           flipStatus={flipStatus}
         />
 
-        <div className="flex items-end text-black text-[18px] font-normal leading-[100%] uppercase mt-[16px] ml-[0px]">
+        <div className="flex items-end text-black text-[18px] font-normal leading-[100%] uppercase mt-[10px]">
           {[1, 10, 50, 100].map((item) => (
             <div
               key={`bids-${item}`}
