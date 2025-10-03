@@ -105,7 +105,7 @@ export default function BTCCreate() {
                 )}
               </div>
               <div className="mt-[13px] flex items-center gap-[10px] h-[97px] max-md:grid max-md:grid-cols-2 max-md:h-[unset]">
-                {[1, 0.1, 0.01].map((item, index) => {
+                {[1, 0.1, 0.001].map((item, index) => {
                   const isActive = amount === item;
                   return (
                     <motion.div
