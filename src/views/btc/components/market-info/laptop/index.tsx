@@ -2,7 +2,6 @@ import Progress from "../progress";
 import { useBtcContext } from "../../../context";
 import { formatNumber } from "@/utils/format/number";
 import clsx from "clsx";
-import { PlayerIcon, BidsIcon } from "../icons";
 import RollingDigitDisplay from "@/components/rolling-digit";
 import Avatar from "@/components/avatar";
 import SellerLevel from "@/components/seller-level";
@@ -41,50 +40,26 @@ export default function MarketInfo() {
           <div className="w-1/2">
             <div
               className={clsx(
-                "text-[16px] flex items-center gap-[6px]",
-                pool?.status === 3 ? "text-[#C3C3C3]" : "text-[#FFE9B2]"
+                "text-[12px] flex items-center gap-[6px]",
+                pool?.status === 3 ? "text-[#C3C3C3]" : "text-white/50"
               )}
             >
-              <PlayerIcon />
               <span>Players</span>
             </div>
-            <div
-              className={clsx(
-                "font-[DelaGothicOne] text-[26px] bg-clip-text",
-                pool?.status === 3
-                  ? "bg-[linear-gradient(180deg,#C3C3C3_0%,#787878_100%)]"
-                  : "bg-[linear-gradient(180deg,#FFF698_0%,#FFC42F_100%)]"
-              )}
-              style={{
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent"
-              }}
-            >
+            <div className={clsx("text-[20px] text-white")}>
               {pool?.participants || "-"}
             </div>
           </div>
           <div className="w-1/2">
             <div
               className={clsx(
-                "text-[16px] flex items-center gap-[6px]",
-                pool?.status === 3 ? "text-[#C3C3C3]" : "text-[#FFE9B2]"
+                "text-[12px] flex items-center gap-[6px]",
+                pool?.status === 3 ? "text-[#C3C3C3]" : "text-white/50"
               )}
             >
-              <BidsIcon />
               <span>Bid</span>
             </div>
-            <div
-              className={clsx(
-                "font-[DelaGothicOne] text-[26px] bg-clip-text",
-                pool?.status === 3
-                  ? "bg-[linear-gradient(180deg,#C3C3C3_0%,#787878_100%)]"
-                  : "bg-[linear-gradient(180deg,#FFF698_0%,#FFC42F_100%)]"
-              )}
-              style={{
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent"
-              }}
-            >
+            <div className={clsx("text-[20px] text-white mt-[5px]")}>
               {pool?.status !== 3 ? (
                 <RollingDigitDisplay
                   prefixSymbol="$"
@@ -96,20 +71,20 @@ export default function MarketInfo() {
             </div>
           </div>
         </div>
-        <div className="mt-[8px] flex items-center">
+        <div className="mt-[12px] flex items-center">
           <div className="w-1/2">
             <div
               className={clsx(
-                "text-[16px]",
-                pool?.status === 3 ? "text-[#C3C3C3]" : "text-[#FFE9B2]"
+                "text-[12px]",
+                pool?.status === 3 ? "text-[#C3C3C3]" : "text-white/50"
               )}
             >
               Market Size
             </div>
             <div
               className={clsx(
-                "font-[BlackHanSans] text-[18px]",
-                pool?.status === 3 ? "text-[#C3C3C3]" : "text-[#FFE9B2]"
+                "text-[16px] font-[600]",
+                pool?.status === 3 ? "text-[#C3C3C3]" : "text-white"
               )}
             >
               {poolAmount} BTC
@@ -118,16 +93,16 @@ export default function MarketInfo() {
           <div className="w-1/2">
             <div
               className={clsx(
-                "text-[16px]",
-                pool?.status === 3 ? "text-[#C3C3C3]" : "text-[#FFE9B2]"
+                "text-[12px]",
+                pool?.status === 3 ? "text-[#C3C3C3]" : "text-white/50"
               )}
             >
               Valued
             </div>
             <div
               className={clsx(
-                "font-[BlackHanSans] text-[18px]",
-                pool?.status === 3 ? "text-[#C3C3C3]" : "text-[#FFE9B2]"
+                "text-[16px] font-[600]",
+                pool?.status === 3 ? "text-[#C3C3C3]" : "text-white"
               )}
             >
               ${formatNumber(pool?.value, 0, true)}
@@ -135,11 +110,11 @@ export default function MarketInfo() {
           </div>
         </div>
 
-        <div className="mt-[8px]">
+        <div className="mt-[14px]">
           <div
             className={clsx(
-              "text-[16px]",
-              pool?.status === 3 ? "text-[#C3C3C3]" : "text-[#FFE9B2]"
+              "text-[12px]",
+              pool?.status === 3 ? "text-[#C3C3C3]" : "text-white/50"
             )}
           >
             Total Bid
