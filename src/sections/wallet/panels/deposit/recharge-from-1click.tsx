@@ -43,7 +43,11 @@ export default function RechargeFrom1click() {
               .toString(),
             evmAddress: address || "",
             slippageTolerance: 50,
-            refundTo: address || "",
+            refundType: chain.blockchain === "btc" ? "INTENTS" : "ORIGIN_CHAIN",
+            refundTo:
+              chain.blockchain === "btc"
+                ? import.meta.env.VITE_NEAR_ACCOUNT_ID
+                : address,
             getFullQuote: true
           });
           setQuote(qoute);
@@ -161,9 +165,7 @@ export default function RechargeFrom1click() {
             <div className="mt-[10px] text-[12px] leading-[18px] text-[#8A87AA]">
               The third-party bridge service will be used during the recharge
               process, which requires at least an additional recharge of{" "}
-              <span className="font-bold text-black">
-                {!isNaN(Number(amount)) ? Number(amount) * 0.0001 : "-"}
-              </span>
+              <span className="font-bold text-black">{0.0001}</span>
             </div>
             <ChainSelector
               selectedChain={chain}

@@ -17,6 +17,8 @@
 // };
 
 export const BASE_TOKEN: Record<string, any> = {
+  assetId:
+    "nep141:2260fac5e5542a773aa44fbcfedf7c193bc2c599.factory.bridge.near",
   address: "2260fac5e5542a773aa44fbcfedf7c193bc2c599.factory.bridge.near",
   decimals: 8,
   chain: "near",
