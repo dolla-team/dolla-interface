@@ -57,7 +57,11 @@ export default function Market({
         <div className="flex items-center justify-between px-[12px]">
           <div className="flex items-center gap-[12px]">
             {data?.reward_amount && (
-              <BtcImg amount={amount} id={data?.pool_id} />
+              <BtcImg
+                amount={amount}
+                id={data?.pool_id}
+                name={data.reward_token_info?.[0]?.symbol}
+              />
             )}
             <div>
               <div className="text-[18px] text-[#2B3337] font-bold">

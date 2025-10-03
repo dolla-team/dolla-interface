@@ -28,7 +28,11 @@ export default function Market({
           )}
           {column.dataIndex === "market" && (
             <div className="flex items-center gap-[16px]">
-              <BtcImg amount={data.amount} id={data.pool_id} />
+              <BtcImg
+                amount={data.amount}
+                id={data.pool_id}
+                name={data.reward_token_info?.[0]?.symbol}
+              />
               <div>
                 <div className="text-[14px] text-black font-semibold">
                   {data.reward_token_info?.[0]?.name}
