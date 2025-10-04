@@ -58,7 +58,6 @@ export default function useRecords() {
             : rawResponse.quoteResponse.quoteRequest.originAsset;
         const token = assetId === BASE_TOKEN.assetId ? BASE_TOKEN : QUOTE_TOKEN;
         const amount = rawResponse.quoteResponse.quote.amountInFormatted;
-        console.log("amount", rawResponse);
 
         let status = item.status;
         if (item.status === "SUCCESS") {
