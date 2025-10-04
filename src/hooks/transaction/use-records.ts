@@ -62,10 +62,10 @@ export default function useRecords() {
         let status = item.status;
         if (item.status === "SUCCESS") {
           status = "Success";
-        } else if (item.status === "PROCESSING") {
-          status = "Processing";
         } else if (item.status === "FAILED") {
           status = "Failed";
+        } else {
+          status = "Processing";
         }
         return {
           type: item.type,
