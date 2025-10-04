@@ -110,7 +110,7 @@ export default function useTrade({ onSuccess }: any) {
           name: "Near Intents",
           noPair: false,
           amount: _amount,
-          outputCurrencyAmount: data.quote.amountOutUsd,
+          outputCurrencyAmount: data.quote.amountOutFormatted,
           routerStr: `${inputCurrency.symbol} -> ${outputCurrency.symbol}`,
           isGasEnough: true,
           priceImpact: priceImpact.toFixed(2),
