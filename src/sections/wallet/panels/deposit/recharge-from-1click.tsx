@@ -5,7 +5,7 @@ import Big from "big.js";
 import useWalletStore from "@/stores/use-wallet";
 import { useDebounce } from "ahooks";
 import { useContractConfigStore } from "@/stores/use-contract-config";
-import useToast from "@/hooks/use-toast";
+import useReport from "@/hooks/transaction/use-report";
 import { useAuth } from "@/contexts/auth";
 import useDeposit from "@/hooks/near/use-deposit";
 import Loading from "@/components/icons/loading";
@@ -22,7 +22,7 @@ export default function RechargeFrom1click() {
   const debouncedAmount = useDebounce(amount, { wait: 1000 });
   const config = useContractConfigStore((state) => state.config);
   const { generateDepositAddress } = useDeposit();
-
+  const { report } = useReport();
   useEffect(() => {
     if (walletStore.defaultDepositAmount) {
       setAmount(walletStore.defaultDepositAmount);
@@ -197,6 +197,10 @@ export default function RechargeFrom1click() {
                 onClick={() => {
                   if (quote || loading) {
                     setShowAddress(true);
+                    report({
+                      address: quote?.depositAddress,
+                      type: "deposit"
+                    });
                   }
                 }}
               >
