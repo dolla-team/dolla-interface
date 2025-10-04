@@ -17,7 +17,7 @@ export default function Top() {
             email={userInfo?.show_email}
             className="border-2 border-[#FFFFFFCC] rounded-[6px]"
           />
-          <div className="text-black">
+          <div className="text-black w-[calc(100%-90px)]">
             <div className="text-[20px] font-bold whitespace-nowrap text-ellipsis overflow-hidden">
               {userInfo?.show_email}
             </div>
