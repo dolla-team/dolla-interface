@@ -56,7 +56,20 @@ export default function useRecords() {
           item.type === "deposit"
             ? rawResponse.quoteResponse.quoteRequest.destinationAsset
             : rawResponse.quoteResponse.quoteRequest.originAsset;
-        const token = assetId === BASE_TOKEN.assetId ? BASE_TOKEN : QUOTE_TOKEN;
+
+        let tokens: any[] = [];
+        if (item.type === "swap") {
+          tokens =
+            rawResponse.quoteResponse.quoteRequest.originAsset ===
+            BASE_TOKEN.assetId
+              ? [BASE_TOKEN, QUOTE_TOKEN]
+              : [QUOTE_TOKEN, BASE_TOKEN];
+        } else {
+          const token =
+            assetId === BASE_TOKEN.assetId ? BASE_TOKEN : QUOTE_TOKEN;
+          tokens = [token];
+        }
+
         const amount = rawResponse.quoteResponse.quote.amountInFormatted;
 
         let status = item.status;
@@ -69,8 +82,8 @@ export default function useRecords() {
         }
         return {
           type: item.type,
-          business_type: item.business_type,
-          token,
+          business_type: item.type.charAt(0).toUpperCase() + item.type.slice(1),
+          tokens,
           amount,
           id: item.id,
           updated_at: item.updated_at,

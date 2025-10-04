@@ -30,11 +30,18 @@ const Account = (props: any) => {
       render: (record: any) => {
         return (
           <div className={clsx("flex items-center gap-[4px]")}>
-            <img
-              src={record.token.icon}
-              className="w-[32px] h-[32px] rounded-full object-cover"
-            />
-            <div className="">{record.token?.symbol}</div>
+            {record.tokens[0]?.icon && (
+              <img
+                src={record.tokens[0].icon}
+                className="w-[32px] h-[32px] rounded-full object-cover"
+              />
+            )}
+            {record.tokens[1]?.icon && (
+              <img
+                src={record.tokens[1].icon}
+                className="w-[32px] h-[32px] rounded-full object-cover ml-[-10px]"
+              />
+            )}
           </div>
         );
       }
@@ -44,10 +51,17 @@ const Account = (props: any) => {
       title: "Amount",
       width: "20%",
       render: (record: any) => {
-        return formatNumber(record.amount, 3, true, {
-          isShort: true,
-          isShortUppercase: true
-        });
+        return (
+          <div className="flex items-center gap-[4px]">
+            <span>
+              {formatNumber(record.amount, 3, true, {
+                isShort: true,
+                isShortUppercase: true
+              })}
+            </span>
+            <div className="">{record.tokens[0]?.symbol}</div>
+          </div>
+        );
       }
     },
     {

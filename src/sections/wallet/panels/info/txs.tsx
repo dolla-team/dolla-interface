@@ -40,36 +40,32 @@ const Item = ({ data }: { data: any }) => {
       <div className="flex justify-between items-center py-[8px]">
         <div className="flex items-center gap-[8px]">
           <div className="relative flex">
-            {data.token?.icon && (
+            {data.tokens[0]?.icon && (
               <img
-                src={data.token.icon}
+                src={data.tokens[0].icon}
                 className="w-[32px] h-[32px] rounded-full object-cover"
               />
             )}
-            {/* <img
-            src={config.purchaseToken.icon}
-            className="w-[32px] h-[32px] rounded-full object-cover ml-[-10px]"
-          /> */}
+            {data.tokens[1]?.icon && (
+              <img
+                src={data.tokens[1].icon}
+                className="w-[32px] h-[32px] rounded-full object-cover ml-[-10px]"
+              />
+            )}
           </div>
           <div>
-            <div className="text-[14px] text-black">
-              {data?.business_type}(
-              <span
-                className={clsx(
-                  "text-[12px]",
-                  data.status === "Success"
-                    ? "text-[#4DCF5E]"
-                    : data.status === "Processing"
-                    ? "text-[#FFC42F]"
-                    : "text-[#FF6A8E]"
-                )}
-              >
-                {data.status}
-              </span>
-              )
-            </div>
-            <div className="text-[10px] text-[#8A87AA]">
-              {data.token?.symbol}
+            <div className="text-[14px] text-black">{data?.business_type}</div>
+            <div
+              className={clsx(
+                "text-[12px]",
+                data.status === "Success"
+                  ? "text-[#4DCF5E]"
+                  : data.status === "Processing"
+                  ? "text-[#FFC42F]"
+                  : "text-[#FF6A8E]"
+              )}
+            >
+              {data.status}
             </div>
           </div>
         </div>
@@ -79,9 +75,13 @@ const Item = ({ data }: { data: any }) => {
               data.amount,
               3,
               true,
-              data.type === "deposit" ? { prefix: "+ " } : { prefix: "- " }
+              data.type === "swap"
+                ? {}
+                : data.type === "deposit"
+                ? { prefix: "+ " }
+                : { prefix: "- " }
             )}{" "}
-            {data.token?.symbol}
+            {data.tokens[0]?.symbol}
           </div>
           <div className="text-[10px] text-[#8A87AA]">
             {dayjs(data.updated_at).format("hh:mm D MMM, YYYY")}

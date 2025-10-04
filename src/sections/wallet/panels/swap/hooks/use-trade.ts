@@ -10,6 +10,7 @@ import dayjs from "dayjs";
 import Big from "big.js";
 import useGenerateKey from "@/hooks/near/use-generate-key";
 import { useAuth } from "@/contexts/auth";
+import useReport from "@/hooks/transaction/use-report";
 
 const THIRTY_TGAS = "300000000000000";
 
@@ -23,6 +24,7 @@ export default function useTrade({ onSuccess }: any) {
   const prices = {};
   const { generateKeyPair } = useGenerateKey();
   const { address } = useAuth();
+  const { report } = useReport();
 
   const onQuoter = useCallback(
     async ({ inputCurrency, outputCurrency, inputCurrencyAmount }: any) => {
@@ -146,6 +148,10 @@ export default function useTrade({ onSuccess }: any) {
           }
         }
       };
+      report({
+        address: trade.recipientAccount,
+        type: "swap"
+      });
       console.log("swapArgs:", JSON.stringify(withdrawArgs));
       const nonce = await getNonce(publicKey);
       const publicKeyObj = PublicKey.from(publicKey);
