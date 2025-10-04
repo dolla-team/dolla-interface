@@ -20,9 +20,8 @@ export default function TicketBottom({
 
       <Button
         className={clsx("w-[112px] h-[42px]")}
-        soon
         onClick={() => {
-          // onBuyTicket();
+          onBuyTicket();
         }}
       >
         Buy Ticket

@@ -8,7 +8,7 @@ import AmountInput from "./amount-input";
 import useIsMobile from "@/hooks/use-is-mobile";
 import { BET_UNIT } from "@/config";
 import Big from "big.js";
-import useUserPrize from "@/hooks/use-user-prize";
+import useUserInfoStore from "@/stores/use-user-info";
 
 export default function BuyTicket({
   showBuyTicket,
@@ -21,15 +21,19 @@ export default function BuyTicket({
 }) {
   const isMobile = useIsMobile();
   const [ticket, setTicket] = useState(1);
+  const userInfoStore = useUserInfoStore();
 
   const isDisabled = useMemo(() => {
     return Big(ticket).gt(Big(tokenBalance || 0).mul(BET_UNIT));
   }, [ticket, tokenBalance]);
 
-  const { getUserPrize } = useUserPrize();
-
   const { transfer: onTransfer, loading: transferring } = useTransfer(() => {
-    getUserPrize();
+    userInfoStore.set({
+      prize: {
+        ...userInfoStore.prize,
+        tickets: userInfoStore.prize.tickets + ticket
+      }
+    });
   });
 
   return (
