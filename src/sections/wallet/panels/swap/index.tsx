@@ -45,7 +45,7 @@ export default function Swap(props?: any) {
 
   const tokenPrices = useMemo(() => {
     return prices?.reduce((acc: any, price: any) => {
-      acc[price.symbol] = price.last_price;
+      acc[price.address] = price.last_price;
       return acc;
     }, {});
   }, [prices]);

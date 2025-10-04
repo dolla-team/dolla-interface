@@ -32,9 +32,7 @@ export default function TokenAmount({
     () =>
       currency
         ? [
-            currency && prices
-              ? prices[currency.priceKey || currency.symbol]
-              : 0,
+            currency && prices ? prices[currency.address] : 0,
             currency?.isBaseToken
               ? nearAccount?.prizeBalance
               : nearAccount?.balance

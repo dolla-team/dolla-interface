@@ -28,20 +28,25 @@ export function useSwap(props?: any) {
   const [selectType, setSelectType] = useState<"in" | "out">("in");
 
   const tokenIds = useMemo(() => {
-    return [
-      {
+    if (!inputCurrency && !outputCurrency) return [];
+    let _tokenIds = [];
+    if (inputCurrency) {
+      _tokenIds.push({
         chain: "near",
         address: inputCurrency?.address
-      },
-      {
+      });
+    }
+    if (outputCurrency) {
+      _tokenIds.push({
         chain: "near",
         address: outputCurrency?.address
-      }
-    ];
+      });
+    }
+    return _tokenIds;
   }, [inputCurrency, outputCurrency]);
 
   const { chainId, account } = useAccount();
-  const { prices, loading: pricesLoading } = useTokenPrice(tokenIds);
+  const { prices, loading: pricesLoading } = useTokenPrice(tokenIds as any);
 
   const { loading, trade, onQuoter, onSwap } = useTrade({
     onSuccess: () => {
