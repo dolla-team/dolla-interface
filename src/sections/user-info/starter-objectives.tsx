@@ -4,6 +4,7 @@ import Loading from "@/components/icons/loading";
 import useTaskAction from "@/hooks/task/use-task-action";
 import { useAuth } from "@/contexts/auth";
 import useTaskStore from "@/stores/use-task";
+import RefreshBtn from "@/views/profile/player/objectives/refresh-btn";
 
 export default function StarterObjectives() {
   const taskStore = useTaskStore();
@@ -46,7 +47,9 @@ const Item = ({ task, onSuccess }: { task: any; onSuccess: () => void }) => {
     loading,
     completed,
     claimed,
-    progress
+    progress,
+    refreshing,
+    fetchTaskStatus
   } = useTaskAction(task, onSuccess);
 
   return (
@@ -64,13 +67,19 @@ const Item = ({ task, onSuccess }: { task: any; onSuccess: () => void }) => {
           </div>
         )}
         {!claimed && (
-          <Button
-            className="px-[7px] h-[26px] text-[10px] !rounded-[8px] min-w-[60px]"
-            loading={loading}
-            onClick={() => handleTaskAction()}
-          >
-            {completed ? "Claim" : buttonText}
-          </Button>
+          <div className="flex items-center gap-[10px]">
+            <RefreshBtn
+              refreshing={refreshing}
+              handleRefresh={fetchTaskStatus}
+            />
+            <Button
+              className="px-[7px] h-[26px] text-[10px] !rounded-[8px] min-w-[60px]"
+              loading={loading}
+              onClick={() => handleTaskAction()}
+            >
+              {completed ? "Claim" : buttonText}
+            </Button>
+          </div>
         )}
       </div>
 

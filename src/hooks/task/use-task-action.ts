@@ -1,13 +1,15 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { getButtonText } from "./util";
 import useWalletStore from "@/stores/use-wallet";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import useCopy from "../use-copy";
 import { useGlobalStore } from "@/stores/use-global";
 import useTaskComplete from "./use-task-complete";
 import useTaskClaim from "./use-task-claim";
 import useTaskCurrent from "./use-task-current";
 import useTaskStore from "@/stores/use-task";
+import useToast from "@/hooks/use-toast";
+import axiosInstance from "@/libs/axios";
 
 export default function useTaskAction(task: any, onSuccess?: () => void) {
   const walletStore = useWalletStore();
@@ -15,11 +17,12 @@ export default function useTaskAction(task: any, onSuccess?: () => void) {
   const [completed, setCompleted] = useState(false);
   const [claimed, setClaimed] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [refreshing, setRefreshing] = useState(false);
   const { fetchTasks } = useTaskCurrent();
   const navigate = useNavigate();
   const { onCopy } = useCopy();
   const taskStore = useTaskStore();
-  const pathname = useLocation();
+  const toast = useToast();
 
   const { completeTask, loading: completeLoading } = useTaskComplete(() => {
     setCompleted(true);
@@ -68,6 +71,26 @@ export default function useTaskAction(task: any, onSuccess?: () => void) {
     await completeTask(task.id);
   }, [task, completed]);
 
+  const fetchTaskStatus = useCallback(async (): Promise<any> => {
+    try {
+      setRefreshing(true);
+      const response = await axiosInstance.get(`/api/v1/task/${task.id}`);
+      const data = response.data.data;
+      setCompleted(data.is_completed);
+      setClaimed(data.is_claimed);
+      setProgress(data.is_completed ? 1 : data.progress);
+
+      toast.success({ title: "Refresh successfully" });
+    } catch (err: any) {
+      console.error("Failed to fetch task status:", err);
+
+      toast.fail({ title: "Refresh failed" });
+      return null;
+    } finally {
+      setRefreshing(false);
+    }
+  }, [task]);
+
   useEffect(() => {
     setCompleted(task.is_completed);
     setClaimed(task.is_claimed);
@@ -78,9 +101,11 @@ export default function useTaskAction(task: any, onSuccess?: () => void) {
     buttonText,
     pastButtonText,
     handleTaskAction,
+    fetchTaskStatus,
     loading: completeLoading || claimLoading,
     completed,
     claimed,
-    progress
+    progress,
+    refreshing
   };
 }

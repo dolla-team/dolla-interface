@@ -1,6 +1,7 @@
 import clsx from "clsx";
 import useTaskAction from "@/hooks/task/use-task-action";
 import Button from "@/components/button";
+import RefreshBtn from "./refresh-btn";
 
 export default function Task({
   className,
@@ -17,7 +18,9 @@ export default function Task({
     loading,
     completed,
     claimed,
-    progress
+    progress,
+    refreshing,
+    fetchTaskStatus
   } = useTaskAction(task, onSuccess);
 
   return (
@@ -30,16 +33,22 @@ export default function Task({
       <div className="flex items-center justify-between">
         <div className="text-[14px] text-black">{task.title}</div>
         {!claimed && (
-          <Button
-            className="!bg-black h-[32px] min-w-[60px] px-[10px] !rounded-[8px] text-white button"
-            loading={loading}
-            onClick={(e: any) => {
-              e.stopPropagation();
-              handleTaskAction();
-            }}
-          >
-            {completed ? "Claim" : buttonText}
-          </Button>
+          <div className="flex items-center gap-[10px]">
+            <RefreshBtn
+              refreshing={refreshing}
+              handleRefresh={fetchTaskStatus}
+            />
+            <Button
+              className="!bg-black h-[32px] min-w-[60px] px-[10px] !rounded-[8px] text-white button"
+              loading={loading}
+              onClick={(e: any) => {
+                e.stopPropagation();
+                handleTaskAction();
+              }}
+            >
+              {completed ? "Claim" : buttonText}
+            </Button>
+          </div>
         )}
         {claimed && (
           <svg
