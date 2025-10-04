@@ -17,19 +17,19 @@ export const getButtonText = (task: any) => {
   if (task.category === 1) {
     return ["Invite", "Invited"];
   }
-  if (task.id === 1) {
+  if (task.title === "Follow Twitter") {
     return ["Follow", "Followed"];
   }
-  if (task.id === 2) {
+  if (task.title === "Like a Tweet") {
     return ["Like", "Liked"];
   }
-  if (task.id === 3) {
+  if (task.title === "Like & RT a Tweet") {
     return ["Like & RT", "Liked"];
   }
-  if (task.id === 4) {
+  if (task.title === "Join Telegram") {
     return ["Join", "Joined"];
   }
-  if (task.id === 5) {
+  if (task.title === "Subscribe to TG Channel") {
     return ["Subscribe", "Subscribed"];
   }
   return ["", ""];
