@@ -58,12 +58,24 @@ export default function useRecords() {
             : rawResponse.quoteResponse.quoteRequest.originAsset;
         const token = assetId === BASE_TOKEN.assetId ? BASE_TOKEN : QUOTE_TOKEN;
         const amount = rawResponse.quoteResponse.quote.amountInFormatted;
+        console.log("amount", rawResponse);
+
+        let status = item.status;
+        if (item.status === "SUCCESS") {
+          status = "Success";
+        } else if (item.status === "PROCESSING") {
+          status = "Processing";
+        } else if (item.status === "FAILED") {
+          status = "Failed";
+        }
         return {
           type: item.type,
           business_type: item.business_type,
           token,
           amount,
-          id: item.id
+          id: item.id,
+          updated_at: item.updated_at,
+          status
         };
       });
 

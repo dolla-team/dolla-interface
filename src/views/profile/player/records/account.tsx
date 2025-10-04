@@ -17,7 +17,7 @@ const Account = (props: any) => {
     {
       dataIndex: "typeName",
       title: "Type",
-      width: 150,
+      width: "15%",
       fixed: true,
       render: (record: any) => {
         return record.business_type;
@@ -26,7 +26,7 @@ const Account = (props: any) => {
     {
       dataIndex: "assets",
       title: "Assets",
-      width: isMobile ? 170 : void 0,
+      width: "25%",
       render: (record: any) => {
         return (
           <div className={clsx("flex items-center gap-[4px]")}>
@@ -42,7 +42,7 @@ const Account = (props: any) => {
     {
       dataIndex: "valued",
       title: "Amount",
-      width: 110,
+      width: "20%",
       render: (record: any) => {
         return formatNumber(record.amount, 3, true, {
           isShort: true,
@@ -50,51 +50,30 @@ const Account = (props: any) => {
         });
       }
     },
-    // {
-    //   dataIndex: "wallet",
-    //   title: "Wallet",
-    //   width: 200,
-    //   render: (record: any) => {
-    //     const currentChain = Object.values(chains).find(
-    //       (it: any) => it.name.toLowerCase() === record.chain?.toLowerCase()
-    //     );
-    //     let txUrl: any;
-    //     if (currentChain) {
-    //       txUrl = `${currentChain?.blockExplorers?.default?.url}/tx/${
-    //         record.tx_hash
-    //       }?cluster=${import.meta.env.VITE_SOLANA_CLUSTER_NAME}`;
-    //     }
-    //     return (
-    //       <div className="flex items-center gap-[7px]">
-    //         <div className="text-[#BBACA6]">
-    //           {record.type === "deposit" ? "From" : "To"}
-    //         </div>
-    //         {txUrl ? (
-    //           <a target="_blank" href={txUrl} className="block">
-    //             {record.type === "deposit"
-    //               ? formatAddress(record.from)
-    //               : formatAddress(record.to)}
-    //           </a>
-    //         ) : (
-    //           <div className="block">
-    //             {record.type === "deposit"
-    //               ? formatAddress(record.from)
-    //               : formatAddress(record.to)}
-    //           </div>
-    //         )}
-    //         <img
-    //           src="/profile/icon-share.svg"
-    //           alt="share"
-    //           className="w-[9px] h-[9px] shrink-0"
-    //         />
-    //       </div>
-    //     );
-    //   }
-    // },
+    {
+      dataIndex: "status",
+      title: "Status",
+      width: "15%",
+      render: (record: any) => {
+        return (
+          <div
+            className={clsx(
+              record.status === "Success"
+                ? "text-[#4DCF5E]"
+                : record.status === "Processing"
+                ? "text-[#FFC42F]"
+                : "text-[#FF6A8E]"
+            )}
+          >
+            {record.status}
+          </div>
+        );
+      }
+    },
     {
       dataIndex: "date",
       title: "Date",
-      width: isMobile ? 180 : 160,
+      width: "20%",
       align: GridTableAlign.Right,
       render: (record: any) => {
         return dayjs(record.updated_at).format("hh:mm D MMM, YYYY");

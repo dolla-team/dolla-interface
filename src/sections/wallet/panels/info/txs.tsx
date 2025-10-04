@@ -4,8 +4,8 @@ import useInfiniteScroll from "@/hooks/use-infinite-scroll";
 import Empty from "./empty";
 import useRecords from "@/hooks/transaction/use-records";
 import { formatNumber } from "@/utils/format/number";
-import { useMemo } from "react";
-import { BASE_TOKEN, QUOTE_TOKEN } from "@/config/btc";
+import dayjs from "dayjs";
+import clsx from "clsx";
 
 export default function Txs() {
   const { loading, records, hasMore, loadMore } = useRecords();
@@ -52,13 +52,28 @@ const Item = ({ data }: { data: any }) => {
           /> */}
           </div>
           <div>
-            <div className="text-[14px] text-black">{data?.business_type}</div>
+            <div className="text-[14px] text-black">
+              {data?.business_type}(
+              <span
+                className={clsx(
+                  "text-[12px]",
+                  data.status === "Success"
+                    ? "text-[#4DCF5E]"
+                    : data.status === "Processing"
+                    ? "text-[#FFC42F]"
+                    : "text-[#FF6A8E]"
+                )}
+              >
+                {data.status}
+              </span>
+              )
+            </div>
             <div className="text-[10px] text-[#8A87AA]">
               {data.token?.symbol}
             </div>
           </div>
         </div>
-        <div>
+        <div className="text-right">
           <div className="text-[14px] text-black">
             {formatNumber(
               data.amount,
@@ -68,7 +83,9 @@ const Item = ({ data }: { data: any }) => {
             )}{" "}
             {data.token?.symbol}
           </div>
-          {/* <div className="text-[10px] text-[#8A87AA]">-200 USDC</div> */}
+          <div className="text-[10px] text-[#8A87AA]">
+            {dayjs(data.updated_at).format("hh:mm D MMM, YYYY")}
+          </div>
         </div>
       </div>
     )
