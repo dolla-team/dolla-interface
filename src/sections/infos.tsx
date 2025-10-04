@@ -92,7 +92,10 @@ export default function Infos({
       );
 
       setData(res.data.data);
-      walletStore.set({ showInfos: !!res.data.data?.length });
+
+      walletStore.set({
+        showInfos: !(!res.data || !res.data?.data || !res.data.data?.length)
+      });
       window.scrollTimer = setTimeout(() => {
         getData();
       }, 10000);

@@ -2,17 +2,15 @@ import Loading from "@/components/icons/loading";
 import LoadingMore from "@/components/loading/loading-more";
 import useInfiniteScroll from "@/hooks/use-infinite-scroll";
 import Empty from "./empty";
-import useUserRecords, {
-  EUserRecordsType,
-  UserRecordsTypeMap
-} from "@/hooks/use-user-records";
+import useRecords from "@/hooks/transaction/use-records";
 import { formatNumber } from "@/utils/format/number";
-import Big from "big.js";
+import { useMemo } from "react";
+import { BASE_TOKEN, QUOTE_TOKEN } from "@/config/btc";
 
 export default function Txs() {
-  const { loading, records, hasMore, onQueryRecords } = useUserRecords();
+  const { loading, records, hasMore, loadMore } = useRecords();
 
-  const { containerRef, isLoading } = useInfiniteScroll(onQueryRecords, {
+  const { containerRef, isLoading } = useInfiniteScroll(loadMore, {
     loading,
     hasMore,
     threshold: 100
@@ -38,47 +36,41 @@ export default function Txs() {
 
 const Item = ({ data }: { data: any }) => {
   return (
-    <div className="flex justify-between items-center py-[8px]">
-      <div className="flex items-center gap-[8px]">
-        {/* <div className="relative flex">
-          <img
-            src={config.purchaseToken.icon}
-            className="w-[32px] h-[32px] rounded-full object-cover"
-          />
-          <img
+    data && (
+      <div className="flex justify-between items-center py-[8px]">
+        <div className="flex items-center gap-[8px]">
+          <div className="relative flex">
+            {data.token?.icon && (
+              <img
+                src={data.token.icon}
+                className="w-[32px] h-[32px] rounded-full object-cover"
+              />
+            )}
+            {/* <img
             src={config.purchaseToken.icon}
             className="w-[32px] h-[32px] rounded-full object-cover ml-[-10px]"
-          />
-        </div> */}
+          /> */}
+          </div>
+          <div>
+            <div className="text-[14px] text-black">{data?.business_type}</div>
+            <div className="text-[10px] text-[#8A87AA]">
+              {data.token?.symbol}
+            </div>
+          </div>
+        </div>
         <div>
           <div className="text-[14px] text-black">
-            {UserRecordsTypeMap[data.type as EUserRecordsType].label}
+            {formatNumber(
+              data.amount,
+              3,
+              true,
+              data.type === "deposit" ? { prefix: "+ " } : { prefix: "- " }
+            )}{" "}
+            {data.token?.symbol}
           </div>
-          {/* <div className="text-[10px] text-[#8A87AA]">
-            {data.token_info.symbol}
-          </div> */}
+          {/* <div className="text-[10px] text-[#8A87AA]">-200 USDC</div> */}
         </div>
       </div>
-      <div>
-        <div className="text-[14px] text-black">
-          {!data.token_info?.token_id
-            ? formatNumber(
-                Big(data.amount).div(10 ** data.token_info.decimals),
-                2,
-                true,
-                data.type === 1 || data.type === 3 || data.type === 5
-                  ? { prefix: "+ " }
-                  : { prefix: "- " }
-              )
-            : data.type === 1 || data.type === 3 || data.type === 5
-            ? "+"
-            : "-"}{" "}
-          {data.token_info?.token_id
-            ? `${data.token_info.name} #${data.token_info.token_id}`
-            : data.token_info.symbol}
-        </div>
-        {/* <div className="text-[10px] text-[#8A87AA]">-200 USDC</div> */}
-      </div>
-    </div>
+    )
   );
 };

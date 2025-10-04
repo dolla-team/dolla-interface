@@ -3,12 +3,14 @@ import dayjs from "dayjs";
 import useGenerateKey from "@/hooks/near/use-generate-key";
 import { quote } from "./util";
 import useToast from "../use-toast";
+import useReport from "../transaction/use-report";
 
 export default function useDeposit() {
   const [loading, setLoading] = useState(false);
   const [depositAddress, setDepositAddress] = useState<string | null>("");
   const { fail } = useToast();
   const { generateKeyPair } = useGenerateKey();
+  const { report } = useReport();
 
   async function generateDepositAddress({
     swapType = "EXACT_INPUT",
@@ -73,8 +75,12 @@ export default function useDeposit() {
       const data = await quote(body);
 
       if (data) {
-        console.log(data);
         setDepositAddress(data.quote.depositAddress);
+        report({
+          // address: data.quote.depositAddres,
+          address: "0x94d3627fCf250f7F72439E8863fD171b4B6D1462",
+          type: "deposit"
+        });
         if (getFullQuote) {
           return data.quote;
         }

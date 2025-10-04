@@ -3,7 +3,6 @@ import Actions from "./actions";
 import Level from "./level";
 import Info from "./info";
 import StarterObjectives from "./starter-objectives";
-import clsx from "clsx";
 import { useAuth } from "@/contexts/auth";
 import { useGlobalStore } from "@/stores/use-global";
 import useWalletStore from "@/stores/use-wallet";
@@ -28,14 +27,14 @@ export default function Laptop() {
               damping: 30,
               duration: 0.3
             }}
-            className={clsx(
-              "fixed bottom-0 right-0 z-[5] w-[294px] bg-[#1C1C23]",
-              walletStore.showInfos
-                ? "h-[calc(100%-112px)]"
-                : "h-[calc(100%-76px)]"
-            )}
+            className="fixed bottom-0 right-0 z-[5] w-[294px] bg-[#1C1C23]"
             onClick={(e: any) => {
               e.stopPropagation();
+            }}
+            style={{
+              height: walletStore.showInfos
+                ? "calc(100% - 112px)"
+                : "calc(100% - 76px)"
             }}
           >
             <div className="p-[20px]">

@@ -124,7 +124,6 @@ export default function useUserRecords(props?: {
     hasMore,
     onQueryRecords,
     resetRecords,
-
     userRecords,
     userRecordsPrices,
     userRecordsLoading: userRecordsLoading,

@@ -1,4 +1,5 @@
 import { create } from "zustand/index";
+import { createJSONStorage, persist } from "zustand/middleware";
 
 interface WalletState {
   showWallet: boolean;
@@ -17,7 +18,7 @@ interface WalletState {
 
 const initialState = {
   showWallet: false,
-  showInfos: true,
+  showInfos: false,
   panelType: "info",
   depositPanelType: "fund-list",
   depositMethod: "centralized-exchange",
@@ -27,11 +28,20 @@ const initialState = {
   defaultDepositAmount: null
 } as WalletState;
 
-const useWalletStore = create<WalletState>((set, get) => ({
-  ...initialState,
-  set: (params) => set(() => ({ ...params })),
-  get: () => get(),
-  init: () => set(() => initialState)
-}));
+const useWalletStore = create(
+  persist<WalletState>(
+    (set, get) => ({
+      ...initialState,
+      set: (params) => set(() => ({ ...params })),
+      get: () => get(),
+      init: () => set(() => initialState)
+    }),
+    {
+      name: "_wallet",
+      version: 0.1,
+      storage: createJSONStorage(() => localStorage)
+    }
+  )
+);
 
 export default useWalletStore;
