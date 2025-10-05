@@ -6,9 +6,9 @@ import useTransfer from "@/hooks/near/use-buy-ticket";
 import Loading from "@/components/icons/loading";
 import AmountInput from "./amount-input";
 import useIsMobile from "@/hooks/use-is-mobile";
-import { BET_UNIT } from "@/config";
 import Big from "big.js";
 import useUserInfoStore from "@/stores/use-user-info";
+import { QUOTE_TOKEN } from "@/config/btc";
 
 export default function BuyTicket({
   showBuyTicket,
@@ -23,8 +23,14 @@ export default function BuyTicket({
   const [ticket, setTicket] = useState(1);
   const userInfoStore = useUserInfoStore();
 
-  const isDisabled = useMemo(() => {
-    return Big(ticket).gt(Big(tokenBalance || 0).mul(BET_UNIT));
+  const errorTips = useMemo(() => {
+    if (Big(ticket).gt(Big(tokenBalance || 0))) {
+      return "Insufficient Balance";
+    }
+    if (Number(ticket) === 0) {
+      return "Input amount";
+    }
+    return "";
   }, [ticket, tokenBalance]);
 
   const { transfer: onTransfer, loading: transferring } = useTransfer(() => {
@@ -64,7 +70,7 @@ export default function BuyTicket({
         <div className="bg-[url(/btc/ticket3.png)] w-[186px] h-[126px] bg-no-repeat bg-center bg-contain mx-auto mt-[16px]" />
         <div className="flex justify-center items-center gap-[8px]">
           <span className="text-[16px] font-[DelaGothicOne]">{ticket}</span>
-          <PointIcon />
+          <img src={QUOTE_TOKEN.icon} className="w-[24px] h-[24px]" />
         </div>
         <div
           className={clsx(
@@ -92,16 +98,16 @@ export default function BuyTicket({
         <button
           className={clsx(
             "h-[40px] bg-[#FFC42F] rounded-[8px] text-[14px] text-black ml-[20px] mt-[30px]",
-            isDisabled ? "opacity-50" : "button",
+            errorTips ? "opacity-50" : "button",
             isMobile ? "w-[calc(100%-40px)]" : "w-[338px]"
           )}
           onClick={() => {
-            if (isDisabled) return;
+            if (errorTips) return;
             onTransfer(ticket);
           }}
         >
-          {isDisabled ? (
-            "Insufficient Balance"
+          {errorTips ? (
+            errorTips
           ) : transferring ? (
             <Loading size={20} />
           ) : (
