@@ -10,6 +10,7 @@ import { useAuth } from "@/contexts/auth";
 import useDeposit from "@/hooks/near/use-deposit";
 import Loading from "@/components/icons/loading";
 import ChainSelector from "./chain-selector";
+import { formatNumber } from "@/utils/format/number";
 
 export default function RechargeFrom1click() {
   const [quote, setQuote] = useState<any>(null);
@@ -158,7 +159,7 @@ export default function RechargeFrom1click() {
             <div className="flex items-center justify-between mt-[10px]">
               <div className="text-[12px] text-[#8A87AA]">Est. Receive</div>
               <div className="text-[14px] text-black font-[600]">
-                {quote ? quote.amountOutFormatted : "-"}
+                {quote ? formatNumber(quote.amountOutFormatted, 6, true) : "-"}
               </div>
             </div>
 
@@ -224,9 +225,13 @@ export default function RechargeFrom1click() {
               <div className="text-[14px] text-[#8A87AA]">Minimum Receive</div>
               <div className="text-[14px] text-[#8A87AA]">
                 {quote?.minAmountOut
-                  ? new Big(quote?.minAmountOut)
-                      .div(10 ** walletStore.selectedToken?.decimals)
-                      .toString()
+                  ? formatNumber(
+                      new Big(quote?.minAmountOut)
+                        .div(10 ** walletStore.selectedToken?.decimals)
+                        .toString(),
+                      6,
+                      true
+                    )
                   : "-"}{" "}
                 {walletStore.selectedToken?.symbol}
               </div>
