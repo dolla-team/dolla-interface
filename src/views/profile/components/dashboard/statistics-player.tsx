@@ -73,7 +73,7 @@ const StatisticsPlayer = (props: any) => {
           </div>
           <div className="w-[1px] h-[70px] shrink-0 bg-[#E4E4E4] mt-[10px] max-md:hidden"></div>
           <div className="flex items-center justify-between gap-[10px] flex-1 pl-[30px] max-md:flex-col max-md:w-full max-md:gap-[15px]">
-            <div className="flex items-center gap-[10px] max-md:w-full max-md:justify-between max-md:pr-[30px] max-md:pl-[7px]">
+            <div className="flex items-center gap-[40px] max-md:w-full max-md:justify-between max-md:pr-[30px] max-md:pl-[7px]">
               <LabelValue label="Your Balance" className="whitespace-nowrap">
                 {formatNumber(nearAccount?.balance || 0, 2, true, {
                   prefix: "$",
