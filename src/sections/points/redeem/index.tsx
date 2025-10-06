@@ -38,11 +38,11 @@ export default function Redeem({
     <Modal open={showRedeem} onClose={onClose}>
       <div
         className={clsx(
-          "rounded-[16px] border border-[#6A5D3A] bg-[#35302B]",
+          "rounded-[16px] border border-[#E4E4E4] bg-white",
           isMobile ? "w-full" : "w-[618px]"
         )}
       >
-        <div className="h-[54px] bg-[#00000033] rounded-t-[16px] flex items-center justify-between px-[16px]">
+        <div className="h-[54px] bg-black rounded-t-[16px] flex items-center justify-between px-[16px]">
           <div className="text-[20px] text-white">Points Redemption</div>
           <button className="w-[24px] h-[24px] button" onClick={onClose}>
             <svg
@@ -62,7 +62,7 @@ export default function Redeem({
         <div className="p-[20px] flex gap-[40px]">
           {!isMobile && <Item data={data} className="w-[180px]" />}
           <div className={!isMobile ? "grow" : "w-full"}>
-            <div className="flex items-center justify-between text-[14px] text-[#BBACA6]">
+            <div className="flex items-center justify-between text-[14px]">
               <span>Amount</span>
               <span
                 className="underline button"
@@ -81,7 +81,7 @@ export default function Redeem({
               max={max}
             />
             <div className="flex items-center justify-between mt-[10px]">
-              <span className="text-[14px] text-[#BBACA6]">Subtotal</span>
+              <span className="text-[14px]">Subtotal</span>
               <div className="flex items-center gap-[8px]">
                 <PointIcon />
                 <span
