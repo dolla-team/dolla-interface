@@ -54,7 +54,7 @@ export default function Info({
         cursorClassName="!bg-[#743EFF]"
       />
       <div className="h-[calc(100vh-346px)] overflow-y-auto p-[15px]">
-        {tab === 0 && <Tokens onDeposit={() => onTabChange("deposit")} />}
+        {tab === 0 && <Tokens onClick={() => onTabChange("deposit")} />}
         {tab === 1 && (
           <Nfts
             onDeposit={() => onTabChange("deposit")}

@@ -10,7 +10,7 @@ import useWalletStore from "@/stores/use-wallet";
 export default function Laptop() {
   const globalStore = useGlobalStore();
   const walletStore = useWalletStore();
-  const { nearAccount } = useAuth();
+  const { userInfo } = useAuth();
 
   return (
     <>
@@ -43,13 +43,13 @@ export default function Laptop() {
               <div className="flex justify-between items-center text-white mt-[26px]">
                 <div className="text-[10px]">Total bid</div>
                 <div className="text-[12px] font-medium">
-                  ${nearAccount?.acc_bet_amount}
+                  ${userInfo?.player_total_bid}
                 </div>
               </div>
               <div className="flex justify-between items-center text-white mt-[10px]">
                 <div className="text-[10px]">Played</div>
                 <div className="text-[12px] font-medium">
-                  {nearAccount?.acc_bets}
+                  {userInfo?.played}
                 </div>
               </div>
             </div>
