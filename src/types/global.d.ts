@@ -15,6 +15,7 @@ declare global {
     scrollTimer: NodeJS.Timeout;
     bidDataTimer: NodeJS.Timeout | number;
     bidResultTimer: NodeJS.Timeout | number;
+    accountTimer: NodeJS.Timeout | number;
     oddOffset: number;
   }
 }

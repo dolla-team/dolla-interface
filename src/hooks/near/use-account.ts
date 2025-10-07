@@ -12,7 +12,6 @@ export default function useAccount(evmAddress: string) {
         method: "get_account",
         args: { user_id: { Evm: evmAddress.replace(/^0x/, "").toLowerCase() } }
       });
-      console.log("account", res);
 
       let quoteBalance = "0";
       let prizeBalance = "0";
@@ -30,15 +29,20 @@ export default function useAccount(evmAddress: string) {
         nonce: 0,
        */
 
+      const _quoteBalance = Big(quoteBalance)
+        .div(10 ** QUOTE_TOKEN.decimals)
+        .toString();
+      const _prizeBalance = Big(prizeBalance)
+        .div(10 ** BASE_TOKEN.decimals)
+        .toString();
+
       setAccount({
         ...(res || {}),
-        balance: Big(quoteBalance)
-          .div(10 ** QUOTE_TOKEN.decimals)
-          .toString(),
-        prizeBalance: Big(prizeBalance)
-          .div(10 ** BASE_TOKEN.decimals)
-          .toString()
+        balance: _quoteBalance,
+        prizeBalance: _prizeBalance
       });
+
+      window.accountTimer = setTimeout(fetchAccount, 10000);
     } catch (error) {
       console.error(error);
     }
@@ -47,6 +51,12 @@ export default function useAccount(evmAddress: string) {
   useEffect(() => {
     if (!evmAddress) return;
     fetchAccount();
+
+    return () => {
+      if (window.accountTimer) {
+        clearTimeout(window.accountTimer);
+      }
+    };
   }, [evmAddress]);
 
   return {
