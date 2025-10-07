@@ -5,6 +5,7 @@ import { getAnchorPrice } from "@/utils/pool";
 import Big from "big.js";
 import { formatNumber } from "@/utils/format/number";
 import { useDebounceFn } from "ahooks";
+import usePoolListStore from "@/stores/use-pool-list";
 
 export default function usePoolList(props?: {
   pageLimit?: number;
@@ -18,6 +19,7 @@ export default function usePoolList(props?: {
     onFirstPageLoad,
     tokenStatus = 0
   } = props ?? {};
+  const poolListStore = usePoolListStore();
 
   const [poolList, setPoolList] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -68,6 +70,9 @@ export default function usePoolList(props?: {
         }${volume ? "&volume=" + volume : ""}`
       );
 
+      let has1Market = false;
+      let has01Market = false;
+      let has001Market = false;
       const list = res.data.data.list.map((item: any) => {
         const valued = item.nft_ids
           ? getAnchorPrice(item.anchor_price)
@@ -77,6 +82,14 @@ export default function usePoolList(props?: {
         const decimals = item.reward_token_info?.[0]?.decimals || 1;
         const _an = Big(reward_amount).div(10 ** decimals);
         const _a = formatNumber(_an, 3, true);
+
+        if (_a === "1") {
+          has1Market = true;
+        } else if (_a === "0.1") {
+          has01Market = true;
+        } else if (_a === "0.01") {
+          has001Market = true;
+        }
         return {
           ...item,
           amount: _a,
@@ -97,6 +110,14 @@ export default function usePoolList(props?: {
       if (pageRef.current === 0) {
         onFirstPageLoad?.(list);
       }
+
+      poolListStore.set({
+        hasMarkets: {
+          "1": has1Market,
+          "0.1": has01Market,
+          "0.01": has001Market
+        }
+      });
 
       cachedList.current =
         pageRef.current === 0 ? list : [...cachedList.current, ...list];

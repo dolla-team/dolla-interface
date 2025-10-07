@@ -18,12 +18,13 @@ export const getAnchorPrice = (price: number, decimals: number = 18) => {
   return 0;
 };
 
-export const getReAnchorPrice = (pool: any) => {
+export const getReAnchorPrice = (pool: any, decimals: number = 6) => {
   if (pool?.anchor_price)
-    return Big(pool.anchor_price * (1 + (window.oddOffset || 0.2)))
-      .div(1.2)
+    return Big(pool.anchor_price)
+      .div(1 + (window.oddOffset || 0.2))
       .div(10 ** decimals)
       .toNumber();
+
   return 0;
 };
 

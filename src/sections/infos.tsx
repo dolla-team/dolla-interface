@@ -4,7 +4,7 @@ import clsx from "clsx";
 import axiosInstance from "@/libs/axios";
 import { formatAddress } from "@/utils/format/address";
 import Big from "big.js";
-import { getAnchorPrice } from "@/utils/pool";
+import { getReAnchorPrice } from "@/utils/pool";
 import useWalletStore from "@/stores/use-wallet";
 import { BASE_TOKEN } from "@/config/btc";
 
@@ -145,9 +145,7 @@ const Item = ({ item, index }: { item: any; index: number }) => {
     return Math.floor(Math.random() * config.length);
   }, [index]);
 
-  const anchorPrice = Big(
-    getAnchorPrice(item?.anchor_price, BASE_TOKEN.decimals)
-  ).toFixed(2);
+  const price = Big(getReAnchorPrice(item, BASE_TOKEN.decimals)).toFixed(2);
 
   return item.winner_user ? (
     <div className="flex items-center h-full gap-3 text-white transition-transform duration-200 hover:scale-105">
@@ -160,7 +158,7 @@ const Item = ({ item, index }: { item: any; index: number }) => {
           config[randomIndex].color
         )}
       >
-        {anchorPrice}x
+        {price}x
       </span>
       <span className="text-xl drop-shadow-lg">🚀</span>
     </div>
@@ -169,9 +167,7 @@ const Item = ({ item, index }: { item: any; index: number }) => {
       <span className="text-[#D9D9D9] text-[12px]">
         {item.nft_ids ? "New NFT Listed" : "New Market Listed"}
       </span>
-      <span className={clsx("text-lg font-bold drop-shadow-lg")}>
-        ${anchorPrice}
-      </span>
+      <span className={clsx("text-lg font-bold drop-shadow-lg")}>${price}</span>
       <span className="text-xl drop-shadow-lg">🎯</span>
     </div>
   );

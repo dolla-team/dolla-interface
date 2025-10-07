@@ -7,11 +7,13 @@ import useBtcStore from "@/stores/use-btc";
 import { BASE_TOKEN } from "@/config/btc";
 import Big from "big.js";
 import { useNavigate } from "react-router-dom";
+import usePoolListStore from "@/stores/use-pool-list";
 
 export default function MoreMarkets() {
   const { prices } = useTokenPrice(BASE_TOKEN);
   const btcStore = useBtcStore();
   const navigate = useNavigate();
+  const poolListStore = usePoolListStore();
   const price = useMemo(() => {
     if (BASE_TOKEN.address === "usdt.tether-token.near") {
       return 1;
@@ -37,6 +39,7 @@ export default function MoreMarkets() {
               });
               navigate("/btc/detail");
             }}
+            hasMarket={poolListStore.hasMarkets[item]}
           />
         );
       })}
@@ -47,10 +50,12 @@ export default function MoreMarkets() {
 const MarketItem = ({
   value,
   price,
+  hasMarket,
   onClick
 }: {
   value: number;
   price: number;
+  hasMarket: boolean;
   onClick: () => void;
 }) => {
   const valued = useMemo(() => {
@@ -58,14 +63,10 @@ const MarketItem = ({
   }, [price, value]);
   return (
     <div
-      className="
-        w-[372px] h-[200px] 
-        rounded-[16px] 
-        border 
-        border-[rgba(242,242,242,0.20)] 
-        relative group 
-        backdrop-blur-[25px]
-      "
+      className={clsx(
+        "w-[372px] h-[200px] rounded-[16px] border border-[rgba(242,242,242,0.20)] relative group backdrop-blur-[25px]",
+        !hasMarket && "hover:grayscale"
+      )}
     >
       <div
         className="absolute top-0 left-0 w-full h-full rounded-[16px] z-[1] flex flex-col justify-center"
@@ -117,8 +118,17 @@ const MarketItem = ({
         }}
       />
       <div className="opacity-0 absolute top-0 left-0 z-[10] bg-[#0000004D] backdrop-blur-[25px] group-hover:opacity-100 duration-300 w-full h-full rounded-[16px] flex items-center justify-center">
-        <Button className="w-[160px] h-[42px] !bg-[#FFC42F]" onClick={onClick}>
-          Bid for {value} BTC
+        <Button
+          className="w-[160px] h-[42px] !bg-[#FFC42F]"
+          onClick={() => {
+            if (!hasMarket) {
+              return;
+            }
+            onClick();
+          }}
+          disabled={!hasMarket}
+        >
+          {hasMarket ? "Bid for " + value + " BTC" : "Coming soon"}
         </Button>
       </div>
     </div>

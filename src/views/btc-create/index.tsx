@@ -53,7 +53,7 @@ export default function BTCCreate() {
 
   const { create: onCreate, loading: creating } = useCreate(() => {
     updateNearAccount?.();
-    navigate("/profile/seller");
+    navigate("/portfolio/seller");
   });
 
   const errorTips = useMemo(() => {
