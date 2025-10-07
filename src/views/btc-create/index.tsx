@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import { useMemo, useState } from "react";
 import PriceChart from "../nft-create/price-chart";
-import { BASE_TOKEN } from "@/config/btc";
+import { BASE_TOKEN, QUOTE_TOKEN } from "@/config/btc";
 import { formatNumber } from "@/utils/format/number";
 import useTokenPrice from "@/hooks/use-token-price";
 import { motion } from "framer-motion";
@@ -61,10 +61,13 @@ export default function BTCCreate() {
       return "Anchor price not found";
     }
     if (Big(amount).gt(Big(nearAccount?.prizeBalance || 0))) {
-      return "Insufficient Balance";
+      return `Insufficient ${BASE_TOKEN.symbol} Balance`;
     }
+    if (nearAccount?.balance === "0")
+      return `Insufficient ${QUOTE_TOKEN.symbol} Balance`;
+
     return "";
-  }, [amount, pricePerBTC, nearAccount?.prizeBalance]);
+  }, [amount, pricePerBTC, nearAccount?.prizeBalance, nearAccount?.balance]);
 
   const [poolBidsOvermarket] = useMemo(() => {
     return [
@@ -158,9 +161,14 @@ export default function BTCCreate() {
                 {errorTips || "Create Market"}
               </Button>
             </div>
-            {errorTips === "Insufficient Balance" && (
+            {errorTips === `Insufficient ${BASE_TOKEN.symbol} Balance` && (
               <div className="text-[12px] text-[#F87168] text-center mt-[20px]">
-                Insufficient Balance, deposit first
+                Insufficient {BASE_TOKEN.symbol} Balance, deposit first
+              </div>
+            )}
+            {errorTips === `Insufficient ${QUOTE_TOKEN.symbol} Balance` && (
+              <div className="text-[12px] text-[#F87168] text-center mt-[20px]">
+                Insufficient {QUOTE_TOKEN.symbol} Balance, deposit first
               </div>
             )}
             <div className="mt-[36px] rounded-[12px] bg-[#FFFFFF99] p-[24px] w-full max-md:mt-[40px] max-md:px-[12px]">
@@ -361,7 +369,15 @@ export default function BTCCreate() {
 }
 
 const DepositBTC = (props: any) => {
-  const { userInfo, isLoading, tokenBalance, isMobile, token, amount } = props;
+  const {
+    userInfo,
+    isLoading,
+    tokenBalance,
+    isMobile,
+    token,
+    amount,
+    nearAccount
+  } = props;
   const walletStore = useWalletStore();
 
   return (
@@ -387,7 +403,8 @@ const DepositBTC = (props: any) => {
               walletStore.set({
                 showWallet: true,
                 panelType: "deposit",
-                selectedToken: token,
+                // selectedToken:
+                //   nearAccount?.balance === "0" ? QUOTE_TOKEN : token,
                 defaultDepositAmount: amount
               });
             }}
