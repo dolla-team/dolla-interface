@@ -139,7 +139,7 @@ export default function Swap(props?: any) {
           token={inputCurrency}
           loading={loading}
           onClick={onSwap}
-          disabled={trade?.noPair}
+          disabled={!trade || trade?.noPair}
           onRefresh={() => {
             runQuoter(trade?.name);
           }}
