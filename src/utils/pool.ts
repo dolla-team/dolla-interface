@@ -1,3 +1,4 @@
+import { BASE_TOKEN } from "@/config/btc";
 import axiosInstance from "@/libs/axios";
 import Big from "big.js";
 
@@ -18,11 +19,11 @@ export const getAnchorPrice = (price: number, decimals: number = 18) => {
   return 0;
 };
 
-export const getReAnchorPrice = (pool: any, decimals: number = 6) => {
+export const getReAnchorPrice = (pool: any) => {
   if (pool?.anchor_price)
     return Big(pool.anchor_price)
       .div(1 + (window.oddOffset || 0.2))
-      .div(10 ** decimals)
+      .div(10 ** BASE_TOKEN.decimals)
       .toNumber();
 
   return 0;

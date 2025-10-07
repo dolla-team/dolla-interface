@@ -6,7 +6,6 @@ import { formatAddress } from "@/utils/format/address";
 import Big from "big.js";
 import { getReAnchorPrice } from "@/utils/pool";
 import useWalletStore from "@/stores/use-wallet";
-import { BASE_TOKEN } from "@/config/btc";
 
 interface ScrollProps {
   className?: string;
@@ -145,7 +144,7 @@ const Item = ({ item, index }: { item: any; index: number }) => {
     return Math.floor(Math.random() * config.length);
   }, [index]);
 
-  const price = Big(getReAnchorPrice(item, BASE_TOKEN.decimals)).toFixed(2);
+  const price = Big(getReAnchorPrice(item)).toFixed(2);
 
   return item.winner_user ? (
     <div className="flex items-center h-full gap-3 text-white transition-transform duration-200 hover:scale-105">
