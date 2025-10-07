@@ -7,7 +7,7 @@ import Complete from "./complete";
 import { useAuth } from "@/contexts/auth";
 import useTaskStore from "@/stores/use-task";
 
-export default function Objectives({ dataHeight }: { dataHeight: number }) {
+export default function Objectives() {
   const [tab, setTab] = useState("progress");
   const taskStore = useTaskStore();
   const { userInfo, onQueryUserInfo } = useAuth();
@@ -63,12 +63,7 @@ export default function Objectives({ dataHeight }: { dataHeight: number }) {
         />
       </div>
       <SwitchPanel className="mt-[10px]">
-        <div
-          className="overflow-y-auto"
-          style={{
-            maxHeight: (dataHeight || 240) + 304
-          }}
-        >
+        <div className="overflow-y-auto" id="objectives-container">
           {tab === "progress" && (
             <Progress
               tasks={taskStore.progressTasks}

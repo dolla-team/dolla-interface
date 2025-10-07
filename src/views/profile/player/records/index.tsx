@@ -2,14 +2,26 @@ import Switch from "@/components/switch";
 import SwitchPanel from "@/components/switch/switch-panel";
 import clsx from "clsx";
 import { AnimatePresence } from "framer-motion";
-import { memo, useState } from "react";
+import { memo, useState, useRef, useEffect } from "react";
 import BidHistory from "./bid-history";
 import Account from "./account";
 
 const Records = (props: any) => {
-  const { className, ...restProps } = props;
-
+  const { className, ref, ...restProps } = props;
   const [tab, setTab] = useState("bidHistory");
+  const accountRef = useRef<any>(null);
+  const contentRef = useRef<any>(null);
+
+  useEffect(() => {
+    setTimeout(() => {
+      const height = contentRef.current?.clientHeight;
+      const _height = (height || 240) + 244;
+      const element = document.getElementById("objectives-container");
+      if (element) {
+        element.style.maxHeight = _height + "px";
+      }
+    }, 300);
+  }, [tab]);
 
   return (
     <div
@@ -30,7 +42,7 @@ const Records = (props: any) => {
         tabClassName="!px-[20px]"
         activeClassName="!text-white"
       />
-      <div className="">
+      <div className="" ref={contentRef}>
         <AnimatePresence>
           {tab === "bidHistory" && (
             <SwitchPanel>
@@ -39,7 +51,7 @@ const Records = (props: any) => {
           )}
           {tab === "account" && (
             <SwitchPanel>
-              <Account />
+              <Account ref={accountRef} />
             </SwitchPanel>
           )}
         </AnimatePresence>

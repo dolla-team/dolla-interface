@@ -34,10 +34,6 @@ export default function Player() {
 
   const containerRef = useRef<any>(null);
 
-  const dataHeight = useMemo(() => {
-    return data?.length * 50;
-  }, [data]);
-
   return (
     <div
       className="w-full pb-[60px] border-box max-md:overflow-x-hidden max-md:pb-[70px] relative"
@@ -52,7 +48,7 @@ export default function Player() {
             <Dashboard tab="player" className="mt-[20px] max-md:mt-[20px]" />
           </div>
           <div className="mt-[15px] flex gap-[20px]">
-            <Objectives dataHeight={dataHeight} />
+            <Objectives />
             <div className="w-[780px]">
               <PlayerMarkets
                 orders={joinedPoolListData}
