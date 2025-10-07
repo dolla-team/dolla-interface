@@ -36,12 +36,15 @@ export default function RechargeFrom1click() {
         try {
           setQuote(null);
           setLoading(true);
+          console.log("chain", chain, walletStore.selectedToken);
+          const decimals =
+            chain.blockchain === "bsc"
+              ? 18
+              : walletStore.selectedToken.decimals;
           const qoute = await generateDepositAddress({
             originAsset: chain.assetId,
             destinationAsset: walletStore.selectedToken.assetId,
-            amount: new Big(debouncedAmount)
-              .mul(10 ** walletStore.selectedToken.decimals)
-              .toString(),
+            amount: new Big(debouncedAmount).mul(10 ** decimals).toString(),
             evmAddress: address || "",
             slippageTolerance: 50,
             refundType: chain.blockchain === "btc" ? "INTENTS" : "ORIGIN_CHAIN",
