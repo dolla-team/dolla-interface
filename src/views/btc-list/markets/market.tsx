@@ -49,7 +49,7 @@ export default function Market({
           )}
           {column.dataIndex === "anchor_price" && (
             <div className="text-[14px] text-black">
-              {formatNumber(data.value, 0, true, {
+              {formatNumber(data.reward_usd, 2, true, {
                 prefix: "$"
               })}
             </div>
