@@ -18,7 +18,6 @@ interface WalletState {
 
 const initialState = {
   showWallet: false,
-  showInfos: false,
   panelType: "info",
   depositPanelType: "fund-list",
   depositMethod: "centralized-exchange",
@@ -32,6 +31,7 @@ const useWalletStore = create(
   persist<WalletState>(
     (set, get) => ({
       ...initialState,
+      showInfos: false,
       set: (params) => set(() => ({ ...params })),
       get: () => get(),
       init: () => set(() => initialState)

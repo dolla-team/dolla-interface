@@ -82,7 +82,7 @@ export default function TokenAmount({
         <div
           className={`${
             outputCurrencyReadonly ? "" : "border"
-          } flex items-center justify-between border-[#8A87AA4D] rounded-[8px] w-[160px] h-[46px] px-[7px] cursor-pointer ${
+          } flex items-center justify-between border-[#8A87AA4D] rounded-[8px] w-[130px] h-[46px] px-[7px] cursor-pointer ${
             currencyClassName ?? ""
           }`}
           onClick={() => {
@@ -121,7 +121,7 @@ export default function TokenAmount({
               </div>
             </div>
           ) : (
-            <div className="text-[14px]">Select a token</div>
+            <div className="text-[12px]">Select a token</div>
           )}
           {!outputCurrencyReadonly && (
             <svg

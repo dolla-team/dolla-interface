@@ -26,7 +26,7 @@ export default function EstGas({ className }: any) {
         <EstGasIcon />
         <span className="text-[12px] text-[#8A87AA]">Est. Gas</span>
       </div>
-      <div className="w-[288px] rounded-[10px] bg-[#2D2B35] border border-[#514A5D] leading-[2] absolute z-10 left-[-18px] top-[40px] text-white text-[12px] invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 py-[10px] px-[16px]">
+      <div className="w-[288px] rounded-[10px] bg-[#2D2B35] border border-[#514A5D] leading-[2] absolute z-10 left-[-90px] top-[40px] text-white text-[12px] invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 py-[10px] px-[16px]">
         <div className="flex items-center justify-between">
           <span>Bid</span>
           <span>

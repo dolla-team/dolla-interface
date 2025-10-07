@@ -2,7 +2,6 @@ import Big from "big.js";
 import { motion, AnimatePresence } from "framer-motion";
 import Fee from "./fee";
 import { useSettingsStore } from "../../stores/settings";
-import LazyImage from "@/components/layz-image";
 
 const COLOR: Record<number, string> = {
   1: "text-[#ff9445]",
@@ -46,7 +45,7 @@ export default function Routes({
             valueClassName="text-[#3B3951]"
             value={
               <div className="flex items-center gap-2">
-                <LazyImage
+                <img
                   src="/near-intents-logo.png"
                   alt={name}
                   width={80}
