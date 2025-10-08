@@ -291,6 +291,7 @@ export default function BTCCreate() {
                 <DoughnutChart
                   className="!w-[210px] !h-[210px] max-md:mt-[12px]"
                   data={poolBidsOvermarket}
+                  volume={amount.toString()}
                   formatLabel={(record: any) => {
                     return (
                       <div className="flex flex-col items-center justify-center gap-[5px]">
