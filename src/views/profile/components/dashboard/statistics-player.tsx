@@ -9,11 +9,13 @@ import Loading from "@/components/icons/loading";
 import useUserWinner from "@/hooks/use-user-winner";
 import ClaimModal from "../claim/modal";
 import useWalletStore from "@/stores/use-wallet";
+import useBalance from "@/hooks/near/use-balance";
 
 const StatisticsPlayer = (props: any) => {
   const { className, onShare } = props;
   const walletStore = useWalletStore();
-  const { userInfo, nearAccount } = useAuth();
+  const { userInfo } = useAuth();
+  const { balance } = useBalance();
 
   const { totalAmount, loading } = useUserWinner();
 
@@ -75,7 +77,7 @@ const StatisticsPlayer = (props: any) => {
           <div className="flex items-center justify-between gap-[10px] flex-1 pl-[30px] max-md:flex-col max-md:w-full max-md:gap-[15px]">
             <div className="flex items-center gap-[40px] max-md:w-full max-md:justify-between max-md:pr-[30px] max-md:pl-[7px]">
               <LabelValue label="Your Balance" className="whitespace-nowrap">
-                {formatNumber(nearAccount?.balance || 0, 2, true, {
+                {formatNumber(balance || 0, 2, true, {
                   prefix: "$",
                   isShort: true,
                   isShortUppercase: true
