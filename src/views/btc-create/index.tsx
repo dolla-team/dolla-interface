@@ -53,6 +53,7 @@ export default function BTCCreate() {
 
   const { create: onCreate, loading: creating } = useCreate(() => {
     updateNearAccount?.();
+
     navigate("/portfolio/seller");
   });
 

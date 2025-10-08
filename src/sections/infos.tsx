@@ -6,6 +6,7 @@ import { formatAddress } from "@/utils/format/address";
 import Big from "big.js";
 import { getReAnchorPrice } from "@/utils/pool";
 import useWalletStore from "@/stores/use-wallet";
+import { useNavigate } from "react-router-dom";
 
 interface ScrollProps {
   className?: string;
@@ -69,11 +70,14 @@ export default function Infos({
           repeat: Infinity
         }
       });
+    } else {
+      // Stop animation when paused
+      controls.stop();
     }
   }, [controls, contentWidth, duration, isPaused]);
 
   useEffect(() => {
-    if (autoPlay && !isPaused) {
+    if (autoPlay) {
       startAnimation();
     }
   }, [autoPlay, isPaused, startAnimation]);
@@ -128,10 +132,20 @@ export default function Infos({
           }}
         >
           {data.map((item, index) => (
-            <Item item={item} key={`first-${index}`} index={index} />
+            <Item
+              item={item}
+              key={`first-${index}`}
+              index={index}
+              setIsPaused={setIsPaused}
+            />
           ))}
           {data.map((item, index) => (
-            <Item item={item} key={`second-${index}`} index={index} />
+            <Item
+              item={item}
+              key={`second-${index}`}
+              index={index}
+              setIsPaused={setIsPaused}
+            />
           ))}
         </motion.div>
       </div>
@@ -139,7 +153,16 @@ export default function Infos({
   );
 }
 
-const Item = ({ item, index }: { item: any; index: number }) => {
+const Item = ({
+  item,
+  index,
+  setIsPaused
+}: {
+  item: any;
+  index: number;
+  setIsPaused: (isPaused: boolean) => void;
+}) => {
+  const navigate = useNavigate();
   const randomIndex = useMemo(() => {
     return Math.floor(Math.random() * config.length);
   }, [index]);
@@ -162,7 +185,18 @@ const Item = ({ item, index }: { item: any; index: number }) => {
       <span className="text-xl drop-shadow-lg">🚀</span>
     </div>
   ) : (
-    <div className="flex items-center h-full gap-3 text-white transition-transform duration-200 hover:scale-105">
+    <div
+      onClick={() => {
+        navigate(`/btc/detail/${item.pool_id}`);
+      }}
+      className="flex items-center h-full gap-3 text-white transition-transform duration-200 hover:scale-105 button"
+      onMouseEnter={() => {
+        setIsPaused(true);
+      }}
+      onMouseLeave={() => {
+        setIsPaused(false);
+      }}
+    >
       <span className="text-[#D9D9D9] text-[12px]">
         {item.nft_ids ? "New NFT Listed" : "New Market Listed"}
       </span>

@@ -77,6 +77,8 @@ export default function useRecords() {
           status = "Success";
         } else if (item.status === "FAILED") {
           status = "Failed";
+        } else if (item.status === "REFUNDED") {
+          status = "Refunded";
         } else {
           status = "Processing";
         }

@@ -16,13 +16,10 @@ export default function ProgressBar({
   isNft?: boolean;
 }) {
   return (
-    <div
-      className={clsx("flex items-center justify-center gap-[2px]", className)}
-    >
+    <div className={clsx("flex items-center justify-center", className)}>
       <div
         className={clsx(
-          "rounded-[12px] relative h-[10px] p-[2px] bg-[#0000001A] backdrop-blur-[10px]",
-          progress >= 100 ? "w-[148px]" : "w-[200px]"
+          "rounded-[12px] relative h-[10px] p-[2px] bg-[#0000001A] backdrop-blur-[10px] w-[200px]"
         )}
       >
         <div

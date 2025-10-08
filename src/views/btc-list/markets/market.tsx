@@ -68,7 +68,7 @@ export default function Market({
           {column.dataIndex === "hitting" && (
             <div className="w-full">
               {data.progress >= 100 && (
-                <div className="text-[#2B3337] text-[12px] mb-[10px] pl-[10px]">
+                <div className="text-[#2B3337] text-[12px] mb-[10px]">
                   Spilled!
                 </div>
               )}

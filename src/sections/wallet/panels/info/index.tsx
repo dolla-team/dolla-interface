@@ -20,10 +20,10 @@ export default function Info({
       <Top />
       <div className="pt-[20px]">
         <div className="flex justify-center items-center gap-[16px]">
-          <img
+          {/* <img
             src={QUOTE_TOKEN.icon}
             className="w-[36px] h-[36px] rounded-full"
-          />
+          /> */}
           <div className="text-[36px] text-black">
             {formatNumber(balance || 0, 2, true, { prefix: "$" })}
           </div>
