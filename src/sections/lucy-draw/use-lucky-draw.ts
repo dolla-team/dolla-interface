@@ -16,8 +16,9 @@ export default function useLucyDraw() {
       const res = await axiosInstance.get(path);
       if (!id) {
         setCurrentRound(res.data.data.ticket_prize_draw.id);
+        setParticipation(res.data.data.ticket_prize_draw.number);
       }
-      setParticipation(res.data.data.ticket_prize_draw.number);
+
       setIsLoading(false);
       return {
         winningList: res.data.data.winning_list || [],

@@ -2,6 +2,7 @@ import StarIcon from "./star-icon";
 import clsx from "clsx";
 
 export default function SellerLevel({ isSmall = false }: any) {
+  return null;
   return (
     <div
       className={clsx(

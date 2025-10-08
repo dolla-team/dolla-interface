@@ -1,7 +1,6 @@
 import clsx from "clsx";
 import Market from "../../components/market";
 import Button from "@/components/button";
-import Empty from "@/components/empty";
 import { EMarketStatus } from "../../components/market-status";
 import dayjs from "@/libs/dayjs";
 import Popover, {
@@ -16,6 +15,7 @@ import DepositModal from "../deposit-modal";
 import { formatNumber } from "@/utils/format/number";
 import { useNavigate } from "react-router-dom";
 import { useContractConfigStore } from "@/stores/use-contract-config";
+import Empty from "@/sections/wallet/panels/info/empty";
 
 const SellerMarkets = (props: any) => {
   const { className, poolsData, orders, loading, updatePoolsData } = props;
@@ -55,7 +55,7 @@ const SellerMarkets = (props: any) => {
           );
         })
       ) : (
-        <Empty />
+        <Empty className="!py-[50px]" text="No Data" />
       )}
       {currentOrder && (
         <>

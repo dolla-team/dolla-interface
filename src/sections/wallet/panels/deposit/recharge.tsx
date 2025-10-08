@@ -22,7 +22,6 @@ export default function Recharge({
   const rechargeToken = token;
   const depositAddress = address || rechargeToken.depositAddress;
   const { onCopy } = useCopy();
-
   return (
     <div className={clsx("flex flex-col items-center", className)}>
       <div className="w-[160px] h-[160px] mt-[10px] rounded-[6px] bg-white p-2">
@@ -60,7 +59,7 @@ export default function Recharge({
                 </div>
               </div>
               <div className="text-[10px] text-black/60">
-                {formatAddress(token.address, 10)}
+                {formatAddress(chain.contractAddress, 10)}
               </div>
             </div>
           </div>

@@ -25,6 +25,7 @@ export default function useTrade({ onSuccess }: any) {
   const { generateKeyPair } = useGenerateKey();
   const { address } = useAuth();
   const { report } = useReport();
+  const { nearAccount } = useAuth();
 
   const onQuoter = useCallback(
     async ({ inputCurrency, outputCurrency, inputCurrencyAmount }: any) => {
@@ -104,11 +105,15 @@ export default function useTrade({ onSuccess }: any) {
         }
 
         // const gasUsd = Big(Number(result.gasUseEstimateUSD)).toFixed(18);
+        const balance = inputCurrency.isBaseToken
+          ? nearAccount?.prizeBalance
+          : nearAccount?.balance;
 
         const trade = {
           inputCurrency,
           outputCurrency,
           inputCurrencyAmount,
+          isMax: inputCurrencyAmount === balance,
           name: "Near Intents",
           noPair: false,
           amount: _amount,
@@ -137,21 +142,25 @@ export default function useTrade({ onSuccess }: any) {
     let toastId = toast.loading({ title: "Swapping..." });
     try {
       const { publicKey, keyPairSigner } = await generateKeyPair();
+
       const provider = getProvider();
       const { header } = await provider.block({ finality: "final" });
+
+      const _args: any = {
+        token: { FT: trade.inputCurrency.address },
+        recipient_account: trade.recipientAccount
+      };
+
+      if (!trade.isMax) {
+        _args.amount = trade.amount;
+      }
+
       const withdrawArgs = {
         withdraw_args: {
-          ByAk: {
-            amount: trade.amount,
-            token: { FT: trade.inputCurrency.address },
-            recipient_account: trade.recipientAccount
-          }
+          ByAk: _args
         }
       };
-      report({
-        address: trade.recipientAccount,
-        type: "swap"
-      });
+
       console.log("swapArgs:", JSON.stringify(withdrawArgs));
       const nonce = await getNonce(publicKey);
       const publicKeyObj = PublicKey.from(publicKey);
@@ -173,6 +182,10 @@ export default function useTrade({ onSuccess }: any) {
       console.log("signedTransaction:", signedTransaction);
       const result: any = await provider.sendTransaction(signedTransaction);
       toast.dismiss(toastId);
+      report({
+        address: trade.recipientAccount,
+        type: "swap"
+      });
       if (result.status.SuccessValue !== undefined) {
         console.log("Swap success:", result);
         toast.success({ title: "Swap success" });

@@ -308,7 +308,7 @@ export default function PriceChart({
         <Title className="!static" />
         <button
           type="button"
-          className="button shrink-0 w-[44px] h-[36px] rounded-[12px] bg-[#000000] flex items-center justify-center"
+          className="button shrink-0 w-[28px] h-[28px] rounded-[8px] bg-[#000000] flex items-center justify-center"
           onClick={() => {
             setIsFolded(!isFolded);
             if (isFolded) {
@@ -385,7 +385,7 @@ export default function PriceChart({
           </div>
         </div>
         <Annotations
-          className="z-[3] !top-[-30px]"
+          className="z-[3] !top-[-20px]"
           anchorPrice={anchorPrice}
           expectedValue={anchorPrice ? anchorPrice * 1.2 : undefined}
         />

@@ -30,7 +30,8 @@ export const BASE_TOKEN: Record<string, any> = {
   symbol: "ETH",
   icon: "/tokens/eth.png",
   pointsIcon: "/tokens/eth.png",
-  isBaseToken: true
+  isBaseToken: true,
+  minDepositAmount: "0.001"
 };
 
 export const QUOTE_TOKEN: Record<string, any> = {
@@ -41,7 +42,8 @@ export const QUOTE_TOKEN: Record<string, any> = {
   name: "USDT",
   symbol: "USDT",
   icon: "/tokens/usdt.png",
-  pointsIcon: "/tokens/usdt.png"
+  pointsIcon: "/tokens/usdt.png",
+  minDepositAmount: "1"
 };
 
 // export const QUOTE_TOKEN: Record<string, any> = {

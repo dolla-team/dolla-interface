@@ -93,7 +93,7 @@ const MarketItem = ({
             [-webkit-text-fill-color:transparent]
           `}
         >
-          {value} Bitcoin
+          {value} {BASE_TOKEN.symbol}
         </div>
         <div className="flex items-center gap-[4px] text-[14px]">
           <span className="text-white">Valued</span>
@@ -128,7 +128,9 @@ const MarketItem = ({
           }}
           disabled={!hasMarket}
         >
-          {hasMarket ? "Bid for " + value + " BTC" : "Coming soon"}
+          {hasMarket
+            ? "Bid for " + value + " " + BASE_TOKEN.symbol
+            : "Coming soon"}
         </Button>
       </div>
     </div>

@@ -295,7 +295,7 @@ export default function BTCCreate() {
                     return (
                       <div className="flex flex-col items-center justify-center gap-[5px]">
                         <div className="text-[12px] text-[#8A87AA] rounded-[12px] border border-[#E4E4E4] bg-white px-[12px] py-[4px]">
-                          {record.label} BTC
+                          {record.label} {BASE_TOKEN.symbol}
                         </div>
                         {!isMobile && (
                           <div className="text-[#8A87AA] mt-[4px]">
@@ -393,7 +393,7 @@ const DepositBTC = (props: any) => {
             {isLoading ? (
               <Loading size={12} />
             ) : (
-              `${formatNumber(tokenBalance, 2, true)} ${token.symbol}`
+              `${formatNumber(tokenBalance, 6, true)} ${token.symbol}`
             )}
           </div>
           <Button

@@ -16,8 +16,8 @@ export default function BidBtn({
       <BtnBg />
       <button
         className={clsx(
-          "absolute bottom-[-8px] left-0 w-[197px] h-[138px] button",
-          disabled && flipStatus !== 4 && "opacity-50"
+          "absolute bottom-[-8px] left-0 w-[197px] h-[138px]",
+          disabled && flipStatus !== 4 ? "opacity-50" : "button"
         )}
         onClick={onClick}
       >

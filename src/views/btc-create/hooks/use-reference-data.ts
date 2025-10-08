@@ -1,8 +1,8 @@
 import { useAuth } from "@/contexts/auth";
 import { useRequest } from "ahooks";
 import axiosInstance from "@/libs/axios";
-import Big from "big.js";
 import { useMemo } from "react";
+import Big from "big.js";
 
 export function useReferenceData(props: any) {
   const { token, amount } = props;
@@ -38,7 +38,14 @@ export function useReferenceData(props: any) {
     if (!referenceList || !token) return [];
 
     const _data = referenceList.find((item: any) => {
-      return item.reward_token.toLowerCase() === token.address.toLowerCase();
+      const _amount = Big(amount)
+        .mul(10 ** token.decimals)
+        .toFixed(0);
+
+      return (
+        item.reward_token.toLowerCase() === token.address.toLowerCase() &&
+        _amount === item.reward_amount
+      );
     });
     return [_data];
   }, [referenceList, token, amount]);

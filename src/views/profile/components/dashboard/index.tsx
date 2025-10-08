@@ -92,7 +92,7 @@ const Dashboard = (props: any) => {
               </div>
             )}
           </div>
-          {tab === "player" && <SellerLevel isSmall />}
+          {tab === "seller" && <SellerLevel />}
         </div>
         <div className="flex items-center gap-[3px] mt-[8px]">
           <span className="text-[12px] text-[#2B3337]">

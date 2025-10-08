@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useUser } from "@privy-io/react-auth";
+import { usePrivy } from "@privy-io/react-auth";
 import useAccount from "@/hooks/near/use-account";
 import useGameAction from "@/hooks/near/use-game-action";
 import useWithdraw from "@/hooks/near/use-withdraw";
@@ -13,7 +13,6 @@ import useToast from "@/hooks/use-toast";
 import useWithdrawEvm from "@/hooks/evm/use-withdraw";
 import { useContractConfigStore } from "@/stores/use-contract-config";
 import useGenerateKey from "@/hooks/near/use-generate-key";
-import { useGlobalStore } from "@/stores/use-global";
 
 // Constants
 const NFT_ADDRESS = "0x0ae4451B85A528b1Bc03D90F3Bc009962Fe737f7";
@@ -292,6 +291,56 @@ function UpdateKeySection({
   );
 }
 
+// Export Wallet Section Component
+function ExportWalletSection({ exportWallet }: { exportWallet: () => void }) {
+  const [exporting, setExporting] = useState(false);
+  const toast = useToast();
+
+  const handleExportWallet = async () => {
+    try {
+      setExporting(true);
+      await exportWallet();
+      toast.success({ title: "Wallet export initiated" });
+    } catch (error) {
+      console.error("Export wallet error:", error);
+      toast.fail({ title: "Failed to export wallet" });
+    } finally {
+      setExporting(false);
+    }
+  };
+
+  return (
+    <div className="space-y-4">
+      <h2 className="text-xl font-semibold text-gray-800">
+        Export Wallet Demo
+      </h2>
+
+      <div className="bg-gray-50 p-4 rounded-lg">
+        <p className="text-sm text-gray-600 mb-3">
+          Export your wallet's private key securely using Privy's built-in
+          export functionality.
+        </p>
+
+        <Button
+          className="w-full h-10 !bg-pink-600 text-white rounded-lg transition-colors border border-pink-600"
+          onClick={handleExportWallet}
+          loading={exporting}
+          disabled={exporting}
+        >
+          {exporting ? "Exporting..." : "Export Wallet"}
+        </Button>
+
+        <div className="mt-3 p-3 bg-yellow-50 border border-yellow-200 rounded">
+          <p className="text-xs text-yellow-800">
+            ⚠️ This will open a secure dialog to export your private key. Keep
+            it safe and never share it with anyone.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // Account Info Section Component
 function AccountInfoSection({
   account,
@@ -351,8 +400,7 @@ function AccountInfoSection({
 }
 
 export default function Demo() {
-  const { user } = useUser();
-  const globalStore = useGlobalStore();
+  const { exportWallet } = usePrivy(); // Get exportWallet from usePrivy hook
   const config = useContractConfigStore((state) => state.config);
   // const { account } = useAccount(user?.wallet?.address || "");
   const { account } = useAccount("0xbede1d86148441ab80e4917ffe727990e74387ec");
@@ -437,15 +485,16 @@ export default function Demo() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <UpdateKeySection onUpdateKey={handleUpdateKey} updating={updating} />
+          <ExportWalletSection exportWallet={exportWallet} />
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <GameManagementSection
             getAllGames={getAllGames}
             pauseGame={pauseGame}
             resumeGame={resumeGame}
             cancelGame={cancelGame}
           />
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <TradingOperationsSection
             withdraw={withdraw}
             withdrawing={withdrawing}

@@ -2,7 +2,7 @@ import Loading from "@/components/icons/loading";
 import useToast from "@/hooks/use-toast";
 import LazyImage from "@/components/layz-image";
 import clsx from "clsx";
-import { balanceFormated } from "../../utils/balance";
+import { formatNumber } from "@/utils/format/number";
 
 const checkIcon = (
   <svg
@@ -114,7 +114,7 @@ export default function CurrencyRow({
             <>
               {typeof customBalanceFormatter === "function"
                 ? customBalanceFormatter(currency, balance)
-                : balanceFormated(balance)}
+                : formatNumber(balance, currency.decimals === 6 ? 2 : 6, true)}
               {isActive ? checkIcon : <div style={{ width: 16 }} />}
             </>
           )}

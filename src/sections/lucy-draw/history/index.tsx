@@ -7,6 +7,7 @@ import LoadingItem from "./loading-item";
 import Avatar from "@/components/avatar";
 import useIsMobile from "@/hooks/use-is-mobile";
 import { useDebounceFn } from "ahooks";
+import Empty from "@/sections/wallet/panels/info/empty";
 
 export default function LucyDrawHistory({
   open,
@@ -132,9 +133,7 @@ export default function LucyDrawHistory({
             </div>
           ))}
           {winningList.length === 0 && !isLoading && (
-            <div className="text-[16px] text-white text-center pt-[200px]">
-              No data
-            </div>
+            <Empty className="!pt-[100px]" text="No Data" />
           )}
           {isLoading &&
             Array.from({ length: 10 }).map((_, index) => (

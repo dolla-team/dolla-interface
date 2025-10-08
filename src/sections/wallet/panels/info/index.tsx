@@ -1,4 +1,3 @@
-import { useAuth } from "@/contexts/auth";
 import Top from "./top";
 import { QUOTE_TOKEN } from "@/config/btc";
 import { formatNumber } from "@/utils/format/number";
@@ -7,14 +6,15 @@ import Tokens from "./tokens";
 import Nfts from "./nfts";
 import Txs from "./txs";
 import { useState } from "react";
+import useBalance from "@/hooks/near/use-balance";
 
 export default function Info({
   onTabChange
 }: {
   onTabChange: (tab: string) => void;
 }) {
-  const { nearAccount } = useAuth() || {};
   const [tab, setTab] = useState(0);
+  const { balance } = useBalance();
   return (
     <div className="h-full w-full">
       <Top />
@@ -25,7 +25,7 @@ export default function Info({
             className="w-[36px] h-[36px] rounded-full"
           />
           <div className="text-[36px] text-black">
-            {formatNumber(nearAccount?.balance || 0, 2, true, { prefix: "$" })}
+            {formatNumber(balance || 0, 2, true, { prefix: "$" })}
           </div>
         </div>
         <div className="text-[12px] text-[#8A87AA] text-center">

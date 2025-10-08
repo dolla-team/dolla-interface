@@ -38,7 +38,7 @@ export default function TokenAmount({
               : nearAccount?.balance
           ]
         : [0, "0"],
-    [prices, currency]
+    [prices, currency, nearAccount]
   );
 
   const [percent, setPercent] = useState<any>(0);
@@ -82,7 +82,7 @@ export default function TokenAmount({
         <div
           className={`${
             outputCurrencyReadonly ? "" : "border"
-          } flex items-center justify-between border-[#8A87AA4D] rounded-[8px] w-[130px] h-[46px] px-[7px] cursor-pointer ${
+          } flex items-center justify-between border-[#8A87AA4D] rounded-[8px] w-[140px] h-[46px] px-[7px] cursor-pointer ${
             currencyClassName ?? ""
           }`}
           onClick={() => {
@@ -134,7 +134,7 @@ export default function TokenAmount({
             >
               <path
                 d="M1 1L6 5L11 1"
-                stroke="#FFFFFF"
+                stroke="#000"
                 strokeWidth="2"
                 strokeLinecap="round"
               />
@@ -170,7 +170,8 @@ export default function TokenAmount({
         )}
       >
         <div className="flex items-center gap-[4px]">
-          {balanceLabel}: {formatNumber(tokenBalance, 2, true)}
+          {balanceLabel}:{" "}
+          {formatNumber(tokenBalance, currency?.decimals === 6 ? 2 : 6, true)}
         </div>
         {isPrice && (
           <div>

@@ -3,8 +3,6 @@ import { createJSONStorage, persist } from "zustand/middleware";
 
 interface NearKeyState {
   set: (params: any) => void;
-  setPublicKey: (publicKey: any) => void;
-  setPrivateKey: (privateKey: any) => void;
   publicKey: any;
   privateKey: any;
 }
@@ -14,17 +12,7 @@ export const useNearKeyStore = create(
     (set) => ({
       publicKey: null,
       privateKey: null,
-      set: (params) => set(() => ({ ...params })),
-      setPublicKey: (publicKey: any) => {
-        set((state) => {
-          return { ...state, publicKey };
-        });
-      },
-      setPrivateKey: (privateKey: any) => {
-        set((state) => {
-          return { ...state, privateKey };
-        });
-      }
+      set: (params) => set(() => ({ ...params }))
     }),
     {
       name: "_near-key",

@@ -3,13 +3,16 @@ import { useAuth } from "@/contexts/auth";
 import AvatarCashier from "./avatar-cashier";
 import { useGlobalStore } from "@/stores/use-global";
 import useWalletStore from "@/stores/use-wallet";
+import useBalance from "@/hooks/near/use-balance";
 
 export default function AvatarAction() {
-  const { userInfo, nearAccount, address } = useAuth();
+  const { userInfo, address } = useAuth();
 
   // const { claiming, claimTestCoin } = useClaimTestCoin();
   const { set, showUserInfo } = useGlobalStore();
   const walletStore = useWalletStore();
+
+  const { balance } = useBalance();
 
   return (
     <div className="relative group flex items-center gap-[10px]">
@@ -23,7 +26,7 @@ export default function AvatarAction() {
             panelType: "info"
           });
         }}
-        tokenBalance={nearAccount?.balance}
+        tokenBalance={Number(balance).toFixed(2)}
       />
       {userInfo?.icon && (
         <Avatar

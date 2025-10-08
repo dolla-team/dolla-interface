@@ -7,8 +7,7 @@ import { QUOTE_TOKEN } from "@/config/btc";
 import axiosInstance from "@/libs/axios";
 
 export default function useGenerateKey() {
-  const { setPublicKey, setPrivateKey, publicKey, privateKey } =
-    useNearKeyStore();
+  const { set, publicKey, privateKey } = useNearKeyStore();
   const { signMessage } = useSignMessage();
   const { nearAccount, address } = useAuth();
 
@@ -56,8 +55,7 @@ export default function useGenerateKey() {
     };
   }
   function saveKeyPair(publicKey: string, privateKey: string) {
-    setPublicKey(publicKey);
-    setPrivateKey(privateKey);
+    set({ publicKey, privateKey });
   }
 
   async function updateAk({ publicKey }: any) {

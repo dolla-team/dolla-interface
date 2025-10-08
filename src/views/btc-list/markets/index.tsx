@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import clsx from "clsx";
 import { BASE_TOKEN } from "@/config/btc";
 import useTaskStore from "@/stores/use-task";
+import Empty from "@/sections/wallet/panels/info/empty";
 
 export default function Markets() {
   const navigate = useNavigate();
@@ -41,9 +42,18 @@ export default function Markets() {
         <div className="flex items-center h-[40px] p-[2px] bg-[#0000000D] border border-[#F2F2F233] rounded-[10px]">
           {[
             { label: "All", key: 0 },
-            { label: "1 BTC", key: 1 * 10 ** BASE_TOKEN.decimals },
-            { label: "0.1 BTC", key: 0.1 * 10 ** BASE_TOKEN.decimals },
-            { label: "0.01 BTC", key: 0.01 * 10 ** BASE_TOKEN.decimals }
+            {
+              label: "1" + BASE_TOKEN.symbol,
+              key: 1 * 10 ** BASE_TOKEN.decimals
+            },
+            {
+              label: "0.1" + BASE_TOKEN.symbol,
+              key: 0.1 * 10 ** BASE_TOKEN.decimals
+            },
+            {
+              label: "0.01" + BASE_TOKEN.symbol,
+              key: 0.01 * 10 ** BASE_TOKEN.decimals
+            }
           ].map((item) => (
             <button
               key={item.key}
@@ -87,9 +97,7 @@ export default function Markets() {
             <Loading size={20} />
           </div>
         ) : poolList.length === 0 ? (
-          <div className="text-center text-[#8A87AA] text-[14px] leading-[140px]">
-            No data
-          </div>
+          <Empty className="!py-[50px]" text="No Data" />
         ) : (
           poolList.map((item: any) => (
             <Market

@@ -209,7 +209,8 @@ export default function WithdrawInput() {
               withdraw({
                 fromToken: walletStore.selectedToken,
                 amount: amount,
-                recipientAccount: quoteData.depositAddress
+                recipientAccount: quoteData.depositAddress,
+                isMax: amount === balance
               });
             }}
           >

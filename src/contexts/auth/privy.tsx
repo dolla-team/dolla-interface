@@ -33,7 +33,7 @@ export const AuthProvider: React.FC<{
 }> = ({ children }) => {
   const { logout: privyLogout, login: privyLogin, ready } = usePrivy();
   const { user } = useUser();
-  const { setPublicKey, setPrivateKey } = useNearKeyStore();
+  const nearKeyStore = useNearKeyStore();
   const globalStore = useGlobalStore();
 
   useConfig();
@@ -179,8 +179,7 @@ export const AuthProvider: React.FC<{
     localStorage.removeItem("_AK_TOKEN_");
     setInfo(null);
     setAccountRefresher(0);
-    setPublicKey(null);
-    setPrivateKey(null);
+    nearKeyStore.set({ publicKey: null, privateKey: null });
     userInfoStore.init();
     globalStore.init();
   }, [privyWallet?.address, privyLogout, wallets, solanaWallets]);

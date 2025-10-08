@@ -30,29 +30,52 @@ export default function EstGas({ className }: any) {
         <div className="flex items-center justify-between">
           <span>Bid</span>
           <span>
-            ~ ${formatNumber(gas?.bid.min_usd, 3, true)} - $
-            {formatNumber(gas?.bid.max_usd, 3, true)}
+            ~ $
+            {formatNumber(
+              (Number(gas?.bid.min_usd || 0) + Number(gas?.bid.max_usd || 0)) /
+                2,
+              3,
+              true
+            )}
           </span>
         </div>
         <div className="flex items-center justify-between">
           <span>Market Creation</span>
           <span>
-            ~ ${formatNumber(gas?.market_creation.min_usd, 3, true)} - $
-            {formatNumber(gas?.market_creation.max_usd, 3, true)}
+            ~ $
+            {formatNumber(
+              (Number(gas?.market_creation.min_usd || 0) +
+                Number(gas?.market_creation.max_usd || 0)) /
+                2,
+              3,
+              true
+            )}
           </span>
         </div>
         <div className="flex items-center justify-between">
           <span>Withdraw</span>
           <span>
-            ~ ${formatNumber(gas?.withdraw.min_usd, 3, true)} - $
-            {formatNumber(gas?.withdraw.max_usd, 3, true)}
+            ~ $
+            {formatNumber(
+              (Number(gas?.withdraw.min_usd || 0) +
+                Number(gas?.withdraw.max_usd || 0)) /
+                2,
+              3,
+              true
+            )}
           </span>
         </div>
         <div className="flex items-center justify-between">
           <span>Claim</span>
           <span>
-            ~ ${formatNumber(gas?.claim.min_usd, 3, true)} - $
-            {formatNumber(gas?.claim.max_usd, 3, true)}
+            ~ $
+            {formatNumber(
+              (Number(gas?.claim.min_usd || 0) +
+                Number(gas?.claim.max_usd || 0)) /
+                2,
+              3,
+              true
+            )}
           </span>
         </div>
       </div>

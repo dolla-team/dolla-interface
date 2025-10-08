@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import MarketItem from "./market";
-import Empty from "@/components/empty";
+import Empty from "@/sections/wallet/panels/info/empty";
 import Loading from "@/components/icons/loading";
 import { useState } from "react";
 
@@ -109,7 +109,7 @@ const PlayerMarkets = (props: any) => {
               );
             })
           ) : (
-            <Empty />
+            <Empty className="!py-[50px]" text="No Data" />
           )}
         </div>
       </div>

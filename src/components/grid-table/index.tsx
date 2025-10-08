@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import React, { useImperativeHandle, useMemo } from "react";
 import Loading from "@/components/icons/loading";
-import Empty from "../empty";
+import Empty from "@/sections/wallet/panels/info/empty";
 
 const GridTable = (props: Props, ref: any) => {
   const {
@@ -246,7 +246,7 @@ const GridTable = (props: Props, ref: any) => {
               emptyClassName
             )}
           >
-            <Empty text="No memes" />
+            <Empty text="No Data" />
           </div>
         )}
       </div>

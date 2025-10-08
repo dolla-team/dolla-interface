@@ -2,7 +2,6 @@ import axiosInstance from "@/libs/axios";
 import { useState } from "react";
 import { useAuth } from "@/contexts/auth";
 import useGenerateKey from "@/hooks/near/use-generate-key";
-import useToast from "@/hooks/use-toast";
 import { KeyPair } from "near-api-js";
 import { viewMethod } from "./util";
 import { QUOTE_TOKEN } from "@/config/btc";
@@ -16,7 +15,6 @@ export default function useBid(
   const [biding, setBiding] = useState(false);
   const { address, updateNearAccount } = useAuth();
   const { generateKeyPair } = useGenerateKey();
-  const toast = useToast();
 
   // Function to sign a message using NEAR private key
   const signMessage = async (message: string): Promise<string | null> => {
@@ -49,7 +47,7 @@ export default function useBid(
     if (!address) return;
     setBiding(true);
 
-    let toastId = toast.loading({ title: "Bidding..." });
+    // let toastId = toast.loading({ title: "Bidding..." });
     try {
       const res = await viewMethod({
         method: "get_account",
@@ -101,7 +99,10 @@ export default function useBid(
           return;
         }
         if (count > 15) {
-          throw new Error("Bid failed");
+          clearTimeout(window.bidDataTimer);
+          setBiding(false);
+          onTxFail();
+          return;
         }
         if (window.bidDataTimer) {
           clearTimeout(window.bidDataTimer);
@@ -134,16 +135,16 @@ export default function useBid(
 
       loopBidData();
 
-      toast.dismiss(toastId);
-      toast.success({ title: "Bid success" });
+      // toast.dismiss(toastId);
+      // toast.success({ title: "Bid success" });
     } catch (error) {
       setBiding(false);
-      toast.dismiss(toastId);
-      toast.fail({
-        title: "Bid failed",
-        description:
-          error instanceof Error ? error.message : "Unknown error occurred"
-      });
+      // toast.dismiss(toastId);
+      // toast.fail({
+      //   title: "Bid failed",
+      //   description:
+      //     error instanceof Error ? error.message : "Unknown error occurred"
+      // });
       onTxFail();
     } finally {
       setBiding(false);

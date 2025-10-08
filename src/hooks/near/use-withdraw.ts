@@ -21,11 +21,13 @@ export default function useWithdraw(onSuccess?: () => void) {
   async function withdraw({
     fromToken,
     amount,
-    recipientAccount = ""
+    recipientAccount = "",
+    isMax = false
   }: {
     fromToken: any;
     amount: string;
     recipientAccount?: string;
+    isMax?: boolean;
   }) {
     let toastId = toast.loading({ title: "Withdrawing..." });
     try {
@@ -64,13 +66,18 @@ export default function useWithdraw(onSuccess?: () => void) {
       //   recipientAccount = recipientAccount.padStart(64, "0");
       // }
 
+      const _args: any = {
+        token: { FT: fromToken.address },
+        recipient_account: recipientAccount
+      };
+
+      if (!isMax) {
+        _args.amount = _amount;
+      }
+
       const withdrawArgs = {
         withdraw_args: {
-          ByAk: {
-            amount: _amount,
-            token: { FT: fromToken.address },
-            recipient_account: recipientAccount
-          }
+          ByAk: _args
         }
       };
       console.log("withdrawArgs:", JSON.stringify(withdrawArgs));
@@ -94,13 +101,13 @@ export default function useWithdraw(onSuccess?: () => void) {
       console.log("signedTransaction:", signedTransaction);
       const result: any = await provider.sendTransaction(signedTransaction);
       toast.dismiss(toastId);
+      report({
+        address: recipientAccount,
+        type: "withdraw"
+      });
       if (result.status.SuccessValue !== undefined) {
         console.log("Withdraw success:", result);
         toast.success({ title: "Withdraw success" });
-        report({
-          address: recipientAccount,
-          type: "withdraw"
-        });
         onSuccess?.();
       } else {
         console.log("Withdraw failed:", result);
