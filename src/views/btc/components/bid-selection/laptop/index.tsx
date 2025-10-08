@@ -58,7 +58,6 @@ export default function BidSelection({
             }
             onBidClick();
           }}
-          flipStatus={flipStatus}
         />
 
         <div className="flex items-end text-black text-[18px] font-normal leading-[100%] uppercase mt-[10px]">

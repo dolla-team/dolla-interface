@@ -1,16 +1,35 @@
 import clsx from "clsx";
-import DollaEye from "@/components/dolla-eye";
 import BtnBg, { BtnBidBg } from "./btn-bg";
+import { useBtcContext } from "@/views/btc/context";
+import { useState, useEffect, useRef } from "react";
 
 export default function BidBtn({
   disabled,
-  flipStatus,
   onClick
 }: {
   disabled: boolean;
-  flipStatus: number;
   onClick: () => void;
 }) {
+  const { flipStatus, setFlipStatus } = useBtcContext();
+  const [count, setCount] = useState(10);
+
+  useEffect(() => {
+    if (flipStatus !== 4) {
+      clearTimeout(window.autoFlipTimer);
+      setCount(10);
+      return;
+    }
+    if (count === 0) {
+      clearTimeout(window.autoFlipTimer);
+      setFlipStatus(5);
+      return;
+    }
+    if (count > 0) {
+      window.autoFlipTimer = setTimeout(() => {
+        setCount(count - 1);
+      }, 1000);
+    }
+  }, [count, flipStatus]);
   return (
     <div className="w-[197px] h-[235px] relative mx-[100px] top-[-56px]">
       <BtnBg />
@@ -21,10 +40,17 @@ export default function BidBtn({
         )}
         onClick={onClick}
       >
+        {flipStatus === 4 && window.autoFlipTimer !== -1 && (
+          <div className="relative z-[2] text-[36px] font-bold">{count}S</div>
+        )}
         <div
           className={clsx(
-            "relative z-[2] font-bold uppercase mt-[10px]",
-            flipStatus === 4 ? "text-[36px]" : "text-[42px]"
+            "relative z-[2] font-bold uppercase",
+            flipStatus === 4
+              ? window.autoFlipTimer !== -1
+                ? "text-[20px] mt-[-14px]"
+                : "text-[36px]"
+              : "text-[42px] mt-[10px]"
           )}
         >
           {flipStatus === 4 ? "AUTO" : "BID"}
@@ -44,7 +70,10 @@ export default function BidBtn({
             {flipStatus === 4 ? "AUTO" : "BID"}
           </div>
         )} */}
-        <BtnBidBg className="absolute bottom-0 left-0" />
+        <BtnBidBg
+          className="absolute bottom-0 left-0"
+          isAuto={flipStatus === 4}
+        />
       </button>
     </div>
   );

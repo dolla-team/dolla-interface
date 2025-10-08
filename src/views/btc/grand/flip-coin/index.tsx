@@ -144,6 +144,8 @@ const Coin = forwardRef<any, any>(
           }}
           onClick={() => {
             onFlip(false, true);
+            clearTimeout(window.autoFlipTimer);
+            window.autoFlipTimer = -1;
           }}
           ref={coinRef}
         >

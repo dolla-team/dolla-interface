@@ -16,6 +16,7 @@ declare global {
     bidDataTimer: NodeJS.Timeout | number;
     bidResultTimer: NodeJS.Timeout | number;
     accountTimer: NodeJS.Timeout | number;
+    autoFlipTimer: NodeJS.Timeout | number;
     oddOffset: number;
   }
 }

@@ -1,7 +1,7 @@
 import { addThousandSeparator } from "@/utils/format/number";
 import ResultBg from "./bg";
 import Modal from "@/components/modal";
-import { useMemo } from "react";
+import { useMemo, useEffect } from "react";
 import PointIcon from "@/components/icons/point-icon";
 import Winner from "./winner";
 import DollaEye from "@/components/dolla-eye";
@@ -51,6 +51,18 @@ export default function Result({ points, tickets, isWinner, onClose }: any) {
 
     return points > 10000 ? Config[3] : Config[2];
   }, [points, tickets]);
+
+  useEffect(() => {
+    if (isWinner) {
+      return;
+    }
+    const timer = setTimeout(() => {
+      onClose();
+    }, 10000);
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [isWinner]);
 
   return isWinner ? (
     <Winner points={points} onClose={onClose} />

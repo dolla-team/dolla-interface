@@ -46,7 +46,7 @@ export default function BidSelection({ tokenBalance }: any) {
   const { onBid } = useBid(
     pool?.pool_id,
     (result) => {
-      setFlipStatus(4);
+      setFlipStatus(bids === 1 ? 5 : 4);
       setBidResult(result);
       console.log("success", 4);
     },

@@ -57,12 +57,19 @@ export const CannonCoinsProvider = ({
     if (flipStatus === 4) {
       window.howl.bgm.fade(0.2, 0, 1000);
       for (let i = 0; i < bids; i++) {
-        coinsRef.current[i].revert();
+        coinsRef.current[i]?.revert();
       }
     }
 
     if (flipStatus === 5) {
-      coinsRef.current[0]?.flip();
+      if (bids === 1) {
+        coinsRef.current[0]?.revert();
+        coinsRef.current[0]?.flip();
+      } else {
+        for (let i = 0; i < bids; i++) {
+          coinsRef.current[i]?.flip();
+        }
+      }
     }
 
     if (flipStatus === 6 && poolCachedRef.current) {

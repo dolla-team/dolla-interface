@@ -44,6 +44,20 @@ export default function useBid(
   };
 
   const onBid = async (times: number) => {
+    // onTxSuccess();
+
+    // setTimeout(() => {
+    //   onSuccess({
+    //     bid: {
+    //       id: 1,
+    //       status: 1,
+    //       times: times,
+    //       created_at: Date.now()
+    //     }
+    //   });
+    // }, 3000);
+
+    // return;
     if (!address) return;
     setBiding(true);
 
@@ -98,7 +112,7 @@ export default function useBid(
           loopBidResult(result.data.data.tx_hash);
           return;
         }
-        if (count > 15) {
+        if (count > 30) {
           clearTimeout(window.bidDataTimer);
           setBiding(false);
           onTxFail();

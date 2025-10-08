@@ -166,7 +166,13 @@ export default function BtnBg() {
   );
 }
 
-export function BtnBidBg({ className }: { className?: string }) {
+export function BtnBidBg({
+  className,
+  isAuto
+}: {
+  className?: string;
+  isAuto?: boolean;
+}) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -247,8 +253,8 @@ export function BtnBidBg({ className }: { className?: string }) {
           gradientUnits="userSpaceOnUse"
           gradientTransform="translate(98.0556 68.9688) rotate(90) scale(48.9688 78.0556)"
         >
-          <stop stopColor="#FFB700" />
-          <stop offset="1" stopColor="#FFD876" />
+          <stop stopColor={isAuto ? "#00FF95" : "#FFB700"} />
+          <stop offset="1" stopColor={isAuto ? "#00FF59" : "#FFD876"} />
         </radialGradient>
       </defs>
     </svg>
