@@ -39,7 +39,7 @@ export default function RedeemSelection({
       <Modal open={showRedeemSelection} onClose={close}>
         <div
           className={clsx(
-            " rounded-[16px] border border-[#E4E4E4] bg-white",
+            "rounded-[16px] border border-[#E4E4E4] bg-white",
             isMobile ? "w-full" : "w-[814px] h-[422px]"
           )}
         >
@@ -70,8 +70,8 @@ export default function RedeemSelection({
               >
                 <Avatar
                   size={46}
-                  address={userInfo?.user}
-                  email={userInfo?.email}
+                  email={userInfo?.show_email}
+                  src={userInfo?.icon}
                 />
                 <div className="font-[DelaGothicOne] flex items-center">
                   <div className={isMobile ? "text-[16px]" : "text-[20px]"}>
@@ -96,7 +96,7 @@ export default function RedeemSelection({
                   </span>
                 </div>
                 <button
-                  className="underline button text-white text-[14px]"
+                  className="underline button text-[14px]"
                   onClick={() => setShowHistory(true)}
                 >
                   Redeem History

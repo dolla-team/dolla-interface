@@ -7,6 +7,7 @@ import LoadingMore from "@/components/loading/loading-more";
 import { useEffect } from "react";
 import dayjs from "dayjs";
 import useIsMobile from "@/hooks/use-is-mobile";
+import Empty from "@/sections/wallet/panels/info/empty";
 
 export default function History({
   showHistory,
@@ -35,11 +36,11 @@ export default function History({
     <Modal open={showHistory} onClose={onClose}>
       <div
         className={clsx(
-          "rounded-[16px] border border-[#6A5D3A] bg-[#35302B]",
+          "rounded-[16px] border border-[#E4E4E4] bg-white",
           isMobile ? "w-full" : "w-[618px]"
         )}
       >
-        <div className="h-[54px] bg-[#00000033] rounded-t-[16px] flex items-center justify-between px-[16px]">
+        <div className="h-[54px] bg-black rounded-t-[16px] flex items-center justify-between px-[16px]">
           <div className="text-[20px] text-white">Points Redemption</div>
           <button className="w-[24px] h-[24px] button" onClick={onClose}>
             <svg
@@ -57,7 +58,7 @@ export default function History({
           </button>
         </div>
         <div className={clsx("pt-[0px]", isMobile ? "p-0" : "p-[18px]")}>
-          <div className="px-[12px] h-[45px] flex items-center text-[14px] text-[#BBACA6]">
+          <div className="px-[12px] h-[45px] flex items-center text-[14px]">
             {COLUMNS.map((column) => (
               <div
                 key={column.key}
@@ -128,9 +129,10 @@ export default function History({
               </div>
             )}
             {data.length === 0 && !loading && (
-              <div className="text-[14px] text-[#BBACA6] w-full h-[300px] flex items-center justify-center">
-                No data
-              </div>
+              <Empty
+                text="No data"
+                className="h-[300px] flex items-center justify-center"
+              />
             )}
             {data.length > 0 && (
               <LoadingMore
