@@ -47,15 +47,15 @@ export default function Markets() {
           {[
             { label: "All", key: 0 },
             {
-              label: "1" + BASE_TOKEN.symbol,
+              label: "1 " + BASE_TOKEN.symbol,
               key: 1 * 10 ** BASE_TOKEN.decimals
             },
             {
-              label: "0.1" + BASE_TOKEN.symbol,
+              label: "0.1 " + BASE_TOKEN.symbol,
               key: 0.1 * 10 ** BASE_TOKEN.decimals
             },
             {
-              label: "0.01" + BASE_TOKEN.symbol,
+              label: "0.01 " + BASE_TOKEN.symbol,
               key: 0.01 * 10 ** BASE_TOKEN.decimals
             }
           ].map((item) => (
@@ -78,8 +78,14 @@ export default function Markets() {
         {columns.map((column: any) => (
           <div
             key={column.title}
-            className="flex items-center gap-[4px]"
+            className="flex items-center gap-[4px] cursor-pointer"
             style={{ width: column.width }}
+            onClick={() => {
+              if (column.sort) {
+                setSortField(column.dataIndex);
+                setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+              }
+            }}
           >
             <span>{column.title}</span>
             {column.title === "Valued" && <MarketInfo />}
@@ -87,10 +93,6 @@ export default function Markets() {
               <SortIcon
                 active={sortField === column.dataIndex}
                 expanded={sortField === column.dataIndex && sortOrder === "asc"}
-                onClick={() => {
-                  setSortField(column.dataIndex);
-                  setSortOrder(sortOrder === "asc" ? "desc" : "asc");
-                }}
               />
             )}
           </div>

@@ -2,12 +2,10 @@ import clsx from "clsx";
 
 export default function SortIcon({
   active,
-  expanded,
-  onClick
+  expanded
 }: {
   active: boolean;
   expanded: boolean;
-  onClick: () => void;
 }) {
   return (
     <svg
@@ -17,7 +15,6 @@ export default function SortIcon({
       viewBox="0 0 13 11"
       fill="none"
       className={clsx("duration-300 button", expanded ? "rotate-180" : "")}
-      onClick={onClick}
     >
       <path
         opacity={active ? 1 : 0.3}
