@@ -3,7 +3,7 @@ import { KeyPair, KeyPairSigner } from "near-api-js";
 import { useSignMessage } from "@privy-io/react-auth";
 import { viewMethod } from "./util";
 import { useAuth } from "@/contexts/auth/privy";
-import { QUOTE_TOKEN } from "@/config/btc";
+import { BASE_TOKEN, QUOTE_TOKEN } from "@/config/btc";
 import axiosInstance from "@/libs/axios";
 
 export default function useGenerateKey() {
@@ -70,7 +70,12 @@ export default function useGenerateKey() {
       },
       ak: publicKey,
       fee_token: { FT: QUOTE_TOKEN.address },
-      gas_token: { FT: QUOTE_TOKEN.address },
+      gas_token: {
+        FT:
+          nearAccount?.balance === "0"
+            ? BASE_TOKEN.address
+            : QUOTE_TOKEN.address
+      },
       nonce: res.nonce,
       deadline: String(Date.now() + 1000 * 60 * 60 * 6)
     };
