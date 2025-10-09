@@ -50,7 +50,7 @@ const Item = ({ data, number, total, winner, bidsDistribution }: any) => {
 
   return (
     <div className="flex items-center">
-      <div className="text-[14px] text-[#FFE9B2] w-[60px] mr-[11px] shrink-0">
+      <div className="text-[14px] text-[#FFE9B2] w-[100px] mr-[11px] shrink-0">
         BID x{data.value}
       </div>
       <div className="h-[12px] w-[292px] rounded-[6px] flex items-center">
@@ -62,7 +62,7 @@ const Item = ({ data, number, total, winner, bidsDistribution }: any) => {
           <>
             <div className="text-[14px] text-[#ADBCCF]">{number}</div>
             <div className="flex items-center gap-[6px] ml-[10px]">
-              <Avatar size={20} address={winner?.user} email={winner?.email} />
+              <Avatar size={20} src={winner?.icon} email={winner?.email} />
               <span className="text-[12px] text-white">
                 x{bidsDistribution}
               </span>

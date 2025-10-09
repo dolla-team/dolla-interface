@@ -5,15 +5,18 @@ import { motion } from "framer-motion";
 import { useMemo } from "react";
 
 export default function Progress({ data }: any) {
-  const [progress, spilled] = useMemo(() => {
-    if (!data) return [0, 0];
-    if (!data?.accumulative_bids || data?.anchor_price === "0") return [0, 0];
+  const [progress, spilled, spilledPercent] = useMemo(() => {
+    if (!data) return [0, 0, 0];
+    if (!data?.accumulative_bids || data?.anchor_price === "0")
+      return [0, 0, 0];
 
     const value = getReAnchorPrice(data);
-    if (value === 0) return [0, 0];
+    if (value === 0) return [0, 0, 0];
 
     const _spilled = data.accumulative_bids - value;
-    return [(data.accumulative_bids / value) * 100, _spilled];
+    const _spilledPercent = (_spilled / data.accumulative_bids) * 100;
+
+    return [(data.accumulative_bids / value) * 100, _spilled, _spilledPercent];
   }, [data]);
 
   const particles = useMemo(
@@ -44,6 +47,8 @@ export default function Progress({ data }: any) {
     []
   );
 
+  console.log("spilledPercent", spilledPercent);
+
   return (
     <div className="relative">
       <div
@@ -52,6 +57,9 @@ export default function Progress({ data }: any) {
           data?.status === 3 ? "border-[#4E4E4E]" : "border-[#3B3951]",
           spilled > 0 ? "w-[70%]" : "w-full"
         )}
+        style={{
+          width: spilled > 0 ? 100 - spilledPercent! + "%" : "100%"
+        }}
       />
       <div className="h-[10px] rounded-[10px] p-[1px] relative top-[1px] left-[1px] z-[2]">
         <div
@@ -109,7 +117,10 @@ export default function Progress({ data }: any) {
       </div>
       {spilled > 0 && (
         <>
-          <div className="absolute top-[4px] right-[1px] z-[3] w-[30%] h-[4px] bg-linear-to-r from-[#C637FF] to-[#FFADCF] rounded-r-[4px]" />
+          <div
+            style={{ width: spilledPercent! + "%" }}
+            className="absolute top-[4px] right-[1px] z-[3] h-[4px] bg-linear-to-r from-[#C637FF] to-[#FFADCF] rounded-r-[4px]"
+          />
           <div className="absolute bottom-[14px] right-[0px]">
             <div className="text-[12px] text-white/50">Spilled</div>
             <div

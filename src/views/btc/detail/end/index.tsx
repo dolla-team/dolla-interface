@@ -102,7 +102,7 @@ export default function EndPanel({ data }: { data: any }) {
             </div>
             <div
               className={clsx(
-                "relative mx-auto rounded-full flex items-center justify-center",
+                "relative mx-auto rounded-full flex items-center justify-center w-[150px] h-[150px]",
                 isMobile ? "mt-[20px] w-[150px] h-[150px]" : "mt-[47px]"
               )}
             >
@@ -131,7 +131,7 @@ export default function EndPanel({ data }: { data: any }) {
               </div>
               <Avatar
                 size={150}
-                address={data.winner_user_info?.user}
+                src={data.winner_user_info?.icon}
                 email={data.winner_user_info?.email}
                 className="rounded-full"
               />
@@ -168,7 +168,7 @@ export default function EndPanel({ data }: { data: any }) {
                   <div className="flex items-center gap-[10px]">
                     <Avatar
                       size={32}
-                      address={data.user_info?.user}
+                      src={data.user_info?.icon}
                       email={data.user_info?.email}
                     />
                     <div>
@@ -287,7 +287,7 @@ const ProgressAvatar = ({
     >
       <Avatar
         size={26}
-        address={data.winner_user_info?.user}
+        src={data.winner_user_info?.icon}
         email={data.winner_user_info?.email}
       />
       <svg

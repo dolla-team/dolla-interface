@@ -26,11 +26,11 @@ const PlayerMarkets = (props: any) => {
               label: "Live"
             },
             {
-              key: "3",
+              key: "2",
               label: "Ended"
             },
             {
-              key: "5",
+              key: "3",
               label: "Cancelled"
             }
           ].map((item) => {
