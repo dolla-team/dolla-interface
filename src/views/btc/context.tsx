@@ -11,6 +11,7 @@ import { useParams } from "react-router-dom";
 import usePoolInfo from "@/hooks/use-pool-info";
 import { formatNumber } from "@/utils/format/number";
 import Big from "big.js";
+import { useAuth } from "@/contexts/auth";
 
 export const CannonCoinsContext = createContext<any>({});
 
@@ -25,6 +26,7 @@ export const CannonCoinsProvider = ({
   const flipedNumberRef = useRef(0);
   const [bidResult, setBidResult] = useState<any>(null);
   const params = useParams();
+  const { onQueryUserInfo } = useAuth();
   const { onQueryPoolInfo } = usePoolInfo();
   const [pool, setPool] = useState<any>(null);
   const { data, getPoolRecommend } = usePoolRecommend(0, !params?.poolId);
@@ -186,6 +188,7 @@ export const CannonCoinsProvider = ({
         onReset: () => {
           flipedNumberRef.current = 0;
           setBidResult(null);
+          onQueryUserInfo();
           for (let i = 0; i < bids; i++) {
             coinsRef.current[i]?.flip(true);
           }

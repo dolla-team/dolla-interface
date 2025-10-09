@@ -9,7 +9,7 @@ import { BET_UNIT } from "@/config";
 import { useContractConfigStore } from "@/stores/use-contract-config";
 
 export default function BidSelection({ tokenBalance }: any) {
-  const { userInfo, onQueryUserInfo } = useAuth();
+  const { userInfo } = useAuth();
   const isMobile = useIsMobile();
   const {
     bids,
@@ -53,7 +53,6 @@ export default function BidSelection({ tokenBalance }: any) {
     () => {
       setFlipStatus(2);
       console.log("tx success", 2);
-      onQueryUserInfo();
     },
     () => {
       setTimeout(() => {
