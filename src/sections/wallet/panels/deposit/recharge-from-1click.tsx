@@ -86,9 +86,9 @@ export default function RechargeFrom1click() {
       {!showAddress && (
         <div className="py-[20px]">
           <div className="relative h-[calc(100vh-100px)]">
-            <div className="text-[16px] text-center text-black mb-[20px]">
+            {/* <div className="text-[16px] text-center text-black mb-[20px]">
               Input Deposit Amount
-            </div>
+            </div> */}
 
             {/* <div className="w-full bg-white rounded-[12px] border border-[#E5E7EB] px-[16px] h-[60px] flex items-center justify-between">
               <div className="relative flex-1">
@@ -139,9 +139,20 @@ export default function RechargeFrom1click() {
             </div> */}
 
             <div className="mt-[10px] text-[12px] leading-[18px] text-[#8A87AA]">
-              The third-party bridge service will be used during the recharge
-              process, which requires at least an additional recharge of{" "}
-              <span className="font-bold text-black">{0.0001}</span>
+              <div>
+                {" "}
+                Please note that only supported networks on Dolla are shown, if
+                you deposit via another network your assets maybe lost.
+              </div>
+              <div className="mt-[3px]">
+                {" "}
+                Min. deposit{" "}
+                <span className="font-bold text-black">
+                  &gt; {walletStore.selectedToken.minDepositAmount}{" "}
+                  {walletStore.selectedToken.symbol}
+                </span>
+              </div>
+              <div className="mt-[3px]"> Est. arrival ≈ 1 mins</div>
             </div>
             <ChainSelector
               selectedChain={chain}
