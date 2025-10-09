@@ -71,6 +71,12 @@ export default function TokenAmount({
       onUpdateCurrencyBalance(tokenBalance);
   }, [tokenBalance]);
 
+  useEffect(() => {
+    if (!amount) {
+      setPercent(0);
+    }
+  }, [amount]);
+
   return (
     <div
       className={clsx(

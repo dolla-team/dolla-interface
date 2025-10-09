@@ -13,13 +13,13 @@ export default function Top() {
         <div className="flex items-center gap-[12px]">
           <Avatar
             size={56}
-            address={userInfo?.address}
+            src={userInfo?.icon}
             email={userInfo?.show_email}
             className="border-2 border-[#FFFFFFCC] rounded-[6px]"
           />
           <div className="text-black w-[calc(100%-90px)]">
             <div className="text-[20px] font-bold whitespace-nowrap text-ellipsis overflow-hidden">
-              {userInfo?.show_email}
+              {userInfo?.name || userInfo?.show_email}
             </div>
             <div className="flex items-center gap-[3px]">
               <span className="text-[12px]">

@@ -88,6 +88,7 @@ export default function Swap(props?: any) {
             ];
             setInputCurrency(_inputCurrency);
             setOutputCurrency(_outputCurrency);
+            setInputCurrencyAmount("");
             setOutputCurrencyAmount("");
             if (Big(inputCurrencyAmount || 0).gt(0)) runQuoter();
           }}
