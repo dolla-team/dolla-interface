@@ -8,6 +8,10 @@ import clsx from "clsx";
 import { BASE_TOKEN } from "@/config/btc";
 import useTaskStore from "@/stores/use-task";
 import Empty from "@/sections/wallet/panels/info/empty";
+import Popover, {
+  PopoverPlacement,
+  PopoverTrigger
+} from "@/components/popover";
 
 export default function Markets() {
   const navigate = useNavigate();
@@ -78,6 +82,7 @@ export default function Markets() {
             style={{ width: column.width }}
           >
             <span>{column.title}</span>
+            {column.title === "Valued" && <MarketInfo />}
             {column.sort && (
               <SortIcon
                 active={sortField === column.dataIndex}
@@ -113,3 +118,35 @@ export default function Markets() {
     </div>
   );
 }
+
+const MarketInfo = () => {
+  return (
+    <Popover
+      trigger={PopoverTrigger.Hover}
+      placement={PopoverPlacement.Bottom}
+      content={
+        <div className="w-[298px] text-[#3B3951] text-[12px] p-[14px] bg-white rounded-[10px] border border-[#E4E4E4]">
+          <div className="font-[300] opacity-80 leading-[120%]">
+            Valued: Market’s base value, your win chance = Bid ÷ Valued * 1.2
+          </div>
+        </div>
+      }
+    >
+      <button className="relative transition-opacity button">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="14"
+          height="14"
+          viewBox="0 0 16 16"
+          fill="none"
+          className="mt-[4px]"
+        >
+          <path
+            d="M8 0C12.4615 5.7067e-07 16 3.6154 16 8C16 12.3846 12.4615 16 8 16C3.6154 16 1.05567e-05 12.4615 0 8C0 3.53847 3.53847 0 8 0ZM8 1.53809C4.46155 1.53809 1.53809 4.46155 1.53809 8C1.5381 11.5384 4.38463 14.4619 8 14.4619C11.6154 14.4619 14.4619 11.5384 14.4619 8C14.4619 4.46155 11.5385 1.53809 8 1.53809ZM8.76953 12.6152H7.23047V6H8.76953V12.6152ZM8.76953 4.69238H7.23047V3.23047H8.76953V4.69238Z"
+            fill="currentColor"
+          />
+        </svg>
+      </button>
+    </Popover>
+  );
+};
