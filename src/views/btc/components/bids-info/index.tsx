@@ -26,9 +26,9 @@ function BidsInfoInner({ onRefresher }: any) {
 
   const [animationY, duration] = useMemo(() => {
     if (!list.length) return [0, 10];
-    const _cy = containerRef.current?.clientHeight || list.length * 36;
-    const _y = hasNext ? _cy : _cy + 360;
-    const _cd = _y / 360 < 2 ? 10 : (_y / 360) * 5;
+    const _cy = containerRef.current?.clientHeight || list.length * 42;
+    const _y = hasNext ? _cy : _cy + 500;
+    const _cd = _y / 420 < 2 ? 10 : (_y / 420) * 5;
     const _d = hasNext ? _cd : _cd + 5;
     return [_y, _d];
   }, [list.length, hasNext]);
