@@ -3,17 +3,14 @@ import clsx from "clsx";
 import useTokenPrice from "@/hooks/use-token-price";
 import { useMemo } from "react";
 import { formatNumber } from "@/utils/format/number";
-import useBtcStore from "@/stores/use-btc";
 import { BASE_TOKEN } from "@/config/btc";
-import Big from "big.js";
 import { useNavigate } from "react-router-dom";
 import usePoolListStore from "@/stores/use-pool-list";
 import { getReAnchorPrice } from "@/utils/pool";
 
 export default function MoreMarkets() {
   const { prices } = useTokenPrice(BASE_TOKEN);
-  const btcStore = useBtcStore();
-  const navigate = useNavigate();
+
   const poolListStore = usePoolListStore();
   const price = useMemo(() => {
     if (BASE_TOKEN.address === "usdt.tether-token.near") {
@@ -32,14 +29,6 @@ export default function MoreMarkets() {
             key={item}
             value={item}
             price={price}
-            onClick={() => {
-              btcStore.set({
-                recommendValue: Big(item)
-                  .mul(10 ** BASE_TOKEN.decimals)
-                  .toString()
-              });
-              navigate("/btc/detail");
-            }}
             market={poolListStore.hotMarkets[item]}
           />
         );
@@ -51,14 +40,13 @@ export default function MoreMarkets() {
 const MarketItem = ({
   value,
   price,
-  market,
-  onClick
+  market
 }: {
   value: number;
   price: number;
   market: any;
-  onClick: () => void;
 }) => {
+  const navigate = useNavigate();
   const valued = useMemo(() => {
     if (!market) return formatNumber(price * value, 2, true);
     return formatNumber(getReAnchorPrice(market), 2, true);
@@ -67,8 +55,7 @@ const MarketItem = ({
   return (
     <div
       className={clsx(
-        "w-[372px] h-[200px] rounded-[16px] border border-[rgba(242,242,242,0.20)] relative group backdrop-blur-[25px]",
-        !market && "hover:grayscale"
+        "w-[372px] h-[200px] rounded-[16px] border border-[rgba(242,242,242,0.20)] relative group backdrop-blur-[25px]"
       )}
     >
       {market && (
@@ -136,15 +123,15 @@ const MarketItem = ({
           className="w-[160px] h-[42px] !bg-[#FFC42F]"
           onClick={() => {
             if (!market) {
+              navigate("/btc/create");
               return;
             }
-            onClick();
+            navigate("/btc/detail/" + market.pool_id);
           }}
-          disabled={!market}
         >
           {market
             ? "Bid for " + value + " " + BASE_TOKEN.symbol
-            : "Coming soon"}
+            : "Create Market"}
         </Button>
       </div>
     </div>
