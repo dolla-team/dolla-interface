@@ -5,7 +5,7 @@ import { formatAddress } from "@/utils/format/address";
 import dayjs from "@/libs/dayjs";
 import { addThousandSeparator, formatNumber } from "@/utils/format/number";
 import useWinnerBidList from "../use-winner-bid-list";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import Big from "big.js";
 import useIsMobile from "@/hooks/use-is-mobile";
 import clsx from "clsx";

@@ -213,7 +213,7 @@ export default function Market({
       </div>
 
       {data.status === 2 && (
-        <div className="w-full h-[calc(100%-46px)] rounded-t-[18px] absolute top-0 left-0 z-[2] bg-[#E5E5E54D] backdrop-blur-[10px]">
+        <div className="w-full h-full rounded-t-[18px] absolute top-0 left-0 z-[2] bg-[#E5E5E54D] backdrop-blur-[10px]">
           <div className="text-[24px] font-[900] text-center mt-[40px]">
             {formatNumber(anchorPrice, 0, true, {
               isShort: true
