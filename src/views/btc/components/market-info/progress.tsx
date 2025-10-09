@@ -11,6 +11,7 @@ export default function Progress({ data }: any) {
 
     const value = getReAnchorPrice(data);
     if (value === 0) return [0, 0];
+
     const _spilled = data.accumulative_bids - value;
     return [(data.accumulative_bids / value) * 100, _spilled];
   }, [data]);
@@ -141,8 +142,10 @@ const Label = ({
   return (
     <div
       className={clsx(
-        "absolute top-[10px] right-[0px] flex gap-[9px]",
-        progress > 40 ? "flex-row-reverse" : ""
+        "absolute top-[10px] flex gap-[9px] w-[80px]",
+        progress > 30
+          ? "flex-row-reverse right-[0px]"
+          : "flex-row right-[-80px]"
       )}
     >
       <div className="w-[1px] h-[52px] bg-[#FFC42F]" />
