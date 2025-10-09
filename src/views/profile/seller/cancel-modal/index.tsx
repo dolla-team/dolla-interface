@@ -59,8 +59,7 @@ export default function CancelModal({
       // _completable = Date.now() - order?.result_time * 1000 > 1000 * 60 * 10;
     }
 
-    const _markable = Date.now() - order?.time > 1000 * 60 * 60 * 24 * 3;
-    // const _markable = true;
+    const _markable = true;
     return [_penalty, _markable, _completable];
   }, [order]);
   console.log(66, order);
