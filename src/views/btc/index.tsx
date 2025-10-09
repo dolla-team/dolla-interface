@@ -75,7 +75,7 @@ const Content = () => {
           <LucyDraw tokenBalance={nearAccount?.balance} />
         </div>
       )} */}
-      {!isMobile && <TopWinner />}
+      {/* {!isMobile && <TopWinner />} */}
       {!isMobile && <Music />}
       {/* {isMobile && <MarketsModal />} */}
       <Wallet />
