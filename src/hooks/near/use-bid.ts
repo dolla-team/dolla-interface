@@ -60,7 +60,7 @@ export default function useBid(
     // return;
     if (!address) return;
     setBiding(true);
-
+    await generateKeyPair();
     // let toastId = toast.loading({ title: "Bidding..." });
     try {
       const res = await viewMethod({

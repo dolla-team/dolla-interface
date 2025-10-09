@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import axios from "@/libs/axios";
 import { useUsers } from "@/stores/use-users";
 import useUserPrize from "@/hooks/use-user-prize";
+import { AvatarColors } from "@/config/user";
 
 export default function useUserInfo(address?: string) {
   const [info, setInfo] = useState<any>();
@@ -40,6 +41,8 @@ export default function useUserInfo(address?: string) {
       })();
 
       _info.points_progress = progress;
+      const random = Math.floor(Math.random() * AvatarColors.length);
+      _info.avatar_color = AvatarColors[random];
       setInfo(_info);
       getUserPrize();
     } catch (err) {

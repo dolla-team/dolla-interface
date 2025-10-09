@@ -42,7 +42,7 @@ export default function Statistics({ from }: { from: "player" | "seller" }) {
           <div className="flex items-center gap-[4px]">
             <span className="text-[20px] font-medium text-white">
               {from === "player"
-                ? userInfo?.played
+                ? userInfo?.played_number
                 : `${userInfo?.sold || 0} / ${userInfo?.created || 0}`}
             </span>
             <span className="text-[14px] text-[#5E6B7D] mt-[2px]">

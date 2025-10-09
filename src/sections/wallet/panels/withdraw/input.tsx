@@ -172,6 +172,7 @@ export default function WithdrawInput() {
               }}
               className="text-[24px] text-black text-right bg-transparent border-none outline-none w-[200px]"
               placeholder="0"
+              autoFocus
             />
           </div>
         </div>

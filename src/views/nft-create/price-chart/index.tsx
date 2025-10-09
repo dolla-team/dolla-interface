@@ -21,7 +21,7 @@ export default function PriceChart({
   const chartInstance = useRef<Chart | null>(null);
   const anchorDotRef = useRef<HTMLDivElement>(null);
   const [isInit, setIsInit] = useState(false);
-  const [isFolded, setIsFolded] = useState(true);
+  const [isFolded, setIsFolded] = useState(false);
   const [isAnimationComplete, setIsAnimationComplete] = useState(false);
 
   // Function to calculate probability density data
@@ -293,7 +293,7 @@ export default function PriceChart({
 
   return (
     <motion.div
-      className={clsx("w-full relative flex flex-col items-stretch", className)}
+      className={clsx("relative flex flex-col items-stretch", className)}
       initial={{
         height: isFolded ? 45 : "100%"
       }}
@@ -306,7 +306,7 @@ export default function PriceChart({
     >
       <div className="w-full px-[13px] h-[45px] flex justify-between items-center shrink-0 relative z-[10]">
         <Title className="!static" />
-        <button
+        {/* <button
           type="button"
           className="button shrink-0 w-[28px] h-[28px] rounded-[8px] bg-[#000000] flex items-center justify-center"
           onClick={() => {
@@ -332,7 +332,7 @@ export default function PriceChart({
               fill="white"
             />
           </motion.svg>
-        </button>
+        </button> */}
       </div>
       <motion.div
         className="w-full relative shrink-0 h-[calc(100%_-_45px)] px-[20px] max-md:px-[10px] max-md:pt-[100px]"
@@ -385,7 +385,7 @@ export default function PriceChart({
           </div>
         </div>
         <Annotations
-          className="z-[3] !top-[-20px]"
+          className="z-[3] !top-[-30px]"
           anchorPrice={anchorPrice}
           expectedValue={anchorPrice ? anchorPrice * 1.2 : undefined}
         />

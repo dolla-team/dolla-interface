@@ -12,7 +12,7 @@ import Skeleton from "@/components/skeleton";
 import { useConfigStore } from "@/stores/use-config";
 import Big from "big.js";
 import useIsMobile from "@/hooks/use-is-mobile";
-import Modal from "@/components/modal";
+import SuccessModal from "./success-modal";
 import { useAuth } from "@/contexts/auth";
 import { formatAddress } from "@/utils/format/address";
 import Loading from "@/components/icons/loading";
@@ -28,6 +28,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function BTCCreate() {
   const [amount, setAmount] = useState(1);
+  const [successModal, setSuccessModal] = useState(false);
   const { userInfo, isLoading, updateNearAccount, nearAccount } =
     useAuth() || {};
   const { token } = useQuote();
@@ -40,7 +41,8 @@ export default function BTCCreate() {
   const isMobile = useIsMobile();
   const navigate = useNavigate();
   const { prices } = useTokenPrice(BASE_TOKEN);
-  const [depositModalOpen, setDepositModalOpen] = useState(false);
+
+  const walletStore = useWalletStore();
 
   const pricePerBTC = useMemo(() => {
     if (BASE_TOKEN.address === "usdt.tether-token.near") {
@@ -92,89 +94,110 @@ export default function BTCCreate() {
       <div className="w-full relative z-[2] text-[14px] font-[400] leading-[100%] pt-[30px] pb-[60px] max-md:pt-[80px]">
         <PageBack className="!border-[#555555] !bg-[#FFFFFF33] !text-[#fff] !top-[20px]" />
         <Title />
-        <div className="w-[894px] mx-auto flex justify-between items-start gap-[15px] pt-[42px] max-md:w-full max-md:pt-[40px]">
-          <div className="flex-1 w-0">
-            <div className="w-full max-md:px-[12px]">
-              <div className="text-white flex justify-between items-center">
-                <div className="">Amount</div>
-                {isMobile && (
-                  <div
-                    className="underline underline-offset-2 text-white text-[16px] font-[600]"
-                    onClick={() => {
-                      setDepositModalOpen(true);
-                    }}
-                  >
-                    Deposit
+        <div className="w-[1200px] mx-auto gap-[15px] pt-[42px] max-md:w-full max-md:pt-[40px]">
+          <div
+            className="w-full h-[212px] p-[30px] rounded-[20px]"
+            style={{
+              background:
+                "radial-gradient(152.59% 26.96% at 1.17% 0%, rgba(255, 196, 47, 0.30) 0%, rgba(255, 196, 47, 0.00) 100%), #000"
+            }}
+          >
+            <div className="flex items-center">
+              <div>
+                <div className="text-white flex justify-between items-center">
+                  <div className="">Create Market</div>
+                </div>
+                <div className="flex items-center">
+                  <div className="mt-[13px] flex items-center gap-[10px]">
+                    {[1, 0.1, 0.01].map((item, index) => {
+                      const isActive = amount === item;
+                      return (
+                        <motion.div
+                          key={index}
+                          className={clsx(
+                            "button rounded-[12px] flex flex-col items-center justify-center gap-[9px] border w-[196px] h-[106px]",
+                            !isActive
+                              ? "backdrop-blur-[10px] text-white"
+                              : "text-black"
+                          )}
+                          onClick={() => setAmount(item)}
+                          initial={{ height: 106 }}
+                          animate={{
+                            height: !isMobile ? (isActive ? 120 : 106) : 106,
+                            borderColor: isActive ? "#E4E4E4" : "#A2A2A2",
+                            backgroundColor: isActive
+                              ? "#FFFFFF"
+                              : "transparent"
+                          }}
+                          style={{
+                            fontSize: isActive ? 20 : 16
+                          }}
+                        >
+                          <div className="text-[14px] font-[800]">
+                            {item} {BASE_TOKEN.symbol}
+                          </div>
+                          <div className={clsx("text-[12px]")}>
+                            ~${formatNumber(item * pricePerBTC, 0, true)}
+                          </div>
+                        </motion.div>
+                      );
+                    })}
                   </div>
-                )}
+                </div>
               </div>
-              <div className="mt-[13px] flex items-center gap-[10px] h-[97px] max-md:grid max-md:grid-cols-2 max-md:h-[unset]">
-                {[1, 0.1, 0.01].map((item, index) => {
-                  const isActive = amount === item;
-                  return (
-                    <motion.div
-                      key={index}
-                      className={clsx(
-                        "button rounded-[12px] flex flex-col items-center justify-center gap-[9px] border",
-                        "max-md:w-full",
-                        !isActive
-                          ? "backdrop-blur-[10px] text-white"
-                          : "text-black"
-                      )}
-                      onClick={() => setAmount(item)}
-                      initial={{ width: "25%" }}
-                      animate={{
-                        width: !isMobile
-                          ? isActive
-                            ? "calc(33.33% + 34px)"
-                            : "calc(33.33% - 11.33px)"
-                          : "100%",
-                        height: !isMobile ? (isActive ? 97 : 78) : 78,
-                        borderColor: isActive ? "#E4E4E4" : "#A2A2A2",
-                        backgroundColor: isActive ? "#FFFFFF" : "transparent"
-                      }}
-                      style={{
-                        fontSize: isActive ? 20 : 16
-                      }}
-                    >
-                      <div className="text-[14px] font-[800]">
-                        {item} {BASE_TOKEN.symbol}
-                      </div>
-                      <div className={clsx("text-[12px]")}>
-                        ~${formatNumber(item * pricePerBTC, 0, true)}
-                      </div>
-                    </motion.div>
-                  );
-                })}
+              <div className="w-[1px] h-[158px] bg-[#424242] mx-[30px]" />
+              <div className="relative flex-1 h-[158px]">
+                <div className="text-center text-white text-[14px] font-[500]">
+                  {formatAddress(userInfo?.user)}
+                </div>
+                <div className="mt-[20px] text-center text-[20px] font-[700] text-white">
+                  {isLoading ? (
+                    <Loading size={12} />
+                  ) : (
+                    `${formatNumber(tokenBalance, 6, true)} ${token.symbol}`
+                  )}
+                </div>
+                <button
+                  onClick={(ev: any) => {
+                    ev.stopPropagation();
+                    walletStore.set({
+                      showWallet: true,
+                      panelType: "deposit",
+                      // selectedToken: token,
+                      defaultDepositAmount: amount
+                    });
+                  }}
+                  className="absolute top-0 right-0 w-[86px] h-[30px] button rounded-[8px] border border-[#A2A2A2] bg-[#FFFFFF1A] text-white text-[12px] text-center"
+                >
+                  Deposit
+                </button>
+                <div className="text-center text-[14px] text-white mt-[10px]">
+                  Balance
+                </div>
+                <Button
+                  disabled={!!errorTips}
+                  className="mt-[20px] w-[466px] h-[50px] !bg-[#FFC42F]"
+                  loading={creating}
+                  onClick={() => {
+                    if (errorTips || creating) return;
+                    onCreate({
+                      amount: amount.toString(),
+                      price: pricePerBTC
+                    });
+                  }}
+                >
+                  {errorTips || "Create Market"}
+                </Button>
               </div>
-              <Button
-                disabled={!!errorTips}
-                className="mt-[20px] w-full h-[40px] !bg-[#FFC42F]"
-                loading={creating}
-                onClick={() => {
-                  if (errorTips || creating) return;
-                  onCreate({
-                    amount: amount.toString(),
-                    price: pricePerBTC
-                  });
-                }}
-              >
-                {errorTips || "Create Market"}
-              </Button>
             </div>
-            {errorTips === `Insufficient ${BASE_TOKEN.symbol} Balance` && (
-              <div className="text-[12px] text-[#F87168] text-center mt-[20px]">
-                Insufficient {BASE_TOKEN.symbol} Balance, deposit first
+          </div>
+
+          <div className="flex gap-[29px] mt-[36px] rounded-[12px] bg-[#FFFFFF99] p-[24px] w-full max-md:mt-[40px] max-md:px-[12px]">
+            <div className="w-1/2">
+              <div className="text-[16px] text-black font-[500]">
+                {amount} {BASE_TOKEN.symbol} Markets Reference Data
               </div>
-            )}
-            {errorTips === `Insufficient ${QUOTE_TOKEN.symbol} Balance` && (
-              <div className="text-[12px] text-[#F87168] text-center mt-[20px]">
-                Insufficient {QUOTE_TOKEN.symbol} Balance, deposit first
-              </div>
-            )}
-            <div className="mt-[36px] rounded-[12px] bg-[#FFFFFF99] p-[24px] w-full max-md:mt-[40px] max-md:px-[12px]">
-              <div className="text-[#8A87AA]">Reference Data</div>
-              <div className="w-full grid grid-cols-3 gap-[10px] mt-[11px] max-md:mt-[15px] max-md:gap-[7px]">
+              <div className="w-full grid grid-cols-3 gap-[10px] mt-[26px] max-md:mt-[15px] max-md:gap-[7px]">
                 <div className="rounded-[12px] bg-[#EAEAEA] h-[93px] flex flex-col justify-center items-center gap-[10px]">
                   <div className="flex justify-center items-center gap-[7px]">
                     <div className="text-[12px]">Top Sale</div>
@@ -319,105 +342,22 @@ export default function BTCCreate() {
                   }}
                 />
               </div>
-              <PriceChart
-                anchorPrice={amount * pricePerBTC}
-                className="mt-[36px] rounded-[12px] border border-[#E4E4E4] bg-white h-[379px] max-md:h-[479px]"
-              />
             </div>
+            <PriceChart
+              anchorPrice={amount * pricePerBTC}
+              className="mt-[40px] rounded-[12px] bg-[#EAEAEA] h-[379px] !w-1/2"
+            />
           </div>
-          {!isMobile && (
-            <DepositBTC
-              userInfo={userInfo}
-              isLoading={isLoading}
-              tokenBalance={tokenBalance}
-              isMobile={isMobile}
-              token={token}
-              amount={amount}
-            />
-          )}
-          <Modal
-            open={depositModalOpen}
-            onClose={() => {
-              setDepositModalOpen(false);
-            }}
-          >
-            <button
-              type="button"
-              className="absolute right-[17px] top-[18px] w-[10px] h-[11px] shrink-0"
-              onClick={() => {
-                setDepositModalOpen(false);
-              }}
-            >
-              <img
-                src="/icon-close.svg"
-                className="w-full h-full object-center object-contain"
-              />
-            </button>
-            <DepositBTC
-              userInfo={userInfo}
-              isLoading={isLoading}
-              tokenBalance={tokenBalance}
-              isMobile={isMobile}
-              token={token}
-              amount={amount}
-            />
-          </Modal>
         </div>
       </div>
-
       <div className="absolute top-0 left-0 w-full h-[285px] bg-[url('/btc/btc-create-bg.jpg')] bg-cover bg-top bg-no-repeat z-0 pointer-events-none" />
+      <SuccessModal
+        open={successModal}
+        onClose={() => setSuccessModal(false)}
+      />
     </div>
   );
 }
-
-const DepositBTC = (props: any) => {
-  const {
-    userInfo,
-    isLoading,
-    tokenBalance,
-    isMobile,
-    token,
-    amount,
-    nearAccount
-  } = props;
-  const walletStore = useWalletStore();
-
-  return (
-    <div className="w-[316px] shrink-0 max-md:w-full">
-      {!isMobile && <div className="text-white">Account</div>}
-      <div className="w-full rounded-[16px] bg-[#1C1C23] mt-[10px] max-md:rounded-b-[0] max-md:mt-0">
-        <div className="w-full p-[18px_15px]">
-          <div className="text-white text-[14px]">
-            {formatAddress(userInfo?.user)}
-          </div>
-          <div className="text-center text-white mt-[17px]">Balance</div>
-          <div className="mt-[13px] text-center text-[16px] font-[700] text-white">
-            {isLoading ? (
-              <Loading size={12} />
-            ) : (
-              `${formatNumber(tokenBalance, 6, true)} ${token.symbol}`
-            )}
-          </div>
-          <Button
-            className="mt-[30px] w-full h-[42px] !bg-[#FFC42F]"
-            onClick={(ev: any) => {
-              ev.stopPropagation();
-              walletStore.set({
-                showWallet: true,
-                panelType: "deposit",
-                // selectedToken:
-                //   nearAccount?.balance === "0" ? QUOTE_TOKEN : token,
-                defaultDepositAmount: amount
-              });
-            }}
-          >
-            Deposit
-          </Button>
-        </div>
-      </div>
-    </div>
-  );
-};
 
 const Title = () => {
   return (

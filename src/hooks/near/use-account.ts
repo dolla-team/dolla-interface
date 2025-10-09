@@ -49,7 +49,10 @@ export default function useAccount(evmAddress: string) {
   };
 
   useEffect(() => {
-    if (!evmAddress) return;
+    if (!evmAddress) {
+      setAccount(null);
+      return;
+    }
     fetchAccount();
 
     return () => {

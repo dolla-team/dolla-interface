@@ -49,7 +49,7 @@ export default function Laptop() {
               <div className="flex justify-between items-center text-white mt-[10px]">
                 <div className="text-[10px]">Played</div>
                 <div className="text-[12px] font-medium">
-                  {userInfo?.played}
+                  {userInfo?.played_number}
                 </div>
               </div>
             </div>

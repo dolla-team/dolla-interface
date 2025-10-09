@@ -12,16 +12,16 @@ const Records = (props: any) => {
   const accountRef = useRef<any>(null);
   const contentRef = useRef<any>(null);
 
-  useEffect(() => {
-    setTimeout(() => {
-      const height = contentRef.current?.clientHeight;
-      const _height = (height || 240) + 194;
-      const element = document.getElementById("objectives-container");
-      if (element) {
-        element.style.maxHeight = _height + "px";
-      }
-    }, 300);
-  }, [tab]);
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     const height = contentRef.current?.clientHeight;
+  //     const _height = (height || 240) + 194;
+  //     const element = document.getElementById("objectives-container");
+  //     if (element) {
+  //       element.style.maxHeight = _height + "px";
+  //     }
+  //   }, 300);
+  // }, [tab]);
 
   return (
     <div

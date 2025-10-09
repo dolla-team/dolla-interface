@@ -9,7 +9,7 @@ export default function ModalClose({
 }) {
   return (
     <button
-      className={clsx("button p-[2px] hover:bg-gray-100 rounded", className)}
+      className={clsx("button p-[2px] rounded", className)}
       onClick={onClose}
     >
       <svg

@@ -14,7 +14,7 @@ export default function Market({
   className,
   footer,
   header,
-  onClick = () => {},
+  onClick,
   isActive
 }: {
   data: any;
@@ -41,13 +41,14 @@ export default function Market({
   return (
     <div
       className={clsx(
-        "w-[300px] cursor-pointer group shrink-0 rounded-[20px] border-[1px] border-[#E4E4E4] bg-black transition-all duration-300 relative",
+        "w-[300px] group shrink-0 rounded-[20px] border-[1px] border-[#E4E4E4] bg-black transition-all duration-300 relative",
         isActive
           ? "shadow-[0px_0px_20px_0px_rgba(255,_239,_67,_0.60)] bg-[url('/btc/bg-market-active-border.svg')] bg-[length:344px_222px] bg-no-repeat bg-center"
           : "",
         isMobile
           ? ""
-          : "hover:scale-[1.05] hover:shadow-[0px_0px_20px_0px_rgba(0,0,0,0.10)]",
+          : onClick &&
+              "cursor-pointer hover:scale-[1.05] hover:shadow-[0px_0px_20px_0px_rgba(0,0,0,0.10)]",
         className
       )}
       onClick={onClick}
@@ -70,11 +71,12 @@ export default function Market({
               <div className="flex items-center gap-[6px]">
                 <Avatar
                   size={20}
-                  address={data?.pool_user}
-                  email={data?.user_info?.email}
+                  src={data?.pool_user_info?.icon}
+                  email={data?.pool_user_info?.email}
                 />
                 <div className="text-[12px]">
-                  {data?.user_info?.email || formatAddress(data?.pool_user)}
+                  {data?.pool_user_info?.email ||
+                    formatAddress(data?.pool_user)}
                 </div>
               </div>
             </div>
@@ -214,11 +216,7 @@ export default function Market({
         <div className="w-full h-full rounded-[16px] absolute top-0 left-0 z-[2] bg-[#00000080]">
           <div className="flex justify-center mt-[80px]">
             <div className="p-[4px] pr-[10px] min-w-[100px] inline-flex gap-[3px] rounded-[16px] bg-white border border-[#E4E4E4] backdrop-blur-[25px]">
-              <Avatar
-                address={data?.winner_user}
-                email={data?.winner_user_info?.email}
-                size={24}
-              />
+              <Avatar email={data?.winner_user_info?.email} size={24} />
               <div className="text-[12px] text-[#2B3337] leading-[24px]">
                 {data?.winner_user_info?.email ||
                   formatAddress(

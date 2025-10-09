@@ -65,13 +65,13 @@ const StatisticsPlayer = (props: any) => {
                 })
               )}
             </LabelValue>
-            <Button
+            {/* <Button
               className="border border-[#383F47]/30 text-[#2B3337] w-[96px] h-[38px] !rounded-[8px] ml-[20px]"
               // disabled={Big(claimableAmount || 0).lte(0)}
               onClick={onShare}
             >
               Share
-            </Button>
+            </Button> */}
           </div>
           <div className="w-[1px] h-[70px] shrink-0 bg-[#E4E4E4] mt-[10px] max-md:hidden"></div>
           <div className="flex items-center justify-between gap-[10px] flex-1 pl-[30px] max-md:flex-col max-md:w-full max-md:gap-[15px]">
@@ -84,8 +84,8 @@ const StatisticsPlayer = (props: any) => {
                 })}
               </LabelValue>
               <LabelValue label="Played times" className="whitespace-nowrap">
-                {formatNumber(userInfo?.played, 2, true, {
-                  isShort: Big(userInfo?.played || 0).gt(10000),
+                {formatNumber(userInfo?.played_number, 2, true, {
+                  isShort: Big(userInfo?.played_number || 0).gt(10000),
                   isShortUppercase: true
                 })}
               </LabelValue>

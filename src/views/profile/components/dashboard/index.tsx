@@ -19,6 +19,8 @@ import PopoverCard from "../popover-card";
 import Badge from "../badge";
 import { formatNumber } from "@/utils/format/number";
 import Big from "big.js";
+import ProfileSetting from "../profile-setting";
+import { useState } from "react";
 
 const Dashboard = (props: any) => {
   const { className, tab } = props;
@@ -26,6 +28,7 @@ const Dashboard = (props: any) => {
   const { userInfo } = useAuth();
   const { referralData } = useReferralList();
   const { onCopy } = useCopy();
+  const [showSetting, setShowSetting] = useState(false);
 
   return (
     <div
@@ -39,7 +42,7 @@ const Dashboard = (props: any) => {
         <Avatar
           size={74}
           className="shrink-0 rounded-[8px] border-[2px] border-[#FFFFFFCC]"
-          address={userInfo?.user}
+          src={userInfo?.icon}
           email={userInfo?.email}
         />
         <div className="flex justify-center items-center gap-[6px] mt-[8px]">
@@ -109,8 +112,12 @@ const Dashboard = (props: any) => {
       <div className="w-full pl-[13px] max-md:pl-0">
         <div className="w-full flex justify-between gap-[10px] max-md:relative">
           {/*#region User Info*/}
-          <div />
-          {/* <button className="w-[92px] h-[32px] border border-[#383F47]/30 rounded-[8px] button flex items-center justify-center">
+          <button
+            onClick={() => {
+              setShowSetting(true);
+            }}
+            className="w-[92px] h-[32px] border border-[#383F47]/30 rounded-[8px] button flex gap-[6px] items-center justify-center"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="15"
@@ -124,7 +131,7 @@ const Dashboard = (props: any) => {
               />
             </svg>
             <span className="text-[12px] text-[#2B3337]">Setting</span>
-          </button> */}
+          </button>
           {/*#endregion*/}
           {/*#region Invite frenz*/}
           <div className="flex flex-col gap-[12px] items-end">
@@ -137,7 +144,7 @@ const Dashboard = (props: any) => {
                       .map((item: any, index: number) => (
                         <Avatar
                           key={index}
-                          address={item.user}
+                          src={item.user_icon}
                           email={item.user_email}
                           size={26}
                           className={clsx(
@@ -180,6 +187,12 @@ const Dashboard = (props: any) => {
       ) : (
         <StatisticsSeller />
       )}
+      <ProfileSetting
+        open={showSetting}
+        onClose={() => {
+          setShowSetting(false);
+        }}
+      />
     </div>
   );
 };
