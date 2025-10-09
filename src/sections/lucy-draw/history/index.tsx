@@ -8,6 +8,7 @@ import Avatar from "@/components/avatar";
 import useIsMobile from "@/hooks/use-is-mobile";
 import { useDebounceFn } from "ahooks";
 import Empty from "@/sections/wallet/panels/info/empty";
+import ModalClose from "@/components/button/modal-close";
 
 export default function LucyDrawHistory({
   open,
@@ -59,10 +60,14 @@ export default function LucyDrawHistory({
     <Modal open={open} onClose={onClose}>
       <div
         className={clsx(
-          "bg-[#1D1A16]",
+          "bg-[#1D1A16] relative",
           isMobile ? "w-full rounded-t-[16px]" : "w-[496px] rounded-[16px]"
         )}
       >
+        <ModalClose
+          onClose={onClose}
+          className="absolute right-[16px] top-[16px] z-[2]"
+        />
         <div className="h-[160px] bg-black/80 backdrop-blur-[10px] rounded-t-[18px]">
           <div className="h-full relative z-[2] flex flex-col justify-center items-center">
             <div
