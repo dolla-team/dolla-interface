@@ -55,6 +55,12 @@ export default function MainLayout() {
     }
   }, [userInfo?.user]);
 
+  useEffect(() => {
+    return () => {
+      taskStore.set({ isBid: false });
+    };
+  }, []);
+
   return (
     <div className="h-screen w-screen overflow-hidden bg-white relative">
       {/* header */}

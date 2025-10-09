@@ -39,7 +39,7 @@ const useTaskStore = create<TaskState>((set) => ({
   completedTasks: [],
   loading: false,
   initialized: false,
-  isBid: true,
+  isBid: false,
   set: (params) => set(() => ({ ...params }))
 }));
 
