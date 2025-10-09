@@ -16,7 +16,7 @@ export default function Item({ data }: any) {
         className="border border-[#131417] mr-[6px]"
       />
       <div className="text-[10px] font-bold truncate mr-[3px] shrink-0">
-        {formatAddress(data.user, 3)}
+        {data.user_name || formatAddress(data.user, 3)}
       </div>
       <div className="text-[12px] font-bold text-[#FFEF43] mr-[3px]">
         bid ${data.times}

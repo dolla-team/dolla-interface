@@ -1,7 +1,7 @@
 import clsx from "clsx";
 // @ts-ignore
 import crypto from "crypto-browserify";
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import { AvatarColors } from "@/config/user";
 import { useUsers } from "@/stores/use-users";
 
@@ -23,6 +23,19 @@ export default function Avatar({
 }) {
   const usersStore = useUsers();
   const randomRef = useRef(Math.floor(Math.random() * AvatarColors.length));
+
+  useEffect(() => {
+    if (!address) return;
+    if (usersStore.users[address.toLowerCase()]) {
+      return;
+    }
+
+    usersStore.setUsers({
+      [address.toLowerCase()]: {
+        color: AvatarColors[randomRef.current]
+      }
+    });
+  }, [address]);
   if (!src && !email) {
     return null;
   }
