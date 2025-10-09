@@ -186,9 +186,7 @@ export default function EndPanel({ data }: { data: any }) {
                       Started from
                     </div>
                     <div className="text-white text-[14px]">
-                      {dayjs(data.user_info?.created_at).format(
-                        "HH:mm DD MMM, YYYY"
-                      )}{" "}
+                      {dayjs(data?.created_at).format("HH:mm DD MMM, YYYY")}{" "}
                     </div>
                   </div>
                 </div>
