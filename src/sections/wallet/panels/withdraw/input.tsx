@@ -177,9 +177,13 @@ export default function WithdrawInput() {
           </div>
         </div>
         <div className="flex items-center justify-between mt-[4px]">
-          <div className="text-[12px] text-[#8A87AA]">Est. Receive</div>
+          <div className="text-[12px] text-[#8A87AA]">Min. Receive</div>
           <div className="text-[14px] text-black font-[600]">
-            {quoteData ? quoteData.amountOutFormatted : "-"}
+            {quoteData
+              ? Big(quoteData.minAmountOut)
+                  .div(10 ** walletStore.selectedToken?.decimals)
+                  .toString()
+              : "-"}
           </div>
         </div>
         <ChainSelector
