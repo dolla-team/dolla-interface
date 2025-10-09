@@ -85,7 +85,10 @@ const BidHistory = (props: any) => {
       width: isMobile ? 140 : void 0,
       render: (record: any) => {
         if (
-          record.pool_info.winner_user?.toLowerCase() === address?.toLowerCase()
+          record.pool_info.winner_user?.toLowerCase() ===
+            address?.toLowerCase() &&
+          record.winner_point_reward === "0" &&
+          record.winner_ticket_number === 0
         ) {
           return (
             <div className="bg-[#FFC42F] h-[30px] leading-[30px] rounded-[12px] px-[10px] font-[600] text-[12px]">
