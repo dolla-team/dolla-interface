@@ -78,7 +78,10 @@ export default function Markets() {
         {columns.map((column: any) => (
           <div
             key={column.title}
-            className="flex items-center gap-[4px] cursor-pointer"
+            className={clsx(
+              "flex items-center gap-[4px] ",
+              column.sort && "cursor-pointer"
+            )}
             style={{ width: column.width }}
             onClick={() => {
               if (column.sort) {
