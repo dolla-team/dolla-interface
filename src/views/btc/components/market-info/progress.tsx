@@ -1,18 +1,18 @@
-import useIsMobile from "@/hooks/use-is-mobile";
 import { formatNumber } from "@/utils/format/number";
-import { getAnchorPrice } from "@/utils/pool";
+import { getReAnchorPrice } from "@/utils/pool";
 import clsx from "clsx";
 import { motion } from "framer-motion";
 import { useMemo } from "react";
 
 export default function Progress({ data }: any) {
-  const progress = useMemo(() => {
-    if (!data) return 0;
-    if (!data?.accumulative_bids || data?.anchor_price === "0") return 0;
+  const [progress, spilled] = useMemo(() => {
+    if (!data) return [0, 0];
+    if (!data?.accumulative_bids || data?.anchor_price === "0") return [0, 0];
 
-    const anchorPrice = getAnchorPrice(data?.anchor_price);
-    if (anchorPrice === 0) return 0;
-    return (data.accumulative_bids / anchorPrice) * 100;
+    const value = getReAnchorPrice(data);
+    if (value === 0) return [0, 0];
+    const _spilled = data.accumulative_bids - value;
+    return [(data.accumulative_bids / value) * 100, _spilled];
   }, [data]);
 
   const particles = useMemo(
@@ -44,13 +44,15 @@ export default function Progress({ data }: any) {
   );
 
   return (
-    <div
-      className={clsx(
-        "w-full h-[12px] rounded-[30px] border bg-[#FFFFFF1A]",
-        data?.status === 3 ? "border-[#4E4E4E]" : "border-[#757395]"
-      )}
-    >
-      <div className="h-[10px] rounded-[10px] p-[1px]">
+    <div className="relative">
+      <div
+        className={clsx(
+          "h-[12px] rounded-[30px] border bg-[#FFFFFF1A] absolute top-0 left-0 z-[1]",
+          data?.status === 3 ? "border-[#4E4E4E]" : "border-[#3B3951]",
+          spilled > 0 ? "w-[70%]" : "w-full"
+        )}
+      />
+      <div className="h-[10px] rounded-[10px] p-[1px] relative top-[1px] left-[1px] z-[2]">
         <div
           className={clsx(
             "rounded-[10px] h-[8px] border relative",
@@ -100,27 +102,66 @@ export default function Progress({ data }: any) {
           <Label
             amount={data?.accumulative_bids || 0}
             disabled={data?.status === 3}
+            progress={progress}
           />
         </div>
       </div>
+      {spilled > 0 && (
+        <>
+          <div className="absolute top-[4px] right-[1px] z-[3] w-[30%] h-[4px] bg-linear-to-r from-[#C637FF] to-[#FFADCF] rounded-r-[4px]" />
+          <div className="absolute bottom-[14px] right-[0px]">
+            <div className="text-[12px] text-white/50">Spilled</div>
+            <div
+              className="text-[16px] font-[600]"
+              style={{
+                background: "linear-gradient(90deg, #C637FF 0%, #FFADCF 100%)",
+                backgroundClip: "text",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent"
+              }}
+            >
+              {formatNumber(spilled, 2, true, { isShort: true, prefix: "$" })}
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 }
 
-const Label = ({ amount, disabled }: { amount: number; disabled: boolean }) => {
-  const isMobile = useIsMobile();
-
+const Label = ({
+  amount,
+  progress,
+  disabled
+}: {
+  amount: number;
+  disabled: boolean;
+  progress: number;
+}) => {
   return (
     <div
       className={clsx(
-        "absolute  p-[4px] h-[24px] leading-[14px] text-[14px] text-center font-[DelaGothicOne] rounded-[6px]",
-        !disabled
-          ? "bg-[linear-gradient(180deg,#FFF698_0%,#FFC42F_100%)] border-[#4E4E4E]"
-          : "bg-[linear-gradient(180deg,#C3C3C3_0%,#787878_100%)]",
-        isMobile ? "top-[12px]" : "top-[16px] right-[-20px]"
+        "absolute top-[10px] right-[0px] flex gap-[9px]",
+        progress > 40 ? "flex-row-reverse" : ""
       )}
     >
-      ${formatNumber(amount, 2, true)}
+      <div className="w-[1px] h-[52px] bg-[#FFC42F]" />
+      <div className="pt-[10px]">
+        <div className="text-[12px] text-white/50">Total Bid</div>
+        <div
+          className="text-[16px] font-[600]"
+          style={{
+            background: disabled
+              ? "#C3C3C3"
+              : "linear-gradient(90deg, #A2623D 0%, #FFC42F 47.6%, #FFE9B2 100%)",
+            backgroundClip: "text",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent"
+          }}
+        >
+          {formatNumber(amount, 2, true, { isShort: true, prefix: "$" })}
+        </div>
+      </div>
     </div>
   );
 };
