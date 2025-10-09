@@ -20,17 +20,17 @@ export default function useUserInfo(address?: string) {
     try {
       const res = await axios.get("/api/v1/user?chain=near");
       const _info = res.data.data;
+
       if (!_info.icon) {
         if (usersStore.users[address]) {
           _info.icon = usersStore.users[address].icon;
         } else {
-          // const random = Math.floor(Math.random() * 7) + 1;
-          // _info.icon = `/avatar/${random}.svg`;
-          // usersStore.setUsers({
-          //   [address]: {
-          //     icon: _info.icon
-          //   }
-          // });
+          const random = Math.floor(Math.random() * AvatarColors.length);
+          usersStore.setUsers({
+            [address.toLowerCase()]: {
+              color: AvatarColors[random]
+            }
+          });
         }
       }
       const progress = (() => {
@@ -41,8 +41,7 @@ export default function useUserInfo(address?: string) {
       })();
 
       _info.points_progress = progress;
-      const random = Math.floor(Math.random() * AvatarColors.length);
-      _info.avatar_color = AvatarColors[random];
+
       setInfo(_info);
       getUserPrize();
     } catch (err) {

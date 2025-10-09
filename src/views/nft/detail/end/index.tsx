@@ -98,7 +98,8 @@ export default function EndPanel({ data }: { data: any }) {
               <Avatar
                 size={80}
                 address={data.winner_user_info?.user}
-                email={data.winner_user_info?.email}
+                email={data.winner_user_info?.show_email}
+                src={data.winner_user_info?.icon}
                 className="rounded-full border-[3px] border-[#DD9000]"
               />
               <span
@@ -267,7 +268,8 @@ const ProgressAvatar = ({
       <Avatar
         size={26}
         address={data.winner_user_info?.user}
-        email={data.winner_user_info?.email}
+        email={data.winner_user_info?.show_email}
+        src={data.winner_user_info?.icon}
       />
       <svg
         xmlns="http://www.w3.org/2000/svg"

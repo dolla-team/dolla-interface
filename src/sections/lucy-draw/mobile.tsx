@@ -84,7 +84,8 @@ export default function LucyDrawMobile(props: any) {
                   key={`first-${index}`}
                   className="border border-[#DD9000] ml-[-10px] rounded-full"
                   size={30}
-                  email={item.user_info?.email}
+                  email={item.user_info?.show_email}
+                  src={item.user_info?.icon}
                 />
               ))}
             </motion.div>

@@ -72,7 +72,12 @@ const Item = ({ data, number, total, winner, bidsDistribution }: any) => {
           <>
             <div className="text-[14px] text-[#ADBCCF]">{number}</div>
             <div className="flex items-center gap-[6px] ml-[10px]">
-              <Avatar size={20} address={winner?.user} email={winner?.email} />
+              <Avatar
+                size={20}
+                address={winner?.user}
+                email={winner?.show_email}
+                src={winner?.icon}
+              />
               <span className="text-[12px] text-white">
                 x{bidsDistribution}
               </span>

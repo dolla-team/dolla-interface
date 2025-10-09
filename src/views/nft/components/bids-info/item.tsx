@@ -10,6 +10,7 @@ export default function Item({ data }: any) {
         <Avatar
           address={data.user}
           email={data.user_email}
+          src={data.user_icon}
           size={30}
           className="border border-[#131417] mr-[6px] rounded-full"
         />

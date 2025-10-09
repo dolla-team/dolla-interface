@@ -34,7 +34,8 @@ export default function MWinnerCard({
               <Avatar
                 size={32}
                 address={data?.user_info?.user}
-                email={data?.user_info?.email}
+                email={data?.user_info?.show_email}
+                src={data?.user_info?.icon}
                 className="rounded-full"
               />
               {multiple && (

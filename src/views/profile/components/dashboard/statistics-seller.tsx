@@ -25,7 +25,6 @@ const StatisticsPlayer = (props: any) => {
     if (!userInfo) {
       return _result;
     }
-    console.log("userInfo", userInfo);
 
     if (userInfo.on_sell) {
       _result[0] = userInfo.on_sell

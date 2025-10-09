@@ -69,6 +69,7 @@ export default function ProfileSetting({ open, onClose }: ProfileSettingProps) {
                   className="shrink-0 rounded-[8px] border-[2px] border-[#FFFFFFCC] text-[26px]"
                   src={userInfo?.icon}
                   email={userInfo?.show_email}
+                  address={userInfo?.user}
                 />
               )}
               {/* Edit Button - Show on hover */}

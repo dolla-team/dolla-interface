@@ -14,7 +14,8 @@ export default function Info() {
       <Avatar
         size={50}
         address={userInfo?.user}
-        email={userInfo?.email}
+        email={userInfo?.show_email}
+        src={userInfo?.icon}
         className="shrink-0 border-[2px] border-[#FFFFFFCC]"
       />
       <div className="flex-1 w-0">

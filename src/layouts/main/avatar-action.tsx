@@ -33,9 +33,9 @@ export default function AvatarAction() {
         email={userInfo?.show_email}
         src={userInfo?.icon}
         className="shrink-0 button"
+        address={userInfo?.user}
         onClick={(e: any) => {
           e.stopPropagation();
-          console.log(38);
           set({ showUserInfo: !showUserInfo });
         }}
       />

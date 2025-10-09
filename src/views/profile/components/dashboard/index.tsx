@@ -44,6 +44,7 @@ const Dashboard = (props: any) => {
           className="shrink-0 rounded-[8px] border-[2px] border-[#FFFFFFCC] text-[26px]"
           src={userInfo?.icon}
           email={userInfo?.show_email}
+          address={userInfo?.user}
         />
         <div className="flex justify-center items-center gap-[6px] mt-[8px]">
           <div className="flex items-center gap-[6px]">
@@ -146,6 +147,7 @@ const Dashboard = (props: any) => {
                           key={index}
                           src={item.user_icon}
                           email={item.user_email}
+                          address={item.user}
                           size={26}
                           className={clsx(
                             "rounded-full border-[2px] border-[#383F47] shrink-0",

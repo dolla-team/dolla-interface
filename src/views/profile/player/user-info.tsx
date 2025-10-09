@@ -12,6 +12,7 @@ export default function UserInfo() {
         className="rounded-[8px] border border-[2px] border-[#FFFFFFCC]"
         address={userInfo?.user}
         email={userInfo?.show_email}
+        src={userInfo?.icon}
       />
       <div className="text-white">
         <div className="text-[20px]">{userInfo?.username}</div>

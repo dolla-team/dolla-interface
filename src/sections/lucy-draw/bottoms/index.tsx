@@ -52,7 +52,8 @@ export default function Bottoms({
                 key={index}
                 className="border border-[#DD9000] ml-[-10px]"
                 size={30}
-                email={item.user_info?.email}
+                email={item.user_info?.show_email}
+                src={item.user_info?.icon}
               />
             ))}
           </div>

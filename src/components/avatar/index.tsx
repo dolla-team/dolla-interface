@@ -3,23 +3,25 @@ import clsx from "clsx";
 import crypto from "crypto-browserify";
 import { useRef } from "react";
 import { AvatarColors } from "@/config/user";
-import { useAuth } from "@/contexts/auth";
+import { useUsers } from "@/stores/use-users";
 
 export default function Avatar({
   size,
   src,
   email = "",
   className,
+  address,
   onClick
 }: {
   size: number;
   src?: string;
   email?: string;
+  address?: string;
   active?: boolean;
   className?: string;
   onClick?: (e: any) => void;
 }) {
-  const { userInfo } = useAuth();
+  const usersStore = useUsers();
   const randomRef = useRef(Math.floor(Math.random() * AvatarColors.length));
   if (!src && !email) {
     return null;
@@ -36,10 +38,10 @@ export default function Avatar({
           width: size,
           height: size,
           backgroundColor:
-            userInfo?.show_email === email
-              ? userInfo?.avatar_color
-              : AvatarColors[randomRef.current]
+            (address && usersStore.users[address.toLowerCase()]?.color) ||
+            AvatarColors[randomRef.current]
         }}
+        onClick={onClick}
       >
         {email.charAt(0)}
       </div>

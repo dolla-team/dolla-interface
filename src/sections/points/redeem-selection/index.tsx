@@ -72,6 +72,7 @@ export default function RedeemSelection({
                   size={46}
                   email={userInfo?.show_email}
                   src={userInfo?.icon}
+                  address={userInfo?.user}
                 />
                 <div className="font-[DelaGothicOne] flex items-center">
                   <div className={isMobile ? "text-[16px]" : "text-[20px]"}>

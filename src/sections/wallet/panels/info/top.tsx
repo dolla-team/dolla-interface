@@ -15,6 +15,7 @@ export default function Top() {
             size={56}
             src={userInfo?.icon}
             email={userInfo?.show_email}
+            address={userInfo?.user}
             className="border-2 border-[#FFFFFFCC] rounded-[6px]"
           />
           <div className="text-black w-[calc(100%-90px)]">

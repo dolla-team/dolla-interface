@@ -18,7 +18,8 @@ export default function MarketInfo() {
             <Avatar
               size={35}
               src={pool?.user_info?.icon}
-              email={pool?.user_info?.email}
+              email={pool?.user_info?.show_email}
+              address={pool?.user_info?.user}
               className="rounded-[12px]"
             />
             <div>
@@ -41,7 +42,8 @@ export default function MarketInfo() {
               key={index}
               size={22}
               src={pool?.user_info?.icon}
-              email={pool?.user_info?.email}
+              email={pool?.user_info?.show_email}
+              address={pool?.user_info?.user}
               className={clsx("rounded-[50%]", index !== 0 && "ml-[-6px]")}
             />
           ))}

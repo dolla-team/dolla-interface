@@ -14,7 +14,8 @@ export default function MSellerInfo({ pool }: any) {
           <Avatar
             size={24}
             address={pool?.user_info?.address}
-            email={pool?.user_info?.email}
+            email={pool?.user_info?.show_email}
+            src={pool?.user_info?.icon}
             className="rounded-[6px]"
           />
           <div className="text-[#FFE9B2] text-[14px] ml-[7px] mr-[4px]">

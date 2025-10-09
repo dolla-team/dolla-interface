@@ -33,7 +33,8 @@ export default function WinnerCard({
                 <Avatar
                   size={58}
                   address={data?.user_info?.user}
-                  email={data?.user_info?.email}
+                  email={data?.user_info?.show_email}
+                  src={data?.user_info?.icon}
                   className="rounded-full border-[1px] border-[#DD9000]"
                 />
               </div>

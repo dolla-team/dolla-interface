@@ -29,7 +29,13 @@ export default function TopWinnersItem({
       />
       <div className="flex items-center gap-[10px]">
         <div className="w-[40px] h-[40px] p-[2px] rounded-full bg-linear-to-b from-[#FFE093] via-[#FFECBC] to-[#DEAF37]">
-          <Avatar address="0x1234567890" size={36} className="rounded-full" />
+          <Avatar
+            address={data?.winner_user_info?.user}
+            email={data?.winner_user_info?.show_email}
+            src={data?.winner_user_info?.icon}
+            size={36}
+            className="rounded-full"
+          />
         </div>
         <div>
           <div className="text-[10px] text-black/30">

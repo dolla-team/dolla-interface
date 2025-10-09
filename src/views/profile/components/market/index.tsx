@@ -72,7 +72,8 @@ export default function Market({
                 <Avatar
                   size={20}
                   src={data?.pool_user_info?.icon}
-                  email={data?.pool_user_info?.email}
+                  email={data?.pool_user_info?.show_email}
+                  address={data?.pool_user_info?.user}
                 />
                 <div className="text-[12px]">
                   {data?.pool_user_info?.email ||
@@ -223,8 +224,9 @@ export default function Market({
           <div className="flex justify-center">
             <div className="p-[4px] pr-[10px] min-w-[100px] inline-flex gap-[3px] rounded-[16px] bg-white border border-[#E4E4E4] backdrop-blur-[25px]">
               <Avatar
-                email={data?.winner_user_info?.email}
+                email={data?.winner_user_info?.show_email}
                 src={data?.winner_user_info?.icon}
+                address={data?.winner_user_info?.user}
                 size={24}
               />
               <div className="text-[12px] text-[#2B3337] leading-[24px]">
