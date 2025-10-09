@@ -70,9 +70,9 @@ export default function usePoolList(props?: {
         }${volume ? "&volume=" + volume : ""}`
       );
 
-      let has1Market = false;
-      let has01Market = false;
-      let has001Market = false;
+      let market1: any = null;
+      let market01: any = null;
+      let market001: any = null;
       const list = res.data.data.list.map((item: any) => {
         const valued = item.nft_ids
           ? getAnchorPrice(item.anchor_price)
@@ -83,14 +83,7 @@ export default function usePoolList(props?: {
         const _an = Big(reward_amount).div(10 ** decimals);
         const _a = formatNumber(_an, 3, true);
 
-        if (_a === "1") {
-          has1Market = true;
-        } else if (_a === "0.1") {
-          has01Market = true;
-        } else if (_a === "0.01") {
-          has001Market = true;
-        }
-        return {
+        const market = {
           ...item,
           amount: _a,
           progress:
@@ -98,6 +91,17 @@ export default function usePoolList(props?: {
               ? 0
               : Big(item.accumulative_bids).div(valued).mul(100).toNumber()
         };
+
+        if (_a === "1" && Big(_a).gt(market1?.amount || 0)) {
+          market1 = market;
+        }
+        if (_a === "0.1" && Big(_a).gt(market01?.amount || 0)) {
+          market01 = market;
+        }
+        if (_a === "0.01" && Big(_a).gt(market001?.amount || 0)) {
+          market001 = market;
+        }
+        return market;
       });
 
       if (isScrollList) {
@@ -112,10 +116,10 @@ export default function usePoolList(props?: {
       }
 
       poolListStore.set({
-        hasMarkets: {
-          "1": has1Market,
-          "0.1": has01Market,
-          "0.01": has001Market
+        hotMarkets: {
+          "1": market1,
+          "0.1": market01,
+          "0.01": market001
         }
       });
 

@@ -1,15 +1,15 @@
 import { create } from "zustand/index";
 
 interface PoolListState {
-  hasMarkets: Record<string, boolean>;
+  hotMarkets: Record<string, any>;
   set: (params: any) => void;
 }
 
 const usePoolListStore = create<PoolListState>((set) => ({
-  hasMarkets: {
-    "1": false,
-    "0.1": false,
-    "0.01": false
+  hotMarkets: {
+    "1": null,
+    "0.1": null,
+    "0.01": null
   },
   set: (params) => set(() => ({ ...params }))
 }));
