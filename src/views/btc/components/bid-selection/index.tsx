@@ -9,7 +9,7 @@ import { BET_UNIT } from "@/config";
 import { useContractConfigStore } from "@/stores/use-contract-config";
 
 export default function BidSelection({ tokenBalance }: any) {
-  const { userInfo } = useAuth();
+  const { userInfo, address, login } = useAuth();
   const isMobile = useIsMobile();
   const {
     bids,
@@ -69,6 +69,10 @@ export default function BidSelection({ tokenBalance }: any) {
 
   const onBidClick = () => {
     if (disabled) {
+      return;
+    }
+    if (!address) {
+      login();
       return;
     }
     if (flipStatus === 6) {

@@ -14,7 +14,7 @@ import useBalance from "@/hooks/near/use-balance";
 const StatisticsPlayer = (props: any) => {
   const { className, onShare } = props;
   const walletStore = useWalletStore();
-  const { userInfo } = useAuth();
+  const { userInfo, address, login } = useAuth();
   const { balance } = useBalance();
 
   const { totalAmount, loading } = useUserWinner();
@@ -94,6 +94,10 @@ const StatisticsPlayer = (props: any) => {
               <Button
                 className="!bg-black text-white w-[96px] h-[38px] !rounded-[8px]"
                 onClick={(ev) => {
+                  if (!address) {
+                    login();
+                    return;
+                  }
                   ev.stopPropagation();
                   walletStore.set({
                     showWallet: true,
@@ -106,7 +110,12 @@ const StatisticsPlayer = (props: any) => {
               <Button
                 className="border border-[#383F47]/30 text-[#2B3337] w-[96px] h-[38px] !rounded-[8px]"
                 onClick={(ev) => {
+                  if (!address) {
+                    login();
+                    return;
+                  }
                   ev.stopPropagation();
+
                   walletStore.set({
                     showWallet: true,
                     panelType: "withdraw"

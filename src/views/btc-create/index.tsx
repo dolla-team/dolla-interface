@@ -29,8 +29,14 @@ import { useNavigate } from "react-router-dom";
 export default function BTCCreate() {
   const [amount, setAmount] = useState(1);
   const [successModal, setSuccessModal] = useState(false);
-  const { userInfo, isLoading, updateNearAccount, nearAccount } =
-    useAuth() || {};
+  const {
+    userInfo,
+    isLoading,
+    updateNearAccount,
+    nearAccount,
+    address,
+    login
+  } = useAuth() || {};
   const { token } = useQuote();
   const tokenBalance = nearAccount?.prizeBalance;
   const { data: referenceData, loading: referenceDataLoading } =
@@ -99,7 +105,7 @@ export default function BTCCreate() {
             className="w-full h-[212px] p-[30px] rounded-[20px]"
             style={{
               background:
-                "radial-gradient(152.59% 26.96% at 1.17% 0%, rgba(255, 196, 47, 0.30) 0%, rgba(255, 196, 47, 0.00) 100%), #000"
+                "radial-gradient(30% 30% at 0% 0%, rgba(255, 196, 47, 0.30) 0%, rgba(255, 196, 47, 0.00) 100%), #000" // Adjusted to show gradient only in top-left corner
             }}
           >
             <div className="flex items-center">
@@ -159,6 +165,10 @@ export default function BTCCreate() {
                 </div>
                 <button
                   onClick={(ev: any) => {
+                    if (!address) {
+                      login();
+                      return;
+                    }
                     ev.stopPropagation();
                     walletStore.set({
                       showWallet: true,

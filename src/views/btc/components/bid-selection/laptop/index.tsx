@@ -5,6 +5,7 @@ import Points from "@/sections/points";
 import useWalletStore from "@/stores/use-wallet";
 import CashierEntry from "../../cashier-entery";
 import { useBtcContext } from "../../../context";
+import { useAuth } from "@/contexts/auth";
 
 export default function BidSelection({
   tokenBalance,
@@ -25,6 +26,7 @@ export default function BidSelection({
 }) {
   const { set } = useWalletStore();
   const { setFlipStatus } = useBtcContext();
+  const { address, login } = useAuth();
   return (
     <div className="absolute bottom-0 left-0 w-full h-[202px]">
       <Bg className="absolute top-0 left-0 w-full h-full" />
@@ -39,6 +41,10 @@ export default function BidSelection({
             <CashierEntry
               onClick={(e: any) => {
                 e.stopPropagation();
+                if (!address) {
+                  login();
+                  return;
+                }
                 set({
                   showWallet: true,
                   panelType: "deposit"

@@ -65,7 +65,7 @@ export default function RechargeFrom1click() {
     if (!chain) return "Select a chain";
 
     return "";
-  }, [walletStore.selectedToken, quote]);
+  }, [chain]);
 
   return (
     <div className="pb-[20px] relative">

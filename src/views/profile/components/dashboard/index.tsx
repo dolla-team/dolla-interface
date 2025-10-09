@@ -25,7 +25,7 @@ import { useState } from "react";
 const Dashboard = (props: any) => {
   const { className, tab } = props;
   const globalStore = useGlobalStore();
-  const { userInfo } = useAuth();
+  const { userInfo, address, login } = useAuth();
   const { referralData } = useReferralList();
   const { onCopy } = useCopy();
   const [showSetting, setShowSetting] = useState(false);
@@ -115,6 +115,10 @@ const Dashboard = (props: any) => {
           {/*#region User Info*/}
           <button
             onClick={() => {
+              if (!address) {
+                login();
+                return;
+              }
               setShowSetting(true);
             }}
             className="w-[92px] h-[32px] border border-[#383F47]/30 rounded-[8px] button flex gap-[6px] items-center justify-center"
@@ -164,6 +168,10 @@ const Dashboard = (props: any) => {
               <Button
                 className="border border-[#383F47]/30 h-[32px] w-[114px] !rounded-[8px]"
                 onClick={() => {
+                  if (!address) {
+                    login();
+                    return;
+                  }
                   onCopy(`${window.location.origin}?code=${globalStore.code}`);
                 }}
               >
