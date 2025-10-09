@@ -100,14 +100,21 @@ export default function Redeem({
             </div>
             <button
               className={clsx(
-                "w-full h-[40px] bg-linear-to-b from-[#FFF698] to-[#FFC42F] rounded-[8px] text-black text-[20px] mx-auto mt-[70px] flex items-center justify-center gap-[8px]",
+                "w-full h-[40px] bg-linear-to-b from-[#FFF698] to-[#FFC42F] rounded-[8px] text-black text-[16px] mx-auto mt-[70px] flex items-center justify-center gap-[8px]",
                 loading ? "opacity-50" : "button"
               )}
               onClick={() => {
                 redeem(amount);
               }}
+              disabled={amount > max}
             >
-              {loading ? <Loading /> : "Redeem"}
+              {loading ? (
+                <Loading />
+              ) : amount > max ? (
+                "Insufficient points"
+              ) : (
+                "Redeem"
+              )}
             </button>
           </div>
         </div>
