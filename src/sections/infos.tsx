@@ -40,7 +40,7 @@ const config: any[] = [
 
 export default function Infos({
   className = "",
-  speed = 120,
+  speed = 60,
   height = 36,
   autoPlay = true
 }: ScrollProps) {

@@ -92,13 +92,22 @@ export default function usePoolList(props?: {
               : Big(item.accumulative_bids).div(valued).mul(100).toNumber()
         };
 
-        if (_a === "1" && Big(_a).gt(market1?.amount || 0)) {
+        if (
+          _a === "1" &&
+          Big(item.accumulative_bids).gt(market1?.accumulative_bids || 0)
+        ) {
           market1 = market;
         }
-        if (_a === "0.1" && Big(_a).gt(market01?.amount || 0)) {
+        if (
+          _a === "0.1" &&
+          Big(item.accumulative_bids).gt(market01?.accumulative_bids || 0)
+        ) {
           market01 = market;
         }
-        if (_a === "0.01" && Big(_a).gt(market001?.amount || 0)) {
+        if (
+          _a === "0.01" &&
+          Big(item.accumulative_bids).gt(market001?.accumulative_bids || 0)
+        ) {
           market001 = market;
         }
         return market;

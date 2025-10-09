@@ -2,7 +2,7 @@ import clsx from "clsx";
 import { motion } from "framer-motion";
 import { formatNumber } from "@/utils/format/number";
 import { useMemo } from "react";
-import { getAnchorPrice } from "@/utils/pool";
+import { getReAnchorPrice } from "@/utils/pool";
 import useIsMobile from "@/hooks/use-is-mobile";
 import { formatAddress } from "@/utils/format/address";
 import Avatar from "@/components/avatar";
@@ -28,7 +28,7 @@ export default function Market({
 }) {
   const [progress, anchorPrice] = useMemo(() => {
     if (data?.anchor_price === "0") return [0, 0];
-    const _anchorPrice = getAnchorPrice(data?.anchor_price);
+    const _anchorPrice = getReAnchorPrice(data);
 
     return [(data.accumulative_bids / _anchorPrice) * 100, _anchorPrice];
   }, [data]);
@@ -70,12 +70,11 @@ export default function Market({
               <div className="flex items-center gap-[6px]">
                 <Avatar
                   size={20}
-                  address={data?.user_info?.user}
+                  address={data?.pool_user}
                   email={data?.user_info?.email}
                 />
                 <div className="text-[12px]">
-                  {data?.user_info?.email ||
-                    formatAddress(data?.user_info?.user)}
+                  {data?.user_info?.email || formatAddress(data?.pool_user)}
                 </div>
               </div>
             </div>
