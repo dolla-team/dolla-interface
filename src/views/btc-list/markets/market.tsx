@@ -5,6 +5,7 @@ import { formatNumber } from "@/utils/format/number";
 import { getReAnchorPrice } from "@/utils/pool";
 import ProgressBar from "@/components/nft-card/progress-bar";
 import BtcImg from "./btc-bg";
+import { useAuth } from "@/contexts/auth";
 
 export default function Market({
   data,
@@ -13,11 +14,17 @@ export default function Market({
   data: any;
   onClick: () => void;
 }) {
+  const { address } = useAuth();
   return (
     <div
       onClick={onClick}
-      className="flex items-center h-[70px] rounded-[10px] bg-[#0000000D] button border border-[#F2F2F233] backdrop-blur-[25px] pl-[14px] pr-[20px]"
+      className="relative flex items-center h-[70px] rounded-[10px] bg-[#0000000D] button border border-[#F2F2F233] backdrop-blur-[25px] pl-[14px] pr-[20px]"
     >
+      {address?.toLowerCase() === data?.user?.toLowerCase() && (
+        <div className="w-[48px] h-[18px] bg-black rounded-b-[12px] absolute top-0 left-0 z-[1]">
+          Yours
+        </div>
+      )}
       {columns.map((column: any) => (
         <div
           key={column.title}
