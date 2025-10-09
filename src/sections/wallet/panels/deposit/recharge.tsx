@@ -59,7 +59,8 @@ export default function Recharge({
                 </div>
               </div>
               <div className="text-[10px] text-black/60">
-                {formatAddress(chain.contractAddress, 10)}
+                {!!chain.contractAddress &&
+                  formatAddress(chain.contractAddress, 10)}
               </div>
             </div>
           </div>
