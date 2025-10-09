@@ -90,12 +90,12 @@ export default function History({
               </div>
             )}
             {data.length > 0 && (
-              <div className="text-[16px] text-white">
+              <div className="text-[12px]">
                 {data.map((record: any) => (
                   <div
                     key={record.id}
                     className={clsx(
-                      "mb-[6px] px-[12px] flex items-center h-[50px] rounded-[4px] bg-[flex items-center bg-[#00000033]"
+                      "mb-[6px] px-[12px] flex items-center h-[50px] rounded-[4px] bg-[flex items-center"
                     )}
                   >
                     {COLUMNS.map((column) => (
