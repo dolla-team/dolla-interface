@@ -34,11 +34,16 @@ export default function useCreate(onSuccess: () => void) {
           ByAk: {
             amount: _amount,
             bid_unit: BET_UNIT,
-            bep: Big(_amount).mul(price).toFixed(0),
+            bep: Big(amount)
+              .mul(10 ** 6)
+              .mul(price)
+              .toFixed(0),
             prize: { FT: BASE_TOKEN.address }
           }
         }
       };
+
+      console.log("args:", args);
 
       const nonce = await getNonce(publicKey);
       const publicKeyObj = PublicKey.from(publicKey);
