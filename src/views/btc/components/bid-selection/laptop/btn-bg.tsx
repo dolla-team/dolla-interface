@@ -168,10 +168,12 @@ export default function BtnBg() {
 
 export function BtnBidBg({
   className,
-  isAuto
+  isAuto,
+  isAnimation
 }: {
   className?: string;
   isAuto?: boolean;
+  isAnimation?: boolean;
 }) {
   return (
     <svg
@@ -181,7 +183,24 @@ export function BtnBidBg({
       viewBox="0 0 197 138"
       fill="none"
       className={className}
+      style={{
+        animation: isAnimation
+          ? "breathingLight 2s ease-in-out infinite"
+          : "none"
+      }}
     >
+      <style>
+        {`
+          @keyframes breathingLight {
+            0%, 100% {
+              opacity: 0.8;
+            }
+            50% {
+              opacity: 1;
+            }
+          }
+        `}
+      </style>
       <g filter="url(#filter0_di_4184_1291)">
         <path
           d="M168.747 117.938H27.3637C23.2969 117.938 20 114.641 20 110.574V80.0936C20 67.9634 24.9872 56.3668 33.792 48.0232L50.5826 32.1121C58.7898 24.3348 69.6663 20 80.9731 20H114.626C125.807 20 136.572 24.239 144.751 31.8625L162.054 47.9899C171.02 56.347 176.111 68.053 176.111 80.3099V110.574C176.111 114.641 172.814 117.938 168.747 117.938Z"

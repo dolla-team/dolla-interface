@@ -73,6 +73,7 @@ export default function BidBtn({
         <BtnBidBg
           className="absolute bottom-0 left-0"
           isAuto={flipStatus === 4}
+          isAnimation={flipStatus === 0}
         />
       </button>
     </div>

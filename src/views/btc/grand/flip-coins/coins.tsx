@@ -32,6 +32,7 @@ export function LaptopCoins({
       coinContainerRef={coinContainerRef}
       setFlipStatus={setFlipStatus}
       isWinner={isWinner}
+      flipStatus={flipStatus}
     />
   ));
 }

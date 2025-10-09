@@ -19,7 +19,8 @@ const Coin = forwardRef<any, any>(
       ticket,
       bids,
       setFlipStatus,
-      isWinner
+      isWinner,
+      flipStatus
     },
     ref
   ) => {
@@ -137,7 +138,10 @@ const Coin = forwardRef<any, any>(
     return (
       <>
         <div
-          className={clsx("relative cursor-pointer perspective-[1000px]")}
+          className={clsx(
+            "relative perspective-[1000px]",
+            (flipStatus === 4 || flipStatus === 5) && "cursor-pointer"
+          )}
           style={{
             width: `${size}px`,
             height: `${size}px`
