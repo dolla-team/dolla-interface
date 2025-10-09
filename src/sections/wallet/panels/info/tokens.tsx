@@ -87,7 +87,7 @@ const Item = ({
       </div>
       <div>
         <div className="text-[14px] text-black text-right">
-          {formatNumber(balance || 0, 2, true)}
+          {formatNumber(balance || 0, token.decimals > 6 ? 6 : 2, true)}
         </div>
         <div className="text-[12px] text-[#8A87AA] text-right">
           $
