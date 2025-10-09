@@ -49,8 +49,11 @@ export default function useRecords() {
 
       const { data } = response.data;
 
+      console.log("data:", data.list);
+
       const _list = data.list.map((item: any) => {
         const rawResponse = JSON.parse(item.raw_response);
+        console.log("rawResponse:", rawResponse);
 
         const assetId =
           item.type === "deposit"
@@ -70,7 +73,7 @@ export default function useRecords() {
           tokens = [token];
         }
 
-        const amount = rawResponse.quoteResponse.quote.amountInFormatted;
+        const amount = rawResponse.swapDetails.amountInFormatted;
 
         let status = item.status;
         if (item.status === "SUCCESS") {
