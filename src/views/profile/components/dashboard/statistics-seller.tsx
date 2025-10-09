@@ -159,6 +159,7 @@ const StatisticsPlayer = (props: any) => {
                   isShort: true,
                   isShortUppercase: true
                 })}{" "}
+                {BASE_TOKEN.symbol}
               </div>
             </LabelValue>
             <Button
