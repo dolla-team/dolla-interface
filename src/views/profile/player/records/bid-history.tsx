@@ -128,19 +128,14 @@ const BidHistory = (props: any) => {
       width: isMobile ? 210 : 190,
       align: GridTableAlign.Right,
       render: (record: any) => {
-        const currentChain = Object.values(chains).find(
-          (it: any) => it.name.toLowerCase() === record.chain?.toLowerCase()
-        );
         return (
           <div className="flex items-center gap-[10px] whitespace-nowrap">
             <div className="text-[#5E6B7D]">
-              {dayjs(record.updated_at).format("hh:mm D MMM, YYYY")}
+              {dayjs(record.time).format("hh:mm D MMM, YYYY")}
             </div>
             <div className="text-[#0095FF] text-[14px] underline cursor-pointer">
               <a
-                href={`${currentChain?.blockExplorers?.default?.url}/tx/${
-                  record.tx_hash
-                }?cluster=${import.meta.env.VITE_SOLANA_CLUSTER_NAME}`}
+                href={`https://nearblocks.io/txns/${record.result_tx_hash}`}
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -151,7 +146,7 @@ const BidHistory = (props: any) => {
             <svg
               className="cursor-pointer"
               onClick={() => {
-                onCopy(record.tx_hash);
+                onCopy(record.result_tx_hash);
               }}
               width="12"
               height="13"
