@@ -47,8 +47,6 @@ export default function Progress({ data }: any) {
     []
   );
 
-  console.log("spilledPercent", spilledPercent);
-
   return (
     <div className="relative">
       <div

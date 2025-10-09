@@ -14,7 +14,7 @@ export default function Laptop() {
   const { userInfo, address } = useAuth();
 
   useEffect(() => {
-    if (!address) globalStore.set({ showUserInfo: false });
+    globalStore.set({ showUserInfo: !!address });
   }, [address]);
 
   return (

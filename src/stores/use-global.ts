@@ -14,7 +14,7 @@ const initialState = {
   chainId: "",
   playBgm: true,
   code: "",
-  showUserInfo: true
+  showUserInfo: false
 } as GlobalState;
 
 export const useGlobalStore = create(
@@ -23,7 +23,7 @@ export const useGlobalStore = create(
       chainId: "",
       playBgm: true,
       code: "",
-      showUserInfo: true,
+      showUserInfo: false,
       set: (params) => set(() => ({ ...params })),
       init: () => set(() => initialState)
     }),
