@@ -93,7 +93,7 @@ export default function LucyDrawHistory({
                   }
                 }}
               />
-              <div className="w-[120px] h-[32px] rounded-[12px] bg-linear-to-r from-[#FFC42F] to-[#FFF698] leading-[32px] text-center pointer-events-none">
+              <div className="w-[120px] h-[32px] rounded-[12px] bg-linear-to-r from-[#FFC42F] to-[#FFF698] leading-[32px] text-center pointer-events-none select-none">
                 Round #{round}
               </div>
               <CircleArrow
@@ -120,8 +120,8 @@ export default function LucyDrawHistory({
                 <Rank rank={index + 1} />
                 <Avatar
                   size={30}
-                  address={item.user_info?.user}
                   email={item.user_info?.email}
+                  src={item.user_info?.icon}
                 />
                 <div className="text-[14px] text-white">
                   {formatAddress(item.user)}
