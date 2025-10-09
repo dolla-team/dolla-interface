@@ -2,28 +2,25 @@ import Progress from "../progress";
 import { useBtcContext } from "../../../context";
 import { formatNumber } from "@/utils/format/number";
 import clsx from "clsx";
-import RollingDigitDisplay from "@/components/rolling-digit";
 import Avatar from "@/components/avatar";
 import SellerLevel from "@/components/seller-level";
 import { formatAddress } from "@/utils/format/address";
 import MoreIcon from "./more-icon";
 
 export default function MarketInfo() {
-  const { poolAmount, pool } = useBtcContext();
+  const { pool } = useBtcContext();
 
   return (
     pool?.status !== 2 && (
       <div className="absolute left-[20px] bottom-[50%] w-[244px]">
         <div className="flex items-center justify-between">
           <div className="h-[40px] flex items-center gap-[12px]">
-            <div className="w-[39px] h-[39px] bg-linear-to-b from-[#FFC42F] to-[#99761C] rounded-[12px] p-[2px]">
-              <Avatar
-                size={35}
-                address={pool?.user_info?.address}
-                email={pool?.user_info?.email}
-                className="rounded-[12px]"
-              />
-            </div>
+            <Avatar
+              size={35}
+              src={pool?.user_info?.icon}
+              email={pool?.user_info?.email}
+              className="rounded-[12px]"
+            />
             <div>
               <div className="flex items-center gap-[4px]">
                 <span className="text-[14px] text-white">Seller</span>
@@ -43,13 +40,15 @@ export default function MarketInfo() {
             <Avatar
               key={index}
               size={22}
-              address={pool?.user_info?.address}
+              src={pool?.user_info?.icon}
               email={pool?.user_info?.email}
               className={clsx("rounded-[50%]", index !== 0 && "ml-[-6px]")}
             />
           ))}
-          <MoreIcon className="ml-[-6px] relative z-[2]" />
-          {/* {pool?.participants >= 15 && } */}
+
+          {pool?.participants >= 15 && (
+            <MoreIcon className="ml-[-6px] relative z-[2]" />
+          )}
           <div className="text-[12px] text-white ml-[6px]">
             {pool?.participants || 0}
           </div>

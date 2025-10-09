@@ -21,7 +21,7 @@ export interface RecordsResponse {
   message?: string;
 }
 
-const DEFAULT_LIMIT = 20;
+const DEFAULT_LIMIT = 10;
 
 export default function useRecords() {
   const [records, setRecords] = useState<any[]>([]);
@@ -100,9 +100,7 @@ export default function useRecords() {
       });
 
       // Update records based on whether it's a new fetch or load more
-      setRecords((prev) =>
-        pageRef.current === 1 ? _list : [...prev, ..._list]
-      );
+      setRecords(_list);
 
       setCurrentPage(data.current_page);
       setHasMore(data.has_next_page);
