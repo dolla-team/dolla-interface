@@ -8,6 +8,7 @@ import { BASE_TOKEN } from "@/config/btc";
 import Big from "big.js";
 import { useNavigate } from "react-router-dom";
 import usePoolListStore from "@/stores/use-pool-list";
+import { getReAnchorPrice } from "@/utils/pool";
 
 export default function MoreMarkets() {
   const { prices } = useTokenPrice(BASE_TOKEN);
@@ -59,8 +60,9 @@ const MarketItem = ({
   onClick: () => void;
 }) => {
   const valued = useMemo(() => {
-    return formatNumber(price * value, 1, true);
-  }, [price, value]);
+    if (!market) return formatNumber(price * value, 2, true);
+    return formatNumber(getReAnchorPrice(market), 2, true);
+  }, [price, value, market]);
 
   return (
     <div
