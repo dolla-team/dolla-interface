@@ -73,7 +73,10 @@ export default function useRecords() {
           tokens = [token];
         }
 
-        const amount = rawResponse.swapDetails.amountInFormatted;
+        const amount =
+          item.type === "swap"
+            ? rawResponse.quoteResponse.quoteRequest.amountOutFormatted
+            : rawResponse.swapDetails.amountInFormatted;
 
         let status = item.status;
         if (item.status === "SUCCESS") {
