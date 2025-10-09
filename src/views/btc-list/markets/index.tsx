@@ -132,7 +132,8 @@ const MarketInfo = () => {
       content={
         <div className="w-[298px] text-[#3B3951] text-[12px] p-[14px] bg-white rounded-[10px] border border-[#E4E4E4]">
           <div className="font-[300] opacity-80 leading-[120%]">
-            Valued: Market’s base value, your win chance = Bid ÷ Valued * 1.2
+            <div> Market’s base value.</div>
+            <div>your win chance = Bid ÷ Valued * 1.2</div>
           </div>
         </div>
       }

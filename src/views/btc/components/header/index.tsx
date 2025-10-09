@@ -5,16 +5,11 @@ import { useBtcContext } from "../../context";
 import { formatNumber } from "@/utils/format/number";
 import { useMemo } from "react";
 import Big from "big.js";
-import TriIcon from "./tri-icon";
-import { BASE_TOKEN } from "@/config/btc";
-import Avatar from "@/components/avatar";
-import SellerLevel from "@/components/seller-level";
-import { formatAddress } from "@/utils/format/address";
 
 export default function Header({ className }: { className?: string }) {
-  const { bids, pool, getPoolRecommend, setFilterVolume } = useBtcContext();
+  const { bids, pool } = useBtcContext();
 
-  const [amount, prev, next] = useMemo(() => {
+  const [amount] = useMemo(() => {
     if (!pool) return ["0", 0, 0];
     const reward_amount = pool.reward_amount || 0;
     const decimals = pool.reward_token_info?.[0]?.decimals || 1;
@@ -25,28 +20,7 @@ export default function Header({ className }: { className?: string }) {
     );
     const _a = formatNumber(_an, 3, true);
 
-    let prev = 0;
-    let next = 0;
-    if (_an.eq(0.001)) {
-      prev = 0;
-      next = 0.01;
-    } else if (_an.eq(0.01)) {
-      prev = 0.001;
-      next = 0.1;
-    } else if (_an.eq(0.1)) {
-      prev = 0.01;
-      next = 1;
-    } else if (_an.eq(1)) {
-      prev = 0.1;
-      next = 0;
-    } else if (_an.lt(0.001)) {
-      prev = 0;
-      next = 0.001;
-    } else if (_an.gt(1)) {
-      prev = 1;
-      next = 0;
-    }
-    return [_a, prev, next];
+    return [_a];
   }, [pool]);
 
   return (
