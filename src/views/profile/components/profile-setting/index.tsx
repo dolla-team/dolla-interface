@@ -6,6 +6,7 @@ import clsx from "clsx";
 import useUpdateUserInfo from "@/hooks/user/use-update-userinfo";
 import { useAuth } from "@/contexts/auth";
 import ModalClose from "@/components/button/modal-close";
+import Avatar from "@/components/avatar";
 
 interface ProfileSettingProps {
   open: boolean;
@@ -15,12 +16,14 @@ interface ProfileSettingProps {
 }
 
 export default function ProfileSetting({ open, onClose }: ProfileSettingProps) {
-  const { userInfo } = useAuth();
+  const { userInfo, onQueryUserInfo } = useAuth();
   const [username, setUsername] = useState("");
   const [avatarUrl, setAvatarUrl] = useState("");
   const [showAvatarUpload, setShowAvatarUpload] = useState(false);
   const [file, setFile] = useState<Blob | null>(null);
-  const { loading: isSaving, updateUserInfo } = useUpdateUserInfo();
+  const { loading: isSaving, updateUserInfo } = useUpdateUserInfo(() => {
+    onQueryUserInfo();
+  });
 
   useEffect(() => {
     setUsername(userInfo?.name || userInfo?.show_email);
@@ -61,7 +64,12 @@ export default function ProfileSetting({ open, onClose }: ProfileSettingProps) {
                   className="w-full h-full rounded-[12px] object-cover"
                 />
               ) : (
-                <div className="w-full h-full rounded-[12px] bg-gray-200 flex items-center justify-center"></div>
+                <Avatar
+                  size={74}
+                  className="shrink-0 rounded-[8px] border-[2px] border-[#FFFFFFCC] text-[26px]"
+                  src={userInfo?.icon}
+                  email={userInfo?.show_email}
+                />
               )}
               {/* Edit Button - Show on hover */}
               <button

@@ -105,10 +105,6 @@ const router = createBrowserRouter([
   {
     path: "/temp",
     element: <Temp />
-  },
-  {
-    path: "*",
-    element: <Navigate to="/" replace />
   }
 ]);
 

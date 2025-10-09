@@ -24,13 +24,13 @@ export default function useUserInfo(address?: string) {
         if (usersStore.users[address]) {
           _info.icon = usersStore.users[address].icon;
         } else {
-          const random = Math.floor(Math.random() * 7) + 1;
-          _info.icon = `/avatar/${random}.svg`;
-          usersStore.setUsers({
-            [address]: {
-              icon: _info.icon
-            }
-          });
+          // const random = Math.floor(Math.random() * 7) + 1;
+          // _info.icon = `/avatar/${random}.svg`;
+          // usersStore.setUsers({
+          //   [address]: {
+          //     icon: _info.icon
+          //   }
+          // });
         }
       }
       const progress = (() => {

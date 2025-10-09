@@ -20,7 +20,7 @@ export const useUsers = create(
     }),
     {
       name: "_users",
-      version: 0.1,
+      version: 0.11,
       storage: createJSONStorage(() => localStorage)
     }
   )

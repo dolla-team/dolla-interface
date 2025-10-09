@@ -26,8 +26,6 @@ export default function useUpdateUserInfo(onSuccess?: () => void) {
             dir: "user",
             file: params.file
           })) as any;
-
-          return;
         }
 
         const args: any = {};

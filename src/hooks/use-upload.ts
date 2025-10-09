@@ -26,17 +26,17 @@ export default function useUpload(onSuccess?: (url: string) => void) {
         setLoading(true);
         setProgress(0);
 
+        const dir = "user";
+
         // Upload with progress tracking
         const fileName = Date.now().toString();
         const response = await axiosInstance.post<UploadResponse>(
-          `/api/v1/upload/data?dir=${"user"}&file_name=${fileName}`
+          `/api/v1/upload/data?dir=${dir}&file_name=${fileName}`
         );
 
         if (response.data.code !== 0) {
           throw new Error(response.data.message);
         }
-
-        console.log("response", response.data);
 
         const res = await fetch(response.data.data as any, {
           method: "PUT",
@@ -45,16 +45,14 @@ export default function useUpload(onSuccess?: (url: string) => void) {
             "Content-Type": params.file.type
           }
         });
-        console.log("res", res);
+
         if (res.ok) {
-          // onSuccess?.();
+          onSuccess?.(`https://assets.dolla.market/${dir}/${fileName}`);
+          return `https://assets.dolla.market/${dir}/${fileName}`;
         } else {
           throw new Error("Failed to upload file");
+          return null;
         }
-
-        // onSuccess?.(fileUrl);
-
-        return response.data.data;
       } catch (err: any) {
         console.error("Failed to upload file:", err);
 

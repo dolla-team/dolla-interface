@@ -41,9 +41,9 @@ const Dashboard = (props: any) => {
       <div className="absolute top-[-38px] left-[50%] translate-x-[-50%] flex flex-col items-center">
         <Avatar
           size={74}
-          className="shrink-0 rounded-[8px] border-[2px] border-[#FFFFFFCC]"
+          className="shrink-0 rounded-[8px] border-[2px] border-[#FFFFFFCC] text-[26px]"
           src={userInfo?.icon}
-          email={userInfo?.email}
+          email={userInfo?.show_email}
         />
         <div className="flex justify-center items-center gap-[6px] mt-[8px]">
           <div className="flex items-center gap-[6px]">
