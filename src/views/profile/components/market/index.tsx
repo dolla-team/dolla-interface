@@ -213,31 +213,28 @@ export default function Market({
       </div>
 
       {data.status === 2 && (
-        <div className="w-full h-full rounded-[16px] absolute top-0 left-0 z-[2] bg-[#00000080]">
-          <div className="flex justify-center mt-[80px]">
+        <div className="w-full h-[calc(100%-46px)] rounded-t-[18px] absolute top-0 left-0 z-[2] bg-[#E5E5E54D] backdrop-blur-[10px]">
+          <div className="text-[24px] font-[900] text-center mt-[40px]">
+            {formatNumber(anchorPrice, 0, true, {
+              isShort: true
+            })}
+            x WIN
+          </div>
+          <div className="flex justify-center">
             <div className="p-[4px] pr-[10px] min-w-[100px] inline-flex gap-[3px] rounded-[16px] bg-white border border-[#E4E4E4] backdrop-blur-[25px]">
-              <Avatar email={data?.winner_user_info?.email} size={24} />
+              <Avatar
+                email={data?.winner_user_info?.email}
+                src={data?.winner_user_info?.icon}
+                size={24}
+              />
               <div className="text-[12px] text-[#2B3337] leading-[24px]">
-                {data?.winner_user_info?.email ||
+                {data?.winner_user_info?.name ||
+                  data?.winner_user_info?.email ||
                   formatAddress(
                     data?.winner_user || data?.pool_info?.winner_user
                   )}
               </div>
             </div>
-          </div>
-          <div
-            className="text-[26px] font-bold text-center mt-[4px]"
-            style={{
-              background: "linear-gradient(180deg, #FFF79F 0%, #D3C104 100%)",
-              backgroundClip: "text",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent"
-            }}
-          >
-            {formatNumber(anchorPrice, 0, true, {
-              isShort: true
-            })}
-            x WIN
           </div>
         </div>
       )}

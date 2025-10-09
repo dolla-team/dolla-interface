@@ -16,7 +16,7 @@ export default function Grand({ className }: { className?: string }) {
         "relative flex items-center justify-center mx-auto overflow-hidde h-[calc(100vh-416px)] pt-[25px]",
 
         !(pool?.status === 1 || flipStatus !== 0)
-          ? "w-[calc(100vw-220px)]"
+          ? "w-[calc(100vw-220px)] z-[20]"
           : "w-[calc(100vw-620px)]",
         className
       )}
