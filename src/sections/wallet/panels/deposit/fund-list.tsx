@@ -54,14 +54,6 @@ export default function FundList({ onBack }: { onBack: () => void }) {
             </div>
           </div>
         ))}
-        <div
-          className="text-[14px] font-medium text-[#8A87AA] text-center mt-[20px] button"
-          onClick={() => {
-            walletStore.set({ depositPanelType: "centralized-exchange" });
-          }}
-        >
-          Deposit Funds Manually
-        </div>
       </div>
 
       {/* {(selectedOption === "centralized-exchange" ||
