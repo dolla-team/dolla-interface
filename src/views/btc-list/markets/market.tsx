@@ -21,7 +21,7 @@ export default function Market({
       className="relative flex items-center h-[70px] rounded-[10px] bg-[#0000000D] button border border-[#F2F2F233] backdrop-blur-[25px] pl-[14px] pr-[20px]"
     >
       {address?.toLowerCase() === data?.user?.toLowerCase() && (
-        <div className="w-[48px] h-[18px] bg-black rounded-b-[12px] absolute top-0 left-0 z-[1]">
+        <div className="w-[48px] h-[18px] bg-black rounded-b-[12px] absolute top-0 left-0 z-[1] text-[10px] text-white text-center leading-[18px]">
           Yours
         </div>
       )}
