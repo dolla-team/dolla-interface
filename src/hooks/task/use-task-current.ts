@@ -17,9 +17,11 @@ export default function useTaskCurrent() {
       const data = response.data.data || {};
 
       let _progressTasks = JSON.parse(JSON.stringify(initProgressTasks));
-      [...data.fixed_tasks, ...data.ongoing_tasks].forEach((item: any) => {
-        if (!item.is_claimed) _progressTasks[item.category].list.push(item);
-      });
+      [...(data.fixed_tasks || []), ...(data.ongoing_tasks || [])].forEach(
+        (item: any) => {
+          if (!item.is_claimed) _progressTasks[item.category].list.push(item);
+        }
+      );
 
       const tasks = [
         ...(data.fixed_tasks || []),

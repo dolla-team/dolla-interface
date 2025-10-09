@@ -16,7 +16,6 @@ export default function Objectives() {
     <div
       className={`
         w-[400px]
-        h-full
         rounded-[20px]
         border
         border-[#E4E4E4]
@@ -63,7 +62,7 @@ export default function Objectives() {
         />
       </div>
       <SwitchPanel className="mt-[10px]">
-        <div className="overflow-y-auto" id="objectives-container">
+        <div>
           {tab === "progress" && (
             <Progress
               tasks={taskStore.progressTasks}

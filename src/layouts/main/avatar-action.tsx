@@ -28,18 +28,17 @@ export default function AvatarAction() {
         }}
         tokenBalance={Number(balance).toFixed(2)}
       />
-      {userInfo?.icon && (
-        <Avatar
-          size={32}
-          address={address}
-          email={userInfo?.show_email}
-          className="shrink-0 button border-[2px] border-[#1B1A23]"
-          onClick={(e: any) => {
-            e.stopPropagation();
-            set({ showUserInfo: !showUserInfo });
-          }}
-        />
-      )}
+      <Avatar
+        size={32}
+        email={userInfo?.show_email}
+        src={userInfo?.icon}
+        className="shrink-0 button"
+        onClick={(e: any) => {
+          e.stopPropagation();
+          console.log(38);
+          set({ showUserInfo: !showUserInfo });
+        }}
+      />
     </div>
   );
 }

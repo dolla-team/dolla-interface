@@ -17,19 +17,19 @@ export default function Progress({
           <Loading size={20} />
         </div>
       ) : (
-        tasks?.map((task: any) => (
-          <div key={task.title}>
-            <div className="text-[14px] font-[600] mt-[20px]">{task.title}</div>
-            {task.list.map((item: any) => (
-              <Task
-                key={item.id}
-                className="mt-[10px]"
-                task={item}
-                onSuccess={onSuccess}
-              />
-            ))}
-          </div>
-        ))
+        tasks?.map(
+          (task: any) =>
+            task.list.length > 0 && (
+              <div key={task.title}>
+                <div className="text-[14px] font-[600] mt-[20px]">
+                  {task.title}
+                </div>
+                {task.list.map((item: any) => (
+                  <Task key={item.id} task={item} onSuccess={onSuccess} />
+                ))}
+              </div>
+            )
+        )
       )}
     </div>
   );
