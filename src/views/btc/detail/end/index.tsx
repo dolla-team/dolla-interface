@@ -132,7 +132,7 @@ export default function EndPanel({ data }: { data: any }) {
               <Avatar
                 size={150}
                 src={data.winner_user_info?.icon}
-                email={data.winner_user_info?.show_email}
+                email={data.winner_user_info?.email_desensitization}
                 address={data.winner_user_info?.user}
                 className="rounded-full"
               />
@@ -170,7 +170,7 @@ export default function EndPanel({ data }: { data: any }) {
                     <Avatar
                       size={32}
                       src={data.user_info?.icon}
-                      email={data.user_info?.show_email}
+                      email={data.user_info?.email_desensitization}
                       address={data.user_info?.user}
                     />
                     <div>
@@ -288,7 +288,7 @@ const ProgressAvatar = ({
       <Avatar
         size={26}
         src={data.winner_user_info?.icon}
-        email={data.winner_user_info?.show_email}
+        email={data.winner_user_info?.email_desensitization}
         address={data.winner_user_info?.user}
       />
       <svg

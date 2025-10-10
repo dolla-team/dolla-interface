@@ -47,6 +47,7 @@ const PlayerMarkets = (props: any) => {
                 )}
                 onClick={() => {
                   if (status === item.key) return;
+                  setIndex(0);
                   onStatusChange(item.key);
                 }}
               >

@@ -42,7 +42,7 @@ export default function MarketInfo() {
               key={index}
               size={22}
               src={item.icon}
-              email={item?.show_email || item?.name}
+              email={item?.email_desensitization || item?.name}
               address={item?.user}
               className={clsx("rounded-[50%]", index !== 0 && "ml-[-6px]")}
             />

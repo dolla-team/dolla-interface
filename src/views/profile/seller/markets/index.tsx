@@ -16,6 +16,7 @@ import { formatNumber } from "@/utils/format/number";
 import { useNavigate } from "react-router-dom";
 import { useContractConfigStore } from "@/stores/use-contract-config";
 import Empty from "@/sections/wallet/panels/info/empty";
+import { useAuth } from "@/contexts/auth";
 
 const SellerMarkets = (props: any) => {
   const { className, poolsData, orders, loading, updatePoolsData } = props;
@@ -101,6 +102,7 @@ export default SellerMarkets;
 
 const MarketItem = (props: any) => {
   const { order, onCancel } = props;
+  const { userInfo } = useAuth();
 
   const contractConfig = useContractConfigStore((store) => store.config);
 
@@ -126,11 +128,33 @@ const MarketItem = (props: any) => {
     return [_time, _cancelValid];
   }, [order]);
 
+  console.log("order", order);
+
+  const data = useMemo(() => {
+    return {
+      accumulative_bids: order.accumulative_bids,
+      reward_amount: order.reward_amount,
+      reward_token_info: order.reward_token_info,
+      status: order.status,
+      profit_ratio: order.profit_ratio,
+      winner_user_info: order.winner_user_info,
+      anchor_price: order.anchor_price,
+      pool_id: order.pool_id,
+      pool_user_info: {
+        icon: userInfo.icon,
+        name: userInfo.name,
+        email_desensitization: userInfo.show_email,
+        user: userInfo.user
+      },
+      participants: order.participants
+    };
+  }, [order]);
+
   return (
     <Market
       isAcitveBg={false}
       className="!w-[288px] !h-[unset]"
-      data={order}
+      data={data}
       footer={
         <div className="w-full px-[13px] bg-black rounded-b-[20px] py-[10px] mt-[10px] relative z-[2] text-white text-center text-[12px] font-normal leading-[100%]">
           <div className="flex justify-between items-center gap-[10px]">

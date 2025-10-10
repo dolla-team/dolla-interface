@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Button from "@/components/button";
 import Market from "@/views/profile/components/market";
 import { EMarketStatus } from "@/views/profile/components/market-status";
+import { useMemo } from "react";
 
 export default function MarketItem(props: any) {
   const { order, onClaimSuccess } = props;
@@ -11,11 +12,26 @@ export default function MarketItem(props: any) {
   const { claiming, claim: onClaim } = useClaimPenalty(onClaimSuccess);
   const navigate = useNavigate();
 
+  const data = useMemo(() => {
+    return {
+      accumulative_bids: order.accumulative_bids,
+      reward_amount: order.reward_amount,
+      reward_token_info: order.reward_token_info,
+      status: order.status,
+      profit_ratio: order.profit_ratio,
+      winner_user_info: order.pool_info.winner_user_info,
+      anchor_price: order.anchor_price,
+      pool_id: order.pool_id,
+      pool_user_info: order.pool_info.user_info,
+      participants: order.participants
+    };
+  }, [order]);
+
   return (
     <Market
       isAcitveBg={false}
       className="!w-[288px] !h-[unset]"
-      data={order}
+      data={data}
       footer={
         <div className="w-full px-[13px] bg-black rounded-b-[20px] py-[17px] mt-[20px] relative z-[2] text-white text-center text-[12px] font-normal leading-[100%]">
           <div className="flex justify-between items-center gap-[10px]">
