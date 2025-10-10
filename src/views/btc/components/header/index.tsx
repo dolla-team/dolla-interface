@@ -108,7 +108,7 @@ export default function Header({ className }: { className?: string }) {
           )}
         >
           <span
-            className="pad:text-[16px] text-[20px]"
+            className="xl:text-[20px] text-[16px]"
             style={{
               WebkitTextFillColor: "transparent"
             }}

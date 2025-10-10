@@ -30,13 +30,13 @@ export default function BidSelection({
   return (
     <div className="absolute bottom-0 left-0 w-full h-[202px]">
       <Bg className="absolute top-0 left-0 w-full h-full" />
-      <div className="relative z-[10] flex items-center justify-center">
+      <div className="relative z-[10] flex items-center justify-center xl:gap-[100px] xl:scale-none gap-[120px] scale-[0.75]">
         <div className="flex items-center justify-end gap-[18px]">
           <div className="w-[254px] px-[20px] mt-[20px] h-[60px] border border-[#F2F2F233] rounded-[10px] bg-[#F2F2F21A] flex items-center justify-between">
             <span className="text-[16px] text-white">PTS</span>
             <Points />
           </div>
-          <div className="flex items-center justify-center mt-[30px] relative w-[192px] h-[62px]">
+          <div className="flex items-center justify-center mt-[24px] relative w-[192px] h-[62px]">
             <BalanceBg />
             <CashierEntry
               onClick={(e: any) => {

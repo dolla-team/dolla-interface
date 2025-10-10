@@ -31,7 +31,7 @@ export default function BidBtn({
     }
   }, [count, flipStatus]);
   return (
-    <div className="w-[197px] h-[235px] relative mx-[100px] top-[-56px]">
+    <div className="w-[197px] h-[235px] relative top-[-56px] shrink-0">
       <BtnBg />
       <button
         className={clsx(
