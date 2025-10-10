@@ -7,6 +7,7 @@ import Big from "big.js";
 import { getReAnchorPrice } from "@/utils/pool";
 import useWalletStore from "@/stores/use-wallet";
 import { useNavigate } from "react-router-dom";
+import { formatNumber } from "@/utils/format/number";
 
 interface ScrollProps {
   className?: string;
@@ -180,7 +181,7 @@ const Item = ({
           config[randomIndex].color
         )}
       >
-        {price}x
+        {formatNumber(Number(price) / (item.winner_times || 1), 2, true)}x
       </span>
       <span className="text-xl drop-shadow-lg">🚀</span>
     </div>

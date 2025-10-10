@@ -144,7 +144,9 @@ export default function useBid(
         if (window.bidResultTimer) {
           clearTimeout(window.bidResultTimer);
         }
-        window.bidResultTimer = setTimeout(loopBidResult, 1000);
+        window.bidResultTimer = setTimeout(() => {
+          loopBidResult(hash);
+        }, 1000);
       };
 
       loopBidData();
