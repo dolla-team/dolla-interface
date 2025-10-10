@@ -128,8 +128,6 @@ const MarketItem = (props: any) => {
     return [_time, _cancelValid];
   }, [order]);
 
-  console.log("order", order);
-
   const data = useMemo(() => {
     return {
       accumulative_bids: order.accumulative_bids,
