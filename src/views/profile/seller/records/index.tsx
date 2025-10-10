@@ -71,9 +71,12 @@ const Records = (props: any) => {
                 : ""
             )}
           >
-            <div>
-              {record.token_info?.symbol} #{record.token_info?.token_id}
-            </div>
+            {formatNumber(
+              record.amountBig || 0,
+              record.token_info?.decimals > 6 ? 6 : 2,
+              true
+            )}
+            <div>{record.token_info?.symbol}</div>
           </div>
         );
       }
