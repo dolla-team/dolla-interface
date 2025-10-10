@@ -157,7 +157,7 @@ const Label = ({
           : "flex-row right-[-80px]"
       )}
     >
-      <div className="w-[1px] h-[52px] bg-[#FFC42F]" />
+      {/* <div className="w-[1px] h-[52px] bg-[#FFC42F]" /> */}
       <div className="pt-[10px]">
         <div className="text-[12px] text-white/50">Total Bid</div>
         <div
