@@ -53,7 +53,6 @@ export default function useRecords() {
 
       const _list = data.list.map((item: any) => {
         const rawResponse = JSON.parse(item.raw_response);
-        console.log("rawResponse:", rawResponse);
 
         const assetId =
           item.type === "deposit"
@@ -75,7 +74,7 @@ export default function useRecords() {
 
         const amount =
           item.type === "swap"
-            ? rawResponse.quoteResponse.quoteRequest.amountOutFormatted
+            ? rawResponse.quoteResponse.quote.amountInFormatted
             : rawResponse.swapDetails.amountInFormatted;
 
         let status = item.status;
