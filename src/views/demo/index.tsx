@@ -291,6 +291,114 @@ function UpdateKeySection({
   );
 }
 
+// Generate KeyPair Section Component
+function GenerateKeyPairSection({
+  onGenerateKeyPair,
+  generating
+}: {
+  onGenerateKeyPair: (isDeposit: boolean) => Promise<any>;
+  generating: boolean;
+}) {
+  const [result, setResult] = useState<any>(null);
+  const [showResult, setShowResult] = useState(false);
+  const toast = useToast();
+
+  const handleGenerateKeyPair = async (isDeposit: boolean) => {
+    try {
+      const keyPairResult = await onGenerateKeyPair(isDeposit);
+      setResult(keyPairResult);
+      setShowResult(true);
+      toast.success({
+        title: isDeposit
+          ? "KeyPair generated (deposit mode)"
+          : "KeyPair generated successfully"
+      });
+    } catch (error) {
+      console.error("Generate keypair error:", error);
+      toast.fail({ title: "Generate keypair failed" });
+    }
+  };
+
+  return (
+    <div className="space-y-4">
+      <h2 className="text-xl font-semibold text-gray-800">
+        Generate KeyPair Demo
+      </h2>
+
+      <div className="bg-gray-50 p-4 rounded-lg">
+        <p className="text-sm text-gray-600 mb-3">
+          Generate or retrieve keypair for NEAR operations. If a keypair exists
+          in storage, it will be returned; otherwise, a new one will be created
+          and saved.
+        </p>
+
+        <div className="space-y-3">
+          <Button
+            className="w-full h-10 !bg-teal-600 text-white rounded-lg transition-colors border border-teal-600"
+            onClick={() => handleGenerateKeyPair(false)}
+            loading={generating}
+            disabled={generating}
+          >
+            {generating ? "Generating..." : "Generate KeyPair"}
+          </Button>
+
+          <Button
+            className="w-full h-10 !bg-cyan-600 text-white rounded-lg transition-colors border border-cyan-600"
+            onClick={() => handleGenerateKeyPair(true)}
+            loading={generating}
+            disabled={generating}
+          >
+            {generating ? "Generating..." : "Generate KeyPair (Deposit Mode)"}
+          </Button>
+
+          {result && (
+            <div className="space-y-2">
+              <Button
+                className="w-full h-8 !bg-gray-600 text-white rounded text-sm border border-gray-600"
+                onClick={() => setShowResult(!showResult)}
+              >
+                {showResult ? "Hide" : "Show"} Result
+              </Button>
+
+              {showResult && (
+                <div className="mt-3 space-y-2">
+                  <div>
+                    <span className="text-xs text-gray-500">Public Key:</span>
+                    <pre className="text-xs bg-white p-2 rounded border overflow-auto">
+                      {result.publicKey}
+                    </pre>
+                  </div>
+                  <div>
+                    <span className="text-xs text-gray-500">Private Key:</span>
+                    <pre className="text-xs bg-white p-2 rounded border overflow-auto">
+                      {result.privateKey}
+                    </pre>
+                  </div>
+                  <div>
+                    <span className="text-xs text-gray-500">
+                      KeyPair Signer:
+                    </span>
+                    <pre className="text-xs bg-white p-2 rounded border overflow-auto">
+                      {result.keyPairSigner ? "Created" : "Not available"}
+                    </pre>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+
+        <div className="mt-3 p-3 bg-blue-50 border border-blue-200 rounded">
+          <p className="text-xs text-blue-800">
+            💡 Deposit mode will skip account key update. Use this when making
+            deposit operations.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // Export Wallet Section Component
 function ExportWalletSection({ exportWallet }: { exportWallet: () => void }) {
   const [exporting, setExporting] = useState(false);
@@ -423,9 +531,11 @@ export default function Demo() {
   const {
     updateAk: onUpdateKey,
     createKeyPair,
-    saveKeyPair
+    saveKeyPair,
+    generateKeyPair
   } = useGenerateKey();
   const [updating, setUpdating] = useState(false);
+  const [generating, setGenerating] = useState(false);
 
   // NFT hooks
   const { nftNumber } = useMintNft(NFT_ADDRESS);
@@ -458,6 +568,17 @@ export default function Demo() {
     }
   };
 
+  // Wrapper for generateKeyPair with loading state
+  const handleGenerateKeyPair = async (isDeposit: boolean) => {
+    setGenerating(true);
+    try {
+      const result = await generateKeyPair(isDeposit);
+      return result;
+    } finally {
+      setGenerating(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-100 p-6">
       <div className="max-w-4xl mx-auto space-y-8">
@@ -484,7 +605,14 @@ export default function Demo() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <GenerateKeyPairSection
+            onGenerateKeyPair={handleGenerateKeyPair}
+            generating={generating}
+          />
           <UpdateKeySection onUpdateKey={handleUpdateKey} updating={updating} />
+        </div>
+
+        <div className="grid grid-cols-1 gap-8">
           <ExportWalletSection exportWallet={exportWallet} />
         </div>
 

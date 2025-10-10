@@ -12,16 +12,26 @@ export default function useGenerateKey() {
   const { nearAccount, address } = useAuth();
 
   async function generateKeyPair(isDeposit = false) {
+    let isCorrect = false;
     if (publicKey && privateKey) {
       const newKeyPairSigner = KeyPairSigner.fromSecretKey(
         ("ed25519:" + privateKey) as any
       );
 
-      return {
-        publicKey,
-        privateKey,
-        keyPairSigner: newKeyPairSigner
-      };
+      const res = await viewMethod({
+        method: "get_user_id_ak",
+        args: { user_id: { Evm: address.replace(/^0x/, "").toLowerCase() } }
+      });
+
+      isCorrect = res === "ed25519:" + publicKey;
+
+      if (isCorrect) {
+        return {
+          publicKey,
+          privateKey,
+          keyPairSigner: newKeyPairSigner
+        };
+      }
     }
 
     const {
@@ -30,7 +40,7 @@ export default function useGenerateKey() {
       privateKey: newPrivateKey
     } = createKeyPair();
 
-    if (nearAccount && !isDeposit) {
+    if ((nearAccount && !isDeposit) || !isCorrect) {
       await updateAk({ publicKey: shortPublicKey });
     }
 
