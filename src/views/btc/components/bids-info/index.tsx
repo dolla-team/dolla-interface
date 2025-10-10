@@ -14,6 +14,7 @@ export default function BidsInfoWrapper() {
         onRefresher={() => {
           setRefresher(refresher + 1);
         }}
+        key={refresher}
       />
     )
   );
@@ -26,20 +27,25 @@ function BidsInfoInner({ onRefresher }: any) {
 
   const [animationY, duration] = useMemo(() => {
     if (!list.length) return [0, 10];
-    const _cy = containerRef.current?.clientHeight || list.length * 42;
+    const _cy = list.length * 42;
     const _y = hasNext ? _cy : _cy + 500;
     const _cd = _y / 420 < 2 ? 10 : (_y / 420) * 5;
     const _d = hasNext ? _cd : _cd + 5;
+    console.log("animationY", _y, _d, list.length);
     return [_y, _d];
   }, [list.length, hasNext]);
 
   const { run } = useDebounceFn(
     (latest) => {
       if (animationY && Math.abs(Number(latest.y)) + 10 > animationY) {
-        onRefresher();
+        if (!hasNext) {
+          setTimeout(() => {
+            onRefresher();
+          }, 10000);
+        }
       }
     },
-    { wait: 1000 }
+    { wait: 500 }
   );
   return (
     <div
@@ -56,7 +62,6 @@ function BidsInfoInner({ onRefresher }: any) {
               duration,
               ease: "linear"
             }}
-            ref={containerRef}
             onUpdate={run}
           >
             {list.map((item, index) => (
