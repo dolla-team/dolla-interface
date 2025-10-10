@@ -14,6 +14,7 @@ export default function Market({
   className,
   footer,
   header,
+  from,
   onClick,
   isActive
 }: {
@@ -22,8 +23,8 @@ export default function Market({
   header?: React.ReactNode;
   footer?: React.ReactNode;
   isAcitveBg?: boolean;
+  from?: string;
   onClick?: () => void;
-  isForceNormal?: boolean;
   isActive?: boolean;
 }) {
   const [progress, anchorPrice] = useMemo(() => {
@@ -217,7 +218,7 @@ export default function Market({
       {data.status === 2 && (
         <div className="w-full h-full rounded-[18px] absolute top-0 left-0 z-[2] bg-[#E5E5E54D] backdrop-blur-[10px]">
           <div className="text-[24px] font-[900] text-center mt-[40px]">
-            {formatNumber(data.profit_ratio, 2, true, {
+            {formatNumber(data.profit_ratio, from === "seller" ? 2 : 0, true, {
               isShort: true
             })}
             x WIN

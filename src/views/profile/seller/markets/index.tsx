@@ -153,6 +153,7 @@ const MarketItem = (props: any) => {
       isAcitveBg={false}
       className="!w-[288px] !h-[unset]"
       data={data}
+      from="seller"
       footer={
         <div className="w-full px-[13px] bg-black rounded-b-[20px] py-[10px] mt-[10px] relative z-[2] text-white text-center text-[12px] font-normal leading-[100%]">
           <div className="flex justify-between items-center gap-[10px]">

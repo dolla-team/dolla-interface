@@ -1,8 +1,7 @@
 import Avatar from "@/components/avatar";
 import ItemLevel from "./item-level";
 import { formatAddress } from "@/utils/format/address";
-import { getAnchorPrice } from "@/utils/pool";
-import Big from "big.js";
+import { formatNumber } from "@/utils/format/number";
 import clsx from "clsx";
 
 export default function TopWinnersItem({
@@ -30,9 +29,9 @@ export default function TopWinnersItem({
       <div className="flex items-center gap-[10px]">
         <div className="w-[40px] h-[40px] p-[2px] rounded-full bg-linear-to-b from-[#FFE093] via-[#FFECBC] to-[#DEAF37]">
           <Avatar
-            address={data?.winner_user_info?.user}
-            email={data?.winner_user_info?.show_email}
-            src={data?.winner_user_info?.icon}
+            address={data?.user_info?.user}
+            email={data?.user_info?.email_desensitization}
+            src={data?.user_info?.icon}
             size={36}
             className="rounded-full text-[18px]"
           />
@@ -48,9 +47,9 @@ export default function TopWinnersItem({
         </div>
       </div>
       <div>
-        <div className="text-[10px] text-black/30">Return</div>
+        <div className="text-[10px] text-black/30">Multiplier</div>
         <div className="text-[12px] text-black text-right font-semibold">
-          {Big(getAnchorPrice(data?.anchor_price, 6)).toFixed(2)}x
+          {formatNumber(data.profit_ratio, 0, true)}X
         </div>
       </div>
     </div>
