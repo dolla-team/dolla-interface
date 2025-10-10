@@ -93,14 +93,14 @@ export default function CurrencyRow({
                       )}...${currency.address.slice(-4)}`
                     : ""}
                 </div>
-                <button
+                {/* <button
                   type="button"
                   className="w-[14px] h-[14px] bg-[url('/images/icon-copy.svg')] bg-no-repeat bg-center bg-contain"
                   onClick={(e) => {
                     e.stopPropagation();
                     handleCopyAddress(currency);
                   }}
-                />
+                /> */}
               </div>
             )}
           </div>

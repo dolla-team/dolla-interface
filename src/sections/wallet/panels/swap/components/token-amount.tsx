@@ -77,6 +77,11 @@ export default function TokenAmount({
     }
   }, [amount]);
 
+  useEffect(() => {
+    setPercent(0);
+    onAmountChange?.(0);
+  }, [currency]);
+
   return (
     <div
       className={clsx(
