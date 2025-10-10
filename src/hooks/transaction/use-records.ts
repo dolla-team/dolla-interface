@@ -101,8 +101,6 @@ export default function useRecords() {
 
       // Update records based on whether it's a new fetch or load more
       setRecords(_list);
-
-      setCurrentPage(data.current_page);
       setHasMore(data.has_next_page);
 
       return data;
@@ -118,27 +116,29 @@ export default function useRecords() {
   const loadMore = useCallback(async () => {
     if (loading || !hasMore) return;
     pageRef.current = pageRef.current + 1;
+    setCurrentPage(pageRef.current);
     await fetchRecords();
   }, [loading, hasMore, fetchRecords]);
 
   // Reset records state
   const resetRecords = useCallback(() => {
     pageRef.current = 1;
+    setCurrentPage(1);
     setRecords([]);
     setHasMore(true);
-
-    setCurrentPage(1);
   }, []);
 
   // Refresh records (fetch first page)
   const refreshRecords = useCallback(async () => {
     pageRef.current = 1;
+    setCurrentPage(1);
     await fetchRecords();
   }, [fetchRecords]);
 
   const loadPage = useCallback(
     async (step: -1 | 1) => {
       pageRef.current = pageRef.current + step;
+      setCurrentPage(pageRef.current);
       await fetchRecords();
     },
     [fetchRecords]
@@ -147,6 +147,7 @@ export default function useRecords() {
   useEffect(() => {
     if (userInfo?.user) {
       pageRef.current = 1;
+      setCurrentPage(1);
       fetchRecords();
     }
   }, [userInfo?.user]);
