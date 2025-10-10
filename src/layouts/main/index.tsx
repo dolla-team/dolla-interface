@@ -92,7 +92,7 @@ export default function MainLayout() {
           <EstGas />
 
           {!userInfo ? (
-            <Button onClick={login} className="w-[100px] h-[36px]">
+            <Button onClick={login} className="w-[100px] h-[36px] bg-black">
               Connect
             </Button>
           ) : (
