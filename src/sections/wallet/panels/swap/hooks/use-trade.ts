@@ -11,6 +11,7 @@ import Big from "big.js";
 import useGenerateKey from "@/hooks/near/use-generate-key";
 import { useAuth } from "@/contexts/auth";
 import useReport from "@/hooks/transaction/use-report";
+import { NEAR_REFUND_ACCOUNT } from "@/config";
 
 const THIRTY_TGAS = "300000000000000";
 
@@ -53,7 +54,7 @@ export default function useTrade({ onSuccess }: any) {
           depositType: "ORIGIN_CHAIN",
           destinationAsset: outputCurrency.assetId,
           amount: _amount,
-          refundTo: import.meta.env.VITE_NEAR_ACCOUNT_ID,
+          refundTo: NEAR_REFUND_ACCOUNT,
           refundType: "ORIGIN_CHAIN",
           recipient: import.meta.env.VITE_NEAR_ACCOUNT_ID,
           recipientType: "DESTINATION_CHAIN",

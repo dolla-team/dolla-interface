@@ -10,7 +10,7 @@ import { useAuth } from "@/contexts/auth";
 import useDeposit from "@/hooks/near/use-deposit";
 import Loading from "@/components/icons/loading";
 import ChainSelector from "./chain-selector";
-import { formatNumber } from "@/utils/format/number";
+import { EVM_REFUND_ACCOUNT } from "@/config";
 
 export default function RechargeFrom1click() {
   const [quote, setQuote] = useState<any>(null);
@@ -47,7 +47,7 @@ export default function RechargeFrom1click() {
             refundTo:
               chain.blockchain === "btc"
                 ? import.meta.env.VITE_NEAR_ACCOUNT_ID
-                : address,
+                : EVM_REFUND_ACCOUNT,
             getFullQuote: true
           });
           console.log("qoute", qoute);

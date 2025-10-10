@@ -12,6 +12,7 @@ import Big from "big.js";
 import dayjs from "dayjs";
 import { isValidEVMAddress } from "@/utils/validate";
 import { useContractConfigStore } from "@/stores/use-contract-config";
+import { NEAR_REFUND_ACCOUNT } from "@/config";
 
 export default function WithdrawInput() {
   const walletStore = useWalletStore();
@@ -50,7 +51,7 @@ export default function WithdrawInput() {
             depositType: "ORIGIN_CHAIN",
             destinationAsset: chain.assetId,
             amount: _amount,
-            refundTo: import.meta.env.VITE_NEAR_ACCOUNT_ID,
+            refundTo: NEAR_REFUND_ACCOUNT,
             refundType: "ORIGIN_CHAIN",
             recipient: receiveAddress,
             recipientType: "DESTINATION_CHAIN",
