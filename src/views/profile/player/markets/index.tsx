@@ -3,6 +3,7 @@ import MarketItem from "./market";
 import Empty from "@/sections/wallet/panels/info/empty";
 import Loading from "@/components/icons/loading";
 import { useState } from "react";
+import { useAuth } from "@/contexts/auth";
 
 const PlayerMarkets = (props: any) => {
   const {
@@ -14,6 +15,7 @@ const PlayerMarkets = (props: any) => {
     onStatusChange
   } = props;
   const [index, setIndex] = useState(0);
+  const { userInfo } = useAuth();
 
   return (
     <div className="w-full bg-white border border-[#E4E4E4] rounded-[20px] relative">
@@ -56,7 +58,13 @@ const PlayerMarkets = (props: any) => {
                     item.label === "Cancelled" && "bg-[#FF399F]"
                   )}
                 />
-                <span>{item.label}</span>
+                <span>
+                  {item.label === "Live" && userInfo?.join_live_count}
+                  {item.label === "Ended" && userInfo?.join_ended_count}
+                  {item.label === "Cancelled" &&
+                    userInfo?.join_cancelled_count}{" "}
+                  {item.label}
+                </span>
               </button>
             );
           })}
