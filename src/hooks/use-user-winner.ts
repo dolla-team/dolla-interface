@@ -1,8 +1,8 @@
 import { useAuth } from "@/contexts/auth";
 import axiosInstance from "@/libs/axios";
 import { useEffect, useState, useMemo } from "react";
-
 import Big from "big.js";
+import { BASE_TOKEN } from "@/config/btc";
 
 export default function useUserWinner() {
   const [nfts, setNfts] = useState<any[]>([]);
@@ -40,7 +40,7 @@ export default function useUserWinner() {
           });
         }
         // btc
-        if (item.token_info?.symbol === "BTC") {
+        if (item.token_info?.symbol === BASE_TOKEN.symbol) {
           _btcs.push(item);
         }
       });
@@ -61,11 +61,11 @@ export default function useUserWinner() {
 
   const [totalAmount] = useMemo(() => {
     return [
-      nfts.reduce((acc, item) => {
-        return Big(acc).plus(Big(item.value || 0));
+      btcs.reduce((acc, item) => {
+        return Big(acc).plus(Big(item.token_usd || 0));
       }, 0)
     ];
-  }, [nfts]);
+  }, [btcs]);
 
   return {
     nfts,
