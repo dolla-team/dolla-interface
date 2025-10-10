@@ -1,7 +1,4 @@
 import Modal from "@/components/modal";
-import Avatar from "@/components/avatar";
-import { useAuth } from "@/contexts/auth";
-import { formatAddress } from "@/utils/format/address";
 import { formatNumber } from "@/utils/format/number";
 import PointIcon from "@/components/icons/point-icon";
 import RedeemSelectionItem from "./item";
@@ -24,28 +21,44 @@ export default function RedeemSelection({
   itemsMap: any;
   onClose: () => void;
 }) {
-  const { userInfo } = useAuth();
   const [selectedItem, setSelectedItem] = useState<any>(null);
-  const [showHistory, setShowHistory] = useState(false);
   const isMobile = useIsMobile();
   const close = () => {
     onClose();
     setSelectedItem(null);
-    setShowHistory(false);
   };
+  const [tab, setTab] = useState(0); // 0 for index, 1 for history, 2 for redeem
 
   return (
     <>
       <Modal open={showRedeemSelection} onClose={close}>
         <div
           className={clsx(
-            "rounded-[16px] border border-[#E4E4E4] bg-white",
-            isMobile ? "w-full" : "w-[814px] h-[422px]"
+            "rounded-[16px] bg-white",
+            isMobile ? "w-full" : "w-[814px] h-[458px]"
           )}
         >
-          <div className="h-[54px] bg-[#000000] rounded-t-[16px] flex items-center justify-between px-[16px]">
-            <div className="text-[20px] text-white">Points Redemption</div>
-            <button className="w-[24px] h-[24px] button" onClick={close}>
+          <div className="h-[54px] bg-black rounded-t-[14px] flex items-center justify-between px-[16px]">
+            <div
+              className="text-[16px] text-white flex items-center gap-[10px] button"
+              onClick={() => {
+                setTab(0);
+              }}
+            >
+              {tab > 0 && (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="7"
+                  height="14"
+                  viewBox="0 0 7 14"
+                  fill="none"
+                >
+                  <path d="M6 1L1 7L6 13" stroke="white" strokeWidth="1.5" />
+                </svg>
+              )}
+              <span>{tab === 1 ? "Redeem History" : "Points Redemption"}</span>
+            </div>
+            <button className="w-[24px] h-[24px] button" onClick={onClose}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="10"
@@ -60,87 +73,56 @@ export default function RedeemSelection({
               </svg>
             </button>
           </div>
-          <div className="p-[20px]">
-            <div className="flex items-center justify-between">
+
+          {tab === 0 && (
+            <div className="p-[20px] relative">
+              <button
+                className="underline button text-[14px] absolute top-[20px] right-[30px]"
+                onClick={() => setTab(1)}
+              >
+                Redeem History
+              </button>
+              <div className="flex flex-col items-center justify-center text-center">
+                <PointIcon size={60} />
+                <span className="text-black text-[26px] font-bold mt-[10px]">
+                  {formatNumber(points.toString(), 0, true, {
+                    isShort: isMobile
+                  })}
+                </span>
+              </div>
               <div
                 className={clsx(
-                  "flex items-center",
-                  isMobile ? "gap-[8px]" : "gap-[16px]"
+                  "flex gap-[16px] mt-[30px]",
+                  isMobile ? "flex-wrap" : "flex-nowrap"
                 )}
               >
-                <Avatar
-                  size={46}
-                  email={userInfo?.show_email}
-                  src={userInfo?.icon}
-                  address={userInfo?.user}
-                  className="text-[20px]"
-                />
-                <div className="font-[DelaGothicOne] flex items-center">
-                  <div className={isMobile ? "text-[16px]" : "text-[20px]"}>
-                    {userInfo?.name || formatAddress(userInfo?.user)}
-                  </div>
-                </div>
-              </div>
-              <div className="flex flex-col items-end">
-                <div className="flex items-center gap-[8px]">
-                  <PointIcon />
-                  <span
-                    className="text-[#FFEF43] text-[20px] font-bold font-[AlfaSlabOne]"
-                    style={{
-                      WebkitTextStrokeWidth: "1px",
-                      WebkitTextStrokeColor: "#5E3737"
+                {items.map((item: any, index: number) => (
+                  <RedeemSelectionItem
+                    key={index}
+                    data={item}
+                    onClick={() => {
+                      setSelectedItem(item);
+                      setTab(2);
                     }}
-                  >
-                    x
-                    {formatNumber(points.toString(), 0, true, {
-                      isShort: isMobile
-                    })}
-                  </span>
-                </div>
-                <button
-                  className="underline button text-[14px]"
-                  onClick={() => setShowHistory(true)}
-                >
-                  Redeem History
-                </button>
+                    className={isMobile ? "w-[calc(50%-8px)]" : "w-1/4"}
+                  />
+                ))}
               </div>
             </div>
-            <div
-              className={clsx(
-                "flex gap-[16px] mt-[20px]",
-                isMobile ? "flex-wrap" : "flex-nowrap"
-              )}
-            >
-              {items.map((item: any, index: number) => (
-                <RedeemSelectionItem
-                  key={index}
-                  data={item}
-                  onClick={() => {
-                    setSelectedItem(item);
-                  }}
-                  className={isMobile ? "w-[calc(50%-8px)]" : "w-1/4"}
-                />
-              ))}
-            </div>
-          </div>
+          )}
+          {tab === 1 && <History itemsMap={itemsMap} showHistory={tab === 1} />}
+          {tab === 2 && selectedItem && (
+            <Redeem
+              data={selectedItem}
+              points={points}
+              onSuccess={() => {
+                setSelectedItem(null);
+                setTab(0);
+              }}
+            />
+          )}
         </div>
       </Modal>
-      <Redeem
-        data={selectedItem}
-        showRedeem={!!selectedItem}
-        points={points}
-        onClose={() => {
-          setSelectedItem(null);
-        }}
-        onSuccess={() => {
-          setSelectedItem(null);
-        }}
-      />
-      <History
-        itemsMap={itemsMap}
-        showHistory={showHistory}
-        onClose={() => setShowHistory(false)}
-      />
     </>
   );
 }

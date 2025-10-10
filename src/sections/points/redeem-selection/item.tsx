@@ -22,29 +22,34 @@ export default function RedeemSelectionItem({
   return (
     <div
       className={clsx(
-        "h-[224px] rounded-[16px] border border-[#6A5D3A] relative",
+        "h-[224px] rounded-[16px] border border-[#6A5D3A] relative flex flex-col justify-between pb-[20px]",
         BG[data.name],
         className
       )}
     >
-      <img className="w-[80px] h-[80px] mx-auto mt-[20px]" src={data.icon} />
-      <div className="text-center text-[16px] font-bold mt-[20px] text-white">
-        {data.token_volume} {data.name}
+      <div className="flex-1 flex items-center">
+        <img className="w-[80px] h-[80px] mx-auto mt-[20px]" src={data.icon} />
       </div>
-      <button
-        className={clsx(
-          "w-[158px] h-[40px] bg-linear-to-b from-[#FFF698] to-[#FFC42F] rounded-[8px] text-black text-[20px] font-[BlackHanSans] mx-auto mt-[10px] flex items-center justify-center gap-[8px]",
-          !!onClick && !data.disabled
-            ? "button"
-            : data.disabled
-            ? "opacity-50"
-            : ""
-        )}
-        onClick={onClick}
-      >
-        <PointIcon size={22} />
-        <span>{data.number}</span>
-      </button>
+      <div>
+        {" "}
+        <div className="text-center text-[16px] font-bold mt-[20px] text-white">
+          {data.token_volume} {data.name}
+        </div>
+        <button
+          className={clsx(
+            "w-[158px] h-[40px] bg-linear-to-b from-[#FFF698] to-[#FFC42F] rounded-[8px] text-black text-[14px] font-[600] mx-auto mt-[20px] flex items-center justify-center gap-[8px]",
+            !!onClick && !data.disabled
+              ? "button"
+              : data.disabled
+              ? "opacity-50"
+              : ""
+          )}
+          onClick={onClick}
+        >
+          <PointIcon size={22} />
+          <span>{data.number}</span>
+        </button>
+      </div>
       {data.disabled && (
         <div className="w-full h-full absolute right-0 top-0 bg-[#231E13]/80 rounded-[16px] flex items-center justify-center">
           <LockIcon size={71} />
