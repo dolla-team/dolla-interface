@@ -96,7 +96,7 @@ const Coin = forwardRef<any, any>(
       setTimeout(() => {
         setIsAnimating(false);
         onFlipComplete?.(index, true, notAuto);
-      }, 600); // Reduced from 1000ms to 600ms to start exit animation earlier
+      }, 400); // Reduced from 1000ms to 600ms to start exit animation earlier
     };
 
     const onCollect = () => {
@@ -154,7 +154,7 @@ const Coin = forwardRef<any, any>(
           ref={coinRef}
         >
           <div
-            className="relative w-full h-full transition-transform duration-500 ease-in-out preserve-3d"
+            className="relative w-full h-full transition-transform duration-300 ease-in-out preserve-3d"
             style={{
               transform: isFlipped ? "rotateY(180deg)" : "rotateY(0deg)",
               transformStyle: "preserve-3d"

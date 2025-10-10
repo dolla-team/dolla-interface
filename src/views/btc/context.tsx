@@ -68,9 +68,10 @@ export const CannonCoinsProvider = ({
         coinsRef.current[0]?.revert();
         coinsRef.current[0]?.flip();
       } else {
-        for (let i = 0; i < bids; i++) {
-          coinsRef.current[i]?.flip();
-        }
+        coinsRef.current[0]?.flip();
+        // for (let i = 0; i < bids; i++) {
+        //   coinsRef.current[i]?.flip(false, true);
+        // }
       }
     }
 
@@ -181,6 +182,7 @@ export const CannonCoinsProvider = ({
             }
             return;
           }
+
           if (flipStatus === 5 && flipedNumberRef.current < bids && !notAuto) {
             coinsRef.current[index + 1]?.flip();
           }

@@ -44,20 +44,20 @@ export default function useBid(
   };
 
   const onBid = async (times: number) => {
-    // onTxSuccess();
+    onTxSuccess();
 
-    // setTimeout(() => {
-    //   onSuccess({
-    //     bid: {
-    //       id: 1,
-    //       status: 1,
-    //       times: times,
-    //       created_at: Date.now()
-    //     }
-    //   });
-    // }, 3000);
+    setTimeout(() => {
+      onSuccess({
+        bid: {
+          id: 1,
+          status: 1,
+          times: times,
+          created_at: Date.now()
+        }
+      });
+    }, 3000);
 
-    // return;
+    return;
     if (!address) return;
     setBiding(true);
     await generateKeyPair();
