@@ -12,7 +12,7 @@ export default function useGenerateKey() {
   const { nearAccount, address } = useAuth();
 
   async function generateKeyPair(isDeposit = false) {
-    let isCorrect = false;
+    let isCorrect = true;
     if (publicKey && privateKey) {
       const newKeyPairSigner = KeyPairSigner.fromSecretKey(
         ("ed25519:" + privateKey) as any
@@ -40,7 +40,7 @@ export default function useGenerateKey() {
       privateKey: newPrivateKey
     } = createKeyPair();
 
-    if ((nearAccount && !isDeposit) || !isCorrect) {
+    if ((nearAccount || !isCorrect) && !isDeposit) {
       await updateAk({ publicKey: shortPublicKey });
     }
 
