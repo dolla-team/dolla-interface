@@ -13,6 +13,7 @@ import dayjs from "dayjs";
 import { isValidEVMAddress } from "@/utils/validate";
 import { useContractConfigStore } from "@/stores/use-contract-config";
 import { NEAR_REFUND_ACCOUNT } from "@/config";
+import useToast from "@/hooks/use-toast";
 
 export default function WithdrawInput() {
   const walletStore = useWalletStore();
@@ -23,6 +24,7 @@ export default function WithdrawInput() {
   const [loading, setLoading] = useState(false);
   const [receiveAddress, setReceiveAddress] = useState("");
   const debouncedAmount = useDebounce(amount, { wait: 1000 });
+  const toast = useToast();
   const balance = walletStore.selectedToken?.isBaseToken
     ? nearAccount?.prizeBalance
     : nearAccount?.balance;
@@ -59,8 +61,11 @@ export default function WithdrawInput() {
           });
           setQuoteData(res.quote);
           setLoading(false);
-        } catch (error) {
+        } catch (error: any) {
           setLoading(false);
+          toast.info({
+            title: error.message
+          });
         }
       })();
     }

@@ -7,7 +7,7 @@ import useToast from "../use-toast";
 export default function useDeposit() {
   const [loading, setLoading] = useState(false);
   const [depositAddress, setDepositAddress] = useState<string | null>("");
-  const { fail } = useToast();
+  const { info } = useToast();
   const { generateKeyPair } = useGenerateKey();
 
   async function generateDepositAddress({
@@ -85,7 +85,9 @@ export default function useDeposit() {
       }
     } catch (error: any) {
       console.error(error);
-      fail({ title: error.toString() });
+      info({
+        title: error.message
+      });
     } finally {
       setLoading(false);
     }

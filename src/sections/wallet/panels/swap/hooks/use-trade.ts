@@ -129,10 +129,13 @@ export default function useTrade({ onSuccess }: any) {
 
         setTrade(trade);
         setLoading(false);
-      } catch (err) {
+      } catch (err: any) {
         console.log(err);
         setTrade(null);
         setLoading(false);
+        toast.info({
+          title: err.message
+        });
       }
     },
     [slippage, prices, cachedTokens]

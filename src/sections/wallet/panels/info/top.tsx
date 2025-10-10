@@ -10,7 +10,7 @@ export default function Top() {
   return (
     <div className="border-b border-[#D9D9D9] p-[26px]">
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-[12px]">
+        <div className="flex items-center gap-[12px] w-full">
           <Avatar
             size={56}
             src={userInfo?.icon}
