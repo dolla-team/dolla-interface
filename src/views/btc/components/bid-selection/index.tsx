@@ -7,6 +7,7 @@ import { useAuth } from "@/contexts/auth";
 import useBid from "@/hooks/near/use-bid";
 import { BET_UNIT } from "@/config";
 import { useContractConfigStore } from "@/stores/use-contract-config";
+import useToast from "@/hooks/use-toast";
 
 export default function BidSelection({ tokenBalance }: any) {
   const { userInfo, address, login } = useAuth();
@@ -20,7 +21,7 @@ export default function BidSelection({ tokenBalance }: any) {
     setBidResult,
     onReset
   } = useBtcContext();
-
+  const toast = useToast();
   const contractConfig = useContractConfigStore((state) => state.config);
 
   const disabled = useMemo(() => {
@@ -57,7 +58,10 @@ export default function BidSelection({ tokenBalance }: any) {
     () => {
       setTimeout(() => {
         setFlipStatus(0);
-        console.log("tx fail", 0);
+        onReset(true);
+        toast.fail({
+          title: "Bid failed"
+        });
       }, 30);
     }
   );

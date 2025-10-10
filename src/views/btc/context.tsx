@@ -185,12 +185,13 @@ export const CannonCoinsProvider = ({
             coinsRef.current[index + 1]?.flip();
           }
         },
-        onReset: () => {
+        onReset: (isFail = false) => {
           flipedNumberRef.current = 0;
           setBidResult(null);
           onQueryUserInfo();
           for (let i = 0; i < bids; i++) {
-            coinsRef.current[i]?.flip(true);
+            if (isFail) coinsRef.current[i]?.revert();
+            else coinsRef.current[i]?.flip(true);
           }
         },
         getPoolRecommend,

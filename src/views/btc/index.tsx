@@ -35,7 +35,7 @@ export default function NewBTC() {
 const Content = () => {
   const { nearAccount } = useAuth() || {};
   const isMobile = useIsMobile();
-  const { pool } = useBtcContext();
+  const { pool, bidResult } = useBtcContext();
   const navigate = useNavigate();
 
   return (
@@ -76,7 +76,7 @@ const Content = () => {
         </div>
       )} */}
       {/* {!isMobile && <TopWinner />} */}
-      {!isMobile && <Music />}
+      {!isMobile && !bidResult?.bid?.is_winner && <Music />}
       {/* {isMobile && <MarketsModal />} */}
       <Wallet />
     </div>
