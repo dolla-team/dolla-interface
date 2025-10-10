@@ -1,4 +1,4 @@
-import useClaimPenalty from "@/hooks/evm/use-claim-penalty";
+import usePlayerRefund from "@/hooks/near/use-player-refund";
 import { formatNumber } from "@/utils/format/number";
 import { useNavigate } from "react-router-dom";
 import Button from "@/components/button";
@@ -9,7 +9,10 @@ import { useMemo } from "react";
 export default function MarketItem(props: any) {
   const { order, onClaimSuccess } = props;
 
-  const { claiming, claim: onClaim } = useClaimPenalty(onClaimSuccess);
+  const { loading: claiming, refund: onClaim } = usePlayerRefund(
+    order.pool_id,
+    onClaimSuccess
+  );
   const navigate = useNavigate();
 
   const data = useMemo(() => {
@@ -67,7 +70,7 @@ export default function MarketItem(props: any) {
                     disabled={claiming}
                     onClick={(e: any) => {
                       e.stopPropagation();
-                      onClaim(order.pool_id);
+                      onClaim();
                     }}
                   >
                     Claim
