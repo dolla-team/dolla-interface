@@ -23,6 +23,7 @@ export default function ProfileSetting({ open, onClose }: ProfileSettingProps) {
   const [file, setFile] = useState<Blob | null>(null);
   const { loading: isSaving, updateUserInfo } = useUpdateUserInfo(() => {
     onQueryUserInfo();
+    onClose();
   });
 
   useEffect(() => {
