@@ -1,14 +1,14 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import axios from "@/libs/axios";
-import { usePrivy, useSessionSigners, useUser } from "@privy-io/react-auth";
-import axiosInstance from "@/libs/axios";
+// import { usePrivy, useSessionSigners, useUser } from "@privy-io/react-auth";
+// import axiosInstance from "@/libs/axios";
 
 export default function useLogin() {
   const [loging, setLoging] = useState(false);
-  const { user } = useUser();
-  const { ready } = usePrivy();
-  const { addSessionSigners } = useSessionSigners();
-  const [accounts, setAccounts] = useState<any[]>([]);
+  // const { user } = useUser();
+  // const { ready } = usePrivy();
+  // const { addSessionSigners } = useSessionSigners();
+  // const [accounts, setAccounts] = useState<any[]>([]);
 
   const onLogin = useCallback(
     async ({
@@ -40,16 +40,16 @@ export default function useLogin() {
           })
         );
         onSuccess?.();
-        const users = await axiosInstance.get("/api/v1/privy/user");
-        const linkedAccounts = users?.data?.data?.linked_accounts;
-        setAccounts(
-          linkedAccounts
-            ?.filter(
-              (item: any) =>
-                item.wallet_client_type === "privy" && !item.delegated
-            )
-            .map((item: any) => item.address)
-        );
+        // const users = await axiosInstance.get("/api/v1/privy/user");
+        // const linkedAccounts = users?.data?.data?.linked_accounts;
+        // setAccounts(
+        //   linkedAccounts
+        //     ?.filter(
+        //       (item: any) =>
+        //         item.wallet_client_type === "privy" && !item.delegated
+        //     )
+        //     .map((item: any) => item.address)
+        // );
       } catch (err) {
       } finally {
         setLoging(false);
@@ -63,22 +63,22 @@ export default function useLogin() {
     onSuccess?.();
   }, []);
 
-  useEffect(() => {
-    if (user && ready && accounts.length > 0) {
-      setTimeout(() => {
-        accounts.forEach((account) => {
-          addSessionSigners({
-            address: account,
-            signers: [
-              {
-                signerId: import.meta.env.VITE_PRIVY_SIGNER_ID
-              }
-            ]
-          });
-        });
-      }, 30);
-    }
-  }, [user, ready, accounts]);
+  // useEffect(() => {
+  //   if (user && ready && accounts.length > 0) {
+  //     setTimeout(() => {
+  //       accounts.forEach((account) => {
+  //         addSessionSigners({
+  //           address: account,
+  //           signers: [
+  //             {
+  //               signerId: import.meta.env.VITE_PRIVY_SIGNER_ID
+  //             }
+  //           ]
+  //         });
+  //       });
+  //     }, 30);
+  //   }
+  // }, [user, ready, accounts]);
 
   return {
     loging,
