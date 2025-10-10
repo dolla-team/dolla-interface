@@ -20,7 +20,7 @@ export default function MarketInfo() {
               src={pool?.user_info?.icon}
               email={pool?.user_info?.show_email}
               address={pool?.user_info?.user}
-              className="rounded-[12px]"
+              className="rounded-[12px] text-[16px]"
             />
             <div>
               <div className="flex items-center gap-[4px]">
@@ -44,7 +44,10 @@ export default function MarketInfo() {
               src={item.icon}
               email={item?.email_desensitization || item?.name}
               address={item?.user}
-              className={clsx("rounded-[50%]", index !== 0 && "ml-[-6px]")}
+              className={clsx(
+                "rounded-[50%] text-[12px]",
+                index !== 0 && "ml-[-6px]"
+              )}
             />
           ))}
 

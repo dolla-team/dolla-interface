@@ -16,7 +16,7 @@ export default function Top() {
             src={userInfo?.icon}
             email={userInfo?.show_email}
             address={userInfo?.user}
-            className="border-2 border-[#FFFFFFCC] rounded-[6px]"
+            className="border-2 border-[#FFFFFFCC] rounded-[6px] text-[26px]"
           />
           <div className="text-black w-[calc(100%-90px)]">
             <div className="text-[20px] font-bold whitespace-nowrap text-ellipsis overflow-hidden">

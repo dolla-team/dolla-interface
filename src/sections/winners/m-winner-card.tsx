@@ -36,7 +36,7 @@ export default function MWinnerCard({
                 address={data?.user_info?.user}
                 email={data?.user_info?.show_email}
                 src={data?.user_info?.icon}
-                className="rounded-full"
+                className="rounded-full text-[16px]"
               />
               {multiple && (
                 <div className="absolute top-[-18px] right-[-18px] w-[34px] h-[38px]">

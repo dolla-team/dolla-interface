@@ -100,7 +100,7 @@ export default function EndPanel({ data }: { data: any }) {
                 address={data.winner_user_info?.user}
                 email={data.winner_user_info?.show_email}
                 src={data.winner_user_info?.icon}
-                className="rounded-full border-[3px] border-[#DD9000]"
+                className="rounded-full border-[3px] border-[#DD9000] text-[24px]"
               />
               <span
                 className="absolute bottom-[-10px] text-white text-[24px] [text-shadow:0_0_10px_rgba(255,213,105,0.5)] font-[DelaGothicOne]"
@@ -270,6 +270,7 @@ const ProgressAvatar = ({
         address={data.winner_user_info?.user}
         email={data.winner_user_info?.show_email}
         src={data.winner_user_info?.icon}
+        className="text-[14px]"
       />
       <svg
         xmlns="http://www.w3.org/2000/svg"

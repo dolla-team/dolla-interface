@@ -35,7 +35,7 @@ export default function WinnerCard({
                   address={data?.user_info?.user}
                   email={data?.user_info?.show_email}
                   src={data?.user_info?.icon}
-                  className="rounded-full border-[1px] border-[#DD9000]"
+                  className="rounded-full border-[1px] border-[#DD9000] text-[28px]"
                 />
               </div>
               <div

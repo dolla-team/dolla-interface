@@ -16,7 +16,7 @@ export default function MSellerInfo({ pool }: any) {
             address={pool?.user_info?.address}
             email={pool?.user_info?.show_email}
             src={pool?.user_info?.icon}
-            className="rounded-[6px]"
+            className="rounded-[6px] text-[12px]"
           />
           <div className="text-[#FFE9B2] text-[14px] ml-[7px] mr-[4px]">
             {pool?.user ? formatAddress(pool.user) : "-"}

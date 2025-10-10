@@ -82,7 +82,7 @@ export default function LucyDrawMobile(props: any) {
                 <Avatar
                   address={item.user}
                   key={`first-${index}`}
-                  className="border border-[#DD9000] ml-[-10px] rounded-full"
+                  className="border border-[#DD9000] ml-[-10px] rounded-full text-[16px]"
                   size={30}
                   email={item.user_info?.show_email}
                   src={item.user_info?.icon}

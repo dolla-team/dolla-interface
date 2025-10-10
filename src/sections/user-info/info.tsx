@@ -16,7 +16,7 @@ export default function Info() {
         address={userInfo?.user}
         email={userInfo?.show_email}
         src={userInfo?.icon}
-        className="shrink-0 border-[2px] border-[#FFFFFFCC]"
+        className="shrink-0 border-[2px] border-[#FFFFFFCC] text-[26px]"
       />
       <div className="flex-1 w-0">
         <div className="text-[18px] font-semibold text-white truncate">

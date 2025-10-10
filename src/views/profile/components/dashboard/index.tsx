@@ -154,7 +154,7 @@ const Dashboard = (props: any) => {
                           address={item.user}
                           size={26}
                           className={clsx(
-                            "rounded-full border-[2px] border-[#383F47] shrink-0",
+                            "rounded-full border-[2px] border-[#383F47] shrink-0 text-[12px]",
                             index > 0 && "ml-[-8px]"
                           )}
                         />

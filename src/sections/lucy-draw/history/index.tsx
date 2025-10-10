@@ -128,6 +128,7 @@ export default function LucyDrawHistory({
                   email={item.user_info?.show_email}
                   src={item.user_info?.icon}
                   address={item.user}
+                  className="text-[16px]"
                 />
                 <div className="text-[14px] text-white">
                   {formatAddress(item.user)}

@@ -50,7 +50,7 @@ export default function Bottoms({
               <Avatar
                 address={item.user}
                 key={index}
-                className="border border-[#DD9000] ml-[-10px]"
+                className="border border-[#DD9000] ml-[-10px] text-[16px]"
                 size={30}
                 email={item.user_info?.show_email}
                 src={item.user_info?.icon}

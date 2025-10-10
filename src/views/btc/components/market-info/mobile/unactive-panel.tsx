@@ -28,7 +28,7 @@ export default function UnactivePanel({ pool }: { pool: any }) {
             address={pool?.user_info?.address}
             email={pool?.user_info?.show_email}
             src={pool?.user_info?.icon}
-            className="rounded-[6px]"
+            className="rounded-[6px] text-[12px]"
           />
           <div>
             <div className="text-[#FFE9B2] text-[12px]">Seller</div>

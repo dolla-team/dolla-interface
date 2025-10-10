@@ -36,7 +36,7 @@ export default function Info({
           address={pool?.user_info?.address}
           email={pool?.user_info?.show_email}
           src={pool?.user_info?.icon}
-          className="rounded-[10px] border-[2px] border-white"
+          className="rounded-[10px] border-[2px] border-white text-[20px]"
         />
         <div>
           <div>

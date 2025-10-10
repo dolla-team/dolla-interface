@@ -13,7 +13,7 @@ export default function Item({ data }: any) {
         src={data.user_icon}
         address={data.user}
         size={30}
-        className="border border-[#131417] mr-[6px]"
+        className="border border-[#131417] mr-[6px] text-[16px]"
       />
       <div className="text-[10px] font-bold truncate mr-[3px] shrink-0">
         {data.user_name || formatAddress(data.user, 3)}

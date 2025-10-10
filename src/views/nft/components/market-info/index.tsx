@@ -28,7 +28,7 @@ export default function MarketInfo() {
                 address={pool?.user_info?.address}
                 email={pool?.user_info?.show_email}
                 src={pool?.user_info?.icon}
-                className="rounded-[12px]"
+                className="rounded-[12px] text-[16px]"
               />
             </div>
             <div>

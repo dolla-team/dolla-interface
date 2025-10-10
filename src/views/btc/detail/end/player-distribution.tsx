@@ -67,6 +67,7 @@ const Item = ({ data, number, total, winner, bidsDistribution }: any) => {
                 src={winner?.icon}
                 email={winner?.show_email}
                 address={winner?.user}
+                className="text-[12px]"
               />
               <span className="text-[12px] text-white">
                 x{bidsDistribution}

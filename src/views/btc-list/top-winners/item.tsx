@@ -34,7 +34,7 @@ export default function TopWinnersItem({
             email={data?.winner_user_info?.show_email}
             src={data?.winner_user_info?.icon}
             size={36}
-            className="rounded-full"
+            className="rounded-full text-[18px]"
           />
         </div>
         <div>

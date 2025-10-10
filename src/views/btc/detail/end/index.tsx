@@ -134,7 +134,7 @@ export default function EndPanel({ data }: { data: any }) {
                 src={data.winner_user_info?.icon}
                 email={data.winner_user_info?.email_desensitization}
                 address={data.winner_user_info?.user}
-                className="rounded-full"
+                className="rounded-full text-[30px]"
               />
             </div>
             <div className="text-white text-center text-[16px] font-[DelaGothicOne] mt-[10px]">
@@ -172,6 +172,7 @@ export default function EndPanel({ data }: { data: any }) {
                       src={data.user_info?.icon}
                       email={data.user_info?.email_desensitization}
                       address={data.user_info?.user}
+                      className="text-[16px]"
                     />
                     <div>
                       <div className="text-[#FFE9B2] text-[12px]">Seller</div>
@@ -290,6 +291,7 @@ const ProgressAvatar = ({
         src={data.winner_user_info?.icon}
         email={data.winner_user_info?.email_desensitization}
         address={data.winner_user_info?.user}
+        className="text-[12px]"
       />
       <svg
         xmlns="http://www.w3.org/2000/svg"

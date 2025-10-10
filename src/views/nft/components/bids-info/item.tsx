@@ -12,7 +12,7 @@ export default function Item({ data }: any) {
           email={data.user_email}
           src={data.user_icon}
           size={30}
-          className="border border-[#131417] mr-[6px] rounded-full"
+          className="border border-[#131417] mr-[6px] rounded-full text-[16px]"
         />
         <div className="text-[12px] truncate mr-[3px] shrink-0">
           {formatAddress(data.user, 3)}

@@ -110,7 +110,7 @@ const BtcFace = ({
         address={userInfo?.user}
         email={userInfo?.show_email}
         src={userInfo?.icon}
-        className="rounded-full border-[3px] border-[#DD9000]"
+        className="rounded-full border-[3px] border-[#DD9000] text-[30px]"
       />
     </div>
   );
