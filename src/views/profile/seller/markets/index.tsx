@@ -11,7 +11,7 @@ import PopoverCard from "../../components/popover-card";
 import CancelModal from "../cancel-modal";
 import { useMemo, useState } from "react";
 import Loading from "@/components/icons/loading";
-import DepositModal from "../deposit-modal";
+// import DepositModal from "../deposit-modal";
 import { formatNumber } from "@/utils/format/number";
 import { useNavigate } from "react-router-dom";
 import { useContractConfigStore } from "@/stores/use-contract-config";
@@ -22,7 +22,7 @@ const SellerMarkets = (props: any) => {
   const { className, poolsData, orders, loading, updatePoolsData } = props;
 
   const [cancelMarketVisible, setCancelMarketVisible] = useState(false);
-  const [depositMarketVisible, setDepositMarketVisible] = useState(false);
+  // const [depositMarketVisible, setDepositMarketVisible] = useState(false);
   const [currentOrder, setCurrentOrder] = useState<any>();
 
   return (
@@ -41,7 +41,7 @@ const SellerMarkets = (props: any) => {
               order={order}
               onDeposit={() => {
                 setCurrentOrder(order);
-                setDepositMarketVisible(true);
+                // setDepositMarketVisible(true);
               }}
               onCancel={() => {
                 setCurrentOrder(order);
@@ -80,7 +80,7 @@ const SellerMarkets = (props: any) => {
               setCurrentOrder(void 0);
             }}
           />
-          <DepositModal
+          {/* <DepositModal
             open={depositMarketVisible}
             onClose={() => setDepositMarketVisible(false)}
             order={currentOrder}
@@ -91,7 +91,7 @@ const SellerMarkets = (props: any) => {
               setCurrentOrder(void 0);
               setDepositMarketVisible(false);
             }}
-          />
+          /> */}
         </>
       )}
     </div>
