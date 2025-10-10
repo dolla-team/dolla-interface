@@ -33,8 +33,8 @@ export default function Laptop() {
             }}
             style={{
               height: walletStore.showInfos
-                ? "calc(100% - 112px)"
-                : "calc(100% - 76px)"
+                ? "calc(100% - 96px)"
+                : "calc(100% - 60px)"
             }}
           >
             <div className="p-[20px]">
