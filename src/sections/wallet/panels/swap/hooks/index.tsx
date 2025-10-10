@@ -6,6 +6,7 @@ import Big from "big.js";
 import { useAccount } from "@/hooks/evm/use-account";
 import { tokens } from "../config";
 import { useAuth } from "@/contexts/auth";
+import { BASE_TOKEN, QUOTE_TOKEN } from "@/config/btc";
 
 export function useSwap(props?: any) {
   const { dapp } = props ?? {};
@@ -13,12 +14,8 @@ export function useSwap(props?: any) {
 
   const [inputCurrencyAmount, setInputCurrencyAmount] = useState("");
   const [outputCurrencyAmount, setOutputCurrencyAmount] = useState("");
-  const [inputCurrency, setInputCurrency] = useState<any>(
-    dapp?.defaultInputCurrency
-  );
-  const [outputCurrency, setOutputCurrency] = useState<any>(
-    dapp?.defaultOutputCurrency
-  );
+  const [inputCurrency, setInputCurrency] = useState<any>(BASE_TOKEN);
+  const [outputCurrency, setOutputCurrency] = useState<any>(QUOTE_TOKEN);
   const [displayCurrencySelect, setDisplayCurrencySelect] = useState(false);
   const [selectedTokenAddress, setSelectedTokenAddress] = useState("");
   const [maxInputBalance, setMaxInputBalance] = useState("");
@@ -92,8 +89,6 @@ export function useSwap(props?: any) {
   };
 
   useEffect(() => {
-    setInputCurrency(dapp?.defaultInputCurrency);
-    setOutputCurrency(dapp?.defaultOutputCurrency);
     setInputCurrencyAmount("");
     setOutputCurrencyAmount("");
   }, [dapp]);
