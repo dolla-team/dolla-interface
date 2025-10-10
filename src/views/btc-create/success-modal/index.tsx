@@ -72,7 +72,7 @@ export default function SuccessModal({
           }}
           footer={
             <div className="mt-[10px] w-full px-[13px] bg-black rounded-b-[20px] py-[17px] text-white text-[12px] leading-[100%]">
-              {dayjs().format("hh:mm D MMM, YYYY")}
+              {dayjs().format("HH:mm D MMM, YYYY")}
             </div>
           }
           className="absolute bottom-[-20px] left-[50%] translate-x-[-50%] z-[2] w-[301px] h-[171px]"

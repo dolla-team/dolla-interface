@@ -113,7 +113,7 @@ export default function History({
                         }}
                       >
                         {column.key === "date" &&
-                          dayjs(record.updated_at).format("hh:mm D MMM, YYYY")}
+                          dayjs(record.updated_at).format("HH:mm D MMM, YYYY")}
                         {column.key === "volume" &&
                           `${record.volume} ${
                             itemsMap[

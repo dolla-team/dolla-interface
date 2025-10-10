@@ -109,7 +109,7 @@ const Records = (props: any) => {
               window.open(txUrl, "_blank");
             }}
           >
-            <div>{dayjs(record.updated_at).format("hh:mm D MMM, YYYY")}</div>
+            <div>{dayjs(record.updated_at).format("HH:mm D MMM, YYYY")}</div>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="11"

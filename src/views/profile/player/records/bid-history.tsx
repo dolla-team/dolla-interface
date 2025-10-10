@@ -131,7 +131,7 @@ const BidHistory = (props: any) => {
         return (
           <div className="flex items-center gap-[10px] whitespace-nowrap">
             <div className="text-[#5E6B7D]">
-              {dayjs(record.time).format("hh:mm D MMM, YYYY")}
+              {dayjs(record.time).format("HH:mm D MMM, YYYY")}
             </div>
             <div className="text-[#0095FF] text-[14px] underline cursor-pointer">
               <a
@@ -170,7 +170,7 @@ const BidHistory = (props: any) => {
       width: isMobile ? 180 : 160,
       align: GridTableAlign.Right,
       render: (record: any) => {
-        return dayjs(record.updated_at).format("hh:mm D MMM, YYYY");
+        return dayjs(record.updated_at).format("HH:mm D MMM, YYYY");
       }
     });
   }

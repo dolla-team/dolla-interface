@@ -90,7 +90,7 @@ const Account = (props: any) => {
       width: "20%",
       align: GridTableAlign.Right,
       render: (record: any) => {
-        return dayjs(record.updated_at).format("hh:mm D MMM, YYYY");
+        return dayjs(record.updated_at).format("HH:mm D MMM, YYYY");
       }
     }
   ];

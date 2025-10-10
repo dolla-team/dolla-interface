@@ -101,7 +101,7 @@ export default function Header({ className }: { className?: string }) {
         <div />
         <div
           className={clsx(
-            "bg-clip-text top-[-6px] inline-block relative text-[20px]",
+            "bg-clip-text top-[-6px] inline-block relative text-[20px] max-md:text-[16px]",
             pool?.status === 3
               ? "bg-[radial-gradient(50%_50%_at_50%_50%,#A3A3A3_0%,#787878_100%)]"
               : "bg-[radial-gradient(50%_50%_at_50%_50%,#FFEF43_0%,#FFC42F_100%)]"

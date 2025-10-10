@@ -84,7 +84,7 @@ const Item = ({ data }: { data: any }) => {
             {data.tokens[0]?.symbol}
           </div>
           <div className="text-[10px] text-[#8A87AA]">
-            {dayjs(data.updated_at).format("hh:mm D MMM, YYYY")}
+            {dayjs(data.updated_at).format("HH:mm D MMM, YYYY")}
           </div>
         </div>
       </div>
