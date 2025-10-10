@@ -12,6 +12,7 @@ import { useBtcContext } from "../../../context";
 import useIsMobile from "@/hooks/use-is-mobile";
 import DollaEye from "@/components/dolla-eye";
 import { getAnchorPrice } from "@/utils/pool";
+import { BASE_TOKEN } from "@/config/btc";
 
 export default function Winner({
   points,
@@ -56,6 +57,7 @@ export default function Winner({
       });
     }
   }, []);
+
   return (
     <>
       <button
@@ -115,7 +117,7 @@ export default function Winner({
                 address={userInfo?.user}
                 email={userInfo?.show_email}
                 src={userInfo?.icon}
-                className="rounded-full border-[3px] border-[#DD9000] text-[36px]"
+                className="rounded-full border-[3px] border-[#DD9000] text-[72px]"
               />
             </div>
             <BtcFace
@@ -139,7 +141,7 @@ export default function Winner({
                     WebkitTextFillColor: "transparent"
                   }}
                 >
-                  {poolAmount} BTC
+                  {poolAmount} {BASE_TOKEN.symbol}
                 </div>
                 <div
                   className={clsx(
@@ -150,7 +152,8 @@ export default function Winner({
                     WebkitTextFillColor: "transparent"
                   }}
                 >
-                  ${formatNumber(getAnchorPrice(pool?.anchor_price), 0, true)}
+                  $
+                  {formatNumber(getAnchorPrice(pool?.anchor_price, 6), 2, true)}
                 </div>
               </>
             )}
