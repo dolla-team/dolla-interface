@@ -80,16 +80,14 @@ export default function BTCCreate() {
 
   const [poolBidsOvermarket] = useMemo(() => {
     return [
+      globalConfig?.pool_bids_overmarket?.map((_item: any) => ({
+        label: _item.volume,
+        value: _item.bid,
+        percentage: _item.percentage[0]
+      })) || [],
       globalConfig?.pool_cash_out_timing?.map((_item: any) => ({
         label: _item.days,
         value: _item.volume,
-        percentage: _item.percentage[0]
-      })) || [],
-      globalConfig?.pool_bids_overmarket?.map((_item: any) => ({
-        label: Big(_item.volume || 0)
-          .div(10 ** token.decimals)
-          .toNumber(),
-        value: _item.bid,
         percentage: _item.percentage[0]
       })) || []
     ];

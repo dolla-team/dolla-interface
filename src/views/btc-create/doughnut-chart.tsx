@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import Chart from "chart.js/auto";
 import clsx from "clsx";
+import Item from "../nft/components/bids-info/item";
 
 interface DoughnutChartProps {
   data: any;
@@ -112,7 +113,7 @@ export default function DoughnutChart({
   }, [data]);
 
   useEffect(() => {
-    const index = data.findIndex((item: any) => item.value === volume);
+    const index = data.findIndex((item: any) => item.label === volume);
     if (index !== -1) {
       setSelectedIndex(index);
     }
