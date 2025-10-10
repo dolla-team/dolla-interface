@@ -8,7 +8,7 @@ import dayjs from "dayjs";
 import clsx from "clsx";
 
 export default function Txs() {
-  const { loading, records, hasMore, loadMore } = useRecords();
+  const { loading, records, hasMore, loadMore } = useRecords(true);
 
   const { containerRef, isLoading } = useInfiniteScroll(loadMore, {
     loading,
@@ -37,7 +37,7 @@ export default function Txs() {
 const Item = ({ data }: { data: any }) => {
   return (
     data && (
-      <div className="flex justify-between items-center py-[8px]">
+      <div className="flex justify-between items-center py-[8px] px-[10px]">
         <div className="flex items-center gap-[8px]">
           <div className="relative flex">
             {data.tokens[0]?.icon && (

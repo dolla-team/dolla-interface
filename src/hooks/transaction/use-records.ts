@@ -23,7 +23,7 @@ export interface RecordsResponse {
 
 const DEFAULT_LIMIT = 10;
 
-export default function useRecords() {
+export default function useRecords(isScroll?: boolean) {
   const [records, setRecords] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
@@ -99,7 +99,12 @@ export default function useRecords() {
       });
 
       // Update records based on whether it's a new fetch or load more
-      setRecords(_list);
+      if (isScroll) {
+        setRecords([...records, ..._list]);
+      } else {
+        setRecords(_list);
+      }
+
       setHasMore(data.has_next_page);
 
       return data;
