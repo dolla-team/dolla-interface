@@ -22,8 +22,8 @@ export default function useUserInfo(address?: string) {
       const _info = res.data.data;
 
       if (!_info.icon) {
-        if (usersStore.users[address]) {
-          _info.icon = usersStore.users[address].icon;
+        if (usersStore.users[address.toLowerCase()]) {
+          _info.icon = usersStore.users[address.toLowerCase()].icon;
         } else {
           const random = Math.floor(Math.random() * AvatarColors.length);
           usersStore.setUsers({
