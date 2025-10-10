@@ -37,13 +37,13 @@ export default function MarketInfo() {
         </div>
         <div className="flex items-center mt-[20px]">
           <div className="text-[12px] text-white/50 mr-[6px]">Player</div>
-          {new Array(pool?.participants || 0).fill(0).map((item, index) => (
+          {pool?.degen_players.map((item: any, index: number) => (
             <Avatar
               key={index}
               size={22}
-              src={pool?.user_info?.icon}
-              email={pool?.user_info?.show_email}
-              address={pool?.user_info?.user}
+              src={item.icon}
+              email={item?.show_email || item?.name}
+              address={item?.user}
               className={clsx("rounded-[50%]", index !== 0 && "ml-[-6px]")}
             />
           ))}

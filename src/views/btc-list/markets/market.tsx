@@ -43,7 +43,7 @@ export default function Market({
               />
               <div>
                 <div className="text-[14px] text-black font-semibold">
-                  {data.reward_token_info?.[0]?.name}
+                  {data.amount} {data.reward_token_info?.[0]?.name}
                   {/* {` #${data.reward_token_info?.[0]?.token_id}`} */}
                 </div>
                 <div className="flex items-center gap-[4px] mt-[6px]">

@@ -65,7 +65,7 @@ export default function Avatar({
     <img
       src={src}
       alt="avatar"
-      className={clsx("relative rounded-[6px]", className)}
+      className={clsx("rounded-[6px]", className)}
       style={{
         width: size,
         height: size
