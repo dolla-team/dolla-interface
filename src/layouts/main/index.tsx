@@ -64,7 +64,7 @@ export default function MainLayout() {
   return (
     <div className="h-screen w-screen overflow-hidden bg-white relative">
       {/* header */}
-      <div className="flex justify-between items-center h-[76px] sticky top-0 bg-white z-[20]">
+      <div className="flex justify-between items-center h-[60px] sticky top-0 bg-white z-[20]">
         <div className="flex items-center gap-[30px] pl-[30px]">
           <DollaEye
             className="button origin-left"
@@ -111,7 +111,7 @@ export default function MainLayout() {
       <Infos />
       <div className="flex h-full">
         <div
-          className="h-[calc(100vh-76px)] overflow-y-auto relative z-[2] bg-[#F0F0F0]"
+          className="h-[calc(100vh-60px)] overflow-y-auto relative z-[2] bg-[#F0F0F0]"
           style={{
             width: globalStore.showUserInfo ? window.innerWidth - 294 : "100%",
             scrollBehavior: "smooth"
