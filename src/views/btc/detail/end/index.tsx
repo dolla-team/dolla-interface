@@ -204,9 +204,9 @@ export default function EndPanel({ data }: { data: any }) {
                   <div className="w-1/3 h-[70px] flex flex-col items-center justify-center bg-[#00000033] rounded-[10px]">
                     <div className="text-[12px]">Time Duration</div>
                     <div className="text-[16px]">
-                      {data?.created_at && data?.updated_at
+                      {data?.created_at && data?.result_time
                         ? dayjs(data.created_at).from(
-                            dayjs(data.updated_at),
+                            dayjs(data.result_time),
                             true
                           )
                         : "-"}

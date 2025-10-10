@@ -6,16 +6,11 @@ import StarterObjectives from "./starter-objectives";
 import { useAuth } from "@/contexts/auth";
 import { useGlobalStore } from "@/stores/use-global";
 import useWalletStore from "@/stores/use-wallet";
-import { useEffect } from "react";
 
 export default function Laptop() {
   const globalStore = useGlobalStore();
   const walletStore = useWalletStore();
-  const { userInfo, address } = useAuth();
-
-  useEffect(() => {
-    globalStore.set({ showUserInfo: !!address });
-  }, [address]);
+  const { userInfo } = useAuth();
 
   return (
     <>

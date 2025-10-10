@@ -1,11 +1,13 @@
 import { useAuth } from "@/contexts/auth";
 import { useNavigate } from "react-router-dom";
 import useIsBtc from "@/hooks/use-is-btc";
+import { useGlobalStore } from "@/stores/use-global";
 
 export default function Actions() {
   const navigate = useNavigate();
-  const { logout, address, login } = useAuth();
+  const { logout, address } = useAuth();
   const isBtc = useIsBtc();
+  const globalStore = useGlobalStore();
 
   return (
     <div className="absolute bottom-0 right-0 border-t border-[#313038] px-[20px] pt-[12px] w-full">
@@ -34,7 +36,9 @@ export default function Actions() {
       <button
         className="flex button items-center gap-[8px] w-full h-[40px] mb-[10px] rounded-[10px] bg-[#F2F2F21A] backdrop-blur-[25px] pl-[12px]"
         onClick={() => {
-          address ? logout() : login();
+          navigate("/");
+          logout();
+          globalStore.set({ showUserInfo: false });
         }}
       >
         {address ? (

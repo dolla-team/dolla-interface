@@ -3,8 +3,10 @@ import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import useIsBtc from "@/hooks/use-is-btc";
 import clsx from "clsx";
+import { useAuth } from "@/contexts/auth";
 
 export default function PageTabs() {
+  const { address, login } = useAuth();
   const isBtc = useIsBtc();
   const [tab, setTab] = useState(isBtc ? 0 : 1);
   const navigate = useNavigate();
@@ -30,6 +32,10 @@ export default function PageTabs() {
       ]}
       currentTab={tab}
       onChangeTab={(tab: any) => {
+        if (!address) {
+          login();
+          return;
+        }
         setTab(tab);
         navigate(
           tab === 0 ? "/" : tab === 1 ? "/portfolio/player" : "/btc/create"
