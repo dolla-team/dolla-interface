@@ -20,7 +20,7 @@ const MarketStatus = (props: Props) => {
         <div className="w-[9px] h-[9px] flex-shrink-0 bg-[#54FF59] rounded-full" />
       )}
       {[EMarketStatus.Cancelled].includes(value) && (
-        <div className="w-[9px] h-[9px] flex-shrink-0 bg-[#6F37FF] rounded-full" />
+        <div className="w-[9px] h-[9px] flex-shrink-0 bg-[#FF60A833] rounded-full" />
       )}
       {[EMarketStatus.Winner].includes(value) && (
         <div className="w-[9px] h-[9px] flex-shrink-0 bg-[#ADBCCF] rounded-full" />

@@ -84,10 +84,10 @@ export default function Market({
             </div>
           </div>
           <div>
-            <MarketStatus value={data?.status} market={data} />
-            <div className="text-[12px] text-[#5E6B7D] text-right mt-[4px]">
+            <div className="text-[12px] text-[#5E6B7D] text-right mb-[4px]">
               #{data?.pool_id}
             </div>
+            <MarketStatus value={data?.status} market={data} />
           </div>
         </div>
 
