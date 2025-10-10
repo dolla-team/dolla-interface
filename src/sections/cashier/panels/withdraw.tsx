@@ -6,7 +6,7 @@ import useTokenBalance from "@/hooks/evm/use-token-balance";
 import { useMemo, useState } from "react";
 import clsx from "clsx";
 import useWithdraw from "@/hooks/evm/use-withdraw";
-import useUserWinner from "@/hooks/use-user-winner";
+import useUserWinner from "@/hooks/user/use-user-winner";
 import Loading from "@/components/icons/loading";
 import { useAuth } from "@/contexts/auth";
 

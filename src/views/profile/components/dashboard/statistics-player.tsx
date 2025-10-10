@@ -6,10 +6,11 @@ import { formatNumber } from "@/utils/format/number";
 import Big from "big.js";
 import { useAuth } from "@/contexts/auth";
 import Loading from "@/components/icons/loading";
-import useUserWinner from "@/hooks/use-user-winner";
+import useUserWinner from "@/hooks/user/use-user-winner";
 import ClaimModal from "../claim/modal";
 import useWalletStore from "@/stores/use-wallet";
 import useBalance from "@/hooks/near/use-balance";
+import { BASE_TOKEN } from "@/config/btc";
 
 const StatisticsPlayer = (props: any) => {
   const { className, onShare } = props;
@@ -17,7 +18,7 @@ const StatisticsPlayer = (props: any) => {
   const { userInfo, address, login } = useAuth();
   const { balance } = useBalance();
 
-  const { totalAmount, loading } = useUserWinner();
+  const { totalAmount, totalAmountWithPrice, loading } = useUserWinner();
 
   const [claimModalOpen, setClaimModalOpen] = useState(false);
 
@@ -56,13 +57,25 @@ const StatisticsPlayer = (props: any) => {
         <div className="bg-[#E4E4E4] h-[1px]" />
         <div className="flex items-center">
           <div className="flex items-center w-[36%]">
+            <LabelValue label="Total Amount" className="mr-[30px]">
+              {loading ? (
+                <Loading size={12} />
+              ) : (
+                <span>
+                  {formatNumber(totalAmount, 6, true)} {BASE_TOKEN.symbol}
+                </span>
+              )}
+            </LabelValue>
+
             <LabelValue label="Total Valued" className="">
               {loading ? (
                 <Loading size={12} />
               ) : (
-                formatNumber(totalAmount, 3, true, {
-                  prefix: "$"
-                })
+                <span>
+                  {formatNumber(totalAmountWithPrice, 2, true, {
+                    prefix: "$"
+                  })}
+                </span>
               )}
             </LabelValue>
             {/* <Button
