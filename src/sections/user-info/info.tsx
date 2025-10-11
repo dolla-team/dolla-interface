@@ -10,7 +10,7 @@ export default function Info() {
   const { onCopy } = useCopy();
   const { user } = useUser();
   return (
-    <div className="flex gap-[8px] items-center">
+    <div className="flex gap-[8px] items-center px-[20px]">
       <Avatar
         size={50}
         address={userInfo?.user}

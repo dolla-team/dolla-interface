@@ -1,6 +1,6 @@
 import { useCallback, useRef, useState } from "react";
 import useToast from "@/hooks/use-toast";
-import { getNonce, getProvider, quote } from "@/hooks/near/util";
+import { getNonce, getProvider, quote, viewMethod } from "@/hooks/near/util";
 import { transactions } from "near-api-js";
 import { PublicKey } from "near-api-js/lib/utils/key_pair";
 import { functionCall } from "near-api-js/lib/transaction";
@@ -42,6 +42,14 @@ export default function useTrade({ onSuccess }: any) {
 
         const { publicKey } = await generateKeyPair();
 
+        const msg: any = {
+          u: {
+            Evm: address.replace(/^0x/, "").toLowerCase()
+          },
+          b: "Deposit",
+          k: publicKey
+        };
+
         const _amount = Big(inputCurrencyAmount)
           .mul(10 ** inputCurrency.decimals)
           .toFixed(0);
@@ -59,13 +67,7 @@ export default function useTrade({ onSuccess }: any) {
           recipient: import.meta.env.VITE_NEAR_ACCOUNT_ID,
           recipientType: "DESTINATION_CHAIN",
           deadline: dayjs().add(1, "hour").toISOString(),
-          customRecipientMsg: JSON.stringify({
-            u: {
-              Evm: address.replace(/^0x/, "").toLowerCase()
-            },
-            b: "Deposit",
-            k: publicKey
-          })
+          customRecipientMsg: JSON.stringify(msg)
         });
 
         if (!data) {

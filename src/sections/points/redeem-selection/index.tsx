@@ -24,8 +24,9 @@ export default function RedeemSelection({
   const [selectedItem, setSelectedItem] = useState<any>(null);
   const isMobile = useIsMobile();
   const close = () => {
-    onClose();
+    setTab(0);
     setSelectedItem(null);
+    onClose();
   };
   const [tab, setTab] = useState(0); // 0 for index, 1 for history, 2 for redeem
 
@@ -58,7 +59,7 @@ export default function RedeemSelection({
               )}
               <span>{tab === 1 ? "Redeem History" : "Points Redemption"}</span>
             </div>
-            <button className="w-[24px] h-[24px] button" onClick={onClose}>
+            <button className="w-[24px] h-[24px] button" onClick={close}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="10"

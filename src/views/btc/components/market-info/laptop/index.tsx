@@ -36,7 +36,9 @@ export default function MarketInfo() {
           </div>
         </div>
         <div className="flex items-center mt-[20px]">
-          <div className="text-[12px] text-white/50 mr-[6px]">Player</div>
+          {pool?.degen_players?.length < 10 && (
+            <div className="text-[12px] text-white/50 mr-[6px]">Player</div>
+          )}
           {pool?.degen_players?.map((item: any, index: number) => (
             <Avatar
               key={index}
@@ -45,14 +47,14 @@ export default function MarketInfo() {
               email={item?.email_desensitization || item?.name}
               address={item?.user}
               className={clsx(
-                "rounded-[50%] text-[12px]",
+                "rounded-[50%] text-[12px] shrink-0",
                 index !== 0 && "ml-[-6px]"
               )}
             />
           ))}
 
-          {pool?.participants >= 15 && (
-            <MoreIcon className="ml-[-6px] relative z-[2]" />
+          {pool?.degen_players?.length >= 10 && (
+            <MoreIcon className="ml-[-6px] relative z-[2] shrink-0" />
           )}
           <div className="text-[12px] text-white ml-[6px]">
             {pool?.participants || 0}

@@ -29,15 +29,15 @@ export default function EndPanel({ data }: { data: any }) {
     let _bidsProgress: any = [];
     const startTime = new Date(data.created_at).getTime();
     const endTime = new Date(
-      winnerBidList.find((item: any) => item.is_winner)?.updated_at ||
-        data.updated_at
+      winnerBidList.find((item: any) => item.is_winner)?.result_time ||
+        data.result_time
     ).getTime();
 
     let lastBids = 0;
     winnerBidList.forEach((item: any) => {
       _totalBids += item.times;
       _bidsDistribution[item.times] = (_bidsDistribution[item.times] || 0) + 1;
-      const bidTime = new Date(item.updated_at).getTime();
+      const bidTime = new Date(item.time).getTime();
       _bidsProgress.push((bidTime - startTime) / (endTime - startTime));
       if (item.is_winner) {
         lastBids = item.times;
@@ -291,7 +291,7 @@ const ProgressAvatar = ({
         src={data.winner_user_info?.icon}
         email={data.winner_user_info?.email_desensitization}
         address={data.winner_user_info?.user}
-        className="text-[12px]"
+        className="text-[12px] !rounded-[4px]"
       />
       <svg
         xmlns="http://www.w3.org/2000/svg"

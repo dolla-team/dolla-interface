@@ -49,7 +49,7 @@ export default function TopWinnersItem({
       <div>
         <div className="text-[10px] text-black/30">Multiplier</div>
         <div className="text-[12px] text-black text-right font-semibold">
-          {formatNumber(data.profit_ratio, 0, true)}X
+          {formatNumber(data.profit_ratio, type === "sellers" ? 2 : 0, true)}X
         </div>
       </div>
     </div>
