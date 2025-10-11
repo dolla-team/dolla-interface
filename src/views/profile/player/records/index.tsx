@@ -12,16 +12,31 @@ const Records = (props: any) => {
   const accountRef = useRef<any>(null);
   const contentRef = useRef<any>(null);
 
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     const height = contentRef.current?.clientHeight;
-  //     const _height = (height || 240) + 194;
-  //     const element = document.getElementById("objectives-container");
-  //     if (element) {
-  //       element.style.maxHeight = _height + "px";
-  //     }
-  //   }, 300);
-  // }, [tab]);
+  useEffect(() => {
+    const element = contentRef.current;
+    if (!element) return;
+
+    // Create ResizeObserver to listen for height changes
+    const resizeObserver = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        const height = entry.contentRect.height;
+        const _height = (height < 500 ? 500 : height) + 214;
+
+        const container = document.getElementById("objectives-container");
+        if (container) {
+          container.style.height = _height + "px";
+        }
+      }
+    });
+
+    // Start observing the element
+    resizeObserver.observe(element);
+
+    // Cleanup: stop observing when component unmounts
+    return () => {
+      resizeObserver.disconnect();
+    };
+  }, []);
 
   return (
     <div

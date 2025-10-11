@@ -33,20 +33,14 @@ export default function EndPanel({ data }: { data: any }) {
         data.result_time
     ).getTime();
 
-    let lastBids = 0;
     winnerBidList.forEach((item: any) => {
       _totalBids += item.times;
       _bidsDistribution[item.times] = (_bidsDistribution[item.times] || 0) + 1;
       const bidTime = new Date(item.time).getTime();
       _bidsProgress.push((bidTime - startTime) / (endTime - startTime));
-      if (item.is_winner) {
-        lastBids = item.times;
-      }
     });
 
-    const _returnMultiple = Big(data.value)
-      .div(lastBids || 1)
-      .toFixed(0);
+    const _returnMultiple = data.profit_ratio;
 
     _bidsProgress.sort((a: number, b: number) => a - b);
     return [

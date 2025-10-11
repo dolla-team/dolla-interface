@@ -78,8 +78,7 @@ export default function Market({
                   className="text-[12px]"
                 />
                 <div className="text-[12px]">
-                  {data?.pool_user_info?.name ||
-                    formatAddress(data?.pool_user_info?.user)}
+                  {formatAddress(data?.pool_user_info?.user)}
                 </div>
               </div>
             </div>
@@ -224,7 +223,7 @@ export default function Market({
             x WIN
           </div>
           <div className="flex justify-center">
-            <div className="p-[4px] pr-[10px] min-w-[100px] inline-flex gap-[3px] rounded-[16px] bg-white border border-[#E4E4E4] backdrop-blur-[25px]">
+            <div className="p-[4px] pr-[10px] min-w-[100px] inline-flex justify-center items-center gap-[3px] rounded-[16px] bg-white border border-[#E4E4E4] backdrop-blur-[25px]">
               <Avatar
                 className="text-[14px]"
                 email={data?.winner_user_info?.email_desensitization}
