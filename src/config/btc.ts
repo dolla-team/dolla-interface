@@ -1,14 +1,26 @@
 export const BASE_TOKEN: Record<string, any> = {
-  assetId: "nep141:eth.bridge.near",
-  address: "eth.bridge.near",
-  decimals: 18,
+  // ETH
+  // assetId: "nep141:eth.bridge.near",
+  // address: "eth.bridge.near",
+  // decimals: 18,
+  // chain: "near",
+  // name: "ETH",
+  // symbol: "ETH",
+  // icon: "/tokens/eth.png",
+  // pointsIcon: "/tokens/eth.png",
+  // isBaseToken: true,
+  // minDepositAmount: "0.001"
+
+  // BTC
+  assetId: "nep141:nbtc.bridge.near",
+  address: "nbtc.bridge.near",
+  decimals: 8,
   chain: "near",
-  name: "ETH",
-  symbol: "ETH",
-  icon: "/tokens/eth.png",
-  pointsIcon: "/tokens/eth.png",
+  symbol: "BTC",
+  icon: "/tokens/btc.png",
+  pointsIcon: "/tokens/btc.png",
   isBaseToken: true,
-  minDepositAmount: "0.001"
+  minDepositAmount: "0.01"
 };
 
 export const QUOTE_TOKEN: Record<string, any> = {
@@ -25,4 +37,4 @@ export const QUOTE_TOKEN: Record<string, any> = {
 
 export const PAID_TOKEN = QUOTE_TOKEN;
 
-export const AMOUNT = [1, 0.1, 0.01];
+export const AMOUNT = [0.01, 0.001, 0.0001];

@@ -81,7 +81,7 @@ export default function useUserWinner() {
   }, [btcs]);
 
   const totalAmountWithPrice = useMemo(() => {
-    return Big(totalAmount).times(prices[0]?.last_price || 0);
+    return Big(totalAmount).times(prices?.[0]?.last_price || 0);
   }, [totalAmount, prices]);
 
   return {
