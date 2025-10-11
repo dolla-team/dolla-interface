@@ -24,6 +24,7 @@ import useQuote from "./hooks/use-quote";
 import useWalletStore from "@/stores/use-wallet";
 import useCreate from "@/hooks/near/use-create";
 import PageBack from "@/views/profile/components/page-back";
+import { AMOUNT } from "@/config/btc";
 
 export default function BTCCreate() {
   const [amount, setAmount] = useState(1);
@@ -116,7 +117,7 @@ export default function BTCCreate() {
                 </div>
                 <div className="flex items-center">
                   <div className="mt-[13px] flex items-center gap-[10px]">
-                    {[1, 0.1, 0.01].map((item, index) => {
+                    {AMOUNT.map((item, index) => {
                       const isActive = amount === item;
                       return (
                         <motion.div
