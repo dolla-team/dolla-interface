@@ -1,7 +1,7 @@
 import { useState } from "react";
 import dayjs from "dayjs";
 import useGenerateKey from "@/hooks/near/use-generate-key";
-import { quote } from "./util";
+import { quote, viewMethod } from "./util";
 import useToast from "../use-toast";
 
 export default function useDeposit() {
@@ -40,11 +40,26 @@ export default function useDeposit() {
     getFullQuote?: boolean;
   }) {
     try {
-      const { publicKey } = await generateKeyPair(true);
+      const { publicKey } = await generateKeyPair();
       if (!publicKey) {
         throw new Error("Public key not found");
       }
       setLoading(true);
+
+      const msg: any = {
+        u: {
+          Evm: evmAddress.replace(/^0x/, "").toLowerCase()
+        },
+        b: "Deposit"
+      };
+
+      const hasAk = await viewMethod({
+        method: "get_user_id_ak",
+        args: { user_id: { Evm: evmAddress.replace(/^0x/, "").toLowerCase() } }
+      });
+      if (!hasAk) {
+        msg.k = publicKey;
+      }
 
       const body = {
         dry: false,
@@ -61,13 +76,7 @@ export default function useDeposit() {
         deadline: dayjs().add(1, "hour").toISOString(),
         referral,
         quoteWaitingTimeMs,
-        customRecipientMsg: JSON.stringify({
-          u: {
-            Evm: evmAddress.replace(/^0x/, "").toLowerCase()
-          },
-          b: "Deposit",
-          k: publicKey
-        })
+        customRecipientMsg: JSON.stringify(msg)
       };
 
       const data = await quote(body);
