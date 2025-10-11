@@ -7,14 +7,16 @@ import useTaskStore from "@/stores/use-task";
 export default function Task({
   className,
   id,
+  task: defaultTask,
   onSuccess
 }: {
   className?: string;
-  id: any;
-  onSuccess: () => void;
+  id?: any;
+  task?: any;
+  onSuccess?: () => void;
 }) {
   const taskStore = useTaskStore();
-  const task = taskStore.tasksMap[id];
+  const task = taskStore.tasksMap[id] || defaultTask;
 
   const {
     buttonText,
