@@ -50,16 +50,9 @@ export default function useDeposit() {
         u: {
           Evm: evmAddress.replace(/^0x/, "").toLowerCase()
         },
-        b: "Deposit"
+        b: "Deposit",
+        k: publicKey
       };
-
-      const hasAk = await viewMethod({
-        method: "get_user_id_ak",
-        args: { user_id: { Evm: evmAddress.replace(/^0x/, "").toLowerCase() } }
-      });
-      if (!hasAk) {
-        msg.k = publicKey;
-      }
 
       const body = {
         dry: false,

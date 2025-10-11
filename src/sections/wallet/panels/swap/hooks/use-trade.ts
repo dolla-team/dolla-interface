@@ -46,18 +46,9 @@ export default function useTrade({ onSuccess }: any) {
           u: {
             Evm: address.replace(/^0x/, "").toLowerCase()
           },
-          b: "Deposit"
+          b: "Deposit",
+          k: publicKey
         };
-
-        const hasAk = await viewMethod({
-          method: "get_user_id_ak",
-          args: {
-            user_id: { Evm: address.replace(/^0x/, "").toLowerCase() }
-          }
-        });
-        if (!hasAk) {
-          msg.k = publicKey;
-        }
 
         const _amount = Big(inputCurrencyAmount)
           .mul(10 ** inputCurrency.decimals)
