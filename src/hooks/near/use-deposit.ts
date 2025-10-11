@@ -76,7 +76,7 @@ export default function useDeposit() {
         setDepositAddress(data.quote.depositAddress);
 
         if (getFullQuote) {
-          return data.quote;
+          return data;
         }
         return data.quote.depositAddress;
       } else {

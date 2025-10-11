@@ -5,7 +5,6 @@ import Pagination from "@/components/pagination";
 import { formatNumber } from "@/utils/format/number";
 import useIsMobile from "@/hooks/use-is-mobile";
 import { useNavigate } from "react-router-dom";
-import chains from "@/config/chains";
 import useCopy from "@/hooks/use-copy";
 import { useAuth } from "@/contexts/auth";
 

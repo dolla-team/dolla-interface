@@ -1,9 +1,8 @@
 import BackIcon from "@/sections/wallet/back-icon";
 import Recharge from "./recharge";
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import Big from "big.js";
 import useWalletStore from "@/stores/use-wallet";
-import { useDebounce } from "ahooks";
 import { useContractConfigStore } from "@/stores/use-contract-config";
 import useReport from "@/hooks/transaction/use-report";
 import { useAuth } from "@/contexts/auth";
@@ -11,6 +10,7 @@ import useDeposit from "@/hooks/near/use-deposit";
 import Loading from "@/components/icons/loading";
 import ChainSelector from "./chain-selector";
 import { EVM_REFUND_ACCOUNT } from "@/config";
+import { useDebounceFn } from "ahooks";
 
 export default function RechargeFrom1click() {
   const [quote, setQuote] = useState<any>(null);
@@ -22,42 +22,51 @@ export default function RechargeFrom1click() {
   const config = useContractConfigStore((state) => state.config);
   const { generateDepositAddress } = useDeposit();
   const { report } = useReport();
+  const chainRef = useRef(null);
+
+  const { run } = useDebounceFn(
+    async () => {
+      try {
+        setQuote(null);
+        setLoading(true);
+
+        const decimals =
+          chain.blockchain === "bsc" ? 18 : walletStore.selectedToken.decimals;
+
+        chainRef.current = chain.assetId;
+        const res = await generateDepositAddress({
+          originAsset: chain.assetId,
+          destinationAsset: walletStore.selectedToken.assetId,
+          amount: new Big(walletStore.selectedToken.minDepositAmount)
+            .mul(10 ** decimals)
+            .toString(),
+          evmAddress: address || "",
+          slippageTolerance: 50,
+          swapType: "FLEX_INPUT",
+          refundType: chain.blockchain === "btc" ? "INTENTS" : "ORIGIN_CHAIN",
+          refundTo:
+            chain.blockchain === "btc"
+              ? import.meta.env.VITE_NEAR_ACCOUNT_ID
+              : EVM_REFUND_ACCOUNT,
+          getFullQuote: true
+        });
+
+        if (chainRef.current === res.quoteRequest.originAsset) {
+          setQuote(res.quote);
+        }
+
+        setLoading(false);
+      } catch (error) {
+        console.log("error", error);
+        setLoading(false);
+      }
+    },
+    { wait: 500 }
+  );
 
   useEffect(() => {
     if (chain && address) {
-      (async () => {
-        try {
-          setQuote(null);
-          setLoading(true);
-
-          const decimals =
-            chain.blockchain === "bsc"
-              ? 18
-              : walletStore.selectedToken.decimals;
-          const qoute = await generateDepositAddress({
-            originAsset: chain.assetId,
-            destinationAsset: walletStore.selectedToken.assetId,
-            amount: new Big(walletStore.selectedToken.minDepositAmount)
-              .mul(10 ** decimals)
-              .toString(),
-            evmAddress: address || "",
-            slippageTolerance: 50,
-            swapType: "FLEX_INPUT",
-            refundType: chain.blockchain === "btc" ? "INTENTS" : "ORIGIN_CHAIN",
-            refundTo:
-              chain.blockchain === "btc"
-                ? import.meta.env.VITE_NEAR_ACCOUNT_ID
-                : EVM_REFUND_ACCOUNT,
-            getFullQuote: true
-          });
-          console.log("qoute", qoute);
-          setQuote(qoute);
-          setLoading(false);
-        } catch (error) {
-          console.log("error", error);
-          setLoading(false);
-        }
-      })();
+      run();
     }
   }, [chain, address, config]);
 
