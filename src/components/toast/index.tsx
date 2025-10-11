@@ -1,8 +1,22 @@
+import clsx from "clsx";
 import Loading from "../icons/loading";
 
+const isAndroid = () => {
+  if (typeof window === "undefined") return false;
+  return /Android/i.test(navigator.userAgent);
+};
+
 export default function Toast({ type, title, text, closeToast }: any) {
+  const isAndroidDevice = isAndroid();
   return (
-    <div className="rounded-[12px] border border-[#FFE9B2] bg-[#FFFFFF1A] backdrop-blur-[10px] px-[12px] py-[8px] flex gap-[10px] w-[288px] items-center md:w-[288px] max-md:w-[calc(100vw-32px)]">
+    <div
+      className={clsx(
+        "rounded-[12px] px-[12px] py-[8px] flex gap-[10px] w-[288px] items-center md:w-[288px] max-md:w-[calc(100vw-32px)]",
+        isAndroidDevice
+          ? "bg-[#35302B]"
+          : "bg-[#35302B]/30 backdrop-blur-[10px]"
+      )}
+    >
       {type === "success" && (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -52,7 +66,7 @@ export default function Toast({ type, title, text, closeToast }: any) {
           />
         </svg>
       )}
-      <div className="flex justify-between flex-grow text-white">
+      <div className="flex items-start justify-between flex-grow text-white">
         <div className="flex flex-col gap-[5px]">
           <div className="text-[16px] font-semibold leading-normal items-center">
             {title}
@@ -62,7 +76,7 @@ export default function Toast({ type, title, text, closeToast }: any) {
           )}
         </div>
         <div
-          className="leading-[22px] flex-shrink-0 cursor-pointer"
+          className="mt-[6px] flex-shrink-0 cursor-pointer"
           onClick={closeToast}
         >
           <svg

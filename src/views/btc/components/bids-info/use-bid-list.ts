@@ -87,7 +87,7 @@ export default function useBidList() {
     setList([]);
 
     loadData();
-  }, [pool, isVisible]);
+  }, [pool?.pool_id, isVisible]);
 
   useEffect(() => {
     return () => {

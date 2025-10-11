@@ -13,7 +13,7 @@ const axiosInstance = axios.create({
   }
 });
 
-const signFn = () => {
+export const signFn = () => {
   clearTimeout((window as any).signTimer);
   if (typeof (window as any).sign === "function") {
     (window as any).sign();
@@ -31,7 +31,8 @@ axiosInstance.interceptors.request.use(
     if (token) {
       config.headers.Authorization = token;
       // FIXME remove this
-      // config.headers.Authorization = "9e9a7e6a74144feb721c8bcd0f8e48758cf2948cd21fdba81a33a7cb7ff3f514afdd6da19db7a0dbacc5a98d73d2c0bf91bca09d42f30cd9fe0fa273f1b6c677";
+      // config.headers.Authorization =
+      //   "84d9f5a935833ec7924ba4ca06478d0baf9a0981375ac9d8acfe92c716d382f4d209420351c6dbb1abba5438de389b4453e91cd848e1f68a5ad788274736c5b6";
     }
 
     return config;

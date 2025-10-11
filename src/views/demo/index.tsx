@@ -1,0 +1,636 @@
+import { useState } from "react";
+import { usePrivy } from "@privy-io/react-auth";
+import useAccount from "@/hooks/near/use-account";
+import useGameAction from "@/hooks/near/use-game-action";
+import useWithdraw from "@/hooks/near/use-withdraw";
+import Button from "@/components/button";
+import useBid from "@/hooks/near/use-bid";
+import useMintNft from "@/views/nft-create/hooks/use-mint-nft";
+import useCreateNft from "@/hooks/evm/use-create-nft";
+import useApprove from "@/hooks/evm/use-approve";
+import beraConfig from "@/config/bera";
+import useToast from "@/hooks/use-toast";
+import useWithdrawEvm from "@/hooks/evm/use-withdraw";
+import { useContractConfigStore } from "@/stores/use-contract-config";
+import useGenerateKey from "@/hooks/near/use-generate-key";
+
+// Constants
+const NFT_ADDRESS = "0x0ae4451B85A528b1Bc03D90F3Bc009962Fe737f7";
+const NFT_ID = "5";
+const BERA_SCAN_URL =
+  "https://berascan.com/address/0x0ae4451b85a528b1bc03d90f3bc009962fe737f7#writeContract";
+
+// Game Management Section Component
+function GameManagementSection({
+  getAllGames,
+  pauseGame,
+  resumeGame,
+  cancelGame
+}: {
+  getAllGames: () => Promise<any>;
+  pauseGame: () => Promise<any>;
+  resumeGame: () => Promise<any>;
+  cancelGame: () => Promise<any>;
+}) {
+  const [loading, setLoading] = useState<string | null>(null);
+  const toast = useToast();
+
+  const handleGameAction = async (
+    action: () => Promise<any>,
+    actionName: string
+  ) => {
+    try {
+      setLoading(actionName);
+      const result = await action();
+      console.log(`${actionName} result:`, result);
+      toast.success({ title: `${actionName} completed successfully` });
+    } catch (error) {
+      console.error(`${actionName} error:`, error);
+      toast.fail({ title: `${actionName} failed` });
+    } finally {
+      setLoading(null);
+    }
+  };
+
+  const gameActions = [
+    { name: "Get All Games", action: getAllGames },
+    { name: "Pause Game", action: pauseGame },
+    { name: "Resume Game", action: resumeGame },
+    { name: "Cancel Game", action: cancelGame }
+  ];
+
+  return (
+    <div className="space-y-4">
+      <h2 className="text-xl font-semibold text-gray-800">Game Management</h2>
+      <div className="grid grid-cols-2 gap-3">
+        {gameActions.map(({ name, action }) => (
+          <Button
+            key={name}
+            className="w-full h-10 !bg-blue-600 text-white rounded-lg transition-colors border border-blue-600"
+            onClick={() => handleGameAction(action, name)}
+            loading={loading === name}
+            disabled={loading !== null}
+          >
+            {name}
+          </Button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// NFT Operations Section Component
+function NFTOperationsSection({
+  nftNumber,
+  approved,
+  approve,
+  approving,
+  checking,
+  creating,
+  onCreateNft
+}: {
+  nftNumber: number;
+  approved: boolean;
+  approve: () => void;
+  approving: boolean;
+  checking: boolean;
+  creating: boolean;
+  onCreateNft: () => void;
+}) {
+  const handleMintNFT = () => {
+    window.open(BERA_SCAN_URL, "_blank");
+  };
+
+  const handleApproveOrCreate = () => {
+    if (approved) {
+      onCreateNft();
+    } else {
+      approve();
+    }
+  };
+
+  return (
+    <div className="space-y-4">
+      <h2 className="text-xl font-semibold text-gray-800">NFT Operations</h2>
+
+      <div className="bg-gray-50 p-4 rounded-lg">
+        <div className="flex items-center justify-between mb-4">
+          <span className="text-sm text-gray-600">Current NFT Balance:</span>
+          <span className="font-semibold text-lg">{nftNumber}</span>
+        </div>
+
+        <div className="space-y-3">
+          <Button
+            className="w-full h-10 !bg-purple-600 text-white rounded-lg transition-colors border border-purple-600"
+            onClick={handleMintNFT}
+          >
+            Mint NFT (External)
+          </Button>
+
+          <Button
+            className="w-full h-10 !bg-green-600 text-white rounded-lg transition-colors border border-green-600"
+            onClick={handleApproveOrCreate}
+            loading={creating || approving || checking}
+            disabled={creating || approving || checking}
+          >
+            {approved ? "Create NFT Pool" : "Approve NFT"}
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Trading Operations Section Component
+function TradingOperationsSection({
+  withdraw,
+  withdrawing,
+  onBid,
+  biding
+}: {
+  withdraw: (params: any) => void;
+  withdrawing: boolean;
+  onBid: (amount: number) => void;
+  biding: boolean;
+}) {
+  const handleWithdraw = () => {
+    withdraw({
+      fromToken: {
+        assetId:
+          "nep141:17208628f84f5d6ad33f0da3bbbeb27ffcb398eac501a31bd6ad2011e36133a1",
+        address:
+          "17208628f84f5d6ad33f0da3bbbeb27ffcb398eac501a31bd6ad2011e36133a1",
+        decimals: 6
+      },
+      toToken: {
+        assetId:
+          "nep141:arb-0xaf88d065e77c8cc2239327c5edb3a432268e5831.omft.near"
+      },
+      account: "dollastg.near",
+      amount: "0.5"
+    });
+  };
+  const { withdrawing: withdrawingEvm, onWithdraw: onWithdrawEvm } =
+    useWithdrawEvm(() => {
+      console.log("Withdraw success");
+    });
+
+  return (
+    <div className="space-y-4">
+      <h2 className="text-xl font-semibold text-gray-800">
+        Trading Operations
+      </h2>
+
+      <div className="grid grid-cols-1 gap-3">
+        <Button
+          className="w-full h-10 !bg-orange-600 text-white rounded-lg transition-colors border border-orange-600"
+          loading={withdrawing}
+          onClick={handleWithdraw}
+          disabled={withdrawing}
+        >
+          Withdraw (0.5 USDC)
+        </Button>
+
+        <Button
+          className="w-full h-10 !bg-yellow-600 text-white rounded-lg transition-colors border border-yellow-600"
+          onClick={() => {
+            onWithdrawEvm({
+              type: "coin",
+              amount: "1000000",
+              address: "0x26591f0f2bbab1bb3cd457eE1dfd80EAE1474C6c",
+              receiveAddress: "0x229E549c97C22b139b8C05fba770D94C086853d8"
+            });
+          }}
+          loading={withdrawingEvm}
+        >
+          Withdraw Evm USDC
+        </Button>
+
+        <Button
+          className="w-full h-10 !bg-red-600 text-white rounded-lg transition-colors border border-red-600"
+          onClick={() => onBid(1)}
+          loading={biding}
+          disabled={biding}
+        >
+          Place Bid (1)
+        </Button>
+      </div>
+    </div>
+  );
+}
+
+// Update Key Section Component
+function UpdateKeySection({
+  onUpdateKey,
+  updating
+}: {
+  onUpdateKey: () => Promise<any>;
+  updating: boolean;
+}) {
+  const [result, setResult] = useState<any>(null);
+  const [showResult, setShowResult] = useState(false);
+  const toast = useToast();
+
+  const handleUpdateKey = async () => {
+    try {
+      const keyResult = await onUpdateKey();
+      setResult(keyResult);
+      setShowResult(true);
+      toast.success({ title: "Key updated successfully" });
+    } catch (error) {
+      console.error("Update key error:", error);
+      toast.fail({ title: "Update key failed" });
+    }
+  };
+
+  return (
+    <div className="space-y-4">
+      <h2 className="text-xl font-semibold text-gray-800">Update Key Demo</h2>
+
+      <div className="bg-gray-50 p-4 rounded-lg">
+        <div className="space-y-3">
+          <Button
+            className="w-full h-10 !bg-indigo-600 text-white rounded-lg transition-colors border border-indigo-600"
+            onClick={handleUpdateKey}
+            loading={updating}
+            disabled={updating}
+          >
+            {updating ? "Updating Key..." : "Update Key"}
+          </Button>
+
+          {result && (
+            <div className="space-y-2">
+              <Button
+                className="w-full h-8 !bg-gray-600 text-white rounded text-sm border border-gray-600"
+                onClick={() => setShowResult(!showResult)}
+              >
+                {showResult ? "Hide" : "Show"} Result
+              </Button>
+
+              {showResult && (
+                <div className="mt-3 space-y-2">
+                  <div>
+                    <span className="text-xs text-gray-500">Public Key:</span>
+                    <pre className="text-xs bg-white p-2 rounded border overflow-auto">
+                      {result.publicKey}
+                    </pre>
+                  </div>
+                  <div>
+                    <span className="text-xs text-gray-500">Private Key:</span>
+                    <pre className="text-xs bg-white p-2 rounded border overflow-auto">
+                      {result.privateKey}
+                    </pre>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Generate KeyPair Section Component
+function GenerateKeyPairSection({
+  onGenerateKeyPair,
+  generating
+}: {
+  onGenerateKeyPair: (isDeposit: boolean) => Promise<any>;
+  generating: boolean;
+}) {
+  const [result, setResult] = useState<any>(null);
+  const [showResult, setShowResult] = useState(false);
+  const toast = useToast();
+
+  const handleGenerateKeyPair = async (isDeposit: boolean) => {
+    try {
+      const keyPairResult = await onGenerateKeyPair(isDeposit);
+      setResult(keyPairResult);
+      setShowResult(true);
+      toast.success({
+        title: isDeposit
+          ? "KeyPair generated (deposit mode)"
+          : "KeyPair generated successfully"
+      });
+    } catch (error) {
+      console.error("Generate keypair error:", error);
+      toast.fail({ title: "Generate keypair failed" });
+    }
+  };
+
+  return (
+    <div className="space-y-4">
+      <h2 className="text-xl font-semibold text-gray-800">
+        Generate KeyPair Demo
+      </h2>
+
+      <div className="bg-gray-50 p-4 rounded-lg">
+        <p className="text-sm text-gray-600 mb-3">
+          Generate or retrieve keypair for NEAR operations. If a keypair exists
+          in storage, it will be returned; otherwise, a new one will be created
+          and saved.
+        </p>
+
+        <div className="space-y-3">
+          <Button
+            className="w-full h-10 !bg-teal-600 text-white rounded-lg transition-colors border border-teal-600"
+            onClick={() => handleGenerateKeyPair(false)}
+            loading={generating}
+            disabled={generating}
+          >
+            {generating ? "Generating..." : "Generate KeyPair"}
+          </Button>
+
+          <Button
+            className="w-full h-10 !bg-cyan-600 text-white rounded-lg transition-colors border border-cyan-600"
+            onClick={() => handleGenerateKeyPair(true)}
+            loading={generating}
+            disabled={generating}
+          >
+            {generating ? "Generating..." : "Generate KeyPair (Deposit Mode)"}
+          </Button>
+
+          {result && (
+            <div className="space-y-2">
+              <Button
+                className="w-full h-8 !bg-gray-600 text-white rounded text-sm border border-gray-600"
+                onClick={() => setShowResult(!showResult)}
+              >
+                {showResult ? "Hide" : "Show"} Result
+              </Button>
+
+              {showResult && (
+                <div className="mt-3 space-y-2">
+                  <div>
+                    <span className="text-xs text-gray-500">Public Key:</span>
+                    <pre className="text-xs bg-white p-2 rounded border overflow-auto">
+                      {result.publicKey}
+                    </pre>
+                  </div>
+                  <div>
+                    <span className="text-xs text-gray-500">Private Key:</span>
+                    <pre className="text-xs bg-white p-2 rounded border overflow-auto">
+                      {result.privateKey}
+                    </pre>
+                  </div>
+                  <div>
+                    <span className="text-xs text-gray-500">
+                      KeyPair Signer:
+                    </span>
+                    <pre className="text-xs bg-white p-2 rounded border overflow-auto">
+                      {result.keyPairSigner ? "Created" : "Not available"}
+                    </pre>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+
+        <div className="mt-3 p-3 bg-blue-50 border border-blue-200 rounded">
+          <p className="text-xs text-blue-800">
+            💡 Deposit mode will skip account key update. Use this when making
+            deposit operations.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Export Wallet Section Component
+function ExportWalletSection({ exportWallet }: { exportWallet: () => void }) {
+  const [exporting, setExporting] = useState(false);
+  const toast = useToast();
+
+  const handleExportWallet = async () => {
+    try {
+      setExporting(true);
+      await exportWallet();
+      toast.success({ title: "Wallet export initiated" });
+    } catch (error) {
+      console.error("Export wallet error:", error);
+      toast.fail({ title: "Failed to export wallet" });
+    } finally {
+      setExporting(false);
+    }
+  };
+
+  return (
+    <div className="space-y-4">
+      <h2 className="text-xl font-semibold text-gray-800">
+        Export Wallet Demo
+      </h2>
+
+      <div className="bg-gray-50 p-4 rounded-lg">
+        <p className="text-sm text-gray-600 mb-3">
+          Export your wallet's private key securely using Privy's built-in
+          export functionality.
+        </p>
+
+        <Button
+          className="w-full h-10 !bg-pink-600 text-white rounded-lg transition-colors border border-pink-600"
+          onClick={handleExportWallet}
+          loading={exporting}
+          disabled={exporting}
+        >
+          {exporting ? "Exporting..." : "Export Wallet"}
+        </Button>
+
+        <div className="mt-3 p-3 bg-yellow-50 border border-yellow-200 rounded">
+          <p className="text-xs text-yellow-800">
+            ⚠️ This will open a secure dialog to export your private key. Keep
+            it safe and never share it with anyone.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Account Info Section Component
+function AccountInfoSection({
+  account,
+  config
+}: {
+  account: any;
+  config: any;
+}) {
+  const [showDetails, setShowDetails] = useState(false);
+
+  return (
+    <div className="space-y-4">
+      <h2 className="text-xl font-semibold text-gray-800">
+        Account Information
+      </h2>
+
+      <div className="bg-gray-50 p-4 rounded-lg">
+        <div className="flex items-center justify-between mb-2">
+          <span className="text-sm text-gray-600">Account Status:</span>
+          <span
+            className={`px-2 py-1 rounded text-xs ${
+              account
+                ? "bg-green-100 text-green-800"
+                : "bg-red-100 text-red-800"
+            }`}
+          >
+            {account ? "Connected" : "Not Connected"}
+          </span>
+        </div>
+
+        <Button
+          className="w-full h-8 !bg-gray-600 text-white rounded text-sm border border-gray-600"
+          onClick={() => setShowDetails(!showDetails)}
+        >
+          {showDetails ? "Hide" : "Show"} Details
+        </Button>
+
+        {showDetails && (
+          <div className="mt-3 space-y-2">
+            <div>
+              <span className="text-xs text-gray-500">Account:</span>
+              <pre className="text-xs bg-white p-2 rounded border overflow-auto">
+                {JSON.stringify(account, null, 2)}
+              </pre>
+            </div>
+            <div>
+              <span className="text-xs text-gray-500">Config:</span>
+              <pre className="text-xs bg-white p-2 rounded border overflow-auto">
+                {JSON.stringify(config, null, 2)}
+              </pre>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+export default function Demo() {
+  const { exportWallet } = usePrivy(); // Get exportWallet from usePrivy hook
+  const config = useContractConfigStore((state) => state.config);
+  // const { account } = useAccount(user?.wallet?.address || "");
+  const { account } = useAccount("0xbede1d86148441ab80e4917ffe727990e74387ec");
+
+  // Trading hooks
+  const { withdraw, loading: withdrawing } = useWithdraw();
+  const { onBid, biding } = useBid(
+    0,
+    () => console.log("bid success"),
+    () => console.log("tx success"),
+    () => console.log("tx fail")
+  );
+
+  // Game management hooks
+  const { getAllGames, resumeGame, pauseGame, cancelGame } = useGameAction({
+    gameId: "0"
+  });
+
+  // Update key hook
+  const {
+    updateAk: onUpdateKey,
+    createKeyPair,
+    saveKeyPair,
+    generateKeyPair
+  } = useGenerateKey();
+  const [updating, setUpdating] = useState(false);
+  const [generating, setGenerating] = useState(false);
+
+  // NFT hooks
+  const { nftNumber } = useMintNft(NFT_ADDRESS);
+  const { approve, approved, approving, checking } = useApprove({
+    token: {
+      address: NFT_ADDRESS,
+      id: NFT_ID,
+      type: "nft"
+    },
+    spender: beraConfig.bettingContractAddress,
+    amount: "1"
+  });
+  const { creating, onCreate: onCreateNft } = useCreateNft({
+    token: {
+      address: NFT_ADDRESS,
+      id: NFT_ID
+    },
+    onCreateSuccess: () => console.log("NFT pool created successfully")
+  });
+
+  // Wrapper for onUpdateKey with loading state
+  const handleUpdateKey = async () => {
+    setUpdating(true);
+    try {
+      const { publicKey, privateKey } = createKeyPair();
+      await onUpdateKey({ publicKey });
+      saveKeyPair(publicKey, privateKey);
+    } finally {
+      setUpdating(false);
+    }
+  };
+
+  // Wrapper for generateKeyPair with loading state
+  const handleGenerateKeyPair = async (isDeposit: boolean) => {
+    setGenerating(true);
+    try {
+      const result = await generateKeyPair(isDeposit);
+      return result;
+    } finally {
+      setGenerating(false);
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-100 p-6">
+      <div className="max-w-4xl mx-auto space-y-8">
+        <div className="text-center">
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            Demo Dashboard
+          </h1>
+          <p className="text-gray-600">
+            Manage your blockchain operations and NFT interactions
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <AccountInfoSection account={account} config={config} />
+          <NFTOperationsSection
+            nftNumber={nftNumber}
+            approved={approved}
+            approve={approve}
+            approving={approving}
+            checking={checking}
+            creating={creating}
+            onCreateNft={onCreateNft}
+          />
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <GenerateKeyPairSection
+            onGenerateKeyPair={handleGenerateKeyPair}
+            generating={generating}
+          />
+          <UpdateKeySection onUpdateKey={handleUpdateKey} updating={updating} />
+        </div>
+
+        <div className="grid grid-cols-1 gap-8">
+          <ExportWalletSection exportWallet={exportWallet} />
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <GameManagementSection
+            getAllGames={getAllGames}
+            pauseGame={pauseGame}
+            resumeGame={resumeGame}
+            cancelGame={cancelGame}
+          />
+          <TradingOperationsSection
+            withdraw={withdraw}
+            withdrawing={withdrawing}
+            onBid={onBid}
+            biding={biding}
+          />
+        </div>
+      </div>
+    </div>
+  );
+}

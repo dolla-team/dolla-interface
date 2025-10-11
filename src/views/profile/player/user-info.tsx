@@ -9,9 +9,10 @@ export default function UserInfo() {
     <div className="flex items-center gap-[20px]">
       <Avatar
         size={56}
-        className="rounded-[8px] border border-[2px] border-[#FFFFFFCC]"
-        address={userInfo?.sol_user}
-        email={userInfo?.email}
+        className="rounded-[8px] border border-[2px] border-[#FFFFFFCC] text-[28px]"
+        address={userInfo?.user}
+        email={userInfo?.show_email}
+        src={userInfo?.icon}
       />
       <div className="text-white">
         <div className="text-[20px]">{userInfo?.username}</div>

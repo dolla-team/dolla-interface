@@ -6,11 +6,11 @@ export default [
     icon: <StarIcon />,
     color: "#FFC42F"
   },
-  {
-    value: 5,
-    icon: <FireIcon />,
-    color: "#FF9B43"
-  },
+  // {
+  //   value: 5,
+  //   icon: <FireIcon />,
+  //   color: "#FF9B43"
+  // },
   {
     value: 10,
     icon: <FireIcon />,

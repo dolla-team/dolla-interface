@@ -2,20 +2,34 @@ import Switch from "@/components/switch";
 import SwitchPanel from "@/components/switch/switch-panel";
 import clsx from "clsx";
 import { AnimatePresence } from "framer-motion";
-import { useState } from "react";
+import { memo, useState, useRef, useEffect } from "react";
 import BidHistory from "./bid-history";
 import Account from "./account";
 
 const Records = (props: any) => {
-  const {
-    className,
-    ...restProps
-  } = props;
-
+  const { className, ref, ...restProps } = props;
   const [tab, setTab] = useState("bidHistory");
+  const accountRef = useRef<any>(null);
+  const contentRef = useRef<any>(null);
+
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     const height = contentRef.current?.clientHeight;
+  //     const _height = (height || 240) + 194;
+  //     const element = document.getElementById("objectives-container");
+  //     if (element) {
+  //       element.style.maxHeight = _height + "px";
+  //     }
+  //   }, 300);
+  // }, [tab]);
 
   return (
-    <div className={clsx("w-full rounded-[16px] border border-[#2B2C2F] bg-[#22201D] p-[17px_22px_21px] mt-[20px]", className)}>
+    <div
+      className={clsx(
+        "w-full rounded-[20px] border border-[#E4E4E4] bg-white p-[17px_22px_21px] mt-[20px] max-md:w-screen max-md:mt-0 max-md:p-[17px_0]",
+        className
+      )}
+    >
       <Switch
         tab={tab}
         tabs={[
@@ -23,30 +37,27 @@ const Records = (props: any) => {
           { label: "Account", value: "account" }
         ]}
         onChange={setTab}
-        className="w-[241px] !h-[38px] !border-[1px] !border-[#6A5D3A] !rounded-[19px] !bg-[#35302B] !p-[4px]"
-        cursorClassName="!rounded-[15px] !shadow-[unset] !bg-[radial-gradient(50%_50%_at_50%_50%,_#FFEF43_0%,_#FFC42F_100%)]"
-        tabClassName="!px-[15px]"
+        className="w-[241px] !border-[1px] !border-[#E4E4E4] !rounded-[10px] !p-[0px] max-md:mx-auto !bg-[#F2F2F299]"
+        cursorClassName="!rounded-[10px] !bg-[#1A1E24] !shadow-[unset]"
+        tabClassName="!px-[20px]"
+        activeClassName="!text-white"
       />
-      <div className="">
+      <div className="" ref={contentRef}>
         <AnimatePresence>
-          {
-            tab === "bidHistory" && (
-              <SwitchPanel>
-                <BidHistory {...restProps} />
-              </SwitchPanel>
-            )
-          }
-          {
-            tab === "account" && (
-              <SwitchPanel>
-                <Account />
-              </SwitchPanel>
-            )
-          }
+          {tab === "bidHistory" && (
+            <SwitchPanel>
+              <BidHistory {...restProps} />
+            </SwitchPanel>
+          )}
+          {tab === "account" && (
+            <SwitchPanel>
+              <Account ref={accountRef} />
+            </SwitchPanel>
+          )}
         </AnimatePresence>
       </div>
     </div>
   );
 };
 
-export default Records;
+export default memo(Records);

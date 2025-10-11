@@ -3,7 +3,9 @@ import clsx from "clsx";
 import { BackPointsFace, FrontFace } from "./faces";
 import useUserInfoStore from "@/stores/use-user-info";
 import { motion } from "framer-motion";
-import "./index.css";
+
+// import "./index.css";
+import("./index.css");
 
 const Coin = forwardRef<any, any>(
   (
@@ -16,7 +18,9 @@ const Coin = forwardRef<any, any>(
       coinContainerRef,
       ticket,
       bids,
-      setFlipStatus
+      setFlipStatus,
+      isWinner,
+      flipStatus
     },
     ref
   ) => {
@@ -29,7 +33,7 @@ const Coin = forwardRef<any, any>(
     // Check if element is in viewport
     const isElementInViewport = (element: HTMLElement) => {
       return (
-        element.offsetTop <
+        element.offsetTop + element.offsetHeight <
           coinContainerRef.current?.clientHeight +
             coinContainerRef.current?.scrollTop &&
         element.offsetTop > coinContainerRef.current?.scrollTop - 10
@@ -50,7 +54,23 @@ const Coin = forwardRef<any, any>(
 
       // Only scroll into view if element is not in viewport
       if (coinRef.current && !isElementInViewport(coinRef.current)) {
-        coinRef.current.scrollIntoView({ behavior: "smooth" });
+        // Scroll within the container instead of the entire document
+        const container = coinContainerRef.current;
+        const coinElement = coinRef.current;
+        const containerRect = container.getBoundingClientRect();
+        const coinRect = coinElement.getBoundingClientRect();
+
+        // Calculate the scroll position to bring the coin into view
+        const scrollTop =
+          container.scrollTop +
+          (coinRect.top - containerRect.top) -
+          containerRect.height / 2 +
+          coinRect.height / 2;
+
+        container.scrollTo({
+          top: scrollTop,
+          behavior: "smooth"
+        });
       }
 
       setIsAnimating(true);
@@ -76,7 +96,7 @@ const Coin = forwardRef<any, any>(
       setTimeout(() => {
         setIsAnimating(false);
         onFlipComplete?.(index, true, notAuto);
-      }, 600); // Reduced from 1000ms to 600ms to start exit animation earlier
+      }, 400); // Reduced from 1000ms to 600ms to start exit animation earlier
     };
 
     const onCollect = () => {
@@ -84,8 +104,9 @@ const Coin = forwardRef<any, any>(
       const coinRect = coinRef.current.getBoundingClientRect();
       const targetW = rect.width;
       const targetH = rect.height;
-      const targetLeft = targetW / 2 - coinRect.x + rect.x;
-      const targetTop = targetH / 2 - coinRect.y + rect.y;
+
+      const targetLeft = targetW / 2 + rect.x - coinRect.x - coinRect.width / 2;
+      const targetTop = targetH / 2 + rect.y - coinRect.y - coinRect.height / 2;
       if (bids > 1) {
         coinRef.current.style.transform = `translate(${targetLeft}px, ${targetTop}px)`;
       } else {
@@ -117,18 +138,23 @@ const Coin = forwardRef<any, any>(
     return (
       <>
         <div
-          className={clsx("relative cursor-pointer perspective-[1000px]")}
+          className={clsx(
+            "relative perspective-[1000px]",
+            (flipStatus === 4 || flipStatus === 5) && "cursor-pointer"
+          )}
           style={{
             width: `${size}px`,
             height: `${size}px`
           }}
           onClick={() => {
             onFlip(false, true);
+            clearTimeout(window.autoFlipTimer);
+            window.autoFlipTimer = -1;
           }}
           ref={coinRef}
         >
           <div
-            className="relative w-full h-full transition-transform duration-500 ease-in-out preserve-3d"
+            className="relative w-full h-full transition-transform duration-300 ease-in-out preserve-3d"
             style={{
               transform: isFlipped ? "rotateY(180deg)" : "rotateY(0deg)",
               transformStyle: "preserve-3d"
@@ -138,30 +164,12 @@ const Coin = forwardRef<any, any>(
             <FrontFace size={size} thickness={thickness} />
 
             {/* Back face (Tails) */}
-            <BackPointsFace size={size} thickness={thickness} points={points} />
-
-            {/* Coin edges container */}
-            {/* <div
-            style={{
-              transformStyle: "preserve-3d",
-              backfaceVisibility: "hidden",
-              transform: `translateX(${size * 0.45}px)`
-            }}
-          >
-            {Array.from({ length: 24 }).map((_, index) => (
-              <div
-                key={index}
-                className="absolute segment"
-                style={{
-                  width: thickness,
-                  height: size,
-                  transformStyle: "preserve-3d",
-                  backfaceVisibility: "hidden",
-                  transform: `rotateY(90deg) rotateX(${(180 / 24) * index}deg)`
-                }}
-              />
-            ))}
-          </div> */}
+            <BackPointsFace
+              size={size}
+              thickness={thickness}
+              points={points}
+              isWinner={isWinner}
+            />
           </div>
         </div>
         {!!showTicket && (

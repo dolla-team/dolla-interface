@@ -5,10 +5,6 @@ const apiKey = 'pk_live_JBij4GiRoOcbQqunNzFkmb8v80z0DPK';
 export default function useMoonpay({ address, amount, orderId }: { address: string, amount: number, orderId: string }) {
     const [moonpayUrl, setMoonpayUrl] = useState<string | null>(null);
 
-    console.log('address', address);
-
-    
-
     const getMoonpayUrl = useCallback(async () => {
         if (!address || amount <= 0 || !orderId) {
             setMoonpayUrl(null);
@@ -29,11 +25,8 @@ export default function useMoonpay({ address, amount, orderId }: { address: stri
             return;
         }
 
-
         // console.log('onrampBuyUrl', onrampBuyUrl);
         const url = `https://buy.moonpay.io/${query}&signature=${encodeURIComponent(signedData.data.data.signature)}`;
-
-        // setCoinBaseUrl(onrampBuyUrl);
         setMoonpayUrl(url);
     }, [address, amount, orderId])
 

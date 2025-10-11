@@ -1,6 +1,5 @@
 import Coin from "@/components/icons/coin";
 import ButtonWithAuth from "@/components/button/button-with-auth";
-// import { PURCHASE_TOKEN } from "@/config";
 import { formatNumber } from "@/utils/format/number";
 import { useMemo, useState } from "react";
 import clsx from "clsx";
@@ -10,38 +9,45 @@ import useSplWithdraw from "@/hooks/solana/use-spl-withdraw";
 import { useAuth } from "@/contexts/auth";
 import useTokenBalance from "@/hooks/solana/use-token-balance";
 import useTransfer from "@/hooks/solana/use-transfer";
+import useToast from "@/hooks/use-toast";
 
-const TOKNES = [
+export const TOKNES = [
   // {
   //   address: "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
   //   decimals: 6,
-  //   icon: "/currency/usdc.png",
+  //   icon: "/tokens/usdc.png",
   //   symbol: "USDC"
   // },
   {
     address: "ADo4M7ZEZwDKNP1k8dic26TBrftX6mix9sGMntkq6Tp4",
     decimals: 6,
-    icon: "/currency/usdc.png",
-    symbol: "USDC"
-  },
-  {
-    address: "zBTCug3er3tLyffELcvDNrKkCymbPWysGcWihESYfLg",
-    decimals: 9,
-    icon: "/btc.png",
-    symbol: "BTC"
+    icon: "/tokens/usdc.png",
+    symbol: "USDC",
+    chain: "solana"
   }
+  // {
+  //   // address: "zBTCug3er3tLyffELcvDNrKkCymbPWysGcWihESYfLg",
+  //   address: "G5aHXkUgD4NnBbTZcKf7aQP2hXGw5bTVotcUc7wS8FVV",
+  //   decimals: 6,
+  //   icon: "/btc.png",
+  //   symbol: "BTC",
+  //   chain: "solana"
+  // }
 ];
 export default function WithdrawSolana() {
-  const { tokenBalance: usdcBalance } = useTokenBalance(TOKNES[0]);
-  const { tokenBalance: btcBalance } = useTokenBalance(TOKNES[1]);
+  const { tokenBalance: usdcBalance, update: updateUsdcBalance } =
+    useTokenBalance(TOKNES[0]);
+  const { tokenBalance: btcBalance, update: updateBtcBalance } =
+    useTokenBalance(TOKNES[1]);
   const [receiveAddress, setReceiveAddress] = useState("");
   const { address } = useAuth();
   const [amount, setAmount] = useState("");
+  const toast = useToast();
   const isAddressValid = useMemo(() => {
     return (
       // receiveAddress.length === 42 &&
       // receiveAddress.startsWith("0x") &&
-      receiveAddress !== address
+      receiveAddress && receiveAddress !== address
     );
   }, [receiveAddress]);
 
@@ -60,11 +66,18 @@ export default function WithdrawSolana() {
 
   const { onTransfer } = useTransfer({
     token: selectedItem,
-    isTicket: false,
+    type: "withdraw",
     onTransferSuccess: () => {
-      setSelectedItem(null);
-      setReceiveAddress("");
-      setAmount("");
+      updateUsdcBalance();
+      updateBtcBalance();
+      setTimeout(() => {
+        updateUsdcBalance();
+        updateBtcBalance();
+      }, 15000);
+
+      // setSelectedItem(null);
+      // setReceiveAddress("");
+      // setAmount("");
     }
   });
 
@@ -80,9 +93,7 @@ export default function WithdrawSolana() {
               onClick={() => {
                 setSelectedItem(item);
               }}
-              balance={
-                item.symbol === "USDC" ? usdcBalance : btcBalance
-              }
+              balance={item.symbol === "USDC" ? usdcBalance : btcBalance}
             />
           );
         })}
@@ -93,7 +104,7 @@ export default function WithdrawSolana() {
           Withdraw Amount
         </div>
         <div className="flex items-center mt-[6px] gap-[12px]">
-          <div className="w-full h-[47px] rounded-[6px] bg-[#191E27] px-[12px] flex items-center">
+          <div className="w-full h-[47px] rounded-[6px] bg-[#00000033] px-[12px] flex items-center">
             <input
               className="w-full text-[14px] text-white"
               value={amount}
@@ -141,7 +152,7 @@ export default function WithdrawSolana() {
         </div>
         <input
           className={clsx(
-            "h-[47px] w-full rounded-[6px] !bg-[#191E27] leading-[47px] px-[12px] text-[#ADBCCF] mt-[6px]",
+            "h-[47px] w-full rounded-[6px] bg-[#00000033] leading-[47px] px-[12px] text-[#ADBCCF] mt-[6px]",
             !isAddressValid && receiveAddress && "border border-[#FF5A974D]"
           )}
           value={receiveAddress}
@@ -186,7 +197,7 @@ const Item = ({
     <div
       onClick={onClick}
       className={clsx(
-        "button flex-1 border border-[#191E27] w-[142px] h-[159px] pt-[20px] shrink-0 bg-[#191E27] rounded-[6px] flex flex-col items-center text-[14px]",
+        "button flex-1 border border-[#191E27] w-[142px] h-[159px] pt-[20px] shrink-0 bg-[#00000033] rounded-[6px] flex flex-col items-center text-[14px]",
         active && "border-[#FFC42F]"
       )}
     >
@@ -203,7 +214,7 @@ const Item = ({
       <div className="text-white text-[16px]">{data.symbol}</div>
       {balance ? (
         <div className="text-white text-[20px]">
-          {formatNumber(balance, 0, true, { isShort: true })}
+          {formatNumber(balance, 0, true, { isShort: false })}
         </div>
       ) : (
         <div></div>

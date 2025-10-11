@@ -1,9 +1,12 @@
 import Modal from "@/components/modal";
 import { formatNumber } from "@/utils/format/number";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import Big from "big.js";
-import useCancel from "@/hooks/solana/use-cancel";
-import ButtonV2 from "@/components/button/v2";
+import Button from "@/components/button";
+import { getAnchorPrice } from "@/utils/pool";
+import useGameAction from "@/hooks/near/use-game-action";
+import { useContractConfigStore } from "@/stores/use-contract-config";
+import { useAuth } from "@/contexts/auth";
 
 export default function CancelModal({
   open,
@@ -13,35 +16,60 @@ export default function CancelModal({
 }: {
   open: boolean;
   onClose: () => void;
-  onSuccess: () => void;
+  onSuccess: (params: any) => void;
   order: any;
 }) {
+  const contractConfig = useContractConfigStore((store) => store.config);
+  const { nearAccount } = useAuth();
   const rewardTokenInfo = useMemo(() => {
     return order?.reward_token_info?.[0] || {};
   }, [order]);
-  const { canceling, onCancel } = useCancel({
-    onCancelSuccess: () => {
-      onClose();
-      onSuccess();
-    }
-  });
-  const [penalty, finalRefund] = useMemo(() => {
-    const _penalty = Big(0)
-      .div(10 ** order?.purchase_token_info?.decimals || 18)
+
+  const { pausing, resuming, canceling, pauseGame, cancelGame, resumeGame } =
+    useGameAction({
+      gameId: order?.pool_id,
+      onPauseSuccess: () => {
+        onSuccess({
+          status: 5,
+          skipClose: true
+        });
+        onClose();
+      },
+      onResumeSuccess: () => {
+        onSuccess({
+          status: 1
+        });
+        onClose();
+      },
+      onCancelSuccess: () => {
+        onSuccess({
+          status: 3
+        });
+        onClose();
+      }
+    });
+
+  const [status, setStatus] = useState(0);
+
+  const [penalty, markable, completable] = useMemo(() => {
+    const _penalty = Big(order?.accumulative_bids || 0)
+      .times(contractConfig?.cancel_penalty_rate || 0)
       .toString();
-    return [
-      _penalty,
-      Big(order?.value || 0)
-        .minus(_penalty)
-        .toString()
-    ];
-  }, [order]);
+    let _completable = true;
+    if (order.status === 5) {
+      setStatus(1);
+      _completable = Big(_penalty).lt(Big(nearAccount?.balance || 0).add(0.1));
+    }
+
+    const _markable = true;
+    return [_penalty, _markable, _completable];
+  }, [order, nearAccount]);
 
   return (
     <Modal onClose={onClose} open={open}>
-      <div className="w-[396px] h-[460px] rounded-[16px] bg-[#35302B] border border-[#6A5D3A] text-[14px] font-[500] leading-[100%] text-white font-[SpaceGrotesk]">
-        <div className="w-full pt-[20px] pb-[13px] px-[24px] bg-black/20 flex justify-between items-center">
-          <div className="text-[18px] font-medium text-white">
+      <div className="w-[396px] pb-[20px] rounded-[16px] bg-[#FFFFFF] border border-[#E4E4E4] text-[14px] font-[500] leading-[100%] text-white">
+        <div className="w-full pt-[20px] rounded-t-[16px] pb-[13px] px-[20px] bg-black flex justify-between items-center">
+          <div className="text-[16px] font-medium text-white">
             Cancel Market
           </div>
           <button className="button" onClick={onClose}>
@@ -59,43 +87,41 @@ export default function CancelModal({
             </svg>
           </button>
         </div>
-        <div className="w-full px-[24px] py-[20px]">
+        <div className="w-full px-[24px] py-[20px] text-black">
           <div className="flex items-center text-[14px] mb-[20px] gap-[10px]">
-            <span className="text-[#BBACA6] font-[400]">Market Amount</span>
+            <span className="font-[400]">Market Size</span>
             <div className="grow border-b border-dashed border-[#5E6B7D] opacity-50" />
-            <span className="text-white font-medium">
+            <span className="font-medium">
               {formatNumber(
-                Big(order?.reward_amount || 0).div(
-                  10 ** (rewardTokenInfo.decimals || 18)
-                ),
-                2,
+                (order?.reward_amount || 0) / 10 ** rewardTokenInfo.decimals,
+                0,
                 true
               )}{" "}
               {rewardTokenInfo.symbol}
             </span>
           </div>
           <div className="flex items-center text-[14px] mb-[20px] gap-[10px]">
-            <span className="text-[#BBACA6] font-[400]">Valued</span>
+            <span className="font-[400]">Market Value</span>
             <div className="grow border-b border-dashed border-[#5E6B7D] opacity-50" />
-            <span className="text-white font-medium">
-              ${formatNumber(order?.value, 0, true)}
+            <span className="font-medium">
+              ${formatNumber(getAnchorPrice(order?.anchor_price), 0, true)}
             </span>
           </div>
           <div className="flex items-center text-[14px] mb-[20px] gap-[10px]">
-            <span className="text-[#BBACA6] font-[400]">Bid player</span>
+            <span className="font-[400]">Total Players</span>
             <div className="grow border-b border-dashed border-[#5E6B7D] opacity-50" />
-            <span className="text-white font-medium">
-              {formatNumber(order?.accumulative_bids, 0, true)}
+            <span className="font-medium">
+              {formatNumber(order?.participants, 0, true)}
             </span>
           </div>
           <div className="flex items-center text-[14px] mb-[20px] gap-[10px]">
-            <span className="text-[#BBACA6] font-[400]">Total bid value</span>
+            <span className="font-[400]">Total bids</span>
             <div className="grow border-b border-dashed border-[#5E6B7D] opacity-50" />
-            <span className="text-white font-medium">
+            <span className="font-medium">
               ${formatNumber(order?.accumulative_bids, 0, true)}
             </span>
           </div>
-          <div className="w-full h-[86px] p-[10px] mt-[20px] mx-auto bg-[#FFC42F1A] rounded-[4px] border border-[#FFC42F]">
+          <div className="w-full h-[72px] p-[8px] mt-[20px] mx-auto bg-[#FFC42F1A] rounded-[4px] border border-[#FFC42F]">
             <div className="flex items-center gap-[2px]">
               <img
                 src="/profile/icon-warning.svg"
@@ -104,38 +130,82 @@ export default function CancelModal({
               />
               <span className="text-[#FFC42F]">Be careful!</span>
             </div>
-            <div className="text-[12px] font-[400] leading-[120%] mt-[7px]">
-              If you cancel, platform will refund the bid amount of the player
-              who has already participated, and you need to pay 20% in demages.
+            <div className="text-[12px] font-[400] leading-[120%] mt-[5px]">
+              The seller must pay an additional{" "}
+              <span className="text-[#FFC42F] font-[600]">
+                {formatNumber(
+                  contractConfig?.cancel_penalty_rate * 100,
+                  2,
+                  true
+                )}
+                % penalty
+              </span>{" "}
+              based on the total funds collected from bids.
             </div>
           </div>
-          <div className="mt-[10px]">
-            <div className="flex items-center text-[14px] mb-[20px] gap-[10px]">
-              <span className="text-[#BBACA6] font-[400]">Demage</span>
+          <div className="mt-[20px]">
+            <div className="flex items-center text-[14px] gap-[10px]">
+              <span className="font-[400]">Penalty</span>
               <div className="grow border-b border-dashed border-[#5E6B7D]" />
-              <span className="text-white font-medium">
+              <span className="font-medium">
                 ${formatNumber(penalty, 2, true)}
               </span>
             </div>
-            <div className="flex items-center text-[14px] mb-[20px] gap-[10px]">
+            {/* <div className="flex items-center text-[14px] mb-[20px] gap-[10px]">
               <span className="text-[#BBACA6] font-[400]">Final refund</span>
               <div className="grow border-b border-dashed border-[#5E6B7D]" />
               <span className="text-[#FFC42F] font-medium">
                 ${formatNumber(finalRefund, 2, true)}
               </span>
-            </div>
+            </div> */}
           </div>
         </div>
-        <div className="flex justify-center mt-[0px]">
-          <ButtonV2
-            className="w-[220px] !h-[40px] !text-[16px]"
-            loading={canceling}
-            onClick={() => {
-              onCancel(order?.pool_id);
-            }}
-          >
-            Confirm
-          </ButtonV2>
+        <div className="flex justify-end mt-[0px] px-[20px] gap-[10px]">
+          {status === 1 && (
+            <>
+              <Button
+                className="!h-[40px] !bg-text border border-[#1A1E24] !text-[14px] !text-black px-[30px]"
+                loading={resuming}
+                disabled={resuming || !completable}
+                onClick={() => {
+                  if (resuming) {
+                    return;
+                  }
+                  resumeGame();
+                }}
+              >
+                Resume
+              </Button>
+              <Button
+                className="!h-[40px] !bg-[#1A1E24] !text-[14px] !text-white px-[30px]"
+                loading={canceling}
+                disabled={canceling || !completable}
+                onClick={() => {
+                  if (canceling) {
+                    return;
+                  }
+                  cancelGame();
+                }}
+              >
+                {completable ? "Cancel" : "Insufficient Balance"}
+              </Button>
+            </>
+          )}
+          {status === 0 && (
+            <Button
+              className="!h-[40px] !bg-[#1A1E24] !text-[14px] !text-white px-[30px]"
+              loading={pausing}
+              disabled={pausing || !markable}
+              onClick={() => {
+                if (pausing || !markable) {
+                  return;
+                }
+                pauseGame();
+              }}
+            >
+              Pause
+            </Button>
+          )}
         </div>
       </div>
     </Modal>

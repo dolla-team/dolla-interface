@@ -1,16 +1,15 @@
 // Use relative path to avoid CORS issues in both dev and production
 // export const HOST_API = import.meta.env.DEV ? "/api" : "/";
-export const HOST_API = import.meta.env.VITE_HOST_API;
 
-export const PURCHASE_TOKEN = {
-  address: "0x26591f0f2bbab1bb3cd457eE1dfd80EAE1474C6c",
-  decimals: 18,
-  icon: "/currency/usdc.png",
-  name: "USDC.e",
-  symbol: "USDC.e"
-};
+// export const HOST_API = "https://test-api.dolla.market";
+export const HOST_API = "https://api.dolla.market";
 
 export const INVATE_ACTIVE = false;
 
-// FIXME
-export const BETTING_CONTRACT_ADDRESS = "";
+export const BET_UNIT = String(1000000);
+
+export const NEAR_REFUND_ACCOUNT = "reffer.near";
+
+export const EVM_REFUND_ACCOUNT = "0x1c7c07f5b03d4d73098d025e46497e93a8b8ec72";
+
+export const BTC_REFUND_ACCOUNT = "3HMTBqmN7Xxi1YSZH1mzuYtjNm4pkiwzaZ";

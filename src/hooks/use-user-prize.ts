@@ -7,18 +7,22 @@ export default function useUserPrize() {
   const getUserPrize = async () => {
     try {
       const response = await axiosInstance.get("/api/v1/user/prize/balance");
-
+      const tickets =
+        response.data.data.ticket.number - response.data.data.ticket.use_number;
       set({
         prize: {
           points:
             response.data.data.point.reward -
             response.data.data.point.freeze_reward -
             response.data.data.point.withdrawal_reward,
-          tickets:
-            response.data.data.ticket.number -
-            response.data.data.ticket.use_number
+          tickets: tickets < 0 ? 0 : tickets
         }
       });
+      // set({
+      //   prize: {
+      //     points: 100
+      //   }
+      // });
     } catch (err) {}
   };
 

@@ -1,26 +1,40 @@
-export const TOKEN = {
-  address: "0x0821bdfcbcd53837b4a8341427155a3d67290afe",
-  decimals: 18,
-  name: "BTC",
+export const BASE_TOKEN: Record<string, any> = {
+  // ETH
+  // assetId: "nep141:eth.bridge.near",
+  // address: "eth.bridge.near",
+  // decimals: 18,
+  // chain: "near",
+  // name: "ETH",
+  // symbol: "ETH",
+  // icon: "/tokens/eth.png",
+  // pointsIcon: "/tokens/eth.png",
+  // isBaseToken: true,
+  // minDepositAmount: "0.001"
+
+  // BTC
+  assetId: "nep141:nbtc.bridge.near",
+  address: "nbtc.bridge.near",
+  decimals: 8,
+  chain: "near",
   symbol: "BTC",
-  icon: "/btc.png",
-  chain: "Berachain"
+  icon: "/tokens/btc.png",
+  pointsIcon: "/tokens/btc.png",
+  isBaseToken: true,
+  minDepositAmount: "0.01"
 };
 
-// btc
-export const BASE_TOKEN: Record<string, any> = {
-  address: import.meta.env.VITE_SOLANA_BASE_ADDRESS,
-  decimals: 6,
-  chain: "solana",
-  name: "BTC",
-  symbol: "BTC",
-  pointIcon: "/points/btc.png"
-};
-// usdc
 export const QUOTE_TOKEN: Record<string, any> = {
-  address: import.meta.env.VITE_SOLANA_QUOTE_ADDRESS,
+  assetId: "nep141:usdt.tether-token.near",
+  address: "usdt.tether-token.near",
   decimals: 6,
-  chain: "solana",
+  chain: "near",
   name: "USDT",
-  pointIcon: "/points/usdt.png"
+  symbol: "USDT",
+  icon: "/tokens/usdt.png",
+  pointsIcon: "/tokens/usdt.png",
+  minDepositAmount: "1"
 };
+
+export const PAID_TOKEN = QUOTE_TOKEN;
+
+export const AMOUNT = [0.01, 0.001, 0.0001];

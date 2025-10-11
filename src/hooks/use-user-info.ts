@@ -1,7 +1,8 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import axios from "@/libs/axios";
 import { useUsers } from "@/stores/use-users";
 import useUserPrize from "@/hooks/use-user-prize";
+import { AvatarColors } from "@/config/user";
 
 export default function useUserInfo(address?: string) {
   const [info, setInfo] = useState<any>();
@@ -17,28 +18,43 @@ export default function useUserInfo(address?: string) {
     setLoading(true);
 
     try {
-      const res = await axios.get("/api/v1/user");
+      const res = await axios.get("/api/v1/user?chain=near");
       const _info = res.data.data;
+
       if (!_info.icon) {
-        if (usersStore.users[address]) {
-          _info.icon = usersStore.users[address].icon;
+        if (usersStore.users[address.toLowerCase()]) {
+          _info.icon = usersStore.users[address.toLowerCase()].icon;
         } else {
-          const random = Math.floor(Math.random() * 7) + 1;
-          _info.icon = `/avatar/${random}.svg`;
+          const random = Math.floor(Math.random() * AvatarColors.length);
           usersStore.setUsers({
-            [address]: {
-              icon: _info.icon
+            [address.toLowerCase()]: {
+              color: AvatarColors[random]
             }
           });
         }
       }
-      setInfo(res.data.data);
+      const progress = (() => {
+        if (!_info?.current_points || !_info?.next_level_points) {
+          return 0;
+        }
+        return (_info.current_points / _info.next_level_points) * 100;
+      })();
+
+      _info.points_progress = progress;
+
+      setInfo(_info);
       getUserPrize();
     } catch (err) {
       console.log("err", err);
       setInfo(null);
     } finally {
       setLoading(false);
+    }
+  }, [address]);
+
+  useEffect(() => {
+    if (address) {
+      onQueryUserInfo();
     }
   }, [address]);
 

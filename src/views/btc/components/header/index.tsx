@@ -5,40 +5,22 @@ import { useBtcContext } from "../../context";
 import { formatNumber } from "@/utils/format/number";
 import { useMemo } from "react";
 import Big from "big.js";
-import TriIcon from "./tri-icon";
-import { BASE_TOKEN } from "@/config/btc";
 
 export default function Header({ className }: { className?: string }) {
-  const { bids, pool, getPoolRecommend } = useBtcContext();
+  const { bids, pool } = useBtcContext();
 
-  const [amount, prev, next] = useMemo(() => {
+  const [amount] = useMemo(() => {
     if (!pool) return ["0", 0, 0];
     const reward_amount = pool.reward_amount || 0;
     const decimals = pool.reward_token_info?.[0]?.decimals || 1;
-    const _an = Big(reward_amount).div(10 ** decimals);
+    const _an = Big(
+      Big(reward_amount)
+        .div(10 ** decimals)
+        .toFixed(3)
+    );
     const _a = formatNumber(_an, 3, true);
-    let prev = 0;
-    let next = 0;
-    if (_an.eq(0.001)) {
-      prev = 0;
-      next = 0.01;
-    } else if (_an.eq(0.01)) {
-      prev = 0.001;
-      next = 0.1;
-    } else if (_an.eq(0.1)) {
-      prev = 0.01;
-      next = 1;
-    } else if (_an.eq(1)) {
-      prev = 0.1;
-      next = 0;
-    } else if (_an.lt(0.001)) {
-      prev = 0;
-      next = 0.001;
-    } else if (_an.gt(1)) {
-      prev = 1;
-      next = 0;
-    }
-    return [_a, prev, next];
+
+    return [_a];
   }, [pool]);
 
   return (
@@ -47,9 +29,27 @@ export default function Header({ className }: { className?: string }) {
       {bids === 1 && (
         <Light className="absolute top-[0px] left-[50%] translate-x-[-50%] z-[1] pointer-events-none" />
       )}
+      <div className="absolute z-[3] top-[30px] left-[50%] translate-x-[-50%] h-[40px] flex items-center gap-[12px]">
+        <span className="text-[#D9D9D9] text-[18px]">Market</span>
+        <span
+          className={clsx(
+            "text-[18px] bg-clip-text",
+            pool?.status === 3
+              ? "bg-[linear-gradient(180deg,#C3C3C3_0%,#787878_100%)]"
+              : "bg-[linear-gradient(180deg,#FFF698_0%,#FFC42F_100%)]"
+          )}
+          style={{
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent"
+          }}
+        >
+          {" "}
+          #{pool?.pool_id}
+        </span>
+      </div>
       <div
         className={clsx(
-          "absolute top-[76px] z-[2] w-full text-center font-[DelaGothicOne]",
+          "absolute top-[70px] z-[2] w-full text-center font-[DelaGothicOne]",
           pool?.status === 3 ? "text-[#B2B2B2]" : "text-[#FFF79E]"
         )}
         style={{
@@ -59,7 +59,7 @@ export default function Header({ className }: { className?: string }) {
       >
         <div
           className={clsx(
-            "bg-clip-text relative inline-block text-[62px]",
+            "bg-clip-text relative inline-block text-[56px]",
             pool?.status === 3
               ? "bg-[radial-gradient(50%_50%_at_50%_50%,#C3C3C3_0%,#787878_100%)]"
               : "bg-[radial-gradient(50%_50%_at_50%_50%,#FFEF43_0%,#FFC42F_100%)]"
@@ -72,12 +72,14 @@ export default function Header({ className }: { className?: string }) {
           >
             ${formatNumber(pool?.value, 0, true)}
           </span>
-          {!!prev && (
+
+          {/* {!!prev && (
             <div className="absolute left-[-180px] top-[-20px] flex items-center gap-[8px]">
               <TriIcon
                 className="button"
                 onClick={() => {
                   getPoolRecommend(prev * 10 ** BASE_TOKEN.decimals);
+                  setFilterVolume(prev);
                 }}
               />
               <span className="text-[20px] text-[#FFEF43]">{prev} BTC</span>
@@ -90,21 +92,23 @@ export default function Header({ className }: { className?: string }) {
                 className="rotate-y-[180deg] button"
                 onClick={() => {
                   getPoolRecommend(next * 10 ** BASE_TOKEN.decimals);
+                  setFilterVolume(next);
                 }}
               />
             </div>
-          )}
+          )} */}
         </div>
         <div />
         <div
           className={clsx(
-            "bg-clip-text mt-[-8px] inline-block relative text-[26px]",
+            "bg-clip-text top-[-6px] inline-block relative",
             pool?.status === 3
               ? "bg-[radial-gradient(50%_50%_at_50%_50%,#A3A3A3_0%,#787878_100%)]"
               : "bg-[radial-gradient(50%_50%_at_50%_50%,#FFEF43_0%,#FFC42F_100%)]"
           )}
         >
           <span
+            className="xl:text-[20px] text-[16px]"
             style={{
               WebkitTextFillColor: "transparent"
             }}

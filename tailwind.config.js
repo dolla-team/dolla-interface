@@ -9,6 +9,9 @@ export default {
       },
       transitionDuration: {
         600: "600ms"
+      },
+      screens: {
+        pad: { max: "1240px", min: "768px" }
       }
     }
   },

@@ -13,7 +13,8 @@ import {
   PublicKey,
   SystemProgram,
   LAMPORTS_PER_SOL,
-  ComputeBudgetProgram
+  ComputeBudgetProgram,
+  Transaction
 } from "@solana/web3.js";
 import { createHash } from "crypto";
 import { Buffer } from "buffer";
@@ -21,6 +22,9 @@ import * as sb from "@switchboard-xyz/on-demand";
 import axios from "axios";
 import { bs58 } from "@coral-xyz/anchor/dist/cjs/utils/bytes";
 import Big from "big.js";
+import config from "@/config/solana";
+import axiosInstance from "@/libs/axios";
+import { PAID_TOKEN } from "@/config/btc";
 
 export function getState(program: anchor.Program) {
   const [globalBalPda, bump] = anchor.web3.PublicKey.findProgramAddressSync(
@@ -118,7 +122,7 @@ export async function getAccountsInfo(pairs: string[][]): Promise<any[]> {
     return {
       address: account.toString(),
       instruction: createAssociatedTokenAccountInstruction(
-        new PublicKey(import.meta.env.VITE_SOLANA_OPERATOR),
+        new PublicKey(config.operator),
         account,
         new PublicKey(pairs[i][1]),
         new PublicKey(pairs[i][0])
@@ -245,11 +249,7 @@ export function getRandomnessAccount(payer: any) {
 }
 
 export function setupQueue() {
-  return new PublicKey(
-    import.meta.env.VITE_SOLANA_CLUSTER_NAME === "devnet"
-      ? "EYiAmGSdsQTuCw413V5BzaruWuCCSDgTPtBGvLkXHbe7"
-      : "A43DyUGA7s8eXPxqEjJY6EBu1KKbNgfxF8h17VAHn13w"
-  );
+  return new PublicKey(config.queue);
 }
 
 export async function getBidGasFee(
@@ -259,14 +259,19 @@ export async function getBidGasFee(
 ) {
   // @ts-ignore
   const dollaState = await program.account.dollaState.fetch(state);
-  const allGasFee = dollaState.quoteBidGasFees;
+
+  const allGasFee = dollaState.quoteGasFees;
   const allQuoteTokens = dollaState.quoteTokens;
+  let gasFee = new anchor.BN(0);
   for (let i = 0; i < allQuoteTokens.length; i++) {
     if (tokenMint.toString() == allQuoteTokens[i]) {
-      return new anchor.BN(allGasFee[i]);
+      gasFee = new anchor.BN(allGasFee[i]);
     }
   }
-  return new anchor.BN(0);
+  if (gasFee.eq(0) || gasFee.gt(new anchor.BN(20000))) {
+    gasFee = new anchor.BN(20000);
+  }
+  return gasFee;
 }
 
 export async function getSolanaBalance(
@@ -308,7 +313,7 @@ export async function wrapTxWithBugetFee(transaction: any) {
   const defaultPriorityFee = 300000;
   const multiplier = 10;
   let priorityFee = defaultPriorityFee;
-  if (import.meta.env.VITE_SOLANA_CLUSTER_NAME === "mainnet-beta") {
+  if (config.chain === "mainnet-beta") {
     try {
       const res = await fetch(import.meta.env.VITE_SOLANA_RPC_URL, {
         method: "POST",
@@ -351,4 +356,56 @@ export async function wrapTxWithBugetFee(transaction: any) {
   });
 
   return [priorityFeeInstruction, computeUnitLimitInstruction];
+}
+
+export async function buildTxWithGas({ tx, otherTxs, action }: any) {
+  const transaction = new Transaction();
+  transaction.feePayer = new PublicKey(config.operator);
+  transaction.recentBlockhash = "11111111111111111111111111111111";
+  if (otherTxs.length > 0) {
+    transaction.add(...otherTxs);
+  }
+  const bugetFeeTxs = await wrapTxWithBugetFee(transaction);
+  transaction.add(...bugetFeeTxs);
+  transaction.add(tx);
+
+  const txBuffer = transaction.serialize({ requireAllSignatures: false });
+  const transactionStr = txBuffer.toString("base64");
+
+  const response = await axiosInstance.post(`/api/v1/paygas/sol/estimate`, {
+    operator_key: config.operator,
+    action,
+    tx: transactionStr
+  });
+
+  const gas =
+    Big(response.data?.data?.gas_amount)
+      .mul(10 ** PAID_TOKEN.decimals)
+      .toFixed(0) || "1000000";
+
+  const newTranscation = new Transaction();
+  newTranscation.feePayer = new PublicKey(config.operator);
+  newTranscation.recentBlockhash = "11111111111111111111111111111111";
+  newTranscation.add(...[...otherTxs, ...bugetFeeTxs]);
+
+  return {
+    transaction: newTranscation,
+    gas
+  };
+}
+
+export async function confirmHash(
+  provider: any,
+  hash: string,
+  callback: () => void
+) {
+  const status = await provider.connection.getSignatureStatus(hash);
+
+  if (status?.value?.confirmationStatus === "confirmed") {
+    callback();
+  } else {
+    setTimeout(() => {
+      confirmHash(provider, hash, callback);
+    }, 500);
+  }
 }

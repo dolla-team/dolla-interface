@@ -4,6 +4,8 @@ import useToast from "@/hooks/use-toast";
 import useGelatonetwork from "./use-gelatonetwork";
 import reportHash from "@/utils/report-hash";
 
+// for seller claiming
+
 export default function useClaim(poolIds: number[], onSuccess?: () => void) {
   const [claiming, setClaiming] = useState(false);
   const toast = useToast();

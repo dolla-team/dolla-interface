@@ -11,8 +11,8 @@ export default function ShareBtn() {
         <path
           d="M1 9.23333V14H13V9.23333M6.80645 10.1V1M6.80645 1L3.32258 4.03333M6.80645 1L10.2903 4.03333"
           stroke="#CAAB5E"
-          stroke-width="1.5"
-          stroke-linecap="round"
+          strokeWidth="1.5"
+          strokeLinecap="round"
         />
       </svg>
     </button>

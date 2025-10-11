@@ -1,26 +1,82 @@
 import AvatarAction from "./avatar-action";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import Button from "@/components/button";
 import { useAuth } from "@/contexts/auth";
-import Points from "@/sections/points";
+import DollaEye from "@/components/dolla-eye";
+import EstGas from "@/sections/est-gas";
+// import useIsMobile from "@/hooks/use-is-mobile";
+import Wallet from "@/sections/wallet";
+import Infos from "@/sections/infos";
+import UserInfo from "@/sections/user-info";
+import { useEffect, useRef } from "react";
+import PageTabs from "./tabs";
+import { useGlobalStore } from "@/stores/use-global";
+import useTaskCurrent from "@/hooks/task/use-task-current";
+import useTaskStore from "@/stores/use-task";
 
 export default function MainLayout() {
-  const { userInfo, login } = useAuth();
+  const { userInfo, login } = useAuth() || {};
+  const taskStore = useTaskStore();
+  // const isMobile = useIsMobile();
   const navigate = useNavigate();
+  const contentRef = useRef<HTMLDivElement>(null);
+  const globalStore = useGlobalStore();
+  const pathname = useLocation();
+  const prevUserInfoStatus = useRef(false);
+  const { fetchTasks } = useTaskCurrent();
+
+  useEffect(() => {
+    if (pathname.pathname.includes("portfolio")) {
+      if (globalStore.showUserInfo) {
+        globalStore.set({ showUserInfo: false });
+        prevUserInfoStatus.current = true;
+      }
+    } else {
+      if (prevUserInfoStatus.current) {
+        globalStore.set({ showUserInfo: true });
+      }
+      prevUserInfoStatus.current = false;
+    }
+    contentRef.current?.scrollTo(0, 0);
+    if (taskStore.isBid) {
+      taskStore.set({ isBid: false });
+    }
+  }, [pathname]);
+
+  useEffect(() => {
+    if (taskStore.isBid) {
+      contentRef.current?.scrollTo(0, 560);
+    }
+  }, [taskStore.isBid]);
+
+  useEffect(() => {
+    if (userInfo?.user) {
+      fetchTasks();
+    }
+  }, [userInfo?.user]);
+
+  useEffect(() => {
+    return () => {
+      taskStore.set({ isBid: false });
+    };
+  }, []);
+
   return (
-    <div className="h-screen overflow-hidden bg-black relative">
+    <div className="h-screen w-screen overflow-hidden bg-white relative">
       {/* header */}
-      <>
-        <img
-          src="/logo.svg"
-          alt="dolla"
-          className="w-[78px] h-[39px] absolute left-[10px] top-[4px] z-[20] button"
-          onClick={() => {
-            navigate("/");
-          }}
-        />
-        <div className="absolute right-[10px] top-[10px] z-[20] flex items-center gap-[36px]">
-          <Points />
+      <div className="flex justify-between items-center h-[60px] sticky top-0 bg-white z-[20]">
+        <div className="flex items-center gap-[30px] pl-[30px]">
+          <DollaEye
+            className="button origin-left"
+            height={32}
+            onClick={() => {
+              navigate("/");
+            }}
+          />
+          {/* {!isMobile && <EstGas />} */}
+        </div>
+
+        <div className="flex items-center gap-[12px] pr-[12px]">
           {/* <div className="flex items-center gap-[8px]">
             <TicketIcon />
             <span
@@ -33,8 +89,13 @@ export default function MainLayout() {
               x35
             </span>
           </div> */}
+          <EstGas />
+
           {!userInfo ? (
-            <Button onClick={login} className="w-[100px] h-[36px]">
+            <Button
+              onClick={login}
+              className="w-[100px] h-[36px] !bg-black text-white"
+            >
               Connect
             </Button>
           ) : (
@@ -48,8 +109,23 @@ export default function MainLayout() {
             </>
           )}
         </div>
-      </>
-      <Outlet />
+        <PageTabs />
+      </div>
+      <Infos />
+      <div className="flex h-full">
+        <div
+          className="h-[calc(100vh-60px)] overflow-y-auto relative z-[2] bg-[#F0F0F0]"
+          style={{
+            width: globalStore.showUserInfo ? window.innerWidth - 294 : "100%",
+            scrollBehavior: "smooth"
+          }}
+          ref={contentRef}
+        >
+          <Outlet />
+        </div>
+        <UserInfo />
+      </div>
+      <Wallet />
     </div>
   );
 }

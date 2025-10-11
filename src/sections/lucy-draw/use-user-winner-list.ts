@@ -45,8 +45,10 @@ export default function useUserWinnerList() {
   useEffect(() => {
     if (userInfo?.user) {
       fetchUserWinnerList();
+    } else {
+      setCurrentWinner(null);
     }
-  }, [userInfo]);
+  }, [userInfo?.user]);
 
   return {
     currentWinner,

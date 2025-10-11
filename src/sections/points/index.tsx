@@ -1,6 +1,6 @@
 import PointIcon from "@/components/icons/point-icon";
 import useUserInfoStore from "@/stores/use-user-info";
-import { addThousandSeparator } from "@/utils/format/number";
+import { formatNumber } from "@/utils/format/number";
 import Big from "big.js";
 import { motion } from "framer-motion";
 import { useMemo, useState } from "react";
@@ -8,10 +8,13 @@ import RedeemSelection from "./redeem-selection";
 import clsx from "clsx";
 import { useConfigStore } from "@/stores/use-config";
 import { BASE_TOKEN, QUOTE_TOKEN } from "@/config/btc";
+import useIsMobile from "@/hooks/use-is-mobile";
 
-export default function Points() {
+export default function Points({ className }: { className?: string }) {
   const { prize } = useUserInfoStore();
+
   const { config } = useConfigStore();
+  const isMobile = useIsMobile();
   const [items, itemsMap, minPoints] = useMemo(() => {
     if (!config?.point_withdrawal_config) return [[], {}, 0];
     let _itemsMap: any = {};
@@ -21,17 +24,16 @@ export default function Points() {
       let name = "";
 
       if (item.token.toLowerCase() === BASE_TOKEN.address.toLowerCase()) {
-        icon = BASE_TOKEN.pointIcon;
+        icon = BASE_TOKEN.pointsIcon;
         name = BASE_TOKEN.name;
       } else if (
         item.token.toLowerCase() === QUOTE_TOKEN.address.toLowerCase()
       ) {
         icon =
-          item.token_volume === "1" ? "/points/bid.png" : QUOTE_TOKEN.pointIcon;
+          item.token_volume === "1"
+            ? "/points/bid.png"
+            : QUOTE_TOKEN.pointsIcon;
         name = item.token_volume === "1" ? "Free Bid" : QUOTE_TOKEN.name;
-      } else if (item.token === "SOL") {
-        icon = "/points/solana.png";
-        name = "SOL";
       }
       _itemsMap[item.token + "_" + item.token_volume] = { name };
 
@@ -71,7 +73,12 @@ export default function Points() {
       <div
         className={clsx(
           "flex items-center gap-[8px]",
-          progress >= 1 ? "button" : ""
+          progress >= 1 ? "button" : "",
+          isMobile &&
+            "p-[4px] pr-[14px] border border-[#7C68FF] rounded-l-[40px] fixed right-[-2px] bottom-[30px] duration-300 bg-[#000]/30 scale-[0.76] origin-right",
+          isMobile &&
+            (prize.points > 0 ? "!translate-x-[0]" : "translate-x-[100%]"),
+          className
         )}
         onClick={() => {
           if (progress >= 1) {
@@ -102,8 +109,8 @@ export default function Points() {
               cy="22"
               r="20"
               stroke="url(#paint0_linear_1991_3580)"
-              stroke-width="3"
-              stroke-linecap="round"
+              strokeWidth="3"
+              strokeLinecap="round"
               style={{
                 strokeWidth: 3,
                 strokeLinecap: "round"
@@ -133,25 +140,22 @@ export default function Points() {
                 y2="2"
                 gradientUnits="userSpaceOnUse"
               >
-                <stop stop-color="#FFEF43" />
-                <stop offset="1" stop-color="#FFC42F" />
+                <stop stopColor="#FFEF43" />
+                <stop offset="1" stopColor="#FFC42F" />
               </linearGradient>
             </defs>
           </motion.svg>
           <PointIcon
             className="w-[30px] h-[30px] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
-            size={30}
+            size={26}
           />
         </div>
 
-        <span
-          className="text-[#FFEF43] text-[20px] font-bold font-[AlfaSlabOne]"
-          style={{
-            WebkitTextStrokeWidth: "1px",
-            WebkitTextStrokeColor: "#5E3737"
-          }}
-        >
-          x{addThousandSeparator(prize.points.toString())}
+        <span className={clsx("text-white font-[600] text-[16px]")}>
+          x
+          {isMobile
+            ? formatNumber(prize.points, 0, true, { isShort: false })
+            : formatNumber(prize.points, 0, true)}
         </span>
       </div>
       <RedeemSelection

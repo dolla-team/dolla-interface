@@ -13,6 +13,7 @@ type SwitchProps = Omit<ComponentProps<"div">, "onChange"> & {
   type?: "card" | "line";
   tabClassName?: string;
   cursorClassName?: string;
+  activeClassName?: string;
 };
 
 export default function Switch({
@@ -23,12 +24,13 @@ export default function Switch({
   type = "card",
   tabClassName,
   cursorClassName,
+  activeClassName
 }: SwitchProps) {
   const prevI = useRef<number[]>([0]);
   return (
     <div
       className={clsx(
-        "h-[36px] bg-[#222A35] rounded-[6px] p-[3px] text-[16px] font-medium flex items-center justify-between",
+        "h-[38px] rounded-[6px] p-[3px] text-[12px] font-medium flex items-center justify-between",
         className
       )}
     >
@@ -37,8 +39,8 @@ export default function Switch({
           key={item.value}
           className={clsx(
             "px-[10px] h-full rounded-[6px] button relative",
-            tab === item.value && type === "card" ? "text-black" : "text-white",
-            tabClassName
+            tabClassName,
+            tab === item.value ? activeClassName : ""
           )}
           onClick={() => {
             onChange(item.value);
@@ -70,10 +72,7 @@ export default function Switch({
                 cursorClassName
               )}
               style={{
-                background:
-                  type === "card"
-                    ? "radial-gradient(50% 50% at 50% 50%, #FFEF43 0%, #FFC42F 100%)"
-                    : "#FFC42F"
+                background: type === "card" ? "#FFC42F" : "#FFC42F"
               }}
             />
           )}

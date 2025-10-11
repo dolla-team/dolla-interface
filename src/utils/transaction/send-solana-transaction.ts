@@ -1,4 +1,5 @@
 import axiosInstance from "@/libs/axios";
+import config from "@/config/solana";
 
 export const sendSolanaTransaction = async (tx: any, action: string) => {
   const txBuffer = tx.serialize({ requireAllSignatures: false });
@@ -6,7 +7,7 @@ export const sendSolanaTransaction = async (tx: any, action: string) => {
 
   console.time("sendSolanaTransaction");
   const gasPayResult = await axiosInstance.post(`/api/v1/paygas/sol/send`, {
-    operator_key: import.meta.env.VITE_SOLANA_OPERATOR,
+    operator_key: config.operator,
     action,
     tx: transaction
   });

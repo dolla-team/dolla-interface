@@ -1,16 +1,21 @@
 import axiosInstance from "@/libs/axios";
 import { useState, useRef } from "react";
-
-const pageSize = 10;
+import useIsMobile from "@/hooks/use-is-mobile";
 
 export default function useHistory() {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<any[]>([]);
   const [hasMore, setHasMore] = useState(true);
   const pageRef = useRef(0);
+  const isMobile = useIsMobile();
+  const pageSize = isMobile ? 20 : 10;
 
-  const getHistory = async () => {
+  const getHistory = async (isFirst = false) => {
     setLoading(true);
+    if (isFirst) {
+      pageRef.current = 0;
+      setData([]);
+    }
     try {
       const response = await axiosInstance.get(
         `/api/v1/user/point/withdrawals?limit=${pageSize}&offset=${
@@ -23,9 +28,8 @@ export default function useHistory() {
           ? response.data.data.list
           : [...prev, ...response.data.data.list]
       );
+      setHasMore(response.data.data.has_next_page);
       if (response.data.data.has_next_page) {
-        setHasMore(false);
-      } else {
         pageRef.current = pageRef.current + 1;
       }
     } catch (error) {

@@ -3,17 +3,24 @@ import clsx from "clsx";
 export default function AmountInput({
   amount,
   onChange,
-  max
+  max,
+  className
 }: {
   amount: number;
   onChange: (value: number) => void;
   max: number;
+  className?: string;
 }) {
   return (
-    <div className="rounded-[10px] bg-[#00000033] flex items-center justify-between p-[10px] mt-[6px]">
+    <div
+      className={clsx(
+        "w-full h- rounded-[10px] border border-[#E4E4E4] flex items-center justify-between p-[10px] mt-[6px]",
+        className
+      )}
+    >
       <button
         className={clsx(
-          "w-[24px] h-[24px] rounded-full border border-[#6A5D3A] bg-[#00000033] flex justify-center items-center",
+          "w-[26px] h-[26px] rounded-full bg-black/5 flex justify-center items-center shrink-0",
           amount === 1 ? "opacity-50" : "button"
         )}
         onClick={() => {
@@ -24,19 +31,19 @@ export default function AmountInput({
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          width="10"
+          width="14"
           height="2"
-          viewBox="0 0 10 2"
+          viewBox="0 0 14 2"
           fill="none"
         >
           <path
-            d="M9.59961 1.54492H0V0.0449219H9.59961V1.54492Z"
-            fill="white"
+            d="M13.8359 1.51477H0.737305V0.0147705H13.8359V1.51477Z"
+            fill="black"
           />
         </svg>
       </button>
       <input
-        className="w-[280px] text-center text-white text-[14px] font-[DelaGothicOne]"
+        className="w-[calc(100%-78px)] text-center text-[14px] font-[DelaGothicOne] shrink-1"
         value={amount}
         onChange={(e) => {
           if (!isNaN(Number(e.target.value))) {
@@ -46,7 +53,7 @@ export default function AmountInput({
       />
       <button
         className={clsx(
-          "w-[24px] h-[24px] rounded-full border border-[#6A5D3A] bg-[#00000033] flex justify-center items-center",
+          "w-[26px] h-[26px] rounded-full bg-black/5 flex justify-center items-center shrink-0",
           amount === Number(max) ? "opacity-50" : "button"
         )}
         onClick={() => {
@@ -57,14 +64,14 @@ export default function AmountInput({
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          width="10"
-          height="10"
-          viewBox="0 0 10 10"
+          width="14"
+          height="14"
+          viewBox="0 0 14 14"
           fill="none"
         >
           <path
-            d="M5.54492 4.04492H9.59961V5.54492H5.54492V9.59961H4.04492V5.54492H0V4.04492H4.04492V0H5.54492V4.04492Z"
-            fill="white"
+            d="M7.29297 5.79199H13.0986V7.29199H7.29297V13.0986H5.79297V7.29199H0V5.79199H5.79297V0H7.29297V5.79199Z"
+            fill="black"
           />
         </svg>
       </button>

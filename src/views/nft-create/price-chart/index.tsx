@@ -21,7 +21,8 @@ export default function PriceChart({
   const chartInstance = useRef<Chart | null>(null);
   const anchorDotRef = useRef<HTMLDivElement>(null);
   const [isInit, setIsInit] = useState(false);
-  const [isFolded, setIsFolded] = useState(true);
+  const [isFolded, setIsFolded] = useState(false);
+  const [isAnimationComplete, setIsAnimationComplete] = useState(false);
 
   // Function to calculate probability density data
   const calculateDensity = (anchorPrice: number) => {
@@ -59,9 +60,9 @@ export default function PriceChart({
     }));
   };
 
-  // Initialize chart - only executed once when component mounts
+  // Initialize chart - only executed once when component mounts and animation is complete
   useEffect(() => {
-    if (!chartRef.current) return;
+    if (!chartRef.current || !isAnimationComplete || isFolded) return;
 
     const ctx = chartRef.current.getContext("2d");
     if (!ctx) return;
@@ -110,24 +111,7 @@ export default function PriceChart({
             display: false
           },
           annotation: {
-            annotations: {
-              line1: {
-                type: "line",
-                xMin: anchorPrice || 0,
-                xMax: anchorPrice || 0,
-                borderColor: "#FFC42F",
-                borderWidth: 1,
-                borderDash: [2, 2]
-              },
-              line2: {
-                type: "line",
-                xMin: anchorPrice * 1.2 || 0,
-                xMax: anchorPrice * 1.2 || 0,
-                borderColor: "#8C8B8B",
-                borderWidth: 1,
-                borderDash: [2, 2]
-              }
-            }
+            annotations: {}
           },
           tooltip: {
             backgroundColor: "rgba(20, 21, 25, 0.9)",
@@ -139,11 +123,11 @@ export default function PriceChart({
             cornerRadius: 8,
             displayColors: false,
             titleFont: {
-              family: "SpaceGrotesk",
+              family: "Unbounded",
               size: 12
             },
             bodyFont: {
-              family: "SpaceGrotesk",
+              family: "Unbounded",
               size: 12
             },
             callbacks: {
@@ -167,7 +151,7 @@ export default function PriceChart({
               display: true,
               text: "Total Sales ($)",
               font: {
-                family: "SpaceGrotesk",
+                family: "Unbounded",
                 size: 12
               },
               color: "#5E6B7D"
@@ -177,7 +161,7 @@ export default function PriceChart({
                 return value;
               },
               font: {
-                family: "SpaceGrotesk",
+                family: "Unbounded",
                 size: 10
               },
               color: "#666"
@@ -195,7 +179,7 @@ export default function PriceChart({
               display: true,
               text: "Probability Density",
               font: {
-                family: "SpaceGrotesk",
+                family: "Unbounded",
                 size: 12
               },
               color: "#5E6B7D"
@@ -206,7 +190,7 @@ export default function PriceChart({
                 return `${Number(value).toFixed(0)}%`;
               },
               font: {
-                family: "SpaceGrotesk",
+                family: "Unbounded",
                 size: 10
               },
               color: "#666"
@@ -223,11 +207,17 @@ export default function PriceChart({
         chartInstance.current = null;
       }
     };
-  }, []); // Empty dependency array, only executes on mount
+  }, [isAnimationComplete, isFolded]); // Execute when animation is complete
 
-  // Update chart data - only executed when anchorPrice changes
+  // Update chart data - only executed when anchorPrice changes and chart is initialized
   useEffect(() => {
-    if (!chartInstance.current || !anchorPrice) return;
+    if (
+      !chartInstance.current ||
+      !anchorPrice ||
+      !isAnimationComplete ||
+      isFolded
+    )
+      return;
 
     const density = calculateDensity(anchorPrice);
     const desiredMode = anchorPrice * 1.2;
@@ -237,12 +227,28 @@ export default function PriceChart({
 
     // Update annotation line positions
     if (chartInstance.current.options.plugins?.annotation?.annotations) {
-      const annotations = chartInstance.current.options.plugins.annotation
-        .annotations as any;
-      annotations.line1.xMin = anchorPrice;
-      annotations.line1.xMax = anchorPrice;
-      annotations.line2.xMin = desiredMode;
-      annotations.line2.xMax = desiredMode;
+      // const annotations = chartInstance.current.options.plugins.annotation
+      //   .annotations as any;
+
+      // Update annotations by reassigning the entire object to trigger re-render
+      chartInstance.current.options.plugins.annotation.annotations = {
+        line1: {
+          type: "line",
+          xMin: anchorPrice,
+          xMax: anchorPrice,
+          borderColor: "#FFC42F",
+          borderWidth: 1,
+          borderDash: [2, 2]
+        },
+        line2: {
+          type: "line",
+          xMin: desiredMode,
+          xMax: desiredMode,
+          borderColor: "#8C8B8B",
+          borderWidth: 1,
+          borderDash: [2, 2]
+        }
+      };
     }
 
     // Update segment background color logic
@@ -262,7 +268,7 @@ export default function PriceChart({
       updateAnchorPlace();
       setIsInit(true);
     }, 100);
-  }, [anchorPrice]);
+  }, [anchorPrice, isAnimationComplete, isFolded]);
 
   const updateAnchorPlace = () => {
     const chart = chartInstance.current;
@@ -279,15 +285,15 @@ export default function PriceChart({
         Math.abs(p.raw?.x - anchorPrice * 1.2) < diff &&
         anchorDotRef.current
       ) {
-        anchorDotRef.current.style.left = `${pos.x + 15}px`;
-        anchorDotRef.current.style.top = `${pos.y - 6}px`;
+        anchorDotRef.current.style.left = `${pos.x - 6}px`;
+        anchorDotRef.current.style.top = `${pos.y - 12}px`;
       }
     });
   };
 
   return (
     <motion.div
-      className={clsx("w-full relative flex flex-col items-stretch", className)}
+      className={clsx("relative flex flex-col items-stretch", className)}
       initial={{
         height: isFolded ? 45 : "100%"
       }}
@@ -298,24 +304,38 @@ export default function PriceChart({
         duration: 0.3
       }}
     >
-      <div className="w-full px-[13px] h-[45px] flex justify-between items-center shrink-0">
+      <div className="w-full px-[13px] h-[45px] flex justify-between items-center shrink-0 relative z-[10]">
         <Title className="!static" />
-        <button
+        {/* <button
           type="button"
-          className="button shrink-0 w-[14px] h-[14px]"
-          onClick={() => setIsFolded(!isFolded)}
+          className="button shrink-0 w-[28px] h-[28px] rounded-[8px] bg-[#000000] flex items-center justify-center"
+          onClick={() => {
+            setIsFolded(!isFolded);
+            if (isFolded) {
+              // Reset animation state when folding
+              setIsAnimationComplete(false);
+            }
+          }}
         >
-          <motion.img
-            src="/new-btc/icon-fold-arrow.svg"
-            className="w-full h-full object-center object-contain"
+          <motion.svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="14"
+            height="6"
+            viewBox="0 0 14 6"
+            fill="none"
             animate={{
               rotate: !isFolded ? 0 : 180
             }}
-          />
-        </button>
+          >
+            <path
+              d="M12.614 5.51375e-07L6.608 3.654L0.602001 2.63143e-08L-6.0584e-08 1.386L6.608 5.404L13.216 1.386L12.614 5.51375e-07Z"
+              fill="white"
+            />
+          </motion.svg>
+        </button> */}
       </div>
       <motion.div
-        className="w-full relative shrink-0 h-[calc(100%_-_45px)] px-[20px]"
+        className="w-full relative shrink-0 h-[calc(100%_-_45px)] px-[20px] max-md:px-[10px] max-md:pt-[100px]"
         animate={{
           opacity: isFolded ? 0 : 1,
           height: isFolded ? 0 : "calc(100% - 45px)"
@@ -323,40 +343,49 @@ export default function PriceChart({
         transition={{
           duration: 0.3
         }}
+        onAnimationComplete={() => {
+          if (!isFolded) {
+            setIsAnimationComplete(true);
+          } else {
+            setIsAnimationComplete(false);
+          }
+        }}
       >
-        <canvas
-          ref={chartRef}
-          className="w-full h-full relative z-[2]"
-        ></canvas>
-        {!anchorPrice && (
-          <div className="w-full h-full flex justify-center items-center text-[#ABABAB] text-[14px] absolute top-0 left-0">
-            Please set the price first
-          </div>
-        )}
-        <div
-          ref={anchorDotRef}
-          className="absolute z-[20] flex items-center"
-          style={{
-            opacity: isInit ? 1 : 0
-          }}
-        >
-          <div
-            style={{
-              width: 10,
-              height: 10,
-              borderRadius: 8,
-              background: "#57FF70",
-              pointerEvents: "none"
-            }}
-          />
-          {anchorPrice && (
-            <div className="text-[#57FF70] text-[16px] ml-[10px]">
-              ${formatNumber(anchorPrice * 1.2, 2, true)}
+        <div className="relative w-full h-full">
+          <canvas
+            ref={chartRef}
+            className="w-full h-full relative z-[2]"
+          ></canvas>
+          {!anchorPrice && (
+            <div className="w-full h-full flex justify-center items-center text-[#8A87AA] text-[14px] absolute top-0 left-0">
+              Please set the price first
             </div>
           )}
+          <div
+            ref={anchorDotRef}
+            className="absolute z-[1] flex items-center"
+            style={{
+              opacity: isInit ? 1 : 0
+            }}
+          >
+            <div
+              style={{
+                width: 10,
+                height: 10,
+                borderRadius: 8,
+                background: "#57FF70",
+                pointerEvents: "none"
+              }}
+            />
+            {anchorPrice && (
+              <div className="text-[#57FF70] text-[16px] ml-[10px]">
+                ${formatNumber(anchorPrice * 1.2, 2, true)}
+              </div>
+            )}
+          </div>
         </div>
         <Annotations
-          className="z-[3] !top-[0px]"
+          className="z-[3] !top-[-30px]"
           anchorPrice={anchorPrice}
           expectedValue={anchorPrice ? anchorPrice * 1.2 : undefined}
         />

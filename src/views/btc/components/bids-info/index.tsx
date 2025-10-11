@@ -14,6 +14,7 @@ export default function BidsInfoWrapper() {
         onRefresher={() => {
           setRefresher(refresher + 1);
         }}
+        key={refresher}
       />
     )
   );
@@ -26,25 +27,30 @@ function BidsInfoInner({ onRefresher }: any) {
 
   const [animationY, duration] = useMemo(() => {
     if (!list.length) return [0, 10];
-    const _cy = containerRef.current?.clientHeight || list.length * 36;
-    const _y = hasNext ? _cy : _cy + 360;
-    const _cd = _y / 360 < 2 ? 10 : (_y / 360) * 5;
+    const _cy = list.length * 52;
+    const _y = hasNext ? _cy : _cy + 500;
+    const _cd = _y / 520 < 2 ? 10 : _y / 520 < 3 ? 15 : (_y / 520) * 5;
     const _d = hasNext ? _cd : _cd + 5;
+
     return [_y, _d];
   }, [list.length, hasNext]);
 
   const { run } = useDebounceFn(
     (latest) => {
       if (animationY && Math.abs(Number(latest.y)) + 10 > animationY) {
-        onRefresher();
+        if (!hasNext) {
+          setTimeout(() => {
+            onRefresher();
+          }, 10000);
+        }
       }
     },
-    { wait: 1000 }
+    { wait: 500 }
   );
   return (
     <div
       ref={containerRef}
-      className="flex flex-col gap-[10px] absolute right-[20px] bottom-[16%] text-white h-[280px] overflow-hidden [mask-image:linear-gradient(to_bottom,rgba(0,0,0,0),rgba(0,0,0,1)_10%,rgba(0,0,0,0))]"
+      className="flex flex-col gap-[10px] absolute right-[20px] bottom-[36%] text-white h-[280px] overflow-hidden [mask-image:linear-gradient(to_bottom,rgba(0,0,0,0),rgba(0,0,0,1)_10%,rgba(0,0,0,0))]"
     >
       <AnimatePresence>
         {show && (
@@ -56,7 +62,6 @@ function BidsInfoInner({ onRefresher }: any) {
               duration,
               ease: "linear"
             }}
-            ref={containerRef}
             onUpdate={run}
           >
             {list.map((item, index) => (

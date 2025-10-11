@@ -36,7 +36,7 @@ export default function useTokenBalance({
   chainId?: number;
   account?: string;
 }) {
-  const { address: privyAccount } = useAuth();
+  const authData = useAuth();
   const [tokenBalance, setTokenBalance] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -44,7 +44,9 @@ export default function useTokenBalance({
   const { wallets } = useWallets();
 
   const getBalance = async () => {
-    const _account = account || privyAccount;
+    const _account = account || authData?.address;
+
+    if (!_account) return;
     const wallet = wallets.find((item) => item.address === _account);
     const ethereumProvider = await wallet?.getEthereumProvider();
 
@@ -66,6 +68,10 @@ export default function useTokenBalance({
         const rawBalance = await TokenContract.balanceOf(_account);
 
         setTokenBalance(utils.formatUnits(rawBalance, decimals).toString());
+        console.log(
+          "balance",
+          utils.formatUnits(rawBalance, decimals).toString()
+        );
       }
     } catch (error) {
       setIsError(true);
@@ -80,7 +86,7 @@ export default function useTokenBalance({
   useEffect(() => {
     if (!address || !wallets.length) return;
     getBalance();
-  }, [account, address, decimals, fresh, chainId, wallets]);
+  }, [account, address, authData, decimals, fresh, chainId, wallets]);
 
   return { tokenBalance, isError, isLoading, update };
 }

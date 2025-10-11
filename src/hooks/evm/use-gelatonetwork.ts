@@ -2,7 +2,7 @@ import {
   sponsored,
   createGelatoSmartWalletClient
 } from "@gelatonetwork/smartwallet";
-import { useGelatoSmartWalletPrivyContext } from "@/contexts/wallet";
+import { useGelatoSmartWalletPrivyContext } from "@/contexts/wallet/privy";
 import axiosInstance from "@/libs/axios";
 
 import { useAuth } from "@/contexts/auth";
@@ -80,7 +80,7 @@ export default function useGelatonetwork() {
 
       console.log("Transaction response:", response);
 
-      response.on("submitted", async (status: any) => {
+      response.on("success", async (status: any) => {
         console.log("Transaction submitted:", status);
         const hash = status.transactionHash;
         const needConfirmTx = await provider.getTransaction(hash);

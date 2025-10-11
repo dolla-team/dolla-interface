@@ -5,6 +5,8 @@ import MoreMarketBtn from "./btn";
 import MarketLoading from "./market-loading";
 import usePoolList from "@/hooks/use-pool-list";
 import { useBtcContext } from "../../context";
+import { useEffect } from "react";
+import { MarketFilters, MarketSizes } from "./config";
 
 export default function Markets({ onClose }: { onClose: () => void }) {
   const {
@@ -17,11 +19,18 @@ export default function Markets({ onClose }: { onClose: () => void }) {
     setSortOrder,
     hasMore,
     pageRef,
-    volume,
-    setVolume,
     LIMIT
-  } = usePoolList();
+  } = usePoolList({
+    tokenStatus: 0
+  });
   const { setSelectedMarket } = useBtcContext();
+
+  useEffect(() => {
+    document.addEventListener("click", onClose);
+    return () => {
+      document.removeEventListener("click", onClose);
+    };
+  }, []);
 
   return (
     <motion.div
@@ -35,30 +44,22 @@ export default function Markets({ onClose }: { onClose: () => void }) {
         damping: 30,
         duration: 0.5
       }}
+      onClick={(e) => {
+        e.stopPropagation();
+      }}
     >
       <div className="bg-[#1A1E24] border-b border-[#3C3420]">
         <div className="relative z-[2]">
           <div className="p-[20px] pb-[0px] flex items-center justify-between">
             <div className="flex items-center gap-[8px]">
-              <img
-                src="/logo.svg"
-                alt="dolla"
-                className="w-[101px] h-[30px] mt-[-6px]"
-              />
               <span className="text-[#9CBBFC] text-[30px] font-[BlackHanSans]">
                 Markets
               </span>
             </div>
             <div className="flex items-center gap-[46px] text-[#ADBCCF] text-[12px]">
               <div className="flex items-center gap-[8px]">
-                <div className="mr-[5px]">Prize Size</div>
-                {[
-                  { label: "ALL", key: 0 },
-                  { label: "1 BTC", key: 1 },
-                  { label: "0.1 BTC", key: 0.1 },
-                  { label: "0.01 BTC", key: 0.01 },
-                  { label: "0.001 BTC", key: 0.001 }
-                ].map((item: { label: string; key: number }) => (
+                <div className="mr-[5px]">Market Size</div>
+                {/* {MarketSizes.map((item: { label: string; key: number }) => (
                   <button
                     key={item.key}
                     className={clsx(
@@ -71,7 +72,7 @@ export default function Markets({ onClose }: { onClose: () => void }) {
                   >
                     {item.label}
                   </button>
-                ))}
+                ))} */}
               </div>
               <div className="flex items-center gap-[8px]">
                 <div className="mr-[5px]">
@@ -110,11 +111,7 @@ export default function Markets({ onClose }: { onClose: () => void }) {
                     )}
                   </button>
                 </div>
-                {[
-                  { label: "Hitting", key: "hitting" },
-                  { label: "Players", key: "participants" },
-                  { label: "Time", key: "time" }
-                ].map((item: { label: string; key: string }) => (
+                {MarketFilters.map((item: { label: string; key: string }) => (
                   <button
                     key={item.key}
                     className={clsx(
@@ -156,6 +153,9 @@ export default function Markets({ onClose }: { onClose: () => void }) {
             )}
             <NextBtn
               onClick={() => {
+                if (pageRef.current === 0) {
+                  return;
+                }
                 onQueryPoolList(-1);
               }}
               className={clsx(
@@ -165,6 +165,9 @@ export default function Markets({ onClose }: { onClose: () => void }) {
             />
             <NextBtn
               onClick={() => {
+                if (!hasMore) {
+                  return;
+                }
                 onQueryPoolList(1);
               }}
               className={clsx(
@@ -175,7 +178,7 @@ export default function Markets({ onClose }: { onClose: () => void }) {
           </div>
         </div>
         <MoreMarketBtn
-          className="absolute left-[50%] translate-x-[-50%] bottom-[-54px]"
+          className="absolute left-[50%] translate-x-[-50%] bottom-[-34px]"
           onClick={onClose}
         />
       </div>

@@ -2,13 +2,18 @@ import useCountdown, { getTimePeriods, toTwo } from "@/hooks/use-count-down";
 import { useConfigStore } from "@/stores/use-config";
 import { useEffect, useMemo } from "react";
 import * as parser from "cron-parser";
+import clsx from "clsx";
 
 export default function Timer({
   onTimeUp,
-  currentRound
+  currentRound,
+  className,
+  size = 14
 }: {
   onTimeUp: () => void;
   currentRound: number;
+  className?: string;
+  size?: number;
 }) {
   const configStore = useConfigStore();
 
@@ -35,11 +40,16 @@ export default function Timer({
   }, [secondsRemaining]);
 
   return (
-    <div className="w-[115px] h-[30px] text-center text-[14px] p-[6px] border border-[#6A5D3A] text-white flex items-center justify-between rounded-[16px] border border-[#FFE9B2] bg-[#00000033] font-semibold">
+    <div
+      className={clsx(
+        "w-[108px] h-[30px] text-center text-[10px] p-[6px] border border-[#6A5D3A] text-white flex items-center justify-between rounded-[10px] border border-[#F2F2F233] bg-[#F2F2F21A]",
+        className
+      )}
+    >
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        width="14"
-        height="16"
+        width={size}
+        height={size * 1.1428571428571428}
         viewBox="0 0 14 16"
         fill="none"
       >
@@ -48,8 +58,11 @@ export default function Timer({
           fill="white"
         />
       </svg>
+
       <span className="pr-[4px]">
-        {toTwo(hours)} : {toTwo(minutes)} : {toTwo(seconds)}
+        {secondsRemaining <= 0
+          ? "Times Up!"
+          : `${toTwo(hours)} : ${toTwo(minutes)} : ${toTwo(seconds)}`}
       </span>
     </div>
   );

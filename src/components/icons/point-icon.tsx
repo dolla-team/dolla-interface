@@ -10,42 +10,19 @@ export default function PointIcon({
       xmlns="http://www.w3.org/2000/svg"
       width={size}
       height={size}
-      viewBox="0 0 26 26"
+      viewBox="0 0 60 60"
       fill="none"
       className={className}
     >
+      <circle cx="30" cy="30" r="30" fill="#FDC93A" />
+      <circle cx="30" cy="30.0001" r="26" fill="#6D5000" />
       <ellipse
-        cx="12.9995"
-        cy="12.9563"
-        rx="12.9995"
-        ry="12.9563"
-        fill="#6D5000"
-      />
-      <path d="M14.7335 0H11.267V1.81388H14.7335V0Z" fill="#6D5000" />
-      <path
-        d="M14.7335 24.1865H11.267V26.0004H14.7335V24.1865Z"
-        fill="#6D5000"
-      />
-      <ellipse
-        cx="12.9995"
-        cy="12.9563"
-        rx="12.9995"
-        ry="12.9563"
-        fill="#FDC93A"
-      />
-      <ellipse
-        cx="12.9996"
-        cy="13.0006"
-        rx="10.8329"
-        ry="11.2662"
-        fill="#6D5000"
-      />
-      <circle
-        cx="13.4328"
-        cy="13.0001"
-        r="4.33316"
+        cx="29.999"
+        cy="30"
+        rx="12"
+        ry="12"
         stroke="#FFC42F"
-        strokeWidth="2"
+        stroke-width="2"
       />
     </svg>
   );

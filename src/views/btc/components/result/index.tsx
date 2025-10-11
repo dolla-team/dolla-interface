@@ -1,15 +1,19 @@
 import { addThousandSeparator } from "@/utils/format/number";
 import ResultBg from "./bg";
 import Modal from "@/components/modal";
-import { useMemo } from "react";
+import { useMemo, useEffect } from "react";
 import PointIcon from "@/components/icons/point-icon";
 import Winner from "./winner";
+import DollaEye from "@/components/dolla-eye";
+import clsx from "clsx";
+import useIsMobile from "@/hooks/use-is-mobile";
 
 const Config = {
   0: {
     gifHeight: 210,
     gifSrc: "/btc/level0.gif",
     title: "OPPPS",
+    desc: "Good luck next round",
     key: 0
   },
   1: {
@@ -36,6 +40,7 @@ const Config = {
 };
 
 export default function Result({ points, tickets, isWinner, onClose }: any) {
+  const isMobile = useIsMobile();
   const config = useMemo(() => {
     if (!points && !tickets) {
       return Config[0];
@@ -47,15 +52,31 @@ export default function Result({ points, tickets, isWinner, onClose }: any) {
     return points > 10000 ? Config[3] : Config[2];
   }, [points, tickets]);
 
+  useEffect(() => {
+    if (isWinner) {
+      return;
+    }
+    const timer = setTimeout(() => {
+      onClose();
+    }, 10000);
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [isWinner]);
+
   return isWinner ? (
     <Winner points={points} onClose={onClose} />
   ) : (
     <Modal open={true} onClose={() => {}} className="backdrop-blur-[10px]">
-      <div className="relative w-[464px] h-[584px]">
-        <img
-          src="/logo.svg"
-          alt="dolla"
-          className="w-[78px] h-[39px] absolute left-[50%] translate-x-[-50%] top-[20px] z-[20]"
+      <div
+        className={clsx(
+          "relative h-[584px]",
+          isMobile ? "w-full" : "w-[464px]"
+        )}
+      >
+        <DollaEye
+          className="absolute left-[50%] translate-x-[-50%] top-[10px] z-[20]"
+          height={40}
         />
         <ResultBg />
         <div className="relative z-[2] flex flex-col items-center justify-center pt-[60px]">
@@ -67,10 +88,10 @@ export default function Result({ points, tickets, isWinner, onClose }: any) {
             }}
           />
           <div className="text-[32px] text-white font-[BlackHanSans] mt-[20px]">
-            OPPPS
+            {config.title}
           </div>
           <div className="text-[16px] text-white font-[DelaGothicOne]">
-            You didn't win this time
+            {config.desc}
           </div>
           {config.key === 1 && (
             <img src="/btc/ticket2.png" className="w-[218px]" />

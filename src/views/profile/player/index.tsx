@@ -5,38 +5,23 @@ import SwitchPanel from "@/components/switch/switch-panel";
 // import Invite from "./invite";
 // import { INVATE_ACTIVE } from "@/config";
 import Header from "../header";
-import Dashboard from "../ components/dashboard/index";
-import Tabs from "@/components/tabs";
-import { useRef, useState, useEffect, useCallback } from "react";
-import Radio from "@/components/radio";
+import Dashboard from "../components/dashboard/index";
+import { useRef, useMemo } from "react";
 import PlayerMarkets from "./markets";
-import { AnimatePresence } from "framer-motion";
 import Records from "./records";
 import usePlayerHistory from "./hooks/use-player-history";
-import LoadingMore from "@/components/loading/loading-more";
-import { useDebounceFn } from "ahooks";
-
-const TabsList = [
-  {
-    key: "joinedMarket",
-    label: "Joined Market"
-  },
-  {
-    key: "records",
-    label: "Records"
-  }
-];
+import PageBack from "../components/page-back";
+import Bg from "../components/bg";
+import ProfileTabs from "../components/tabs";
+import Objectives from "./objectives";
 
 export default function Player() {
-  const [tab, setTab] = useState(TabsList[0].key);
-
   const {
     page,
     loading,
     data,
     hasMore,
     onPageChange,
-
     joinedPoolListHasNextPage,
     joinedPoolListPageIndex,
     joinedPoolListLoading,
@@ -44,134 +29,50 @@ export default function Player() {
     updateJoinedPoolListData,
     onJoinedPoolListPageChange,
     joinedPoolListStatus,
-    onJoinedPoolListStatusChange,
+    onJoinedPoolListStatusChange
   } = usePlayerHistory();
 
   const containerRef = useRef<any>(null);
-  const marketsBottomRef = useRef<any>(null);
-
-  const { run: handleLoadMore } = useDebounceFn(() => {
-    if (
-      joinedPoolListData.length > 0 &&
-      joinedPoolListHasNextPage &&
-      !joinedPoolListLoading
-    ) {
-      onJoinedPoolListPageChange(joinedPoolListPageIndex + 1);
-    }
-  }, {
-    wait: 500
-  });
-
-  useEffect(() => {
-    if (!marketsBottomRef.current || joinedPoolListData.length === 0) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (
-            entry.isIntersecting &&
-            joinedPoolListHasNextPage &&
-            !joinedPoolListLoading
-          ) {
-            handleLoadMore();
-          }
-        });
-      },
-      {
-        root: null,
-        rootMargin: "200px",
-        threshold: 0.1
-      }
-    );
-
-    observer.observe(marketsBottomRef.current);
-
-    return () => {
-      if (marketsBottomRef.current) {
-        observer.unobserve(marketsBottomRef.current);
-      }
-    };
-  }, [
-    joinedPoolListData.length,
-    joinedPoolListHasNextPage,
-    joinedPoolListLoading,
-    joinedPoolListPageIndex,
-  ]);
 
   return (
     <div
-      className="w-full h-screen overflow-y-auto pb-[30px]"
+      className="w-full pb-[60px] border-box max-md:overflow-x-hidden max-md:pb-[70px] relative"
       ref={containerRef}
     >
-      <div className="pt-[30px] w-[933px] mx-auto">
-        <Header tab="player" />
-        <SwitchPanel>
-          <Dashboard tab="player" className="mt-[49px]" />
-          <div className="flex justify-between items-center gap-[10px] mt-[44px]">
-            <Tabs
-              currentTab={tab}
-              onChangeTab={setTab}
-              tabs={TabsList}
-              className="!gap-[62px]"
-              tabClassName="!text-[18px] !pb-[14px] font-[SpaceGrotesk]"
-              cursorClassName="!w-[30px] !bg-[#FFC42F] left-1/2 -translate-x-1/2"
-            />
-            {tab === TabsList[0].key && (
-              <div className="flex items-center justify-end gap-[15px]">
-                <Radio
-                  checked={joinedPoolListStatus === ""}
-                  onChange={onJoinedPoolListStatusChange}
-                  name="joinedMarketFilter"
-                  value=""
-                />
-                <Radio
-                  checked={joinedPoolListStatus === "0,1"}
-                  onChange={onJoinedPoolListStatusChange}
-                  name="joinedMarketFilter"
-                  value="0,1"
-                >
-                  Live only
-                </Radio>
-              </div>
-            )}
+      <PageBack />
+      <div className="relative z-1 pt-[30px] w-[1200px] mx-auto max-md:w-full max-md:pt-[70px] max-md:bg-[url('/profile/bg.png')] max-md:bg-cover max-md:bg-no-repeat max-md:bg-[position:center_top_-44px]">
+        <Header />
+        <ProfileTabs tab="player" />
+        <SwitchPanel className="max-md:w-full">
+          <div className="max-md:px-[10px]">
+            <Dashboard tab="player" className="mt-[20px] max-md:mt-[20px]" />
           </div>
-          <AnimatePresence>
-            {tab === TabsList[0].key && (
-              <SwitchPanel>
-                <PlayerMarkets
-                  orders={joinedPoolListData}
-                  loading={joinedPoolListLoading}
-                  pageIndex={joinedPoolListPageIndex}
-                  hasNextPage={joinedPoolListHasNextPage}
-                  onPageChange={onJoinedPoolListPageChange}
-                  updatePoolsData={updateJoinedPoolListData}
-                />
-                <div
-                  ref={marketsBottomRef}
-                  className="h-[40px] flex justify-center items-center"
-                >
-                  {
-                    joinedPoolListData?.length > 0 && (
-                      <LoadingMore loading={joinedPoolListLoading} hasMore={joinedPoolListHasNextPage} />
-                    )
-                  }
-                </div>
-              </SwitchPanel>
-            )}
-            {tab === TabsList[1].key && (
-              <SwitchPanel>
-                <Records
-                  page={page}
-                  loading={loading}
-                  data={data}
-                  hasMore={hasMore}
-                  onPageChange={onPageChange}
-                />
-              </SwitchPanel>
-            )}
-          </AnimatePresence>
+          <div className="mt-[15px] flex gap-[20px]">
+            <Objectives />
+            <div className="w-[780px]">
+              <PlayerMarkets
+                orders={joinedPoolListData}
+                loading={joinedPoolListLoading}
+                pageIndex={joinedPoolListPageIndex}
+                hasNextPage={joinedPoolListHasNextPage}
+                onPageChange={onJoinedPoolListPageChange}
+                updatePoolsData={updateJoinedPoolListData}
+                status={joinedPoolListStatus}
+                onStatusChange={onJoinedPoolListStatusChange}
+              />
+              <Records
+                page={page}
+                loading={loading}
+                data={data}
+                hasMore={hasMore}
+                onPageChange={onPageChange}
+                fullAction={true}
+              />
+            </div>
+          </div>
         </SwitchPanel>
       </div>
+      <Bg />
     </div>
   );
 }

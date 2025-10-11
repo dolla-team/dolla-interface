@@ -1,30 +1,61 @@
+import useIsMobile from "@/hooks/use-is-mobile";
+import clsx from "clsx";
 import ButtonV2 from "@/components/button/v2";
 import useClaimSlash from "@/hooks/solana/use-claim-slash";
 import { useEffect, useState } from "react";
 
 export default function Cancel({ data }: { data: any }) {
+  const isMobile = useIsMobile();
   const { claiming, onClaim } = useClaimSlash({
     onClaimSuccess() {
       setClaimed(true);
     }
   });
   const [claimed, setClaimed] = useState<boolean | null>(null);
-
   useEffect(() => {
-    setClaimed(data.is_claim);
+    setClaimed(data.user_draw_attempt.status === 4);
   }, [data]);
-
+  if (data?.status === 5) {
+    return (
+      <div
+        className={clsx(
+          "rounded-[20px] border border-[#605D55] flex flex-col items-center justify-center",
+          isMobile
+            ? "w-[calc(100%-24px)] h-[254px] ml-[12px] mt-[12px] bg-[#000]/50"
+            : "w-[403px] h-[224px] bg-[rgba(0,0,0,0.5)] backdrop-blur-[25px]"
+        )}
+      >
+        <div className="text-white text-[16px] font-[DelaGothicOne]">
+          This market has been paused
+        </div>
+      </div>
+    );
+  }
   return !data.user_draw_attempt ? (
-    <div className="w-[403px] h-[224px] rounded-[20px] border border-[#605D55] bg-[rgba(0,0,0,0.5)] backdrop-blur-[25px] flex flex-col items-center justify-center">
+    <div
+      className={clsx(
+        "rounded-[20px] border border-[#605D55] flex flex-col items-center justify-center",
+        isMobile
+          ? "w-[calc(100%-24px)] h-[254px] ml-[12px] mt-[12px] bg-[#000]/50"
+          : "w-[403px] h-[224px] bg-[rgba(0,0,0,0.5)] backdrop-blur-[25px]"
+      )}
+    >
       <div className="text-white text-[16px] font-[DelaGothicOne]">
         This market has been cancelled
       </div>
-      <div className="text-white text-[16px] mt-[40px]">
+      <div className="text-white text-[16px] mt-[20px]">
         The amount of bid has been refunded
       </div>
     </div>
   ) : (
-    <div className="w-[403px] h-[254px] rounded-[20px] border border-[#605D55] bg-[rgba(0,0,0,0.5)] backdrop-blur-[25px] flex flex-col items-center justify-center">
+    <div
+      className={clsx(
+        "rounded-[20px] border border-[#605D55] flex flex-col items-center justify-center",
+        isMobile
+          ? "w-[calc(100%-24px)] h-[254px] bg-[#000]/50 ml-[12px] mt-[12px]"
+          : "w-[403px] h-[224px] bg-[rgba(0,0,0,0.5)] backdrop-blur-[25px]"
+      )}
+    >
       <div className="text-white text-[16px] font-[DelaGothicOne]">
         This market has been cancelled
       </div>
@@ -48,8 +79,8 @@ export default function Cancel({ data }: { data: any }) {
             <path
               d="M6 11L10 15L17 8"
               stroke="#2B3337"
-              stroke-width="2"
-              stroke-linecap="round"
+              strokeWidth="2"
+              strokeLinecap="round"
             />
           </svg>
           <span>Claimed</span>

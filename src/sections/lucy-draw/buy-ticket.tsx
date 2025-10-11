@@ -2,55 +2,55 @@ import Modal from "@/components/modal";
 import { useMemo, useState } from "react";
 import PointIcon from "@/components/icons/point-icon";
 import clsx from "clsx";
-import { QUOTE_TOKEN } from "@/config/btc";
-import useTransfer from "@/hooks/solana/use-transfer";
+import useTransfer from "@/hooks/near/use-buy-ticket";
 import Loading from "@/components/icons/loading";
-import useUserInfoStore from "@/stores/use-user-info";
-import useToast from "@/hooks/use-toast";
 import AmountInput from "./amount-input";
+import useIsMobile from "@/hooks/use-is-mobile";
+import Big from "big.js";
+import useUserInfoStore from "@/stores/use-user-info";
+import { QUOTE_TOKEN } from "@/config/btc";
 
 export default function BuyTicket({
   showBuyTicket,
   onClose,
-  tokenBalance,
-  update
+  tokenBalance
 }: {
   showBuyTicket: boolean;
   onClose: () => void;
   tokenBalance: string;
-  update: () => void;
 }) {
+  const isMobile = useIsMobile();
   const [ticket, setTicket] = useState(1);
   const userInfoStore = useUserInfoStore();
-  const toast = useToast();
 
-  const isDisabled = useMemo(() => {
-    return ticket > Number(tokenBalance);
+  const errorTips = useMemo(() => {
+    if (Big(ticket).gt(Big(tokenBalance || 0))) {
+      return "Insufficient Balance";
+    }
+    if (Number(ticket) === 0) {
+      return "Input amount";
+    }
+    return "";
   }, [ticket, tokenBalance]);
 
-  const { onTransfer, transferring } = useTransfer({
-    token: QUOTE_TOKEN,
-    isTicket: true,
-    onTransferSuccess: (amount) => {
-      userInfoStore.set({
-        prize: {
-          ...userInfoStore.prize,
-          tickets: userInfoStore.prize.tickets + amount
-        }
-      });
-
-      toast.success({ title: "Buy ticket successfully" });
-      update();
-      setTimeout(() => {
-        onClose();
-      }, 500);
-    }
+  const { transfer: onTransfer, loading: transferring } = useTransfer(() => {
+    userInfoStore.set({
+      prize: {
+        ...userInfoStore.prize,
+        tickets: userInfoStore.prize.tickets + ticket
+      }
+    });
   });
 
   return (
-    <Modal open={showBuyTicket} onClose={onClose}>
-      <div className="w-[378px] h-[444px] rounded-[16px] border border-[#6A5D3A] bg-[#35302B]">
-        <div className="h-[54px] bg-[#00000033] rounded-t-[16px] flex items-center justify-between px-[16px]">
+    <Modal open={showBuyTicket} onClose={onClose} isForceNormal={isMobile}>
+      <div
+        className={clsx(
+          "rounded-[16px] border border-[#E4E4E4] bg-white h-[444px] w-[378px]",
+          isMobile && "max-w-[90vw]"
+        )}
+      >
+        <div className="h-[54px] bg-[#000000] rounded-t-[16px] flex items-center justify-between px-[16px]">
           <div className="text-[20px] text-white">Buy Ticket</div>
           <button className="w-[24px] h-[24px] button" onClick={onClose}>
             <svg
@@ -69,13 +69,16 @@ export default function BuyTicket({
         </div>
         <div className="bg-[url(/btc/ticket3.png)] w-[186px] h-[126px] bg-no-repeat bg-center bg-contain mx-auto mt-[16px]" />
         <div className="flex justify-center items-center gap-[8px]">
-          <span className="text-white text-[16px] font-[DelaGothicOne]">
-            {ticket}
-          </span>
-          <PointIcon />
+          <span className="text-[16px] font-[DelaGothicOne]">{ticket}</span>
+          <img src={QUOTE_TOKEN.icon} className="w-[24px] h-[24px]" />
         </div>
-        <div className="w-[338px] mx-auto mt-[40px]">
-          <div className="flex items-center justify-between text-[14px] text-[#BBACA6]">
+        <div
+          className={clsx(
+            "mx-auto mt-[40px]",
+            isMobile ? "w-[calc(100%-40px)]" : "w-[338px]"
+          )}
+        >
+          <div className="flex items-center justify-between text-[14px]">
             <span>Amount</span>
             <span
               className="underline button"
@@ -94,16 +97,17 @@ export default function BuyTicket({
         </div>
         <button
           className={clsx(
-            "w-[338px] h-[40px] bg-linear-to-b from-[#FFF698] to-[#FFC42F] rounded-[8px] text-[14px] font-[DelaGothicOne] text-black ml-[20px] mt-[30px]",
-            isDisabled ? "opacity-50" : "button"
+            "h-[40px] bg-[#FFC42F] rounded-[8px] text-[14px] text-black ml-[20px] mt-[30px]",
+            errorTips ? "opacity-50" : "button",
+            isMobile ? "w-[calc(100%-40px)]" : "w-[338px]"
           )}
           onClick={() => {
-            if (isDisabled) return;
-            onTransfer(ticket, import.meta.env.VITE_SOLANA_TICKET_ACCOUNT);
+            if (errorTips) return;
+            onTransfer(ticket);
           }}
         >
-          {isDisabled ? (
-            "Insufficient Balance"
+          {errorTips ? (
+            errorTips
           ) : transferring ? (
             <Loading size={20} />
           ) : (
