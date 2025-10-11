@@ -54,7 +54,10 @@ export default function useRecords(isScroll?: boolean) {
         let businessType = "";
 
         if (item.type === "swap") {
-          tokens = [BASE_TOKEN, QUOTE_TOKEN];
+          tokens =
+            item.assets?.[0] === BASE_TOKEN.address
+              ? [BASE_TOKEN, QUOTE_TOKEN]
+              : [QUOTE_TOKEN, BASE_TOKEN];
         } else {
           tokens =
             item.assets === BASE_TOKEN.address ? [BASE_TOKEN] : [QUOTE_TOKEN];
