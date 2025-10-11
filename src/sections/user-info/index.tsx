@@ -37,21 +37,22 @@ export default function Laptop() {
                 : "calc(100% - 60px)"
             }}
           >
-            <div className="p-[20px]">
+            <div className="pt-[20px]">
               <Info />
-              <Level />
-              <div className="flex justify-between items-center text-white mt-[26px]">
+
+              <div className="flex justify-between items-center text-white mt-[26px] px-[20px]">
                 <div className="text-[10px]">Total bid</div>
                 <div className="text-[12px] font-medium">
                   ${userInfo?.player_total_bid}
                 </div>
               </div>
-              <div className="flex justify-between items-center text-white mt-[10px]">
+              <div className="flex justify-between items-center text-white mt-[10px] px-[20px] pb-[10px] border-b border-[#313038]">
                 <div className="text-[10px]">Played</div>
                 <div className="text-[12px] font-medium">
                   {userInfo?.played_number}
                 </div>
               </div>
+              <Level />
             </div>
             <StarterObjectives />
             <Actions />

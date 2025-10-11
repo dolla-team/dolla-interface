@@ -10,9 +10,9 @@ export default function StarterObjectives() {
   const taskStore = useTaskStore();
   const { onQueryUserInfo } = useAuth();
   return (
-    <div className="border-t border-[#313038] px-[20px] py-[8px] text-white h-[calc(100%-370px)]">
+    <div className="px-[20px] py-[8px] text-white h-[calc(100%-370px)] mt-[10px]">
       <div className="flex items-center justify-between pb-[10px]">
-        <div className="text-[10px]">Starter Objectives</div>
+        <div className="text-[12px]">Earn XP to level up</div>
         {/* <div>
           <span className="text-[8px] text-white/30">Completed </span>
           <span className="text-[10px]"> 0/3</span>
