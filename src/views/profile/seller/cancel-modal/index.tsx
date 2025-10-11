@@ -58,7 +58,7 @@ export default function CancelModal({
     let _completable = true;
     if (order.status === 5) {
       setStatus(1);
-      _completable = Big(_penalty).gt(Big(nearAccount?.balance || 0).add(0.1));
+      _completable = Big(_penalty).lt(Big(nearAccount?.balance || 0).add(0.1));
     }
 
     const _markable = true;
