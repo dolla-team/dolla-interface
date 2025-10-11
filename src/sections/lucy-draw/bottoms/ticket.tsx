@@ -1,6 +1,7 @@
 // import useIsMobile from "@/hooks/use-is-mobile";
 import clsx from "clsx";
 import Button from "@/components/button";
+import { useAuth } from "@/contexts/auth";
 
 export default function TicketBottom({
   setIsHistoryOpen,
@@ -9,6 +10,7 @@ export default function TicketBottom({
   setIsHistoryOpen: (open: boolean) => void;
   onBuyTicket: () => void;
 }) {
+  const { address, login } = useAuth();
   return (
     <div className="flex items-center justify-between h-full relative z-[4] px-[20px]">
       <button
@@ -21,6 +23,10 @@ export default function TicketBottom({
       <Button
         className={clsx("w-[112px] h-[42px]")}
         onClick={() => {
+          if (!address) {
+            login();
+            return;
+          }
           onBuyTicket();
         }}
       >
