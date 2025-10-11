@@ -57,9 +57,7 @@ export default function useRecords(isScroll?: boolean) {
           tokens = [BASE_TOKEN, QUOTE_TOKEN];
         } else {
           tokens =
-            item.assets?.[0] === BASE_TOKEN.assetId
-              ? [BASE_TOKEN]
-              : [QUOTE_TOKEN];
+            item.assets === BASE_TOKEN.address ? [BASE_TOKEN] : [QUOTE_TOKEN];
         }
         if (item.source === "CHAINDEFUSER") {
           businessType = item.type.charAt(0).toUpperCase() + item.type.slice(1);
