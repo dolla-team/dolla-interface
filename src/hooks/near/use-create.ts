@@ -11,7 +11,7 @@ import { BASE_TOKEN } from "@/config/btc";
 import { BET_UNIT } from "@/config";
 const THIRTY_TGAS = "300000000000000";
 
-export default function useCreate(onSuccess: () => void) {
+export default function useCreate(onSuccess: (id: string) => void) {
   const [loading, setLoading] = useState(false);
   const { generateKeyPair } = useGenerateKey();
   const toast = useToast();
@@ -65,7 +65,13 @@ export default function useCreate(onSuccess: () => void) {
       console.log("result:", result);
       if (result.status.SuccessValue) {
         toast.success({ title: "Create success" });
-        onSuccess?.();
+        // Decode base64 to string, then parse to number
+        const decodedValue = Buffer.from(
+          result.status.SuccessValue,
+          "base64"
+        ).toString("utf-8");
+        const gameId = JSON.parse(decodedValue);
+        onSuccess?.(gameId);
       } else {
         toast.fail({ title: "Create failed" });
       }

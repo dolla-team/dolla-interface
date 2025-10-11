@@ -24,11 +24,10 @@ import useQuote from "./hooks/use-quote";
 import useWalletStore from "@/stores/use-wallet";
 import useCreate from "@/hooks/near/use-create";
 import PageBack from "@/views/profile/components/page-back";
-import { useNavigate } from "react-router-dom";
 
 export default function BTCCreate() {
   const [amount, setAmount] = useState(1);
-  const [successModal, setSuccessModal] = useState(false);
+  const [successResult, setSuccessResult] = useState<any>(null);
   const {
     userInfo,
     isLoading,
@@ -45,7 +44,7 @@ export default function BTCCreate() {
   const globalConfig = useConfigStore((state) => state.config);
 
   const isMobile = useIsMobile();
-  const navigate = useNavigate();
+
   const { prices } = useTokenPrice(BASE_TOKEN);
 
   const walletStore = useWalletStore();
@@ -59,10 +58,14 @@ export default function BTCCreate() {
     return _p;
   }, [prices]);
 
-  const { create: onCreate, loading: creating } = useCreate(() => {
+  const { create: onCreate, loading: creating } = useCreate((id: string) => {
     updateNearAccount?.();
 
-    navigate("/portfolio/seller");
+    // navigate("/portfolio/seller");
+    setSuccessResult({
+      pool_id: id,
+      amount
+    });
   });
 
   const errorTips = useMemo(() => {
@@ -360,8 +363,9 @@ export default function BTCCreate() {
       </div>
       <div className="absolute top-0 left-0 w-full h-[285px] bg-[url('/btc/btc-create-bg.jpg')] bg-cover bg-top bg-no-repeat z-0 pointer-events-none" />
       <SuccessModal
-        open={successModal}
-        onClose={() => setSuccessModal(false)}
+        open={!!successResult}
+        data={successResult}
+        onClose={() => setSuccessResult(null)}
       />
     </div>
   );

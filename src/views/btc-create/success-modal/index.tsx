@@ -6,15 +6,19 @@ import { useAuth } from "@/contexts/auth";
 import dayjs from "@/libs/dayjs";
 import Big from "big.js";
 import ModalClose from "@/components/button/modal-close";
+import { useNavigate } from "react-router-dom";
 
 export default function SuccessModal({
   open,
+  data,
   onClose
 }: {
   open: boolean;
+  data: any;
   onClose: () => void;
 }) {
   const { userInfo } = useAuth();
+  const navigate = useNavigate();
 
   return (
     <Modal open={open} onClose={onClose}>
@@ -34,7 +38,7 @@ export default function SuccessModal({
           </div>
         </div>
         <div className="w-[103px] h-[32px] rounded-[16px] bg-[#1A1E24] absolute z-[2] left-[50%] translate-x-[-50%] top-[100px] text-[16px] text-white flex items-center justify-center">
-          #0124
+          #{data?.pool_id}
         </div>
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -53,7 +57,7 @@ export default function SuccessModal({
           data={{
             accumulative_bids: 0,
             anchor_price: 0,
-            reward_amount: Big(0.01)
+            reward_amount: Big(data?.amount || 0)
               .mul(10 ** BASE_TOKEN.decimals)
               .toFixed(0),
             reward_token_info: [
@@ -62,10 +66,12 @@ export default function SuccessModal({
                 symbol: BASE_TOKEN.symbol
               }
             ],
-            pool_id: 0,
+            pool_id: data?.pool_id,
             pool_user_info: {
               icon: userInfo?.icon,
-              email: userInfo?.show_email
+              email: userInfo?.show_email,
+              name: userInfo?.name,
+              user: userInfo?.user
             },
             status: 1,
             participants: 0
@@ -78,7 +84,12 @@ export default function SuccessModal({
           className="absolute bottom-[-20px] left-[50%] translate-x-[-50%] z-[2] w-[301px] h-[171px]"
         />
         <div className="absolute bottom-0 left-0 z-[2] w-full h-[88px] !bg-black rounded-b-[20px] flex items-center justify-center">
-          <Button className="!bg-[#FFC42F] w-[206px] h-[40px]">View</Button>
+          <Button
+            className="!bg-[#FFC42F] w-[206px] h-[40px]"
+            onClick={() => navigate(`/portfolio/seller`)}
+          >
+            View
+          </Button>
         </div>
       </div>
     </Modal>
