@@ -9,7 +9,7 @@ import { useAuth } from "@/contexts/auth";
 import useDeposit from "@/hooks/near/use-deposit";
 import Loading from "@/components/icons/loading";
 import ChainSelector from "./chain-selector";
-import { EVM_REFUND_ACCOUNT } from "@/config";
+import { EVM_REFUND_ACCOUNT, BTC_REFUND_ACCOUNT } from "@/config";
 import { useDebounceFn } from "ahooks";
 
 export default function RechargeFrom1click() {
@@ -43,10 +43,10 @@ export default function RechargeFrom1click() {
           evmAddress: address || "",
           slippageTolerance: 50,
           swapType: "FLEX_INPUT",
-          refundType: chain.blockchain === "btc" ? "INTENTS" : "ORIGIN_CHAIN",
+          refundType: "ORIGIN_CHAIN",
           refundTo:
             chain.blockchain === "btc"
-              ? import.meta.env.VITE_NEAR_ACCOUNT_ID
+              ? BTC_REFUND_ACCOUNT
               : EVM_REFUND_ACCOUNT,
           getFullQuote: true
         });
