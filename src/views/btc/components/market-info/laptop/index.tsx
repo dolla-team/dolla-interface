@@ -51,7 +51,7 @@ export default function MarketInfo() {
             />
           ))}
 
-          {pool?.participants >= 15 && (
+          {pool?.degen_players?.length >= 10 && (
             <MoreIcon className="ml-[-6px] relative z-[2]" />
           )}
           <div className="text-[12px] text-white ml-[6px]">
