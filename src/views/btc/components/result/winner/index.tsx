@@ -11,7 +11,7 @@ import gsap from "gsap";
 import { useBtcContext } from "../../../context";
 import useIsMobile from "@/hooks/use-is-mobile";
 import DollaEye from "@/components/dolla-eye";
-import { getAnchorPrice } from "@/utils/pool";
+import { getReAnchorPrice } from "@/utils/pool";
 import { BASE_TOKEN } from "@/config/btc";
 
 export default function Winner({
@@ -152,8 +152,7 @@ export default function Winner({
                     WebkitTextFillColor: "transparent"
                   }}
                 >
-                  $
-                  {formatNumber(getAnchorPrice(pool?.anchor_price, 6), 2, true)}
+                  ${formatNumber(getReAnchorPrice(pool), 2, true)}
                 </div>
               </>
             )}
