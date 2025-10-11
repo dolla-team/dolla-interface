@@ -4,6 +4,7 @@ interface TaskState {
   tasks: any[];
   progressTasks: any;
   completedTasks: any[];
+  tasksMap: any;
   loading: boolean;
   initialized: boolean;
   isBid: boolean;
@@ -37,6 +38,7 @@ const useTaskStore = create<TaskState>((set) => ({
   tasks: [],
   progressTasks: Object.values(initProgressTasks),
   completedTasks: [],
+  tasksMap: {},
   loading: false,
   initialized: false,
   isBid: false,

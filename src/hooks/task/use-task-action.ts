@@ -35,10 +35,12 @@ export default function useTaskAction(task: any, onSuccess?: () => void) {
   });
 
   const [buttonText, pastButtonText] = useMemo(() => {
+    if (!task) return ["", ""];
     return getButtonText(task);
   }, [task]);
 
   const handleTaskAction = useCallback(async () => {
+    if (!task) return;
     if ((task.is_completed && !task.is_claimed) || completed) {
       await claimTask(task.id);
       return;
@@ -72,6 +74,7 @@ export default function useTaskAction(task: any, onSuccess?: () => void) {
   }, [task, completed]);
 
   const fetchTaskStatus = useCallback(async (): Promise<any> => {
+    if (!task) return;
     try {
       setRefreshing(true);
       const response = await axiosInstance.get(`/api/v1/task/${task.id}`);
@@ -79,6 +82,7 @@ export default function useTaskAction(task: any, onSuccess?: () => void) {
       setCompleted(data.is_completed);
       setClaimed(data.is_claimed);
       setProgress(data.is_completed ? 1 : data.progress);
+      taskStore.set({ tasksMap: { ...taskStore.tasksMap, [task.id]: data } });
 
       toast.success({ title: "Refresh successfully" });
     } catch (err: any) {

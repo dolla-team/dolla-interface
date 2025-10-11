@@ -25,7 +25,7 @@ export default function Progress({
                   {task.title}
                 </div>
                 {task.list.map((item: any) => (
-                  <Task key={item.id} task={item} onSuccess={onSuccess} />
+                  <Task key={item} id={item} onSuccess={onSuccess} />
                 ))}
               </div>
             )

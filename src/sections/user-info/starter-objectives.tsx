@@ -5,10 +5,11 @@ import useTaskAction from "@/hooks/task/use-task-action";
 import { useAuth } from "@/contexts/auth";
 import useTaskStore from "@/stores/use-task";
 import RefreshBtn from "@/views/profile/player/objectives/refresh-btn";
+import { useMemo } from "react";
 
 export default function StarterObjectives() {
-  const taskStore = useTaskStore();
   const { onQueryUserInfo } = useAuth();
+  const taskStore = useTaskStore();
   return (
     <div className="px-[20px] py-[8px] text-white h-[calc(100%-370px)] mt-[10px]">
       <div className="flex items-center justify-between pb-[10px]">
@@ -26,8 +27,8 @@ export default function StarterObjectives() {
         <div className="h-[calc(100%-20px)] overflow-y-auto flex flex-col gap-[10px]">
           {taskStore.tasks.map((task) => (
             <Item
-              key={task.id}
-              task={task}
+              key={task}
+              id={task}
               onSuccess={() => {
                 onQueryUserInfo();
               }}
@@ -39,7 +40,10 @@ export default function StarterObjectives() {
   );
 }
 
-const Item = ({ task, onSuccess }: { task: any; onSuccess: () => void }) => {
+const Item = ({ id, onSuccess }: { id: any; onSuccess: () => void }) => {
+  const taskStore = useTaskStore();
+  const task = taskStore.tasksMap[id];
+
   const {
     buttonText,
     pastButtonText,
@@ -53,43 +57,45 @@ const Item = ({ task, onSuccess }: { task: any; onSuccess: () => void }) => {
   } = useTaskAction(task, onSuccess);
 
   return (
-    <div
-      className={clsx(
-        "rounded-[10px] border border-[#F2F2F233] bg-[#F2F2F21A] backdrop-blur-[25px] p-[10px] text-white"
-      )}
-    >
-      <div className="flex items-center justify-between">
-        <span className="text-[10px]">{task.title}</span>
-        {claimed && (
-          <div className="flex items-center gap-[6px]">
-            <span className="text-[8px] text-white/30">{pastButtonText}</span>
-            <CheckIcon />
-          </div>
+    task && (
+      <div
+        className={clsx(
+          "rounded-[10px] border border-[#F2F2F233] bg-[#F2F2F21A] backdrop-blur-[25px] p-[10px] text-white"
         )}
-        {!claimed && (
-          <div className="flex items-center gap-[10px]">
-            <RefreshBtn
-              refreshing={refreshing}
-              handleRefresh={fetchTaskStatus}
-            />
-            <Button
-              className="px-[7px] h-[26px] text-[10px] !rounded-[8px] min-w-[60px]"
-              loading={loading}
-              onClick={() => handleTaskAction()}
-            >
-              {completed ? "Claim" : buttonText}
-            </Button>
-          </div>
-        )}
-      </div>
+      >
+        <div className="flex items-center justify-between">
+          <span className="text-[10px]">{task.title}</span>
+          {claimed && (
+            <div className="flex items-center gap-[6px]">
+              <span className="text-[8px] text-white/30">{pastButtonText}</span>
+              <CheckIcon />
+            </div>
+          )}
+          {!claimed && (
+            <div className="flex items-center gap-[10px]">
+              <RefreshBtn
+                refreshing={refreshing}
+                handleRefresh={fetchTaskStatus}
+              />
+              <Button
+                className="px-[7px] h-[26px] text-[10px] !rounded-[8px] min-w-[60px]"
+                loading={loading}
+                onClick={() => handleTaskAction()}
+              >
+                {completed ? "Claim" : buttonText}
+              </Button>
+            </div>
+          )}
+        </div>
 
-      <div className="w-full h-[6px] bg-[#F2F2F21A] rounded-[3px] backdrop-blur-[25px] mt-[10px]">
-        <div
-          className="h-full bg-[#00FFBB] rounded-[3px]"
-          style={{ width: `${progress * 100}%` }}
-        />
+        <div className="w-full h-[6px] bg-[#F2F2F21A] rounded-[3px] backdrop-blur-[25px] mt-[10px]">
+          <div
+            className="h-full bg-[#00FFBB] rounded-[3px]"
+            style={{ width: `${progress * 100}%` }}
+          />
+        </div>
       </div>
-    </div>
+    )
   );
 };
 

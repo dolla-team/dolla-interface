@@ -17,23 +17,25 @@ export default function useTaskCurrent() {
       const data = response.data.data || {};
 
       let _progressTasks = JSON.parse(JSON.stringify(initProgressTasks));
+      let _tasks: any = [];
+      let _tasksMap: any = {};
       [...(data.fixed_tasks || []), ...(data.ongoing_tasks || [])].forEach(
         (item: any) => {
-          if (!item.is_claimed) _progressTasks[item.category].list.push(item);
+          if (!item.is_claimed) {
+            _tasksMap[item.id] = item;
+            _tasks.push(item.id);
+            _progressTasks[item.category].list.push(item.id);
+          }
         }
       );
 
-      const tasks = [
-        ...(data.fixed_tasks || []),
-        ...(data.ongoing_tasks || [])
-      ].filter((item: any) => !item.is_claimed);
-
       taskStore.set({
-        tasks: tasks,
+        tasks: _tasks,
         progressTasks: Object.values(_progressTasks),
         completedTasks: listResponse.data.data?.completed_tasks || [],
         loading: false,
-        initialized: true
+        initialized: true,
+        tasksMap: _tasksMap
       });
     } catch (err: any) {
       console.error("Failed to fetch tasks:", err);
