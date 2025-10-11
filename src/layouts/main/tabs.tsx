@@ -41,14 +41,13 @@ export default function PageTabs() {
           tab === 0 ? "/" : tab === 1 ? "/portfolio/player" : "/btc/create"
         );
       }}
-      className="absolute left-[50%] translate-x-[-50%] w-[336px] h-[40px] p-[2px] !gap-0 border border-[#E4E4E4] bg-[#F2F2F299] rounded-[12px] backdrop-blur-[25px]"
+      className="absolute left-[50%] translate-x-[-50%] w-[336px] h-[40px] p-[2px] !gap-0 rounded-[12px] backdrop-blur-[25px]"
       tabClassName={clsx(
-        "text-[14px] w-1/2 text-center h-[34px] leading-[34px] text-[#2B3337]"
+        "text-[14px] w-1/3 text-center h-[34px] leading-[34px] text-[#2B3337]"
       )}
-      activeClassName="!text-white"
+      activeClassName="font-[600]"
       cursorClassName={clsx(
-        "h-[34px] rounded-[12px] w-full !bottom-[0px]",
-        isBtc ? "!bg-[#000]" : "!bg-[#6F37FF]"
+        "!h-[4px] !w-[32px] rounded-[10px] !left-[50%] translate-x-[-50%] !bottom-[-2px] !bg-[#000]"
       )}
     />
   );
