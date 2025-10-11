@@ -90,7 +90,7 @@ export default function History({
                     {column.key === "date" &&
                       dayjs(record.updated_at).format("HH:mm D MMM, YYYY")}
                     {column.key === "volume" &&
-                      `${record.volume * record.number} ${
+                      `${record.volume} ${
                         itemsMap[
                           record.token + "_" + record.config?.token_volume
                         ]?.name
