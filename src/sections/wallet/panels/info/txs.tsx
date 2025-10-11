@@ -77,7 +77,7 @@ const Item = ({ data }: { data: any }) => {
               true,
               data.type === "swap"
                 ? {}
-                : data.type === "deposit"
+                : data.type === "deposit" || data.type === "ticket"
                 ? { prefix: "+ " }
                 : { prefix: "- " }
             )}{" "}

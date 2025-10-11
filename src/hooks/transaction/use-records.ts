@@ -32,12 +32,12 @@ export default function useRecords(isScroll?: boolean) {
   const pageRef = useRef(0);
   const { userInfo, address } = useAuth();
   // Fetch records with pagination (infinite scroll style)
-  const fetchRecords = useCallback(async () => {
+  const fetchRecords = async () => {
     try {
       setLoading(true);
 
       const response = await axiosInstance.get<RecordsResponse>(
-        "/api/v1/chaindefuser/records",
+        "/api/v1/account_records",
         {
           params: {
             limit: DEFAULT_LIMIT,
@@ -49,33 +49,23 @@ export default function useRecords(isScroll?: boolean) {
 
       const { data } = response.data;
 
-      console.log("data:", data.list);
-
       const _list = data.list.map((item: any) => {
-        const rawResponse = JSON.parse(item.raw_response);
-
-        const assetId =
-          item.type === "deposit"
-            ? rawResponse.quoteResponse.quoteRequest.destinationAsset
-            : rawResponse.quoteResponse.quoteRequest.originAsset;
-
         let tokens: any[] = [];
-        if (item.type === "swap") {
-          tokens =
-            rawResponse.quoteResponse.quoteRequest.originAsset ===
-            BASE_TOKEN.assetId
-              ? [BASE_TOKEN, QUOTE_TOKEN]
-              : [QUOTE_TOKEN, BASE_TOKEN];
-        } else {
-          const token =
-            assetId === BASE_TOKEN.assetId ? BASE_TOKEN : QUOTE_TOKEN;
-          tokens = [token];
-        }
+        let businessType = "";
 
-        const amount =
-          item.type === "swap"
-            ? rawResponse.quoteResponse.quote.amountInFormatted
-            : rawResponse.swapDetails.amountInFormatted;
+        if (item.type === "swap") {
+          tokens = [BASE_TOKEN, QUOTE_TOKEN];
+        } else {
+          tokens =
+            item.assets?.[0] === BASE_TOKEN.assetId
+              ? [BASE_TOKEN]
+              : [QUOTE_TOKEN];
+        }
+        if (item.source === "CHAINDEFUSER") {
+          businessType = item.type.charAt(0).toUpperCase() + item.type.slice(1);
+        } else if (item.source === "TICKET") {
+          businessType = "Lucky Draw";
+        }
 
         let status = item.status;
         if (item.status === "SUCCESS") {
@@ -87,13 +77,14 @@ export default function useRecords(isScroll?: boolean) {
         } else {
           status = "Processing";
         }
+
         return {
           type: item.type,
-          business_type: item.type.charAt(0).toUpperCase() + item.type.slice(1),
+          business_type: businessType,
           tokens,
-          amount,
+          amount: item.amount,
           id: item.id,
-          updated_at: item.updated_at,
+          updated_at: item.date,
           status
         };
       });
@@ -114,7 +105,7 @@ export default function useRecords(isScroll?: boolean) {
     } finally {
       setLoading(false);
     }
-  }, []);
+  };
 
   // Load more records (for infinite scroll)
   const loadMore = useCallback(async () => {
