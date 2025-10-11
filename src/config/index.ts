@@ -12,4 +12,4 @@ export const NEAR_REFUND_ACCOUNT = "reffer.near";
 
 export const EVM_REFUND_ACCOUNT = "0x1c7c07f5b03d4d73098d025e46497e93a8b8ec72";
 
-export const BTC_REFUND_ACCOUNT = "";
+export const BTC_REFUND_ACCOUNT = "3HMTBqmN7Xxi1YSZH1mzuYtjNm4pkiwzaZ";
