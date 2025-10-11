@@ -86,7 +86,6 @@ export default function useGameAction({
 
       const gameArgs = {
         game_args: {
-          // TODO
           ByAk: { game_id: Number(gameId), token: { FT: QUOTE_TOKEN.address } }
         }
       };

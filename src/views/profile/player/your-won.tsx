@@ -25,7 +25,6 @@ export default function YourWon({ data }: { data: any[] }) {
           {data.map((item) => (
             <div key={item.id} className="flex items-center justify-between">
               <div className="flex items-center gap-[4px]">
-                {/* TODO */}
                 {item.token_icon && (
                   <img
                     className="w-[20px] h-[20px]"

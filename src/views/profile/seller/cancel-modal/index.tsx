@@ -6,6 +6,7 @@ import Button from "@/components/button";
 import { getAnchorPrice } from "@/utils/pool";
 import useGameAction from "@/hooks/near/use-game-action";
 import { useContractConfigStore } from "@/stores/use-contract-config";
+import { useAuth } from "@/contexts/auth";
 
 export default function CancelModal({
   open,
@@ -19,6 +20,7 @@ export default function CancelModal({
   order: any;
 }) {
   const contractConfig = useContractConfigStore((store) => store.config);
+  const { nearAccount } = useAuth();
   const rewardTokenInfo = useMemo(() => {
     return order?.reward_token_info?.[0] || {};
   }, [order]);
@@ -56,12 +58,12 @@ export default function CancelModal({
     let _completable = true;
     if (order.status === 5) {
       setStatus(1);
-      // _completable = Date.now() - order?.result_time * 1000 > 1000 * 60 * 10;
+      _completable = Big(_penalty).gt(Big(nearAccount?.balance || 0).add(0.1));
     }
 
     const _markable = true;
     return [_penalty, _markable, _completable];
-  }, [order]);
+  }, [order, nearAccount]);
 
   return (
     <Modal onClose={onClose} open={open}>
@@ -185,7 +187,7 @@ export default function CancelModal({
                   cancelGame();
                 }}
               >
-                Cancel
+                {completable ? "Cancel" : "Insufficient Balance"}
               </Button>
             </>
           )}
