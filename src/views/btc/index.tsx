@@ -7,7 +7,6 @@ import BidsInfo from "./components/bids-info";
 import MarketInfo from "./components/market-info";
 import Grand from "./grand";
 import DollaEye from "@/components/dolla-eye";
-import TopWinner from "@/sections/winners";
 import Music from "./components/music";
 import useIsMobile from "@/hooks/use-is-mobile";
 import clsx from "clsx";

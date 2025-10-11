@@ -88,6 +88,7 @@ export const CannonCoinsProvider = ({
 
   const loopUpdatePool = async (_pool: any) => {
     clearTimeout(window.poolTimer);
+
     if (_pool?.status === 1) {
       const res = await onQueryPoolInfo(_pool?.pool_id);
       if (res?.status === 1) {
@@ -106,11 +107,15 @@ export const CannonCoinsProvider = ({
   useEffect(() => {
     if (!params?.poolId) return;
     let count = 0;
+
     const updatePool = async () => {
       const res = await onQueryPoolInfo(Number(params.poolId));
       if (res) {
         setPool(res);
-        loopUpdatePool(res);
+
+        window.poolTimer = setTimeout(() => {
+          loopUpdatePool(res);
+        }, 10000);
       } else {
         clearTimeout(window.poolTimer);
         if (count < 5) {
