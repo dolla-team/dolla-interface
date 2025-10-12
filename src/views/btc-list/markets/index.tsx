@@ -5,7 +5,7 @@ import usePoolList from "@/hooks/use-pool-list";
 import Loading from "@/components/icons/loading";
 import { useNavigate } from "react-router-dom";
 import clsx from "clsx";
-import { BASE_TOKEN } from "@/config/btc";
+import { BASE_TOKEN, AMOUNT } from "@/config/btc";
 import useTaskStore from "@/stores/use-task";
 import Empty from "@/sections/wallet/panels/info/empty";
 import Popover, {
@@ -47,16 +47,16 @@ export default function Markets() {
           {[
             { label: "All", key: 0 },
             {
-              label: "1 " + BASE_TOKEN.symbol,
-              key: 1 * 10 ** BASE_TOKEN.decimals
+              label: AMOUNT[0] + " " + BASE_TOKEN.symbol,
+              key: AMOUNT[0] * 10 ** BASE_TOKEN.decimals
             },
             {
-              label: "0.1 " + BASE_TOKEN.symbol,
-              key: 0.1 * 10 ** BASE_TOKEN.decimals
+              label: AMOUNT[1] + " " + BASE_TOKEN.symbol,
+              key: AMOUNT[1] * 10 ** BASE_TOKEN.decimals
             },
             {
-              label: "0.01 " + BASE_TOKEN.symbol,
-              key: 0.01 * 10 ** BASE_TOKEN.decimals
+              label: AMOUNT[2] + " " + BASE_TOKEN.symbol,
+              key: AMOUNT[2] * 10 ** BASE_TOKEN.decimals
             }
           ].map((item) => (
             <button

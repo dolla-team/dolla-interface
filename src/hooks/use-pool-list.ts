@@ -6,6 +6,7 @@ import Big from "big.js";
 import { formatNumber } from "@/utils/format/number";
 import { useDebounceFn } from "ahooks";
 import usePoolListStore from "@/stores/use-pool-list";
+import { AMOUNT } from "@/config/btc";
 
 export default function usePoolList(props?: {
   pageLimit?: number;
@@ -93,19 +94,19 @@ export default function usePoolList(props?: {
         };
 
         if (
-          _a === "1" &&
+          Number(_a) === AMOUNT[0] &&
           Big(item.accumulative_bids).gt(market1?.accumulative_bids || 0)
         ) {
           market1 = market;
         }
         if (
-          _a === "0.1" &&
+          Number(_a) === AMOUNT[1] &&
           Big(item.accumulative_bids).gt(market01?.accumulative_bids || 0)
         ) {
           market01 = market;
         }
         if (
-          _a === "0.01" &&
+          Number(_a) === AMOUNT[2] &&
           Big(item.accumulative_bids).gt(market001?.accumulative_bids || 0)
         ) {
           market001 = market;

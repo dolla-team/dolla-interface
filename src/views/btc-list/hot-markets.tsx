@@ -3,10 +3,12 @@ import clsx from "clsx";
 import useTokenPrice from "@/hooks/use-token-price";
 import { useMemo } from "react";
 import { formatNumber } from "@/utils/format/number";
-import { BASE_TOKEN } from "@/config/btc";
+import { AMOUNT, BASE_TOKEN } from "@/config/btc";
 import { useNavigate } from "react-router-dom";
 import usePoolListStore from "@/stores/use-pool-list";
 import { getReAnchorPrice } from "@/utils/pool";
+
+const imgs = ["btc-1", "btc-0.1", "btc-0.01"];
 
 export default function MoreMarkets() {
   const { prices } = useTokenPrice(BASE_TOKEN);
@@ -23,13 +25,15 @@ export default function MoreMarkets() {
 
   return (
     <div className="flex items-center gap-[20px] mt-[20px]">
-      {[1, 0.1, 0.01].map((item) => {
+      {AMOUNT.map((item, index) => {
         return (
           <MarketItem
             key={item}
             value={item}
             price={price}
             market={poolListStore.hotMarkets[item]}
+            img={imgs[index]}
+            index={index}
           />
         );
       })}
@@ -40,11 +44,15 @@ export default function MoreMarkets() {
 const MarketItem = ({
   value,
   price,
-  market
+  market,
+  img,
+  index
 }: {
   value: number;
   price: number;
   market: any;
+  img: string;
+  index: number;
 }) => {
   const navigate = useNavigate();
   const valued = useMemo(() => {
@@ -79,7 +87,7 @@ const MarketItem = ({
       <div
         className={clsx(
           "absolute top-0 left-0 w-full h-full rounded-[16px] z-[5] flex flex-col justify-center",
-          value === 0.01 ? "pl-[90px]" : "pl-[140px]"
+          index === 2 ? "pl-[90px]" : "pl-[140px]"
         )}
       >
         <div className="text-[14px] text-white">Bid for</div>
@@ -115,7 +123,7 @@ const MarketItem = ({
       <div
         className="absolute top-0 left-0 w-full h-full rounded-[16px] z-[2] bg-cover bg-center"
         style={{
-          backgroundImage: `url('/home/btc-${value}.png')`
+          backgroundImage: `url('/home/${img}.png')`
         }}
       />
       <div className="opacity-0 absolute top-0 left-0 z-[10] bg-[#0000004D] backdrop-blur-[25px] group-hover:opacity-100 duration-300 w-full h-full rounded-[16px] flex items-center justify-center">
