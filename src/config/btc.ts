@@ -20,7 +20,7 @@ export const BASE_TOKEN: Record<string, any> = {
   icon: "/tokens/btc.png",
   pointsIcon: "/tokens/btc.png",
   isBaseToken: true,
-  minDepositAmount: "0.01"
+  minDepositAmount: "0.0001"
 };
 
 export const QUOTE_TOKEN: Record<string, any> = {
