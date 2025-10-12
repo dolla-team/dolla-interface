@@ -76,11 +76,9 @@ export default function BTCCreate() {
     if (Big(amount).gt(Big(nearAccount?.prizeBalance || 0))) {
       return `Insufficient ${BASE_TOKEN.symbol} Balance`;
     }
-    if (nearAccount?.balance === "0")
-      return `Insufficient ${QUOTE_TOKEN.symbol} Balance`;
 
     return "";
-  }, [amount, pricePerBTC, nearAccount?.prizeBalance, nearAccount?.balance]);
+  }, [amount, pricePerBTC, nearAccount?.prizeBalance]);
 
   const [poolBidsOvermarket] = useMemo(() => {
     return [
