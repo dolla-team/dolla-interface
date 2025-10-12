@@ -49,7 +49,7 @@ const Item = ({ data, number, total, winner, bidsDistribution }: any) => {
   }, [number, total]);
 
   return (
-    number && (
+    !!number && (
       <div className="flex items-center">
         <div className="text-[14px] text-[#FFE9B2] w-[100px] mr-[11px] shrink-0">
           BID x{data.value}

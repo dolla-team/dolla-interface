@@ -152,7 +152,7 @@ export default function EndPanel({ data }: { data: any }) {
                 Return multiple
               </span>
               <span className="text-white text-[12px] font-[DelaGothicOne]">
-                {returnMultiple}
+                {formatNumber(returnMultiple, 0, true, { isShort: true })}
               </span>
             </div>
           </div>
