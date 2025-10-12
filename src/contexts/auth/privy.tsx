@@ -142,7 +142,6 @@ export const AuthProvider: React.FC<{
         }
       });
     } catch (error: any) {
-      console.error("Sign message error:", error);
       setLogining(false);
       // If signing fails, it might be an authentication issue, redirect to login
       if (
@@ -150,6 +149,10 @@ export const AuthProvider: React.FC<{
         error?.message?.includes("embedded wallet")
       ) {
         login();
+      }
+
+      if (error?.message?.includes("user rejected")) {
+        logout();
       }
     }
   };
