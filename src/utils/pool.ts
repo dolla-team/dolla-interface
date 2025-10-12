@@ -21,8 +21,7 @@ export const getAnchorPrice = (price: number, decimals: number = 18) => {
 
 export const getReAnchorPrice = (pool: any) => {
   if (pool?.anchor_price) {
-    const decimals =
-      pool.anchor_price.length > 18 && BASE_TOKEN.symbol === "ETH" ? 18 : 6;
+    const decimals = 6;
     return Big(pool.anchor_price)
       .div(1 + (window.oddOffset || 0.2))
       .div(10 ** decimals)

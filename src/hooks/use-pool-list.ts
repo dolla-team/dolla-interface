@@ -82,7 +82,7 @@ export default function usePoolList(props?: {
         const reward_amount = item.reward_amount || 0;
         const decimals = item.reward_token_info?.[0]?.decimals || 1;
         const _an = Big(reward_amount).div(10 ** decimals);
-        const _a = formatNumber(_an, 3, true);
+        const _a = formatNumber(_an, 6, true);
 
         const market = {
           ...item,
@@ -127,9 +127,9 @@ export default function usePoolList(props?: {
 
       poolListStore.set({
         hotMarkets: {
-          "1": market1,
-          "0.1": market01,
-          "0.01": market001
+          "0": market1,
+          "1": market01,
+          "2": market001
         }
       });
 

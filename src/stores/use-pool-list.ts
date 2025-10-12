@@ -7,9 +7,9 @@ interface PoolListState {
 
 const usePoolListStore = create<PoolListState>((set) => ({
   hotMarkets: {
+    "0": null,
     "1": null,
-    "0.1": null,
-    "0.01": null
+    "2": null
   },
   set: (params) => set(() => ({ ...params }))
 }));

@@ -31,7 +31,7 @@ export default function MoreMarkets() {
             key={item}
             value={item}
             price={price}
-            market={poolListStore.hotMarkets[item]}
+            market={poolListStore.hotMarkets[index]}
             img={imgs[index]}
             index={index}
           />
