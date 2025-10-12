@@ -1,20 +1,20 @@
-import { BASE_TOKEN } from "@/config/btc";
+import { AMOUNT, BASE_TOKEN } from "@/config/btc";
 
 const amountConfig: Record<
   string,
   { textColor: string; bgColor: string[]; borderColor: string[] }
 > = {
-  1: {
+  0: {
     textColor: "linear-gradient(180deg, #FFDD70 0%, #DFBC4D 100%)",
     bgColor: ["#99761C", "#FFC42F"],
     borderColor: ["#FFE89E", "#C4A235"]
   },
-  0.1: {
+  1: {
     textColor: "linear-gradient(180deg, #ECECEC 0%, #818181 100%)",
     bgColor: ["#474747", "#A8A8A8"],
     borderColor: ["#CBCBCB", "#68748A"]
   },
-  0.01: {
+  2: {
     textColor: "linear-gradient(180deg, #FFE7DB 0%, #D3AC90 100%)",
     bgColor: ["#746454", "#BE9774"],
     borderColor: ["#F5D4B9", "#725A40"]
@@ -22,15 +22,15 @@ const amountConfig: Record<
 };
 
 export default function BTCBg({
-  amount,
+  index,
   id,
   name
 }: {
-  amount: string;
+  index: number;
   id: string;
   name: string;
 }) {
-  const config = amountConfig[amount];
+  const config = amountConfig[index];
   return (
     <div className="w-[52px] h-[52px] relative">
       <svg
@@ -220,7 +220,7 @@ export default function BTCBg({
           WebkitTextFillColor: "transparent"
         }}
       >
-        {amount} {name || BASE_TOKEN.symbol}
+        {AMOUNT[index]} {name || BASE_TOKEN.symbol}
       </span>
     </div>
   );

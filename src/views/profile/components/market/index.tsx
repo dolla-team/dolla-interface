@@ -8,6 +8,7 @@ import { formatAddress } from "@/utils/format/address";
 import Avatar from "@/components/avatar";
 import BtcImg from "@/views/btc-list/markets/btc-bg";
 import MarketStatus from "../market-status";
+import { AMOUNT } from "@/config/btc";
 
 export default function Market({
   data,
@@ -27,7 +28,7 @@ export default function Market({
   onClick?: () => void;
   isActive?: boolean;
 }) {
-  const [progress, anchorPrice] = useMemo(() => {
+  const [progress] = useMemo(() => {
     if (data?.anchor_price === "0") return [0, 0];
     const _anchorPrice = getReAnchorPrice(data);
 
@@ -60,7 +61,7 @@ export default function Market({
           <div className="flex items-center gap-[12px]">
             {data?.reward_amount && (
               <BtcImg
-                amount={amount}
+                index={AMOUNT.indexOf(Number(amount))}
                 id={data?.pool_id}
                 name={data.reward_token_info?.[0]?.symbol}
               />

@@ -6,6 +6,7 @@ import { getReAnchorPrice } from "@/utils/pool";
 import ProgressBar from "@/components/nft-card/progress-bar";
 import BtcImg from "./btc-bg";
 import { useAuth } from "@/contexts/auth";
+import { AMOUNT } from "@/config/btc";
 
 export default function Market({
   data,
@@ -37,7 +38,7 @@ export default function Market({
           {column.dataIndex === "market" && (
             <div className="flex items-center gap-[16px]">
               <BtcImg
-                amount={data.amount}
+                index={AMOUNT.indexOf(Number(data.amount))}
                 id={data.pool_id}
                 name={data.reward_token_info?.[0]?.symbol}
               />
