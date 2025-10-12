@@ -152,7 +152,9 @@ export const AuthProvider: React.FC<{
       }
 
       if (error?.message?.includes("user rejected")) {
-        logout();
+        setTimeout(() => {
+          sign();
+        }, 500);
       }
     }
   };

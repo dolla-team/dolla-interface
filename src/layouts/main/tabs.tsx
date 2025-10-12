@@ -6,7 +6,7 @@ import clsx from "clsx";
 import { useAuth } from "@/contexts/auth";
 
 export default function PageTabs() {
-  const { address, login } = useAuth();
+  const { userInfo, login } = useAuth();
   const isBtc = useIsBtc();
   const [tab, setTab] = useState(isBtc ? 0 : 1);
   const navigate = useNavigate();
@@ -32,7 +32,7 @@ export default function PageTabs() {
       ]}
       currentTab={tab}
       onChangeTab={(tab: any) => {
-        if (!address) {
+        if (!userInfo?.user) {
           login();
           return;
         }
