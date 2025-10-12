@@ -2,7 +2,7 @@ export default function ExchangeIcon({ onClick }: any) {
   return (
     <div
       onClick={onClick}
-      className="h-[8px] flex justify-center items-center duration-500 relative button"
+      className="h-[12px] flex justify-center items-center duration-500 relative button"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"

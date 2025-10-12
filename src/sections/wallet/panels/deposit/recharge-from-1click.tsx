@@ -11,6 +11,7 @@ import Loading from "@/components/icons/loading";
 import ChainSelector from "./chain-selector";
 import { EVM_REFUND_ACCOUNT, BTC_REFUND_ACCOUNT } from "@/config";
 import { useDebounceFn } from "ahooks";
+import { BTC_DEPOSIT_AMOUNT } from "@/config/btc";
 
 export default function RechargeFrom1click() {
   const [quote, setQuote] = useState<any>(null);
@@ -39,7 +40,7 @@ export default function RechargeFrom1click() {
           destinationAsset: walletStore.selectedToken.assetId,
           amount:
             chain.blockchain === "btc"
-              ? "10000"
+              ? BTC_DEPOSIT_AMOUNT
               : new Big(walletStore.selectedToken.minDepositAmount)
                   .mul(10 ** decimals)
                   .toString(),
@@ -160,7 +161,10 @@ export default function RechargeFrom1click() {
                 {" "}
                 Min. deposit{" "}
                 <span className="font-bold text-black">
-                  &gt; {walletStore.selectedToken.minDepositAmount}{" "}
+                  &gt;{" "}
+                  {chain?.blockchain === "btc"
+                    ? Number(BTC_DEPOSIT_AMOUNT) / 1e8
+                    : walletStore.selectedToken.minDepositAmount}{" "}
                   {walletStore.selectedToken.symbol}
                 </span>
               </div>

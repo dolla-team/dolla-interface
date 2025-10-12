@@ -38,3 +38,5 @@ export const QUOTE_TOKEN: Record<string, any> = {
 export const PAID_TOKEN = QUOTE_TOKEN;
 
 export const AMOUNT = [0.01, 0.001, 0.0001];
+
+export const BTC_DEPOSIT_AMOUNT = "20000";
