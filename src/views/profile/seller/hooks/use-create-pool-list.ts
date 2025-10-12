@@ -17,7 +17,7 @@ export default function useCreatePoolList() {
   const poolsData = useRef<any>({});
 
   const [recordsPageIndex, setRecordsPageIndex] = useState(1);
-  const [recordsPageSize] = useState(100);
+  const [recordsPageSize] = useState(10);
   const [recordsPageHasNextPage, setRecordsPageHasNextPage] = useState(true);
 
   const getCreatePoolList = async () => {
@@ -80,7 +80,7 @@ export default function useCreatePoolList() {
       return [];
     },
     {
-      refreshDeps: [recordsPageIndex, recordsPageSize, userInfo]
+      refreshDeps: [recordsPageIndex, recordsPageSize, userInfo?.user]
     }
   );
   const recordsTokens = useMemo(() => {
