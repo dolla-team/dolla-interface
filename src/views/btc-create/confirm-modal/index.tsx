@@ -3,6 +3,7 @@ import Button from "@/components/button";
 import ModalClose from "@/components/button/modal-close";
 import useCreate from "@/hooks/near/use-create";
 import { formatNumber } from "@/utils/format/number";
+import { BASE_TOKEN } from "@/config/btc";
 
 export default function ConfirmModal({
   open,
@@ -32,8 +33,10 @@ export default function ConfirmModal({
         <div className="relative z-[2] flex flex-col items-center mt-[30px]">
           <div className="text-[14px] text-black text-center w-[332px]">
             Your are creating a{" "}
-            <span className="text-[16px] font-[700]">{amount} BTC</span> sell
-            market, valued ${formatNumber(amount * pricePerBTC, 2, true)}
+            <span className="text-[16px] font-[700]">
+              {amount} {BASE_TOKEN.symbol}
+            </span>{" "}
+            sell market, valued ${formatNumber(amount * pricePerBTC, 2, true)}
           </div>
           <div className="flex gap-[13px] mt-[26px]">
             <Button
