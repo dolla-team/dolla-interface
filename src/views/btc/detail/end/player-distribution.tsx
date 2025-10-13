@@ -19,8 +19,6 @@ export default function PlayerDistribution({
     return Object.values(distributed).reduce((acc, curr) => acc + curr, 0);
   }, [distributed]);
 
-  console.log("distributed", distributed);
-
   return (
     <div className="w-full rounded-[10px] bg-[#00000033] mt-[10px]">
       <div
@@ -61,9 +59,9 @@ const Item = ({ data, number, total, winner, bidsDistribution }: any) => {
             className="h-full rounded-[6px] mr-[16px]"
             style={{ width: `${width}%`, backgroundColor: data.color }}
           />
+          <div className="text-[14px] text-[#ADBCCF]">{number}</div>
           {!!bidsDistribution && (
             <>
-              <div className="text-[14px] text-[#ADBCCF]">{number}</div>
               <div className="flex items-center gap-[6px] ml-[10px]">
                 <Avatar
                   size={20}
