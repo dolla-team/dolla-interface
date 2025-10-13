@@ -22,6 +22,7 @@ export const usePoolDistributed = (data: any) => {
         10: 0,
         20: 0
       };
+
       res.data.data.forEach((item: any) => {
         if (item.bid === 1) {
           _result[1] += item.number;

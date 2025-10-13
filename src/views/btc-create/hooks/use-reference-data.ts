@@ -34,24 +34,67 @@ export function useReferenceData(props: any) {
     }
   );
 
-  const [data] = useMemo(() => {
-    if (!referenceList || !token) return [];
+  const [data, bids] = useMemo(() => {
+    if (!referenceList || !token) return [null, []];
 
-    const _data = referenceList.find((item: any) => {
-      const _amount = Big(amount)
-        .mul(10 ** token.decimals)
-        .toFixed(0);
+    let _data: any = {};
 
-      return (
-        item.reward_token.toLowerCase() === token.address.toLowerCase() &&
-        _amount === item.reward_amount
-      );
+    let _bids: any = [];
+
+    referenceList.forEach((item: any) => {
+      const _label = Big(item.reward_amount)
+        .div(10 ** token.decimals)
+        .toString();
+      const _timing = [
+        {
+          label: "in 1 day",
+          value: item.end_time_1day_num,
+          percentage: Number(item.end_time_1day * 100).toFixed(2)
+        },
+        {
+          label: "in 2 days",
+          value: item.end_time_2day_num,
+          percentage: Number(item.end_time_2day * 100).toFixed(2)
+        },
+        {
+          label: "in 7 days",
+          value: item.end_time_7day_num,
+          percentage: Number(item.end_time_7day * 100).toFixed(2)
+        },
+        {
+          label: "other days",
+          value: item.end_time_other_day_num,
+          percentage: Number(item.end_time_other_day * 100).toFixed(2)
+        }
+      ];
+
+      _bids.push({
+        label: _label,
+        value: item.total_creations_amount,
+        percentage: Number(
+          (item.total_creations_amount / item.total_creations) * 100
+        ).toFixed(2),
+        bids: item.times
+      });
+
+      _data[_label] = {
+        top_sale: item.top_sale,
+        avg_profit: item.avg_profit,
+        live: item.live,
+        timing: _timing
+      };
     });
-    return [_data];
-  }, [referenceList, token, amount]);
+    return [_data, _bids];
+  }, [referenceList, token]);
+
+  const currentData = useMemo(() => {
+    if (!data) return {};
+    return data[amount];
+  }, [data, amount]);
 
   return {
-    data,
-    loading: referenceListLoading
+    data: currentData,
+    loading: referenceListLoading,
+    bidsMarket: bids
   };
 }

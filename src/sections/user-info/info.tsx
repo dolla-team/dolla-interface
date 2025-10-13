@@ -20,7 +20,7 @@ export default function Info() {
       />
       <div className="flex-1 w-0">
         <div className="text-[18px] font-semibold text-white truncate">
-          {user?.email?.address}
+          {userInfo?.name}
         </div>
         <div className="flex items-center gap-[3px]">
           <span className="text-[12px] text-white">

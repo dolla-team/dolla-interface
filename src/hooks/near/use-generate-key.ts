@@ -42,13 +42,13 @@ export default function useGenerateKey() {
       privateKey: newPrivateKey
     } = createKeyPair();
 
-    saveKeyPair(shortPublicKey, newPrivateKey);
-
     if ((nearAccount || !isCorrect) && contractPublicKey) {
       await updateAk({ publicKey: shortPublicKey });
+      saveKeyPair(shortPublicKey, newPrivateKey);
       return {};
     }
 
+    saveKeyPair(shortPublicKey, newPrivateKey);
     return {
       publicKey: shortPublicKey,
       privateKey: newPrivateKey,

@@ -29,11 +29,10 @@ export default function VerifyEmail() {
   // Check if email is in whitelist
   const checkWhitelist = async (email: string): Promise<boolean> => {
     try {
-      // const res = await axios.get(
-      //   `/api/v1/whitelist/check?email=${encodeURIComponent(email)}`
-      // );
-      // return res.data.data?.isWhitelisted || false;
-      return true;
+      const res = await axios.get(
+        `/api/v1/user/whitelist?email=${encodeURIComponent(email)}`
+      );
+      return res.data.data?.is_whitelist || false;
     } catch (err: any) {
       // If API returns error, consider it as not whitelisted
       console.error("Whitelist check failed:", err);

@@ -33,7 +33,6 @@ export default function ProfileSetting({ open, onClose }: ProfileSettingProps) {
 
   // Handle avatar save
   const handleAvatarSave = (croppedImage: Blob) => {
-    console.log("croppedImage", croppedImage);
     // Convert blob to object URL for preview
     const url = URL.createObjectURL(croppedImage);
     setAvatarUrl(url);
@@ -47,7 +46,7 @@ export default function ProfileSetting({ open, onClose }: ProfileSettingProps) {
 
   return (
     <>
-      <Modal open={open} onClose={onClose}>
+      <Modal open={open}>
         <div className="w-[388px] rounded-[20px] bg-white p-[20px]">
           {/* Header */}
           <div className="flex items-center justify-between mb-[20px]">

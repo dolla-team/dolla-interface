@@ -125,13 +125,13 @@ export default function LucyDrawHistory({
                 <Rank rank={index + 1} />
                 <Avatar
                   size={30}
-                  email={item.user_info?.show_email}
+                  email={item.user_info?.email_desensitization}
                   src={item.user_info?.icon}
                   address={item.user}
                   className="text-[16px]"
                 />
                 <div className="text-[14px] text-white">
-                  {formatAddress(item.user)}
+                  {item.user_info?.name || formatAddress(item.user)}
                 </div>
               </div>
               <div className="text-[14px] text-[#FFC42F] font-[DelaGothicOne]">

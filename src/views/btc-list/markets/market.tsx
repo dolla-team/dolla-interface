@@ -58,6 +58,7 @@ export default function Market({
                     address={data?.user}
                     src={data?.user_info?.icon}
                     email={data?.user_info?.email_desensitization}
+                    className="text-[8px]"
                   />
                   <span className="text-[10px] text-[#2B3337]">
                     {data?.user_info?.name || formatAddress(data?.user)}

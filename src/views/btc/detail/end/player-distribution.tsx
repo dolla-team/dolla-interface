@@ -19,6 +19,8 @@ export default function PlayerDistribution({
     return Object.values(distributed).reduce((acc, curr) => acc + curr, 0);
   }, [distributed]);
 
+  console.log("distributed", distributed);
+
   return (
     <div className="w-full rounded-[10px] bg-[#00000033] mt-[10px]">
       <div

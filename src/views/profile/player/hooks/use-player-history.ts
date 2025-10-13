@@ -108,7 +108,7 @@ export default function usePlayerHistory() {
       });
 
       setData(list);
-      setHasMore(response.data.data.list.length === pageSize);
+      setHasMore(response.data.data.has_next_page);
     } catch (error) {
       console.log(error);
     } finally {

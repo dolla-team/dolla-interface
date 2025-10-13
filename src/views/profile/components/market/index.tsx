@@ -78,7 +78,7 @@ export default function Market({
                   className="text-[12px]"
                 />
 
-                <div className="text-[12px]">
+                <div className="text-[12px] truncate max-w-[100px]">
                   {data?.pool_user_info?.name ||
                     formatAddress(data?.pool_user_info?.user)}
                 </div>
@@ -172,7 +172,7 @@ export default function Market({
           )}
         >
           <div
-            className="h-full absolute left-0 top-0 rounded-[6px] shadow-[0px_0px_6px_0px_#FFC42F]"
+            className="h-full absolute left-0 top-0 rounded-[6px]"
             style={{
               background:
                 progress >= 100

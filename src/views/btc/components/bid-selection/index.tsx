@@ -75,7 +75,7 @@ export default function BidSelection({ tokenBalance }: any) {
     if (disabled) {
       return;
     }
-    if (!address) {
+    if (!userInfo?.user) {
       login();
       return;
     }

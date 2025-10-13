@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import { useMemo, useState } from "react";
 import PriceChart from "../nft-create/price-chart";
-import { BASE_TOKEN, QUOTE_TOKEN } from "@/config/btc";
+import { BASE_TOKEN } from "@/config/btc";
 import { formatNumber } from "@/utils/format/number";
 import useTokenPrice from "@/hooks/use-token-price";
 import { motion } from "framer-motion";
@@ -9,7 +9,6 @@ import Button from "@/components/button";
 import DoughnutChart from "./doughnut-chart";
 import { useReferenceData } from "./hooks/use-reference-data";
 import Skeleton from "@/components/skeleton";
-import { useConfigStore } from "@/stores/use-config";
 import Big from "big.js";
 import useIsMobile from "@/hooks/use-is-mobile";
 import SuccessModal from "./success-modal";
@@ -22,13 +21,14 @@ import Popover, {
 } from "@/components/popover";
 import useQuote from "./hooks/use-quote";
 import useWalletStore from "@/stores/use-wallet";
-import useCreate from "@/hooks/near/use-create";
 import PageBack from "@/views/profile/components/page-back";
 import { AMOUNT } from "@/config/btc";
+import ConfirmModal from "./confirm-modal";
 
 export default function BTCCreate() {
-  const [amount, setAmount] = useState(1);
+  const [amount, setAmount] = useState(AMOUNT[1]);
   const [successResult, setSuccessResult] = useState<any>(null);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
   const {
     userInfo,
     isLoading,
@@ -39,10 +39,11 @@ export default function BTCCreate() {
   } = useAuth() || {};
   const { token } = useQuote();
   const tokenBalance = nearAccount?.prizeBalance;
-  const { data: referenceData, loading: referenceDataLoading } =
-    useReferenceData({ token: BASE_TOKEN, amount });
-
-  const globalConfig = useConfigStore((state) => state.config);
+  const {
+    data: referenceData,
+    loading: referenceDataLoading,
+    bidsMarket
+  } = useReferenceData({ token: BASE_TOKEN, amount });
 
   const isMobile = useIsMobile();
 
@@ -59,16 +60,6 @@ export default function BTCCreate() {
     return _p;
   }, [prices]);
 
-  const { create: onCreate, loading: creating } = useCreate((id: string) => {
-    updateNearAccount?.();
-
-    // navigate("/portfolio/seller");
-    setSuccessResult({
-      pool_id: id,
-      amount
-    });
-  });
-
   const errorTips = useMemo(() => {
     if (pricePerBTC === 0) {
       return "Anchor price not found";
@@ -79,21 +70,6 @@ export default function BTCCreate() {
 
     return "";
   }, [amount, pricePerBTC, nearAccount?.prizeBalance]);
-
-  const [poolBidsOvermarket] = useMemo(() => {
-    return [
-      globalConfig?.pool_bids_overmarket?.map((_item: any) => ({
-        label: _item.volume,
-        value: _item.bid,
-        percentage: _item.percentage[0]
-      })) || [],
-      globalConfig?.pool_cash_out_timing?.map((_item: any) => ({
-        label: _item.days,
-        value: _item.volume,
-        percentage: _item.percentage[0]
-      })) || []
-    ];
-  }, [globalConfig]);
 
   return (
     <div className="relative">
@@ -187,13 +163,9 @@ export default function BTCCreate() {
                 <Button
                   disabled={!!errorTips}
                   className="mt-[20px] w-[466px] h-[50px] !bg-[#FFC42F]"
-                  loading={creating}
                   onClick={() => {
-                    if (errorTips || creating) return;
-                    onCreate({
-                      amount: amount.toString(),
-                      price: pricePerBTC
-                    });
+                    if (errorTips) return;
+                    setShowConfirmModal(true);
                   }}
                 >
                   {errorTips || "Create Market"}
@@ -230,15 +202,6 @@ export default function BTCCreate() {
                       })
                     )}
                   </div>
-                  {/* <div className="text-[#4DD561] text-[12px] mt-[2px]">
-                  {referenceDataLoading ? (
-                    <Skeleton className="w-[25px] h-[12px] rounded-full" />
-                  ) : (
-                    formatNumber(referenceData?.top_sale_percentage, 2, true, {
-                      prefix: "+"
-                    }) + "%"
-                  )}
-                </div> */}
                 </div>
                 <div className="rounded-[12px] bg-[#EAEAEA] h-[93px] flex flex-col justify-center items-center gap-[10px]">
                   <div className="flex justify-center items-center gap-[7px]">
@@ -253,18 +216,6 @@ export default function BTCCreate() {
                       })
                     )}
                   </div>
-                  {/* <div className="text-[#4DD561] text-[12px] mt-[2px]">
-                  {referenceDataLoading ? (
-                    <Skeleton className="w-[25px] h-[12px] rounded-full" />
-                  ) : (
-                    formatNumber(
-                      referenceData?.avg_profit_percentage,
-                      2,
-                      true,
-                      { prefix: "+" }
-                    ) + "%"
-                  )}
-                </div> */}
                 </div>
                 <div className="rounded-[12px] bg-[#EAEAEA] h-[93px] flex flex-col justify-center items-center gap-[10px]">
                   <div className="flex justify-center items-center gap-[7px]">
@@ -277,15 +228,6 @@ export default function BTCCreate() {
                       formatNumber(referenceData?.live, 0, true)
                     )}
                   </div>
-                  {/* <div className="text-[#4DD561] text-[12px] mt-[2px]">
-                  {referenceDataLoading ? (
-                    <Skeleton className="w-[25px] h-[12px] rounded-full" />
-                  ) : (
-                    formatNumber(referenceData?.new_live, 0, true, {
-                      prefix: "+"
-                    }) + " new"
-                  )}
-                </div> */}
                 </div>
               </div>
               <div className="w-full mt-[30px] grid grid-cols-2 h-[210px] place-items-center max-md:grid-cols-1 max-md:mt-[28px] max-md:h-[unset]">
@@ -296,25 +238,26 @@ export default function BTCCreate() {
                 )}
                 <DoughnutChart
                   className="!w-[210px] !h-[210px] max-md:mt-[12px]"
-                  // data={poolCashOutTiming}
-                  data={[]}
+                  data={referenceData?.timing || []}
                   formatLabel={(record: any) => {
                     return (
-                      <div className="text-[#8A87AA]">Comming soon...</div>
+                      <div className="flex flex-col items-center justify-center gap-[5px]">
+                        <div className="text-[12px] text-[#8A87AA] rounded-[12px] border border-[#E4E4E4] bg-white px-[12px] py-[4px]">
+                          {amount} {BASE_TOKEN.symbol}
+                        </div>
+                        {!isMobile && (
+                          <div className="text-[#8A87AA] text-[12px]">
+                            Cash out timing
+                          </div>
+                        )}
+                        <div className="text-[16px] font-[800]">
+                          {record.label}
+                        </div>
+                        <div className="text-[12px] mt-[10px] text-[#8A87AA]">
+                          {record.percentage}%
+                        </div>
+                      </div>
                     );
-                    // return (
-                    //   <div className="flex flex-col items-center justify-center gap-[5px]">
-                    //     {!isMobile && (
-                    //       <div className="text-[#BBACA6]">Cash out timing</div>
-                    //     )}
-                    //     <div className="font-[DelaGothicOne] text-[20px]">
-                    //       in {record.label} days
-                    //     </div>
-                    //     <div className="text-[16px] mt-[10px] text-[#BBACA6]">
-                    //       {record.percentage}%
-                    //     </div>
-                    //   </div>
-                    // );
                   }}
                 />
                 {isMobile && (
@@ -324,7 +267,7 @@ export default function BTCCreate() {
                 )}
                 <DoughnutChart
                   className="!w-[210px] !h-[210px] max-md:mt-[12px]"
-                  data={poolBidsOvermarket}
+                  data={bidsMarket}
                   volume={amount.toString()}
                   formatLabel={(record: any) => {
                     return (
@@ -338,7 +281,7 @@ export default function BTCCreate() {
                           </div>
                         )}
                         <div className="font-[800] text-[16px] mt-[1px]">
-                          {formatNumber(record.value, 2, true, {
+                          {formatNumber(record.bids, 2, true, {
                             isShort: true,
                             isShortUppercase: true
                           })}{" "}
@@ -365,6 +308,23 @@ export default function BTCCreate() {
         open={!!successResult}
         data={successResult}
         onClose={() => setSuccessResult(null)}
+      />
+      <ConfirmModal
+        open={showConfirmModal}
+        amount={amount}
+        pricePerBTC={pricePerBTC}
+        onSuccess={(id: string) => {
+          updateNearAccount?.();
+
+          // navigate("/portfolio/seller");
+          setSuccessResult({
+            pool_id: id,
+            amount
+          });
+        }}
+        onClose={() => {
+          setShowConfirmModal(false);
+        }}
       />
     </div>
   );

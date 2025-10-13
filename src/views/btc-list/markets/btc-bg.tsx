@@ -2,22 +2,34 @@ import { AMOUNT, BASE_TOKEN } from "@/config/btc";
 
 const amountConfig: Record<
   string,
-  { textColor: string; bgColor: string[]; borderColor: string[] }
+  {
+    textColor: string;
+    bgColor: string[];
+    borderColor: string[];
+    circleBgColor: string[];
+    circleBorderColor: string[];
+  }
 > = {
   0: {
     textColor: "linear-gradient(180deg, #FFDD70 0%, #DFBC4D 100%)",
     bgColor: ["#99761C", "#FFC42F"],
-    borderColor: ["#FFE89E", "#C4A235"]
+    borderColor: ["#FFE89E", "#C4A235"],
+    circleBgColor: ["#FFDD70", "#DFBC4D"],
+    circleBorderColor: ["#F1CE5C", "#C4A235"]
   },
   1: {
     textColor: "linear-gradient(180deg, #ECECEC 0%, #818181 100%)",
     bgColor: ["#474747", "#A8A8A8"],
-    borderColor: ["#CBCBCB", "#68748A"]
+    borderColor: ["#CBCBCB", "#68748A"],
+    circleBgColor: ["#ECECEC", "#818181"],
+    circleBorderColor: ["#D2CDC0", "#908972"]
   },
   2: {
     textColor: "linear-gradient(180deg, #FFE7DB 0%, #D3AC90 100%)",
     bgColor: ["#746454", "#BE9774"],
-    borderColor: ["#F5D4B9", "#725A40"]
+    borderColor: ["#F5D4B9", "#725A40"],
+    circleBgColor: ["#E5B59F", "#AD876C"],
+    circleBorderColor: ["#E9B890", "#9F723F"]
   }
 };
 
@@ -154,8 +166,8 @@ export default function BTCBg({ index, id }: { index: number; id: string }) {
             gradientUnits="userSpaceOnUse"
             gradientTransform="translate(27.3774 26.8789) rotate(92.7588) scale(34.2862 34.2855)"
           >
-            <stop stopColor="white" />
-            <stop offset="1" stopColor="white" stopOpacity="0" />
+            <stop stopColor={config.circleBorderColor[0]} />
+            <stop offset="1" stopColor={config.circleBorderColor[1]} />
           </radialGradient>
           <linearGradient
             id={`paint6_linear_139_3_${id}`}
@@ -165,8 +177,8 @@ export default function BTCBg({ index, id }: { index: number; id: string }) {
             y2="37"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stopColor="#FFDD70" />
-            <stop offset="1" stopColor="#DFBC4D" />
+            <stop stopColor={config.circleBgColor[0]} />
+            <stop offset="1" stopColor={config.circleBgColor[1]} />
           </linearGradient>
           <linearGradient
             id={`paint7_linear_139_3_${id}`}

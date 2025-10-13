@@ -6,7 +6,6 @@ import dayjs from "@/libs/dayjs";
 import { addThousandSeparator, formatNumber } from "@/utils/format/number";
 import useWinnerBidList from "../use-winner-bid-list";
 import { useMemo } from "react";
-import Big from "big.js";
 import useIsMobile from "@/hooks/use-is-mobile";
 import clsx from "clsx";
 // import ProvablyFair from "@/sections/provably-fair";
@@ -40,7 +39,7 @@ export default function EndPanel({ data }: { data: any }) {
       _bidsProgress.push((bidTime - startTime) / (endTime - startTime));
     });
 
-    const _returnMultiple = data.winner_user_info?.player_profit;
+    const _returnMultiple = data.winner_info?.player_profit;
 
     _bidsProgress.sort((a: number, b: number) => a - b);
     return [
@@ -132,7 +131,7 @@ export default function EndPanel({ data }: { data: any }) {
               />
             </div>
             <div className="text-white text-center text-[16px] font-[DelaGothicOne] mt-[10px]">
-              {data.winner_user_info?.email ||
+              {data.winner_user_info?.name ||
                 formatAddress(data.winner_user_info?.user)}
             </div>
             <div className="flex items-center justify-between mt-[30px]">
