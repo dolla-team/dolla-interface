@@ -156,3 +156,16 @@ export const getProfitFee = (pool: any, opts?: { isLog?: boolean }) => {
   }
   return finalStageFee;
 };
+
+export const getSpilledAmount = (pool: any) => {
+  if (!pool) return [0, 0, 0];
+  if (!pool?.accumulative_bids || pool?.anchor_price === "0") return [0, 0, 0];
+
+  const value = getReAnchorPrice(pool);
+  if (value === 0) return [0, 0, 0];
+
+  const _spilled = pool.accumulative_bids - value;
+  const _spilledPercent = (_spilled / pool.accumulative_bids) * 100;
+
+  return [(pool.accumulative_bids / value) * 100, _spilled, _spilledPercent];
+};

@@ -27,19 +27,20 @@ export default function RechargeFrom1click() {
 
   const { run } = useDebounceFn(
     async () => {
+      if (!chain || !walletStore.selectedToken) return;
       try {
         setQuote(null);
         setLoading(true);
 
         const decimals =
-          chain.blockchain === "bsc" ? 18 : walletStore.selectedToken.decimals;
+          chain?.blockchain === "bsc" ? 18 : walletStore.selectedToken.decimals;
 
         chainRef.current = chain.assetId;
         const res = await generateDepositAddress({
           originAsset: chain.assetId,
           destinationAsset: walletStore.selectedToken.assetId,
           amount:
-            chain.blockchain === "btc"
+            chain?.blockchain === "btc"
               ? BTC_DEPOSIT_AMOUNT
               : new Big(walletStore.selectedToken.minDepositAmount)
                   .mul(10 ** decimals)
@@ -170,7 +171,7 @@ export default function RechargeFrom1click() {
               </div>
               <div className="mt-[3px]">
                 {" "}
-                Est. arrival ≈ {chain.blockchain === "btc" ? "15" : "1"} mins
+                Est. arrival ≈ {chain?.blockchain === "btc" ? "15" : "1"} mins
               </div>
             </div>
             <ChainSelector

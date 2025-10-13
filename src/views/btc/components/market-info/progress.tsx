@@ -1,22 +1,12 @@
 import { formatNumber } from "@/utils/format/number";
-import { getReAnchorPrice } from "@/utils/pool";
 import clsx from "clsx";
 import { motion } from "framer-motion";
 import { useMemo } from "react";
+import { getSpilledAmount } from "@/utils/pool";
 
 export default function Progress({ data }: any) {
   const [progress, spilled, spilledPercent] = useMemo(() => {
-    if (!data) return [0, 0, 0];
-    if (!data?.accumulative_bids || data?.anchor_price === "0")
-      return [0, 0, 0];
-
-    const value = getReAnchorPrice(data);
-    if (value === 0) return [0, 0, 0];
-
-    const _spilled = data.accumulative_bids - value;
-    const _spilledPercent = (_spilled / data.accumulative_bids) * 100;
-
-    return [(data.accumulative_bids / value) * 100, _spilled, _spilledPercent];
+    return getSpilledAmount(data);
   }, [data]);
 
   const particles = useMemo(
@@ -52,8 +42,7 @@ export default function Progress({ data }: any) {
       <div
         className={clsx(
           "h-[12px] rounded-[30px] border bg-[#FFFFFF1A] absolute top-0 left-0 z-[1]",
-          data?.status === 3 ? "border-[#4E4E4E]" : "border-[#3B3951]",
-          spilled > 0 ? "w-[70%]" : "w-full"
+          data?.status === 3 ? "border-[#4E4E4E]" : "border-[#3B3951]"
         )}
         style={{
           width: spilled > 0 ? 100 - spilledPercent! + "%" : "100%"

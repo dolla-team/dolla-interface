@@ -26,7 +26,7 @@ const Account = (props: any) => {
     {
       dataIndex: "assets",
       title: "Assets",
-      width: "25%",
+      width: "15%",
       render: (record: any) => {
         return (
           <div className={clsx("flex items-center gap-[4px]")}>
@@ -49,12 +49,12 @@ const Account = (props: any) => {
     {
       dataIndex: "valued",
       title: "Amount",
-      width: "20%",
+      width: "30%",
       render: (record: any) => {
         return (
           <div className="flex items-center gap-[4px]">
             <span>
-              {formatNumber(record.amount, 3, true, {
+              {formatNumber(record.amount, 6, true, {
                 isShort: true,
                 isShortUppercase: true
               })}

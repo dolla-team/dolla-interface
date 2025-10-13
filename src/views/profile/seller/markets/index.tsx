@@ -30,7 +30,7 @@ const SellerMarkets = (props: any) => {
       className={clsx("w-full flex flex-wrap gap-[15px] mt-[20px]", className)}
     >
       {loading && !orders?.length ? (
-        <div className="py-[100px] flex items-center justify-center">
+        <div className="w-full py-[100px] flex items-center justify-center">
           <Loading size={20} />
         </div>
       ) : orders?.length > 0 ? (

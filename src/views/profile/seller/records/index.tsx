@@ -89,9 +89,19 @@ const Records = (props: any) => {
       title: "Valued",
       width: isMobile ? 170 : void 0,
       render: (record: any) => {
-        return record?.pool?.reward_usd
-          ? formatNumber(record.pool.reward_usd, 2, true)
-          : "-";
+        if (record.token === BASE_TOKEN.address) {
+          return formatNumber(record.pool.reward_usd, 2, true, {
+            prefix: "$"
+          });
+        }
+        return formatNumber(
+          record.amountBig || 0,
+          record.token_info?.decimals > 6 ? 6 : 2,
+          true,
+          {
+            prefix: "$"
+          }
+        );
         // const price =
         //   record.priceKey === "near:usdt.tether-token.near"
         //     ? 1

@@ -7,6 +7,7 @@ import useIsMobile from "@/hooks/use-is-mobile";
 import { useNavigate } from "react-router-dom";
 import useCopy from "@/hooks/use-copy";
 import { useAuth } from "@/contexts/auth";
+import { BASE_TOKEN } from "@/config/btc";
 
 const BidHistory = (props: any) => {
   const {
@@ -58,10 +59,10 @@ const BidHistory = (props: any) => {
             {formatNumber(
               Number(record.reward_amount) /
                 10 ** record.reward_token_info?.[0].decimals,
-              2,
+              6,
               true
             )}{" "}
-            {record.reward_token_info?.[0].symbol}
+            {BASE_TOKEN.symbol}
           </div>
         );
       }

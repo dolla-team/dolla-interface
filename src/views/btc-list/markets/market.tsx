@@ -3,10 +3,13 @@ import columns from "./columns";
 import { formatAddress } from "@/utils/format/address";
 import { formatNumber } from "@/utils/format/number";
 import { getReAnchorPrice } from "@/utils/pool";
-import ProgressBar from "@/components/nft-card/progress-bar";
+import ProgressBar from "./progress-bar";
 import BtcImg from "./btc-bg";
 import { useAuth } from "@/contexts/auth";
 import { BASE_TOKEN, AMOUNT } from "@/config/btc";
+import Avatar from "@/components/avatar";
+import { getSpilledAmount } from "@/utils/pool";
+import { useMemo } from "react";
 
 export default function Market({
   data,
@@ -16,6 +19,9 @@ export default function Market({
   onClick: () => void;
 }) {
   const { address } = useAuth();
+  const [progress, spilled, spilledPercent] = useMemo(() => {
+    return getSpilledAmount(data);
+  }, [data]);
   return (
     <div
       onClick={onClick}
@@ -47,6 +53,12 @@ export default function Market({
                   {/* {` #${data.reward_token_info?.[0]?.token_id}`} */}
                 </div>
                 <div className="flex items-center gap-[4px] mt-[6px]">
+                  <Avatar
+                    size={10}
+                    address={data?.user}
+                    src={data?.user_info?.icon}
+                    email={data?.user_info?.email_desensitization}
+                  />
                   <span className="text-[10px] text-[#2B3337]">
                     {data?.user_info?.name || formatAddress(data?.user)}
                   </span>
@@ -75,16 +87,11 @@ export default function Market({
           {column.dataIndex === "hitting" && (
             <div className="w-full">
               {data.progress >= 100 && (
-                <div className="text-[#2B3337] text-[12px] mb-[10px]">
-                  Spilled!
+                <div className="text-[#2B3337] text-[12px] mb-[10px] font-[600]">
+                  Spilled {formatNumber(spilled, 0, true, { prefix: "$" })}
                 </div>
               )}
-              <ProgressBar
-                type="basic"
-                progress={data.progress}
-                className="w-full"
-                isNft={!!data.nft_ids}
-              />
+              <ProgressBar {...{ progress, spilled, spilledPercent }} />
             </div>
           )}
         </div>

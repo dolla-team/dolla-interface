@@ -37,7 +37,7 @@ export default function ChainSelector({
       >
         {usedChains.map((network) => (
           <div
-            key={network.name}
+            key={network.blockchain}
             onClick={() => {
               onSelect({
                 ...network,
