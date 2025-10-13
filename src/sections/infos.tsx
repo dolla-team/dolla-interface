@@ -173,7 +173,7 @@ const Item = ({
   return item.winner_user ? (
     <div className="flex items-center h-full gap-3 text-white transition-transform duration-200 hover:scale-105">
       <span className="text-[12px] text-[#D9D9D9] rounded">
-        {formatAddress(item.winner_user)} Won
+        {item?.winner_user_name || formatAddress(item.winner_user)} Won
       </span>
       <span
         className={clsx(

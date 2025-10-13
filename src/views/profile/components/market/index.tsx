@@ -181,7 +181,7 @@ export default function Market({
               width: `${Math.min(progress, 100)}%`
             }}
           >
-            {progress >= 80 && progress < 100 && (
+            {progress >= 80 && progress < 100 && data.status === 1 && (
               <>
                 <motion.div
                   className="absolute right-0 top-[-3px] w-[4px] h-[2px] bg-[#FFC42F] rounded-full rotate-45"

@@ -1,6 +1,5 @@
 import Modal from "@/components/modal";
 import { useMemo, useState } from "react";
-import PointIcon from "@/components/icons/point-icon";
 import clsx from "clsx";
 import useTransfer from "@/hooks/near/use-buy-ticket";
 import Loading from "@/components/icons/loading";

@@ -13,12 +13,14 @@ export default function usePoolList(props?: {
   isScrollList?: boolean;
   tokenStatus?: number;
   onFirstPageLoad?(list: any): void;
+  volume?: number;
 }) {
   const {
     pageLimit,
     isScrollList,
     onFirstPageLoad,
-    tokenStatus = 0
+    tokenStatus = 0,
+    volume = 0
   } = props ?? {};
   const poolListStore = usePoolListStore();
 
@@ -27,7 +29,6 @@ export default function usePoolList(props?: {
   const [sortField, setSortField] = useState("hitting");
   const [sortOrder, setSortOrder] = useState("desc");
   const [collection, setCollection] = useState<any>();
-  const [volume, setVolume] = useState(0);
   const [hasMore, setHasMore] = useState(true);
   const pageRef = useRef(0);
   const { userInfo } = useAuth();
@@ -175,8 +176,6 @@ export default function usePoolList(props?: {
     setSortOrder,
     collection,
     setCollection,
-    volume,
-    setVolume,
     hasMore,
     pageRef,
     LIMIT

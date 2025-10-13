@@ -12,22 +12,23 @@ import Popover, {
   PopoverPlacement,
   PopoverTrigger
 } from "@/components/popover";
+import { useAllMarketsStore } from "@/stores/use-all-markets";
 
 export default function Markets() {
   const navigate = useNavigate();
   const taskStore = useTaskStore();
+  const allMarketsStore = useAllMarketsStore();
   const {
     poolList,
     loading,
     sortField,
     sortOrder,
     setSortField,
-    setSortOrder,
-    volume,
-    setVolume
+    setSortOrder
   } = usePoolList({
     pageLimit: 100,
-    tokenStatus: 0
+    tokenStatus: 0,
+    volume: allMarketsStore.tab
   });
 
   return (
@@ -63,11 +64,15 @@ export default function Markets() {
               key={item.key}
               className={clsx(
                 "button min-w-[50px] text-center h-[34px] rounded-[8px] text-[12px] px-[10px]",
-                volume === item.key
+                allMarketsStore.tab === item.key
                   ? "bg-[#FFC42F] text-black"
                   : "text-[#8A87AA]"
               )}
-              onClick={() => setVolume(item.key)}
+              onClick={() => {
+                allMarketsStore.set({
+                  tab: item.key
+                });
+              }}
             >
               {item.label}
             </button>

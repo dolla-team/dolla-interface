@@ -1,6 +1,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import WinResultContent from "./content";
 import ReactDOM from "react-dom";
+import { useGlobalStore } from "@/stores/use-global";
 
 export default function WinResult({
   currentWinner,
@@ -8,6 +9,7 @@ export default function WinResult({
   claim,
   onShowHistory
 }: any) {
+  const globalStore = useGlobalStore();
   return ReactDOM.createPortal(
     <AnimatePresence>
       {currentWinner && (
@@ -19,7 +21,8 @@ export default function WinResult({
           className="fixed bottom-[10px] right-[10px] z-[50] w-[250px] h-[124px] border border-[#D9D9D9] rounded-[12px] text-black py-[8px] px-[10px] mb-[10px] shadow-[0_0_20px_0_rgba(132,101,255,0.20)] bg-cover bg-center bg-no-repeat"
           style={{
             backgroundImage: "url('/lucky-draw/lucky-draw-result.png')",
-            backgroundSize: "120% 150%"
+            backgroundSize: "120% 150%",
+            right: globalStore.showUserInfo ? "300px" : "10px"
           }}
         >
           <WinResultContent

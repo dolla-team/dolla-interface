@@ -99,7 +99,7 @@ export default function ProfileSetting({ open, onClose }: ProfileSettingProps) {
             <input
               className="w-full h-[56px] rounded-[10px] border border-[#F2F2F233] bg-[#F0F0F0] text-[14px] text-black px-[20px] focus:outline-none focus:border-gray-300"
               value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              onChange={(e) => setUsername(e.target.value?.trim())}
               placeholder="Enter your username"
             />
           </div>

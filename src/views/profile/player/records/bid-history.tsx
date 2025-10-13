@@ -70,7 +70,7 @@ const BidHistory = (props: any) => {
     {
       dataIndex: "purchase_amount",
       title: "Bid",
-      width: "20%",
+      width: "15%",
       render: (record: any) => {
         return `${formatNumber(record.purchase_amount, 4, true, {
           isShort: true,
@@ -82,7 +82,7 @@ const BidHistory = (props: any) => {
     {
       dataIndex: "results",
       title: "Prize",
-      width: isMobile ? 140 : void 0,
+      width: "25%",
       render: (record: any) => {
         if (
           record.pool_info.winner_user?.toLowerCase() ===
@@ -107,7 +107,7 @@ const BidHistory = (props: any) => {
           record.winner_point_reward &&
           Number(record.winner_point_reward) !== 0
         ) {
-          str += formatNumber(record.winner_point_reward, 0, true) + " pts";
+          str += formatNumber(record.winner_point_reward, 0, true) + " credits";
         }
         if (
           record.winner_ticket_number &&
@@ -118,14 +118,11 @@ const BidHistory = (props: any) => {
         }
         return <span>{str || "-"}</span>;
       }
-    }
-  ];
-
-  if (fullAction) {
-    columns.push({
+    },
+    {
       dataIndex: "date",
       title: "Date / tx",
-      width: isMobile ? 210 : 190,
+      width: "30%",
       align: GridTableAlign.Right,
       render: (record: any) => {
         return (
@@ -162,18 +159,8 @@ const BidHistory = (props: any) => {
           </div>
         );
       }
-    });
-  } else {
-    columns.push({
-      dataIndex: "date",
-      title: "Date",
-      width: isMobile ? 180 : 160,
-      align: GridTableAlign.Right,
-      render: (record: any) => {
-        return dayjs(record.updated_at).format("HH:mm D MMM, YYYY");
-      }
-    });
-  }
+    }
+  ];
 
   return (
     <div className={clsx("mt-[20px]", className)}>

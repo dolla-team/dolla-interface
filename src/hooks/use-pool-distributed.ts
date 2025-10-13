@@ -28,7 +28,7 @@ export const usePoolDistributed = (data: any) => {
           _result[1] += item.number;
         } else if (item.bid === 10) {
           _result[10] += item.number;
-        } else if (item.bid === 5) {
+        } else if (item.bid === 50) {
           _result[50] += item.number;
         } else if (item.bid === 100) {
           _result[100] += item.number;
