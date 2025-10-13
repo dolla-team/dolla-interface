@@ -147,7 +147,7 @@ const DollaEye = (props: any) => {
 
         {/*#region eye background layer 1*/}
         <div
-          className="z-[1] absolute w-[calc(100%_-_2px)] h-[calc(100%_-_2px)] left-[1px] top-[1px] bg-[#fff]"
+          className="z-[1] absolute w-[calc(100%_-_2px)] h-[calc(100%_-_2px)] left-[1px] top-[1px] bg-[#FFF3D4]"
           style={{ borderRadius: height / 2 }}
         />
         {/*#endregion*/}

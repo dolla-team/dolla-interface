@@ -196,7 +196,7 @@ const Loading = (props: Props) => {
         <div
           className={clsx(
             "text-center font-normal leading-[40px] mt-[20px] min-h-[120px] flex flex-col items-center justify-center",
-            isBtc ? "text-[#FFC42F]" : "text-[#AB96FF]"
+            isBtc ? "text-[#AB6F00]" : "text-[#AB96FF]"
           )}
         >
           <div className="whitespace-pre-wrap">

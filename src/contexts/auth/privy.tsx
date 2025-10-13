@@ -32,6 +32,7 @@ export const AuthProvider: React.FC<{
   children: ReactNode;
 }> = ({ children }) => {
   const { logout: privyLogout, login: privyLogin, ready } = usePrivy();
+
   const { user } = useUser();
   const nearKeyStore = useNearKeyStore();
   const globalStore = useGlobalStore();
@@ -199,10 +200,10 @@ export const AuthProvider: React.FC<{
     }
 
     if (!privyWallet?.address) {
-      login();
+      // login();
       return;
     }
-
+    console.log("user", user);
     if (user) {
       updateAccount();
     }

@@ -1,15 +1,11 @@
-import {
-  createBrowserRouter,
-  RouterProvider,
-  Navigate,
-  ScrollRestoration
-} from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Suspense, lazy, useEffect, useState } from "react";
 import WalletProvider from "./contexts/wallet";
-import { AuthProvider, useAuth } from "./contexts/auth";
+import { AuthProvider } from "./contexts/auth";
+import { usePrivy, useUser } from "@privy-io/react-auth";
 import { ToastContainer } from "react-toastify";
 import Loading from "@/components/loading";
-import Temp from "./views/temp";
+import VerifyEmail from "./views/verify-email";
 // import "react-toastify/dist/ReactToastify.css";
 
 import MainLayout from "./layouts/main";
@@ -101,16 +97,13 @@ const router = createBrowserRouter([
   {
     path: "/callback",
     element: <Callback />
-  },
-  {
-    path: "/temp",
-    element: <Temp />
   }
 ]);
 
 const Content = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const { ready, user } = useAuth() || {};
+  const { ready } = usePrivy();
+  const { user } = useUser();
   useEffect(() => {
     if (!ready) {
       return;
@@ -125,7 +118,16 @@ const Content = () => {
       setIsLoading(false);
     }, 2000);
   }, [ready, user]);
-  return isLoading ? <Loading /> : <RouterProvider router={router} />;
+
+  return isLoading ? (
+    <Loading />
+  ) : !user ? (
+    <VerifyEmail />
+  ) : (
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
+  );
 };
 
 function App() {
@@ -133,9 +135,7 @@ function App() {
     <DollaEyeContextProvider>
       <Suspense>
         <WalletProvider>
-          <AuthProvider>
-            <Content />
-          </AuthProvider>
+          <Content />
         </WalletProvider>
         <ToastContainer
           position="top-right"
