@@ -15,7 +15,7 @@ export default function Item({ data }: any) {
         size={30}
         className="border border-[#131417] mr-[6px] text-[16px]"
       />
-      <div className="text-[10px] font-bold truncate mr-[3px] shrink-0">
+      <div className="text-[10px] font-bold truncate mr-[3px] shrink-0 max-w-[100px]">
         {data.user_name || formatAddress(data.user, 3)}
       </div>
       <div className="text-[12px] font-bold text-[#FFEF43] mr-[3px]">
