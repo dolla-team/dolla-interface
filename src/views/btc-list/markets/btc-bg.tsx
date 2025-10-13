@@ -1,4 +1,4 @@
-import { AMOUNT, BASE_TOKEN } from "@/config/btc";
+import { BASE_TOKEN } from "@/config/btc";
 
 const amountConfig: Record<
   string,
@@ -41,8 +41,16 @@ const amountConfig: Record<
   }
 };
 
-export default function BTCBg({ index, id }: { index: number; id: string }) {
-  const config = amountConfig[index];
+export default function BTCBg({
+  index,
+  id,
+  amount
+}: {
+  index: number;
+  id: string;
+  amount: string;
+}) {
+  const config = amountConfig[index] || amountConfig[2];
   return (
     <div className="w-[52px] h-[52px] relative">
       <svg
@@ -232,7 +240,7 @@ export default function BTCBg({ index, id }: { index: number; id: string }) {
           WebkitTextFillColor: "transparent"
         }}
       >
-        {AMOUNT[index]} {BASE_TOKEN.symbol}
+        {amount} {BASE_TOKEN.symbol}
       </span>
     </div>
   );

@@ -46,6 +46,7 @@ export default function Market({
               <BtcImg
                 index={AMOUNT.indexOf(Number(data.amount))}
                 id={data.pool_id}
+                amount={data.amount}
               />
               <div>
                 <div className="text-[14px] text-black font-semibold">
