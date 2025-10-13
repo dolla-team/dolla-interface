@@ -10,7 +10,8 @@ export default function useBid(
   poolId: number,
   onSuccess: (result: any) => void,
   onTxSuccess: () => void,
-  onTxFail: () => void
+  onTxFail: () => void,
+  onTxFail2: () => void
 ) {
   const [biding, setBiding] = useState(false);
   const { address, updateNearAccount } = useAuth();
@@ -60,9 +61,17 @@ export default function useBid(
     // }, 3000);
 
     // return;
-    if (!address) return;
+    if (!address) {
+      onTxFail2();
+      return;
+    }
     const { publicKey, privateKey } = await generateKeyPair();
-    if (!publicKey) return;
+
+    if (!publicKey) {
+      onTxFail2();
+      return;
+    }
+
     setBiding(true);
 
     // let toastId = toast.loading({ title: "Bidding..." });

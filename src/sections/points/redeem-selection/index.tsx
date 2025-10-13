@@ -57,7 +57,7 @@ export default function RedeemSelection({
                   <path d="M6 1L1 7L6 13" stroke="white" strokeWidth="1.5" />
                 </svg>
               )}
-              <span>{tab === 1 ? "Redeem History" : "Points Redemption"}</span>
+              <span>{tab === 1 ? "Redeem History" : "Credit Redemption"}</span>
             </div>
             <button className="w-[24px] h-[24px] button" onClick={close}>
               <svg

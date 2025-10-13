@@ -12,48 +12,52 @@ export default function useGenerateKey() {
   const { nearAccount, address } = useAuth();
 
   async function generateKeyPair() {
-    let isCorrect = true;
-    let contractPublicKey = "";
-    if (publicKey && privateKey) {
-      const newKeyPairSigner = KeyPairSigner.fromSecretKey(
-        ("ed25519:" + privateKey) as any
-      );
-
+    try {
       const res = await viewMethod({
         method: "get_user_id_ak",
         args: { user_id: { Evm: address.replace(/^0x/, "").toLowerCase() } }
       });
 
-      isCorrect = res === "ed25519:" + publicKey;
-      contractPublicKey = res;
+      const isCorrect = res === "ed25519:" + publicKey;
+      const contractPublicKey = res;
 
-      if (isCorrect) {
+      if (publicKey && privateKey && isCorrect) {
+        const newKeyPairSigner = KeyPairSigner.fromSecretKey(
+          ("ed25519:" + privateKey) as any
+        );
+
         return {
           publicKey,
           privateKey,
           keyPairSigner: newKeyPairSigner
         };
       }
-    }
 
-    const {
-      publicKey: shortPublicKey,
-      keyPairSigner: newKeyPairSigner,
-      privateKey: newPrivateKey
-    } = createKeyPair();
+      const {
+        publicKey: shortPublicKey,
+        keyPairSigner: newKeyPairSigner,
+        privateKey: newPrivateKey
+      } = createKeyPair();
 
-    if ((nearAccount || !isCorrect) && contractPublicKey) {
-      await updateAk({ publicKey: shortPublicKey });
+      if (!isCorrect && contractPublicKey) {
+        await updateAk({ publicKey: shortPublicKey });
+        saveKeyPair(shortPublicKey, newPrivateKey);
+        return {};
+      }
+
       saveKeyPair(shortPublicKey, newPrivateKey);
-      return {};
+      return {
+        publicKey: shortPublicKey,
+        privateKey: newPrivateKey,
+        keyPairSigner: newKeyPairSigner
+      };
+    } catch (error) {
+      return {
+        publicKey: "",
+        privateKey: "",
+        keyPairSigner: null
+      };
     }
-
-    saveKeyPair(shortPublicKey, newPrivateKey);
-    return {
-      publicKey: shortPublicKey,
-      privateKey: newPrivateKey,
-      keyPairSigner: newKeyPairSigner
-    };
   }
 
   function createKeyPair(): any {

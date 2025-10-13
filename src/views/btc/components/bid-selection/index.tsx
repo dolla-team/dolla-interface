@@ -63,6 +63,9 @@ export default function BidSelection({ tokenBalance }: any) {
           title: "Bid failed"
         });
       }, 30);
+    },
+    () => {
+      setFlipStatus(0);
     }
   );
 

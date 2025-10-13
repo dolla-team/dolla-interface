@@ -217,7 +217,7 @@ export default function Market({
       </div>
 
       {data.status === 2 && (
-        <div className="w-full h-full rounded-[18px] absolute top-0 left-0 z-[2] bg-[#E5E5E54D] backdrop-blur-[10px]">
+        <div className="w-full h-full rounded-[18px] absolute top-0 left-0 z-[2] bg-[#E5E5E54D] backdrop-blur-[10px] hidden group-hover:block">
           <div className="text-[12px] text-[#5E6B7D] text-right mb-[4px] absolute top-[12px] right-[12px]">
             #{data?.pool_id}
           </div>

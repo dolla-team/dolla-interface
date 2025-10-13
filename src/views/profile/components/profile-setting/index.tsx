@@ -116,7 +116,7 @@ export default function ProfileSetting({ open, onClose }: ProfileSettingProps) {
                 file: file
               });
             }}
-            disabled={isSaving}
+            disabled={isSaving || !username}
             loading={isSaving}
           >
             Save

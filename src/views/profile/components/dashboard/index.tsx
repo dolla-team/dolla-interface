@@ -96,18 +96,34 @@ const Dashboard = (props: any) => {
           </div>
           {tab === "seller" && <SellerLevel />}
         </div>
-        <div className="flex items-center gap-[3px] mt-[8px]">
-          <span className="text-[12px] text-[#2B3337]">
-            {formatAddress(userInfo?.user)}
-          </span>
-          <button
-            className="button"
-            onClick={() => {
-              onCopy(userInfo?.user);
-            }}
-          >
-            <CopyIcon />
-          </button>
+        <div className="flex items-center gap-[14px] mt-[8px]">
+          <div className="flex items-center gap-[3px]">
+            <span className="text-[12px] text-[#2B3337]">
+              {userInfo?.show_email}
+            </span>
+            <button
+              className="button"
+              onClick={() => {
+                onCopy(userInfo?.show_email);
+              }}
+            >
+              <CopyIcon />
+            </button>
+          </div>
+          <div className="w-[1px] h-[14px] bg-[#E4E4E4]" />
+          <div className="flex items-center gap-[3px]">
+            <span className="text-[12px] text-[#2B3337]">
+              {formatAddress(userInfo?.user)}
+            </span>
+            <button
+              className="button"
+              onClick={() => {
+                onCopy(userInfo?.user);
+              }}
+            >
+              <CopyIcon />
+            </button>
+          </div>
         </div>
       </div>
       <div className="w-full pl-[13px] max-md:pl-0">
@@ -172,8 +188,13 @@ const Dashboard = (props: any) => {
                     login();
                     return;
                   }
-                  onCopy(`${window.location.origin}?code=${globalStore.code}`);
+                  if (globalStore.code) {
+                    onCopy(
+                      `${window.location.origin}?code=${globalStore.code}`
+                    );
+                  }
                 }}
+                disabled={!globalStore.code}
               >
                 + Invite frenz
               </Button>

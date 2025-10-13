@@ -78,7 +78,7 @@ const Item = ({ id, onSuccess }: { id: any; onSuccess: () => void }) => {
                 handleRefresh={fetchTaskStatus}
               />
               <Button
-                className="px-[7px] h-[26px] text-[10px] !rounded-[8px] min-w-[60px]"
+                className="px-[7px] h-[26px] text-[10px] !rounded-[8px] min-w-[60px] shrink-0"
                 loading={loading}
                 onClick={() => handleTaskAction()}
               >

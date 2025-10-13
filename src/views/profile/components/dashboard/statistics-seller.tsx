@@ -77,7 +77,7 @@ const StatisticsPlayer = (props: any) => {
               valueClassName={clsx(
                 Big(userInfo?.seller_profit || 0).lt(0)
                   ? "text-[#FF399F]"
-                  : "text-[#57FF70]"
+                  : "text-[#27C627]"
               )}
             >
               {Big(userInfo?.seller_profit || 0).lt(0) ? "-" : "+"}

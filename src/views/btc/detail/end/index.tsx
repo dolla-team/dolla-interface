@@ -170,7 +170,7 @@ export default function EndPanel({ data }: { data: any }) {
                     <div>
                       <div className="text-[#FFE9B2] text-[12px]">Seller</div>
                       <div className="text-white text-[12px] font-[DelaGothicOne]">
-                        {data.user_info?.email ||
+                        {data.user_info?.name ||
                           formatAddress(data.user_info?.user)}
                       </div>
                     </div>

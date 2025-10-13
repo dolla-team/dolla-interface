@@ -93,7 +93,7 @@ export default function Redeem({
           {loading ? (
             <Loading />
           ) : amount > max ? (
-            "Insufficient points"
+            "Insufficient credits"
           ) : (
             "Redeem"
           )}

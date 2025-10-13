@@ -136,7 +136,7 @@ const COLUMNS = [
   },
   {
     key: "reward",
-    label: "PTS Used",
+    label: "Credits Used",
     width: "25%",
     align: "right"
   }

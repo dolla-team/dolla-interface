@@ -8,6 +8,8 @@ const amountConfig: Record<
     borderColor: string[];
     circleBgColor: string[];
     circleBorderColor: string[];
+    textBgColor: string[];
+    textBorderColor: string[];
   }
 > = {
   0: {
@@ -15,21 +17,27 @@ const amountConfig: Record<
     bgColor: ["#99761C", "#FFC42F"],
     borderColor: ["#FFE89E", "#C4A235"],
     circleBgColor: ["#FFDD70", "#DFBC4D"],
-    circleBorderColor: ["#F1CE5C", "#C4A235"]
+    circleBorderColor: ["#F1CE5C", "#C4A235"],
+    textBgColor: ["#B67C23", "#503610"],
+    textBorderColor: ["#FFC229", "#FCF3D9"]
   },
   1: {
     textColor: "linear-gradient(180deg, #ECECEC 0%, #818181 100%)",
     bgColor: ["#474747", "#A8A8A8"],
     borderColor: ["#CBCBCB", "#68748A"],
     circleBgColor: ["#ECECEC", "#818181"],
-    circleBorderColor: ["#D2CDC0", "#908972"]
+    circleBorderColor: ["#D2CDC0", "#908972"],
+    textBgColor: ["#7B7B7B", "#222222"],
+    textBorderColor: ["#B4B8B9", "#B4B8B9"]
   },
   2: {
     textColor: "linear-gradient(180deg, #FFE7DB 0%, #D3AC90 100%)",
     bgColor: ["#746454", "#BE9774"],
     borderColor: ["#F5D4B9", "#725A40"],
     circleBgColor: ["#E5B59F", "#AD876C"],
-    circleBorderColor: ["#E9B890", "#9F723F"]
+    circleBorderColor: ["#E9B890", "#9F723F"],
+    textBgColor: ["#BE8E7F", "#45332B"],
+    textBorderColor: ["#C6947E", "#FCE8D9"]
   }
 };
 
@@ -199,8 +207,8 @@ export default function BTCBg({ index, id }: { index: number; id: string }) {
             y2="33"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stopColor="#B67C23" />
-            <stop offset="1" stopColor="#503610" />
+            <stop stopColor={config.textBgColor[0]} />
+            <stop offset="1" stopColor={config.textBgColor[1]} />
           </linearGradient>
           <linearGradient
             id={`paint9_linear_139_3_${id}`}
@@ -210,8 +218,8 @@ export default function BTCBg({ index, id }: { index: number; id: string }) {
             y2="13"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stopColor="#FFC229" />
-            <stop offset="1" stopColor="#FCF3D9" />
+            <stop stopColor={config.textBorderColor[0]} />
+            <stop offset="1" stopColor={config.textBorderColor[1]} />
           </linearGradient>
         </defs>
       </svg>
