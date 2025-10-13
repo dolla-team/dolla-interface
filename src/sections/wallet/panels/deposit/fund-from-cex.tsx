@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
-import config from "@/config/bera";
-import ButtonV2 from "@/components/button/v2";
+import Button from "@/components/button";
 import BackIcon from "@/sections/wallet/back-icon";
+import useWalletStore from "@/stores/use-wallet";
 
 export default function FundFromCex({
   loading = false,
@@ -21,6 +21,7 @@ export default function FundFromCex({
   minAmount: number;
 }) {
   const inputRef = useRef<HTMLInputElement>(null);
+  const walletStore = useWalletStore();
   useEffect(() => {
     if (inputRef.current) {
       inputRef.current.focus();
@@ -30,11 +31,11 @@ export default function FundFromCex({
   return (
     <div className="relative min-h-[320px]">
       <div
-        className="flex items-center gap-[18px] text-[16px] cursor-pointer button"
+        className="flex items-center gap-[8px] text-[16px] cursor-pointer button"
         onClick={onBack}
       >
         <BackIcon />
-        <div className="text-[#8A87AA] text-[12px]">Back</div>
+        <div className="text-black text-[14px]">Deposit</div>
       </div>
 
       <div className="mt-[40px] mb-[32px] text-black text-[14px] text-center">
@@ -58,11 +59,11 @@ export default function FundFromCex({
           />
         </div>
         <span className="text-black text-[15px] mt-1">
-          {config.purchaseToken?.symbol || 'USDC'}
+          {walletStore.selectedToken?.symbol}
         </span>
       </div>
       <div className="flex justify-center">
-        <ButtonV2
+        <Button
           disabled={disabled}
           loading={loading}
           onClick={() => {
@@ -70,10 +71,10 @@ export default function FundFromCex({
               onOrderIdCreated();
             }
           }}
-          className="w-[200px] h-[42px]"
+          className="w-full h-[42px] !bg-black !text-white"
         >
           Next
-        </ButtonV2>
+        </Button>
       </div>
     </div>
   );

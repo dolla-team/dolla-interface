@@ -7,11 +7,11 @@ export default function FundList({ onBack }: { onBack: () => void }) {
   return (
     <>
       <div
-        className="flex items-center gap-[18px] text-[16px] cursor-pointer button"
+        className="flex items-center gap-[10px] text-[14px] cursor-pointer button"
         onClick={onBack}
       >
         <BackIcon />
-        <div className="text-[#8A87AA]">Deposit</div>
+        <div className="text-black">Deposit</div>
       </div>
       <div className="space-y-2 pt-[20px] pb-[20px]">
         {fundOptions.map((option) => (

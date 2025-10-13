@@ -28,10 +28,7 @@ export default function ChainSelector({
   }, [walletStore.selectedToken, tokens]);
 
   return (
-    <div className="mt-[24px]">
-      <div className="text-[16px] font-[500] text-center mb-[16px]">
-        Select Receiving Network
-      </div>
+    <div>
       <div
         className={clsx("flex flex-col gap-[8px] overflow-y-auto", className)}
       >
@@ -49,7 +46,7 @@ export default function ChainSelector({
               "flex items-center gap-[12px] px-[16px] py-[14px] rounded-[10px] cursor-pointer transition-colors",
               selectedChain?.blockchain === network.blockchain
                 ? "bg-[#F3F4F6]"
-                : "hover:bg-[#F9FAFB]"
+                : "hover:bg-black/5"
             )}
           >
             <div className="w-[32px] h-[32px] flex items-center justify-center">

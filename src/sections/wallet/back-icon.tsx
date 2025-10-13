@@ -3,15 +3,15 @@ export default function BackIcon() {
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width="10"
-      height="18"
-      viewBox="0 0 10 18"
+      height="16"
+      viewBox="0 0 10 16"
       fill="none"
     >
       <path
-        d="M9 1L2 9L9 17"
+        d="M9 1L2 8L9 15"
         stroke="black"
-        strokeWidth="2"
-        strokeLinecap="round"
+        stroke-width="2"
+        stroke-linecap="round"
       />
     </svg>
   );

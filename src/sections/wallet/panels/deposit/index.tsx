@@ -8,19 +8,21 @@ export default function Deposit({ onBack }: { onBack: () => void }) {
   const walletStore = useWalletStore();
 
   return (
-    <div className="px-[20px] pt-[30px]">
+    <div className="px-[16px] pt-[16px] h-full">
       {walletStore.depositPanelType === "fund-list" && (
         <FundList onBack={onBack} />
       )}
       {walletStore.depositPanelType === "token-selector" && (
         <TokenSelector
           onBack={() => {
-            walletStore.set({ depositPanelType: "fund-list" });
+            onBack();
+            // walletStore.set({ depositPanelType: "fund-list" });
           }}
           onSelect={(token) => {
             walletStore.set({
               selectedToken: token,
-              depositPanelType: "input"
+              depositPanelType: "input",
+              depositMethod: walletStore.depositMethod
             });
           }}
           title="Deposit"
@@ -34,7 +36,7 @@ export default function Deposit({ onBack }: { onBack: () => void }) {
         walletStore.depositMethod === "coinbase" && (
           <FundFromCoinbase
             onBack={() => {
-              walletStore.set({ depositPanelType: "fund-list" });
+              walletStore.set({ depositPanelType: "token-selector" });
             }}
           />
         )}

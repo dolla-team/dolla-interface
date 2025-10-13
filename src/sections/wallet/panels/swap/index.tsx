@@ -51,9 +51,9 @@ export default function Swap(props?: any) {
   }, [prices]);
 
   return (
-    <div className="px-[20px] pt-[30px]">
+    <div className="px-[10px] pt-[16px]">
       <div
-        className="flex items-center gap-[18px] text-[16px] cursor-pointer button"
+        className="flex items-center gap-[8px] text-[16px] cursor-pointer button"
         onClick={onBack}
       >
         <BackIcon />

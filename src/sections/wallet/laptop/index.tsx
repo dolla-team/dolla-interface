@@ -20,6 +20,7 @@ export default function Laptop() {
             "radial-gradient(75.31% 36.96% at 1.18% 2.95%, rgba(111, 55, 255, 0.2) 0%, rgba(255, 255, 255, 0.2) 100%), linear-gradient(0deg, #FFFFFF 0%, #FFFFFF 100%)"
         }
       : {
+          boxShadow: "0 0 10px rgba(0, 0, 0, 0.20)",
           background:
             "radial-gradient(75.31% 36.96% at 1.18% 2.95%, rgba(255, 196, 47, 0.2) 0%, rgba(255, 255, 255, 0.2) 100%), linear-gradient(0deg, #FFFFFF 0%, #FFFFFF 100%)"
         };
@@ -42,9 +43,9 @@ export default function Laptop() {
       <AnimatePresence>
         {walletStore.showWallet && (
           <motion.div
-            initial={{ x: 500 }}
+            initial={{ x: 320 }}
             animate={{ x: 0 }}
-            exit={{ x: 500 }}
+            exit={{ x: 320 }}
             transition={{
               type: "spring",
               stiffness: 300,
@@ -52,11 +53,11 @@ export default function Laptop() {
               duration: 0.3
             }}
             className={clsx(
-              "fixed bottom-0 right-0 z-[100] w-[416px] bg-[#141519CC] rounded-l-[20px] h-full"
+              "fixed bottom-[6px] right-[6px] z-[100] w-[320px] rounded-[20px] h-[calc(100%-12px)]"
             )}
           >
             <div
-              className="h-full rounded-l-[20px] ml-[40px]"
+              className="h-full rounded-[20px]"
               style={colorStyle}
               onClick={(e: any) => {
                 e.stopPropagation();
@@ -66,7 +67,8 @@ export default function Laptop() {
                 <Info
                   onTabChange={(tab: string) => {
                     walletStore.set({
-                      panelType: tab
+                      panelType: tab,
+                      depositPanelType: "token-selector"
                     });
                   }}
                 />
@@ -74,7 +76,10 @@ export default function Laptop() {
               {walletStore.panelType === "deposit" && (
                 <Deposit
                   onBack={() => {
-                    walletStore.set({ panelType: "info" });
+                    walletStore.set({
+                      panelType: "info",
+                      depositMethod: "centralized-exchange"
+                    });
                   }}
                 />
               )}
@@ -93,22 +98,20 @@ export default function Laptop() {
                 />
               )}
             </div>
-            <div className="absolute top-[30px] left-[15px] cursor-pointer">
+            <button className="absolute top-[20px] right-[16px] button">
               <svg
-                width="10"
-                height="18"
-                viewBox="0 0 10 18"
-                fill="none"
                 xmlns="http://www.w3.org/2000/svg"
+                width="13"
+                height="13"
+                viewBox="0 0 13 13"
+                fill="none"
               >
                 <path
-                  d="M1 1L8 9L1 17"
-                  stroke="white"
-                  strokeWidth="2"
-                  strokeLinecap="round"
+                  d="M0.334961 0.295898C0.721676 -0.0983983 1.34864 -0.0983983 1.73535 0.295898L6.2334 4.88184L10.6777 0.351562C11.0644 -0.0427343 11.6924 -0.0427343 12.0791 0.351562C12.4653 0.74587 12.4656 1.38515 12.0791 1.7793L7.63379 6.31055L12.124 10.8877C12.5104 11.282 12.5105 11.9212 12.124 12.3154C11.7374 12.7096 11.1104 12.7094 10.7236 12.3154L6.2334 7.73828L1.69043 12.3711C1.30376 12.7653 0.676747 12.7652 0.290039 12.3711C-0.0966393 11.9768 -0.0965661 11.3377 0.290039 10.9434L4.83301 6.30957L0.334961 1.72363C-0.0516867 1.3294 -0.051552 0.690212 0.334961 0.295898Z"
+                  fill="black"
                 />
               </svg>
-            </div>
+            </button>
           </motion.div>
         )}
       </AnimatePresence>

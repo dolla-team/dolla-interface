@@ -13,15 +13,15 @@ export default function TokenSelector({
   return (
     <div>
       <div
-        className="flex items-center gap-[18px] text-[16px] cursor-pointer button"
+        className="flex items-center gap-[10px] text-[14px] cursor-pointer button"
         onClick={onBack}
       >
         <BackIcon />
         <div className="text-black">{title}</div>
       </div>
       <div className="mt-[20px]">
-        <div className="text-[16px] text-black mb-[10px] text-center">
-          Choose Token
+        <div className="text-[16px] text-black font-[500] mb-[10px] text-center">
+          Select Token
         </div>
         <Tokens onClick={onSelect} />
       </div>

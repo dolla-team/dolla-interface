@@ -7,7 +7,11 @@ interface WalletState {
   panelType: "info" | "deposit" | "withdraw" | "swap";
   depositPanelType: "fund-list" | "token-selector" | "input";
   depositMethod: "centralized-exchange" | "coinbase";
-  withdrawPanelType: "token-selector" | "input";
+  withdrawPanelType:
+    | "token-selector"
+    | "chain-selector"
+    | "input"
+    | "withdraw-confirm";
   withdrawType: "token" | "nft";
   selectedToken: any;
   defaultDepositAmount: any;
@@ -19,7 +23,7 @@ interface WalletState {
 const initialState = {
   showWallet: false,
   panelType: "info",
-  depositPanelType: "fund-list",
+  depositPanelType: "token-selector",
   depositMethod: "centralized-exchange",
   withdrawPanelType: "token-selector",
   withdrawType: "token",
