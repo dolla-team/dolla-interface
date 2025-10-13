@@ -6,7 +6,7 @@ import { getReAnchorPrice } from "@/utils/pool";
 import ProgressBar from "@/components/nft-card/progress-bar";
 import BtcImg from "./btc-bg";
 import { useAuth } from "@/contexts/auth";
-import { AMOUNT } from "@/config/btc";
+import { BASE_TOKEN, AMOUNT } from "@/config/btc";
 
 export default function Market({
   data,
@@ -40,16 +40,15 @@ export default function Market({
               <BtcImg
                 index={AMOUNT.indexOf(Number(data.amount))}
                 id={data.pool_id}
-                name={data.reward_token_info?.[0]?.symbol}
               />
               <div>
                 <div className="text-[14px] text-black font-semibold">
-                  {data.amount} {data.reward_token_info?.[0]?.name}
+                  {data.amount} {BASE_TOKEN.symbol}
                   {/* {` #${data.reward_token_info?.[0]?.token_id}`} */}
                 </div>
                 <div className="flex items-center gap-[4px] mt-[6px]">
                   <span className="text-[10px] text-[#2B3337]">
-                    {data?.user ? formatAddress(data.user) : "-"}
+                    {data?.user_info?.name || formatAddress(data?.user)}
                   </span>
                   <SellerLevel isSmall />
                 </div>

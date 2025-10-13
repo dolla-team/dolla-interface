@@ -71,17 +71,10 @@ const Item = ({ data }: { data: any }) => {
         </div>
         <div className="text-right">
           <div className="text-[14px] text-black">
-            {formatNumber(
-              data.amount,
-              3,
-              true,
-              data.type === "swap"
-                ? {}
-                : data.type === "deposit" || data.type === "ticket"
-                ? { prefix: "+ " }
-                : { prefix: "- " }
-            )}{" "}
-            {data.tokens[0]?.symbol}
+            {data.type === "deposit" || data.type === "ticket"
+              ? "+"
+              : data.type !== "swap" && "-"}
+            {formatNumber(data.amount, 6, true)} {data.tokens[0]?.symbol}
           </div>
           <div className="text-[10px] text-[#8A87AA]">
             {dayjs(data.updated_at).format("HH:mm D MMM, YYYY")}

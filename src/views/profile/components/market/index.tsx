@@ -8,7 +8,7 @@ import { formatAddress } from "@/utils/format/address";
 import Avatar from "@/components/avatar";
 import BtcImg from "@/views/btc-list/markets/btc-bg";
 import MarketStatus from "../market-status";
-import { AMOUNT } from "@/config/btc";
+import { BASE_TOKEN, AMOUNT } from "@/config/btc";
 
 export default function Market({
   data,
@@ -43,7 +43,7 @@ export default function Market({
   return (
     <div
       className={clsx(
-        "w-[300px] group shrink-0 rounded-[20px] border-[1px] border-[#E4E4E4] bg-black transition-all duration-300 relative",
+        "w-[300px] group shrink-0 rounded-[20px] border-[1px] border-[#E4E4E4] transition-all duration-300 relative",
         isActive
           ? "shadow-[0px_0px_20px_0px_rgba(255,_239,_67,_0.60)] bg-[url('/btc/bg-market-active-border.svg')] bg-[length:344px_222px] bg-no-repeat bg-center"
           : "",
@@ -58,19 +58,18 @@ export default function Market({
       {header}
       <div className="relative z-[2] bg-white rounded-[18px] pt-[20px]">
         <div className="flex items-center justify-between px-[12px]">
-          <div className="flex items-center gap-[12px]">
+          <div className="flex items-center gap-[8px]">
             {data?.reward_amount && (
               <BtcImg
                 index={AMOUNT.indexOf(Number(amount))}
                 id={data?.pool_id}
-                name={data.reward_token_info?.[0]?.symbol}
               />
             )}
             <div>
               <div className="text-[18px] text-[#2B3337] font-bold">
-                {amount} {data.reward_token_info?.[0]?.symbol}
+                {amount} {BASE_TOKEN.symbol}
               </div>
-              <div className="flex items-center gap-[6px]">
+              <div className="flex items-center gap-[4px]">
                 <Avatar
                   size={20}
                   src={data?.pool_user_info?.icon}
@@ -78,8 +77,10 @@ export default function Market({
                   address={data?.pool_user_info?.user}
                   className="text-[12px]"
                 />
+
                 <div className="text-[12px]">
-                  {formatAddress(data?.pool_user_info?.user)}
+                  {data?.pool_user_info?.name ||
+                    formatAddress(data?.pool_user_info?.user)}
                 </div>
               </div>
             </div>
@@ -217,6 +218,9 @@ export default function Market({
 
       {data.status === 2 && (
         <div className="w-full h-full rounded-[18px] absolute top-0 left-0 z-[2] bg-[#E5E5E54D] backdrop-blur-[10px]">
+          <div className="text-[12px] text-[#5E6B7D] text-right mb-[4px] absolute top-[12px] right-[12px]">
+            #{data?.pool_id}
+          </div>
           <div className="text-[24px] font-[900] text-center mt-[40px]">
             {formatNumber(data.profit_ratio, from === "seller" ? 2 : 0, true, {
               isShort: true

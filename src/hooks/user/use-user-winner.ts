@@ -41,20 +41,18 @@ export default function useUserWinner() {
       const _data = res.data.data || [];
       _data.forEach((item: any) => {
         // nfts
-        if (item.token_id) {
-          _nfts.push({
-            label: "NFT Prize",
-            address: item.token,
-            icon: item.token_info.icon,
-            type: "nft",
-            tokenId: item.token_id,
-            value: item.token_usd
-          });
-        }
+        // if (item.token_id) {
+        //   _nfts.push({
+        //     label: "NFT Prize",
+        //     address: item.token,
+        //     icon: item.token_info.icon,
+        //     type: "nft",
+        //     tokenId: item.token_id,
+        //     value: item.token_usd
+        //   });
+        // }
         // btc
-        if (item.token_info?.symbol === BASE_TOKEN.symbol) {
-          _btcs.push(item);
-        }
+        _btcs.push(item);
       });
 
       setNfts(_nfts);

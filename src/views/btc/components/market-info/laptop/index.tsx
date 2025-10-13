@@ -29,14 +29,14 @@ export default function MarketInfo() {
               </div>
               <div className="">
                 <span className="text-[14px] text-white">
-                  {pool?.user ? formatAddress(pool.user) : "-"}
+                  {pool?.user_info?.name || formatAddress(pool?.user)}
                 </span>
               </div>
             </div>
           </div>
         </div>
         <div className="flex items-center mt-[20px]">
-          {pool?.degen_players?.length < 10 && (
+          {pool?.participants < 10 && (
             <div className="text-[12px] text-white/50 mr-[6px]">Player</div>
           )}
           {pool?.degen_players?.map((item: any, index: number) => (

@@ -40,7 +40,7 @@ export default function EndPanel({ data }: { data: any }) {
       _bidsProgress.push((bidTime - startTime) / (endTime - startTime));
     });
 
-    const _returnMultiple = data.profit_ratio;
+    const _returnMultiple = data.winner_user_info?.player_profit;
 
     _bidsProgress.sort((a: number, b: number) => a - b);
     return [

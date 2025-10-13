@@ -11,7 +11,6 @@ import gsap from "gsap";
 import { useBtcContext } from "../../../context";
 import useIsMobile from "@/hooks/use-is-mobile";
 import DollaEye from "@/components/dolla-eye";
-import { getReAnchorPrice } from "@/utils/pool";
 import { BASE_TOKEN } from "@/config/btc";
 
 export default function Winner({
@@ -152,7 +151,7 @@ export default function Winner({
                     WebkitTextFillColor: "transparent"
                   }}
                 >
-                  ${formatNumber(getReAnchorPrice(pool), 2, true)}
+                  ${formatNumber(pool.reward_usd, 2, true)}
                 </div>
               </>
             )}
@@ -167,7 +166,7 @@ export default function Winner({
                   You won {poolAmount} BTC by only ${bids}
                 </div>
                 <div className="text-white text-[26px] font-[DelaGothicOne]">
-                  {userInfo?.email || formatAddress(userInfo?.user)}
+                  {userInfo?.name || formatAddress(userInfo?.user)}
                 </div>
                 {points > 0 && (
                   <div>

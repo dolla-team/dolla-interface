@@ -154,7 +154,7 @@ export default function BTCCreate() {
               <div className="w-[1px] h-[158px] bg-[#424242] mx-[30px]" />
               <div className="relative flex-1 h-[158px]">
                 <div className="text-center text-white text-[14px] font-[500]">
-                  {formatAddress(userInfo?.user)}
+                  {userInfo?.name || formatAddress(userInfo?.user)}
                 </div>
                 <div className="mt-[20px] text-center text-[20px] font-[700] text-white">
                   {isLoading ? (

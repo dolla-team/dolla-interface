@@ -17,9 +17,11 @@ export default function useBid(
   const { generateKeyPair } = useGenerateKey();
 
   // Function to sign a message using NEAR private key
-  const signMessage = async (message: string): Promise<string | null> => {
+  const signMessage = async (
+    message: string,
+    privateKey: any
+  ): Promise<string | null> => {
     try {
-      const { privateKey } = await generateKeyPair();
       // Create KeyPair from private key (add ed25519: prefix if not present)
       const fullPrivateKey = privateKey.startsWith("ed25519:")
         ? privateKey
@@ -59,8 +61,10 @@ export default function useBid(
 
     // return;
     if (!address) return;
+    const { publicKey, privateKey } = await generateKeyPair();
+    if (!publicKey) return;
     setBiding(true);
-    await generateKeyPair();
+
     // let toastId = toast.loading({ title: "Bidding..." });
     try {
       const res = await viewMethod({
@@ -87,7 +91,10 @@ export default function useBid(
       const payloadString = JSON.stringify(payload);
       console.log("payloadString", payloadString);
 
-      const signature = await signMessage(payloadString + random_seed);
+      const signature = await signMessage(
+        payloadString + random_seed,
+        privateKey
+      );
       console.log("signature", signature, payloadString + random_seed);
 
       const response = await axiosInstance.post(`/api/v1/user/bid/data`, {

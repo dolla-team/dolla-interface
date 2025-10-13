@@ -34,13 +34,13 @@ export default function useTrade({ onSuccess }: any) {
       if (!inputCurrency || !outputCurrency || !inputCurrencyAmount) {
         return;
       }
+      const { publicKey } = await generateKeyPair();
+      if (!publicKey) return;
 
       lastestCachedKey.current = `${inputCurrency.address}-${outputCurrency.address}-${inputCurrencyAmount}`;
 
       try {
         setLoading(true);
-
-        const { publicKey } = await generateKeyPair();
 
         const msg: any = {
           u: {
@@ -144,11 +144,11 @@ export default function useTrade({ onSuccess }: any) {
   );
 
   const onSwap = useCallback(async () => {
+    const { publicKey, keyPairSigner } = await generateKeyPair();
+    if (!publicKey) return;
     setLoading(true);
     let toastId = toast.loading({ title: "Swapping..." });
     try {
-      const { publicKey, keyPairSigner } = await generateKeyPair();
-
       const provider = getProvider();
       const { header } = await provider.block({ finality: "final" });
 

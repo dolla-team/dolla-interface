@@ -3,10 +3,10 @@ import GridTable, { GridTableAlign } from "@/components/grid-table";
 import dayjs from "dayjs";
 import Pagination from "@/components/pagination";
 import { formatNumber } from "@/utils/format/number";
-import Big from "big.js";
 import { ESellerRecordsType } from "../hooks/use-create-pool-list";
 import useIsMobile from "@/hooks/use-is-mobile";
 import { useNavigate } from "react-router-dom";
+import { BASE_TOKEN } from "@/config/btc";
 
 const Records = (props: any) => {
   const {
@@ -16,8 +16,7 @@ const Records = (props: any) => {
     onPrevPage,
     onNextPage,
     hasNextPage,
-    currentPage,
-    recordsPrices
+    currentPage
   } = props;
 
   const isMobile = useIsMobile();
@@ -76,7 +75,11 @@ const Records = (props: any) => {
               record.token_info?.decimals > 6 ? 6 : 2,
               true
             )}
-            <div>{record.token_info?.symbol}</div>
+            <div>
+              {record.token === BASE_TOKEN.address
+                ? BASE_TOKEN.symbol
+                : record.token_info?.symbol}
+            </div>
           </div>
         );
       }

@@ -27,10 +27,12 @@ export default function useGameAction({
   const toast = useToast();
 
   async function pauseGame() {
+    const { publicKey, keyPairSigner } = await generateKeyPair();
+    if (!publicKey) return;
     let toastId = toast.loading({ title: "Pausing game..." });
     try {
       setPausing(true);
-      const { publicKey, keyPairSigner } = await generateKeyPair();
+
       const provider = getProvider();
       const { header } = await provider.block({ finality: "final" });
 
@@ -76,9 +78,10 @@ export default function useGameAction({
   }
 
   async function resumeGame() {
+    const { publicKey, keyPairSigner } = await generateKeyPair();
+    if (!publicKey) return;
     let toastId = toast.loading({ title: "Resuming game..." });
     try {
-      const { publicKey, keyPairSigner } = await generateKeyPair();
       setResuming(true);
 
       const provider = getProvider();
@@ -125,8 +128,9 @@ export default function useGameAction({
   }
 
   async function cancelGame() {
-    let toastId = toast.loading({ title: "Canceling game..." });
     const { publicKey, keyPairSigner } = await generateKeyPair();
+    if (!publicKey) return;
+    let toastId = toast.loading({ title: "Canceling game..." });
     try {
       setCanceling(true);
 

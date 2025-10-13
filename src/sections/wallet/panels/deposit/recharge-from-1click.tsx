@@ -168,7 +168,10 @@ export default function RechargeFrom1click() {
                   {walletStore.selectedToken.symbol}
                 </span>
               </div>
-              <div className="mt-[3px]"> Est. arrival ≈ 1 mins</div>
+              <div className="mt-[3px]">
+                {" "}
+                Est. arrival ≈ {chain.blockchain === "btc" ? "15" : "1"} mins
+              </div>
             </div>
             <ChainSelector
               selectedChain={chain}

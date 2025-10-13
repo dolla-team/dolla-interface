@@ -3,7 +3,6 @@ import { formatNumber } from "@/utils/format/number";
 import { useMemo, useState } from "react";
 import Big from "big.js";
 import Button from "@/components/button";
-import { getAnchorPrice } from "@/utils/pool";
 import useGameAction from "@/hooks/near/use-game-action";
 import { useContractConfigStore } from "@/stores/use-contract-config";
 import { useAuth } from "@/contexts/auth";
@@ -94,7 +93,7 @@ export default function CancelModal({
             <span className="font-medium">
               {formatNumber(
                 (order?.reward_amount || 0) / 10 ** rewardTokenInfo.decimals,
-                0,
+                6,
                 true
               )}{" "}
               {rewardTokenInfo.symbol}
@@ -104,7 +103,7 @@ export default function CancelModal({
             <span className="font-[400]">Market Value</span>
             <div className="grow border-b border-dashed border-[#5E6B7D] opacity-50" />
             <span className="font-medium">
-              ${formatNumber(getAnchorPrice(order?.anchor_price), 0, true)}
+              ${formatNumber(order?.reward_usd, 2, true)}
             </span>
           </div>
           <div className="flex items-center text-[14px] mb-[20px] gap-[10px]">

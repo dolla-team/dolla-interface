@@ -20,11 +20,12 @@ export default function useBuyTicket(onSuccess?: () => void) {
   const toast = useToast();
 
   async function transfer(ticket: number) {
+    const { publicKey, keyPairSigner } = await generateKeyPair();
+    if (!publicKey) return;
+
     let toastId = toast.loading({ title: "Buying ticket..." });
     try {
       setLoading(true);
-
-      const { publicKey, keyPairSigner } = await generateKeyPair();
 
       const provider = getProvider();
       const { header } = await provider.block({ finality: "final" });

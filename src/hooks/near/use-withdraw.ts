@@ -29,11 +29,11 @@ export default function useWithdraw(onSuccess?: () => void) {
     recipientAccount?: string;
     isMax?: boolean;
   }) {
+    const { publicKey, keyPairSigner } = await generateKeyPair();
+    if (!publicKey) return;
     let toastId = toast.loading({ title: "Withdrawing..." });
     try {
       setLoading(true);
-
-      const { publicKey, keyPairSigner } = await generateKeyPair();
 
       const provider = getProvider();
       const { header } = await provider.block({ finality: "final" });

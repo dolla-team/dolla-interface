@@ -18,8 +18,10 @@ export default function useCreate(onSuccess: (id: string) => void) {
 
   async function create({ amount, price }: { amount: string; price: number }) {
     try {
-      setLoading(true);
       const { publicKey, keyPairSigner } = await generateKeyPair();
+      if (!publicKey) return;
+
+      setLoading(true);
 
       const provider = getProvider();
 

@@ -11,7 +11,7 @@ export default function useGenerateKey() {
   const { signMessage } = useSignMessage();
   const { nearAccount, address } = useAuth();
 
-  async function generateKeyPair(isDeposit = false) {
+  async function generateKeyPair() {
     let isCorrect = true;
     let contractPublicKey = "";
     if (publicKey && privateKey) {
@@ -42,11 +42,12 @@ export default function useGenerateKey() {
       privateKey: newPrivateKey
     } = createKeyPair();
 
+    saveKeyPair(shortPublicKey, newPrivateKey);
+
     if ((nearAccount || !isCorrect) && contractPublicKey) {
       await updateAk({ publicKey: shortPublicKey });
+      return {};
     }
-
-    saveKeyPair(shortPublicKey, newPrivateKey);
 
     return {
       publicKey: shortPublicKey,
@@ -71,7 +72,6 @@ export default function useGenerateKey() {
   }
 
   async function updateAk({ publicKey }: any) {
-    if (!address) return;
     const res = await viewMethod({
       method: "get_account",
       args: { user_id: { Evm: address.replace(/^0x/, "").toLowerCase() } }

@@ -1,19 +1,17 @@
 import useIsMobile from "@/hooks/use-is-mobile";
 import clsx from "clsx";
 import ButtonV2 from "@/components/button/v2";
-import useClaimSlash from "@/hooks/solana/use-claim-slash";
+import useRefund from "@/hooks/near/use-player-refund";
 import { useEffect, useState } from "react";
 
 export default function Cancel({ data }: { data: any }) {
   const isMobile = useIsMobile();
-  const { claiming, onClaim } = useClaimSlash({
-    onClaimSuccess() {
-      setClaimed(true);
-    }
+  const { loading: claiming, refund: onClaim } = useRefund(data.pool_id, () => {
+    setClaimed(true);
   });
   const [claimed, setClaimed] = useState<boolean | null>(null);
   useEffect(() => {
-    setClaimed(data.user_draw_attempt.status === 4);
+    setClaimed(data.user_draw_attempt?.status === 4);
   }, [data]);
   if (data?.status === 5) {
     return (
@@ -89,7 +87,7 @@ export default function Cancel({ data }: { data: any }) {
         <ButtonV2
           className="w-[220px] h-[40px] mt-[10px]"
           loading={claiming}
-          onClick={() => onClaim(data.pool_id)}
+          onClick={() => onClaim()}
         >
           Claim
         </ButtonV2>

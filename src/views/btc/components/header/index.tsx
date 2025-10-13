@@ -66,7 +66,7 @@ export default function Header({ className }: { className?: string }) {
               WebkitTextFillColor: "transparent"
             }}
           >
-            ${formatNumber(pool?.value, 0, true)}
+            ${formatNumber(pool?.reward_usd, 2, true)}
           </span>
 
           {/* {!!prev && (
