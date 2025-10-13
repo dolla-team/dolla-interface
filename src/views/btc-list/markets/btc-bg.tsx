@@ -196,7 +196,7 @@ export default function BTCBg({ index, id }: { index: number; id: string }) {
             y2="9"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stopColor="#F1CE5C" />
+            <stop stopColor={config.borderColor[0]} />
             <stop offset="1" stopColor={config.borderColor[1]} />
           </linearGradient>
           <linearGradient
