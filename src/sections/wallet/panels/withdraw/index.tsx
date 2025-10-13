@@ -28,7 +28,7 @@ export default function WithdrawPanel({ onBack }: { onBack: () => void }) {
     ];
   }, [walletStore?.selectedToken]);
   const { prices } = useTokenPrice(tokenIds);
-  const tokenPrice = prices[0]?.last_price;
+  const tokenPrice = prices?.[0]?.last_price;
 
   const amountUSD = useMemo(() => {
     const _amountUSD = Big(amount || 0).mul(tokenPrice || 0);
