@@ -12,6 +12,7 @@ import { getSpilledAmount } from "@/utils/pool";
 import { useMemo } from "react";
 import MarketStatus from "@/views/profile/components/market-status";
 import dayjs from "@/libs/dayjs";
+import clsx from "clsx";
 
 export default function Market({
   data,
@@ -99,8 +100,13 @@ export default function Market({
             </div>
           )}
           {column.dataIndex === "status" && (
-            <div className="">
-              <MarketStatus value={data.status} className="p-[8px]" />
+            <div
+              className={clsx(data.status === 1 ? "pl-[30px]" : "pl-[10px]")}
+            >
+              <MarketStatus
+                value={data.status}
+                className={clsx("p-[8px]", data.status !== 1 && "mx-auto")}
+              />
               {data.status === 1 && (
                 <div className="text-[10px] text-black mt-[5px]">
                   {dayjs(data.created_at).from(dayjs(Date.now()), true)}

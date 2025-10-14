@@ -37,6 +37,7 @@ export default [
   {
     title: "Status",
     dataIndex: "status",
-    width: "10%"
+    width: "10%",
+    align: "center"
   }
 ];

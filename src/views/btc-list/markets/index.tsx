@@ -100,7 +100,8 @@ export default function Markets() {
             key={column.title}
             className={clsx(
               "flex items-center gap-[4px] ",
-              column.sort && "cursor-pointer"
+              column.sort && "cursor-pointer",
+              column.align === "center" && "justify-center"
             )}
             style={{ width: column.width }}
             onClick={() => {
