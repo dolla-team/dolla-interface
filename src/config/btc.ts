@@ -16,6 +16,7 @@ export const BASE_TOKEN: Record<string, any> = {
   address: "nbtc.bridge.near",
   decimals: 8,
   chain: "near",
+  name: "BTC",
   symbol: "BTC",
   icon: "/tokens/btc.png",
   pointsIcon: "/tokens/btc.png",
