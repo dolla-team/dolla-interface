@@ -168,7 +168,7 @@ const Item = ({
     return Math.floor(Math.random() * config.length);
   }, [index]);
 
-  const price = Big(getReAnchorPrice(item)).toFixed(2);
+  const price = getReAnchorPrice(item);
 
   return item.winner_user ? (
     <div className="flex items-center h-full gap-3 text-white transition-transform duration-200 hover:scale-105">
@@ -181,7 +181,7 @@ const Item = ({
           config[randomIndex].color
         )}
       >
-        {formatNumber(Number(price) / (item.winner_times || 1), 2, true)}x
+        {formatNumber(Number(price) / (item.winner_times || 1), 0, true)}x
       </span>
       <span className="text-xl drop-shadow-lg">🚀</span>
     </div>
@@ -201,7 +201,9 @@ const Item = ({
       <span className="text-[#D9D9D9] text-[12px]">
         {item.nft_ids ? "New NFT Listed" : "New Market Listed"}
       </span>
-      <span className={clsx("text-lg font-bold drop-shadow-lg")}>${price}</span>
+      <span className={clsx("text-lg font-bold drop-shadow-lg")}>
+        ${formatNumber(price, 2, true)}
+      </span>
       <span className="text-xl drop-shadow-lg">🎯</span>
     </div>
   );

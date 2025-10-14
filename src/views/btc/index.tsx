@@ -79,7 +79,7 @@ const Content = () => {
       {!isMobile && !bidResult?.bid?.is_winner && <Music />}
       {/* {isMobile && <MarketsModal />} */}
       <Wallet />
-      <Tips />
+      {pool?.status === 1 && <Tips />}
     </div>
   );
 };

@@ -74,7 +74,7 @@ export default function useCreatePoolList() {
       try {
         const response = await axiosInstance.get(
           `/api/v1/user/records/seller?limit=${recordsPageSize}&chain=near&offset=${
-            (recordsPageIndex - 1) * pageSize
+            (recordsPageIndex - 1) * recordsPageSize
           }`
         );
         setRecordsPageHasNextPage(response.data.data.has_next_page);

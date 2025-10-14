@@ -110,7 +110,7 @@ export default function EndPanel({ data }: { data: any }) {
                 <MultiIcon className="absolute top-0 left-0 w-full h-full" />
                 <div className="text-black text-center font-[DelaGothicOne] relative z-[1] rotate-[15deg] w-full h-full flex flex-wrap items-center justify-center px-[6px]">
                   <span className="text-[24px]">
-                    {formatNumber(returnMultiple, 0, true, { isShort: true })}
+                    {formatNumber(returnMultiple, 1, true, { isShort: true })}
                   </span>
                   <span
                     className={clsx(
@@ -151,7 +151,7 @@ export default function EndPanel({ data }: { data: any }) {
                 Return multiple
               </span>
               <span className="text-white text-[12px] font-[DelaGothicOne]">
-                {formatNumber(returnMultiple, 0, true, { isShort: true })}
+                {formatNumber(returnMultiple, 1, true, { isShort: true })}
               </span>
             </div>
           </div>
