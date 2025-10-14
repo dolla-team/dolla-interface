@@ -223,27 +223,34 @@ export default function Market({
           <div className="text-[12px] text-[#5E6B7D] text-right mb-[4px] absolute top-[12px] right-[12px]">
             #{data?.pool_id}
           </div>
-          <div className="text-[24px] font-[900] text-center mt-[40px]">
+          <div
+            className={clsx(
+              "text-[24px] font-[900] text-center",
+              from === "seller" ? "mt-[60px]" : "mt-[40px]"
+            )}
+          >
             {formatNumber(data.profit_ratio, from === "seller" ? 2 : 0, true, {
               isShort: true
             })}
             x WIN
           </div>
-          <div className="flex justify-center">
-            <div className="p-[4px] pr-[10px] min-w-[100px] inline-flex justify-center items-center gap-[3px] rounded-[16px] bg-white border border-[#E4E4E4] backdrop-blur-[25px]">
-              <Avatar
-                className="text-[14px]"
-                email={data?.winner_user_info?.email_desensitization}
-                src={data?.winner_user_info?.icon}
-                address={data?.winner_user_info?.user}
-                size={24}
-              />
-              <div className="text-[12px] text-[#2B3337] leading-[24px]">
-                {data?.winner_user_info?.name ||
-                  formatAddress(data?.winner_user_info?.user)}
+          {from !== "seller" && (
+            <div className="flex justify-center">
+              <div className="p-[4px] pr-[10px] min-w-[100px] inline-flex justify-center items-center gap-[3px] rounded-[16px] bg-white border border-[#E4E4E4] backdrop-blur-[25px]">
+                <Avatar
+                  className="text-[14px]"
+                  email={data?.winner_user_info?.email_desensitization}
+                  src={data?.winner_user_info?.icon}
+                  address={data?.winner_user_info?.user}
+                  size={24}
+                />
+                <div className="text-[12px] text-[#2B3337] leading-[24px]">
+                  {data?.winner_user_info?.name ||
+                    formatAddress(data?.winner_user_info?.user)}
+                </div>
               </div>
             </div>
-          </div>
+          )}
         </div>
       )}
     </div>
