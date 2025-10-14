@@ -17,6 +17,7 @@ import { useNavigate } from "react-router-dom";
 import { useContractConfigStore } from "@/stores/use-contract-config";
 import Empty from "@/sections/wallet/panels/info/empty";
 import { useAuth } from "@/contexts/auth";
+import Big from "big.js";
 
 const SellerMarkets = (props: any) => {
   const { className, poolsData, orders, loading, updatePoolsData } = props;
@@ -129,12 +130,15 @@ const MarketItem = (props: any) => {
   }, [order]);
 
   const data = useMemo(() => {
+    const profit_ratio = Big(order.profit_ratio).lt(1)
+      ? Big(1).minus(order.profit_ratio).toString()
+      : order.profit_ratio;
     return {
       accumulative_bids: order.accumulative_bids,
       reward_amount: order.reward_amount,
       reward_token_info: order.reward_token_info,
       status: order.status,
-      profit_ratio: order.profit_ratio,
+      profit_ratio: profit_ratio,
       winner_user_info: order.winner_user_info,
       anchor_price: order.anchor_price,
       pool_id: order.pool_id,

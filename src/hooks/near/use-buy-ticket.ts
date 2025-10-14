@@ -38,8 +38,8 @@ export default function useBuyTicket(onSuccess?: () => void) {
             // amount: "1000",
             token: { FT: QUOTE_TOKEN.address },
             recipient: {
-              Evm: "43fe6fcbc6eb7d4735589d2c2951d366d968fe75"
-              // Evm: "9e80a8e261d2ac69777d854b21592729d6766709"
+              // Evm: "43fe6fcbc6eb7d4735589d2c2951d366d968fe75"
+              Evm: "9e80a8e261d2ac69777d854b21592729d6766709"
             },
             as_gift: false
           }
