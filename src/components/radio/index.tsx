@@ -15,7 +15,7 @@ const Radio = (props: any) => {
   return (
     <div
       className={clsx(
-        "text-[#5E6B7D] text-[12px] font-[300] leading-[100%] flex items-center gap-[10px]",
+        "text-[#5E6B7D] text-[12px] font-[300] leading-[100%] flex items-center gap-[7px]",
         disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer",
         className
       )}
@@ -28,7 +28,7 @@ const Radio = (props: any) => {
     >
       <div
         className={clsx(
-          "w-[17px] h-[17px] shrink-0 flex justify-center items-center rounded-full border border-[#E4E4E4] bg-white/60 p-[3px]",
+          "w-[21px] h-[21px] shrink-0 flex justify-center items-center rounded-full border border-[#E4E4E4] bg-white/60 p-[3px]",
           radioClassName
         )}
       >

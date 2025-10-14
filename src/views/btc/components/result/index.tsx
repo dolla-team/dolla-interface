@@ -87,7 +87,7 @@ export default function Result({ points, tickets, isWinner, onClose }: any) {
               marginTop: config.key === 0 ? 30 : 0
             }}
           />
-          <div className="text-[32px] text-white font-[BlackHanSans] mt-[20px]">
+          <div className="text-[32px] text-white font-[700] mt-[20px]">
             {config.title}
           </div>
           <div className="text-[16px] text-white font-[DelaGothicOne]">
@@ -132,7 +132,7 @@ export default function Result({ points, tickets, isWinner, onClose }: any) {
               marginTop: config.key === 0 ? 40 : 0
             }}
             onClick={onClose}
-            className="h-[44px] w-[228px] button rounded-[8px] bg-linear-to-b from-[#FFF698] to-[#FFC42F] text-[#111111] font-[BlackHanSans] text-[16px]"
+            className="h-[44px] w-[228px] button rounded-[8px] bg-linear-to-b from-[#FFF698] to-[#FFC42F] text-[#111111] font-[600] text-[16px]"
           >
             Try Your Luck Again
           </button>

@@ -3,9 +3,7 @@ import clsx from "clsx";
 export default function WildTime() {
   return (
     <div className="flex items-center gap-[8px]">
-      <span className="text-[#FFEF43] text-[16px] font-[BlackHanSans]">
-        Wild Time
-      </span>
+      <span className="text-[#FFEF43] text-[16px] font-[600]">Wild Time</span>
       <img src="/new-btc/wild.gif" className="w-[28px] h-[28px]" />
       <div className="flex p-[2px] border border-[#3C3420] rounded-[4px] gap-[4px]">
         <Item active />

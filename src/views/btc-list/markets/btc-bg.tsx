@@ -1,5 +1,3 @@
-import { BASE_TOKEN } from "@/config/btc";
-
 const amountConfig: Record<
   string,
   {
@@ -240,7 +238,7 @@ export default function BTCBg({
           WebkitTextFillColor: "transparent"
         }}
       >
-        {amount} {BASE_TOKEN.symbol}
+        {amount}
       </span>
     </div>
   );

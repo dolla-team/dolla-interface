@@ -10,6 +10,8 @@ import { BASE_TOKEN, AMOUNT } from "@/config/btc";
 import Avatar from "@/components/avatar";
 import { getSpilledAmount } from "@/utils/pool";
 import { useMemo } from "react";
+import MarketStatus from "@/views/profile/components/market-status";
+import dayjs from "@/libs/dayjs";
 
 export default function Market({
   data,
@@ -96,8 +98,36 @@ export default function Market({
               <ProgressBar {...{ progress, spilled, spilledPercent }} />
             </div>
           )}
+          {column.dataIndex === "status" && (
+            <div className="">
+              <MarketStatus value={data.status} className="p-[8px]" />
+              {data.status === 1 && (
+                <div className="text-[10px] text-black mt-[5px]">
+                  {dayjs(data.created_at).from(dayjs(Date.now()), true)}
+                </div>
+              )}
+              {data.status === 2 && (
+                <div className="flex items-center gap-[4px] mt-[5px]">
+                  <Avatar
+                    size={20}
+                    src={data.winner_user_info?.icon}
+                    email={data.winner_user_info?.email_desensitization}
+                    address={data.winner_user_info?.user}
+                    className="text-[12px]"
+                  />
+                  <div className="text-[12px] text-black font-[600] w-[160px] truncate">
+                    {data.winner_user_info?.name ||
+                      formatAddress(data.winner_user_info?.user)}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       ))}
+      {data.status !== 1 && (
+        <div className="absolute top-0 left-0 w-full h-full bg-[#FFFFFF80] border border-[#F2F2F233] rounded-[10px]"></div>
+      )}
     </div>
   );
 }

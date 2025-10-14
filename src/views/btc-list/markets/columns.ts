@@ -2,13 +2,13 @@ export default [
   {
     title: "#",
     dataIndex: "pool_id",
-    width: "10%",
+    width: "5%",
     sort: true
   },
   {
     title: "Market",
     dataIndex: "market",
-    width: "30%"
+    width: "20%"
   },
   {
     title: "Valued",
@@ -25,13 +25,18 @@ export default [
   {
     title: "Players",
     dataIndex: "participants",
-    width: "15%",
+    width: "10%",
     sort: true
   },
   {
     title: "Bidding progress",
     dataIndex: "hitting",
-    width: "15%",
+    width: "20%",
     sort: true
+  },
+  {
+    title: "Status",
+    dataIndex: "status",
+    width: "10%"
   }
 ];

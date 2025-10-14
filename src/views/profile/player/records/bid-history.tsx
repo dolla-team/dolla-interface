@@ -3,24 +3,14 @@ import GridTable, { GridTableAlign } from "@/components/grid-table";
 import dayjs from "dayjs";
 import Pagination from "@/components/pagination";
 import { formatNumber } from "@/utils/format/number";
-import useIsMobile from "@/hooks/use-is-mobile";
 import { useNavigate } from "react-router-dom";
 import useCopy from "@/hooks/use-copy";
 import { useAuth } from "@/contexts/auth";
 import { BASE_TOKEN } from "@/config/btc";
 
 const BidHistory = (props: any) => {
-  const {
-    className,
-    page,
-    loading,
-    data,
-    hasMore,
-    onPageChange,
-    fullAction = false
-  } = props;
+  const { className, page, loading, data, hasMore, onPageChange } = props;
 
-  const isMobile = useIsMobile();
   const navigate = useNavigate();
   const { onCopy } = useCopy();
   const { address } = useAuth();
@@ -95,10 +85,10 @@ const BidHistory = (props: any) => {
               {formatNumber(
                 Number(record.reward_amount) /
                   10 ** record.reward_token_info?.[0].decimals,
-                2,
+                6,
                 true
               )}{" "}
-              {record.reward_token_info?.[0].symbol}
+              {BASE_TOKEN.symbol}
             </div>
           );
         }

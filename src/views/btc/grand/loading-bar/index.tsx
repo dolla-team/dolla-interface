@@ -18,7 +18,7 @@ export default function GrandLoading({ ended }: any) {
   return (
     <div className="w-full h-full absolute left-0 top-0 z-[50] bg-black/50 flex items-center justify-center">
       <div>
-        <span className="text-[#FFF] text-[14px] font-[BlackHanSans] text-left">
+        <span className="text-[#FFF] text-[14px] font-[600] text-left">
           Loading...
         </span>
         <div

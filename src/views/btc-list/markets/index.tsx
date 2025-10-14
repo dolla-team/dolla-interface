@@ -13,6 +13,7 @@ import Popover, {
   PopoverTrigger
 } from "@/components/popover";
 import { useAllMarketsStore } from "@/stores/use-all-markets";
+import Radio from "@/components/radio";
 
 export default function Markets() {
   const navigate = useNavigate();
@@ -24,7 +25,9 @@ export default function Markets() {
     sortField,
     sortOrder,
     setSortField,
-    setSortOrder
+    setSortOrder,
+    onChangeStatus,
+    status
   } = usePoolList({
     pageLimit: 100,
     tokenStatus: 0,
@@ -44,39 +47,51 @@ export default function Markets() {
         <div className="text-[20px] text-black font-[700] mb-[10px]">
           All Markets
         </div>
-        <div className="flex items-center h-[40px] p-[2px] bg-[#0000000D] border border-[#F2F2F233] rounded-[10px]">
-          {[
-            { label: "All", key: 0 },
-            {
-              label: AMOUNT[0] + " " + BASE_TOKEN.symbol,
-              key: AMOUNT[0] * 10 ** BASE_TOKEN.decimals
-            },
-            {
-              label: AMOUNT[1] + " " + BASE_TOKEN.symbol,
-              key: AMOUNT[1] * 10 ** BASE_TOKEN.decimals
-            },
-            {
-              label: AMOUNT[2] + " " + BASE_TOKEN.symbol,
-              key: AMOUNT[2] * 10 ** BASE_TOKEN.decimals
-            }
-          ].map((item) => (
-            <button
-              key={item.key}
-              className={clsx(
-                "button min-w-[50px] text-center h-[34px] rounded-[8px] text-[12px] px-[10px]",
-                allMarketsStore.tab === item.key
-                  ? "bg-[#FFC42F] text-black"
-                  : "text-[#8A87AA]"
-              )}
-              onClick={() => {
-                allMarketsStore.set({
-                  tab: item.key
-                });
+        <div className="flex items-center gap-[30px]">
+          <div className="flex items-center h-[40px] p-[2px] bg-[#0000000D] border border-[#F2F2F233] rounded-[10px]">
+            {[
+              { label: "All", key: 0 },
+              {
+                label: AMOUNT[0] + " " + BASE_TOKEN.symbol,
+                key: AMOUNT[0] * 10 ** BASE_TOKEN.decimals
+              },
+              {
+                label: AMOUNT[1] + " " + BASE_TOKEN.symbol,
+                key: AMOUNT[1] * 10 ** BASE_TOKEN.decimals
+              },
+              {
+                label: AMOUNT[2] + " " + BASE_TOKEN.symbol,
+                key: AMOUNT[2] * 10 ** BASE_TOKEN.decimals
+              }
+            ].map((item) => (
+              <button
+                key={item.key}
+                className={clsx(
+                  "button min-w-[50px] text-center h-[34px] rounded-[8px] text-[12px] px-[10px]",
+                  allMarketsStore.tab === item.key
+                    ? "bg-[#FFC42F] text-black"
+                    : "text-[#8A87AA]"
+                )}
+                onClick={() => {
+                  allMarketsStore.set({
+                    tab: item.key
+                  });
+                }}
+              >
+                {item.label}
+              </button>
+            ))}
+          </div>
+          <div className="flex items-center">
+            <Radio
+              checked={status === "1"}
+              onChange={() => {
+                onChangeStatus();
               }}
             >
-              {item.label}
-            </button>
-          ))}
+              <span className="text-[12px] text-[#8A87AA]">Live only</span>
+            </Radio>
+          </div>
         </div>
       </div>
       <div className="flex items-center text-[#8A87AA] text-[12px] mt-[20px] pl-[14px] pr-[20px]">

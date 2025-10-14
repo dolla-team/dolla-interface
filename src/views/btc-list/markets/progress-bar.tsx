@@ -12,12 +12,11 @@ export default function ProgressBar({
   spilledPercent: number;
 }) {
   return (
-    <div className="relative flex items-center">
+    <div className="relative flex items-center w-[220px]">
       <div
-        className={clsx("h-[10px] rounded-[30px] bg-[#0000001A] p-[2px]")}
-        style={{
-          width: spilled > 0 ? 100 - spilledPercent! + "%" : "100%"
-        }}
+        className={clsx(
+          "h-[10px] w-[110px] rounded-[30px] bg-[#0000001A] p-[2px]"
+        )}
       >
         <div
           className={clsx(
@@ -33,11 +32,12 @@ export default function ProgressBar({
       </div>
       {spilled > 0 && (
         <>
-          <Particles />
           <div
-            style={{ width: spilledPercent! + "%" }}
-            className="absolute top-[2px] right-[0px] z-[3] h-[6px] rounded-[10px] bg-linear-to-r from-[#C637FF] to-[#FFADCF]"
-          ></div>
+            style={{ width: Math.min(spilledPercent!, 100) * 1.1 + "px" }}
+            className="absolute top-[2px] left-[110px] z-[3] h-[6px] rounded-[10px] bg-linear-to-r from-[#C637FF] to-[#FFADCF]"
+          >
+            <Particles />
+          </div>
         </>
       )}
     </div>

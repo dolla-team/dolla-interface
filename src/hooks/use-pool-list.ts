@@ -23,7 +23,7 @@ export default function usePoolList(props?: {
     volume = 0
   } = props ?? {};
   const poolListStore = usePoolListStore();
-
+  const [status, setStatus] = useState("1");
   const [poolList, setPoolList] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [sortField, setSortField] = useState("hitting");
@@ -67,7 +67,7 @@ export default function usePoolList(props?: {
       const res = await axiosInstance.get(
         `/api/v1/pool/list?limit=${LIMIT}&offset=${
           pageRef.current * LIMIT
-        }&sort_field=${sortField}&sort_order=${sortOrder}&status=1&chain=${"near"}&token_status=${tokenStatus}${
+        }&sort_field=${sortField}&sort_order=${sortOrder}&status=${status}&chain=${"near"}&token_status=${tokenStatus}${
           collection?.address ? "&token=" + collection.address : ""
         }${volume ? "&volume=" + volume : ""}`
       );
@@ -146,6 +146,11 @@ export default function usePoolList(props?: {
     }
   };
 
+  const onChangeStatus = () => {
+    console.log(status, status === "1" ? "2,3" : "1");
+    setStatus(status === "1" ? "2,3" : "1");
+  };
+
   const { run: onQueryPoolListDebounced } = useDebounceFn(
     () => {
       pageRef.current = 0;
@@ -164,7 +169,7 @@ export default function usePoolList(props?: {
     } else {
       setLoading(false);
     }
-  }, [userInfo?.user, sortOrder, sortField, collection, volume]);
+  }, [userInfo?.user, sortOrder, sortField, collection, volume, status]);
 
   return {
     poolList,
@@ -178,6 +183,8 @@ export default function usePoolList(props?: {
     setCollection,
     hasMore,
     pageRef,
-    LIMIT
+    LIMIT,
+    status,
+    onChangeStatus
   };
 }

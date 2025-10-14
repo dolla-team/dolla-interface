@@ -11,7 +11,7 @@ const LabelValue = (props: any) => {
       )}
     >
       <div className="text-[12px] text-[#2B3337]">{label}</div>
-      <div className={clsx("font-[DelaGothicOne] text-[16px]", valueClassName)}>
+      <div className={clsx("font-[700] text-[16px]", valueClassName)}>
         {children}
       </div>
     </div>

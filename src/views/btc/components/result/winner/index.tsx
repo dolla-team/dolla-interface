@@ -86,7 +86,7 @@ export default function Winner({
 
         <div className="relative z-[3] w-full h-full flex flex-col items-center justify-center">
           <div
-            className="text-white text-[32px] font-[BlackHanSans] mb-[30px] duration-500"
+            className="text-white text-[32px] font-[700] mb-[30px] duration-500"
             style={{
               opacity: animationStatus === 2 ? 1 : 0
             }}
@@ -170,7 +170,7 @@ export default function Winner({
                 </div>
                 {points > 0 && (
                   <div>
-                    <div className="text-white text-[16px] font-[BlackHanSans] mt-[30px]">
+                    <div className="text-white text-[16px] font-[600] mt-[30px]">
                       Also, you’ve got
                     </div>
                     <div className="flex items-center justify-center gap-[8px] mt-[10px]">

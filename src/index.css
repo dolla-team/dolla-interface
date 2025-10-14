@@ -25,12 +25,6 @@
 }
 
 @font-face {
-  font-family: "BlackHanSans";
-  src: url("/fonts/BlackHanSans-Regular.ttf");
-  font-weight: 400;
-}
-
-@font-face {
   font-family: "DelaGothicOne";
   src: url("/fonts/DelaGothicOne-Regular.ttf");
   font-weight: 400;

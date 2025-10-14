@@ -15,7 +15,7 @@ export default function AvatarCashier({
     <div
       onClick={onClick}
       className={clsx(
-        "flex items-center cursor-pointer rounded-[12px] px-3 py-[5px] relative z-[2]",
+        "flex items-center cursor-pointer rounded-[10px] px-3 h-[36px] relative z-[2]",
         isMobile
           ? "p-[10px] border border-[#3B3951] bg-[#FFFFFF1A] gap-[8px]"
           : "bg-gradient-to-b from-[#2B3337] to-[#7B929D] gap-1"
@@ -35,7 +35,7 @@ export default function AvatarCashier({
       </svg>
       <div
         className={clsx(
-          "text-[16px] font-[BlackHanSans] ",
+          "text-[12px] font-[600] ",
           isMobile ? "text-[#FFE9B2]" : "text-white"
         )}
       >

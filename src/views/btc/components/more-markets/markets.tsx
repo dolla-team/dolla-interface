@@ -52,7 +52,7 @@ export default function Markets({ onClose }: { onClose: () => void }) {
         <div className="relative z-[2]">
           <div className="p-[20px] pb-[0px] flex items-center justify-between">
             <div className="flex items-center gap-[8px]">
-              <span className="text-[#9CBBFC] text-[30px] font-[BlackHanSans]">
+              <span className="text-[#9CBBFC] text-[30px] font-[700]">
                 Markets
               </span>
             </div>

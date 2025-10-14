@@ -4,8 +4,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        alfa: ["AlfaSlabOne"],
-        blackHan: ["BlackHanSans"]
+        alfa: ["AlfaSlabOne"]
       },
       transitionDuration: {
         600: "600ms"

@@ -51,6 +51,7 @@ export default function Market({
           ? ""
           : onClick &&
               "cursor-pointer hover:scale-[1.05] hover:shadow-[0px_0px_20px_0px_rgba(0,0,0,0.10)]",
+        data?.status === 2 && "opacity-60",
         className
       )}
       onClick={onClick}

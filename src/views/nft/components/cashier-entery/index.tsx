@@ -25,7 +25,7 @@ export default function CashierEntry({
         />
       </svg>
 
-      <div className="text-[#10FFBF] text-[16px] font-[BlackHanSans]">
+      <div className="text-[#10FFBF] text-[16px] font-[600]">
         <span>${formatNumber(tokenBalance || "0", 2, true)}</span>
       </div>
 
