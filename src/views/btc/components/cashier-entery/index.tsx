@@ -27,6 +27,7 @@ export default function CashierEntry({
         viewBox="0 0 25 24"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
+        id="tips-cashier-entry"
       >
         <circle cx="12.1436" cy="12" r="12" fill="#fff" />
         <path

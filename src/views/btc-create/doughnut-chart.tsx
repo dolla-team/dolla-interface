@@ -131,11 +131,13 @@ export default function DoughnutChart({
   }, [data]);
 
   useEffect(() => {
+    if (!volume || !data) return;
     const index = data.findIndex((item: any) => item.label === volume);
+
     if (index !== -1) {
       setSelectedIndex(index);
     }
-  }, [volume]);
+  }, [volume, data]);
 
   // Update chart colors when selectedIndex changes
   useEffect(() => {

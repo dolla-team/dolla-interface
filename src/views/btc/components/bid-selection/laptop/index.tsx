@@ -6,6 +6,7 @@ import useWalletStore from "@/stores/use-wallet";
 import CashierEntry from "../../cashier-entery";
 import { useBtcContext } from "../../../context";
 import { useAuth } from "@/contexts/auth";
+import { useTipsStore } from "@/stores/use-tips";
 
 export default function BidSelection({
   tokenBalance,
@@ -24,6 +25,7 @@ export default function BidSelection({
   onChangeBids: (bids: number) => void;
   onBidClick: () => void;
 }) {
+  const tipsStore = useTipsStore();
   const { set } = useWalletStore();
   const { setFlipStatus } = useBtcContext();
   const { address, login } = useAuth();
@@ -62,6 +64,9 @@ export default function BidSelection({
               setFlipStatus(5);
               return;
             }
+            if (tipsStore.step === 3) {
+              tipsStore.set({ step: 0 });
+            }
             onBidClick();
           }}
         />
@@ -78,7 +83,13 @@ export default function BidSelection({
                 item === 1 && "w-[124px] h-[53px]",
                 pool?.status !== 1 ? "opacity-50" : "button"
               )}
-              onClick={() => onChangeBids(item)}
+              id={`tips-bid-selection-${item}`}
+              onClick={() => {
+                onChangeBids(item);
+                if (tipsStore.step === 2) {
+                  tipsStore.set({ step: 3 });
+                }
+              }}
             >
               {item === 100 && <Bg100 active={bids === 100} />}
               {item === 50 && <Bg50 active={bids === 50} />}

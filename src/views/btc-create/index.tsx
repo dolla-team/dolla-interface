@@ -281,6 +281,7 @@ export default function BTCCreate() {
                           </div>
                         )}
                         <div className="font-[800] text-[16px] mt-[1px]">
+                          $
                           {formatNumber(record.bids, 2, true, {
                             isShort: true,
                             isShortUppercase: true

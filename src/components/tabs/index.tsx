@@ -17,6 +17,7 @@ export default function Tabs({
       {tabs.map((tab: any, i: number) => (
         <div
           key={tab.key}
+          id={tab.id} // Support custom ID for each tab
           className={clsx(
             "button relative pb-[10px]",
             tabClassName,
@@ -28,7 +29,9 @@ export default function Tabs({
             if (prevI.current.length > 2) prevI.current.shift();
           }}
         >
-          <span className="relative z-[2] whitespace-nowrap text-ellipsis overflow-hidden">{tab.label}</span>
+          <span className="relative z-[2] whitespace-nowrap text-ellipsis overflow-hidden">
+            {tab.label}
+          </span>
           {currentTab === tab.key && (
             <motion.div
               initial="hidden"

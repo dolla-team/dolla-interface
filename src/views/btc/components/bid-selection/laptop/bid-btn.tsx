@@ -38,6 +38,7 @@ export default function BidBtn({
           "absolute bottom-[-8px] left-0 w-[197px] h-[138px]",
           disabled && flipStatus !== 4 ? "opacity-50" : "button"
         )}
+        id="tips-bid-button"
         onClick={onClick}
       >
         {flipStatus === 4 && window.autoFlipTimer !== -1 && (

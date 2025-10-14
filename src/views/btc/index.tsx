@@ -17,6 +17,7 @@ import { useNavigate } from "react-router-dom";
 import { ShareBtn, CloseBtn } from "./share-btn";
 import Loading from "./loading";
 import Wallet from "@/sections/wallet";
+import Tips from "./components/tips";
 
 // import ProvablyFair from "@/sections/provably-fair";
 
@@ -78,6 +79,7 @@ const Content = () => {
       {!isMobile && !bidResult?.bid?.is_winner && <Music />}
       {/* {isMobile && <MarketsModal />} */}
       <Wallet />
+      <Tips />
     </div>
   );
 };
