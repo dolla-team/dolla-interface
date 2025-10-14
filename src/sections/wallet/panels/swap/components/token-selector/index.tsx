@@ -1,38 +1,17 @@
-import { useMemo, useState } from "react";
 import Modal from "@/components/modal";
-import CurrencyRow from "./currency-row";
-import Big from "big.js";
 import clsx from "clsx";
-import { useAuth } from "@/contexts/auth";
+import Tokens from "@/sections/wallet/panels/info/tokens";
 
 export default function CurrencySelect({
   display,
-  tokens,
-  account,
   onClose,
   onSelect,
-  selectedTokenAddress,
-  showBalance = true,
-  isSortByBalance = true,
-  sortCustom,
-  customBalanceFormatter,
   className,
   titleClassName
 }: any) {
-  const { nearAccount } = useAuth();
-
   const handleClose = () => {
     onClose();
   };
-
-  const balances = useMemo(() => {
-    return tokens.reduce((acc: any, token: any) => {
-      acc[token.address] = token.isBaseToken
-        ? nearAccount?.prizeBalance
-        : nearAccount?.balance;
-      return acc;
-    }, {});
-  }, [tokens, nearAccount]);
 
   return (
     <Modal open={display} onClose={handleClose}>
@@ -64,8 +43,11 @@ export default function CurrencySelect({
             />
           </svg>
         </div>
+        <div className="bg-white rounded-b-[10px] p-[10px] h-[calc(60vh-120px)]">
+          <Tokens onClick={onSelect} />
+        </div>
 
-        <div className="h-[calc(60vh-120px)] overflow-y-auto overflow-x-hidden p-[10px] bg-white rounded-b-[10px]">
+        {/* <div className="h-[calc(60vh-120px)] overflow-y-auto overflow-x-hidden p-[10px] bg-white rounded-b-[10px]">
           {tokens
             ?.slice()
             ?.sort((a: any, b: any) => {
@@ -97,7 +79,7 @@ export default function CurrencySelect({
                 customBalanceFormatter={customBalanceFormatter}
               />
             ))}
-        </div>
+        </div> */}
       </div>
     </Modal>
   );
