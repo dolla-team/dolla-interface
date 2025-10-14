@@ -6,6 +6,7 @@ import { usePrivy, useUser } from "@privy-io/react-auth";
 import { ToastContainer } from "react-toastify";
 import Loading from "@/components/loading";
 import VerifyEmail from "./views/verify-email";
+import { useGlobalStore } from "@/stores/use-global";
 // import "react-toastify/dist/ReactToastify.css";
 
 import MainLayout from "./layouts/main";
@@ -104,6 +105,8 @@ const Content = () => {
   const [isLoading, setIsLoading] = useState(true);
   const { ready } = usePrivy();
   const { user } = useUser();
+  const globalStore = useGlobalStore();
+
   useEffect(() => {
     if (!ready) {
       return;
@@ -121,7 +124,7 @@ const Content = () => {
 
   return isLoading ? (
     <Loading />
-  ) : !user ? (
+  ) : !user || globalStore.email !== user?.email?.address ? (
     <VerifyEmail />
   ) : (
     <RouterProvider router={router} />

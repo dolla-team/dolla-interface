@@ -1,15 +1,17 @@
 import Button from "@/components/button";
 import DollaEye from "@/components/dolla-eye";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "@/libs/axios";
 import { useAuth } from "@/contexts/auth";
+import { useGlobalStore } from "@/stores/use-global";
 
 export default function VerifyEmail() {
   const [email, setEmail] = useState("");
   const [touched, setTouched] = useState(false);
   const [error, setError] = useState("");
   const [checking, setChecking] = useState(false);
-  const { login } = useAuth();
+  const { login, user } = useAuth();
+  const globalStore = useGlobalStore();
 
   // Email format validation
   const isValidEmail = (email: string) => {
@@ -26,6 +28,7 @@ export default function VerifyEmail() {
       const res = await axios.get(
         `/api/v1/user/whitelist?email=${encodeURIComponent(email)}`
       );
+
       return res.data.data?.is_whitelist || false;
     } catch (err: any) {
       // If API returns error, consider it as not whitelisted
@@ -49,7 +52,9 @@ export default function VerifyEmail() {
         setChecking(false);
         return;
       }
-
+      globalStore.set({
+        email: email
+      });
       login();
     } catch (err: any) {
       setError(String(err) || "Failed to send code");
@@ -57,6 +62,12 @@ export default function VerifyEmail() {
       setChecking(false);
     }
   };
+
+  useEffect(() => {
+    if (!email || !user?.email?.address) return;
+    if (user.email.address !== email)
+      setError(`Please login with the ${email} address`);
+  }, [user]);
 
   return (
     <div className="w-screen h-screen bg-linear-to-b from-[#FFC42F00] to-[#FFC42F]/20 bg-white relative">

@@ -5,7 +5,7 @@ import Swap from "../panels/swap";
 import { motion, AnimatePresence } from "framer-motion";
 import useWalletStore from "@/stores/use-wallet";
 
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import clsx from "clsx";
 import useIsBtc from "@/hooks/use-is-btc";
 
