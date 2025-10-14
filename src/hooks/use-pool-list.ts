@@ -115,6 +115,16 @@ export default function usePoolList(props?: {
         return market;
       });
 
+      if (!volume) {
+        poolListStore.set({
+          hotMarkets: {
+            "0": market1,
+            "1": market01,
+            "2": market001
+          }
+        });
+      }
+
       if (isScrollList) {
         setPoolList((prev) =>
           pageRef.current === 0 ? list : [...prev, ...list]
@@ -125,14 +135,6 @@ export default function usePoolList(props?: {
       if (pageRef.current === 0) {
         onFirstPageLoad?.(list);
       }
-
-      poolListStore.set({
-        hotMarkets: {
-          "0": market1,
-          "1": market01,
-          "2": market001
-        }
-      });
 
       cachedList.current =
         pageRef.current === 0 ? list : [...cachedList.current, ...list];
