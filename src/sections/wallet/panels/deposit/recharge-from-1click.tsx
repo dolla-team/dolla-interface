@@ -120,7 +120,11 @@ export default function RechargeFrom1click() {
 
           <div className="absolute bottom-[20px] left-0 right-0">
             <InfoPanel
-              minDeposit={`> ${walletStore.selectedToken.minDepositAmount} 
+              minDeposit={`> ${
+                chain?.blockchain === "btc"
+                  ? Number(BTC_DEPOSIT_AMOUNT) / 1e8
+                  : walletStore.selectedToken.minDepositAmount
+              } 
                 ${walletStore.selectedToken.symbol}`}
               time={chain?.blockchain === "btc" ? "15" : "1"}
             />
@@ -151,7 +155,11 @@ export default function RechargeFrom1click() {
             chain={chain}
           />
           <InfoPanel
-            minDeposit={`> ${walletStore.selectedToken.minDepositAmount} 
+            minDeposit={`> ${
+              chain?.blockchain === "btc"
+                ? Number(BTC_DEPOSIT_AMOUNT) / 1e8
+                : walletStore.selectedToken.minDepositAmount
+            } 
                 ${walletStore.selectedToken.symbol}`}
             time={chain?.blockchain === "btc" ? "15" : "1"}
           />
