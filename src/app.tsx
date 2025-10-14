@@ -124,9 +124,7 @@ const Content = () => {
   ) : !user ? (
     <VerifyEmail />
   ) : (
-    <AuthProvider>
-      <RouterProvider router={router} />
-    </AuthProvider>
+    <RouterProvider router={router} />
   );
 };
 
@@ -135,7 +133,9 @@ function App() {
     <DollaEyeContextProvider>
       <Suspense>
         <WalletProvider>
-          <Content />
+          <AuthProvider>
+            <Content />
+          </AuthProvider>
         </WalletProvider>
         <ToastContainer
           position="top-right"

@@ -26,17 +26,6 @@ export default function Laptop() {
         };
   }, [isBtc]);
 
-  const handleToggle = () => {
-    walletStore.init();
-  };
-
-  useEffect(() => {
-    document.addEventListener("click", handleToggle);
-    return () => {
-      document.removeEventListener("click", handleToggle);
-    };
-  }, []);
-
   return (
     <>
       {/* Main panel with slide animation */}

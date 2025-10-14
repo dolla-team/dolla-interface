@@ -229,10 +229,14 @@ export default function Market({
               from === "seller" ? "mt-[60px]" : "mt-[40px]"
             )}
           >
+            {from === "seller" && Number(data.profit_ratio) < 1 && "-"}
             {formatNumber(data.profit_ratio, from === "seller" ? 2 : 0, true, {
               isShort: true
             })}
-            x WIN
+            x{" "}
+            {from === "seller" && Number(data.profit_ratio) < 1
+              ? "LOSE"
+              : "WIN"}
           </div>
           {from !== "seller" && (
             <div className="flex justify-center">
