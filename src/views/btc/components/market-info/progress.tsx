@@ -143,7 +143,7 @@ const Label = ({
         "absolute top-[10px] flex gap-[9px] w-[80px]",
         progress > 30
           ? "flex-row-reverse right-[0px]"
-          : "flex-row right-[-80px]"
+          : "flex-row right-[-76px]"
       )}
     >
       {/* <div className="w-[1px] h-[52px] bg-[#FFC42F]" /> */}
@@ -151,14 +151,17 @@ const Label = ({
         <div className="text-[12px] text-white/50">Total Bid</div>
         <div
           className="text-[16px] font-[600]"
-          style={{
-            background: disabled
-              ? "#C3C3C3"
-              : "linear-gradient(90deg, #A2623D 0%, #FFC42F 47.6%, #FFE9B2 100%)",
-            backgroundClip: "text",
-            WebkitBackgroundClip: "text",
-            WebkitTextFillColor: "transparent"
-          }}
+          style={
+            disabled
+              ? { color: "#C3C3C3" }
+              : {
+                  background:
+                    "linear-gradient(90deg, #A2623D 0%, #FFC42F 47.6%, #FFE9B2 100%)",
+                  backgroundClip: "text",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent"
+                }
+          }
         >
           {formatNumber(amount, 2, true, { isShort: true, prefix: "$" })}
         </div>

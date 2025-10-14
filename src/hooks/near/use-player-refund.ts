@@ -6,6 +6,8 @@ import { functionCall } from "near-api-js/lib/transaction";
 import { base_decode } from "near-api-js/lib/utils/serialize";
 import useGenerateKey from "@/hooks/near/use-generate-key";
 import useToast from "@/hooks/use-toast";
+import reportHash from "@/utils/report-hash";
+import { useAuth } from "@/contexts/auth";
 
 const THIRTY_TGAS = "300000000000000";
 
@@ -16,6 +18,7 @@ export default function usePlayerRefund(
   const [loading, setLoading] = useState(false);
   const { generateKeyPair } = useGenerateKey();
   const toast = useToast();
+  const { address } = useAuth();
 
   async function refund() {
     const { publicKey, keyPairSigner } = await generateKeyPair();
@@ -54,6 +57,12 @@ export default function usePlayerRefund(
       );
       console.log("signedTransaction:", signedTransaction);
       const result: any = await provider.sendTransaction(signedTransaction);
+
+      reportHash({
+        hash: result.transaction.hash,
+        chain: "near",
+        user: address
+      });
 
       if (result.status.SuccessValue) {
         toast.dismiss(toastId);

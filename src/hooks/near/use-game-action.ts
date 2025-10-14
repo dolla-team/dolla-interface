@@ -7,6 +7,8 @@ import { functionCall } from "near-api-js/lib/transaction";
 import { base_decode } from "near-api-js/lib/utils/serialize";
 import { QUOTE_TOKEN } from "@/config/btc";
 import useToast from "../use-toast";
+import reportHash from "@/utils/report-hash";
+import { useAuth } from "@/contexts/auth";
 
 const THIRTY_TGAS = "300000000000000";
 export default function useGameAction({
@@ -25,6 +27,7 @@ export default function useGameAction({
   const [pausing, setPausing] = useState(false);
   const [canceling, setCanceling] = useState(false);
   const toast = useToast();
+  const { address } = useAuth();
 
   async function pauseGame() {
     const { publicKey, keyPairSigner } = await generateKeyPair();
@@ -60,6 +63,13 @@ export default function useGameAction({
       const result: any = await provider.sendTransaction(signedTransaction);
 
       toast.dismiss(toastId);
+
+      reportHash({
+        hash: result.transaction.hash,
+        chain: "near",
+        user: address
+      });
+
       if (result.status.SuccessValue) {
         console.log("success:", result);
         toast.success({ title: "Paused game successfully" });
@@ -109,6 +119,12 @@ export default function useGameAction({
 
       const result: any = await provider.sendTransaction(signedTransaction);
 
+      reportHash({
+        hash: result.transaction.hash,
+        chain: "near",
+        user: address
+      });
+
       toast.dismiss(toastId);
       if (result.status.SuccessValue) {
         console.log("success:", result);
@@ -157,6 +173,12 @@ export default function useGameAction({
       );
 
       const result: any = await provider.sendTransaction(signedTransaction);
+
+      reportHash({
+        hash: result.transaction.hash,
+        chain: "near",
+        user: address
+      });
 
       toast.dismiss(toastId);
       if (result.status.SuccessValue) {

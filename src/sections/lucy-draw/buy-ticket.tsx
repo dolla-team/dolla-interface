@@ -101,7 +101,7 @@ export default function BuyTicket({
             isMobile ? "w-[calc(100%-40px)]" : "w-[338px]"
           )}
           onClick={() => {
-            if (errorTips) return;
+            if (errorTips || transferring) return;
             onTransfer(ticket);
           }}
         >

@@ -9,12 +9,16 @@ import Big from "big.js";
 import useToast from "@/hooks/use-toast";
 import { BASE_TOKEN } from "@/config/btc";
 import { BET_UNIT } from "@/config";
+import reportHash from "@/utils/report-hash";
+import { useAuth } from "@/contexts/auth";
+
 const THIRTY_TGAS = "300000000000000";
 
 export default function useCreate(onSuccess: (id: string) => void) {
   const [loading, setLoading] = useState(false);
   const { generateKeyPair } = useGenerateKey();
   const toast = useToast();
+  const { address } = useAuth();
 
   async function create({ amount, price }: { amount: string; price: number }) {
     try {
@@ -65,6 +69,12 @@ export default function useCreate(onSuccess: (id: string) => void) {
       console.log("signedTransaction:", signedTransaction);
       const result: any = await provider.sendTransaction(signedTransaction);
       console.log("result:", result);
+      reportHash({
+        hash: result.transaction.hash,
+        chain: "near",
+        user: address
+      });
+
       if (result.status.SuccessValue) {
         toast.success({ title: "Create success" });
         // Decode base64 to string, then parse to number

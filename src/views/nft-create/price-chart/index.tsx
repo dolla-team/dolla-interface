@@ -74,18 +74,18 @@ export default function PriceChart({
           {
             label: "Probability Density",
             data: [],
-            borderColor: "#57FF70",
+            borderColor: "#57CD75",
             borderWidth: 3,
             fill: true,
             tension: 0.4,
             pointRadius: 0,
-            backgroundColor: "#57FF7033",
+            backgroundColor: "#57CD7533",
             segment: {
               backgroundColor: (ctx) => {
                 const { p0 } = ctx;
                 return p0.parsed.x >= (anchorPrice * 1.2 || 0)
-                  ? "#57FF7033"
-                  : "#FF5A974D";
+                  ? "#57CD7533"
+                  : "#FF5A5D4D";
               }
             }
           }
@@ -286,7 +286,7 @@ export default function PriceChart({
         anchorDotRef.current
       ) {
         anchorDotRef.current.style.left = `${pos.x - 6}px`;
-        anchorDotRef.current.style.top = `${pos.y - 12}px`;
+        anchorDotRef.current.style.top = `${pos.y - 8}px`;
       }
     });
   };
@@ -373,12 +373,12 @@ export default function PriceChart({
                 width: 10,
                 height: 10,
                 borderRadius: 8,
-                background: "#57FF70",
+                background: "#57CD75",
                 pointerEvents: "none"
               }}
             />
             {anchorPrice && (
-              <div className="text-[#57FF70] text-[16px] ml-[10px]">
+              <div className="text-[#57CD75] text-[12px] ml-[10px]">
                 ${formatNumber(anchorPrice * 1.2, 2, true)}
               </div>
             )}

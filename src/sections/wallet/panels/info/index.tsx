@@ -1,5 +1,4 @@
 import Top from "./top";
-import { QUOTE_TOKEN } from "@/config/btc";
 import { formatNumber } from "@/utils/format/number";
 import Tabs from "@/components/tabs";
 import Tokens from "./tokens";

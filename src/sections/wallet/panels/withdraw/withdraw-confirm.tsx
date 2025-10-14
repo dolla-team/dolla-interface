@@ -81,13 +81,10 @@ export default function WithdrawConfirm({
   return (
     <div className="h-full relative">
       <div className="text-[16px] text-black font-[500] text-center mt-[40px] mb-[20px]">
-        Withdraw
+        Withdraw {walletStore.selectedToken?.symbol}
       </div>
-      <div className="text-center text-[32px] font-[700]">
+      <div className="text-center text-[32px] font-[700] truncate">
         <span className="text-black mr-[10px]">{amount}</span>
-        <span className="text-black/50">
-          {walletStore.selectedToken?.symbol}
-        </span>
       </div>
       <div className="text-[14px] text-black text-center mt-[10px]">
         ${amountUSD}
@@ -97,6 +94,13 @@ export default function WithdrawConfirm({
           <span>Est. Receive</span>
           <span>
             {" "}
+            {quoteData ? quoteData.amountOutFormatted : "-"}{" "}
+            {walletStore.selectedToken?.symbol}
+          </span>
+        </div>
+        <div className="flex justify-between items-center mt-[8px]">
+          <span>Min. Receive</span>
+          <span>
             {quoteData
               ? Big(quoteData.minAmountOut)
                   .div(10 ** walletStore.selectedToken?.decimals)

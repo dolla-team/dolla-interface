@@ -1,13 +1,12 @@
-import { motion, useAnimationControls } from "framer-motion";
-import { useEffect, useRef, useState, useCallback, useMemo } from "react";
+import { useEffect, useRef, useState, useMemo } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import clsx from "clsx";
 import axiosInstance from "@/libs/axios";
 import { formatAddress } from "@/utils/format/address";
-import Big from "big.js";
-import { getReAnchorPrice } from "@/utils/pool";
 import useWalletStore from "@/stores/use-wallet";
 import { useNavigate } from "react-router-dom";
 import { formatNumber } from "@/utils/format/number";
+import useIsWindowVisible from "@/hooks/use-is-window-visible";
 
 interface ScrollProps {
   className?: string;
@@ -46,12 +45,11 @@ export default function Infos({
   autoPlay = true
 }: ScrollProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [containerWidth, setContainerWidth] = useState(0);
+  const scrollRef = useRef<HTMLDivElement>(null);
   const [contentWidth, setContentWidth] = useState(0);
   const [isPaused, setIsPaused] = useState(!autoPlay);
   const [data, setData] = useState<any[]>([]);
   const walletStore = useWalletStore();
-  const controls = useAnimationControls();
 
   useEffect(() => {
     if (!data?.length) return;
@@ -61,44 +59,36 @@ export default function Infos({
 
   const duration = contentWidth / speed;
 
-  const startAnimation = useCallback(() => {
-    if (!isPaused) {
-      controls.start({
-        x: [0, -contentWidth],
-        transition: {
-          duration,
-          ease: "linear",
-          repeat: Infinity
-        }
-      });
-    } else {
-      // Stop animation when paused
-      controls.stop();
-    }
-  }, [controls, contentWidth, duration, isPaused]);
-
   useEffect(() => {
-    if (autoPlay) {
-      startAnimation();
-    }
-  }, [autoPlay, isPaused, startAnimation]);
-
-  useEffect(() => {
-    const handleResize = () => {
-      if (containerRef.current) {
-        setContainerWidth(containerRef.current.offsetWidth);
-      }
-    };
-
     const getData = async () => {
       const res = await axiosInstance.get(
-        `/api/v1/pool/scroll/list?list=10&chain=near`
+        `https://test-api.dolla.market/api/v1/pool/top/market`
       );
 
-      setData(res.data.data);
+      const _list: any = [];
+
+      res?.data?.data?.pool?.forEach((pool: any) => {
+        _list.push({
+          type: "pool",
+          pool_id: pool.pool_id,
+          value: pool.pool_info.reward_usd
+        });
+      });
+
+      res?.data?.data?.winner_bid?.forEach((pool: any) => {
+        _list.push({
+          type: "winner",
+          profit_ratio: pool.profit_ratio,
+          winner_user_name: pool.user_info.name,
+          pool_id: pool.pool_id,
+          winner_user: pool.user_info.user
+        });
+      });
+
+      setData(_list);
 
       walletStore.set({
-        showInfos: !(!res.data || !res.data?.data || !res.data.data?.length)
+        showInfos: !_list.length
       });
       window.scrollTimer = setTimeout(() => {
         getData();
@@ -107,9 +97,7 @@ export default function Infos({
 
     getData();
 
-    window.addEventListener("resize", handleResize);
     return () => {
-      window.removeEventListener("resize", handleResize);
       clearTimeout(window.scrollTimer);
     };
   }, []);
@@ -125,11 +113,26 @@ export default function Infos({
         )}
         style={{ height: `${height}px` }}
       >
-        <motion.div
+        <Bids />
+        <style>
+          {`
+            @keyframes scroll-right-to-left {
+              from {
+                transform: translateX(0);
+              }
+              to {
+                transform: translateX(-${contentWidth}px);
+              }
+            }
+          `}
+        </style>
+        <div
+          ref={scrollRef}
           className="flex items-center gap-8 h-full whitespace-nowrap"
-          animate={controls}
           style={{
-            width: contentWidth * 2
+            width: contentWidth * 2,
+            animation: `scroll-right-to-left ${duration}s linear infinite`,
+            animationPlayState: isPaused ? "paused" : "running"
           }}
         >
           {data.map((item, index) => (
@@ -148,7 +151,7 @@ export default function Infos({
               setIsPaused={setIsPaused}
             />
           ))}
-        </motion.div>
+        </div>
       </div>
     )
   );
@@ -168,29 +171,12 @@ const Item = ({
     return Math.floor(Math.random() * config.length);
   }, [index]);
 
-  const price = getReAnchorPrice(item);
-
-  return item.winner_user ? (
-    <div className="flex items-center h-full gap-3 text-white transition-transform duration-200 hover:scale-105">
-      <span className="text-[12px] text-[#D9D9D9] rounded">
-        {item?.winner_user_name || formatAddress(item.winner_user)} Won
-      </span>
-      <span
-        className={clsx(
-          "text-lg font-bold drop-shadow-lg",
-          config[randomIndex].color
-        )}
-      >
-        {formatNumber(Number(price) / (item.winner_times || 1), 0, true)}x
-      </span>
-      <span className="text-xl drop-shadow-lg">🚀</span>
-    </div>
-  ) : (
+  return (
     <div
       onClick={() => {
         navigate(`/btc/detail/${item.pool_id}`);
       }}
-      className="flex items-center h-full gap-3 text-white transition-transform duration-200 hover:scale-105 button"
+      className="flex items-center h-full gap-3 px-[50px] text-white transition-transform duration-200 hover:scale-105 button"
       onMouseEnter={() => {
         setIsPaused(true);
       }}
@@ -198,13 +184,143 @@ const Item = ({
         setIsPaused(false);
       }}
     >
-      <span className="text-[#D9D9D9] text-[12px]">
-        {item.nft_ids ? "New NFT Listed" : "New Market Listed"}
-      </span>
-      <span className={clsx("text-lg font-bold drop-shadow-lg")}>
-        ${formatNumber(price, 2, true)}
-      </span>
-      <span className="text-xl drop-shadow-lg">🎯</span>
+      {item.type === "winner" ? (
+        <>
+          <span className="text-[12px] text-[#D9D9D9] rounded">
+            {item?.winner_user_name || formatAddress(item.winner_user)} Won
+          </span>
+          <span
+            className={clsx(
+              "text-lg font-bold drop-shadow-lg",
+              config[randomIndex].color
+            )}
+          >
+            {formatNumber(item.profit_ratio, 0, true)}x
+          </span>
+          <span className="text-xl drop-shadow-lg">🚀</span>
+        </>
+      ) : (
+        <>
+          <span className="text-[#D9D9D9] text-[12px]">New Market Listed</span>
+          <span className={clsx("text-lg font-bold drop-shadow-lg")}>
+            ${formatNumber(item.value, 2, true)}
+          </span>
+          <span className="text-xl drop-shadow-lg">🎯</span>
+        </>
+      )}
     </div>
+  );
+};
+
+const Bids = () => {
+  const isVisible = useIsWindowVisible();
+  const [lastBid, setLastBid] = useState<any>(null);
+  const [isNewBid, setIsNewBid] = useState(false);
+
+  const fetchLastBid = async () => {
+    clearTimeout(window.lastBidTimer);
+    try {
+      const res = await axiosInstance.get(`/api/v1/bid/list?limit=1&offset=0`);
+      const newBid = res?.data?.data?.list?.[0];
+
+      // Check if this is a new bid (different from current one)
+      if (
+        newBid &&
+        (!lastBid ||
+          newBid.pool_id !== lastBid.pool_id ||
+          newBid.user_id !== lastBid.user_id ||
+          newBid.times !== lastBid.times)
+      ) {
+        setIsNewBid(true);
+        setLastBid(newBid);
+
+        // Reset the new bid flag after animation
+        setTimeout(() => {
+          setIsNewBid(false);
+        }, 1000);
+      } else if (newBid) {
+        setLastBid(newBid);
+      }
+    } catch {
+    } finally {
+      window.lastBidTimer = setTimeout(() => {
+        fetchLastBid();
+      }, 3000);
+    }
+  };
+
+  useEffect(() => {
+    if (!isVisible) {
+      clearTimeout(window.lastBidTimer);
+      return;
+    }
+    fetchLastBid();
+    return () => {
+      clearTimeout(window.lastBidTimer);
+    };
+  }, [isVisible]);
+
+  return (
+    <AnimatePresence>
+      {!!lastBid && (
+        <motion.div
+          key={lastBid.id}
+          className="w-[300px] h-[36px] border-r border-white flex items-center justify-center absolute z-[5] left-0 top-0 bg-black text-center"
+          initial={{
+            opacity: 0,
+            scale: 0.8,
+            x: -50
+          }}
+          animate={{
+            opacity: 1,
+            scale: isNewBid ? [1, 1.1, 1] : 1,
+            x: 0,
+            rotate: isNewBid ? [0, -2, 2, -2, 2, 0] : 0
+          }}
+          exit={{
+            opacity: 0,
+            scale: 0.8,
+            x: 50
+          }}
+          transition={{
+            duration: isNewBid ? 0.6 : 0.3,
+            ease: "easeOut",
+            scale: {
+              duration: 0.3,
+              times: [0, 0.5, 1]
+            },
+            rotate: {
+              duration: 0.6,
+              times: [0, 0.2, 0.4, 0.6, 0.8, 1]
+            }
+          }}
+        >
+          <span className="text-[12px] text-[#D9D9D9] mr-[4px] max-w-[100px] truncate">
+            {lastBid.user_name || formatAddress(lastBid.user)}
+          </span>
+          <span className="text-[12px] text-[#D9D9D9]">just bid</span>
+          <motion.span
+            className="text-[14px] text-[#66E39C] font-[700] mx-[8px]"
+            animate={
+              isNewBid
+                ? {
+                    color: ["#66E39C", "#FFD700", "#66E39C"],
+                    textShadow: ["0 0 0px", "0 0 10px #FFD700", "0 0 0px"]
+                  }
+                : {}
+            }
+            transition={{
+              duration: 0.6,
+              times: [0, 0.5, 1]
+            }}
+          >
+            ${formatNumber(lastBid.times, 2, true)}
+          </motion.span>
+          <span className="text-[12px] text-[#D9D9D9]">
+            in #{lastBid.pool_id}
+          </span>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 };

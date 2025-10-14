@@ -8,6 +8,8 @@ import useGenerateKey from "@/hooks/near/use-generate-key";
 import Big from "big.js";
 import useToast from "@/hooks/use-toast";
 import useReport from "../transaction/use-report";
+import reportHash from "@/utils/report-hash";
+import { useAuth } from "@/contexts/auth";
 
 const THIRTY_TGAS = "300000000000000";
 
@@ -15,6 +17,7 @@ export default function useWithdraw(onSuccess?: () => void) {
   const [loading, setLoading] = useState(false);
   const { generateKeyPair } = useGenerateKey();
   const { report } = useReport();
+  const { address } = useAuth();
 
   const toast = useToast();
 
@@ -105,6 +108,12 @@ export default function useWithdraw(onSuccess?: () => void) {
         address: recipientAccount,
         type: "withdraw"
       });
+      reportHash({
+        hash: result.transaction.hash,
+        chain: "near",
+        user: address
+      });
+
       if (result.status.SuccessValue !== undefined) {
         console.log("Withdraw success:", result);
         toast.success({ title: "Withdraw success" });

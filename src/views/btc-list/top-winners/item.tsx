@@ -3,6 +3,7 @@ import ItemLevel from "./item-level";
 import { formatAddress } from "@/utils/format/address";
 import { formatNumber } from "@/utils/format/number";
 import clsx from "clsx";
+import { useNavigate } from "react-router-dom";
 
 export default function TopWinnersItem({
   data,
@@ -13,14 +14,18 @@ export default function TopWinnersItem({
   level: number;
   type: "winners" | "sellers";
 }) {
+  const navigate = useNavigate();
   return (
     <div
       className={clsx(
-        `w-full h-[48px] mt-[5px] px-[10px] relative flex items-center justify-between rounded-[10px] border border-[#F2F2F233] bg-linear-to-r to-[#8C8C8C]/10`,
+        `button w-full h-[48px] mt-[5px] px-[10px] relative flex items-center justify-between rounded-[10px] border border-[#F2F2F233] bg-linear-to-r to-[#8C8C8C]/10`,
         level === 1 && "from-[#D565C4]/10",
         level === 2 && "from-[#F87168]/10",
         level === 3 && "from-[#F87168]/10"
       )}
+      onClick={() => {
+        navigate("/btc/detail/" + data.pool_id);
+      }}
     >
       <ItemLevel
         level={level}

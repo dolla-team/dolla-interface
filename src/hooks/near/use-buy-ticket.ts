@@ -10,6 +10,7 @@ import { QUOTE_TOKEN } from "@/config/btc";
 import { useAuth } from "@/contexts/auth";
 import { BET_UNIT } from "@/config";
 import Big from "big.js";
+import reportHash from "@/utils/report-hash";
 
 const THIRTY_TGAS = "300000000000000";
 
@@ -67,6 +68,11 @@ export default function useBuyTicket(onSuccess?: () => void) {
       console.log("signedTransaction:", signedTransaction);
       const result: any = await provider.sendTransaction(signedTransaction);
 
+      reportHash({
+        hash: result.transaction.hash,
+        chain: "near",
+        user: address
+      });
       if (result.status.SuccessValue) {
         toast.dismiss(toastId);
         console.log("Transfer success:", result);

@@ -66,7 +66,7 @@ const Records = (props: any) => {
               [ESellerRecordsType.Claimed, ESellerRecordsType.Refund].includes(
                 record.type
               )
-                ? "text-[#54FF59]"
+                ? "text-[#27C627]"
                 : ""
             )}
           >

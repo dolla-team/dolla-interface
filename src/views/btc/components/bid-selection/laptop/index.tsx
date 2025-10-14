@@ -7,6 +7,7 @@ import CashierEntry from "../../cashier-entery";
 import { useBtcContext } from "../../../context";
 import { useAuth } from "@/contexts/auth";
 import { useTipsStore } from "@/stores/use-tips";
+import { QUOTE_TOKEN } from "@/config/btc";
 
 export default function BidSelection({
   tokenBalance,
@@ -49,7 +50,9 @@ export default function BidSelection({
                 }
                 set({
                   showWallet: true,
-                  panelType: "deposit"
+                  panelType: "deposit",
+                  depositPanelType: "input",
+                  selectedToken: QUOTE_TOKEN
                 });
               }}
               tokenBalance={tokenBalance}
@@ -64,9 +67,7 @@ export default function BidSelection({
               setFlipStatus(5);
               return;
             }
-            if (tipsStore.step === 3) {
-              tipsStore.set({ step: 0 });
-            }
+            tipsStore.set({ step: 0 });
             onBidClick();
           }}
         />

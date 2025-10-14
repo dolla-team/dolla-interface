@@ -149,7 +149,8 @@ export default function BTCCreate() {
                     walletStore.set({
                       showWallet: true,
                       panelType: "deposit",
-                      // selectedToken: token,
+                      depositPanelType: "input",
+                      selectedToken: token,
                       defaultDepositAmount: amount
                     });
                   }}
@@ -281,7 +282,6 @@ export default function BTCCreate() {
                           </div>
                         )}
                         <div className="font-[800] text-[16px] mt-[1px]">
-                          $
                           {formatNumber(record.bids, 2, true, {
                             isShort: true,
                             isShortUppercase: true

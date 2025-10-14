@@ -98,7 +98,12 @@ export default function Laptop() {
                 />
               )}
             </div>
-            <button className="absolute top-[20px] right-[16px] button">
+            <button
+              className="absolute top-[20px] right-[16px] button"
+              onClick={() => {
+                walletStore.init();
+              }}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="13"

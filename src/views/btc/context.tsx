@@ -145,7 +145,7 @@ export const CannonCoinsProvider = ({
     if (!pool) return ["0"];
     const reward_amount = pool.reward_amount || 0;
     const decimals = pool.reward_token_info?.[0]?.decimals || 1;
-    const _a = formatNumber(Big(reward_amount).div(10 ** decimals), 3, true);
+    const _a = formatNumber(Big(reward_amount).div(10 ** decimals), 6, true);
     return [_a];
   }, [pool]);
 
