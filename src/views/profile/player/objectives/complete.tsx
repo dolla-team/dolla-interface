@@ -3,10 +3,12 @@ import Task from "./task";
 
 export default function Complete({
   tasks,
-  loading
+  loading,
+  onSuccess
 }: {
   tasks: any;
   loading: boolean;
+  onSuccess: () => void;
 }) {
   return (
     <div className="pr-[20px]">
@@ -22,7 +24,9 @@ export default function Complete({
             <Loading size={20} />
           </div>
         ) : (
-          tasks?.map((task: any) => <Task key={task.title} task={task} />)
+          tasks?.map((task: any) => (
+            <Task key={task.title} task={task} onSuccess={onSuccess} />
+          ))
         )}
       </div>
     </div>

@@ -13,15 +13,22 @@ export default function useCreatePoolList() {
   const [data, setData] = useState<any[]>([]);
   const [hasMore, setHasMore] = useState(true);
   const pageRef = useRef(0);
-  const { userInfo, onQueryUserInfo } = useAuth();
+  const { userInfo } = useAuth();
   const poolsData = useRef<any>({});
+  const mounted = useRef(false);
+  const [poolsRefreshing, setPoolsRefreshing] = useState(false);
 
   const [recordsPageIndex, setRecordsPageIndex] = useState(1);
   const [recordsPageSize] = useState(10);
   const [recordsPageHasNextPage, setRecordsPageHasNextPage] = useState(true);
 
   const getCreatePoolList = async () => {
-    setLoading(true);
+    clearTimeout(window.createMarketTimer);
+    if (mounted.current) {
+      setPoolsRefreshing(true);
+    } else {
+      setLoading(true);
+    }
     try {
       const response = await axiosInstance.get(
         `/api/v1/user/create/pool/list?limit=${pageSize}&offset=${
@@ -45,10 +52,15 @@ export default function useCreatePoolList() {
       } else {
         pageRef.current = pageRef.current + 1;
       }
+      mounted.current = true;
+      window.createMarketTimer = setTimeout(() => {
+        getCreatePoolList();
+      }, 20000);
     } catch (error) {
       console.log(error);
     } finally {
       setLoading(false);
+      setPoolsRefreshing(false);
     }
   };
 
@@ -139,7 +151,9 @@ export default function useCreatePoolList() {
   }, [userInfo?.user]);
 
   useEffect(() => {
-    onQueryUserInfo();
+    return () => {
+      clearTimeout(window.createMarketTimer);
+    };
   }, []);
 
   return {
@@ -157,7 +171,8 @@ export default function useCreatePoolList() {
     recordsPageHasNextPage,
     getRecords,
     recordsPrices,
-    recordsPricesLoading
+    recordsPricesLoading,
+    poolsRefreshing
   };
 }
 

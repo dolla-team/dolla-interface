@@ -4,6 +4,7 @@ import Empty from "@/sections/wallet/panels/info/empty";
 import Loading from "@/components/icons/loading";
 import { useState } from "react";
 import { useAuth } from "@/contexts/auth";
+import RefreshIcon from "../../components/refresh-icon";
 
 const PlayerMarkets = (props: any) => {
   const {
@@ -12,64 +13,75 @@ const PlayerMarkets = (props: any) => {
     loading,
     updatePoolsData,
     status,
-    onStatusChange
+    onStatusChange,
+    getJoinedPoolList,
+    joinedPoolsRefreshing
   } = props;
   const [index, setIndex] = useState(0);
   const { userInfo } = useAuth();
 
   return (
     <div className="w-full bg-white border border-[#E4E4E4] rounded-[20px] relative">
-      <div className="flex items-center gap-[24px] px-[20px] pt-[20px]">
-        <div className="text-[14px] font-[600]">Joined Markets</div>
-        <div className="flex items-center gap-[10px]">
-          {[
-            {
-              key: "0,1",
-              label: "Live"
-            },
-            {
-              key: "2",
-              label: "Ended"
-            },
-            {
-              key: "3",
-              label: "Cancelled"
-            }
-          ].map((item) => {
-            return (
-              <button
-                key={item.key}
-                className={clsx(
-                  "button px-[10px] py-[6px] rounded-[16px] text-[10px] flex items-center gap-[4px] border",
-                  status === item.key
-                    ? "border-black bg-black text-white"
-                    : "border-[#E4E4E4]"
-                )}
-                onClick={() => {
-                  if (status === item.key) return;
-                  setIndex(0);
-                  onStatusChange(item.key);
-                }}
-              >
-                <div
+      <div className="flex items-center justify-between px-[20px] pt-[20px]">
+        <div className="flex items-center gap-[24px]">
+          <div className="text-[14px] font-[600]">Joined Markets</div>
+          <div className="flex items-center gap-[10px]">
+            {[
+              {
+                key: "0,1",
+                label: "Live"
+              },
+              {
+                key: "2",
+                label: "Ended"
+              },
+              {
+                key: "3",
+                label: "Cancelled"
+              }
+            ].map((item) => {
+              return (
+                <button
+                  key={item.key}
                   className={clsx(
-                    "w-[7px] h-[7px] rounded-full",
-                    item.label === "Live" && "bg-[#54FF59]",
-                    item.label === "Ended" && "bg-[#C9C9C9]",
-                    item.label === "Cancelled" && "bg-[#FF399F]"
+                    "button px-[10px] py-[6px] rounded-[16px] text-[10px] flex items-center gap-[4px] border",
+                    status === item.key
+                      ? "border-black bg-black text-white"
+                      : "border-[#E4E4E4]"
                   )}
-                />
-                <span>
-                  {item.label === "Live" && userInfo?.join_live_count}
-                  {item.label === "Ended" && userInfo?.join_ended_count}
-                  {item.label === "Cancelled" &&
-                    userInfo?.join_cancelled_count}{" "}
-                  {item.label}
-                </span>
-              </button>
-            );
-          })}
+                  onClick={() => {
+                    if (status === item.key) return;
+                    setIndex(0);
+                    onStatusChange(item.key);
+                  }}
+                >
+                  <div
+                    className={clsx(
+                      "w-[7px] h-[7px] rounded-full",
+                      item.label === "Live" && "bg-[#54FF59]",
+                      item.label === "Ended" && "bg-[#C9C9C9]",
+                      item.label === "Cancelled" && "bg-[#FF399F]"
+                    )}
+                  />
+                  <span>
+                    {item.label === "Live" && userInfo?.join_live_count}
+                    {item.label === "Ended" && userInfo?.join_ended_count}
+                    {item.label === "Cancelled" &&
+                      userInfo?.join_cancelled_count}{" "}
+                    {item.label}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
         </div>
+        <RefreshIcon
+          refreshing={joinedPoolsRefreshing}
+          onClick={() => {
+            if (joinedPoolsRefreshing) return;
+            getJoinedPoolList();
+          }}
+        />
       </div>
       <div className="p-[20px] overflow-hidden">
         {orders.length > 2 && (

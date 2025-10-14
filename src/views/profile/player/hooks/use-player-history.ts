@@ -1,8 +1,7 @@
 import axiosInstance from "@/libs/axios";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useAuth } from "@/contexts/auth";
 import Big from "big.js";
-import { useRequest } from "ahooks";
 import { getAnchorPrice, getPoolInfo } from "@/utils/pool";
 
 const pageSize = 10;
@@ -13,57 +12,63 @@ export default function usePlayerHistory() {
   const [page, setPage] = useState(1);
   const { userInfo } = useAuth();
   const [hasMore, setHasMore] = useState(true);
+  const mounted = useRef(false);
 
   const [joinedPoolListData, setJoinedPoolListData] = useState<any>([]);
   const [joinedPoolListPageIndex, setJoinedPoolListPageIndex] = useState(1);
-  const [joinedPoolListPageSize] = useState(10);
+  const [joinedPoolListPageSize] = useState(100);
+  const [joinedPoolListLoading, setJoinedPoolListLoading] = useState(false);
   const [joinedPoolListHasNextPage, setJoinedPoolListHasNextPage] =
     useState(true);
   const [joinedPoolListStatus, setJoinedPoolListStatus] = useState("0,1");
+  const [joinedPoolsRefreshing, setJoinedPoolsRefreshing] = useState(false);
 
-  const { loading: joinedPoolListLoading } = useRequest(
-    async () => {
-      if (!userInfo?.user) return [];
-      const url = new URL(window.location.href);
-      url.searchParams.set("limit", joinedPoolListPageSize + "");
-      url.searchParams.set(
-        "offset",
-        (joinedPoolListPageIndex - 1) * joinedPoolListPageSize + ""
-      );
-      url.searchParams.set("pool_status", joinedPoolListStatus);
-      url.searchParams.set("chain", "near");
-      try {
-        const response = await axiosInstance.get(
-          `/api/v1/user/joined_market?${url.searchParams.toString()}`
-        );
-        setJoinedPoolListHasNextPage(response.data.data.has_next_page);
-        response.data.data.list.forEach((item: any) => {
-          item.participants = item.pool_info?.participants;
-          item.accumulative_bids = item.pool_info?.accumulative_bids;
-          item.anchor_price = item.pool_info?.anchor_price;
-          item.value = getAnchorPrice(item.pool_info?.anchor_price);
-          item.is_claim = item.status === 4;
-          item.status = item.pool_info?.status;
-        });
-
-        setJoinedPoolListData((prev: any) =>
-          joinedPoolListPageIndex === 1
-            ? response.data.data.list
-            : [...prev, ...response.data.data.list]
-        );
-      } catch (error) {
-        console.log(error);
-      }
-    },
-    {
-      refreshDeps: [
-        joinedPoolListPageIndex,
-        joinedPoolListPageSize,
-        joinedPoolListStatus,
-        userInfo
-      ]
+  const getJoinedPoolList = async () => {
+    if (!userInfo?.user) return [];
+    clearTimeout(window.joinMarketTimer);
+    const url = new URL(window.location.href);
+    url.searchParams.set("limit", joinedPoolListPageSize + "");
+    url.searchParams.set(
+      "offset",
+      (joinedPoolListPageIndex - 1) * joinedPoolListPageSize + ""
+    );
+    url.searchParams.set("pool_status", joinedPoolListStatus);
+    url.searchParams.set("chain", "near");
+    if (mounted.current) {
+      setJoinedPoolsRefreshing(true);
+    } else {
+      setJoinedPoolListLoading(true);
     }
-  );
+    try {
+      const response = await axiosInstance.get(
+        `/api/v1/user/joined_market?${url.searchParams.toString()}`
+      );
+      setJoinedPoolListHasNextPage(response.data.data.has_next_page);
+      response.data.data.list.forEach((item: any) => {
+        item.participants = item.pool_info?.participants;
+        item.accumulative_bids = item.pool_info?.accumulative_bids;
+        item.anchor_price = item.pool_info?.anchor_price;
+        item.value = getAnchorPrice(item.pool_info?.anchor_price);
+        item.is_claim = item.status === 4;
+        item.status = item.pool_info?.status;
+      });
+
+      setJoinedPoolListData((prev: any) =>
+        joinedPoolListPageIndex === 1
+          ? response.data.data.list
+          : [...prev, ...response.data.data.list]
+      );
+      window.joinMarketTimer = setTimeout(() => {
+        getJoinedPoolList();
+      }, 20000);
+      mounted.current = true;
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setJoinedPoolListLoading(false);
+      setJoinedPoolsRefreshing(false);
+    }
+  };
 
   const onJoinedPoolListPageChange = (_page: number) => {
     setJoinedPoolListPageIndex(_page);
@@ -128,6 +133,22 @@ export default function usePlayerHistory() {
     getRecords(_page);
   };
 
+  useEffect(() => {
+    if (userInfo?.user) {
+      getJoinedPoolList();
+    }
+  }, [
+    joinedPoolListPageIndex,
+    joinedPoolListPageSize,
+    joinedPoolListStatus,
+    userInfo?.user
+  ]);
+  useEffect(() => {
+    return () => {
+      clearTimeout(window.joinMarketTimer);
+    };
+  }, []);
+
   return {
     page,
     data,
@@ -141,6 +162,8 @@ export default function usePlayerHistory() {
     onJoinedPoolListPageChange,
     updateJoinedPoolListData,
     joinedPoolListStatus,
-    onJoinedPoolListStatusChange
+    onJoinedPoolListStatusChange,
+    getJoinedPoolList,
+    joinedPoolsRefreshing
   };
 }

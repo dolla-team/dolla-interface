@@ -12,6 +12,7 @@ import Records from "./records";
 import PageBack from "../components/page-back";
 import Bg from "../components/bg";
 import ProfileTabs from "../components/tabs";
+import RefreshIcon from "../components/refresh-icon";
 
 export default function Seller() {
   const {
@@ -25,7 +26,9 @@ export default function Seller() {
     onRecordsPrevPage,
     onRecordsNextPage,
     recordsPageIndex,
-    recordsPageHasNextPage
+    recordsPageHasNextPage,
+    poolsRefreshing,
+    getCreatePoolList
   } = useCreatePoolList();
 
   return (
@@ -38,8 +41,15 @@ export default function Seller() {
           <div className="max-md:px-[10px]">
             <Dashboard tab="seller" className="mt-[49px] max-md:mt-[20px]" />
           </div>
-          <div className="flex justify-between items-center gap-[10px] mt-[20px] max-md:flex-col max-md:mt-[20px]">
-            Created Market {data?.length}
+          <div className="w-full flex justify-between items-center gap-[10px] mt-[20px] pr-[20px] max-md:flex-col max-md:mt-[20px]">
+            <div> Created Market {data?.length}</div>
+            <RefreshIcon
+              refreshing={poolsRefreshing}
+              onClick={() => {
+                if (poolsRefreshing) return;
+                getCreatePoolList();
+              }}
+            />
           </div>
           <SellerMarkets
             poolsData={poolsData}

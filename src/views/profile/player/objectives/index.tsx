@@ -79,6 +79,9 @@ export default function Objectives() {
             <Complete
               tasks={taskStore.completedTasks}
               loading={taskStore.loading}
+              onSuccess={() => {
+                onQueryUserInfo();
+              }}
             />
           )}
         </div>

@@ -113,22 +113,25 @@ export const AuthProvider: React.FC<{
       let signature: string;
 
       // Choose different signing methods based on wallet type
-      if (privyWallet && "walletClientType" in privyWallet) {
-        // Use MetaMask for signing
-        const ethereumProvider = await privyWallet.getEthereumProvider();
-        if (!ethereumProvider) {
-          throw new Error("Failed to get Ethereum provider");
-        }
-        const provider = new ethers.providers.Web3Provider(ethereumProvider);
-        const signer = provider.getSigner();
-        signature = await signer.signMessage(message);
-      } else {
-        // Use Privy embedded wallet for signing
-        const { signature: privySignature } = await signMessage({
-          message
-        });
-        signature = privySignature;
-      }
+      // if (privyWallet && "walletClientType" in privyWallet) {
+      //   console.log("privyWallet", 117);
+      //   // Use MetaMask for signing
+      //   const ethereumProvider = await privyWallet.getEthereumProvider();
+      //   if (!ethereumProvider) {
+      //     throw new Error("Failed to get Ethereum provider");
+      //   }
+      //   const provider = new ethers.providers.Web3Provider(ethereumProvider);
+      //   const signer = provider.getSigner();
+      //   signature = await signer.signMessage(message);
+      // } else {
+      //   console.log("privyWallet", 127);
+      //   // Use Privy embedded wallet for signing
+
+      // }
+      const { signature: privySignature } = await signMessage({
+        message
+      });
+      signature = privySignature;
 
       onLogin({
         address: privyWallet?.address,

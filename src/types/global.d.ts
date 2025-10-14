@@ -17,6 +17,8 @@ declare global {
     bidResultTimer: NodeJS.Timeout | number;
     accountTimer: NodeJS.Timeout | number;
     autoFlipTimer: NodeJS.Timeout | number;
+    joinMarketTimer: NodeJS.Timeout | number;
+    createMarketTimer: NodeJS.Timeout | number;
     oddOffset: number;
   }
 }

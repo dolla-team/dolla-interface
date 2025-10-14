@@ -28,8 +28,10 @@ export default function Player() {
     joinedPoolListData,
     updateJoinedPoolListData,
     onJoinedPoolListPageChange,
+    joinedPoolsRefreshing,
     joinedPoolListStatus,
-    onJoinedPoolListStatusChange
+    onJoinedPoolListStatusChange,
+    getJoinedPoolList
   } = usePlayerHistory();
 
   const containerRef = useRef<any>(null);
@@ -59,6 +61,8 @@ export default function Player() {
                 updatePoolsData={updateJoinedPoolListData}
                 status={joinedPoolListStatus}
                 onStatusChange={onJoinedPoolListStatusChange}
+                getJoinedPoolList={getJoinedPoolList}
+                joinedPoolsRefreshing={joinedPoolsRefreshing}
               />
               <Records
                 page={page}
