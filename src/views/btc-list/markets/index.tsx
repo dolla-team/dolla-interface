@@ -47,7 +47,7 @@ export default function Markets() {
         <div className="text-[20px] text-black font-[700] mb-[10px]">
           All Markets
         </div>
-        <div className="flex items-center gap-[30px]">
+        <div className="flex items-center gap-[14px]">
           <div className="flex items-center h-[40px] p-[2px] bg-[#0000000D] border border-[#F2F2F233] rounded-[10px]">
             {[
               { label: "All", key: 0 },
@@ -82,15 +82,29 @@ export default function Markets() {
               </button>
             ))}
           </div>
-          <div className="flex items-center">
-            <Radio
-              checked={status === "1"}
-              onChange={() => {
-                onChangeStatus();
-              }}
-            >
-              <span className="text-[12px] text-[#8A87AA]">Live only</span>
-            </Radio>
+          <div className="flex items-center h-[40px] p-[2px] bg-[#0000000D] border border-[#F2F2F233] rounded-[10px]">
+            {[
+              { label: "Live", key: "1" },
+              {
+                label: "Sold",
+                key: "2"
+              }
+            ].map((item) => (
+              <button
+                key={item.key}
+                className={clsx(
+                  "button min-w-[50px] text-center h-[34px] rounded-[8px] text-[12px] px-[10px]",
+                  status === item.key
+                    ? "bg-[#FFC42F] text-black"
+                    : "text-[#8A87AA]"
+                )}
+                onClick={() => {
+                  onChangeStatus(item.key);
+                }}
+              >
+                {item.label}
+              </button>
+            ))}
           </div>
         </div>
       </div>

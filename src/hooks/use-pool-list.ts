@@ -148,9 +148,8 @@ export default function usePoolList(props?: {
     }
   };
 
-  const onChangeStatus = () => {
-    console.log(status, status === "1" ? "2,3" : "1");
-    setStatus(status === "1" ? "2,3" : "1");
+  const onChangeStatus = (_status: string) => {
+    setStatus(_status);
   };
 
   const { run: onQueryPoolListDebounced } = useDebounceFn(

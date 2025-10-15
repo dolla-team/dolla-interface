@@ -7,6 +7,8 @@ import useWalletStore from "@/stores/use-wallet";
 import { useNavigate } from "react-router-dom";
 import { formatNumber } from "@/utils/format/number";
 import useIsWindowVisible from "@/hooks/use-is-window-visible";
+import Big from "big.js";
+import { BASE_TOKEN } from "@/config/btc";
 
 interface ScrollProps {
   className?: string;
@@ -66,10 +68,26 @@ export default function Infos({
       const _list: any = [];
 
       res?.data?.data?.pool?.forEach((pool: any) => {
+        let label = "New Market";
+        let icon = "🪶";
+        if (pool.type === 0) {
+          label = "Hot Market";
+          icon = "🔥";
+        }
+        if (pool.type === 1) {
+          label = "New Market";
+          icon = "⚡";
+        }
         _list.push({
           type: "pool",
           pool_id: pool.pool_id,
-          value: pool.pool_info.reward_usd
+          value: pool.pool_info.reward_usd,
+          market_type: pool.type, // type: 0: hot, 1: early, 2: new
+          reward_amount: Big(pool.pool_info.reward_amount)
+            .div(10 ** BASE_TOKEN.decimals)
+            .toString(),
+          label,
+          icon
         });
       });
 
@@ -174,7 +192,7 @@ const Item = ({
       onClick={() => {
         navigate(`/btc/detail/${item.pool_id}`);
       }}
-      className="flex items-center h-full gap-3 px-[50px] text-white transition-transform duration-200 hover:scale-105 button"
+      className="flex items-center h-full gap-3 px-[30px] text-white transition-transform duration-200 hover:scale-105 button"
       onMouseEnter={() => {
         setIsPaused(true);
       }}
@@ -199,11 +217,11 @@ const Item = ({
         </>
       ) : (
         <>
-          <span className="text-[#D9D9D9] text-[12px]">New Market Listed</span>
+          <span className="text-[#D9D9D9] text-[12px]">{item.label}</span>
           <span className={clsx("text-lg font-bold drop-shadow-lg")}>
-            ${formatNumber(item.value, 2, true)}
+            {formatNumber(item.reward_amount, 6, true)} {BASE_TOKEN.symbol}
           </span>
-          <span className="text-xl drop-shadow-lg">🎯</span>
+          <span className="text-xl drop-shadow-lg">{item.icon}</span>
         </>
       )}
     </div>
@@ -261,63 +279,65 @@ const Bids = () => {
   return (
     <AnimatePresence>
       {!!lastBid && (
-        <motion.div
-          key={lastBid.id}
-          className="w-[300px] h-[36px] border-r border-white flex items-center justify-center absolute z-[5] left-0 top-0 bg-black text-center"
-          initial={{
-            opacity: 0,
-            scale: 0.8,
-            x: -50
-          }}
-          animate={{
-            opacity: 1,
-            scale: isNewBid ? [1, 1.1, 1] : 1,
-            x: 0,
-            rotate: isNewBid ? [0, -2, 2, -2, 2, 0] : 0
-          }}
-          exit={{
-            opacity: 0,
-            scale: 0.8,
-            x: 50
-          }}
-          transition={{
-            duration: isNewBid ? 0.6 : 0.3,
-            ease: "easeOut",
-            scale: {
-              duration: 0.3,
-              times: [0, 0.5, 1]
-            },
-            rotate: {
-              duration: 0.6,
-              times: [0, 0.2, 0.4, 0.6, 0.8, 1]
-            }
-          }}
-        >
-          <span className="text-[12px] text-[#D9D9D9] mr-[4px] max-w-[100px] truncate">
-            {lastBid.user_name || formatAddress(lastBid.user)}
-          </span>
-          <span className="text-[12px] text-[#D9D9D9]">just bid</span>
-          <motion.span
-            className="text-[14px] text-[#66E39C] font-[700] mx-[8px]"
-            animate={
-              isNewBid
-                ? {
-                    color: ["#66E39C", "#FFD700", "#66E39C"],
-                    textShadow: ["0 0 0px", "0 0 10px #FFD700", "0 0 0px"]
-                  }
-                : {}
-            }
+        <div className="w-[300px] h-[36px] border-r border-white bg-black absolute z-[5] left-0 top-0">
+          <motion.div
+            key={lastBid.id}
+            className="w-full h-full flex items-center justify-center  text-center"
+            initial={{
+              opacity: 0,
+              scale: 0.8,
+              x: -50
+            }}
+            animate={{
+              opacity: 1,
+              scale: isNewBid ? [1, 1.1, 1] : 1,
+              x: 0,
+              rotate: isNewBid ? [0, -2, 2, -2, 2, 0] : 0
+            }}
+            exit={{
+              opacity: 0,
+              scale: 0.8,
+              x: 50
+            }}
             transition={{
-              duration: 0.6,
-              times: [0, 0.5, 1]
+              duration: isNewBid ? 0.6 : 0.3,
+              ease: "easeOut",
+              scale: {
+                duration: 0.3,
+                times: [0, 0.5, 1]
+              },
+              rotate: {
+                duration: 0.6,
+                times: [0, 0.2, 0.4, 0.6, 0.8, 1]
+              }
             }}
           >
-            ${formatNumber(lastBid.times, 2, true)}
-          </motion.span>
-          <span className="text-[12px] text-[#D9D9D9]">
-            in #{lastBid.pool_id}
-          </span>
-        </motion.div>
+            <span className="text-[12px] text-[#D9D9D9] mr-[4px] max-w-[100px] truncate">
+              {lastBid.user_name || formatAddress(lastBid.user)}
+            </span>
+            <span className="text-[12px] text-[#D9D9D9]">just bid</span>
+            <motion.span
+              className="text-[14px] text-[#66E39C] font-[700] mx-[8px]"
+              animate={
+                isNewBid
+                  ? {
+                      color: ["#66E39C", "#FFD700", "#66E39C"],
+                      textShadow: ["0 0 0px", "0 0 10px #FFD700", "0 0 0px"]
+                    }
+                  : {}
+              }
+              transition={{
+                duration: 0.6,
+                times: [0, 0.5, 1]
+              }}
+            >
+              ${formatNumber(lastBid.times, 2, true)}
+            </motion.span>
+            <span className="text-[12px] text-[#D9D9D9]">
+              in #{lastBid.pool_id}
+            </span>
+          </motion.div>
+        </div>
       )}
     </AnimatePresence>
   );
