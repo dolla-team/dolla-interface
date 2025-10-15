@@ -17,29 +17,6 @@ interface ScrollProps {
   autoPlay?: boolean;
 }
 
-const config: any[] = [
-  {
-    emoji: "💰",
-    color: "text-cyan-400"
-  },
-  {
-    emoji: "🚀",
-    color: "text-pink-400"
-  },
-  {
-    emoji: "🎯",
-    color: "text-green-400"
-  },
-  {
-    emoji: "⭐",
-    color: "text-yellow-400"
-  },
-  {
-    emoji: "🎉",
-    color: "text-purple-400"
-  }
-];
-
 export default function Infos({
   className = "",
   speed = 60,
@@ -92,12 +69,28 @@ export default function Infos({
       });
 
       res?.data?.data?.winner_bid?.forEach((pool: any) => {
+        //#4ee818  profit_ratio < 10
+        // #366ac5  profit_ratio < 50
+        // #993ad8  profit_ratio < 100
+        // #f08227  profit_ratio > 100
+
+        let text_color = "#4ee818";
+        if (Number(pool.profit_ratio) < 50) {
+          text_color = "#366ac5";
+        }
+        if (Number(pool.profit_ratio) < 100) {
+          text_color = "#993ad8";
+        }
+        if (Number(pool.profit_ratio) > 100) {
+          text_color = "#f08227";
+        }
         _list.push({
           type: "winner",
           profit_ratio: pool.profit_ratio,
           winner_user_name: pool.user_info.name,
           pool_id: pool.pool_id,
-          winner_user: pool.user_info.user
+          winner_user: pool.user_info.user,
+          text_color
         });
       });
 
@@ -175,7 +168,6 @@ export default function Infos({
 
 const Item = ({
   item,
-  index,
   setIsPaused
 }: {
   item: any;
@@ -183,9 +175,6 @@ const Item = ({
   setIsPaused: (isPaused: boolean) => void;
 }) => {
   const navigate = useNavigate();
-  const randomIndex = useMemo(() => {
-    return Math.floor(Math.random() * config.length);
-  }, [index]);
 
   return (
     <div
@@ -206,10 +195,8 @@ const Item = ({
             {item?.winner_user_name || formatAddress(item.winner_user)} Won
           </span>
           <span
-            className={clsx(
-              "text-lg font-bold drop-shadow-lg",
-              config[randomIndex].color
-            )}
+            className={clsx("text-lg font-bold drop-shadow-lg")}
+            style={{ color: item.text_color }}
           >
             {formatNumber(item.profit_ratio, 0, true)}x
           </span>
@@ -240,20 +227,14 @@ const Bids = () => {
       const newBid = res?.data?.data?.list?.[0];
 
       // Check if this is a new bid (different from current one)
-      if (
-        newBid &&
-        (!lastBid ||
-          newBid.pool_id !== lastBid.pool_id ||
-          newBid.user_id !== lastBid.user_id ||
-          newBid.times !== lastBid.times)
-      ) {
+      if (newBid) {
         setIsNewBid(true);
         setLastBid(newBid);
 
-        // Reset the new bid flag after animation
+        // Reset the new bid flag after animation (0.6s * 2 repeats = 1.2s)
         setTimeout(() => {
           setIsNewBid(false);
-        }, 1000);
+        }, 2000);
       } else if (newBid) {
         setLastBid(newBid);
       }
@@ -292,7 +273,20 @@ const Bids = () => {
               opacity: 1,
               scale: isNewBid ? [1, 1.1, 1] : 1,
               x: 0,
-              rotate: isNewBid ? [0, -2, 2, -2, 2, 0] : 0
+              rotate: isNewBid ? [0, -5, 5, -5, 5, 0] : 0,
+              backgroundColor: isNewBid
+                ? [
+                    "#000000",
+                    "#366ac5",
+                    "#993ad8",
+                    "#f08227",
+                    "#993ad8",
+                    "#366ac5",
+                    "#f08227",
+                    "#366ac5",
+                    "#000000"
+                  ]
+                : "#000000"
             }}
             exit={{
               opacity: 0,
@@ -302,13 +296,20 @@ const Bids = () => {
             transition={{
               duration: isNewBid ? 0.6 : 0.3,
               ease: "easeOut",
+              repeat: isNewBid ? 2 : 0,
               scale: {
                 duration: 0.3,
                 times: [0, 0.5, 1]
               },
               rotate: {
                 duration: 0.6,
-                times: [0, 0.2, 0.4, 0.6, 0.8, 1]
+                times: [0, 0.2, 0.4, 0.6, 0.8, 1],
+                repeat: isNewBid ? 2 : 0
+              },
+              backgroundColor: {
+                duration: 0.6,
+                times: [0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1],
+                repeat: isNewBid ? 2 : 0
               }
             }}
           >
