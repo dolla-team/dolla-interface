@@ -61,9 +61,7 @@ export default function Infos({
 
   useEffect(() => {
     const getData = async () => {
-      const res = await axiosInstance.get(
-        `https://test-api.dolla.market/api/v1/pool/top/market`
-      );
+      const res = await axiosInstance.get(`/api/v1/pool/top/market`);
 
       const _list: any = [];
 
