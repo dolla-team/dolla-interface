@@ -3,6 +3,7 @@ import { useRequest } from "ahooks";
 import axiosInstance from "@/libs/axios";
 import { useMemo } from "react";
 import Big from "big.js";
+import { AMOUNT } from "@/config/btc";
 
 export function useReferenceData(props: any) {
   const { token, amount } = props;
@@ -39,7 +40,26 @@ export function useReferenceData(props: any) {
 
     let _data: any = {};
 
-    let _bids: any = [];
+    let _bids: any = {
+      [AMOUNT[0]]: {
+        label: AMOUNT[0],
+        value: 0,
+        percentage: 0,
+        bids: []
+      },
+      [AMOUNT[1]]: {
+        label: AMOUNT[1],
+        value: 0,
+        percentage: 0,
+        bids: []
+      },
+      [AMOUNT[2]]: {
+        label: AMOUNT[2],
+        value: 0,
+        percentage: 0,
+        bids: []
+      }
+    };
 
     referenceList.forEach((item: any) => {
       const _label = Big(item.reward_amount)
@@ -68,14 +88,14 @@ export function useReferenceData(props: any) {
         }
       ];
 
-      _bids.push({
+      _bids[_label] = {
         label: _label,
         value: item.total_creations_amount,
         percentage: Number(
           (item.total_creations_amount / item.total_creations) * 100
         ).toFixed(2),
         bids: item.times
-      });
+      };
 
       _data[_label] = {
         top_sale: item.top_sale,
@@ -84,7 +104,8 @@ export function useReferenceData(props: any) {
         timing: _timing
       };
     });
-    return [_data, _bids];
+
+    return [_data, Object.values(_bids)];
   }, [referenceList, token]);
 
   const currentData = useMemo(() => {

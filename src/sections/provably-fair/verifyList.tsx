@@ -39,7 +39,7 @@ export default function VerifyList({
     <div>
       <div className="mt-[20px] h-[444px] overflow-y-auto text-white pb-[20px]">
         <div className="flex items-center justify-between px-[10px]">
-          <div>Ended Market</div>
+          <div>Sold Market</div>
           <div
             onClick={() => setYouParticipateOnly(!youParticipateOnly)}
             className="flex items-center justify-between cursor-pointer"

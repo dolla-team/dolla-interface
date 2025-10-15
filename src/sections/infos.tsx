@@ -52,7 +52,7 @@ export default function Infos({
           icon = "🔥";
         }
         if (pool.type === 1) {
-          label = "New Market";
+          label = "Early Entry";
           icon = "⚡";
         }
         _list.push({

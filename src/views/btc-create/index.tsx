@@ -24,9 +24,10 @@ import useWalletStore from "@/stores/use-wallet";
 import PageBack from "@/views/profile/components/page-back";
 import { AMOUNT } from "@/config/btc";
 import ConfirmModal from "./confirm-modal";
+import { useBtcCreateStore } from "@/stores/use-btc-create";
 
 export default function BTCCreate() {
-  const [amount, setAmount] = useState(AMOUNT[1]);
+  const btcCreateStore = useBtcCreateStore();
   const [successResult, setSuccessResult] = useState<any>(null);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const {
@@ -43,7 +44,7 @@ export default function BTCCreate() {
     data: referenceData,
     loading: referenceDataLoading,
     bidsMarket
-  } = useReferenceData({ token: BASE_TOKEN, amount });
+  } = useReferenceData({ token: BASE_TOKEN, amount: btcCreateStore.amount });
 
   const isMobile = useIsMobile();
 
@@ -64,12 +65,12 @@ export default function BTCCreate() {
     if (pricePerBTC === 0) {
       return "Anchor price not found";
     }
-    if (Big(amount).gt(Big(nearAccount?.prizeBalance || 0))) {
+    if (Big(btcCreateStore.amount).gt(Big(nearAccount?.prizeBalance || 0))) {
       return `Insufficient ${BASE_TOKEN.symbol} Balance`;
     }
 
     return "";
-  }, [amount, pricePerBTC, nearAccount?.prizeBalance]);
+  }, [btcCreateStore.amount, pricePerBTC, nearAccount?.prizeBalance]);
 
   return (
     <div className="relative">
@@ -92,7 +93,7 @@ export default function BTCCreate() {
                 <div className="flex items-center">
                   <div className="mt-[13px] flex items-center gap-[10px]">
                     {AMOUNT.map((item, index) => {
-                      const isActive = amount === item;
+                      const isActive = btcCreateStore.amount === item;
                       return (
                         <motion.div
                           key={index}
@@ -102,7 +103,7 @@ export default function BTCCreate() {
                               ? "backdrop-blur-[10px] text-white"
                               : "text-black"
                           )}
-                          onClick={() => setAmount(item)}
+                          onClick={() => btcCreateStore.set({ amount: item })}
                           initial={{ height: 106 }}
                           animate={{
                             height: !isMobile ? (isActive ? 120 : 106) : 106,
@@ -151,7 +152,7 @@ export default function BTCCreate() {
                       panelType: "deposit",
                       depositPanelType: "input",
                       selectedToken: token,
-                      defaultDepositAmount: amount
+                      defaultDepositAmount: btcCreateStore.amount
                     });
                   }}
                   className="absolute top-0 right-0 w-[86px] h-[30px] button rounded-[8px] border border-[#A2A2A2] bg-[#FFFFFF1A] text-white text-[12px] text-center"
@@ -178,7 +179,8 @@ export default function BTCCreate() {
           <div className="flex gap-[29px] mt-[36px] rounded-[12px] bg-[#FFFFFF99] p-[24px] w-full max-md:mt-[40px] max-md:px-[12px]">
             <div className="w-1/2">
               <div className="text-[16px] text-black font-[500]">
-                {amount} {BASE_TOKEN.symbol} Markets Reference Data
+                {btcCreateStore.amount} {BASE_TOKEN.symbol} Markets Reference
+                Data
               </div>
               <div className="w-full grid grid-cols-3 gap-[10px] mt-[26px] max-md:mt-[15px] max-md:gap-[7px]">
                 <div className="rounded-[12px] bg-[#EAEAEA] h-[93px] flex flex-col justify-center items-center gap-[10px]">
@@ -244,18 +246,18 @@ export default function BTCCreate() {
                     return (
                       <div className="flex flex-col items-center justify-center gap-[5px]">
                         <div className="text-[12px] text-[#8A87AA] rounded-[12px] border border-[#E4E4E4] bg-white px-[12px] py-[4px]">
-                          {amount} {BASE_TOKEN.symbol}
+                          {btcCreateStore.amount} {BASE_TOKEN.symbol}
                         </div>
                         {!isMobile && (
                           <div className="text-[#8A87AA] text-[12px]">
-                            Cash out timing
+                            Cash out timing {record.timing_empty}
                           </div>
                         )}
                         <div className="text-[16px] font-[800]">
-                          {record.label}
+                          {record?.value === 0 ? "in - days" : record.label}
                         </div>
                         <div className="text-[12px] mt-[10px] text-[#8A87AA]">
-                          {record.percentage}%
+                          {record?.value === 0 ? "-" : record.percentage}%
                         </div>
                       </div>
                     );
@@ -269,7 +271,7 @@ export default function BTCCreate() {
                 <DoughnutChart
                   className="!w-[210px] !h-[210px] max-md:mt-[12px]"
                   data={bidsMarket}
-                  volume={amount.toString()}
+                  volume={btcCreateStore.amount.toString()}
                   formatLabel={(record: any) => {
                     return (
                       <div className="flex flex-col items-center justify-center gap-[5px]">
@@ -282,14 +284,17 @@ export default function BTCCreate() {
                           </div>
                         )}
                         <div className="font-[800] text-[16px] mt-[1px]">
-                          {formatNumber(record.bids, 2, true, {
-                            isShort: true,
-                            isShortUppercase: true
-                          })}{" "}
+                          $
+                          {record.bids
+                            ? formatNumber(record.bids, 2, true, {
+                                isShort: true,
+                                isShortUppercase: true
+                              })
+                            : "-"}{" "}
                           Bids
                         </div>
                         <div className="text-[12px] mt-[10px] text-[#8A87AA]">
-                          {record.percentage}%
+                          {record.bids ? record.percentage : "-"}%
                         </div>
                       </div>
                     );
@@ -298,7 +303,7 @@ export default function BTCCreate() {
               </div>
             </div>
             <PriceChart
-              anchorPrice={amount * pricePerBTC}
+              anchorPrice={btcCreateStore.amount * pricePerBTC}
               className="mt-[40px] rounded-[12px] bg-[#EAEAEA] h-[379px] !w-1/2"
             />
           </div>
@@ -312,7 +317,7 @@ export default function BTCCreate() {
       />
       <ConfirmModal
         open={showConfirmModal}
-        amount={amount}
+        amount={btcCreateStore.amount}
         pricePerBTC={pricePerBTC}
         onSuccess={(id: string) => {
           updateNearAccount?.();
@@ -320,7 +325,7 @@ export default function BTCCreate() {
           // navigate("/portfolio/seller");
           setSuccessResult({
             pool_id: id,
-            amount
+            amount: btcCreateStore.amount
           });
         }}
         onClose={() => {

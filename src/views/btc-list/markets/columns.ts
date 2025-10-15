@@ -6,30 +6,30 @@ export default [
     sort: true
   },
   {
-    title: "Market",
+    title: "Markets",
     dataIndex: "market",
     width: "20%"
   },
   {
-    title: "Valued",
+    title: "Anchor Value",
     dataIndex: "anchor_price",
     width: "15%",
     sort: true
   },
   {
-    title: "Total bid",
+    title: "Total Bids",
     dataIndex: "accumulative_bids",
     width: "15%",
     sort: true
   },
   {
-    title: "Players",
+    title: "Bidders",
     dataIndex: "participants",
     width: "10%",
     sort: true
   },
   {
-    title: "Bidding progress",
+    title: "Fill level",
     dataIndex: "hitting",
     width: "20%",
     sort: true

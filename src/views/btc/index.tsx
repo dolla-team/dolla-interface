@@ -18,6 +18,8 @@ import { ShareBtn, CloseBtn } from "./share-btn";
 import Loading from "./loading";
 import Wallet from "@/sections/wallet";
 import Tips from "./components/tips";
+import { useEffect } from "react";
+import useWalletStore from "@/stores/use-wallet";
 
 // import ProvablyFair from "@/sections/provably-fair";
 
@@ -37,6 +39,10 @@ const Content = () => {
   const isMobile = useIsMobile();
   const { pool, bidResult } = useBtcContext();
   const navigate = useNavigate();
+  const walletStore = useWalletStore();
+  useEffect(() => {
+    walletStore.init();
+  }, []);
 
   return (
     <div

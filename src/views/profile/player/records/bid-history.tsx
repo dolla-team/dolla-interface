@@ -71,7 +71,7 @@ const BidHistory = (props: any) => {
     },
     {
       dataIndex: "results",
-      title: "Prize",
+      title: "Rewards",
       width: "25%",
       render: (record: any) => {
         if (

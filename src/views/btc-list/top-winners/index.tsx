@@ -22,11 +22,7 @@ export default function TopWinners({ type }: { type: "winners" | "sellers" }) {
   }, []);
   return (
     <TopWinnersContainer
-      title={
-        type === "winners"
-          ? "Top " + BASE_TOKEN.symbol + " Winners"
-          : "Top " + BASE_TOKEN.symbol + " Sellers"
-      }
+      title={type === "winners" ? "Top Winners" : "Top Market Sell"}
     >
       {data.map((item, index) => (
         <TopWinnersItem

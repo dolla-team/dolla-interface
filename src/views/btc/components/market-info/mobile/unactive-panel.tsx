@@ -12,7 +12,7 @@ export default function UnactivePanel({ pool }: { pool: any }) {
     <>
       <div className="flex items-center justify-between mt-[8px]">
         <div className="px-[8px] py-[3px] rounded-[10px] border border-[#6A5D3A] bg-[#00000033] backdrop-blur-[10px] text-white text-[14px]">
-          {pool?.status === 2 ? "Ended" : "Cancelled"}
+          {pool?.status === 2 ? "Sold" : "Cancelled"}
         </div>
         {/* <button onClick={() => {setShowProvablyFair(true)}} className="text-[14px] text-[#FFE9B2]">Provably fair</button>
         <ProvablyFair

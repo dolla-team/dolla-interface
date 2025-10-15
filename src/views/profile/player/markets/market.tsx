@@ -21,7 +21,7 @@ export default function MarketItem(props: any) {
       reward_amount: order.reward_amount,
       reward_token_info: order.reward_token_info,
       status: order.status,
-      profit_ratio: order.pool_info.profit_ratio,
+      profit_ratio: order.pool_info?.winner_info?.profit_ratio,
       winner_user_info: order.pool_info.winner_user_info,
       anchor_price: order.anchor_price,
       pool_id: order.pool_id,

@@ -24,9 +24,7 @@ export default function Markets() {
     sortField,
     sortOrder,
     setSortField,
-    setSortOrder,
-    onChangeStatus,
-    status
+    setSortOrder
   } = usePoolList({
     pageLimit: 100,
     tokenStatus: 0,
@@ -93,12 +91,14 @@ export default function Markets() {
                 key={item.key}
                 className={clsx(
                   "button min-w-[50px] text-center h-[34px] rounded-[8px] text-[12px] px-[10px]",
-                  status === item.key
+                  allMarketsStore.status === item.key
                     ? "bg-[#FFC42F] text-black"
                     : "text-[#8A87AA]"
                 )}
                 onClick={() => {
-                  onChangeStatus(item.key);
+                  allMarketsStore.set({
+                    status: item.key
+                  });
                 }}
               >
                 {item.label}
@@ -125,7 +125,7 @@ export default function Markets() {
             }}
           >
             <span>{column.title}</span>
-            {column.title === "Valued" && <MarketInfo />}
+            {column.dataIndex === "anchor_price" && <MarketInfo />}
             {column.sort && (
               <SortIcon
                 active={sortField === column.dataIndex}
@@ -164,10 +164,13 @@ const MarketInfo = () => {
       trigger={PopoverTrigger.Hover}
       placement={PopoverPlacement.Bottom}
       content={
-        <div className="w-[298px] text-[#3B3951] text-[12px] p-[14px] bg-white rounded-[10px] border border-[#E4E4E4]">
+        <div className="w-[360px] text-[#3B3951] text-[12px] p-[14px] bg-white rounded-[10px] border border-[#E4E4E4]">
           <div className="font-[300] opacity-80 leading-[120%]">
-            <div> Market’s base value.</div>
-            <div>Base win per $1: p = 1 / (Valued × 1.2)</div>
+            <div className="font-[500] text-black">Anchor Value: </div>
+            <div className="mt-[4px]">
+              Base reference for calculating win probability.
+            </div>
+            <div>Win per $1 = 1 / (Anchor × 1.25).</div>
           </div>
         </div>
       }

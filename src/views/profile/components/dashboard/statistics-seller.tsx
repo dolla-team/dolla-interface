@@ -131,7 +131,7 @@ const StatisticsPlayer = (props: any) => {
                     <div className="inline-flex gap-[4px] mt-[10px] h-[24px] px-[10px] items-center border border-[#E4E4E4] rounded-[16px] bg-[#F2F2F299]">
                       <div className="w-[7px] h-[7px] shrink-0 rounded-full bg-[#C9C9C9]" />
                       <div className="text-[10px] text-[#2B3337]">
-                        {userInfo?.ended} Ended
+                        {userInfo?.ended} Sold
                       </div>
                     </div>
                   </PopoverCard>

@@ -7,6 +7,8 @@ import { AMOUNT, BASE_TOKEN } from "@/config/btc";
 import { useNavigate } from "react-router-dom";
 import { useAllMarketsStore } from "@/stores/use-all-markets";
 import { getReAnchorPrice } from "@/utils/pool";
+import { useBtcCreateStore } from "@/stores/use-btc-create";
+import { motion } from "framer-motion";
 
 const imgs = ["btc-1", "btc-0.1", "btc-0.01"];
 
@@ -54,6 +56,7 @@ const MarketItem = ({
   img: string;
   index: number;
 }) => {
+  const createStore = useBtcCreateStore();
   const navigate = useNavigate();
   const valued = useMemo(() => {
     if (!market) return formatNumber(price * value, 2, true);
@@ -63,25 +66,18 @@ const MarketItem = ({
   return (
     <div
       className={clsx(
-        "w-[372px] h-[200px] rounded-[16px] border border-[rgba(242,242,242,0.20)] relative group backdrop-blur-[25px]"
+        "w-[372px] h-[200px] rounded-[16px] border border-[rgba(242,242,242,0.20)] relative group backdrop-blur-[25px]",
+        !market && "bg-[#0F0F0F] backdrop-blur-[25px]"
       )}
     >
-      {market && (
-        <div className="absolute z-[3] top-[10px] left-[12px] w-[calc(100%-24px)] flex items-center justify-between text-[12px] text-white">
-          <div className="border border-[#F2F2F233] bg-[#FFFFFF1F] px-[6px] h-[18px] rounded-[10px] flex items-center gap-[4px]">
-            <ParticipantsIcon />
-            <span>{market?.participants}</span>
-          </div>
-          <div className="border border-[#F2F2F233] bg-[#FFFFFF1F] px-[6px] h-[18px] rounded-[10px] flex items-center gap-[4px]">
-            #{market?.pool_id}
-          </div>
-        </div>
-      )}
       <div
-        className="absolute top-0 left-0 w-full h-full rounded-[16px] z-[1] flex flex-col justify-center"
+        className={clsx(
+          "absolute top-0 left-0 w-full h-full rounded-[16px] z-[1] flex flex-col justify-center"
+        )}
         style={{
-          background:
-            "radial-gradient(61.75% 61.75% at 50% 100%, rgba(255, 196, 47, 0.60) 0%, rgba(0, 0, 0, 0.00) 100%), #000"
+          background: market
+            ? "radial-gradient(61.75% 61.75% at 50% 100%, rgba(255, 196, 47, 0.60) 0%, rgba(0, 0, 0, 0.00) 100%), #000"
+            : ""
         }}
       />
       <div
@@ -90,57 +86,103 @@ const MarketItem = ({
           index === 2 ? "pl-[90px]" : "pl-[140px]"
         )}
       >
-        <div className="text-[14px] text-white">Bid for</div>
+        <div className="flex items-center gap-[4px]">
+          {market && (
+            <div className="flex items-center gap-[4px] text-white">
+              <ParticipantsIcon />
+              <span>{market?.participants}</span>
+            </div>
+          )}
+          <div className="text-[14px] text-white">Bid for</div>
+        </div>
         <div
-          className={`
+          className={clsx(
+            `
             text-[32px] font-[500]
-            bg-gradient-to-b from-[#FFC42F] to-[#FFE39C]
             bg-clip-text
             text-transparent
             [background-clip:text]
             [-webkit-background-clip:text]
             [-webkit-text-fill-color:transparent]
-          `}
+          `,
+            market
+              ? "bg-gradient-to-b from-[#FFC42F] to-[#FFE39C]"
+              : "bg-gradient-to-b from-[#7F7F7F] to-[#A0A0A0]"
+          )}
         >
           {value} {BASE_TOKEN.symbol}
         </div>
         <div className="flex items-center gap-[4px] text-[14px]">
           <span className="text-white">Valued</span>
           <span
-            className="
-              bg-[linear-gradient(180deg,_#FFC42F_0%,_#FFE39C_100%)]
+            className={clsx(
+              `
               bg-clip-text
               text-transparent
               [background-clip:text]
               [-webkit-background-clip:text]
               [-webkit-text-fill-color:transparent]
-            "
+              `,
+              market
+                ? "bg-[linear-gradient(180deg,_#FFC42F_0%,_#FFE39C_100%)]"
+                : "bg-[linear-gradient(180deg,_#8E8E8E_0%,_#BDBDBD_100%)]"
+            )}
           >
             ${valued}
           </span>
         </div>
       </div>
       <div
-        className="absolute top-0 left-0 w-full h-full rounded-[16px] z-[2] bg-cover bg-center"
+        className={clsx(
+          "absolute top-0 left-0 w-full h-full rounded-[16px] z-[2] bg-cover bg-center",
+          !market && "grayscale"
+        )}
         style={{
           backgroundImage: `url('/home/${img}.png')`
         }}
       />
-      <div className="opacity-0 absolute top-0 left-0 z-[10] bg-[#0000004D] backdrop-blur-[25px] group-hover:opacity-100 duration-300 w-full h-full rounded-[16px] flex items-center justify-center">
-        <Button
-          className="w-[160px] h-[42px] !bg-[#FFC42F]"
-          onClick={() => {
-            if (!market) {
-              navigate("/btc/create");
-              return;
-            }
-            navigate("/btc/detail/" + market.pool_id);
+      <div className="opacity-0 absolute top-0 left-0 z-[10] bg-[#0000004D] backdrop-blur-[25px] group-hover:opacity-100 duration-300 w-full h-full rounded-[16px] flex flex-col items-center justify-center">
+        {!market ? (
+          <div className="text-[#8A87AA] text-[14px] mb-[10px]">
+            Nothing here
+          </div>
+        ) : (
+          <>
+            <div className="text-[12px] text-white">Hottest market</div>
+            <div className="flex items-center mb-[10px] mt-[4px]">
+              <img src="/fire.gif" className="w-[30px] h-[30px]" />
+              <span className="text-[18px] text-white font-bold mt-[2px]">
+                #{market?.pool_id}
+              </span>
+            </div>
+          </>
+        )}
+        <motion.div
+          animate={{
+            scale: [0.9, 1, 0.9]
+          }}
+          transition={{
+            duration: 2,
+            repeat: Infinity,
+            ease: "easeInOut"
           }}
         >
-          {market
-            ? "Bid for " + value + " " + BASE_TOKEN.symbol
-            : "Create Market"}
-        </Button>
+          <Button
+            className="w-[160px] h-[42px] !bg-[#FFC42F]"
+            onClick={() => {
+              if (!market) {
+                createStore.set({
+                  amount: value
+                });
+                navigate("/btc/create");
+                return;
+              }
+              navigate("/btc/detail/" + market.pool_id);
+            }}
+          >
+            {market ? "Bid Now" : "Launch a Market"}
+          </Button>
+        </motion.div>
       </div>
     </div>
   );

@@ -23,7 +23,6 @@ export default function usePoolList(props?: {
     volume = 0
   } = props ?? {};
   const allmarketsStore = useAllMarketsStore();
-  const [status, setStatus] = useState("1");
   const [poolList, setPoolList] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [sortField, setSortField] = useState("hitting");
@@ -39,7 +38,7 @@ export default function usePoolList(props?: {
 
   const cachedList = useRef<any[]>([]);
 
-  const onQueryPoolList = async () => {
+  const onQueryPoolList = async (withoutLoading = false) => {
     // if (
     //   step === -1 ||
     //   step + pageRef.current < cachedList.current.length / LIMIT
@@ -59,16 +58,20 @@ export default function usePoolList(props?: {
     //   return;
     // }
     // pageRef.current += step;
-    if (!isScrollList) {
-      setPoolList([]);
-    }
+
     try {
       clearTimeout(window.allMarketsTimer);
-      setLoading(true);
+      // console.log("withoutLoading", withoutLoading);
+      if (!withoutLoading) {
+        setLoading(true);
+        setPoolList([]);
+      }
       const res = await axiosInstance.get(
         `/api/v1/pool/list?limit=${LIMIT}&offset=${
           pageRef.current * LIMIT
-        }&sort_field=${sortField}&sort_order=${sortOrder}&status=${status}&chain=${"near"}&token_status=${tokenStatus}${
+        }&sort_field=${sortField}&sort_order=${sortOrder}&status=${
+          allmarketsStore.status
+        }&chain=${"near"}&token_status=${tokenStatus}${
           collection?.address ? "&token=" + collection.address : ""
         }${volume ? "&volume=" + volume : ""}`
       );
@@ -97,19 +100,22 @@ export default function usePoolList(props?: {
 
         if (
           Number(_a) === AMOUNT[0] &&
-          Big(item.accumulative_bids).gt(market1?.accumulative_bids || 0)
+          Big(item.accumulative_bids).gt(market1?.accumulative_bids || 0) &&
+          Number(item.status) === 1
         ) {
           market1 = market;
         }
         if (
           Number(_a) === AMOUNT[1] &&
-          Big(item.accumulative_bids).gt(market01?.accumulative_bids || 0)
+          Big(item.accumulative_bids).gt(market01?.accumulative_bids || 0) &&
+          Number(item.status) === 1
         ) {
           market01 = market;
         }
         if (
           Number(_a) === AMOUNT[2] &&
-          Big(item.accumulative_bids).gt(market001?.accumulative_bids || 0)
+          Big(item.accumulative_bids).gt(market001?.accumulative_bids || 0) &&
+          Number(item.status) === 1
         ) {
           market001 = market;
         }
@@ -148,13 +154,9 @@ export default function usePoolList(props?: {
       setLoading(false);
     } finally {
       window.allMarketsTimer = setTimeout(() => {
-        onQueryPoolList();
+        onQueryPoolList(true);
       }, 20000);
     }
-  };
-
-  const onChangeStatus = (_status: string) => {
-    setStatus(_status);
   };
 
   const { run: onQueryPoolListDebounced } = useDebounceFn(
@@ -175,7 +177,14 @@ export default function usePoolList(props?: {
     } else {
       setLoading(false);
     }
-  }, [userInfo?.user, sortOrder, sortField, collection, volume, status]);
+  }, [
+    userInfo?.user,
+    sortOrder,
+    sortField,
+    collection,
+    volume,
+    allmarketsStore.status
+  ]);
 
   useEffect(() => {
     return () => {
@@ -195,8 +204,6 @@ export default function usePoolList(props?: {
     setCollection,
     hasMore,
     pageRef,
-    LIMIT,
-    status,
-    onChangeStatus
+    LIMIT
   };
 }

@@ -5,14 +5,21 @@ import { useMemo } from "react";
 export default function ProgressBar({
   progress,
   spilled,
-  spilledPercent
+  spilledPercent,
+  status
 }: {
   progress: number;
   spilled: number;
   spilledPercent: number;
+  status: string;
 }) {
   return (
-    <div className="relative flex items-center w-[220px]">
+    <div
+      className={clsx(
+        "relative flex items-center w-[220px]",
+        Number(status) !== 1 && "grayscale"
+      )}
+    >
       <div
         className={clsx(
           "h-[10px] w-[110px] rounded-[30px] bg-[#0000001A] p-[2px]"
@@ -27,7 +34,9 @@ export default function ProgressBar({
             width: `${Math.min(progress, 100)}%`
           }}
         >
-          {progress > 0 && spilled <= 0 && <Particles />}
+          {progress > 0 && spilled <= 0 && Number(status) === 1 && (
+            <Particles />
+          )}
         </div>
       </div>
       {spilled > 0 && (
@@ -36,7 +45,7 @@ export default function ProgressBar({
             style={{ width: Math.min(spilledPercent!, 100) * 1.1 + "px" }}
             className="absolute top-[2px] left-[110px] z-[3] h-[6px] rounded-[10px] bg-linear-to-r from-[#C637FF] to-[#FFADCF]"
           >
-            <Particles />
+            {Number(status) === 1 && <Particles />}
           </div>
         </>
       )}

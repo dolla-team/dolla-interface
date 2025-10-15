@@ -93,10 +93,12 @@ export default function Market({
             <div className="w-full">
               {data.progress >= 100 && (
                 <div className="text-[#2B3337] text-[12px] mb-[10px] font-[600]">
-                  Spilled {formatNumber(spilled, 0, true, { prefix: "$" })}
+                  Overfilled {formatNumber(spilled, 0, true, { prefix: "$" })}
                 </div>
               )}
-              <ProgressBar {...{ progress, spilled, spilledPercent }} />
+              <ProgressBar
+                {...{ progress, spilled, spilledPercent, status: data.status }}
+              />
             </div>
           )}
           {column.dataIndex === "status" && (

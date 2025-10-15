@@ -33,7 +33,7 @@ const PlayerMarkets = (props: any) => {
               },
               {
                 key: "2",
-                label: "Ended"
+                label: "Sold"
               },
               {
                 key: "3",
@@ -59,13 +59,13 @@ const PlayerMarkets = (props: any) => {
                     className={clsx(
                       "w-[7px] h-[7px] rounded-full",
                       item.label === "Live" && "bg-[#54FF59]",
-                      item.label === "Ended" && "bg-[#C9C9C9]",
+                      item.label === "Sold" && "bg-[#C9C9C9]",
                       item.label === "Cancelled" && "bg-[#FF399F]"
                     )}
                   />
                   <span>
                     {item.label === "Live" && userInfo?.join_live_count}
-                    {item.label === "Ended" && userInfo?.join_ended_count}
+                    {item.label === "Sold" && userInfo?.join_ended_count}
                     {item.label === "Cancelled" &&
                       userInfo?.join_cancelled_count}{" "}
                     {item.label}

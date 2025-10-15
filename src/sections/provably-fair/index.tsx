@@ -80,7 +80,7 @@ export default function ProvablyFair({
           <Switch
             tabs={[
               { label: "Current Market", value: "verify" },
-              { label: "Ended Markets", value: "markets" }
+              { label: "Sold Markets", value: "markets" }
               // { label: "Records", value: "records" }
             ]}
             onChange={(value) => {

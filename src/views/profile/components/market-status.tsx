@@ -67,7 +67,7 @@ export enum EMarketStatus {
   Live = 1,
   // Closed
   Cancelled = 3,
-  // Ended
+  // Sold
   Winner = 2,
   PreCancel = 5
 }
@@ -86,8 +86,8 @@ export const MarketStatusMap = {
     name: "Cancelled"
   },
   [EMarketStatus.Winner]: {
-    label: "Ended",
-    name: "Ended"
+    label: "Sold",
+    name: "Sold"
   },
   [EMarketStatus.PreCancel]: {
     label: "Paused",

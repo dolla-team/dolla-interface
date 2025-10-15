@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { usePrivy } from "@privy-io/react-auth";
 import useGameAction from "@/hooks/near/use-game-action";
 import Button from "@/components/button";
 import useToast from "@/hooks/use-toast";
 import UserShareCard from "@/sections/share/user";
+import { useDomToImage } from "@/sections/share/use-share";
+import PoolShareCard from "@/sections/share/pool";
 
 // Game Management Section Component
 function GameManagementSection({
@@ -115,18 +117,72 @@ function ExportWalletSection({ exportWallet }: { exportWallet: () => void }) {
 
 // Account Info Section Component
 function ShareSection() {
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  const { generateAndDownload, generateAndShare } = useDomToImage();
+
+  // Handle image download
+  const handleDownload = async () => {
+    if (!cardRef.current) return;
+
+    try {
+      await generateAndDownload(
+        cardRef.current,
+        `user-share-player-${Date.now()}`,
+        {
+          format: "png",
+          quality: 1,
+          pixelRatio: 2,
+          backgroundColor: "#000000"
+        }
+      );
+    } catch (error) {
+      console.error("Download failed:", error);
+      alert("Download failed, please try again");
+    }
+  };
+
+  // Handle image sharing
+  const handleShare = async () => {
+    if (!cardRef.current) return;
+    try {
+      await generateAndShare(
+        cardRef.current,
+        {
+          format: "png",
+          quality: 2,
+          pixelRatio: 2,
+          backgroundColor: "#000000"
+        },
+        {
+          url: window.location.href
+        }
+      );
+    } catch (error) {
+      console.error("Share failed:", error);
+      alert("Share failed, please try again");
+    }
+  };
+
   return (
     <div className="space-y-4">
       <h2 className="text-xl font-semibold text-gray-800">Share</h2>
       <div>
-        <UserShareCard type="player" />
+        <UserShareCard type="player" cardRef={cardRef} />
+        <PoolShareCard cardRef={cardRef} />
       </div>
-      <div className="bg-gray-50 p-4 rounded-lg">
+      <div className="bg-gray-50 p-4 rounded-lg flex gap-[10px]">
         <Button
           className="w-full h-8 !bg-gray-600 text-white rounded text-sm border border-gray-600"
-          onClick={() => {}}
+          onClick={handleDownload}
         >
-          Share
+          Download Image
+        </Button>
+        <Button
+          className="w-full h-8 !bg-gray-600 text-white rounded text-sm border border-gray-600"
+          onClick={handleShare}
+        >
+          Share on Twitter
         </Button>
       </div>
     </div>

@@ -47,7 +47,7 @@ const ClaimIndex = (props: any) => {
         // -1: All
         // 0: Created
         // 1: Sold
-        // 2: Ended
+        // 2: Sold
         // 3: Cancelled
         params.set("status", "2");
       }

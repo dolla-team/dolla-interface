@@ -53,11 +53,14 @@ export default function DoughnutChart({
             ? data.map((item: any) => item.value)
             : [1],
           backgroundColor: allValuesZero
-            ? ["#C3C1DC"] // Use #C3C1DC when all values are 0
+            ? ["rgba(195, 193, 220, 0.3)"] // Use #C3C1DC when all values are 0
             : hasData
             ? data.map((_item: any, index: number) => {
                 // Use different color from palette for each data item
-                const baseColor = COLOR_PALETTE[index % COLOR_PALETTE.length];
+                const baseColor =
+                  _item.value === 0
+                    ? "rgba(195, 193, 220, 0.3)"
+                    : COLOR_PALETTE[index % COLOR_PALETTE.length];
 
                 if (index === selectedIndex) {
                   // Create gradient for selected segment with the item's color
@@ -82,7 +85,7 @@ export default function DoughnutChart({
                 // Add opacity to unselected items
                 return baseColor;
               })
-            : ["#8A87AA"], // Empty state color
+            : ["rgba(195, 193, 220, 0.3)"], // Empty state color
           // borderWidth: 2,
           // borderColor: "#000", // Background color for gaps
           cutout: "78%" // Doughnut chart inner radius
@@ -158,11 +161,13 @@ export default function DoughnutChart({
 
     // Update colors for all segments with different colors for each item
     const newColors = allValuesZero
-      ? ["#C3C1DC"] // Use #C3C1DC when all values are 0
+      ? ["rgba(195, 193, 220, 0.3)"] // Use #C3C1DC when all values are 0
       : hasData
       ? data.map((_item: any, index: number) => {
-          // Use different color from palette for each data item
-          const baseColor = COLOR_PALETTE[index % COLOR_PALETTE.length];
+          const baseColor =
+            _item.value === 0
+              ? "rgba(195, 193, 220, 0.3)"
+              : COLOR_PALETTE[index % COLOR_PALETTE.length];
 
           if (index === selectedIndex) {
             // Create gradient for selected segment with the item's color
@@ -175,7 +180,7 @@ export default function DoughnutChart({
           // Add opacity to unselected items
           return baseColor;
         })
-      : ["#ACA9CA"]; // Empty state color
+      : ["rgba(195, 193, 220, 0.3)"]; // Empty state color
 
     // Update the chart data
     chartInstance.current.data.datasets[0].backgroundColor = newColors;
