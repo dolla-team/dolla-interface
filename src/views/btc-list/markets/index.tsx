@@ -13,7 +13,6 @@ import Popover, {
   PopoverTrigger
 } from "@/components/popover";
 import { useAllMarketsStore } from "@/stores/use-all-markets";
-import Radio from "@/components/radio";
 
 export default function Markets() {
   const navigate = useNavigate();

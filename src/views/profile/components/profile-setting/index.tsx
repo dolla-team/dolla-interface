@@ -99,7 +99,7 @@ export default function ProfileSetting({ open, onClose }: ProfileSettingProps) {
             <input
               className="w-full h-[56px] rounded-[10px] border border-[#F2F2F233] bg-[#F0F0F0] text-[14px] text-black px-[20px] focus:outline-none focus:border-gray-300"
               value={username}
-              onChange={(e) => setUsername(e.target.value?.trim())}
+              onChange={(e) => setUsername(e.target.value)}
               placeholder="Enter your username"
             />
           </div>
@@ -112,11 +112,11 @@ export default function ProfileSetting({ open, onClose }: ProfileSettingProps) {
             )}
             onClick={() => {
               updateUserInfo({
-                name: username,
+                name: username?.trim(),
                 file: file
               });
             }}
-            disabled={isSaving || !username}
+            disabled={isSaving || !username?.trim()}
             loading={isSaving}
           >
             Save

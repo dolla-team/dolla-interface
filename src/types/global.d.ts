@@ -20,6 +20,7 @@ declare global {
     autoFlipTimer: NodeJS.Timeout | number;
     joinMarketTimer: NodeJS.Timeout | number;
     createMarketTimer: NodeJS.Timeout | number;
+    allMarketsTimer: NodeJS.Timeout | number;
     oddOffset: number;
   }
 }

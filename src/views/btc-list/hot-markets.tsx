@@ -5,7 +5,7 @@ import { useMemo } from "react";
 import { formatNumber } from "@/utils/format/number";
 import { AMOUNT, BASE_TOKEN } from "@/config/btc";
 import { useNavigate } from "react-router-dom";
-import usePoolListStore from "@/stores/use-pool-list";
+import { useAllMarketsStore } from "@/stores/use-all-markets";
 import { getReAnchorPrice } from "@/utils/pool";
 
 const imgs = ["btc-1", "btc-0.1", "btc-0.01"];
@@ -13,7 +13,7 @@ const imgs = ["btc-1", "btc-0.1", "btc-0.01"];
 export default function MoreMarkets() {
   const { prices } = useTokenPrice(BASE_TOKEN);
 
-  const poolListStore = usePoolListStore();
+  const allMarketsStore = useAllMarketsStore();
   const price = useMemo(() => {
     if (BASE_TOKEN.address === "usdt.tether-token.near") {
       return 1;
@@ -31,7 +31,7 @@ export default function MoreMarkets() {
             key={item}
             value={item}
             price={price}
-            market={poolListStore.hotMarkets[index]}
+            market={allMarketsStore.hotMarkets[index]}
             img={imgs[index]}
             index={index}
           />

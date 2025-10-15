@@ -5,7 +5,7 @@ import { getAnchorPrice } from "@/utils/pool";
 import Big from "big.js";
 import { formatNumber } from "@/utils/format/number";
 import { useDebounceFn } from "ahooks";
-import usePoolListStore from "@/stores/use-pool-list";
+import { useAllMarketsStore } from "@/stores/use-all-markets";
 import { AMOUNT } from "@/config/btc";
 
 export default function usePoolList(props?: {
@@ -22,7 +22,7 @@ export default function usePoolList(props?: {
     tokenStatus = 0,
     volume = 0
   } = props ?? {};
-  const poolListStore = usePoolListStore();
+  const allmarketsStore = useAllMarketsStore();
   const [status, setStatus] = useState("1");
   const [poolList, setPoolList] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -39,30 +39,31 @@ export default function usePoolList(props?: {
 
   const cachedList = useRef<any[]>([]);
 
-  const onQueryPoolList = async (step: number) => {
-    if (
-      step === -1 ||
-      step + pageRef.current < cachedList.current.length / LIMIT
-    ) {
-      setPoolList(
-        cachedList.current.slice(
-          isScrollList ? 0 : (step + pageRef.current) * LIMIT,
-          (step + pageRef.current + 1) * LIMIT
-        )
-      );
-      setLoading(false);
-      pageRef.current += step;
+  const onQueryPoolList = async () => {
+    // if (
+    //   step === -1 ||
+    //   step + pageRef.current < cachedList.current.length / LIMIT
+    // ) {
+    //   setPoolList(
+    //     cachedList.current.slice(
+    //       isScrollList ? 0 : (step + pageRef.current) * LIMIT,
+    //       (step + pageRef.current + 1) * LIMIT
+    //     )
+    //   );
+    //   setLoading(false);
+    //   pageRef.current += step;
 
-      setHasMore(
-        step + pageRef.current < Math.ceil(cachedList.current.length / LIMIT)
-      );
-      return;
-    }
-    pageRef.current += step;
+    //   setHasMore(
+    //     step + pageRef.current < Math.ceil(cachedList.current.length / LIMIT)
+    //   );
+    //   return;
+    // }
+    // pageRef.current += step;
     if (!isScrollList) {
       setPoolList([]);
     }
     try {
+      clearTimeout(window.allMarketsTimer);
       setLoading(true);
       const res = await axiosInstance.get(
         `/api/v1/pool/list?limit=${LIMIT}&offset=${
@@ -116,7 +117,7 @@ export default function usePoolList(props?: {
       });
 
       if (!volume) {
-        poolListStore.set({
+        allmarketsStore.set({
           hotMarkets: {
             "0": market1,
             "1": market01,
@@ -145,6 +146,10 @@ export default function usePoolList(props?: {
     } catch (error) {
       console.log(error);
       setLoading(false);
+    } finally {
+      window.allMarketsTimer = setTimeout(() => {
+        onQueryPoolList();
+      }, 20000);
     }
   };
 
@@ -157,7 +162,7 @@ export default function usePoolList(props?: {
       pageRef.current = 0;
       cachedList.current = [];
       setPoolList([]);
-      onQueryPoolList(0);
+      onQueryPoolList();
     },
     {
       wait: 500
@@ -171,6 +176,12 @@ export default function usePoolList(props?: {
       setLoading(false);
     }
   }, [userInfo?.user, sortOrder, sortField, collection, volume, status]);
+
+  useEffect(() => {
+    return () => {
+      clearTimeout(window.allMarketsTimer);
+    };
+  }, []);
 
   return {
     poolList,
