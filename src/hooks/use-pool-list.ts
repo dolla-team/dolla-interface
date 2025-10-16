@@ -122,7 +122,7 @@ export default function usePoolList(props?: {
         return market;
       });
 
-      if (!volume) {
+      if (!volume && allmarketsStore.status === "1") {
         allmarketsStore.set({
           hotMarkets: {
             "0": market1,
