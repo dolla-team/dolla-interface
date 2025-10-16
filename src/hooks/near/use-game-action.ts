@@ -9,6 +9,7 @@ import { QUOTE_TOKEN } from "@/config/btc";
 import useToast from "../use-toast";
 import reportHash from "@/utils/report-hash";
 import { useAuth } from "@/contexts/auth";
+import Big from "big.js";
 
 const THIRTY_TGAS = "300000000000000";
 export default function useGameAction({
@@ -143,7 +144,7 @@ export default function useGameAction({
     }
   }
 
-  async function cancelGame() {
+  async function cancelGame(penalty: string) {
     const { publicKey, keyPairSigner } = await generateKeyPair();
     if (!publicKey) return;
     let toastId = toast.loading({ title: "Canceling game..." });
@@ -155,7 +156,14 @@ export default function useGameAction({
 
       const gameArgs = {
         game_args: {
-          ByAk: { game_id: Number(gameId), token: { FT: QUOTE_TOKEN.address } }
+          ByAk: {
+            game_id: Number(gameId),
+            penalty_token: { FT: QUOTE_TOKEN.address },
+            penalty_value: Big(penalty)
+              .mul(10 ** QUOTE_TOKEN.decimals)
+              .toFixed(0),
+            slippage: 100
+          }
         }
       };
       const nonce = await getNonce(publicKey);

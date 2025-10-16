@@ -1,6 +1,6 @@
 import Modal from "@/components/modal";
 import { formatNumber } from "@/utils/format/number";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import Big from "big.js";
 import Button from "@/components/button";
 import useGameAction from "@/hooks/near/use-game-action";
@@ -24,44 +24,39 @@ export default function CancelModal({
     return order?.reward_token_info?.[0] || {};
   }, [order]);
 
-  const { pausing, resuming, canceling, pauseGame, cancelGame, resumeGame } =
-    useGameAction({
-      gameId: order?.pool_id,
-      onPauseSuccess: () => {
-        onSuccess({
-          status: 5,
-          skipClose: true
-        });
-        onClose();
-      },
-      onResumeSuccess: () => {
-        onSuccess({
-          status: 1
-        });
-        onClose();
-      },
-      onCancelSuccess: () => {
-        onSuccess({
-          status: 3
-        });
-        onClose();
-      }
-    });
+  const { canceling, cancelGame } = useGameAction({
+    gameId: order?.pool_id,
+    onPauseSuccess: () => {
+      onSuccess({
+        status: 5,
+        skipClose: true
+      });
+      onClose();
+    },
+    onResumeSuccess: () => {
+      onSuccess({
+        status: 1
+      });
+      onClose();
+    },
+    onCancelSuccess: () => {
+      onSuccess({
+        status: 3
+      });
+      onClose();
+    }
+  });
 
-  const [status, setStatus] = useState(0);
-
-  const [penalty, markable, completable] = useMemo(() => {
+  const [penalty, remainingBalance, completable] = useMemo(() => {
     const _penalty = Big(order?.accumulative_bids || 0)
       .times(contractConfig?.cancel_penalty_rate || 0)
       .toString();
     let _completable = true;
-    if (order.status === 5) {
-      setStatus(1);
-      _completable = Big(_penalty).lt(Big(nearAccount?.balance || 0).add(0.1));
-    }
-
-    const _markable = true;
-    return [_penalty, _markable, _completable];
+    _completable = Big(_penalty).lt(Big(nearAccount?.balance || 0).add(0.1));
+    const _remainingBalance = Big(nearAccount?.balance || 0)
+      .minus(_penalty)
+      .toString();
+    return [_penalty, _remainingBalance, _completable];
   }, [order, nearAccount]);
 
   return (
@@ -69,7 +64,7 @@ export default function CancelModal({
       <div className="w-[396px] pb-[20px] rounded-[16px] bg-[#FFFFFF] border border-[#E4E4E4] text-[14px] font-[500] leading-[100%] text-white">
         <div className="w-full pt-[20px] rounded-t-[16px] pb-[13px] px-[20px] bg-black flex justify-between items-center">
           <div className="text-[16px] font-medium text-white">
-            Cancel Market
+            End Market Early
           </div>
           <button className="button" onClick={onClose}>
             <svg
@@ -86,7 +81,7 @@ export default function CancelModal({
             </svg>
           </button>
         </div>
-        <div className="w-full px-[24px] py-[20px] text-black">
+        <div className="w-full px-[24px] pt-[20px] text-black">
           <div className="flex items-center text-[14px] mb-[20px] gap-[10px]">
             <span className="font-[400]">Market Size</span>
             <div className="grow border-b border-dashed border-[#5E6B7D] opacity-50" />
@@ -138,69 +133,46 @@ export default function CancelModal({
               market fair for all participants.
             </div>
           </div>
-          <div className="mt-[20px]">
-            <div className="flex items-center text-[14px] gap-[10px]">
-              <span className="font-[400]">Penalty</span>
-              <div className="grow border-b border-dashed border-[#5E6B7D]" />
-              <span className="font-medium">
-                ${formatNumber(penalty, 2, true)}
-              </span>
-            </div>
-            {/* <div className="flex items-center text-[14px] mb-[20px] gap-[10px]">
-              <span className="text-[#BBACA6] font-[400]">Final refund</span>
-              <div className="grow border-b border-dashed border-[#5E6B7D]" />
-              <span className="text-[#FFC42F] font-medium">
-                ${formatNumber(finalRefund, 2, true)}
-              </span>
-            </div> */}
+          <div className="flex items-center text-[14px] mt-[20px] gap-[10px]">
+            <span className="font-[400]">Balance</span>
+            <div className="grow border-b border-dashed border-[#5E6B7D]" />
+            <span className="font-medium">
+              ${formatNumber(nearAccount?.balance, 2, true)}
+            </span>
+          </div>
+          <div className="flex items-center text-[14px] gap-[10px] mt-[20px] text-[#FF399F]">
+            <span className="font-[400]">Penalty</span>
+            <div className="grow border-b border-dashed border-[#5E6B7D]" />
+            <span className="font-medium">
+              ${formatNumber(penalty, 2, true)}
+            </span>
+          </div>
+          <div className="flex items-center text-[14px] mb-[20px] gap-[10px] mt-[20px]">
+            <span className="font-[400]">Balance Remaining</span>
+            <div className="grow border-b border-dashed border-[#5E6B7D]" />
+            <span className="font-medium">
+              ${formatNumber(remainingBalance, 2, true)}
+            </span>
           </div>
         </div>
-        <div className="flex justify-end mt-[0px] px-[20px] gap-[10px]">
-          {status === 1 && (
-            <>
-              <Button
-                className="!h-[40px] !bg-text border border-[#1A1E24] !text-[14px] !text-black px-[30px]"
-                loading={resuming}
-                disabled={resuming || !completable}
-                onClick={() => {
-                  if (resuming) {
-                    return;
-                  }
-                  resumeGame();
-                }}
-              >
-                Resume
-              </Button>
-              <Button
-                className="!h-[40px] !bg-[#1A1E24] !text-[14px] !text-white px-[30px]"
-                loading={canceling}
-                disabled={canceling || !completable}
-                onClick={() => {
-                  if (canceling) {
-                    return;
-                  }
-                  cancelGame();
-                }}
-              >
-                {completable ? "Cancel" : "Insufficient Balance"}
-              </Button>
-            </>
-          )}
-          {status === 0 && (
-            <Button
-              className="!h-[40px] !bg-[#1A1E24] !text-[14px] !text-white px-[30px]"
-              loading={pausing}
-              disabled={pausing || !markable}
-              onClick={() => {
-                if (pausing || !markable) {
-                  return;
-                }
-                pauseGame();
-              }}
-            >
-              Pause
-            </Button>
-          )}
+        <Button
+          className="!h-[50px] w-[354px] !bg-[#1A1E24] ml-[24px] !text-[14px] !text-white px-[30px]"
+          loading={canceling}
+          disabled={canceling || !completable}
+          onClick={() => {
+            if (canceling) {
+              return;
+            }
+            cancelGame(penalty);
+          }}
+        >
+          {completable ? "Confirm End Market" : "Insufficient Balance"}
+        </Button>
+        <div className="flex items-center justify-between text-[12px] text-[#8A87AA] px-[24px] mt-[10px]">
+          <span className="font-[400]">Slippage Tolerance</span>
+          <div className="w-[43px] h-[26px] rounded-[14px] border border-[#E9E9E9] text-center leading-[26px]">
+            1%
+          </div>
         </div>
       </div>
     </Modal>
