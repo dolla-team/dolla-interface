@@ -23,7 +23,7 @@ import ProfileSetting from "../profile-setting";
 import { useState } from "react";
 
 const Dashboard = (props: any) => {
-  const { className, tab } = props;
+  const { className, tab, pnlList, pnl } = props;
   const globalStore = useGlobalStore();
   const { userInfo, address, login } = useAuth();
   const { referralData } = useReferralList();
@@ -216,7 +216,7 @@ const Dashboard = (props: any) => {
           }}
         />
       ) : (
-        <StatisticsSeller />
+        <StatisticsSeller pnlList={pnlList} pnl={pnl} />
       )}
       <ProfileSetting
         open={showSetting}

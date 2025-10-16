@@ -11,6 +11,8 @@ const pageSize = 100;
 export default function useCreatePoolList() {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<any[]>([]);
+  const [pnlList, setPnlList] = useState<any[]>([]);
+  const [pnl, setPnl] = useState(0);
   const [hasMore, setHasMore] = useState(true);
   const pageRef = useRef(0);
   const { userInfo } = useAuth();
@@ -36,14 +38,32 @@ export default function useCreatePoolList() {
         }&status=-1&chain=near`
       );
       const poolIds: number[] = [];
+      const _pnlList: any[] = [];
+      let _pnl: any = Big(0);
       response.data.data.list.forEach((item: any) => {
         if (item.status === 4) {
           return;
         }
         poolsData.current[item.pool_id] = item;
         poolIds.push(item.pool_id);
-      });
 
+        if (item.status === 2) {
+          const profit = Big(item.accumulative_bids).minus(item.reward_usd);
+          _pnl = _pnl.plus(profit);
+
+          _pnlList.push({
+            pool_id: item.pool_id,
+            amount: Big(item.reward_amount)
+              .div(10 ** (item.reward_token_info?.[0]?.decimals || 6))
+              .toString(),
+            anchor_value: item.reward_usd,
+            sold: item.accumulative_bids,
+            pnl: profit.toString()
+          });
+        }
+      });
+      setPnlList(_pnlList);
+      setPnl(_pnl.toString());
       setData((prev) =>
         pageRef.current === 0 ? poolIds : [...prev, ...poolIds]
       );
@@ -172,7 +192,9 @@ export default function useCreatePoolList() {
     getRecords,
     recordsPrices,
     recordsPricesLoading,
-    poolsRefreshing
+    poolsRefreshing,
+    pnlList,
+    pnl
   };
 }
 

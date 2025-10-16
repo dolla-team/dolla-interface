@@ -26,6 +26,7 @@ const LazyBtc = lazy(() => import("./views/btc/index"));
 const LazyTerms = lazy(() => import("./views/terms"));
 const LazyPolicy = lazy(() => import("./views/policy"));
 const LazyDemo = lazy(() => import("./views/demo"));
+const LazyDocs = lazy(() => import("./views/docs"));
 
 import("react-toastify/dist/ReactToastify.css");
 
@@ -98,6 +99,10 @@ const router = createBrowserRouter([
   {
     path: "/callback",
     element: <Callback />
+  },
+  {
+    path: "/docs",
+    element: <LazyDocs />
   }
 ]);
 

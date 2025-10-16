@@ -1,7 +1,9 @@
 import Button from "@/components/button";
 import DollaEye from "@/components/dolla-eye";
+import { useNavigate } from "react-router-dom";
 
 export default function Banner() {
+  const navigate = useNavigate();
   return (
     <div className="w-full h-[300px] relative rounded-[20px] bg-[#000] bg-[url('/home/banner-btc-bg.png')] bg-cover bg-center pl-[40px] pt-[30px]">
       <div className="text-[50px] text-white font-[700] mt-[-10px]">
@@ -10,7 +12,12 @@ export default function Banner() {
       <div className="w-[480px] text-[20px] text-white/60 mt-[-4px]">
         Turn every stablecoin into a fair shot at owning something bigger.
       </div>
-      <Button className="w-[140px] h-[42px] mt-[80px] !bg-[#FFC42F]">
+      <Button
+        onClick={() => {
+          navigate("/docs");
+        }}
+        className="w-[140px] h-[42px] mt-[80px] !bg-[#FFC42F]"
+      >
         How it works
       </Button>
       <DollaEye

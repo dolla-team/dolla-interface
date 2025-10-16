@@ -5,7 +5,6 @@ import useTaskAction from "@/hooks/task/use-task-action";
 import { useAuth } from "@/contexts/auth";
 import useTaskStore from "@/stores/use-task";
 import RefreshBtn from "@/views/profile/player/objectives/refresh-btn";
-import { useMemo } from "react";
 
 export default function StarterObjectives() {
   const { onQueryUserInfo } = useAuth();

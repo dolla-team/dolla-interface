@@ -28,7 +28,9 @@ export default function Seller() {
     recordsPageIndex,
     recordsPageHasNextPage,
     poolsRefreshing,
-    getCreatePoolList
+    getCreatePoolList,
+    pnlList,
+    pnl
   } = useCreatePoolList();
 
   return (
@@ -39,7 +41,12 @@ export default function Seller() {
         <ProfileTabs tab="seller" />
         <SwitchPanel className="max-md:w-full">
           <div className="max-md:px-[10px]">
-            <Dashboard tab="seller" className="mt-[49px] max-md:mt-[20px]" />
+            <Dashboard
+              tab="seller"
+              className="mt-[49px] max-md:mt-[20px]"
+              pnlList={pnlList}
+              pnl={pnl}
+            />
           </div>
           <div className="w-full flex justify-between items-center gap-[10px] mt-[20px] pr-[20px] max-md:flex-col max-md:mt-[20px]">
             <div> Created Market {data?.length}</div>
