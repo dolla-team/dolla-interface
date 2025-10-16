@@ -319,13 +319,13 @@ export default function Docs() {
                     }}
                     className="button bg-yellow-400 text-black px-8 py-3 rounded-lg font-semibold hover:bg-yellow-300 transition-colors duration-200"
                   >
-                    Start Bidding
+                    Bid Now
                   </button>
                   <button
                     onClick={() => navigate("/btc/create")}
                     className="button border border-yellow-400 text-yellow-400 px-8 py-3 rounded-lg font-semibold hover:bg-yellow-400/10 transition-colors duration-200"
                   >
-                    List Assets
+                    Launch a Market
                   </button>
                 </div>
               </div>
