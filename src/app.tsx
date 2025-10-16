@@ -127,6 +127,10 @@ const Content = () => {
     }, 2000);
   }, [ready, user]);
 
+  if (window.location.pathname === "/docs") {
+    return <RouterProvider router={router} />;
+  }
+
   return isLoading ? (
     <Loading />
   ) : !user || globalStore.email !== user?.email?.address ? (
