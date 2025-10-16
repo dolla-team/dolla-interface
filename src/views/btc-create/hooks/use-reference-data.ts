@@ -109,6 +109,7 @@ export function useReferenceData(props: any) {
       item.percentage = Number(
         (item.value / _totalCreations.toNumber()) * 100
       ).toFixed(2);
+      item.label = String(item.label);
       return item;
     });
 
