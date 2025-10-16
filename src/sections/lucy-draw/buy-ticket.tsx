@@ -1,15 +1,15 @@
 import Modal from "@/components/modal";
-import { useMemo, useState } from "react";
+import { useMemo, useState, memo } from "react";
 import clsx from "clsx";
 import useTransfer from "@/hooks/near/use-buy-ticket";
-import Loading from "@/components/icons/loading";
 import AmountInput from "./amount-input";
 import useIsMobile from "@/hooks/use-is-mobile";
 import Big from "big.js";
 import useUserInfoStore from "@/stores/use-user-info";
 import { QUOTE_TOKEN } from "@/config/btc";
+import Button from "@/components/button";
 
-export default function BuyTicket({
+export default memo(function BuyTicket({
   showBuyTicket,
   onClose,
   tokenBalance
@@ -94,26 +94,21 @@ export default function BuyTicket({
             max={Number(tokenBalance)}
           />
         </div>
-        <button
+        <Button
           className={clsx(
-            "h-[40px] bg-[#FFC42F] rounded-[8px] text-[14px] text-black ml-[20px] mt-[30px]",
-            errorTips ? "opacity-50" : "button",
-            isMobile ? "w-[calc(100%-40px)]" : "w-[338px]"
+            "h-[40px] !bg-[#FFC42F] rounded-[8px] w-[338px] text-black ml-[20px] mt-[30px] button"
           )}
           onClick={() => {
+            console.log("transferring:", transferring);
             if (errorTips || transferring) return;
             onTransfer(ticket);
           }}
+          loading={transferring}
+          disabled={!!errorTips || transferring}
         >
-          {errorTips ? (
-            errorTips
-          ) : transferring ? (
-            <Loading size={20} />
-          ) : (
-            "Buy Ticket"
-          )}
-        </button>
+          {errorTips ? errorTips : "Buy Ticket"}
+        </Button>
       </div>
     </Modal>
   );
-}
+});

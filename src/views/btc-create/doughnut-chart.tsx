@@ -131,7 +131,7 @@ export default function DoughnutChart({
         chartInstance.current.destroy();
       }
     };
-  }, [data]);
+  }, [data, selectedIndex]);
 
   useEffect(() => {
     if (!volume || !data) return;
@@ -141,56 +141,6 @@ export default function DoughnutChart({
       setSelectedIndex(index);
     }
   }, [volume, data]);
-
-  // Update chart colors when selectedIndex changes
-  useEffect(() => {
-    if (!chartInstance.current) return;
-
-    const canvas = chartInstance.current.canvas;
-    if (!canvas) return;
-
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-
-    // Check if data is empty or undefined
-    const hasData = data && data.length > 0;
-
-    // Check if all values are 0
-    const allValuesZero =
-      hasData && data.every((item: any) => item.value === 0);
-
-    // Update colors for all segments with different colors for each item
-    const newColors = allValuesZero
-      ? ["rgba(195, 193, 220, 0.3)"] // Use #C3C1DC when all values are 0
-      : hasData
-      ? data.map((_item: any, index: number) => {
-          const baseColor =
-            _item.value === 0
-              ? "rgba(195, 193, 220, 0.3)"
-              : COLOR_PALETTE[index % COLOR_PALETTE.length];
-
-          if (index === selectedIndex) {
-            // Create gradient for selected segment with the item's color
-            const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
-            gradient.addColorStop(0, baseColor);
-            gradient.addColorStop(1, baseColor);
-            return gradient;
-          }
-
-          // Add opacity to unselected items
-          return baseColor;
-        })
-      : ["rgba(195, 193, 220, 0.3)"]; // Empty state color
-
-    // Update the chart data
-    chartInstance.current.data.datasets[0].backgroundColor = newColors;
-    chartInstance.current.data.datasets[0].data = allValuesZero
-      ? [1] // Show full circle when all values are 0
-      : hasData
-      ? data.map((item: any) => item.value)
-      : [1];
-    chartInstance.current.update("none"); // Update without animation
-  }, [selectedIndex, data]);
 
   // Calculate center record - show selected record
   const hasData = data && data.length > 0;

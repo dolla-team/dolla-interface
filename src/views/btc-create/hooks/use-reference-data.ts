@@ -44,22 +44,21 @@ export function useReferenceData(props: any) {
       [AMOUNT[0]]: {
         label: AMOUNT[0],
         value: 0,
-        percentage: 0,
-        bids: []
+        percentage: 0
       },
       [AMOUNT[1]]: {
         label: AMOUNT[1],
         value: 0,
-        percentage: 0,
-        bids: []
+        percentage: 0
       },
       [AMOUNT[2]]: {
         label: AMOUNT[2],
         value: 0,
-        percentage: 0,
-        bids: []
+        percentage: 0
       }
     };
+
+    let _totalCreations = Big(0);
 
     referenceList.forEach((item: any) => {
       const _label = Big(item.reward_amount)
@@ -88,14 +87,15 @@ export function useReferenceData(props: any) {
         }
       ];
 
-      _bids[_label] = {
-        label: _label,
-        value: item.total_creations_amount,
-        percentage: Number(
-          (item.total_creations_amount / item.total_creations) * 100
-        ).toFixed(2),
-        bids: item.times
-      };
+      if (_bids[_label]) {
+        _totalCreations = _totalCreations.plus(item.total_creations_amount);
+
+        _bids[_label] = {
+          label: _label,
+          value: item.total_creations_amount,
+          percentage: 0
+        };
+      }
 
       _data[_label] = {
         top_sale: item.top_sale,
@@ -105,7 +105,14 @@ export function useReferenceData(props: any) {
       };
     });
 
-    return [_data, Object.values(_bids)];
+    const _bidsList = Object.values(_bids).map((item: any) => {
+      item.percentage = Number(
+        (item.value / _totalCreations.toNumber()) * 100
+      ).toFixed(2);
+      return item;
+    });
+
+    return [_data, _bidsList];
   }, [referenceList, token]);
 
   const currentData = useMemo(() => {

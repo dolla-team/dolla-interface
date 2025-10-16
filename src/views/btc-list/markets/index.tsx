@@ -96,6 +96,7 @@ export default function Markets() {
                     : "text-[#8A87AA]"
                 )}
                 onClick={() => {
+                  setSortField(item.key === "1" ? "hitting" : "profit_ratio");
                   allMarketsStore.set({
                     status: item.key
                   });

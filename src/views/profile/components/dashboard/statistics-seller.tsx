@@ -80,10 +80,9 @@ const StatisticsPlayer = (props: any) => {
               }
               className=""
               valueClassName={clsx(
-                "border-b border-[#8A87AA] border-dotted pb-[4px] button",
                 Big(userInfo?.seller_profit || 0).lt(0)
                   ? "text-[#27C627]"
-                  : "text-[#FF399F]"
+                  : "text-[#FF399F] border-b border-[#8A87AA] border-dotted pb-[4px] button"
               )}
             >
               <PnlAmountInfo list={pnlList}>
@@ -136,7 +135,13 @@ const StatisticsPlayer = (props: any) => {
                 trigger={PopoverTrigger.Hover}
                 closeDelayDuration={0}
               >
-                <div className="button border-b border-[#8A87AA] border-dotted pb-[4px]">
+                <div
+                  className={clsx(
+                    userInfo?.created > 0
+                      ? "button border-b border-[#8A87AA] border-dotted pb-[4px]"
+                      : ""
+                  )}
+                >
                   {formatNumber(userInfo?.created, 0, true, {
                     isShort: true,
                     isShortUppercase: true
@@ -150,7 +155,14 @@ const StatisticsPlayer = (props: any) => {
               valueClassName="flex items-center gap-[13px]"
             >
               <ActiveListingsInfo list={userInfo?.on_sell || []}>
-                <div className="text-[16px] text-[#2B3337] font-[700] border-b border-[#8A87AA] border-dotted pb-[4px] button">
+                <div
+                  className={clsx(
+                    "text-[16px] text-[#2B3337] font-[700]",
+                    userInfo?.on_sell?.length > 0
+                      ? "border-b border-[#8A87AA] border-dotted pb-[4px] button"
+                      : ""
+                  )}
+                >
                   {formatNumber(onSellTotalAmount, 3, true, {
                     isShort: true,
                     isShortUppercase: true

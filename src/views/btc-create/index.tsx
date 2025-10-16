@@ -77,9 +77,9 @@ export default function BTCCreate() {
       <div className="w-full relative z-[2] text-[14px] font-[400] leading-[100%] pt-[30px] pb-[60px] max-md:pt-[80px]">
         <PageBack className="!border-[#555555] !bg-[#FFFFFF33] !text-[#fff] !top-[20px]" />
         <Title />
-        <div className="w-[1200px] mx-auto gap-[15px] pt-[42px] max-md:w-full max-md:pt-[40px]">
+        <div className="w-[1200px] mx-auto gap-[15px] pt-[10px]">
           <div
-            className="w-full h-[212px] p-[30px] rounded-[20px]"
+            className="w-full h-[246px] p-[20px] rounded-[20px]"
             style={{
               background:
                 "radial-gradient(30% 30% at 0% 0%, rgba(255, 196, 47, 0.30) 0%, rgba(255, 196, 47, 0.00) 100%), #000" // Adjusted to show gradient only in top-left corner
@@ -87,11 +87,36 @@ export default function BTCCreate() {
           >
             <div className="flex items-center">
               <div>
-                <div className="text-white flex justify-between items-center">
-                  <div className="">Create Market</div>
+                <div className="text-white text-[14px] font-[500]">
+                  Create Market
+                </div>
+                <div className="text-white text-[10px] font-[400] flex items-center gap-[4px] mt-[10px]">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="14"
+                    height="14"
+                    viewBox="0 0 14 14"
+                    fill="none"
+                  >
+                    <path
+                      d="M6.99823 0.464844C3.37382 0.464844 0.43573 3.40293 0.43573 7.02734C0.43573 10.6518 3.37382 13.5898 6.99823 13.5898C10.6226 13.5898 13.5607 10.6518 13.5607 7.02734C13.5607 3.40293 10.6225 0.464844 6.99823 0.464844ZM6.99454 10.819C6.61706 10.819 6.31095 10.5129 6.31095 10.1354C6.31095 9.75789 6.61706 9.45178 6.99454 9.45178C7.37202 9.45178 7.67813 9.75789 7.67813 10.1354C7.67813 10.513 7.37202 10.819 6.99454 10.819ZM7.50956 8.365C7.50956 8.62723 7.28425 8.83982 7.00643 8.83982C6.72848 8.83982 6.50331 8.62723 6.50331 8.365C6.50331 8.365 6.1935 4.94895 6.19309 3.80611C6.19296 3.46801 6.55731 3.23559 7.00657 3.23559C7.42575 3.23559 7.8035 3.44777 7.8035 3.79627C7.80337 4.95742 7.50956 8.365 7.50956 8.365Z"
+                      fill="#FFC42F"
+                    />
+                  </svg>
+                  <span>
+                    {" "}
+                    <span className="font-[600] text-[#FFC42F]">
+                      Refund Conditions:
+                    </span>{" "}
+                    Markets are locked for 72 hours after listing.
+                  </span>
+                </div>
+                <div className="text-white text-[10px] font-[400]">
+                  After that, if unsold, the seller may close it manually — this
+                  will trigger a 8% penalty on total bids.
                 </div>
                 <div className="flex items-center">
-                  <div className="mt-[13px] flex items-center gap-[10px]">
+                  <div className="mt-[13px] flex items-center gap-[10px] h-[140px]">
                     {AMOUNT.map((item, index) => {
                       const isActive = btcCreateStore.amount === item;
                       return (
@@ -128,12 +153,12 @@ export default function BTCCreate() {
                   </div>
                 </div>
               </div>
-              <div className="w-[1px] h-[158px] bg-[#424242] mx-[30px]" />
-              <div className="relative flex-1 h-[158px]">
+              <div className="w-[1px] h-[200px] bg-[#424242] mx-[30px]" />
+              <div className="relative flex-1">
                 <div className="text-center text-white text-[14px] font-[500]">
                   {userInfo?.name || formatAddress(userInfo?.user)}
                 </div>
-                <div className="mt-[20px] text-center text-[20px] font-[700] text-white">
+                <div className="mt-[40px] text-center text-[20px] font-[700] text-white">
                   {isLoading ? (
                     <Loading size={12} />
                   ) : (
@@ -155,7 +180,7 @@ export default function BTCCreate() {
                       defaultDepositAmount: btcCreateStore.amount
                     });
                   }}
-                  className="absolute top-0 right-0 w-[86px] h-[30px] button rounded-[8px] border border-[#A2A2A2] bg-[#FFFFFF1A] text-white text-[12px] text-center"
+                  className="absolute top-[-10px] right-0 w-[86px] h-[30px] button rounded-[8px] border border-[#A2A2A2] bg-[#FFFFFF1A] text-white text-[12px] text-center"
                 >
                   Deposit
                 </button>
@@ -285,8 +310,8 @@ export default function BTCCreate() {
                         )}
                         <div className="font-[800] text-[16px] mt-[1px]">
                           $
-                          {record.bids
-                            ? formatNumber(record.bids, 2, true, {
+                          {record.value
+                            ? formatNumber(record.value, 2, true, {
                                 isShort: true,
                                 isShortUppercase: true
                               })
@@ -294,7 +319,7 @@ export default function BTCCreate() {
                           Bids
                         </div>
                         <div className="text-[12px] mt-[10px] text-[#8A87AA]">
-                          {record.bids ? record.percentage : "-"}%
+                          {record.value ? record.percentage : "-"}%
                         </div>
                       </div>
                     );
