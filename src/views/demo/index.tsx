@@ -7,64 +7,6 @@ import UserShareCard from "@/sections/share/user";
 import { useDomToImage } from "@/sections/share/use-share";
 import PoolShareCard from "@/sections/share/pool";
 
-// Game Management Section Component
-function GameManagementSection({
-  getAllGames,
-  pauseGame,
-  resumeGame,
-  cancelGame
-}: {
-  getAllGames: () => Promise<any>;
-  pauseGame: () => Promise<any>;
-  resumeGame: () => Promise<any>;
-  cancelGame: () => Promise<any>;
-}) {
-  const [loading, setLoading] = useState<string | null>(null);
-  const toast = useToast();
-
-  const handleGameAction = async (
-    action: () => Promise<any>,
-    actionName: string
-  ) => {
-    try {
-      setLoading(actionName);
-      const result = await action();
-      console.log(`${actionName} result:`, result);
-      toast.success({ title: `${actionName} completed successfully` });
-    } catch (error) {
-      console.error(`${actionName} error:`, error);
-      toast.fail({ title: `${actionName} failed` });
-    } finally {
-      setLoading(null);
-    }
-  };
-
-  const gameActions = [
-    { name: "Get All Games", action: getAllGames },
-    { name: "Pause Game", action: pauseGame },
-    { name: "Resume Game", action: resumeGame },
-    { name: "Cancel Game", action: cancelGame }
-  ];
-
-  return (
-    <div className="space-y-4">
-      <h2 className="text-xl font-semibold text-gray-800">Game Management</h2>
-      <div className="grid grid-cols-2 gap-3">
-        {gameActions.map(({ name, action }) => (
-          <Button
-            key={name}
-            className="w-full h-10 !bg-blue-600 text-white rounded-lg transition-colors border border-blue-600"
-            onClick={() => handleGameAction(action, name)}
-            loading={loading === name}
-            disabled={loading !== null}
-          >
-            {name}
-          </Button>
-        ))}
-      </div>
-    </div>
-  );
-}
 // Export Wallet Section Component
 function ExportWalletSection({ exportWallet }: { exportWallet: () => void }) {
   const [exporting, setExporting] = useState(false);
@@ -192,11 +134,6 @@ function ShareSection() {
 export default function Demo() {
   const { exportWallet } = usePrivy(); // Get exportWallet from usePrivy hook
 
-  // Game management hooks
-  const { getAllGames, resumeGame, pauseGame, cancelGame } = useGameAction({
-    gameId: "0"
-  });
-
   return (
     <div className="min-h-screen bg-gray-100 p-6">
       <div className="max-w-4xl mx-auto space-y-8">
@@ -217,13 +154,31 @@ export default function Demo() {
           <ExportWalletSection exportWallet={exportWallet} />
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <GameManagementSection
-            getAllGames={getAllGames}
-            pauseGame={pauseGame}
-            resumeGame={resumeGame}
-            cancelGame={cancelGame}
-          />
+        {/* Custom Buttons Section */}
+        <div className="space-y-4">
+          <h2 className="text-xl font-semibold text-gray-800">
+            Custom Actions
+          </h2>
+          <div className="grid grid-cols-2 gap-3">
+            <Button
+              className="w-full h-10 !bg-green-600 text-white rounded-lg transition-colors border border-green-600"
+              onClick={() => {
+                // TODO: 实现第一个按钮的功能
+                console.log("Custom Button 1 clicked");
+              }}
+            >
+              Custom Button 1
+            </Button>
+            <Button
+              className="w-full h-10 !bg-purple-600 text-white rounded-lg transition-colors border border-purple-600"
+              onClick={() => {
+                // TODO: 实现第二个按钮的功能
+                console.log("Custom Button 2 clicked");
+              }}
+            >
+              Custom Button 2
+            </Button>
+          </div>
         </div>
       </div>
     </div>

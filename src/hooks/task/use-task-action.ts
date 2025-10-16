@@ -10,6 +10,9 @@ import useTaskCurrent from "./use-task-current";
 import useTaskStore from "@/stores/use-task";
 import useToast from "@/hooks/use-toast";
 import axiosInstance from "@/libs/axios";
+import useBindSocial from "./use-bind-social";
+import { TELEGRAM_BOT, TELEGRAM_BOT_ID, TWITTER_CLIENT_ID } from "@/config";
+import { useAuth } from "@/contexts/auth";
 
 export default function useTaskAction(task: any, onSuccess?: () => void) {
   const walletStore = useWalletStore();
@@ -18,11 +21,14 @@ export default function useTaskAction(task: any, onSuccess?: () => void) {
   const [claimed, setClaimed] = useState(false);
   const [progress, setProgress] = useState(0);
   const [refreshing, setRefreshing] = useState(false);
+  const { userInfo } = useAuth();
+
   const { fetchTasks } = useTaskCurrent();
   const navigate = useNavigate();
   const { onCopy } = useCopy();
   const taskStore = useTaskStore();
   const toast = useToast();
+  const { handleBind } = useBindSocial();
 
   const { completeTask, loading: completeLoading } = useTaskComplete(() => {
     setCompleted(true);
@@ -45,6 +51,44 @@ export default function useTaskAction(task: any, onSuccess?: () => void) {
       await claimTask(task.id);
       return;
     }
+    if (task.category === 0 && task.title === "Follow Twitter") {
+      const path = userInfo?.twitter_user_id
+        ? `https://x.com/intent/follow?screen_name=Dollamarket`
+        : `https://twitter.com/i/oauth2/authorize?response_type=code&client_id=${TWITTER_CLIENT_ID}&redirect_uri=${window.location.href}&scope=tweet.read%20users.read%20follows.read%20like.read&state=state&code_challenge=challenge&code_challenge_method=plain`;
+      window.open(path, "_blank");
+      if (!!userInfo?.twitter_user_id) await completeTask(task.id);
+      return;
+    }
+    if (task.category === 0 && task.title === "Join Telegram") {
+      if (!userInfo?.telegram_user_id) {
+        if (window.Telegram) {
+          window.Telegram.Login.auth(
+            { bot_id: TELEGRAM_BOT_ID, request_access: true },
+            (data: any) => {
+              if (data) {
+                handleBind("telegram", { ...data, id: data.id.toString() });
+                console.log("telegram data", data);
+              }
+            }
+          );
+        }
+      } else {
+        window.open(`https://t.me/${TELEGRAM_BOT}`, "_blank");
+        await completeTask(task.id);
+      }
+      return;
+    }
+
+    if (
+      task.category === 0 &&
+      ["Like a Tweet", "Like & RT a Tweet"].includes(task.title)
+    ) {
+      const path = `https://x.com/Dollamarket`;
+      window.open(path, "_blank");
+      await completeTask(task.id);
+      return;
+    }
+
     if (task.category === 5) {
       navigate("/btc/create");
       return;
@@ -58,7 +102,6 @@ export default function useTaskAction(task: any, onSuccess?: () => void) {
       setTimeout(() => {
         taskStore.set({ isBid: true });
       }, 300);
-      // navigate("/btc/detail");
       return;
     }
     if (task.category === 2) {
@@ -69,8 +112,6 @@ export default function useTaskAction(task: any, onSuccess?: () => void) {
       onCopy(`${window.location.origin}?code=${globalStore.code}`);
       return;
     }
-
-    await completeTask(task.id);
   }, [task, completed]);
 
   const fetchTaskStatus = useCallback(async (): Promise<any> => {

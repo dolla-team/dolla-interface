@@ -22,7 +22,7 @@ const StatisticsPlayer = (props: any) => {
   return (
     <div
       className={clsx(
-        "w-full mt-[10px] flex items-center gap-[18px] max-md:flex-col max-md:mt-[13px]",
+        "w-full mt-[10px] flex justify-center items-center gap-[18px] max-md:flex-col max-md:mt-[13px]",
         className
       )}
     >
@@ -44,6 +44,19 @@ const RewardCard = () => {
     ? "/profile/gold-bg.png"
     : "/profile/silver-bg.png";
 
+  const WinsAmount = (
+    <div
+      className={clsx(
+        "text-[16px] inline-block",
+        userInfo?.winner > 0
+          ? "border-b border-[#8A87AA] border-dotted pb-[4px] button"
+          : ""
+      )}
+    >
+      {formatNumber(userInfo?.winner, 2, true)}
+    </div>
+  );
+
   return (
     <div
       className={clsx(
@@ -58,7 +71,6 @@ const RewardCard = () => {
       <div className="flex items-center gap-[40px] text-black mt-[22px]">
         <div className="flex items-center gap-[7px]">
           <img src={BASE_TOKEN.icon} className="w-[30px] h-[30px]" />
-          <div className="text-[14px] font-[500]">{BASE_TOKEN.symbol}</div>
           <div className="text-[14px]">
             <span className="font-[700]">
               {formatNumber(totalAmount || 0, 6, true)}{" "}
@@ -77,18 +89,11 @@ const RewardCard = () => {
           </span>
         </LabelValue>
         <LabelValue label="Wins" className="whitespace-nowrap w-1/3">
-          <YourWonInfo list={userWonData || []}>
-            <div
-              className={clsx(
-                "text-[16px] inline-block",
-                userInfo?.winner > 0
-                  ? "border-b border-[#8A87AA] border-dotted pb-[4px] button"
-                  : ""
-              )}
-            >
-              {formatNumber(userInfo?.winner, 2, true)}
-            </div>
-          </YourWonInfo>
+          {userWonData?.length === 0 ? (
+            WinsAmount
+          ) : (
+            <YourWonInfo list={userWonData || []}>{WinsAmount}</YourWonInfo>
+          )}
         </LabelValue>
         <LabelValue label="Top Multiplier" className="whitespace-nowrap w-1/3">
           <span className="text-[16px]">
@@ -187,12 +192,12 @@ const YourWonInfo = ({
       content={
         <PopoverCard className="w-[265px] text-[12px] p-[10px] flex flex-col gap-[10px]">
           {list.map((item) => (
-            <Button
+            <div
               key={item.id}
               onClick={() => {
                 navigate(`/btc/detail/${item.pool_id}`);
               }}
-              className="text-[12px] w-full h-[36px] !bg-[#FFC42F] !rounded-[8px] !justify-between !px-[10px]"
+              className="button text-[#2B3337] text-[12px] w-full h-[36px] bg-[#F2F2F299] hover:bg-[#FFC42F] rounded-[8px] flex items-center justify-between px-[10px]"
             >
               <div className="font-[400]">
                 {" "}
@@ -207,7 +212,7 @@ const YourWonInfo = ({
               <span className="font-[600]">
                 {formatNumber(item.profit_ratio, 0, true)}x
               </span>
-            </Button>
+            </div>
           ))}
         </PopoverCard>
       }

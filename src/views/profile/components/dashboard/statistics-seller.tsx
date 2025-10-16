@@ -56,6 +56,34 @@ const StatisticsPlayer = (props: any) => {
     return _result;
   }, [userInfo]);
 
+  const PnlAmount = (
+    <span>
+      {Big(userInfo?.seller_profit || 0).lt(0) ? "-" : "+"}
+      {formatNumber(Big(userInfo?.seller_profit || 0).abs(), 2, true, {
+        prefix: "$",
+        isShort: true,
+        isShortUppercase: true
+      })}
+    </span>
+  );
+
+  const ActiveListingsAmount = (
+    <div
+      className={clsx(
+        "text-[16px] text-[#2B3337] font-[700]",
+        userInfo?.on_sell?.length > 0
+          ? "border-b border-[#8A87AA] border-dotted pb-[4px] button"
+          : ""
+      )}
+    >
+      {formatNumber(onSellTotalAmount, 3, true, {
+        isShort: true,
+        isShortUppercase: true
+      })}{" "}
+      {BASE_TOKEN.symbol}
+    </div>
+  );
+
   return (
     <div
       className={clsx(
@@ -70,7 +98,7 @@ const StatisticsPlayer = (props: any) => {
       <div className="flex-1">
         <div className="bg-[#E4E4E4] h-[1px]" />
         <div className="flex items-center">
-          <div className="flex items-center gap-[32px] max-md:w-full w-[36%]">
+          <div className="flex items-center gap-[32px] max-md:w-full w-[404px]">
             <LabelValue
               label={
                 <div className="flex items-center gap-[4px]">
@@ -80,26 +108,18 @@ const StatisticsPlayer = (props: any) => {
               }
               className=""
               valueClassName={clsx(
+                !Big(userInfo?.seller_profit || 0).eq(0) &&
+                  "border-b border-[#8A87AA] border-dotted pb-[4px] button",
                 Big(userInfo?.seller_profit || 0).lt(0)
                   ? "text-[#27C627]"
-                  : "text-[#FF399F] border-b border-[#8A87AA] border-dotted pb-[4px] button"
+                  : "text-[#FF399F]"
               )}
             >
-              <PnlAmountInfo list={pnlList}>
-                <span className="button">
-                  {Big(userInfo?.seller_profit || 0).lt(0) ? "-" : "+"}
-                  {formatNumber(
-                    Big(userInfo?.seller_profit || 0).abs(),
-                    2,
-                    true,
-                    {
-                      prefix: "$",
-                      isShort: true,
-                      isShortUppercase: true
-                    }
-                  )}
-                </span>
-              </PnlAmountInfo>
+              {pnlList.length === 0 ? (
+                PnlAmount
+              ) : (
+                <PnlAmountInfo list={pnlList}>{PnlAmount}</PnlAmountInfo>
+              )}
             </LabelValue>
           </div>
           <div className="w-[1px] h-[70px] mt-[10px] shrink-0 bg-[#E4E4E4] max-md:hidden"></div>
@@ -159,22 +179,13 @@ const StatisticsPlayer = (props: any) => {
               className="max-md:w-full max-md:mt-[10px] max-md:gap-[8px]"
               valueClassName="flex items-center gap-[13px]"
             >
-              <ActiveListingsInfo list={userInfo?.on_sell || []}>
-                <div
-                  className={clsx(
-                    "text-[16px] text-[#2B3337] font-[700]",
-                    userInfo?.on_sell?.length > 0
-                      ? "border-b border-[#8A87AA] border-dotted pb-[4px] button"
-                      : ""
-                  )}
-                >
-                  {formatNumber(onSellTotalAmount, 3, true, {
-                    isShort: true,
-                    isShortUppercase: true
-                  })}{" "}
-                  {BASE_TOKEN.symbol}
-                </div>
-              </ActiveListingsInfo>
+              {userInfo?.on_sell?.length === 0 ? (
+                ActiveListingsAmount
+              ) : (
+                <ActiveListingsInfo list={userInfo?.on_sell || []}>
+                  {ActiveListingsAmount}
+                </ActiveListingsInfo>
+              )}
             </LabelValue>
             <Button
               onClick={() => {
@@ -242,12 +253,12 @@ const ActiveListingsInfo = ({
       content={
         <PopoverCard className="w-[188px] text-[12px] p-[10px] flex flex-col gap-[10px]">
           {list.map((item) => (
-            <Button
+            <div
               key={item.id}
               onClick={() => {
                 navigate(`/btc/detail/${item.pool_id}`);
               }}
-              className="text-[12px] w-full h-[36px] !bg-[#FFC42F] !rounded-[8px] !justify-between !px-[10px]"
+              className="button text-[#2B3337] text-[12px] w-full h-[36px] bg-[#F2F2F299] hover:bg-[#FFC42F] rounded-[8px] flex items-center justify-between px-[10px]"
             >
               <span>#{item.pool_id}</span>
               <span className="font-[600]">
@@ -256,7 +267,7 @@ const ActiveListingsInfo = ({
                   .toString()}{" "}
                 {BASE_TOKEN.symbol}
               </span>
-            </Button>
+            </div>
           ))}
         </PopoverCard>
       }
@@ -318,7 +329,7 @@ const PnlAmountInfo = ({
               </div>
             ))}
           </div>
-          <div className="text-[12px] flex flex-col gap-[8px] mt-[8px]">
+          <div className="text-[12px] flex flex-col gap-[8px] mt-[8px] max-h-[200px] overflow-y-auto">
             {list?.map((item) => (
               <div
                 key={item.pool_id}
@@ -340,9 +351,9 @@ const PnlAmountInfo = ({
                   >
                     {column.dataIndex === "markets" && (
                       <div className="flex items-center gap-[10px]">
-                        <span>#${item.pool_id}</span>
+                        <span>#{item.pool_id}</span>
                         <span>
-                          ${item.amount} {BASE_TOKEN.symbol}
+                          {item.amount} {BASE_TOKEN.symbol}
                         </span>
                       </div>
                     )}

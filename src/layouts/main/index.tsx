@@ -13,6 +13,7 @@ import PageTabs from "./tabs";
 import { useGlobalStore } from "@/stores/use-global";
 import useTaskCurrent from "@/hooks/task/use-task-current";
 import useTaskStore from "@/stores/use-task";
+import useBindSocial from "@/hooks/task/use-bind-social";
 
 export default function MainLayout() {
   const { userInfo, login } = useAuth() || {};
@@ -24,6 +25,7 @@ export default function MainLayout() {
   const pathname = useLocation();
   const prevUserInfoStatus = useRef(false);
   const { fetchTasks } = useTaskCurrent();
+  const { handleBind } = useBindSocial();
 
   useEffect(() => {
     if (pathname.pathname.includes("portfolio")) {
@@ -53,6 +55,12 @@ export default function MainLayout() {
     if (userInfo?.user) {
       fetchTasks();
     }
+  }, [userInfo?.user]);
+
+  useEffect(() => {
+    const code = new URLSearchParams(window.location.search).get("code");
+    if (!userInfo?.user || !code) return;
+    handleBind("twitter", code);
   }, [userInfo?.user]);
 
   useEffect(() => {

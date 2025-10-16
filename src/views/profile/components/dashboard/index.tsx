@@ -97,7 +97,7 @@ const Dashboard = (props: any) => {
           {tab === "seller" && <SellerLevel />}
         </div>
         <div className="flex items-center gap-[14px] mt-[8px]">
-          <div className="flex items-center gap-[3px]">
+          <div className="flex items-center justify-end gap-[3px] w-[200px]">
             <span className="text-[12px] text-[#2B3337]">
               {userInfo?.show_email}
             </span>
@@ -111,7 +111,7 @@ const Dashboard = (props: any) => {
             </button>
           </div>
           <div className="w-[1px] h-[14px] bg-[#E4E4E4]" />
-          <div className="flex items-center gap-[3px]">
+          <div className="flex items-center gap-[3px] w-[200px]">
             <span className="text-[12px] text-[#2B3337]">
               {formatAddress(userInfo?.user)}
             </span>
