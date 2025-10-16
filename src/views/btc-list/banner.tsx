@@ -1,9 +1,7 @@
 import Button from "@/components/button";
 import DollaEye from "@/components/dolla-eye";
-import { useNavigate } from "react-router-dom";
 
 export default function Banner() {
-  const navigate = useNavigate();
   return (
     <div className="w-full h-[300px] relative rounded-[20px] bg-[#000] bg-[url('/home/banner-btc-bg.png')] bg-cover bg-center pl-[40px] pt-[30px]">
       <div className="text-[50px] text-white font-[700] mt-[-10px]">
@@ -14,7 +12,7 @@ export default function Banner() {
       </div>
       <Button
         onClick={() => {
-          navigate("/docs");
+          window.open(window.location.origin + "/docs", "_blank");
         }}
         className="w-[140px] h-[42px] mt-[80px] !bg-[#FFC42F]"
       >
