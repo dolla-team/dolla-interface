@@ -114,7 +114,7 @@ const BalanceCard = () => {
       <div className="flex items-center gap-[40px] text-black mt-[22px]">
         <div className="flex items-center gap-[7px]">
           <img src={QUOTE_TOKEN.icon} className="w-[30px] h-[30px]" />
-          <div className="text-[14px] font-[500]">{QUOTE_TOKEN.symbol}</div>
+
           <div className="text-[14px]">
             <span className="font-[700]">
               {formatNumber(nearAccount?.balance || 0, 2, true)}{" "}
@@ -124,7 +124,7 @@ const BalanceCard = () => {
         </div>
         <div className="flex items-center gap-[7px]">
           <img src={BASE_TOKEN.icon} className="w-[30px] h-[30px]" />
-          <div className="text-[14px] font-[500]">{BASE_TOKEN.symbol}</div>
+
           <div className="text-[14px]">
             <span className="font-[700]">
               {formatNumber(nearAccount?.prizeBalance || 0, 6, true)}{" "}

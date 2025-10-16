@@ -192,6 +192,14 @@ export default function usePoolList(props?: {
     };
   }, []);
 
+  useEffect(() => {
+    if (allmarketsStore.status === "1") {
+      setSortField("hitting");
+    } else if (allmarketsStore.status === "2") {
+      setSortField("winner_profit_ratio");
+    }
+  }, [allmarketsStore.status]);
+
   return {
     poolList,
     loading,

@@ -86,13 +86,18 @@ const StatisticsPlayer = (props: any) => {
               )}
             >
               <PnlAmountInfo list={pnlList}>
-                <span>
-                  {Big(pnl || 0).lt(0) ? "-" : "+"}
-                  {formatNumber(Big(pnl).abs(), 2, true, {
-                    prefix: "$",
-                    isShort: true,
-                    isShortUppercase: true
-                  })}
+                <span className="button">
+                  {Big(userInfo?.seller_profit || 0).lt(0) ? "-" : "+"}
+                  {formatNumber(
+                    Big(userInfo?.seller_profit || 0).abs(),
+                    2,
+                    true,
+                    {
+                      prefix: "$",
+                      isShort: true,
+                      isShortUppercase: true
+                    }
+                  )}
                 </span>
               </PnlAmountInfo>
             </LabelValue>
