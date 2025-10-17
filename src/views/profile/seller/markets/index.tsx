@@ -180,52 +180,33 @@ const MarketItem = (props: any) => {
               ) && (
                 <Popover
                   content={
-                    <PopoverCard className="!w-[300px] text-[#5E6B7D] text-[12px] leading-[120%] font-[400]">
-                      <div className="flex items-center gap-[3px]">
-                        <img
-                          src="/profile/icon-warning.svg"
-                          alt="warning"
-                          className="w-[13px] h-[11px] shrink-0"
-                        />
-                        <div className="text-[#000] leading-[100%]">
-                          Early Closure Penalty
-                        </div>
+                    <PopoverCard className="!w-[308px] leading-[120%]">
+                      <div className="text-[#000] font-[500] text-[12px]">
+                        ⚠️ Early Termination Penalty
                       </div>
-                      <div className="mt-[7px]">
-                        If a seller decides to close the market{" "}
-                        <span className="text-[#000] font-[600]">
-                          after the 72-hour
+                      <div className="mt-[7px] text-[10px] text-[#5E6B7D]">
+                        Markets are available to end list{" "}
+                        <span className="font-[700] text-[#000]">
+                          after 72 hours
+                        </span>
+                        . An additional{" "}
+                        <span className="font-[700] text-[#000]">
+                          {formatNumber(
+                            contractConfig?.cancel_penalty_rate * 100,
+                            2,
+                            true
+                          )}
+                          % fee
                         </span>{" "}
-                        lock period without a winner:
-                        <br />
-                        <ul className="list-disc pl-[20px]">
-                          <li>
-                            The seller must pay an additional{" "}
-                            <span className="text-[#000] font-[600]">
-                              {formatNumber(
-                                contractConfig.cancel_penalty_rate * 100,
-                                2,
-                                true
-                              )}
-                              % penalty
-                            </span>{" "}
-                            based on the total funds collected from bids.
-                          </li>
-                          <li>Upon payment, the market will be closed.</li>
-                          <li>
-                            All collected funds will be fully refunded to
-                            participating bidders’ platform balances.
-                          </li>
-                        </ul>
-                        This mechanism ensures fairness to bidders while giving
-                        sellers the flexibility to manage inactive markets.
+                        applies to the total bids collected — this helps keep
+                        the market fair for all participants.
                       </div>
                     </PopoverCard>
                   }
                   placement={PopoverPlacement.Top}
                   trigger={PopoverTrigger.Hover}
                   closeDelayDuration={0}
-                  offset={30}
+                  offset={10}
                 >
                   <Button
                     className="!h-[28px] !px-[7px] !rounded-[8px] !bg-transparent border border-[#383F47] text-white"

@@ -1,8 +1,8 @@
 import clsx from "clsx";
-import Loading from "@/components/icons/loading";
 import useIsMobile from "@/hooks/use-is-mobile";
 import { formatNumber } from "@/utils/format/number";
 import Button from "@/components/button";
+import { motion } from "framer-motion";
 
 export default function WinResultContent({
   onShowHistory,
@@ -12,7 +12,17 @@ export default function WinResultContent({
 }: any) {
   const isMobile = useIsMobile();
   return (
-    <>
+    <motion.div
+      initial={{ x: 300, opacity: 0 }} // Slide in from right
+      animate={{ x: 0, opacity: 1 }} // Animate to center
+      exit={{ x: 300, opacity: 0 }} // Slide out to right
+      transition={{ type: "spring", stiffness: 400, damping: 30 }}
+      className="w-[250px] h-[124px] border border-[#D9D9D9] rounded-[12px] text-black py-[8px] px-[10px] mb-[10px] shadow-[0_0_20px_0_rgba(132,101,255,0.20)] bg-cover bg-center bg-no-repeat"
+      style={{
+        backgroundImage: "url('/lucky-draw/lucky-draw-result.png')",
+        backgroundSize: "120% 150%"
+      }}
+    >
       {/* Title */}
       <div className="flex items-center justify-between">
         <div
@@ -37,7 +47,7 @@ export default function WinResultContent({
       {/* Description */}
       <div
         className={clsx(
-          "text-[12px] h-[44px]",
+          "text-[10px] h-[40px] mt-[4px]",
           isMobile && "text-center leading-[100%] mt-[4px]"
         )}
       >
@@ -70,6 +80,6 @@ export default function WinResultContent({
           </Button>
         </div>
       </div>
-    </>
+    </motion.div>
   );
 }

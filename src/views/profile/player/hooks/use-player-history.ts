@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import { useAuth } from "@/contexts/auth";
 import Big from "big.js";
 import { getAnchorPrice, getPoolInfo } from "@/utils/pool";
+import useCancelledPoolsStore from "@/stores/use-cancelled-pools";
 
 const pageSize = 10;
 
@@ -13,6 +14,7 @@ export default function usePlayerHistory() {
   const { userInfo } = useAuth();
   const [hasMore, setHasMore] = useState(true);
   const mounted = useRef(false);
+  const cancelledPoolsStore = useCancelledPoolsStore();
 
   const [joinedPoolListData, setJoinedPoolListData] = useState<any>([]);
   const [joinedPoolListPageIndex, setJoinedPoolListPageIndex] = useState(1);
@@ -58,6 +60,13 @@ export default function usePlayerHistory() {
           ? response.data.data.list
           : [...prev, ...response.data.data.list]
       );
+      if (joinedPoolListStatus === "3") {
+        cancelledPoolsStore.set({
+          cancelledPools: response.data.data.list.filter(
+            (item: any) => item.status === 3
+          )
+        });
+      }
       window.joinMarketTimer = setTimeout(() => {
         getJoinedPoolList();
       }, 20000);

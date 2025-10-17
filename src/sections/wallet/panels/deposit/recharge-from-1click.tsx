@@ -125,7 +125,7 @@ export default function RechargeFrom1click() {
                   ? Number(BTC_DEPOSIT_AMOUNT) / 1e8
                   : walletStore.selectedToken.minDepositAmount
               } 
-                ${walletStore.selectedToken.symbol}`}
+                ${chain?.symbol || walletStore.selectedToken.symbol}`}
               time={chain?.blockchain === "btc" ? "15" : "1"}
             />
             <button
@@ -160,7 +160,7 @@ export default function RechargeFrom1click() {
                 ? Number(BTC_DEPOSIT_AMOUNT) / 1e8
                 : walletStore.selectedToken.minDepositAmount
             } 
-                ${walletStore.selectedToken.symbol}`}
+                ${chain?.symbol || walletStore.selectedToken.symbol}`}
             time={chain?.blockchain === "btc" ? "15" : "1"}
           />
           <div className="absolute bottom-[20px] left-0 w-full">
@@ -205,29 +205,6 @@ export default function RechargeFrom1click() {
               </svg>
             </div>
           </div>
-
-          {/* <div className="flex justify-between items-center mt-[20px] px-[10px]">
-              <div className="text-[14px] text-[#8A87AA]">Minimum Receive</div>
-              <div className="text-[14px] text-[#8A87AA]">
-                {quote?.minAmountOut
-                  ? formatNumber(
-                      new Big(quote?.minAmountOut)
-                        .div(10 ** walletStore.selectedToken?.decimals)
-                        .toString(),
-                      6,
-                      true
-                    )
-                  : "-"}{" "}
-                {walletStore.selectedToken?.symbol}
-              </div>
-            </div> */}
-
-          {/* <div className="flex justify-between items-center mt-[20px] px-[10px]">
-              <div className="text-[14px] text-[#8A87AA]">Cost time</div>
-              <div className="text-[14px] text-[#8A87AA]">
-                {quote?.costTime || "~"}
-              </div>
-            </div> */}
         </div>
       )}
     </div>

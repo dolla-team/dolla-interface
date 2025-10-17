@@ -46,7 +46,7 @@ export default function Recharge({
         <div className="flex items-center">
           <div className="flex items-center gap-[5px]">
             <div className="text-[18px] text-black font-[700] pr-[8px]">
-              {token.symbol}
+              {chain?.symbol || token.symbol}
             </div>
             <div className="relative">
               <div className="flex items-center gap-[5px]">

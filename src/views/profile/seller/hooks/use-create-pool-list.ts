@@ -56,7 +56,7 @@ export default function useCreatePoolList() {
             amount: Big(item.reward_amount)
               .div(10 ** (item.reward_token_info?.[0]?.decimals || 6))
               .toString(),
-            anchor_value: item.reward_usd,
+            list_value: item.reward_usd,
             sold: item.accumulative_bids,
             pnl: profit.toString()
           });

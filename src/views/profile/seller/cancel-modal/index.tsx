@@ -100,46 +100,42 @@ export default function CancelModal({
             </span>
           </div>
           <div className="flex items-center text-[14px] mb-[20px] gap-[10px]">
-            <span className="font-[400]">Market Value</span>
+            <span className="font-[400]">Assets Value</span>
             <div className="grow border-b border-dashed border-[#5E6B7D] opacity-50" />
             <span className="font-medium">
               ${formatNumber(order?.reward_usd, 2, true)}
             </span>
           </div>
           <div className="flex items-center text-[14px] mb-[20px] gap-[10px]">
-            <span className="font-[400]">Total Players</span>
+            <span className="font-[400]">Total Bidders</span>
             <div className="grow border-b border-dashed border-[#5E6B7D] opacity-50" />
             <span className="font-medium">
               {formatNumber(order?.participants, 0, true)}
             </span>
           </div>
-          <div className="flex items-center text-[14px] mb-[20px] gap-[10px]">
-            <span className="font-[400]">Total bids</span>
+          <div className="flex items-center text-[14px] gap-[10px]">
+            <span className="font-[400]">Total Bid Collected</span>
             <div className="grow border-b border-dashed border-[#5E6B7D] opacity-50" />
             <span className="font-medium">
               ${formatNumber(order?.accumulative_bids, 0, true)}
             </span>
           </div>
-          <div className="w-full h-[72px] p-[8px] mt-[20px] mx-auto bg-[#FFC42F1A] rounded-[4px] border border-[#FFC42F]">
+          <div className="w-full h-[72px] px-[8px] py-[10px] mt-[20px] mx-auto bg-[#FFC42F1A] rounded-[4px] border border-[#FFC42F]">
             <div className="flex items-center gap-[2px]">
-              <img
-                src="/profile/icon-warning.svg"
-                alt="warning"
-                className="w-[13px] h-[11px] shrink-0"
-              />
-              <span className="text-[#FFC42F]">Be careful!</span>
+              <span>⚠️ Early Termination Penalty</span>
             </div>
-            <div className="text-[12px] font-[400] leading-[120%] mt-[5px]">
-              The seller must pay an additional{" "}
-              <span className="text-[#FFC42F] font-[600]">
+            <div className="text-[10px] font-[400] leading-[120%] mt-[8px]">
+              An additional{" "}
+              <span className="font-[600]">
                 {formatNumber(
                   contractConfig?.cancel_penalty_rate * 100,
                   2,
                   true
                 )}
-                % penalty
+                %
               </span>{" "}
-              based on the total funds collected from bids.
+              fee applies to the total bids collected — this helps keep the
+              market fair for all participants.
             </div>
           </div>
           <div className="mt-[20px]">

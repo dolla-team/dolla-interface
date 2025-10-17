@@ -91,7 +91,7 @@ export default function Market({
             <div className="text-[12px] text-[#5E6B7D] text-right mb-[4px]">
               #{data?.pool_id}
             </div>
-            <MarketStatus value={data?.status} market={data} />
+            <MarketStatus value={data?.status} market={data} from={from} />
           </div>
         </div>
 

@@ -9,8 +9,6 @@ import LucyDrawCard from "./card";
 
 export default function LucyDrawMobile(props: any) {
   const {
-    setIsHistoryOpen,
-    setHistoryRound,
     currentRound,
     prizeAmount,
     status,
@@ -118,12 +116,6 @@ export default function LucyDrawMobile(props: any) {
           <div className="mt-[-8px]">DRAW</div>
         </div>
       </div>
-      <WinResult
-        onShowHistory={() => {
-          setIsHistoryOpen(true);
-          setHistoryRound(currentRound);
-        }}
-      />
       <Modal open={showCard} onClose={() => setShowCard(false)}>
         <div className="w-full bg-black">
           <LucyDrawCard {...props} />

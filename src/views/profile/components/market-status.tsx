@@ -1,7 +1,7 @@
 import clsx from "clsx";
 
 const MarketStatus = (props: Props) => {
-  const { className, value } = props;
+  const { className, value, from } = props;
 
   const currentMarketStatus = MarketStatusMap[value];
 
@@ -31,7 +31,9 @@ const MarketStatus = (props: Props) => {
           // value === EMarketStatus.Winner && "border-r border-[#ADBCCF]"
         )}
       >
-        {currentMarketStatus?.label}
+        {from === "seller" && value === EMarketStatus.Cancelled
+          ? "End List"
+          : currentMarketStatus?.label}
       </div>
       {/* {value === EMarketStatus.Winner && (
         <>
@@ -56,6 +58,7 @@ interface Props {
   className?: string;
   value: EMarketStatus;
   market?: any;
+  from?: string;
 }
 
 export default MarketStatus;

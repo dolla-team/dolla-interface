@@ -2,7 +2,7 @@ import SellerLevel from "@/components/seller-level";
 import columns from "./columns";
 import { formatAddress } from "@/utils/format/address";
 import { formatNumber } from "@/utils/format/number";
-import { getReAnchorPrice } from "@/utils/pool";
+import { getAnchorPrice, getReAnchorPrice } from "@/utils/pool";
 import ProgressBar from "./progress-bar";
 import BtcImg from "./btc-bg";
 import { useAuth } from "@/contexts/auth";
@@ -74,7 +74,7 @@ export default function Market({
           )}
           {column.dataIndex === "anchor_price" && (
             <div className="text-[14px] text-black">
-              {formatNumber(getReAnchorPrice(data), 2, true, {
+              {formatNumber(getAnchorPrice(data?.anchor_price), 2, true, {
                 prefix: "$"
               })}
             </div>

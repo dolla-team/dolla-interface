@@ -8,6 +8,7 @@ import useUserInfoStore from "@/stores/use-user-info";
 import { useEffect, useMemo, useRef, useState } from "react";
 import LucyDrawHistory from "./history";
 import BuyTicket from "./buy-ticket";
+import useLuckyDrawStore from "@/stores/use-lucky-draw";
 
 export default function LucyDraw({
   tokenBalance,
@@ -18,8 +19,7 @@ export default function LucyDraw({
 }) {
   const isMobile = useIsMobile();
   const userInfoStore = useUserInfoStore();
-  const [isHistoryOpen, setIsHistoryOpen] = useState(false);
-  const [historyRound, setHistoryRound] = useState(0);
+  const lucyDrawStore = useLuckyDrawStore();
   const { currentRound, isLoading, fetchCurrentRound, participation } =
     useLucyDraw();
   const configStore = useConfigStore();
@@ -77,8 +77,6 @@ export default function LucyDraw({
     };
   }, []);
   const params = {
-    setIsHistoryOpen,
-    setHistoryRound,
     currentRound,
     participation,
     prizeAmount,
@@ -99,9 +97,9 @@ export default function LucyDraw({
         <LucyDrawLaptop {...params} />
       )}
       <LucyDrawHistory
-        open={isHistoryOpen}
-        onClose={() => setIsHistoryOpen(false)}
-        historyRound={historyRound}
+        open={lucyDrawStore.showHistory}
+        onClose={() => lucyDrawStore.set({ showHistory: false })}
+        historyRound={lucyDrawStore.historyRound}
         isLoading={isLoading}
         fetchCurrentRound={fetchCurrentRound}
         prizeAmount={prizeAmount}

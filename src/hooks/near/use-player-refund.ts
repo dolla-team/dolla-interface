@@ -8,6 +8,7 @@ import useGenerateKey from "@/hooks/near/use-generate-key";
 import useToast from "@/hooks/use-toast";
 import reportHash from "@/utils/report-hash";
 import { useAuth } from "@/contexts/auth";
+import useCancelledPoolsStore from "@/stores/use-cancelled-pools";
 
 const THIRTY_TGAS = "300000000000000";
 
@@ -19,10 +20,11 @@ export default function usePlayerRefund(
   const { generateKeyPair } = useGenerateKey();
   const toast = useToast();
   const { address } = useAuth();
+  const cancelledPoolsStore = useCancelledPoolsStore();
 
   async function refund() {
     const { publicKey, keyPairSigner } = await generateKeyPair();
-    if (!publicKey) return;
+    if (!publicKey || !poolId) return;
     let toastId = toast.loading({ title: "Refunding..." });
     try {
       setLoading(true);
@@ -69,6 +71,7 @@ export default function usePlayerRefund(
         console.log("Claim success:", result);
         toast.success({ title: "Claim success" });
         onSuccess?.();
+        cancelledPoolsStore.removeCancelledPool(poolId);
       } else {
         toast.dismiss(toastId);
         console.log("Claim failed:", result);

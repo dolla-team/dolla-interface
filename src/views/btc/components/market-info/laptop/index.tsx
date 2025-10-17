@@ -6,6 +6,7 @@ import Avatar from "@/components/avatar";
 import SellerLevel from "@/components/seller-level";
 import { formatAddress } from "@/utils/format/address";
 import MoreIcon from "./more-icon";
+import { getAnchorPrice } from "@/utils/pool";
 
 export default function MarketInfo() {
   const { pool } = useBtcContext();
@@ -69,7 +70,7 @@ export default function MarketInfo() {
                 pool?.status === 3 ? "text-[#C3C3C3]" : "text-white"
               )}
             >
-              ${formatNumber(pool?.value, 0, true)}
+              ${formatNumber(getAnchorPrice(pool?.anchor_price), 2, true)}
             </div>
           </div>
         </div>

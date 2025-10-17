@@ -14,7 +14,7 @@ import Popover, {
 import PopoverCard from "../popover-card";
 import { BASE_TOKEN } from "@/config/btc";
 
-const StatisticsPlayer = (props: any) => {
+const StatisticsSeller = (props: any) => {
   const { className, pnlList, pnl } = props;
 
   const { userInfo } = useAuth();
@@ -145,7 +145,7 @@ const StatisticsPlayer = (props: any) => {
                     <div className="inline-flex gap-[4px] mt-[10px] h-[24px] px-[10px] items-center border border-[#E4E4E4] rounded-[16px] bg-[#F2F2F299]">
                       <div className="w-[7px] h-[7px] shrink-0 rounded-full bg-[#FF399F]" />
                       <div className="text-[10px] text-[#2B3337]">
-                        {userInfo?.cancel} Cancelled
+                        {userInfo?.cancel} End List
                       </div>
                     </div>
                     <div className="inline-flex gap-[4px] mt-[10px] h-[24px] px-[10px] items-center border border-[#E4E4E4] rounded-[16px] bg-[#F2F2F299]">
@@ -202,7 +202,7 @@ const StatisticsPlayer = (props: any) => {
   );
 };
 
-export default StatisticsPlayer;
+export default StatisticsSeller;
 
 const PnlInfo = () => {
   return (
@@ -291,8 +291,8 @@ const PnlAmountInfo = ({
       width: "35%"
     },
     {
-      title: "Anchor Value",
-      dataIndex: "anchor_value",
+      title: "List Value",
+      dataIndex: "list_value",
       width: "25%"
     },
     {
@@ -357,10 +357,10 @@ const PnlAmountInfo = ({
                         </span>
                       </div>
                     )}
-                    {column.dataIndex === "anchor_value" && (
+                    {column.dataIndex === "list_value" && (
                       <span>
                         $
-                        {formatNumber(item.anchor_value, 2, true, {
+                        {formatNumber(item.list_value, 2, true, {
                           isShort: true,
                           isShortUppercase: true
                         })}

@@ -3,6 +3,7 @@ import Timer from "./timer";
 import useIsMobile from "@/hooks/use-is-mobile";
 import clsx from "clsx";
 import { formatNumber } from "@/utils/format/number";
+import useLuckyDrawStore from "@/stores/use-lucky-draw";
 
 export default function LucyDrawCard({
   currentRound,
@@ -13,10 +14,10 @@ export default function LucyDrawCard({
   setStatus,
   fetchResult,
   setShowBuyTicket,
-  setIsHistoryOpen,
   participation
 }: any) {
   const isMobile = useIsMobile();
+  const lucyDrawStore = useLuckyDrawStore();
   return (
     <div
       className={clsx(
@@ -105,7 +106,7 @@ export default function LucyDrawCard({
           status={status}
           onBuyTicket={() => setShowBuyTicket(true)}
           winningList={winningList}
-          setIsHistoryOpen={setIsHistoryOpen}
+          setIsHistoryOpen={() => lucyDrawStore.set({ showHistory: true })}
         />
       </div>
     </div>

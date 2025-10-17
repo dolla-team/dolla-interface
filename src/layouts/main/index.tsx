@@ -10,6 +10,7 @@ import Infos from "@/sections/infos";
 import UserInfo from "@/sections/user-info";
 import { useEffect, useRef } from "react";
 import PageTabs from "./tabs";
+import Alerts from "@/sections/alerts";
 import { useGlobalStore } from "@/stores/use-global";
 import useTaskCurrent from "@/hooks/task/use-task-current";
 import useTaskStore from "@/stores/use-task";
@@ -134,6 +135,7 @@ export default function MainLayout() {
         <UserInfo />
       </div>
       <Wallet />
+      <Alerts />
     </div>
   );
 }
