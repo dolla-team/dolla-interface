@@ -63,7 +63,7 @@ export default function usePlayerHistory() {
       if (joinedPoolListStatus === "3") {
         cancelledPoolsStore.set({
           cancelledPools: response.data.data.list.filter(
-            (item: any) => item.status === 3
+            (item: any) => item.status === 3 && !item.is_claim
           )
         });
       }
