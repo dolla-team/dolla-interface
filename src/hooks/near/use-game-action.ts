@@ -155,7 +155,7 @@ export default function useGameAction({
       const { header } = await provider.block({ finality: "final" });
 
       const gameArgs = {
-        game_args: {
+        cancel_game_args: {
           ByAk: {
             game_id: Number(gameId),
             penalty_token: { FT: QUOTE_TOKEN.address },
