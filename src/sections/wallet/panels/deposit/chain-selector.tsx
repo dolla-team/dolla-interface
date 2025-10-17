@@ -3,6 +3,7 @@ import use1clickTokens from "@/hooks/use-1click-tokens";
 import useWalletStore from "@/stores/use-wallet";
 import clsx from "clsx";
 import { chainConfig } from "../../chain-config";
+import { QUOTE_TOKEN } from "@/config/btc";
 
 export default function ChainSelector({
   selectedChain,
@@ -12,19 +13,33 @@ export default function ChainSelector({
   const { tokens } = use1clickTokens();
   const walletStore = useWalletStore();
   const usedChains = useMemo(() => {
-    return tokens.filter(
-      (token: any) =>
-        token.symbol
+    return tokens.filter((token: any) => {
+      if (
+        !token.symbol
           .toUpperCase()
-          .includes(walletStore.selectedToken.symbol.toUpperCase()) &&
-        token.blockchain.toUpperCase() !== "NEAR" &&
-        token.blockchain.toUpperCase() !== "SOL" &&
-        token.blockchain.toUpperCase() !== "SUI" &&
-        token.blockchain.toUpperCase() !== "STELLAR" &&
-        token.blockchain.toUpperCase() !== "TRON" &&
-        token.blockchain.toUpperCase() !== "APTOS" &&
-        token.blockchain.toUpperCase() !== "TON"
-    );
+          .includes(walletStore.selectedToken.symbol.toUpperCase())
+      )
+        return false;
+      if (
+        walletStore.selectedToken?.symbol === QUOTE_TOKEN.symbol &&
+        ["ETH", "SOL", "BSC", "POL"].includes(token.blockchain.toUpperCase())
+      ) {
+        return true;
+      }
+      if (
+        walletStore.selectedToken?.symbol === "ETH" &&
+        ["ETH", "ARB", "OP"].includes(token.blockchain.toUpperCase())
+      ) {
+        return true;
+      }
+      if (
+        walletStore.selectedToken?.symbol === "BTC" &&
+        ["BTC"].includes(token.blockchain.toUpperCase())
+      ) {
+        return true;
+      }
+      return false;
+    });
   }, [walletStore.selectedToken, tokens]);
 
   return (

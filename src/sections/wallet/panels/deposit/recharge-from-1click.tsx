@@ -9,10 +9,15 @@ import { useAuth } from "@/contexts/auth";
 import useDeposit from "@/hooks/near/use-deposit";
 import Loading from "@/components/icons/loading";
 import ChainSelector from "./chain-selector";
-import { EVM_REFUND_ACCOUNT, BTC_REFUND_ACCOUNT } from "@/config";
+import {
+  EVM_REFUND_ACCOUNT,
+  BTC_REFUND_ACCOUNT,
+  SOLANA_REFUND_ACCOUNT
+} from "@/config";
 import { useDebounceFn } from "ahooks";
 import WarningIcon from "./warning-icon";
 import { BTC_DEPOSIT_AMOUNT } from "@/config/btc";
+import { formatNumber } from "@/utils/format/number";
 
 export default function RechargeFrom1click() {
   const [quote, setQuote] = useState<any>(null);
@@ -25,6 +30,7 @@ export default function RechargeFrom1click() {
   const { generateDepositAddress } = useDeposit();
   const { report } = useReport();
   const chainRef = useRef(null);
+  const { nearAccount } = useAuth();
 
   const { run } = useDebounceFn(
     async () => {
@@ -53,6 +59,8 @@ export default function RechargeFrom1click() {
           refundTo:
             chain.blockchain === "btc"
               ? BTC_REFUND_ACCOUNT
+              : chain.blockchain === "solana"
+              ? SOLANA_REFUND_ACCOUNT
               : EVM_REFUND_ACCOUNT,
           getFullQuote: true
         });
@@ -103,7 +111,23 @@ export default function RechargeFrom1click() {
           <div className="text-[16px] font-[500] text-center mb-[16px]">
             Select Receiving Network
           </div>
-          <div className="mt-[10px] py-[10px] px-[16px] text-[12px] text-center flex flex-col items-center leading-[18px] text-black font-[300] bg-[#FFC42F]/10 rounded-[12px]">
+          <div className="flex flex-col items-center">
+            <img
+              src={walletStore.selectedToken.icon}
+              className="w-[32px] h-[32px] object-cover"
+            />
+            <div className="text-[14px] font-[500] mt-[6px]">
+              {formatNumber(
+                walletStore.selectedToken.isBaseToken
+                  ? nearAccount?.prizeBalance
+                  : nearAccount?.balance,
+                walletStore.selectedToken.isBaseToken ? 6 : 2,
+                true
+              )}{" "}
+              {walletStore.selectedToken.symbol}
+            </div>
+          </div>
+          <div className="mt-[6px] py-[10px] px-[6px] text-[12px] flex gap-[8px] leading-[14px] text-black font-[300] bg-[#FFC42F]/10 rounded-[12px]">
             <WarningIcon />
             <div>
               Please note that only supported networks on Dolla are shown, if
@@ -111,6 +135,7 @@ export default function RechargeFrom1click() {
             </div>
           </div>
           <ChainSelector
+            selectedToken={walletStore.selectedToken}
             selectedChain={chain}
             onSelect={(chain: any) => {
               setChain(chain);

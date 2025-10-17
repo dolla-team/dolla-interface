@@ -18,16 +18,10 @@ export default function Confetti() {
     const gravity = 0.5;
     const terminalVelocity = 5;
     const drag = 0.075;
-    const colors = [
-      { front: "red", back: "darkred" },
-      { front: "green", back: "darkgreen" },
-      { front: "blue", back: "darkblue" },
-      { front: "yellow", back: "darkyellow" },
-      { front: "orange", back: "darkorange" },
-      { front: "pink", back: "darkpink" },
-      { front: "purple", back: "darkpurple" },
-      { front: "turquoise", back: "darkturquoise" }
-    ];
+
+    // Load confetti image
+    const confettiImage = new Image();
+    confettiImage.src = "/btc/confetti-btc.png";
 
     //-----------Functions--------------
     const resizeCanvas = () => {
@@ -40,11 +34,11 @@ export default function Confetti() {
 
     const initConfetti = () => {
       for (let i = 0; i < confettiCount; i++) {
+        const baseSize = randomRange(15, 35); // Base size for square confetti
         confetti.push({
-          color: colors[Math.floor(randomRange(0, colors.length))],
           dimensions: {
-            x: randomRange(10, 20),
-            y: randomRange(10, 30)
+            x: baseSize, // Square width
+            y: baseSize // Square height
           },
 
           position: {
@@ -100,11 +94,11 @@ export default function Confetti() {
 
         // Spin confetto by scaling y
         confetto.scale.y = Math.cos(confetto.position.y * 0.1);
-        ctx.fillStyle =
-          confetto.scale.y > 0 ? confetto.color.front : confetto.color.back;
 
-        // Draw confetti
-        ctx.fillRect(-width / 2, -height / 2, width, height);
+        // Draw confetti image instead of rectangle
+        if (confettiImage.complete) {
+          ctx.drawImage(confettiImage, -width / 2, -height / 2, width, height);
+        }
 
         // Reset transform matrix
         ctx.setTransform(1, 0, 0, 1, 0, 0);
@@ -135,7 +129,7 @@ export default function Confetti() {
     (
       <canvas
         ref={canvasRef}
-        className="fixed top-0 left-0 w-full h-full z-[100]"
+        className="fixed top-0 left-0 w-full h-full z-[100] pointer-events-none"
       />
     ) as any,
     document.body

@@ -1,8 +1,15 @@
-import { useState, useImperativeHandle, forwardRef, useRef } from "react";
+import {
+  useState,
+  useImperativeHandle,
+  forwardRef,
+  useRef,
+  useMemo
+} from "react";
 import clsx from "clsx";
 import { BackPointsFace, FrontFace } from "./faces";
 import useUserInfoStore from "@/stores/use-user-info";
 import { motion } from "framer-motion";
+import { LightRotation } from "./light";
 
 // import "./index.css";
 import("./index.css");
@@ -93,10 +100,13 @@ const Coin = forwardRef<any, any>(
         setFlipStatus(4);
       }
       // Trigger callback after animation
-      setTimeout(() => {
-        setIsAnimating(false);
-        onFlipComplete?.(index, true, notAuto);
-      }, 400); // Reduced from 1000ms to 600ms to start exit animation earlier
+      setTimeout(
+        () => {
+          setIsAnimating(false);
+          onFlipComplete?.(index, true, notAuto);
+        },
+        isWinner ? 200 : 600
+      ); // Reduced from 1000ms to 600ms to start exit animation earlier
     };
 
     const onCollect = () => {
@@ -133,14 +143,22 @@ const Coin = forwardRef<any, any>(
     }));
 
     const thickness = Math.max(8, size * 0.1);
-    // const thickness = 0;
+
+    const [left, top] = useMemo(() => {
+      if (!coinRef.current) return [0, 0];
+      const _left = coinRef.current.offsetLeft;
+      const _top = coinRef.current.offsetTop;
+
+      return [_left, _top];
+    }, [coinRef.current]);
 
     return (
       <>
         <div
           className={clsx(
-            "relative perspective-[1000px]",
-            (flipStatus === 4 || flipStatus === 5) && "cursor-pointer"
+            "relative perspective-[1000px] duration-300 ease-in-out",
+            (flipStatus === 4 || flipStatus === 5) && "cursor-pointer",
+            isAnimating && isFlipped && isWinner && "scale-110"
           )}
           style={{
             width: `${size}px`,
@@ -236,6 +254,14 @@ const Coin = forwardRef<any, any>(
               + {points}
             </span>
           </motion.div>
+        )}
+        {!!(left && top) && isAnimating && isWinner && (
+          <LightRotation
+            size={size}
+            duration={6}
+            style={{ top: top + size / 2 + "px", left: left + size / 2 + "px" }}
+            className="pointer-events-none z-[10]"
+          />
         )}
       </>
     );

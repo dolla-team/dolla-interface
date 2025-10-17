@@ -10,9 +10,38 @@ import { useTipsStore } from "@/stores/use-tips";
 import { QUOTE_TOKEN } from "@/config/btc";
 import { motion, AnimatePresence } from "framer-motion";
 
+const animate: any = {
+  initial: {
+    opacity: 0,
+    scale: 0.3,
+    rotate: -45,
+    x: -100,
+    y: 100
+  },
+  animate: {
+    opacity: 1,
+    scale: 1,
+    rotate: 0,
+    x: 0,
+    y: 0
+  },
+  exit: {
+    opacity: 0,
+    scale: 0.3,
+    rotate: 45,
+    x: 100,
+    y: 100
+  },
+  transition: {
+    duration: 0.5,
+    ease: "easeOut"
+  }
+};
+
 export default function BidSelection({
   tokenBalance,
   disabled,
+  balanceNotEnough,
   bids,
   pool,
   flipStatus,
@@ -21,6 +50,7 @@ export default function BidSelection({
 }: {
   tokenBalance: string;
   disabled: boolean;
+  balanceNotEnough: boolean;
   bids: number;
   pool: any;
   flipStatus: number;
@@ -113,133 +143,51 @@ export default function BidSelection({
         {bids === 1 && (
           <motion.img
             key="bid-1"
-            src="/btc/bid1.png"
+            src={balanceNotEnough ? "/btc/bid1-disabled.png" : "/btc/bid1.png"}
             alt="bid 1"
-            className="w-[282px] h-[239px] absolute bottom-[40px] left-[calc(50%-120px)] xl:scale-none scale-[0.75]"
-            initial={{
-              opacity: 0,
-              scale: 0.3,
-              rotate: -45,
-              x: -100,
-              y: 100
-            }}
-            animate={{
-              opacity: 1,
-              scale: 1,
-              rotate: 0,
-              x: 0,
-              y: 0
-            }}
-            exit={{
-              opacity: 0,
-              scale: 0.3,
-              rotate: 45,
-              x: 100,
-              y: 100
-            }}
-            transition={{
-              duration: 0.5,
-              ease: "easeOut"
-            }}
+            className={clsx(
+              "w-[282px] h-[239px] absolute bottom-[40px] left-[calc(50%-120px)] xl:scale-none scale-[0.75]"
+            )}
+            {...animate}
           />
         )}
         {bids === 10 && (
           <motion.img
             key="bid-10"
-            src="/btc/bid10.png"
+            src={
+              balanceNotEnough ? "/btc/bid10-disabled.png" : "/btc/bid10.png"
+            }
             alt="bid 10"
-            className="w-[331px] h-[194px] absolute bottom-[70px] left-[calc(50%-150px)] xl:scale-none scale-[0.75]"
-            initial={{
-              opacity: 0,
-              scale: 0.3,
-              rotate: -45,
-              x: -100,
-              y: 100
-            }}
-            animate={{
-              opacity: 1,
-              scale: 1,
-              rotate: 0,
-              x: 0,
-              y: 0
-            }}
-            exit={{
-              opacity: 0,
-              scale: 0.3,
-              rotate: 45,
-              x: 100,
-              y: 100
-            }}
-            transition={{
-              duration: 0.5,
-              ease: "easeOut"
-            }}
+            className={clsx(
+              "w-[331px] h-[194px] absolute bottom-[90px] left-[calc(50%-150px)] xl:scale-none scale-[0.75]"
+            )}
+            {...animate}
           />
         )}
         {bids === 50 && (
           <motion.img
             key="bid-50"
-            src="/btc/bid50.png"
+            src={
+              balanceNotEnough ? "/btc/bid50-disabled.png" : "/btc/bid50.png"
+            }
             alt="bid 50"
-            className="w-[272px] h-[225px] absolute bottom-[64px] left-[calc(50%-130px)] xl:scale-none scale-[0.75]"
-            initial={{
-              opacity: 0,
-              scale: 0.3,
-              rotate: -45,
-              x: -100,
-              y: 100
-            }}
-            animate={{
-              opacity: 1,
-              scale: 1,
-              rotate: 0,
-              x: 0,
-              y: 0
-            }}
-            exit={{
-              opacity: 0,
-              scale: 0.3,
-              rotate: 45,
-              x: 100,
-              y: 100
-            }}
-            transition={{
-              duration: 0.5,
-              ease: "easeOut"
-            }}
+            className={clsx(
+              "w-[272px] h-[225px] absolute bottom-[64px] left-[calc(50%-130px)] xl:scale-none scale-[0.75]"
+            )}
+            {...animate}
           />
         )}
         {bids === 100 && (
           <motion.img
             key="bid-100"
-            src="/btc/bid100.png"
+            src={
+              balanceNotEnough ? "/btc/bid100-disabled.png" : "/btc/bid100.png"
+            }
             alt="bid 100"
-            className="w-[289px] h-[198px] absolute bottom-[80px] left-[calc(50%-130px)] xl:scale-none scale-[0.75]"
-            initial={{
-              opacity: 0,
-              scale: 0.3,
-              rotate: -45,
-              x: -100,
-              y: 100
-            }}
-            animate={{
-              opacity: 1,
-              scale: 1,
-              rotate: 0,
-              x: 0,
-              y: 0
-            }}
-            exit={{
-              opacity: 0,
-              scale: 0.3,
-              rotate: 45,
-              x: 100,
-              y: 100
-            }}
-            transition={{
-              duration: 0.5,
-              ease: "easeOut"
-            }}
+            className={clsx(
+              "w-[289px] h-[198px] absolute bottom-[80px] left-[calc(50%-130px)] xl:scale-none scale-[0.75]"
+            )}
+            {...animate}
           />
         )}
       </AnimatePresence>

@@ -22,7 +22,7 @@ const StatisticsPlayer = (props: any) => {
   return (
     <div
       className={clsx(
-        "w-full mt-[10px] flex justify-center items-center gap-[18px] max-md:flex-col max-md:mt-[13px]",
+        "w-full mt-[16px] flex justify-center items-center gap-[18px] max-md:flex-col max-md:mt-[13px]",
         className
       )}
     >

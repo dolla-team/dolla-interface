@@ -6,6 +6,7 @@ export default function WarningIcon() {
       height="32"
       viewBox="0 0 32 32"
       fill="none"
+      className="shrink-0"
     >
       <path
         d="M14.268 3C15.0378 1.66667 16.9622 1.66667 17.7321 3L28.1244 21C28.8942 22.3333 27.9319 24 26.3923 24H5.60769C4.06809 24 3.10584 22.3333 3.87564 21L14.268 3Z"

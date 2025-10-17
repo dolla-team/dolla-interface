@@ -45,7 +45,7 @@ export default function Infos({
       const _list: any = [];
 
       res?.data?.data?.pool?.forEach((pool: any) => {
-        let label = "New Market";
+        let label = "New listing live";
         let icon = "🪶";
         if (pool.type === 0) {
           label = "Hot Market";
@@ -181,7 +181,7 @@ const Item = ({
       onClick={() => {
         navigate(`/btc/detail/${item.pool_id}`);
       }}
-      className="flex items-center h-full gap-3 px-[30px] text-white transition-transform duration-200 hover:scale-105 button"
+      className="flex items-center h-full gap-[4px] px-[30px] text-white transition-transform duration-200 hover:scale-105 button"
       onMouseEnter={() => {
         setIsPaused(true);
       }}
@@ -192,7 +192,7 @@ const Item = ({
       {item.type === "winner" ? (
         <>
           <span className="text-[12px] text-[#D9D9D9] rounded">
-            {item?.winner_user_name || formatAddress(item.winner_user)} Won
+            {item?.winner_user_name || formatAddress(item.winner_user)} hit
           </span>
           <span
             className={clsx("text-lg font-bold drop-shadow-lg")}
@@ -204,8 +204,14 @@ const Item = ({
         </>
       ) : (
         <>
-          <span className="text-[#D9D9D9] text-[12px]">{item.label}</span>
-          <span className={clsx("text-lg font-bold drop-shadow-lg")}>
+          <span className="text-[#D9D9D9] text-[12px] font-[400]">
+            {item.label}
+          </span>
+          <span
+            className={clsx(
+              "text-[#FFC42F] text-[14px] font-bold drop-shadow-lg"
+            )}
+          >
             {formatNumber(item.reward_amount, 6, true)} {BASE_TOKEN.symbol}
           </span>
           <span className="text-xl drop-shadow-lg">{item.icon}</span>

@@ -24,24 +24,24 @@ export default function BidSelection({ tokenBalance }: any) {
   const toast = useToast();
   const contractConfig = useContractConfigStore((state) => state.config);
 
-  const disabled = useMemo(() => {
+  const [disabled, balanceNotEnough] = useMemo(() => {
     if (pool?.status !== 1) {
-      return true;
+      return [true, false];
     }
     if (!userInfo?.user) {
-      return true;
+      return [true, false];
     }
 
     if (
       Number(tokenBalance) <
       bids * (Number(BET_UNIT) / 1e6) + contractConfig.play_game_fee
     ) {
-      return true;
+      return [true, true];
     }
     if (flipStatus === 0 || flipStatus === 6) {
-      return false;
+      return [false, false];
     }
-    return true;
+    return [true, false];
   }, [flipStatus, userInfo, tokenBalance, bids, pool]);
 
   const { onBid } = useBid(
@@ -97,7 +97,8 @@ export default function BidSelection({ tokenBalance }: any) {
     flipStatus,
     onChangeBids,
     onBidClick,
-    pool
+    pool,
+    balanceNotEnough
   };
 
   return isMobile ? (

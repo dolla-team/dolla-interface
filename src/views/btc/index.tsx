@@ -21,6 +21,7 @@ import Tips from "./components/tips";
 import Result from "./components/result";
 import { useEffect, useMemo } from "react";
 import useWalletStore from "@/stores/use-wallet";
+import Confetti from "@/components/confetti";
 
 // import ProvablyFair from "@/sections/provably-fair";
 
@@ -119,6 +120,7 @@ const Content = () => {
           isWinner={isWinner}
         />
       )}
+      {bidResult?.bid?.is_winner && flipStatus > 4 && <Confetti />}
     </div>
   );
 };

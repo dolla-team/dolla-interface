@@ -144,9 +144,6 @@ export default function Market({
           textClassName="text-[14px]"
         />
       )}
-      {data.status !== 1 && (
-        <div className="absolute top-0 left-0 w-full h-full bg-[#FFFFFF80] border border-[#F2F2F233] rounded-[10px]"></div>
-      )}
     </div>
   );
 }

@@ -1,6 +1,5 @@
 import { useBtcContext } from "../../context";
-import { useEffect, useMemo, useRef, useState } from "react";
-
+import { useEffect, useRef, useState } from "react";
 import { useDollaEyeContext } from "@/contexts/dolla-eye";
 import { EEyeType, EyeTypeMap } from "@/hooks/use-dolla-eye";
 import useIsMobile from "@/hooks/use-is-mobile";

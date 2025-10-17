@@ -111,8 +111,8 @@ const StatisticsSeller = (props: any) => {
                 !Big(userInfo?.seller_profit || 0).eq(0) &&
                   "border-b border-[#8A87AA] border-dotted pb-[4px] button",
                 Big(userInfo?.seller_profit || 0).lt(0)
-                  ? "text-[#27C627]"
-                  : "text-[#FF399F]"
+                  ? "text-[#FF399F]"
+                  : "text-[#27C627]"
               )}
             >
               {pnlList.length === 0 ? (
@@ -379,9 +379,9 @@ const PnlAmountInfo = ({
                       <div
                         className={clsx(
                           "font-[500] text-right",
-                          Big(item.pnl).gt(0)
-                            ? "text-[#27C627]"
-                            : "text-[#FF399F]"
+                          Big(item.pnl).lt(0)
+                            ? "text-[#FF399F]"
+                            : "text-[#27C627]"
                         )}
                       >
                         {Big(item.pnl).gt(0) ? "+" : "-"}$
