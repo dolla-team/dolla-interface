@@ -71,7 +71,7 @@ export default function Winner({
       >
         <CloseIcon size={36} />
       </button>
-      <div className="fixed top-0 left-0 w-full h-full z-[50] ">
+      <div className="fixed top-0 left-0 w-screen h-screen z-[50]">
         <div className="w-full h-full absolute flex items-center justify-center">
           <div className="absolute z-[1] left-0 top-0 w-full h-full bg-black/50 backdrop-blur-[10px] bg-[radial-gradient(44.79%_52.28%_at_50%_50%,rgba(255,183,38,0.6)_0%,rgba(0,0,0,0.6)_100%)]" />
 

@@ -216,7 +216,7 @@ const MarketItem = (props: any) => {
                       onCancel(e);
                     }}
                   >
-                    <div className="mr-[4px]">Cancel</div>
+                    <div className="mr-[4px]">End List</div>
                     <img
                       src="/profile/icon-warning.svg"
                       alt="warning"

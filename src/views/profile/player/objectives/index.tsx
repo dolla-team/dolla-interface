@@ -45,8 +45,8 @@ export default function Objectives() {
           />
         </div>
         <div className="flex justify-between items-center text-[#8C8B8B] text-[10px] mt-[10px]">
-          <span>PTS {userInfo?.current_points}</span>
-          <span>Next Level {userInfo?.next_level_points}</span>
+          <span>Current {userInfo?.current_points} XP</span>
+          <span>Next Level {userInfo?.next_level_points} XP</span>
         </div>
         <Switch
           tab={tab}

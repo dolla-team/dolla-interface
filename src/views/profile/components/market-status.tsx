@@ -31,9 +31,7 @@ const MarketStatus = (props: Props) => {
           // value === EMarketStatus.Winner && "border-r border-[#ADBCCF]"
         )}
       >
-        {from === "seller" && value === EMarketStatus.Cancelled
-          ? "End List"
-          : currentMarketStatus?.label}
+        {currentMarketStatus?.label}
       </div>
       {/* {value === EMarketStatus.Winner && (
         <>

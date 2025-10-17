@@ -8,6 +8,7 @@ import { useBtcContext } from "../../../context";
 import { useAuth } from "@/contexts/auth";
 import { useTipsStore } from "@/stores/use-tips";
 import { QUOTE_TOKEN } from "@/config/btc";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function BidSelection({
   tokenBalance,
@@ -33,13 +34,13 @@ export default function BidSelection({
   return (
     <div className="absolute bottom-0 left-0 w-full h-[202px]">
       <Bg className="absolute top-0 left-0 w-full h-full" />
-      <div className="relative z-[10] flex items-center justify-center xl:gap-[100px] xl:scale-none gap-[120px] scale-[0.75]">
+      <div className="relative z-[10] flex items-center justify-center xl:gap-[100px] xl:scale-none gap-[80px] scale-[0.75]">
         <div className="flex items-center justify-end gap-[18px]">
-          <div className="w-[254px] px-[20px] mt-[20px] h-[60px] border border-[#F2F2F233] rounded-[10px] bg-[#F2F2F21A] flex items-center justify-between">
+          <div className="w-[254px] px-[20px] mt-[70px] h-[60px] border border-[#F2F2F233] rounded-[10px] bg-[#F2F2F21A] flex items-center justify-between">
             <span className="text-[16px] text-white">Credits</span>
             <Points />
           </div>
-          <div className="flex items-center justify-center mt-[24px] relative w-[192px] h-[62px]">
+          <div className="flex items-center justify-center mt-[70px] relative w-[192px] h-[62px]">
             <BalanceBg />
             <CashierEntry
               onClick={(e: any) => {
@@ -72,7 +73,7 @@ export default function BidSelection({
           }}
         />
 
-        <div className="flex items-end text-black text-[18px] font-normal leading-[100%] uppercase mt-[10px]">
+        <div className="flex items-end text-black text-[18px] font-normal leading-[100%] uppercase mt-[60px]">
           {[1, 10, 50, 100].map((item) => (
             <div
               key={`bids-${item}`}
@@ -108,6 +109,140 @@ export default function BidSelection({
           ))}
         </div>
       </div>
+      <AnimatePresence>
+        {bids === 1 && (
+          <motion.img
+            key="bid-1"
+            src="/btc/bid1.png"
+            alt="bid 1"
+            className="w-[282px] h-[239px] absolute bottom-[40px] left-[calc(50%-120px)] xl:scale-none scale-[0.75]"
+            initial={{
+              opacity: 0,
+              scale: 0.3,
+              rotate: -45,
+              x: -100,
+              y: 100
+            }}
+            animate={{
+              opacity: 1,
+              scale: 1,
+              rotate: 0,
+              x: 0,
+              y: 0
+            }}
+            exit={{
+              opacity: 0,
+              scale: 0.3,
+              rotate: 45,
+              x: 100,
+              y: 100
+            }}
+            transition={{
+              duration: 0.5,
+              ease: "easeOut"
+            }}
+          />
+        )}
+        {bids === 10 && (
+          <motion.img
+            key="bid-10"
+            src="/btc/bid10.png"
+            alt="bid 10"
+            className="w-[331px] h-[194px] absolute bottom-[70px] left-[calc(50%-150px)] xl:scale-none scale-[0.75]"
+            initial={{
+              opacity: 0,
+              scale: 0.3,
+              rotate: -45,
+              x: -100,
+              y: 100
+            }}
+            animate={{
+              opacity: 1,
+              scale: 1,
+              rotate: 0,
+              x: 0,
+              y: 0
+            }}
+            exit={{
+              opacity: 0,
+              scale: 0.3,
+              rotate: 45,
+              x: 100,
+              y: 100
+            }}
+            transition={{
+              duration: 0.5,
+              ease: "easeOut"
+            }}
+          />
+        )}
+        {bids === 50 && (
+          <motion.img
+            key="bid-50"
+            src="/btc/bid50.png"
+            alt="bid 50"
+            className="w-[272px] h-[225px] absolute bottom-[64px] left-[calc(50%-130px)] xl:scale-none scale-[0.75]"
+            initial={{
+              opacity: 0,
+              scale: 0.3,
+              rotate: -45,
+              x: -100,
+              y: 100
+            }}
+            animate={{
+              opacity: 1,
+              scale: 1,
+              rotate: 0,
+              x: 0,
+              y: 0
+            }}
+            exit={{
+              opacity: 0,
+              scale: 0.3,
+              rotate: 45,
+              x: 100,
+              y: 100
+            }}
+            transition={{
+              duration: 0.5,
+              ease: "easeOut"
+            }}
+          />
+        )}
+        {bids === 100 && (
+          <motion.img
+            key="bid-100"
+            src="/btc/bid100.png"
+            alt="bid 100"
+            className="w-[289px] h-[198px] absolute bottom-[80px] left-[calc(50%-130px)] xl:scale-none scale-[0.75]"
+            initial={{
+              opacity: 0,
+              scale: 0.3,
+              rotate: -45,
+              x: -100,
+              y: 100
+            }}
+            animate={{
+              opacity: 1,
+              scale: 1,
+              rotate: 0,
+              x: 0,
+              y: 0
+            }}
+            exit={{
+              opacity: 0,
+              scale: 0.3,
+              rotate: 45,
+              x: 100,
+              y: 100
+            }}
+            transition={{
+              duration: 0.5,
+              ease: "easeOut"
+            }}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }

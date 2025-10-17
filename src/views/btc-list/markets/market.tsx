@@ -2,7 +2,7 @@ import SellerLevel from "@/components/seller-level";
 import columns from "./columns";
 import { formatAddress } from "@/utils/format/address";
 import { formatNumber } from "@/utils/format/number";
-import { getAnchorPrice, getReAnchorPrice } from "@/utils/pool";
+import { getAnchorPrice } from "@/utils/pool";
 import ProgressBar from "./progress-bar";
 import BtcImg from "./btc-bg";
 import { useAuth } from "@/contexts/auth";
@@ -13,6 +13,7 @@ import { useMemo } from "react";
 import MarketStatus from "@/views/profile/components/market-status";
 import dayjs from "@/libs/dayjs";
 import clsx from "clsx";
+import MultipleTag from "@/components/multiple-tag";
 
 export default function Market({
   data,
@@ -75,14 +76,16 @@ export default function Market({
           {column.dataIndex === "anchor_price" && (
             <div className="text-[14px] text-black">
               {formatNumber(getAnchorPrice(data?.anchor_price), 2, true, {
-                prefix: "$"
+                prefix: "$",
+                isShort: true
               })}
             </div>
           )}
           {column.dataIndex === "accumulative_bids" && (
             <div className="text-[14px] text-black">
               {formatNumber(data.accumulative_bids, 0, true, {
-                prefix: "$"
+                prefix: "$",
+                isShort: true
               })}
             </div>
           )}
@@ -133,6 +136,14 @@ export default function Market({
           )}
         </div>
       ))}
+      {data.status === 2 && (
+        <MultipleTag
+          multipler={formatNumber(data.winner_profit_ratio, 0, true)}
+          size={47}
+          className="absolute top-[-4px] right-[-4px] z-[2]"
+          textClassName="text-[14px]"
+        />
+      )}
       {data.status !== 1 && (
         <div className="absolute top-0 left-0 w-full h-full bg-[#FFFFFF80] border border-[#F2F2F233] rounded-[10px]"></div>
       )}

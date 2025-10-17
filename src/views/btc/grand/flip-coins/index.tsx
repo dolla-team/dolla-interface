@@ -1,13 +1,19 @@
 import { useBtcContext } from "../../context";
 import { useEffect, useMemo, useRef, useState } from "react";
-import Result from "../../components/result";
+
 import { useDollaEyeContext } from "@/contexts/dolla-eye";
 import { EEyeType, EyeTypeMap } from "@/hooks/use-dolla-eye";
 import useIsMobile from "@/hooks/use-is-mobile";
 import clsx from "clsx";
 import Coins from "./coins";
 
-export default function FlipCoins() {
+export default function FlipCoins({
+  sumPoints,
+  sumTickets,
+  isWinner,
+  points,
+  tickets
+}: any) {
   const {
     bids,
     flipStatus,
@@ -15,8 +21,7 @@ export default function FlipCoins() {
     coinsRef,
     flipComplete,
     bidResult,
-    setFlipStatus,
-    onReset
+    setFlipStatus
   } = useBtcContext();
   const isMobile = useIsMobile();
 
@@ -39,23 +44,6 @@ export default function FlipCoins() {
   const coinContainerRef = useRef<any>(null);
   const contentRef = useRef<any>(null);
   const [shouldCenter, setShouldCenter] = useState(false);
-
-  const [points, tickets, sumPoints, sumTickets, isWinner] = useMemo(() => {
-    if (!bidResult) {
-      return [[], [], 0, 0, false];
-    }
-    const _p = bidResult.point
-      ? bidResult.point.wild_coin_ev_result.split(",")
-      : [];
-    const _t = bidResult.ticket ? bidResult.ticket?.result?.split(",") : [];
-    const _pt = _p.reduce((acc: number, curr: string) => acc + Number(curr), 0);
-    const _tt = _t.reduce(
-      (acc: number, curr: string) => acc + Number(curr === "0" ? 1 : 0),
-      0
-    );
-
-    return [_p, _t, _pt, _tt, bidResult.bid.is_winner];
-  }, [bidResult]);
 
   useEffect(() => {
     // Handle eye type
@@ -136,18 +124,6 @@ export default function FlipCoins() {
             SIZE={SIZE}
           />
         </div>
-
-        {flipStatus === 6 && (
-          <Result
-            points={sumPoints}
-            tickets={sumTickets}
-            onClose={() => {
-              setFlipStatus(0);
-              onReset();
-            }}
-            isWinner={isWinner}
-          />
-        )}
       </div>
     )
   );

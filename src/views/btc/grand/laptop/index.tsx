@@ -7,7 +7,13 @@ import PreLoading from "../pre-loading";
 import EndPanel from "../../detail/end";
 import Cancel from "../../detail/cancel";
 
-export default function Grand({ className }: { className?: string }) {
+export default function Grand({
+  className,
+  ...restProps
+}: {
+  className?: string;
+  restProps: any;
+}) {
   const { flipStatus, pool } = useBtcContext();
 
   return (
@@ -22,7 +28,7 @@ export default function Grand({ className }: { className?: string }) {
     >
       {(pool?.status === 1 || flipStatus !== 0) && (
         <>
-          <FlipCoins />
+          <FlipCoins {...restProps} />
           {flipStatus === 3 && <FlippingCoin start={true} />}
           {flipStatus === 1 && <PreLoading />}
         </>

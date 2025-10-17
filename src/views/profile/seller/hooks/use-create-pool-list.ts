@@ -58,7 +58,8 @@ export default function useCreatePoolList() {
               .toString(),
             list_value: item.reward_usd,
             sold: item.accumulative_bids,
-            pnl: profit.toString()
+            pnl: profit.toString(),
+            claim_amount: item.claim_amount
           });
         }
       });

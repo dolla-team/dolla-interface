@@ -1,5 +1,4 @@
 import Avatar from "@/components/avatar";
-import MultiIcon from "./multi-icon";
 import PlayerDistribution from "./player-distribution";
 import { formatAddress } from "@/utils/format/address";
 import dayjs from "@/libs/dayjs";
@@ -8,6 +7,7 @@ import useWinnerBidList from "../use-winner-bid-list";
 import { useMemo } from "react";
 import useIsMobile from "@/hooks/use-is-mobile";
 import clsx from "clsx";
+import MultipleTag from "@/components/multiple-tag";
 // import ProvablyFair from "@/sections/provably-fair";
 
 export default function EndPanel({ data }: { data: any }) {
@@ -99,35 +99,19 @@ export default function EndPanel({ data }: { data: any }) {
                 isMobile ? "mt-[20px] w-[150px] h-[150px]" : "mt-[47px]"
               )}
             >
-              <div
-                className={clsx(
-                  "absolute z-[3] w-[93px] h-[93px] flex items-center justify-center",
-                  isMobile
-                    ? "top-[-30px] right-[-40px]"
-                    : "top-[-30px] right-[-30px]"
-                )}
-              >
-                <MultiIcon className="absolute top-0 left-0 w-full h-full" />
-                <div className="text-black text-center font-[DelaGothicOne] relative z-[1] rotate-[15deg] w-full h-full flex items-center justify-center px-[6px]">
-                  <span className="text-[24px]">
-                    {formatNumber(returnMultiple, 1, true, { isShort: true })}
-                  </span>
-                  <span
-                    className={clsx(
-                      "text-[18px]",
-                      Number(returnMultiple) > 999 ? "mt-[-50px]" : "mt-[0px]"
-                    )}
-                  >
-                    X
-                  </span>
-                </div>
-              </div>
+              <MultipleTag
+                multipler={formatNumber(returnMultiple, 1, true)}
+                size={120}
+                className="absolute top-[-50px] right-[-50px]"
+                textClassName="text-[30px]"
+              />
               <Avatar
                 size={150}
                 src={data.winner_user_info?.icon}
-                email={data.winner_user_info?.email_desensitization}
+                // email={data.winner_user_info?.email_desensitization}
+                email={"A"}
                 address={data.winner_user_info?.user}
-                className="rounded-full text-[30px]"
+                className="rounded-full text-[48px] font-[500]"
               />
             </div>
             <div className="text-white text-center text-[16px] font-[DelaGothicOne] mt-[10px]">

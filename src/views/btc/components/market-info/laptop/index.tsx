@@ -63,7 +63,7 @@ export default function MarketInfo() {
         </div>
         <div className="mt-[10px] flex justify-between items-center">
           <div>
-            <div className="text-[12px] text-white/50">Valued</div>
+            <div className="text-[12px] text-white/50">Anchor Value</div>
             <div
               className={clsx(
                 "text-[16px] font-[600]",

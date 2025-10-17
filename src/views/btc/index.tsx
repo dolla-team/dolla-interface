@@ -18,7 +18,8 @@ import { ShareBtn, CloseBtn } from "./share-btn";
 import Loading from "./loading";
 import Wallet from "@/sections/wallet";
 import Tips from "./components/tips";
-import { useEffect } from "react";
+import Result from "./components/result";
+import { useEffect, useMemo } from "react";
 import useWalletStore from "@/stores/use-wallet";
 
 // import ProvablyFair from "@/sections/provably-fair";
@@ -37,12 +38,30 @@ export default function NewBTC() {
 const Content = () => {
   const { nearAccount } = useAuth() || {};
   const isMobile = useIsMobile();
-  const { pool, bidResult } = useBtcContext();
+  const { pool, bidResult, flipStatus, onReset, setFlipStatus } =
+    useBtcContext();
   const navigate = useNavigate();
   const walletStore = useWalletStore();
   useEffect(() => {
     walletStore.init();
   }, []);
+
+  const [points, tickets, sumPoints, sumTickets, isWinner] = useMemo(() => {
+    if (!bidResult) {
+      return [[], [], 0, 0, false];
+    }
+    const _p = bidResult.point
+      ? bidResult.point.wild_coin_ev_result.split(",")
+      : [];
+    const _t = bidResult.ticket ? bidResult.ticket?.result?.split(",") : [];
+    const _pt = _p.reduce((acc: number, curr: string) => acc + Number(curr), 0);
+    const _tt = _t.reduce(
+      (acc: number, curr: string) => acc + Number(curr === "0" ? 1 : 0),
+      0
+    );
+
+    return [_p, _t, _pt, _tt, bidResult.bid.is_winner];
+  }, [bidResult]);
 
   return (
     <div
@@ -72,7 +91,10 @@ const Content = () => {
       </div>
       {!isMobile && <Header className="h-[214px]" />}
       <MarketInfo />
-      <Grand tokenBalance={nearAccount?.balance} />
+      <Grand
+        tokenBalance={nearAccount?.balance}
+        {...{ sumPoints, sumTickets, isWinner, points, tickets }}
+      />
       <BidSelection tokenBalance={nearAccount?.balance} />
       {!isMobile && <BidsInfo />}
       {/* {!isMobile && <MoreMarkets />} */}
@@ -86,6 +108,17 @@ const Content = () => {
       {/* {isMobile && <MarketsModal />} */}
       <Wallet />
       {pool?.status === 1 && <Tips />}
+      {flipStatus === 6 && (
+        <Result
+          points={sumPoints}
+          tickets={sumTickets}
+          onClose={() => {
+            setFlipStatus(0);
+            onReset();
+          }}
+          isWinner={isWinner}
+        />
+      )}
     </div>
   );
 };

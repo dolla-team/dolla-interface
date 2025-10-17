@@ -1,7 +1,6 @@
 import clsx from "clsx";
-import BtnBg, { BtnBidBg } from "./btn-bg";
 import { useBtcContext } from "@/views/btc/context";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 
 export default function BidBtn({
   disabled,
@@ -10,7 +9,7 @@ export default function BidBtn({
   disabled: boolean;
   onClick: () => void;
 }) {
-  const { flipStatus, setFlipStatus } = useBtcContext();
+  const { flipStatus, setFlipStatus, bids } = useBtcContext();
   const [count, setCount] = useState(10);
 
   useEffect(() => {
@@ -31,52 +30,53 @@ export default function BidBtn({
     }
   }, [count, flipStatus]);
   return (
-    <div className="w-[197px] h-[235px] relative top-[-56px] shrink-0">
-      <BtnBg />
-      <button
-        className={clsx(
-          "absolute bottom-[-8px] left-0 w-[197px] h-[138px]",
-          disabled && flipStatus !== 4 ? "opacity-50" : "button"
-        )}
-        id="tips-bid-button"
-        onClick={onClick}
+    <div
+      className={clsx(
+        "w-[300px] h-[96px] p-[8px] relative mt-[80px] shrink-0 rounded-[24px] border border-black bg-[#333333]",
+        "shadow-[0px_7px_0px_0px_rgba(255,255,255,0.60)_inset]"
+      )}
+    >
+      <div
+        className={clsx("h-full rounded-[20px] border border-black")}
+        style={{
+          background:
+            flipStatus !== 4 && flipStatus !== 5
+              ? "radial-gradient(50% 50% at 50% 50%, #FFB700 0%, #FFD876 100%)"
+              : "radial-gradient(50% 50% at 50% 50%, #00FF95 0%, #00FF59 100%)",
+          boxShadow:
+            flipStatus !== 4 && flipStatus !== 5
+              ? "0 7px 0 0 rgba(255, 255, 255, 0.60) inset, 0 0 10px 0 rgba(255, 210, 87, 0.50)"
+              : "0 7px 0 0 rgba(255, 255, 255, 0.60) inset, 0 0 20px 0 #01FF6F"
+        }}
       >
-        {flipStatus === 4 && window.autoFlipTimer !== -1 && (
-          <div className="relative z-[2] text-[36px] font-bold">{count}S</div>
-        )}
-        <div
-          className={clsx(
-            "relative z-[2] font-bold uppercase",
-            flipStatus === 4
-              ? window.autoFlipTimer !== -1
-                ? "text-[20px] mt-[-14px]"
-                : "text-[36px]"
-              : "text-[42px] mt-[10px]"
-          )}
+        <button
+          className={clsx("w-full h-full relative", "button")}
+          id="tips-bid-button"
+          onClick={onClick}
         >
-          {flipStatus === 4 ? "AUTO" : "BID"}
-        </div>
-        {/* {disabled && flipStatus !== 4 ? (
-          <DollaEye
-            className="w-[50px] h-[50px] absolute left-[76px] bottom-[40px]"
-            onlyEye
-          />
-        ) : (
-          <div
-            className={clsx(
-              "relative z-[2] font-bold uppercase mt-[10px]",
-              flipStatus === 4 ? "text-[36px]" : "text-[42px]"
-            )}
-          >
-            {flipStatus === 4 ? "AUTO" : "BID"}
-          </div>
-        )} */}
-        <BtnBidBg
-          className="absolute bottom-0 left-0"
-          isAuto={flipStatus === 4}
-          isAnimation={flipStatus === 0 && !disabled}
-        />
-      </button>
+          {disabled && flipStatus !== 4 && (
+            <div className="absolute top-0 left-0 w-full h-full bg-black/30" />
+          )}
+          {flipStatus === 4 && window.autoFlipTimer !== -1 ? (
+            <div className="text-[26px] font-bold">Auto Open {count}s</div>
+          ) : flipStatus === 5 ? (
+            <div className="text-[26px] font-bold">Openning</div>
+          ) : (
+            <div
+              className={clsx(
+                "font-bold uppercase",
+                flipStatus === 4
+                  ? window.autoFlipTimer !== -1
+                    ? "text-[20px]"
+                    : "text-[36px]"
+                  : "text-[42px]"
+              )}
+            >
+              {flipStatus === 4 ? "AUTO" : "BID"}
+            </div>
+          )}
+        </button>
+      </div>
     </div>
   );
 }

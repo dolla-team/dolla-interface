@@ -6,10 +6,6 @@ import { useMemo, useState } from "react";
 import { useAuth } from "@/contexts/auth";
 import RefreshIcon from "../../components/refresh-icon";
 import useCancelledPoolsStore from "@/stores/use-cancelled-pools";
-import Popover, {
-  PopoverPlacement,
-  PopoverTrigger
-} from "@/components/popover";
 import PopoverCard from "../../components/popover-card";
 
 const PlayerMarkets = (props: any) => {
@@ -58,7 +54,7 @@ const PlayerMarkets = (props: any) => {
                 <button
                   key={item.key}
                   className={clsx(
-                    "button px-[10px] py-[6px] rounded-[16px] text-[10px] flex items-center gap-[4px] border",
+                    "button relative px-[10px] py-[6px] rounded-[16px] text-[10px] flex items-center gap-[4px] border",
                     status === item.key
                       ? "border-black bg-black text-white"
                       : "border-[#E4E4E4]"
@@ -77,22 +73,20 @@ const PlayerMarkets = (props: any) => {
                       item.label === "Cancelled" && "bg-[#FF399F]"
                     )}
                   />
-                  {item.label === "Cancelled" && cancelledAmount > 0 ? (
+                  {item.label === "Cancelled" && cancelledAmount > 0 && (
                     <CancelledPoolsInfo
                       list={cancelledPoolsStore.cancelledPools}
                       amount={cancelledAmount}
-                    >
-                      <span>{userInfo?.join_cancelled_count} Cancelled</span>
-                    </CancelledPoolsInfo>
-                  ) : (
-                    <span>
-                      {item.label === "Live" && userInfo?.join_live_count}
-                      {item.label === "Sold" && userInfo?.join_ended_count}
-                      {item.label === "Cancelled" &&
-                        userInfo?.join_cancelled_count}{" "}
-                      {item.label}
-                    </span>
+                    />
                   )}
+
+                  <span>
+                    {item.label === "Live" && userInfo?.join_live_count}
+                    {item.label === "Sold" && userInfo?.join_ended_count}
+                    {item.label === "Cancelled" &&
+                      userInfo?.join_cancelled_count}{" "}
+                    {item.label}
+                  </span>
                 </button>
               );
             })}
@@ -203,32 +197,21 @@ const ArrowButton = ({
 };
 
 const CancelledPoolsInfo = ({
-  children,
   amount,
   list
 }: {
-  children: React.ReactNode;
   amount: number;
   list: any[];
 }) => {
   const poolIds = list?.map((item: any) => item.pool_id).join("/");
   return (
-    <Popover
-      trigger={PopoverTrigger.Hover}
-      placement={PopoverPlacement.Top}
-      content={
-        <PopoverCard className="w-[248px] p-[12px] text-black relative">
-          <div className="text-[14px] font-[600]">⚠️ ${amount} Refund!</div>
-          <div className="text-[10px] mt-[10px] leading-[120%]">
-            Your participated Markets #{poolIds} has been cancelled, claim your
-            bid fund.{" "}
-          </div>
-          <div className="w-[12px] h-[12px] bg-white border border-[#E4E4E4] border-t-0 border-l-0 absolute bottom-[-6px] left-1/2 -translate-x-1/2 rotate-45"></div>
-        </PopoverCard>
-      }
-      offset={20}
-    >
-      {children}
-    </Popover>
+    <PopoverCard className="absolute bottom-[40px] left-1/2 -translate-x-1/2 w-[248px] p-[12px] text-black">
+      <div className="text-[14px] font-[600]">⚠️ ${amount} Refund!</div>
+      <div className="text-[10px] mt-[10px] leading-[120%]">
+        Your participated Markets #{poolIds} has been cancelled, claim your bid
+        fund.{" "}
+      </div>
+      <div className="w-[12px] h-[12px] bg-white border border-[#E4E4E4] border-t-0 border-l-0 absolute bottom-[-6px] left-1/2 -translate-x-1/2 rotate-45"></div>
+    </PopoverCard>
   );
 };

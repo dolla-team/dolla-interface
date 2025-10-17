@@ -145,7 +145,7 @@ const StatisticsSeller = (props: any) => {
                     <div className="inline-flex gap-[4px] mt-[10px] h-[24px] px-[10px] items-center border border-[#E4E4E4] rounded-[16px] bg-[#F2F2F299]">
                       <div className="w-[7px] h-[7px] shrink-0 rounded-full bg-[#FF399F]" />
                       <div className="text-[10px] text-[#2B3337]">
-                        {userInfo?.cancel} End List
+                        {userInfo?.cancel} Cancelled
                       </div>
                     </div>
                     <div className="inline-flex gap-[4px] mt-[10px] h-[24px] px-[10px] items-center border border-[#E4E4E4] rounded-[16px] bg-[#F2F2F299]">
@@ -296,7 +296,7 @@ const PnlAmountInfo = ({
       width: "25%"
     },
     {
-      title: "Sold",
+      title: "Sold (-fee)",
       dataIndex: "sold",
       width: "20%"
     },

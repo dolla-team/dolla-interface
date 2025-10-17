@@ -55,7 +55,8 @@ export default function useBid(
     //       id: 1,
     //       status: 1,
     //       times: times,
-    //       created_at: Date.now()
+    //       created_at: Date.now(),
+    //       is_winner: true
     //     }
     //   });
     // }, 3000);

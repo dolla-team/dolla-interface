@@ -107,11 +107,6 @@ export const Bg100 = ({ active }: { active: boolean }) => {
           fill="#FFC42F"
         />
       </svg>
-      <img
-        className="absolute bottom-[-10px] left-0"
-        src="/btc/bid100.gif"
-        alt="bid 100"
-      />
     </>
   ) : (
     <svg
@@ -172,11 +167,6 @@ export const Bg50 = ({ active }: { active: boolean }) => {
           fill="#FFC42F"
         />
       </svg>
-      <img
-        className="absolute bottom-0 left-0"
-        src="/btc/bid50.gif"
-        alt="bid 50"
-      />
     </>
   ) : (
     <svg
@@ -237,11 +227,6 @@ export const Bg10 = ({ active }: { active: boolean }) => {
           fill="#FFC42F"
         />
       </svg>
-      <img
-        className="absolute bottom-0 left-0"
-        src="/btc/bid10.gif"
-        alt="bid 10"
-      />
     </>
   ) : (
     <svg
@@ -315,11 +300,6 @@ export const Bg5 = ({ active }: { active: boolean }) => {
           </linearGradient>
         </defs>
       </svg>
-      <img
-        className="absolute bottom-0 left-0"
-        src="/btc/bid5.gif"
-        alt="bid 5"
-      />
     </>
   ) : (
     <svg

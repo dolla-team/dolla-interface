@@ -8,7 +8,7 @@ export default [
   {
     title: "Markets",
     dataIndex: "market",
-    width: "20%"
+    width: "25%"
   },
   {
     title: "Anchor Value",
@@ -19,7 +19,7 @@ export default [
   {
     title: "Total Bids",
     dataIndex: "accumulative_bids",
-    width: "15%",
+    width: "10%",
     sort: true
   },
   {
@@ -37,7 +37,7 @@ export default [
   {
     title: "Status",
     dataIndex: "status",
-    width: "10%",
+    width: "15%",
     align: "center"
   }
 ];
