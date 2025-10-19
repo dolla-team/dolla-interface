@@ -93,7 +93,8 @@ export function useReferenceData(props: any) {
         _bids[_label] = {
           label: _label,
           value: item.total_creations_amount,
-          percentage: 0
+          percentage: 0,
+          times: item.times
         };
       }
 

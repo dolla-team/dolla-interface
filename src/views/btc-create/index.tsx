@@ -310,10 +310,9 @@ export default function BTCCreate() {
                         )}
                         <div className="font-[800] text-[16px] mt-[1px]">
                           $
-                          {record.value
-                            ? formatNumber(record.value, 2, true, {
-                                isShort: true,
-                                isShortUppercase: true
+                          {record.times
+                            ? formatNumber(record.times, 2, true, {
+                                isShort: true
                               })
                             : "-"}{" "}
                           Bids
