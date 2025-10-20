@@ -33,7 +33,7 @@ export default function Task({
     task && (
       <div
         className={clsx(
-          "w-[360px] bg-[#F0F0F0] border border-[#F2F2F233] rounded-[10px] py-[10px] px-[15px]",
+          "w-[360px] bg-[#F0F0F0] border border-[#F2F2F233] rounded-[10px] py-[10px] px-[15px] mt-[10px]",
           className
         )}
       >

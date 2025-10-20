@@ -17,7 +17,7 @@ export default function Docs() {
     concept: {
       title: "The Concept",
       description:
-        "Dolla turns traditional buying and selling into a probabilistic marketplace — where assets are won through on-chain odds, not fixed prices.",
+        "Dolla is a consumer app that changes the way how people sell and buy on-chain assets.Every assets listed is a probability market with the entry cost to bis as low as 1$ worth of stablecoin.",
       details: [
         "Transform traditional commerce into probability-based trading",
         "Win high-value assets through transparent odds",
@@ -49,9 +49,9 @@ export default function Docs() {
           icon: "⚡"
         },
         {
-          title: "No Waiting",
+          title: "No hassle",
           description:
-            "No waiting, no queue — every click is a new chance to win.",
+            "No waiting, no queue, no slippage, no hidden fees, no MEV.",
           icon: "🚀"
         }
       ]
@@ -167,7 +167,7 @@ export default function Docs() {
                     <h2 className="text-3xl font-bold mb-4 text-yellow-400">
                       {content.concept.title}
                     </h2>
-                    <p className="text-xl text-gray-300 leading-relaxed">
+                    <p className="text-l text-gray-300 leading-relaxed">
                       {content.concept.description}
                     </p>
                   </div>

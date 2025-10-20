@@ -43,7 +43,10 @@ export default function Market({
       {columns.map((column: any) => (
         <div
           key={column.title}
-          className="flex items-center"
+          className={clsx(
+            "flex items-center",
+            column.align === "center" && "justify-center"
+          )}
           style={{ width: column.width }}
         >
           {column.dataIndex === "pool_id" && (
@@ -109,39 +112,12 @@ export default function Market({
             </div>
           )}
           {column.dataIndex === "status" && (
-            <div
-              className={clsx(data.status === 1 ? "pl-[30px]" : "pl-[10px]")}
-            >
-              {data.status === 1 ? (
-                <LiveInfo data={data}>
-                  <MarketStatus
-                    value={data.status}
-                    className={clsx("p-[8px]", data.status !== 1 && "mx-auto")}
-                  />
-                </LiveInfo>
-              ) : (
-                <MarketStatus
-                  value={data.status}
-                  className={clsx("p-[8px]", data.status !== 1 && "mx-auto")}
-                />
-              )}
-
-              {data.status === 2 && (
-                <div className="flex items-center gap-[4px] mt-[5px]">
-                  <Avatar
-                    size={20}
-                    src={data.winner_user_info?.icon}
-                    email={data.winner_user_info?.email_desensitization}
-                    address={data.winner_user_info?.user}
-                    className="text-[12px]"
-                  />
-                  <div className="text-[12px] text-black font-[600] w-[160px] truncate">
-                    {data.winner_user_info?.name ||
-                      formatAddress(data.winner_user_info?.user)}
-                  </div>
-                </div>
-              )}
-            </div>
+            <LiveInfo data={data}>
+              <MarketStatus
+                value={data.status}
+                className={clsx("p-[8px]", data.status !== 1 && "mx-auto")}
+              />
+            </LiveInfo>
           )}
         </div>
       ))}
@@ -170,18 +146,59 @@ const LiveInfo = ({
       placement={PopoverPlacement.Top}
       content={
         <div className="w-[230px] px-[15px] py-[10px] text-[12px] p-[14px] bg-white rounded-[10px] border border-[#E4E4E4]">
-          <div className="flex items-center justify-between">
-            <span className="text-[#8A87AA]">Created</span>
-            <span className="text-black">
-              {dayjs(data.created_at).format("YYYY-MM-DD HH:mm")}
-            </span>
-          </div>
-          <div className="flex items-center justify-between mt-[6px]">
-            <span className="text-[#8A87AA]">Lasts</span>
-            <span className="text-black">
-              {dayjs(data.created_at).from(dayjs(Date.now()), true)}
-            </span>
-          </div>
+          {data.status === 1 && (
+            <>
+              <div className="flex items-center justify-between">
+                <span className="text-[#5E6B7D]">Created</span>
+                <span className="text-black">
+                  {dayjs(data.created_at).format("YYYY-MM-DD HH:mm")}
+                </span>
+              </div>
+              <div className="flex items-center justify-between mt-[6px]">
+                <span className="text-[#5E6B7D]">Lasts</span>
+                <span className="text-black">
+                  {dayjs(data.created_at).from(dayjs(Date.now()), true)}
+                </span>
+              </div>
+            </>
+          )}
+          {data.status === 2 && (
+            <>
+              <div className="flex items-center justify-between w-full">
+                <span className="text-[#5E6B7D]">Winner</span>
+                <div className="flex items-center justify-end gap-[4px] mt-[5px]">
+                  <Avatar
+                    size={20}
+                    src={data.winner_user_info?.icon}
+                    email={data.winner_user_info?.email_desensitization}
+                    address={data.winner_user_info?.user}
+                    className="text-[12px]"
+                  />
+                  <div className="text-[12px] text-black font-[600]">
+                    {data.winner_user_info?.name ||
+                      formatAddress(data.winner_user_info?.user)}
+                  </div>
+                </div>
+              </div>
+              <div className="flex items-center justify-between mt-[6px]">
+                <span className="text-[#5E6B7D]">Duration</span>
+                <div className="text-black text-right">
+                  <div>{dayjs(data.created_at).format("YYYY-MM-DD HH:mm")}</div>
+                  <div>
+                    ~{dayjs(data.result_time).format("YYYY-MM-DD HH:mm")}
+                  </div>
+                </div>
+              </div>
+              <div className="flex items-center justify-between mt-[6px]">
+                <span className="text-[#5E6B7D]">Lasts</span>
+                <div className="text-black">
+                  {data?.created_at && data?.result_time
+                    ? dayjs(data.created_at).from(dayjs(data.result_time), true)
+                    : "-"}
+                </div>
+              </div>
+            </>
+          )}
         </div>
       }
     >

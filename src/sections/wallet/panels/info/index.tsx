@@ -57,9 +57,13 @@ export default function Info({
       <div className="h-[calc(100vh-300px)] overflow-y-auto p-[15px]">
         {tab === 0 && (
           <Tokens
-            onClick={() => {
+            onClick={(token) => {
               onTabChange("deposit");
-              walletStore.set({ depositMethod: "centralized-exchange" });
+              walletStore.set({
+                depositMethod: "centralized-exchange",
+                selectedToken: token,
+                depositPanelType: "input"
+              });
             }}
           />
         )}

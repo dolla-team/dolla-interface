@@ -1,14 +1,10 @@
 import Avatar from "@/components/avatar";
 import { formatAddress } from "@/utils/format/address";
-import CopyIcon from "@/components/icons/copy";
 import { useAuth } from "@/contexts/auth";
-import { useUser } from "@privy-io/react-auth";
-import useCopy from "@/hooks/use-copy";
 
 export default function Info() {
   const { userInfo } = useAuth();
-  const { onCopy } = useCopy();
-  const { user } = useUser();
+
   return (
     <div className="flex gap-[8px] items-center px-[20px]">
       <Avatar
@@ -26,14 +22,6 @@ export default function Info() {
           <span className="text-[12px] text-white">
             {formatAddress(userInfo?.user)}
           </span>
-          <button
-            className="button"
-            onClick={() => {
-              onCopy(userInfo?.user);
-            }}
-          >
-            <CopyIcon />
-          </button>
         </div>
       </div>
     </div>

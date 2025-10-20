@@ -1,6 +1,7 @@
 import clsx from "clsx";
 import { useBtcContext } from "@/views/btc/context";
 import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 
 export default function BidBtn({
   disabled,
@@ -9,7 +10,7 @@ export default function BidBtn({
   disabled: boolean;
   onClick: () => void;
 }) {
-  const { flipStatus, setFlipStatus, bids } = useBtcContext();
+  const { flipStatus, setFlipStatus } = useBtcContext();
   const [count, setCount] = useState(10);
 
   useEffect(() => {
@@ -37,7 +38,7 @@ export default function BidBtn({
       )}
     >
       <div
-        className={clsx("h-full rounded-[20px] border border-black")}
+        className={clsx("h-full rounded-[20px] border border-black relative")}
         style={{
           background:
             flipStatus !== 4 && flipStatus !== 5
@@ -49,8 +50,27 @@ export default function BidBtn({
               : "0 7px 0 0 rgba(255, 255, 255, 0.60) inset, 0 0 20px 0 #01FF6F"
         }}
       >
+        {/* Halo glow only when button is NOT disabled */}
+        {!disabled && (
+          <motion.div
+            className={clsx(
+              "absolute -inset-2 rounded-[28px] pointer-events-none z-[1]"
+            )}
+            // Loop opacity from 0% -> 100% -> 0%
+            initial={{ opacity: 0 }}
+            animate={{ opacity: [0, 1, 0] }}
+            transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+            style={{
+              // Radial glow with soft blur; does not block clicks due to pointer-events-none
+              background:
+                // White-ish halo
+                "radial-gradient(50% 50% at 50% 50%, rgba(255, 255, 255, 0.0) 0%, rgba(255, 255, 255, 0.7) 60%, rgba(255, 255, 255, 0.0) 100%)",
+              filter: "blur(12px)"
+            }}
+          />
+        )}
         <button
-          className={clsx("w-full h-full relative", "button")}
+          className={clsx("w-full h-full relative z-[2]", "button")}
           id="tips-bid-button"
           onClick={onClick}
         >

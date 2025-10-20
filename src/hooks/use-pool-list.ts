@@ -9,14 +9,12 @@ import { useAllMarketsStore } from "@/stores/use-all-markets";
 import { AMOUNT } from "@/config/btc";
 
 export default function usePoolList(props?: {
-  pageLimit?: number;
   isScrollList?: boolean;
   tokenStatus?: number;
   onFirstPageLoad?(list: any): void;
   volume?: number;
 }) {
   const {
-    pageLimit,
     isScrollList,
     onFirstPageLoad,
     tokenStatus = 0,
@@ -31,34 +29,10 @@ export default function usePoolList(props?: {
   const [hasMore, setHasMore] = useState(true);
   const pageRef = useRef(0);
   const { userInfo } = useAuth();
-  const LIMIT =
-    typeof pageLimit === "number"
-      ? pageLimit
-      : Math.floor(window.innerWidth / 300);
 
   const cachedList = useRef<any[]>([]);
 
   const onQueryPoolList = async (withoutLoading = false) => {
-    // if (
-    //   step === -1 ||
-    //   step + pageRef.current < cachedList.current.length / LIMIT
-    // ) {
-    //   setPoolList(
-    //     cachedList.current.slice(
-    //       isScrollList ? 0 : (step + pageRef.current) * LIMIT,
-    //       (step + pageRef.current + 1) * LIMIT
-    //     )
-    //   );
-    //   setLoading(false);
-    //   pageRef.current += step;
-
-    //   setHasMore(
-    //     step + pageRef.current < Math.ceil(cachedList.current.length / LIMIT)
-    //   );
-    //   return;
-    // }
-    // pageRef.current += step;
-
     try {
       clearTimeout(window.allMarketsTimer);
       // console.log("withoutLoading", withoutLoading);
@@ -66,9 +40,10 @@ export default function usePoolList(props?: {
         setLoading(true);
         setPoolList([]);
       }
+      const limit = allmarketsStore.status === "1" ? 20 : 10;
       const res = await axiosInstance.get(
-        `/api/v1/pool/list?limit=${LIMIT}&offset=${
-          pageRef.current * LIMIT
+        `/api/v1/pool/list?limit=${limit}&offset=${
+          pageRef.current * limit
         }&sort_field=${sortField}&sort_order=${sortOrder}&status=${
           allmarketsStore.status
         }&chain=${"near"}&token_status=${tokenStatus}${
@@ -171,6 +146,13 @@ export default function usePoolList(props?: {
     }
   );
 
+  // Load next page when available; keep current list intact
+  const onNextPage = (step: number) => {
+    if (loading) return; // guard to prevent duplicate loads
+    pageRef.current += step;
+    onQueryPoolList(true);
+  };
+
   useEffect(() => {
     if (userInfo?.user) {
       onQueryPoolListDebounced();
@@ -204,6 +186,7 @@ export default function usePoolList(props?: {
     poolList,
     loading,
     onQueryPoolList,
+    onNextPage,
     sortField,
     setSortField,
     sortOrder,
@@ -211,7 +194,6 @@ export default function usePoolList(props?: {
     collection,
     setCollection,
     hasMore,
-    pageRef,
-    LIMIT
+    pageRef
   };
 }

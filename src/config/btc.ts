@@ -21,7 +21,8 @@ export const BASE_TOKEN: Record<string, any> = {
   icon: "/tokens/btc.png",
   pointsIcon: "/tokens/btc.png",
   isBaseToken: true,
-  minDepositAmount: "0.000001"
+  minDepositAmount: "0.000001",
+  maxDepositAmount: "1"
 };
 
 export const QUOTE_TOKEN: Record<string, any> = {
@@ -33,7 +34,8 @@ export const QUOTE_TOKEN: Record<string, any> = {
   symbol: "USDT",
   icon: "/tokens/usdt.png",
   pointsIcon: "/tokens/usdt.png",
-  minDepositAmount: "1"
+  minDepositAmount: "1",
+  maxDepositAmount: "1000000"
 };
 
 export const PAID_TOKEN = QUOTE_TOKEN;

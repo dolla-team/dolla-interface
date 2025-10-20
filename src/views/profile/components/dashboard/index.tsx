@@ -115,14 +115,6 @@ const Dashboard = (props: any) => {
             <span className="text-[12px] text-[#2B3337]">
               {formatAddress(userInfo?.user)}
             </span>
-            <button
-              className="button"
-              onClick={() => {
-                onCopy(userInfo?.user);
-              }}
-            >
-              <CopyIcon />
-            </button>
           </div>
         </div>
       </div>

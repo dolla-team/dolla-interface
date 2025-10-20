@@ -13,6 +13,7 @@ import Popover, {
   PopoverTrigger
 } from "@/components/popover";
 import { useAllMarketsStore } from "@/stores/use-all-markets";
+import Pagination from "@/components/pagination";
 
 export default function Markets() {
   const navigate = useNavigate();
@@ -23,10 +24,12 @@ export default function Markets() {
     loading,
     sortField,
     sortOrder,
+    pageRef,
+    hasMore,
+    onNextPage,
     setSortField,
     setSortOrder
   } = usePoolList({
-    pageLimit: 100,
     tokenStatus: 0,
     volume: allMarketsStore.tab
   });
@@ -154,6 +157,21 @@ export default function Markets() {
           ))
         )}
       </div>
+      {hasMore && (
+        <div className="flex justify-end items-center pt-[10px]">
+          <Pagination
+            current={pageRef.current + 1}
+            hasNextPage={hasMore}
+            onNext={() => {
+              onNextPage(1);
+            }}
+            onPrev={() => {
+              console.log("prev");
+              onNextPage(-1);
+            }}
+          />
+        </div>
+      )}
     </div>
   );
 }
