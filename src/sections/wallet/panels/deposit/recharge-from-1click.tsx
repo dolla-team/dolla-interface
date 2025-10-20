@@ -59,7 +59,7 @@ export default function RechargeFrom1click() {
           refundTo:
             chain.blockchain === "btc"
               ? BTC_REFUND_ACCOUNT
-              : chain.blockchain === "solana"
+              : chain.blockchain === "sol"
               ? SOLANA_REFUND_ACCOUNT
               : EVM_REFUND_ACCOUNT,
           getFullQuote: true
