@@ -15,41 +15,34 @@ export default function EndPanel({ data }: { data: any }) {
   const isMobile = useIsMobile();
   // const [openProvablyFair, setOpenProvablyFair] = useState(false);
 
-  const [
-    totalBids,
-    totalTimes,
-    returnMultiple,
-    bidsDistribution,
-    bidsProgress
-  ] = useMemo(() => {
-    if (!winnerBidList?.length) return [0, 0, 0, {}, []];
-    let _totalBids = 0;
-    let _bidsDistribution: any = {};
-    let _bidsProgress: any = [];
-    const startTime = new Date(data.created_at).getTime();
-    const endTime = new Date(
-      winnerBidList.find((item: any) => item.is_winner)?.result_time ||
-        data.result_time
-    ).getTime();
+  const [totalBids, totalTimes, bidsDistribution, bidsProgress] =
+    useMemo(() => {
+      if (!winnerBidList?.length) return [0, 0, {}, []];
+      let _totalBids = 0;
+      let _bidsDistribution: any = {};
+      let _bidsProgress: any = [];
+      const startTime = new Date(data.created_at).getTime();
+      const endTime = new Date(
+        winnerBidList.find((item: any) => item.is_winner)?.result_time ||
+          data.result_time
+      ).getTime();
 
-    winnerBidList.forEach((item: any) => {
-      _totalBids += item.times;
-      _bidsDistribution[item.times] = (_bidsDistribution[item.times] || 0) + 1;
-      const bidTime = new Date(item.time).getTime();
-      _bidsProgress.push((bidTime - startTime) / (endTime - startTime));
-    });
+      winnerBidList.forEach((item: any) => {
+        _totalBids += item.times;
+        _bidsDistribution[item.times] =
+          (_bidsDistribution[item.times] || 0) + 1;
+        const bidTime = new Date(item.time).getTime();
+        _bidsProgress.push((bidTime - startTime) / (endTime - startTime));
+      });
 
-    const _returnMultiple = data.winner_info?.profit_ratio;
-
-    _bidsProgress.sort((a: number, b: number) => a - b);
-    return [
-      _totalBids,
-      winnerBidList.length,
-      _returnMultiple,
-      _bidsDistribution,
-      _bidsProgress
-    ];
-  }, [winnerBidList, data]);
+      _bidsProgress.sort((a: number, b: number) => a - b);
+      return [
+        _totalBids,
+        winnerBidList.length,
+        _bidsDistribution,
+        _bidsProgress
+      ];
+    }, [winnerBidList, data]);
 
   return (
     data && (
@@ -100,10 +93,10 @@ export default function EndPanel({ data }: { data: any }) {
               )}
             >
               <MultipleTag
-                multipler={formatNumber(returnMultiple, 1, true)}
+                multipler={formatNumber(data.winner_profit_ratio, 1, true)}
                 size={120}
                 className="absolute top-[-50px] right-[-50px]"
-                textClassName="text-[30px]"
+                textClassName="text-[24px]"
               />
               <Avatar
                 size={150}
@@ -135,7 +128,9 @@ export default function EndPanel({ data }: { data: any }) {
                 Return multiple
               </span>
               <span className="text-white text-[12px] font-[DelaGothicOne]">
-                {formatNumber(returnMultiple, 1, true, { isShort: true })}
+                {formatNumber(data.winner_profit_ratio, 1, true, {
+                  isShort: true
+                })}
               </span>
             </div>
           </div>
@@ -205,7 +200,7 @@ export default function EndPanel({ data }: { data: any }) {
                 Winner’s Bid Timing
               </div>
               <div className="w-full relative h-[6px] mt-[40px] bg-linear-to-r from-[#FFC42F] via-[#FF43E0] to-[#53EABF] rounded-[6px]">
-                {bidsProgress.map((item: any, index: number) => (
+                {bidsProgress?.map((item: any, index: number) => (
                   <ProgressAvatar
                     data={data}
                     progress={item}

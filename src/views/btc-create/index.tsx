@@ -239,9 +239,16 @@ export default function BTCCreate() {
                     {referenceDataLoading ? (
                       <Skeleton className="w-[85px] h-[12px] rounded-full" />
                     ) : (
-                      formatNumber(referenceData?.avg_profit, 2, true, {
-                        prefix: "$"
-                      })
+                      `${
+                        Big(referenceData?.avg_profit || 0).lt(0) && "-"
+                      } ${formatNumber(
+                        Big(referenceData?.avg_profit || 0).abs(),
+                        2,
+                        true,
+                        {
+                          prefix: "$"
+                        }
+                      )}`
                     )}
                   </div>
                 </div>
