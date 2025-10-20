@@ -13,7 +13,7 @@ export const NEAR_REFUND_ACCOUNT = "reffer.near";
 export const EVM_REFUND_ACCOUNT = "0x1c7c07f5b03d4d73098d025e46497e93a8b8ec72";
 
 export const SOLANA_REFUND_ACCOUNT =
-  "E4APdiYDj6W58tsfSgYbxu6GfckvZ4SQBDbDGobh3YEt";
+  "F2Y14Sq9EfvbaUQJhkoRqzd2pxnWd4KsT3vag9WAmfCb";
 
 export const BTC_REFUND_ACCOUNT = "3HMTBqmN7Xxi1YSZH1mzuYtjNm4pkiwzaZ";
 
