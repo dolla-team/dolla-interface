@@ -165,12 +165,12 @@ const MarketInfo = () => {
       placement={PopoverPlacement.Bottom}
       content={
         <div className="w-[360px] text-[#3B3951] text-[12px] p-[14px] bg-white rounded-[10px] border border-[#E4E4E4]">
-          <div className="font-[300] opacity-80 leading-[120%]">
+          <div className="opacity-80 leading-[120%]">
             <div className="font-[500] text-black">Anchor Value: </div>
-            <div className="mt-[4px]">
+            <div className="mt-[4px] font-[400]">
               Base reference for calculating win probability.
             </div>
-            <div>Win per $1 = 1 / (Anchor × 1.25).</div>
+            <div>Win per $1 = 1 / (Price of asset at listing × 1.2).</div>
           </div>
         </div>
       }

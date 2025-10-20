@@ -14,6 +14,10 @@ import MarketStatus from "@/views/profile/components/market-status";
 import dayjs from "@/libs/dayjs";
 import clsx from "clsx";
 import MultipleTag from "@/components/multiple-tag";
+import Popover, {
+  PopoverPlacement,
+  PopoverTrigger
+} from "@/components/popover";
 
 export default function Market({
   data,
@@ -108,15 +112,20 @@ export default function Market({
             <div
               className={clsx(data.status === 1 ? "pl-[30px]" : "pl-[10px]")}
             >
-              <MarketStatus
-                value={data.status}
-                className={clsx("p-[8px]", data.status !== 1 && "mx-auto")}
-              />
-              {data.status === 1 && (
-                <div className="text-[10px] text-black mt-[5px]">
-                  {dayjs(data.created_at).from(dayjs(Date.now()), true)}
-                </div>
+              {data.status === 1 ? (
+                <LiveInfo data={data}>
+                  <MarketStatus
+                    value={data.status}
+                    className={clsx("p-[8px]", data.status !== 1 && "mx-auto")}
+                  />
+                </LiveInfo>
+              ) : (
+                <MarketStatus
+                  value={data.status}
+                  className={clsx("p-[8px]", data.status !== 1 && "mx-auto")}
+                />
               )}
+
               {data.status === 2 && (
                 <div className="flex items-center gap-[4px] mt-[5px]">
                   <Avatar
@@ -147,3 +156,36 @@ export default function Market({
     </div>
   );
 }
+
+const LiveInfo = ({
+  children,
+  data
+}: {
+  children: React.ReactNode;
+  data: any;
+}) => {
+  return (
+    <Popover
+      trigger={PopoverTrigger.Hover}
+      placement={PopoverPlacement.Top}
+      content={
+        <div className="w-[230px] px-[15px] py-[10px] text-[12px] p-[14px] bg-white rounded-[10px] border border-[#E4E4E4]">
+          <div className="flex items-center justify-between">
+            <span className="text-[#8A87AA]">Created</span>
+            <span className="text-black">
+              {dayjs(data.created_at).format("YYYY-MM-DD HH:mm")}
+            </span>
+          </div>
+          <div className="flex items-center justify-between mt-[6px]">
+            <span className="text-[#8A87AA]">Lasts</span>
+            <span className="text-black">
+              {dayjs(data.created_at).from(dayjs(Date.now()), true)}
+            </span>
+          </div>
+        </div>
+      }
+    >
+      {children}
+    </Popover>
+  );
+};
