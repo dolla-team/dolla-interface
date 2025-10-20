@@ -240,7 +240,7 @@ export default function BTCCreate() {
                       <Skeleton className="w-[85px] h-[12px] rounded-full" />
                     ) : (
                       `${
-                        Big(referenceData?.avg_profit || 0).lt(0) && "-"
+                        Big(referenceData?.avg_profit || 0).lt(0) ? "-" : ""
                       } ${formatNumber(
                         Big(referenceData?.avg_profit || 0).abs(),
                         2,
