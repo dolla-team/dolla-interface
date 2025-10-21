@@ -48,9 +48,11 @@ export default defineConfig({
         if (warning.code === "EVAL") return;
         if (warning.message?.includes("TypeScript")) return;
         warn(warning);
-      }
+      },
+      external: []
     }
   },
+  assetsInclude: ["**/*.wasm"],
   server: {
     host: "0.0.0.0",
     port: 5174

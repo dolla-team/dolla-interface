@@ -4,16 +4,16 @@ import { formatAddress } from "@/utils/format/address";
 import dayjs from "@/libs/dayjs";
 import { addThousandSeparator, formatNumber } from "@/utils/format/number";
 import useWinnerBidList from "../use-winner-bid-list";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import useIsMobile from "@/hooks/use-is-mobile";
 import clsx from "clsx";
 import MultipleTag from "@/components/multiple-tag";
-// import ProvablyFair from "@/sections/provably-fair";
+import ProvablyFair from "@/sections/provably-fair";
 
 export default function EndPanel({ data }: { data: any }) {
   const { winnerBidList } = useWinnerBidList(data);
   const isMobile = useIsMobile();
-  // const [openProvablyFair, setOpenProvablyFair] = useState(false);
+  const [openProvablyFair, setOpenProvablyFair] = useState(false);
 
   const [totalBids, totalTimes, bidsDistribution, bidsProgress] =
     useMemo(() => {
@@ -69,22 +69,15 @@ export default function EndPanel({ data }: { data: any }) {
             )}
           >
             <div className="flex items-center justify-between">
-              <span
-                className="text-white text-[24px] [text-shadow:0_0_10px_rgba(255,213,105,0.5)] font-[DelaGothicOne]"
-                style={{
-                  WebkitTextStroke: "1px #EEAF0F"
-                }}
-              >
-                Winner
-              </span>
-              {/* <button
+              <span className="text-white text-[20px] font-[700]">Winner</span>
+              <button
                 onClick={() => {
                   setOpenProvablyFair(true);
                 }}
-                className="text-[12px] underline button text-[#FFE9B2]"
+                className="text-[12px] underline button text-white"
               >
                 Verify
-              </button> */}
+              </button>
             </div>
             <div
               className={clsx(
@@ -228,14 +221,13 @@ export default function EndPanel({ data }: { data: any }) {
           </div>
         </div>
 
-        {/* <ProvablyFair
-          pool={data?.id}
+        <ProvablyFair
+          data={data}
           open={openProvablyFair}
           onClose={() => {
             setOpenProvablyFair(false);
           }}
-          defaultTab="provably-fair"
-        /> */}
+        />
       </div>
     )
   );

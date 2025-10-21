@@ -7,10 +7,13 @@ import { useNavigate } from "react-router-dom";
 import useCopy from "@/hooks/use-copy";
 import { useAuth } from "@/contexts/auth";
 import { BASE_TOKEN } from "@/config/btc";
+import ProvablyFair from "@/sections/provably-fair";
+import { useState } from "react";
 import PointIcon from "@/components/icons/point-icon";
 
 const BidHistory = (props: any) => {
   const { className, page, loading, data, hasMore, onPageChange } = props;
+  const [selectedData, setSelectedData] = useState<any>(null);
 
   const navigate = useNavigate();
   const { onCopy } = useCopy();
@@ -148,15 +151,19 @@ const BidHistory = (props: any) => {
             <div className="text-[#5E6B7D]">
               {dayjs(record.time).format("HH:mm D MMM, YYYY")}
             </div>
-            <div className="text-[#0095FF] text-[14px] underline cursor-pointer">
-              <a
-                href={`https://nearblocks.io/txns/${record.result_tx_hash}`}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Tx
-              </a>
-            </div>
+            <button
+              className="text-[#0095FF] text-[14px] underline cursor-pointer button"
+              onClick={() => {
+                setSelectedData({
+                  pool_id: record.pool_id,
+                  hash: record.result_tx_hash,
+                  market_size: record.reward_usd,
+                  bids: record.times
+                });
+              }}
+            >
+              Tx
+            </button>
 
             <svg
               className="cursor-pointer"
@@ -201,6 +208,15 @@ const BidHistory = (props: any) => {
           onNext={onPageChange}
         />
       </div>
+      {selectedData && (
+        <ProvablyFair
+          open={!!selectedData}
+          data={selectedData}
+          onClose={() => {
+            setSelectedData(null);
+          }}
+        />
+      )}
     </div>
   );
 };
