@@ -76,7 +76,7 @@ const BidHistory = (props: any) => {
     {
       dataIndex: "results",
       title: "Rewards",
-      width: "25%",
+      width: "20%",
       render: (record: any) => {
         if (
           record.pool_info.winner_user?.toLowerCase() ===
@@ -143,7 +143,7 @@ const BidHistory = (props: any) => {
     {
       dataIndex: "date",
       title: "Date / tx",
-      width: "30%",
+      width: "35%",
       align: GridTableAlign.Right,
       render: (record: any) => {
         return (
@@ -154,12 +154,10 @@ const BidHistory = (props: any) => {
             <button
               className="text-[#0095FF] text-[14px] underline cursor-pointer button"
               onClick={() => {
-                setSelectedData({
-                  pool_id: record.pool_id,
-                  hash: record.result_tx_hash,
-                  market_size: record.reward_usd,
-                  bids: record.times
-                });
+                window.open(
+                  `https://nearblocks.io/txns/${record.result_tx_hash}`,
+                  "_blank"
+                );
               }}
             >
               Tx
@@ -181,6 +179,19 @@ const BidHistory = (props: any) => {
                 fill="#ADBCCF"
               />
             </svg>
+            <button
+              onClick={() => {
+                setSelectedData({
+                  pool_id: record.pool_id,
+                  hash: record.result_tx_hash,
+                  market_size: record.reward_usd,
+                  bids: record.times
+                });
+              }}
+              className="button text-[12px] w-[57px] h-[25px] border border-[#D9D9D9] rounded-[6px] text-center"
+            >
+              Verify
+            </button>
           </div>
         );
       }
