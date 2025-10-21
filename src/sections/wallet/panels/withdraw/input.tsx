@@ -7,13 +7,26 @@ import Big from "big.js";
 import Button from "@/components/button";
 import { useContractConfigStore } from "@/stores/use-contract-config";
 import { BASE_TOKEN } from "@/config/btc";
+import Popover, {
+  PopoverPlacement,
+  PopoverTrigger
+} from "@/components/popover";
+import ChainSelector from "./chain-selector";
+import WarningIcon from "../deposit/warning-icon";
+import { chainConfig } from "../../chain-config";
 
 export default function WithdrawInput({
   chain,
   amount,
+  amountUSD,
   setAmount,
   balance,
-  amountUSD
+  setChain,
+  receiveAddress,
+  setReceiveAddress,
+  quoteData,
+  networkFee,
+  loading
 }: any) {
   const walletStore = useWalletStore();
 
@@ -22,6 +35,18 @@ export default function WithdrawInput({
   const config = useContractConfigStore((state) => state.config);
 
   const errorTips = useMemo(() => {
+    if (!debouncedAmount) {
+      return "Please enter an amount";
+    }
+
+    if (!receiveAddress) {
+      return "Please enter a receive address";
+    }
+
+    if (!chain) {
+      return "Please select a network";
+    }
+
     if (Big(debouncedAmount || 0).gt(Big(balance || 0))) {
       return "Insufficient Balance";
     }
@@ -51,25 +76,60 @@ export default function WithdrawInput({
       }
     }
     return "";
-  }, [debouncedAmount, walletStore.selectedToken, chain]);
+  }, [debouncedAmount, walletStore.selectedToken, chain, receiveAddress]);
 
   return (
-    <div>
+    <div className="px-[16px]">
       <div
         className="flex items-center gap-[8px] text-[16px] cursor-pointer button"
         onClick={() => {
-          walletStore.set({ withdrawPanelType: "chain-selector" });
+          if (walletStore.from === "token") {
+            walletStore.set({ panelType: "token" });
+          } else {
+            walletStore.set({ withdrawPanelType: "token-selector" });
+          }
+          setChain(null);
+          setReceiveAddress("");
+          setAmount("");
         }}
       >
         <BackIcon />
-        <div className="text-black text-[14px]">Withdraw</div>
+        <div className="text-black text-[14px]">
+          Withdraw {walletStore.selectedToken.symbol}
+        </div>
       </div>
-      <div className="text-[16px] text-black font-[500] text-center mt-[20px] mb-[20px]">
-        Enter an amount
-      </div>
-      <div className="ml-[16px] flex justify-center">
+      <>
+        <div className="flex items-center gap-[8px] mt-[30px]">
+          <span className="text-[14px] font-[500]">Receive Address</span>
+          <ReceiveAddressInfo />
+        </div>
         <input
-          type="text"
+          className="w-full h-[40px] rounded-[10px] border border-[#8A87AA4D] bg-white leading-[40px] px-[12px] text-[12px] mt-[6px]"
+          value={receiveAddress}
+          onChange={(e) => {
+            setReceiveAddress(e.target.value);
+          }}
+          placeholder="Address"
+        />
+      </>
+      <>
+        <div className="flex items-center gap-[8px] mt-[30px]">
+          <span className="text-[14px] font-[500]">Select Network</span>
+          <SelectNetworkInfo />
+        </div>
+        <div className="mt-[6px]">
+          <ChainSelector selectedChain={chain} onSelect={setChain} />
+        </div>
+      </>
+      <>
+        <div className="flex items-center justify-between mt-[30px]">
+          <div className="flex items-center gap-[8px]">
+            <span className="text-[14px] font-[500]">Amount</span>
+            <AmountInfo />
+          </div>
+        </div>
+        <input
+          className="w-full h-[40px] rounded-[10px] border border-[#8A87AA4D] bg-white leading-[40px] px-[12px] text-[12px] mt-[6px]"
           value={amount}
           onChange={(e) => {
             const value = e.target.value;
@@ -83,55 +143,156 @@ export default function WithdrawInput({
                 : numericValue;
             setAmount(validValue);
           }}
-          className="text-[32px] text-black text-center bg-transparent border-none outline-none w-[200px]"
-          placeholder="0"
-          autoFocus
+          placeholder="Minimum 0"
         />
-      </div>
-      <div className="text-[14px] text-black text-center mt-[20px]">
-        ${amountUSD}
-      </div>
-      <div className="text-[12px] text-[#FF4372] text-center mt-[10px]">
-        {errorTips}
-      </div>
-      <div className="mt-[20px] border border-black/10 rounded-[10px] p-[10px] flex justify-between items-center">
-        <div className="flex items-center gap-[10px]">
-          <img
-            className="w-[32px] h-[32px] object-cover"
-            src={walletStore.selectedToken?.icon}
-          />
-          <div>
-            <div className="text-[12px] text-[#8A87AA]">Balance</div>
-            <div className="text-[12px] text-black">
+        <div className="flex items-center justify-between text-[12px] text-[#8A87AA] mt-[6px]">
+          <div>≈ ${formatNumber(amountUSD, 2, true)}</div>
+          <div className="flex items-center gap-[8px]">
+            <span>
+              Bal.{" "}
               {formatNumber(
                 balance,
                 walletStore.selectedToken?.address === BASE_TOKEN.address
                   ? 6
                   : 2,
                 true
+              )}
+            </span>
+            <button
+              onClick={() => {
+                if (balance) setAmount(balance || 0);
+              }}
+              className="button text-[#DD9000] text-[12px] h-[28px] rounded-[14px]"
+            >
+              Max
+            </button>
+          </div>
+        </div>
+        <div className="flex items-center justify-between text-[12px] text-[#8A87AA]">
+          <div>Max withdraw</div>
+          <div>
+            {formatNumber(walletStore.selectedToken.maxDepositAmount, 0, true)}
+          </div>
+        </div>
+      </>
+      <div className="absolute bottom-[20px] left-[0px] px-[16px]">
+        {!!quoteData && (
+          <>
+            <div className="text-center text-[#8A87AA] text-[12px]">
+              Receive Amount
+            </div>
+            <div className="text-center text-black font-[500] text-[16px] mt-[6px]">
+              {formatNumber(
+                quoteData?.amountOutFormatted || 0,
+                walletStore.selectedToken?.isBaseToken ? 6 : 2,
+                true
               )}{" "}
               {walletStore.selectedToken?.symbol}
             </div>
+            <div className="text-center text-[#8A87AA] text-[12px] mt-[6px]">
+              Network fee{" "}
+              {formatNumber(
+                networkFee,
+                walletStore.selectedToken?.isBaseToken ? 6 : 2,
+                true
+              )}{" "}
+              {walletStore.selectedToken?.symbol}
+            </div>
+          </>
+        )}
+        <div className="mt-[6px] py-[10px] px-[6px] text-[12px] flex gap-[8px] leading-[14px] text-black font-[300] bg-[#FFC42F]/10 rounded-[12px]">
+          <WarningIcon />
+          <div>
+            Ensure this address supports{" "}
+            {chainConfig[chain?.blockchain]?.name || chain?.blockchain} network
+            deposits. Sending to another network may result in loss of funds.
           </div>
         </div>
-        <button
+        <Button
+          disabled={!amount || !!errorTips || loading}
+          className="w-full h-[50px] !bg-[black] !text-white mt-[10px]"
           onClick={() => {
-            if (balance) setAmount(balance || 0);
+            walletStore.set({ withdrawPanelType: "withdraw-confirm" });
           }}
-          className="button text-black text-[12px] w-[50px] h-[28px] rounded-[14px] border border-[#8A87AA4D]"
+          loading={loading}
         >
-          Max
-        </button>
+          Withdraw
+        </Button>
       </div>
-      <Button
-        disabled={!amount || !!errorTips}
-        className="w-[300px] h-[50px] !bg-[black] !text-white !absolute bottom-[20px] left-[10px]"
-        onClick={() => {
-          walletStore.set({ withdrawPanelType: "withdraw-confirm" });
-        }}
-      >
-        Next
-      </Button>
     </div>
   );
 }
+
+const ReceiveAddressInfo = () => {
+  return (
+    <Popover
+      trigger={PopoverTrigger.Hover}
+      placement={PopoverPlacement.Bottom}
+      content={
+        <div className="w-[360px] text-[#5E6B7D] text-[12px] font-[300] p-[10px] bg-white rounded-[10px] border border-[#E4E4E4]">
+          This is the address where your withdrawal will be sent. Double-check
+          that your destination wallet supports the selected network.
+        </div>
+      }
+    >
+      <button className="relative transition-opacity button">
+        <InfoIcon />
+      </button>
+    </Popover>
+  );
+};
+
+const SelectNetworkInfo = () => {
+  return (
+    <Popover
+      trigger={PopoverTrigger.Hover}
+      placement={PopoverPlacement.Bottom}
+      content={
+        <div className="w-[360px] text-[#5E6B7D] text-[12px] font-[300] p-[10px] bg-white rounded-[10px] border border-[#E4E4E4]">
+          This is the address where your withdrawal will be sent. Double-check
+          that your destination wallet supports the selected network.
+        </div>
+      }
+    >
+      <button className="relative transition-opacity button">
+        <InfoIcon />
+      </button>
+    </Popover>
+  );
+};
+
+const AmountInfo = () => {
+  return (
+    <Popover
+      trigger={PopoverTrigger.Hover}
+      placement={PopoverPlacement.Bottom}
+      content={
+        <div className="w-[360px] text-[#5E6B7D] text-[12px] font-[300] p-[10px] bg-white rounded-[10px] border border-[#E4E4E4]">
+          This is the address where your withdrawal will be sent. Double-check
+          that your destination wallet supports the selected network.
+        </div>
+      }
+    >
+      <button className="relative transition-opacity button">
+        <InfoIcon />
+      </button>
+    </Popover>
+  );
+};
+
+const InfoIcon = () => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="13"
+      height="13"
+      viewBox="0 0 13 13"
+      fill="none"
+    >
+      <path
+        d="M6.5 13C2.91037 13 0 10.0896 0 6.5C0 2.91037 2.91037 0 6.5 0C10.0896 0 13 2.91037 13 6.5C13 10.0896 10.0896 13 6.5 13ZM6.5 11.9167C9.49162 11.9167 11.9167 9.49162 11.9167 6.5C11.9167 3.50838 9.49162 1.08333 6.5 1.08333C3.50838 1.08333 1.08333 3.50838 1.08333 6.5C1.08333 9.49162 3.50838 11.9167 6.5 11.9167ZM5.95833 5.95833C5.95833 5.81467 6.0154 5.6769 6.11698 5.57532C6.21857 5.47373 6.35634 5.41667 6.5 5.41667C6.64366 5.41667 6.78143 5.47373 6.88302 5.57532C6.9846 5.6769 7.04167 5.81467 7.04167 5.95833V9.75C7.04167 9.89366 6.9846 10.0314 6.88302 10.133C6.78143 10.2346 6.64366 10.2917 6.5 10.2917C6.35634 10.2917 6.21857 10.2346 6.11698 10.133C6.0154 10.0314 5.95833 9.89366 5.95833 9.75V5.95833ZM6.44583 4.225C6.24471 4.225 6.05183 4.1451 5.90961 4.00289C5.7674 3.86067 5.6875 3.66779 5.6875 3.46667C5.6875 3.26554 5.7674 3.07266 5.90961 2.93044C6.05183 2.78823 6.24471 2.70833 6.44583 2.70833C6.64696 2.70833 6.83984 2.78823 6.98206 2.93044C7.12427 3.07266 7.20417 3.26554 7.20417 3.46667C7.20417 3.66779 7.12427 3.86067 6.98206 4.00289C6.83984 4.1451 6.64696 4.225 6.44583 4.225Z"
+        fill="#8A87AA"
+      />
+    </svg>
+  );
+};

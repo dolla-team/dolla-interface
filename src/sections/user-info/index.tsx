@@ -47,7 +47,7 @@ export default function Laptop() {
                 </div>
               </div>
               <div className="flex justify-between items-center text-white mt-[10px] px-[20px] pb-[10px] border-b border-[#313038]">
-                <div className="text-[10px]">Played</div>
+                <div className="text-[10px]">Bid Times</div>
                 <div className="text-[12px] font-medium">
                   {userInfo?.played_number}
                 </div>

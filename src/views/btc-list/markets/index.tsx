@@ -157,21 +157,19 @@ export default function Markets() {
           ))
         )}
       </div>
-      {hasMore && (
-        <div className="flex justify-end items-center pt-[10px]">
-          <Pagination
-            current={pageRef.current + 1}
-            hasNextPage={hasMore}
-            onNext={() => {
-              onNextPage(1);
-            }}
-            onPrev={() => {
-              console.log("prev");
-              onNextPage(-1);
-            }}
-          />
-        </div>
-      )}
+      <div className="flex justify-end items-center pt-[10px]">
+        <Pagination
+          current={pageRef.current + 1}
+          hasNextPage={hasMore}
+          onNext={() => {
+            onNextPage(1);
+          }}
+          onPrev={() => {
+            console.log("prev");
+            onNextPage(-1);
+          }}
+        />
+      </div>
     </div>
   );
 }

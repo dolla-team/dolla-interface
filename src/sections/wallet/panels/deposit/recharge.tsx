@@ -4,6 +4,7 @@ import useCopy from "@/hooks/use-copy";
 import clsx from "clsx";
 import { formatAddress } from "@/utils/format/address";
 import { chainConfig } from "../../chain-config";
+import WarningIcon from "./warning-icon";
 
 export default function Recharge({
   token,
@@ -37,6 +38,13 @@ export default function Recharge({
           }}
         />
       </div>
+      <div className="mt-[6px] py-[10px] px-[6px] text-[12px] flex gap-[8px] leading-[14px] text-black font-[300] bg-[#FFC42F]/10 rounded-[12px]">
+        <WarningIcon />
+        <div>
+          Only supported networks are shown. Depositing via an unsupported
+          network may result in permanent loss of assets.
+        </div>
+      </div>
       <div
         className={clsx(
           "mt-[24px] p-[12px] rounded-[10px] border bg-white border-[#8A87AA4D] w-full",
@@ -57,10 +65,6 @@ export default function Recharge({
                 <div className="text-[12px] text-black">
                   {chainConfig[chain.blockchain]?.name || chain.blockchain}
                 </div>
-              </div>
-              <div className="text-[10px] text-black/60">
-                {!!chain.contractAddress &&
-                  formatAddress(chain.contractAddress, 10)}
               </div>
             </div>
           </div>

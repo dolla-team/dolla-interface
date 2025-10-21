@@ -82,17 +82,15 @@ export default function Market({
           )}
           {column.dataIndex === "anchor_price" && (
             <div className="text-[14px] text-black">
-              {formatNumber(getAnchorPrice(data?.anchor_price), 2, true, {
-                prefix: "$",
-                isShort: true
+              {formatNumber(getAnchorPrice(data?.anchor_price), 1, true, {
+                prefix: "$"
               })}
             </div>
           )}
           {column.dataIndex === "accumulative_bids" && (
             <div className="text-[14px] text-black">
               {formatNumber(data.accumulative_bids, 0, true, {
-                prefix: "$",
-                isShort: true
+                prefix: "$"
               })}
             </div>
           )}
@@ -176,11 +174,13 @@ const LiveInfo = ({
                   />
                   <div className="text-[12px] text-black font-[600]">
                     {data.winner_user_info?.name ||
-                      formatAddress(data.winner_user_info?.user)}
+                      formatAddress(
+                        data.winner_user_info?.user || data?.winner_user
+                      )}
                   </div>
                 </div>
               </div>
-              <div className="flex items-center justify-between mt-[6px]">
+              <div className="flex justify-between mt-[6px]">
                 <span className="text-[#5E6B7D]">Duration</span>
                 <div className="text-black text-right">
                   <div>{dayjs(data.created_at).format("YYYY-MM-DD HH:mm")}</div>

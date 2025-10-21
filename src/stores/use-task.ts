@@ -31,6 +31,10 @@ export const initProgressTasks: any = {
   "4": {
     title: "Swap Objectives",
     list: []
+  },
+  "5": {
+    title: "Create Market Objectives",
+    list: []
   }
 };
 

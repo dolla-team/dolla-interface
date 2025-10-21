@@ -2,9 +2,9 @@ import Info from "../panels/info";
 import Deposit from "../panels/deposit";
 import Withdraw from "../panels/withdraw";
 import Swap from "../panels/swap";
+import Token from "../panels/token";
 import { motion, AnimatePresence } from "framer-motion";
 import useWalletStore from "@/stores/use-wallet";
-
 import { useMemo } from "react";
 import clsx from "clsx";
 import useIsBtc from "@/hooks/use-is-btc";
@@ -57,7 +57,8 @@ export default function Laptop() {
                   onTabChange={(tab: string) => {
                     walletStore.set({
                       panelType: tab,
-                      depositPanelType: "token-selector"
+                      depositPanelType: "token-selector",
+                      from: ""
                     });
                   }}
                 />
@@ -86,6 +87,7 @@ export default function Laptop() {
                   }}
                 />
               )}
+              {walletStore.panelType === "token" && <Token />}
             </div>
             <button
               className="absolute top-[20px] right-[16px] button"

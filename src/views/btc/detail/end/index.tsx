@@ -165,7 +165,7 @@ export default function EndPanel({ data }: { data: any }) {
                 </div>
                 <div className="flex items-center gap-[12px] mt-[16px] font-[DelaGothicOne] text-white">
                   <div className="w-1/3 h-[70px] flex flex-col items-center justify-center bg-[#00000033] rounded-[10px]">
-                    <div className="text-[12px]">Total Players</div>
+                    <div className="text-[12px]">Total Bidders</div>
                     <div className="text-[16px]">{data?.participants}</div>
                   </div>
                   <div className="w-1/3 h-[70px] flex flex-col items-center justify-center bg-[#00000033] rounded-[10px]">
@@ -218,7 +218,7 @@ export default function EndPanel({ data }: { data: any }) {
                     : "text-white text-[12px] font-[DelaGothicOne]"
                 )}
               >
-                Player Distribution
+                Bidder Distribution
               </div>
               <PlayerDistribution
                 data={data}

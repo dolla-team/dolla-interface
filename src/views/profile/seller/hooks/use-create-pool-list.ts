@@ -48,7 +48,8 @@ export default function useCreatePoolList() {
         poolIds.push(item.pool_id);
 
         if (item.status === 2) {
-          const profit = Big(item.accumulative_bids).minus(item.reward_usd);
+          const sold = Big(item.claim_amount).div(1e6);
+          const profit = sold.minus(item.reward_usd);
           _pnl = _pnl.plus(profit);
 
           _pnlList.push({
@@ -57,9 +58,8 @@ export default function useCreatePoolList() {
               .div(10 ** (item.reward_token_info?.[0]?.decimals || 6))
               .toString(),
             list_value: item.reward_usd,
-            sold: item.accumulative_bids,
-            pnl: profit.toString(),
-            claim_amount: item.claim_amount
+            sold: sold.toString(),
+            pnl: profit.toString()
           });
         }
       });

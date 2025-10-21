@@ -47,7 +47,7 @@ export default function LucyDraw({
 
   const fetchResult = async () => {
     try {
-      const { winningList, number } = await fetchCurrentRound(currentRound);
+      const { winningList, number } = await fetchCurrentRound(412);
       if (winningList.length > 0 || number === 0) {
         setStatus(2);
         setWinningList(winningList);

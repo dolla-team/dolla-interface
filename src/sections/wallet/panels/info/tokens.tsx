@@ -60,8 +60,9 @@ const Item = ({
   return (
     <div
       className={clsx(
-        "flex justify-between items-center rounded-[10px] p-[10px]",
-        onClick && "cursor-pointer hover:bg-[#0000001A] duration-300"
+        "flex justify-between items-center rounded-[10px] p-[10px] border border-transparent",
+        onClick &&
+          "cursor-pointer hover:bg-[#FFC42F33] duration-300 hover:border-[#FFC42F]"
       )}
       onClick={() => {
         onClick?.(token);
@@ -70,15 +71,10 @@ const Item = ({
       <div className="flex items-center gap-[14px]">
         <div className="w-[32px] h-[32px] rounded-full relative">
           <img src={token.icon} className="w-full h-full object-cover" />
-          {/* <img
-            src="/chains/bera-1.png"
-            className="w-[16px] h-[16px] absolute bottom-[-4px] right-[-4px]"
-          /> */}
         </div>
         <div>
           <div>
             <span className="text-[14px] text-black">{token.symbol} </span>
-            {/* <span className="text-[12px] text-[#8A87AA]">(Near)</span> */}
           </div>
           <div className="text-[12px] text-[#8A87AA]">
             ${formatNumber(price, 2, true)}

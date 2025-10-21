@@ -1,7 +1,6 @@
 import clsx from "clsx";
 import Avatar from "@/components/avatar";
 import { useAuth } from "@/contexts/auth";
-import { formatAddress } from "@/utils/format/address";
 import dayjs from "dayjs";
 import StatisticsPlayer from "./statistics-player";
 import StatisticsSeller from "./statistics-seller";
@@ -19,8 +18,7 @@ import PopoverCard from "../popover-card";
 import Badge from "../badge";
 import { formatNumber } from "@/utils/format/number";
 import Big from "big.js";
-import ProfileSetting from "../profile-setting";
-import { useState } from "react";
+import useUserInfoStore from "@/stores/use-user-info";
 
 const Dashboard = (props: any) => {
   const { className, tab, pnlList, pnl } = props;
@@ -28,8 +26,7 @@ const Dashboard = (props: any) => {
   const { userInfo, address, login } = useAuth();
   const { referralData } = useReferralList();
   const { onCopy } = useCopy();
-  const [showSetting, setShowSetting] = useState(false);
-
+  const userInfoStore = useUserInfoStore();
   return (
     <div
       className={clsx(
@@ -56,7 +53,7 @@ const Dashboard = (props: any) => {
                 <Popover
                   content={
                     <PopoverCard className="w-[140px]">
-                      Player Engagement
+                      Bidder Engagement
                     </PopoverCard>
                   }
                   placement={PopoverPlacement.Top}
@@ -97,7 +94,7 @@ const Dashboard = (props: any) => {
           {tab === "seller" && <SellerLevel />}
         </div>
         <div className="flex items-center gap-[14px] mt-[8px]">
-          <div className="flex items-center justify-end gap-[3px] w-[200px]">
+          <div className="flex items-center gap-[3px]">
             <span className="text-[12px] text-[#2B3337]">
               {userInfo?.show_email}
             </span>
@@ -110,12 +107,6 @@ const Dashboard = (props: any) => {
               <CopyIcon />
             </button>
           </div>
-          <div className="w-[1px] h-[14px] bg-[#E4E4E4]" />
-          <div className="flex items-center gap-[3px] w-[200px]">
-            <span className="text-[12px] text-[#2B3337]">
-              {formatAddress(userInfo?.user)}
-            </span>
-          </div>
         </div>
       </div>
       <div className="w-full pl-[13px] max-md:pl-0">
@@ -127,7 +118,7 @@ const Dashboard = (props: any) => {
                 login();
                 return;
               }
-              setShowSetting(true);
+              userInfoStore.set({ showSetting: true });
             }}
             className="w-[92px] h-[32px] border border-[#383F47]/30 rounded-[8px] button flex gap-[6px] items-center justify-center"
           >
@@ -210,12 +201,6 @@ const Dashboard = (props: any) => {
       ) : (
         <StatisticsSeller pnlList={pnlList} pnl={pnl} />
       )}
-      <ProfileSetting
-        open={showSetting}
-        onClose={() => {
-          setShowSetting(false);
-        }}
-      />
     </div>
   );
 };

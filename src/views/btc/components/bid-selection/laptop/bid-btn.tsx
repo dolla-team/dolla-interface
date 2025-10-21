@@ -5,9 +5,15 @@ import { motion } from "framer-motion";
 
 export default function BidBtn({
   disabled,
+  bids,
+  balanceNotEnough,
+  probability,
   onClick
 }: {
   disabled: boolean;
+  bids: number;
+  balanceNotEnough: boolean;
+  probability: string;
   onClick: () => void;
 }) {
   const { flipStatus, setFlipStatus } = useBtcContext();
@@ -33,7 +39,7 @@ export default function BidBtn({
   return (
     <div
       className={clsx(
-        "w-[300px] h-[96px] p-[8px] relative mt-[80px] shrink-0 rounded-[24px] border border-black bg-[#333333]",
+        "w-[300px] h-[96px] p-[8px] relative mt-[60px] shrink-0 rounded-[24px] border border-black bg-[#333333]",
         "shadow-[0px_7px_0px_0px_rgba(255,255,255,0.60)_inset]"
       )}
     >
@@ -75,7 +81,7 @@ export default function BidBtn({
           onClick={onClick}
         >
           {disabled && flipStatus !== 4 && (
-            <div className="absolute top-0 left-0 w-full h-full bg-black/30" />
+            <div className="absolute top-0 left-0 w-full h-full bg-black/30 rounded-[20px]" />
           )}
           {flipStatus === 4 && window.autoFlipTimer !== -1 ? (
             <div className="text-[26px] font-bold">Auto Open {count}s</div>
@@ -84,18 +90,30 @@ export default function BidBtn({
           ) : (
             <div
               className={clsx(
-                "font-bold uppercase",
+                "font-bold",
                 flipStatus === 4
                   ? window.autoFlipTimer !== -1
                     ? "text-[20px]"
                     : "text-[36px]"
+                  : balanceNotEnough
+                  ? "text-[18px]"
                   : "text-[42px]"
               )}
             >
-              {flipStatus === 4 ? "AUTO" : "BID"}
+              {flipStatus === 4
+                ? "AUTO"
+                : balanceNotEnough
+                ? "Insufficient Balance"
+                : "BID"}
             </div>
           )}
         </button>
+      </div>
+      <div className="text-[#FFC42F] text-[12px] text-center mt-[16px]">
+        Dolla Probability{" "}
+        <span className="font-[500]">
+          {bids} Bid = {probability}%
+        </span>
       </div>
     </div>
   );

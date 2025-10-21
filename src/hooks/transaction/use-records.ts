@@ -66,6 +66,8 @@ export default function useRecords(isScroll?: boolean) {
           businessType = item.type.charAt(0).toUpperCase() + item.type.slice(1);
         } else if (item.source === "TICKET") {
           businessType = "Lucky Draw";
+        } else if (item.source === "CLAIM") {
+          businessType = "Claim";
         }
 
         let status = item.status;

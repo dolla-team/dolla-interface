@@ -78,7 +78,11 @@ export default function useTaskAction(task: any, onSuccess?: () => void) {
       }
       return;
     }
-
+    if (task.category === 0 && task.title === "Subscribe to TG Channel") {
+      window.open(`https://t.me/+zytJUKvtW4JjZmZl`, "_blank");
+      await completeTask(task.id);
+      return;
+    }
     if (
       task.category === 0 &&
       ["Like a Tweet", "Like & RT a Tweet"].includes(task.title)

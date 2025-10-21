@@ -38,7 +38,7 @@ export default function MarketInfo() {
         </div>
         <div className="flex items-center mt-[20px]">
           {pool?.participants < 10 && (
-            <div className="text-[12px] text-white/50 mr-[6px]">Player</div>
+            <div className="text-[12px] text-white/50 mr-[6px]">Bidders</div>
           )}
           {pool?.degen_players?.map((item: any, index: number) => (
             <Avatar

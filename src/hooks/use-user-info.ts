@@ -3,12 +3,14 @@ import axios from "@/libs/axios";
 import { useUsers } from "@/stores/use-users";
 import useUserPrize from "@/hooks/use-user-prize";
 import { AvatarColors } from "@/config/user";
+import useUserInfoStore from "@/stores/use-user-info";
 
 export default function useUserInfo(address?: string) {
   const [info, setInfo] = useState<any>();
   const [loading, setLoading] = useState(false);
   const { getUserPrize } = useUserPrize();
   const usersStore = useUsers();
+  const userInfoStore = useUserInfoStore();
 
   const onQueryUserInfo = useCallback(async () => {
     if (!address) {
@@ -42,6 +44,7 @@ export default function useUserInfo(address?: string) {
 
       _info.points_progress = progress;
 
+      if (!_info?.name) userInfoStore.set({ showSetting: true });
       setInfo(_info);
       getUserPrize();
     } catch (err) {

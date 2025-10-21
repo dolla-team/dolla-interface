@@ -15,6 +15,8 @@ import { useGlobalStore } from "@/stores/use-global";
 import useTaskCurrent from "@/hooks/task/use-task-current";
 import useTaskStore from "@/stores/use-task";
 import useBindSocial from "@/hooks/task/use-bind-social";
+import ProfileSetting from "@/views/profile/components/profile-setting";
+import useUserInfoStore from "@/stores/use-user-info";
 
 export default function MainLayout() {
   const { userInfo, login } = useAuth() || {};
@@ -24,6 +26,7 @@ export default function MainLayout() {
   const contentRef = useRef<HTMLDivElement>(null);
   const globalStore = useGlobalStore();
   const pathname = useLocation();
+  const userInfoStore = useUserInfoStore();
   const prevUserInfoStatus = useRef(false);
   const { fetchTasks } = useTaskCurrent();
   const { handleBind } = useBindSocial();
@@ -86,18 +89,6 @@ export default function MainLayout() {
         </div>
 
         <div className="flex items-center gap-[12px] pr-[12px]">
-          {/* <div className="flex items-center gap-[8px]">
-            <TicketIcon />
-            <span
-              className="text-[#FFEF43] text-[20px] font-bold font-[AlfaSlabOne]"
-              style={{
-                WebkitTextStrokeWidth: "1px",
-                WebkitTextStrokeColor: "#5E3737"
-              }}
-            >
-              x35
-            </span>
-          </div> */}
           <EstGas />
 
           {!userInfo ? (
@@ -105,7 +96,7 @@ export default function MainLayout() {
               onClick={login}
               className="w-[100px] h-[36px] !bg-black text-white"
             >
-              Connect
+              Login
             </Button>
           ) : (
             <>
@@ -136,6 +127,12 @@ export default function MainLayout() {
       </div>
       <Wallet />
       <Alerts />
+      <ProfileSetting
+        open={userInfoStore.showSetting}
+        onClose={() => {
+          userInfoStore.set({ showSetting: false });
+        }}
+      />
     </div>
   );
 }

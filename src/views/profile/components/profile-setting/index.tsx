@@ -51,7 +51,7 @@ export default function ProfileSetting({ open, onClose }: ProfileSettingProps) {
           {/* Header */}
           <div className="flex items-center justify-between mb-[20px]">
             <span className="text-[16px] font-[500]">Profile Setting</span>
-            <ModalClose onClose={onClose} />
+            {userInfo?.name && <ModalClose onClose={onClose} />}
           </div>
 
           {/* Avatar Section */}

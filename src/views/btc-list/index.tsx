@@ -12,15 +12,16 @@ export default function Home() {
       <Banner />
       <HotMarkets />
       <Markets />
-      <div className="flex items-center gap-[22px] h-[200px] mt-[30px]">
-        <div className="w-1/3 h-full">
-          <LucyDraw tokenBalance={nearAccount?.balance} />
-        </div>
+      <LucyDraw tokenBalance={nearAccount?.balance} />
+      <div className="flex items-center gap-[22px] h-[300px]">
         <div className="w-1/3 h-full">
           <TopWinners type="winners" />
         </div>
         <div className="w-1/3 h-full">
           <TopWinners type="sellers" />
+        </div>
+        <div className="w-1/3 h-full">
+          <TopWinners type="losers" />
         </div>
       </div>
     </div>

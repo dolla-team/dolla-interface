@@ -4,14 +4,16 @@ import Tokens from "../info/tokens";
 export default function TokenSelector({
   onBack,
   onSelect,
-  title
+  title,
+  className
 }: {
   onBack: () => void;
   onSelect: (token: any) => void;
   title: string;
+  className?: string;
 }) {
   return (
-    <div>
+    <div className={className}>
       <div
         className="flex items-center gap-[10px] text-[14px] cursor-pointer button"
         onClick={onBack}

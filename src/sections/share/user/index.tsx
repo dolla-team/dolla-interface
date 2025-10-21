@@ -44,46 +44,66 @@ export default function UserShareCard({
                 : "bg-[#7927C6] text-white"
             )}
           >
-            {type === "player" ? "Player" : "Seller"}
+            {type === "player" ? "Bidder" : "Seller"}
           </div>
         </div>
       </div>
-      <div className="text-[10px] text-[#8A87AA] mt-[6px]">
-        {dayjs().format("YYYY/MM/DD HH:mm:ss")}
+
+      <div className="absolute top-[16px] right-[18px] w-[68px]">
+        <img src="/share/share-icon.png" className="w-[67px] h-[27px]" />
+        <div className="text-[8px] text-[#8A87AA] text-right">
+          {dayjs().format("HH:mm:ss YYYY/MM/DD")}
+        </div>
       </div>
-      <img
-        src="/share/share-icon.png"
-        className="w-[67px] h-[27px] absolute top-[16px] right-[18px]"
-      />
-      <div
-        className={clsx(
-          "w-[260px] h-[82px] mx-auto rounded-[100px] text-center pt-[12px] mt-[20px]",
-          type === "player"
-            ? "bg-[#FFCE52] text-black"
-            : "bg-[#7927C6] text-white"
-        )}
-      >
-        <div className="text-[32px] font-[600] leading-[32px]">3200%</div>
-        <div className="text-[12px] mt-[6px]">Return on Investment</div>
-      </div>
-      <div className="flex mt-[20px]">
-        <img src="/share/share-rabbit.png" className="w-[203px] h-[206px]" />
+      {type === "player" && (
+        <>
+          <div className="text-[14px] text-white mt-[50px]">Your Bid</div>
+          <div className="text-[34px] font-[600] text-white">1 times</div>
+        </>
+      )}
+      {type === "seller" && (
+        <>
+          <div className="text-[14px] text-white mt-[50px]">
+            Total wins ({BASE_TOKEN.symbol})
+          </div>
+          <div className="text-[34px] font-[600] text-white flex items-center gap-[10px]">
+            <img src={BASE_TOKEN.icon} className="w-[36px] h-[36px]" />{" "}
+            <span>0.0114</span>
+          </div>
+        </>
+      )}
+      <div className="flex justify-between mt-[20px]">
         <div className="mt-[30px]">
-          <div className="text-[14px] text-[#8A87AA]">
-            {type === "player" ? "Wins" : "Sold"}
-          </div>
-          <div className="text-[14px] font-[500] text-white">1 times</div>
-          <div className="text-[14px] text-[#8A87AA] mt-[10px]">
-            {type === "player" ? "Won" : BASE_TOKEN.symbol + " Sold"}
-          </div>
-          <div className="text-[14px] font-[500] text-white">
-            0.01 {BASE_TOKEN.symbol}
-          </div>
-          <div className="text-[14px] text-[#8A87AA] mt-[10px]">
-            {type === "player" ? "Total Valued" : "PnL"}
-          </div>
-          <div className="text-[14px] font-[500] text-white">$1,225.23</div>
+          {type === "player" && (
+            <>
+              <div className="text-[14px] text-[#8A87AA] font-[300]">
+                Bid Times
+              </div>
+              <div className="text-[14px] font-[500] text-white">1 times</div>
+              <div className="text-[14px] text-[#8A87AA] mt-[20px] font-[300]">
+                Target Markets
+              </div>
+              <div className="text-[14px] font-[500] text-white">
+                0.01 {BASE_TOKEN.symbol}
+              </div>
+            </>
+          )}
+          {type === "seller" && (
+            <>
+              <div className="text-[14px] text-[#8A87AA] font-[300]">
+                Highest Multiple
+              </div>
+              <div className="text-[14px] font-[500] text-white">36x</div>
+              <div className="text-[14px] text-[#8A87AA] mt-[20px] font-[300]">
+                Target Markets
+              </div>
+              <div className="text-[14px] font-[500] text-white">
+                0.01 {BASE_TOKEN.symbol}
+              </div>
+            </>
+          )}
         </div>
+        <img src="/share/share-rabbit.png" className="w-[203px] h-[206px]" />
       </div>
       <Bottom />
     </div>

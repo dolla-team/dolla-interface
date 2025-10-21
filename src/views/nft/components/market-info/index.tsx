@@ -59,7 +59,7 @@ export default function MarketInfo() {
         </button>
       </div>
       <div className="flex gap-[16px] mt-[10px]">
-        {["Valued", "Players", "Bid", "You bid"].map((item) => (
+        {["Valued", "Bidders", "Bid", "You bid"].map((item) => (
           <div
             key={item}
             className="w-[242px] h-[72px] rounded-[16px] border border-[#483E62] bg-[#FFFFFF1A] backdrop-blur-[10px] flex flex-col justify-center items-center"
@@ -82,7 +82,7 @@ export default function MarketInfo() {
                   })}
                 </div>
               )}
-              {item === "Players" && <div>{pool?.participants}</div>}
+              {item === "Bidders" && <div>{pool?.participants}</div>}
               {item === "Bid" && (
                 <div>
                   {formatNumber(pool?.accumulative_bids || 0, 3, true, {

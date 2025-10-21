@@ -4,9 +4,10 @@ import { createJSONStorage, persist } from "zustand/middleware";
 interface WalletState {
   showWallet: boolean;
   showInfos: boolean;
-  panelType: "info" | "deposit" | "withdraw" | "swap";
+  panelType: "info" | "deposit" | "withdraw" | "swap" | "token";
   depositPanelType: "fund-list" | "token-selector" | "input";
   depositMethod: "centralized-exchange" | "coinbase";
+  from: string;
   withdrawPanelType:
     | "token-selector"
     | "chain-selector"
@@ -25,6 +26,7 @@ const initialState = {
   panelType: "info",
   depositPanelType: "token-selector",
   depositMethod: "centralized-exchange",
+  from: "",
   withdrawPanelType: "token-selector",
   withdrawType: "token",
   selectedToken: null,

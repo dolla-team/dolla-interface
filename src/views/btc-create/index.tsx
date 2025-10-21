@@ -25,11 +25,13 @@ import PageBack from "@/views/profile/components/page-back";
 import { AMOUNT } from "@/config/btc";
 import ConfirmModal from "./confirm-modal";
 import { useBtcCreateStore } from "@/stores/use-btc-create";
+import { useNavigate } from "react-router-dom";
 
 export default function BTCCreate() {
   const btcCreateStore = useBtcCreateStore();
   const [successResult, setSuccessResult] = useState<any>(null);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const navigate = useNavigate();
   const {
     userInfo,
     isLoading,
@@ -77,7 +79,7 @@ export default function BTCCreate() {
       <div className="w-full relative z-[2] text-[14px] font-[400] leading-[100%] pt-[30px] pb-[60px] max-md:pt-[80px]">
         <PageBack className="!border-[#555555] !bg-[#FFFFFF33] !text-[#fff] !top-[20px]" />
         <Title />
-        <div className="w-[1200px] mx-auto gap-[15px] pt-[10px]">
+        <div className="w-[1200px] mx-auto gap-[15px] pt-[50px]">
           <div
             className="w-full h-[246px] p-[20px] rounded-[20px]"
             style={{
@@ -90,7 +92,7 @@ export default function BTCCreate() {
                 <div className="text-white text-[14px] font-[500]">
                   Create Market
                 </div>
-                <div className="text-white text-[10px] font-[400] flex items-center gap-[4px] mt-[10px]">
+                <div className="text-white text-[12px] font-[400] flex items-center gap-[4px] mt-[10px]">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="14"
@@ -111,12 +113,12 @@ export default function BTCCreate() {
                     Markets are locked for 72 hours after listing.
                   </span>
                 </div>
-                <div className="text-white text-[10px] font-[400]">
+                <div className="text-white text-[12px] font-[400]">
                   After that, if unsold, the seller may close it manually — this
                   will trigger a 8% penalty on total bids.
                 </div>
                 <div className="flex items-center">
-                  <div className="mt-[13px] flex items-center gap-[10px] h-[140px]">
+                  <div className="mt-[6px] flex items-center gap-[10px] h-[140px]">
                     {AMOUNT.map((item, index) => {
                       const isActive = btcCreateStore.amount === item;
                       return (
@@ -211,15 +213,30 @@ export default function BTCCreate() {
                 <div className="rounded-[12px] bg-[#EAEAEA] h-[93px] flex flex-col justify-center items-center gap-[10px]">
                   <div className="flex justify-center items-center gap-[7px]">
                     <div className="text-[12px]">Top Sale</div>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="10"
-                      height="10"
-                      viewBox="0 0 10 10"
-                      fill="none"
-                    >
-                      <path d="M1 9.5L9.5 1M9.5 1H1M9.5 1V9.5" stroke="black" />
-                    </svg>
+                    {Number(referenceData?.top_sale || 0) > 0 &&
+                      !!referenceData?.top_sale_pool_id && (
+                        <button
+                          className="button"
+                          onClick={() => {
+                            navigate(
+                              `/btc/detail/${referenceData?.top_sale_pool_id}`
+                            );
+                          }}
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="10"
+                            height="10"
+                            viewBox="0 0 10 10"
+                            fill="none"
+                          >
+                            <path
+                              d="M1 9.5L9.5 1M9.5 1H1M9.5 1V9.5"
+                              stroke="black"
+                            />
+                          </svg>
+                        </button>
+                      )}
                   </div>
                   <div className="font-[600] text-[16px]">
                     {referenceDataLoading ? (
@@ -373,38 +390,6 @@ const Title = () => {
       <span className="text-[20px] font-[500]">
         Create {BASE_TOKEN.symbol} Market
       </span>
-      <Popover
-        trigger={PopoverTrigger.Hover}
-        placement={PopoverPlacement.Bottom}
-        content={
-          <div className="w-[298px] text-[#3B3951] text-[12px] p-[14px] bg-white rounded-[10px] border border-[#E4E4E4]">
-            <div className="font-[500]">Refund Conditions</div>
-            <div className="font-[300] opacity-80 leading-[120%]">
-              Once a seller lists an asset and creates a bidding market, the
-              market is locked for 72 hours. During this period, the seller
-              cannot close or cancel the market under any circumstances. After
-              the initial 72-hour period, if no winner has emerged, the seller
-              may choose to close the market manually. However, this action will
-              trigger a penalty.
-            </div>
-          </div>
-        }
-      >
-        <button className="relative transition-opacity button">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            viewBox="0 0 16 16"
-            fill="none"
-          >
-            <path
-              d="M8 0C12.4615 5.7067e-07 16 3.6154 16 8C16 12.3846 12.4615 16 8 16C3.6154 16 1.05567e-05 12.4615 0 8C0 3.53847 3.53847 0 8 0ZM8 1.53809C4.46155 1.53809 1.53809 4.46155 1.53809 8C1.5381 11.5384 4.38463 14.4619 8 14.4619C11.6154 14.4619 14.4619 11.5384 14.4619 8C14.4619 4.46155 11.5385 1.53809 8 1.53809ZM8.76953 12.6152H7.23047V6H8.76953V12.6152ZM8.76953 4.69238H7.23047V3.23047H8.76953V4.69238Z"
-              fill="currentColor"
-            />
-          </svg>
-        </button>
-      </Popover>
     </div>
   );
 };

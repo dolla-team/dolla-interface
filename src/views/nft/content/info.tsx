@@ -60,7 +60,7 @@ export default function Info({
         </span>
       </div>
       <div className="flex gap-[16px] mt-[20px]">
-        {["Valued", "Players", "Bid"].map((item) => (
+        {["Valued", "Bidders", "Bid"].map((item) => (
           <div
             key={item}
             className="w-[282px] h-[96px] rounded-[16px] border border-[#E4E4E4] bg-[#FFFFFF99] backdrop-blur-[10px] flex flex-col justify-center items-center"
@@ -83,7 +83,7 @@ export default function Info({
                   })}
                 </div>
               )}
-              {item === "Players" && <div>{pool?.participants}</div>}
+              {item === "Bidders" && <div>{pool?.participants}</div>}
               {item === "Bid" && (
                 <div>
                   {formatNumber(pool?.accumulative_bids || 0, 3, true, {

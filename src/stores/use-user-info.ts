@@ -3,6 +3,7 @@ import { create } from "zustand/index";
 interface UserInfoState {
   userInfo: any;
   prize: any;
+  showSetting: boolean;
   set: (params: any) => void;
   init: () => void;
 }
@@ -12,7 +13,8 @@ const initialState = {
   prize: {
     points: 0,
     tickets: 0
-  }
+  },
+  showSetting: false
 } as UserInfoState;
 
 const useUserInfoStore = create<UserInfoState>((set) => ({
@@ -21,6 +23,7 @@ const useUserInfoStore = create<UserInfoState>((set) => ({
     points: 0,
     tickets: 0
   },
+  showSetting: false,
   set: (params) => set(() => ({ ...params })),
   init: () => set(() => initialState)
 }));

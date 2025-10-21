@@ -9,6 +9,8 @@ import { useAuth } from "@/contexts/auth";
 import { useTipsStore } from "@/stores/use-tips";
 import { QUOTE_TOKEN } from "@/config/btc";
 import { motion, AnimatePresence } from "framer-motion";
+import { useMemo } from "react";
+import Big from "big.js";
 
 const animate: any = {
   initial: {
@@ -61,6 +63,16 @@ export default function BidSelection({
   const { set } = useWalletStore();
   const { setFlipStatus } = useBtcContext();
   const { address, login } = useAuth();
+  const probability = useMemo(() => {
+    const _probability = Big(bids)
+      .div(Big(pool?.anchor_price || 1).div(1e6))
+      .mul(100);
+    if (_probability.gt(100)) {
+      return "99.99";
+    }
+    return _probability.toFixed(2);
+  }, [bids, pool?.anchor_price]);
+
   return (
     <div className="absolute bottom-0 left-0 w-full h-[202px]">
       <Bg className="absolute top-0 left-0 w-full h-full" />
@@ -93,6 +105,9 @@ export default function BidSelection({
 
         <BidBtn
           disabled={disabled}
+          balanceNotEnough={balanceNotEnough}
+          bids={bids}
+          probability={probability}
           onClick={() => {
             if (flipStatus === 4) {
               setFlipStatus(5);
@@ -146,7 +161,7 @@ export default function BidSelection({
             src={balanceNotEnough ? "/btc/bid1-disabled.png" : "/btc/bid1.png"}
             alt="bid 1"
             className={clsx(
-              "w-[282px] h-[239px] absolute bottom-[40px] left-[calc(50%-120px)] xl:scale-none scale-[0.75]"
+              "w-[282px] h-[239px] absolute bottom-[60px] left-[calc(50%-120px)] xl:scale-none scale-[0.75]"
             )}
             {...animate}
           />
@@ -159,7 +174,7 @@ export default function BidSelection({
             }
             alt="bid 10"
             className={clsx(
-              "w-[331px] h-[194px] absolute bottom-[90px] left-[calc(50%-150px)] xl:scale-none scale-[0.75]"
+              "w-[331px] h-[194px] absolute bottom-[110px] left-[calc(50%-150px)] xl:scale-none scale-[0.75]"
             )}
             {...animate}
           />
@@ -172,7 +187,7 @@ export default function BidSelection({
             }
             alt="bid 50"
             className={clsx(
-              "w-[272px] h-[225px] absolute bottom-[64px] left-[calc(50%-130px)] xl:scale-none scale-[0.75]"
+              "w-[272px] h-[225px] absolute bottom-[84px] left-[calc(50%-130px)] xl:scale-none scale-[0.75]"
             )}
             {...animate}
           />
@@ -185,7 +200,7 @@ export default function BidSelection({
             }
             alt="bid 100"
             className={clsx(
-              "w-[289px] h-[198px] absolute bottom-[80px] left-[calc(50%-130px)] xl:scale-none scale-[0.75]"
+              "w-[289px] h-[198px] absolute bottom-[100px] left-[calc(50%-130px)] xl:scale-none scale-[0.75]"
             )}
             {...animate}
           />

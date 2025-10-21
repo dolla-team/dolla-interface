@@ -100,6 +100,7 @@ export function useReferenceData(props: any) {
 
       _data[_label] = {
         top_sale: item.top_sale,
+        top_sale_pool_id: item.top_sale_pool_id,
         avg_profit: item.avg_profit,
         live: item.live,
         timing: _timing

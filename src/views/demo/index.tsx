@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { usePrivy } from "@privy-io/react-auth";
 import useGameAction from "@/hooks/near/use-game-action";
 import Button from "@/components/button";
@@ -110,7 +110,7 @@ function ShareSection() {
     <div className="space-y-4">
       <h2 className="text-xl font-semibold text-gray-800">Share</h2>
       <div>
-        <UserShareCard type="player" cardRef={cardRef} />
+        <UserShareCard type="seller" cardRef={cardRef} />
         <PoolShareCard cardRef={cardRef} />
       </div>
       <div className="bg-gray-50 p-4 rounded-lg flex gap-[10px]">
@@ -133,6 +133,11 @@ function ShareSection() {
 
 export default function Demo() {
   const { exportWallet } = usePrivy(); // Get exportWallet from usePrivy hook
+  const { getAllGames } = useGameAction({});
+
+  useEffect(() => {
+    getAllGames();
+  }, []);
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">

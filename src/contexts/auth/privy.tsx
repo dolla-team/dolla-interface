@@ -20,7 +20,6 @@ import {
 import useConfig from "@/hooks/use-config";
 import useUserInfoStore from "@/stores/use-user-info";
 import { useNearKeyStore } from "@/stores/use-near-key";
-import { ethers } from "ethers";
 import useUserNft from "@/hooks/evm/use-user-nft";
 import useAccount from "@/hooks/near/use-account";
 import useCode from "@/hooks/airdrop/use-code";

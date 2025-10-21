@@ -4,6 +4,7 @@ import { formatAddress } from "@/utils/format/address";
 import { formatNumber } from "@/utils/format/number";
 import clsx from "clsx";
 import { useNavigate } from "react-router-dom";
+import Big from "big.js";
 
 export default function TopWinnersItem({
   data,
@@ -12,7 +13,7 @@ export default function TopWinnersItem({
 }: {
   data: any;
   level: number;
-  type: "winners" | "sellers";
+  type: "winners" | "sellers" | "losers";
 }) {
   const navigate = useNavigate();
   return (
@@ -51,9 +52,23 @@ export default function TopWinnersItem({
         </div>
       </div>
       <div>
-        <div className="text-[10px] text-black/30">Multiplier</div>
+        <div className="text-[10px] text-black/30 text-right">
+          {type === "winners" && "Multiple"}
+          {type === "sellers" && "Profit"}
+          {type === "losers" && "Loss"}
+        </div>
         <div className="text-[12px] text-black text-right font-semibold">
-          {formatNumber(data.profit_ratio, type === "sellers" ? 2 : 0, true)}X
+          {type === "winners" && `${formatNumber(data.profit_ratio, 0, true)}%`}
+          {type === "sellers" &&
+            `$${formatNumber(
+              Big(data.claim_amount)
+                .div(1e6)
+                .minus(data.reward_usd || 0),
+              2,
+              true
+            )}`}
+          {type === "losers" &&
+            `$${formatNumber(Big(data.claim_amount).div(1e6), 2, true)}`}
         </div>
       </div>
     </div>

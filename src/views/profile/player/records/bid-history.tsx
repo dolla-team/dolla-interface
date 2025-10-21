@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import useCopy from "@/hooks/use-copy";
 import { useAuth } from "@/contexts/auth";
 import { BASE_TOKEN } from "@/config/btc";
+import PointIcon from "@/components/icons/point-icon";
 
 const BidHistory = (props: any) => {
   const { className, page, loading, data, hasMore, onPageChange } = props;
@@ -81,14 +82,16 @@ const BidHistory = (props: any) => {
           record.winner_ticket_number === 0
         ) {
           return (
-            <div className="bg-[#FFC42F] h-[30px] leading-[30px] rounded-[12px] px-[10px] font-[600] text-[12px]">
-              {formatNumber(
-                Number(record.reward_amount) /
-                  10 ** record.reward_token_info?.[0].decimals,
-                6,
-                true
-              )}{" "}
-              {BASE_TOKEN.symbol}
+            <div className="bg-[#FFC42F] h-[30px] flex items-center gap-[6px] leading-[30px] rounded-[12px] px-[10px] font-[600] text-[12px]">
+              <span>
+                {formatNumber(
+                  Number(record.reward_amount) /
+                    10 ** record.reward_token_info?.[0].decimals,
+                  6,
+                  true
+                )}
+              </span>
+              <img className="w-[20px] h-[20px]" src={BASE_TOKEN.icon} />
             </div>
           );
         }
@@ -106,7 +109,32 @@ const BidHistory = (props: any) => {
           if (str) str += " + ";
           str += record.winner_ticket_number + " tickets";
         }
-        return <span>{str || "-"}</span>;
+        return (
+          <div className="flex items-center gap-[10px]">
+            {!!record.winner_point_reward &&
+              Number(record.winner_point_reward) !== 0 && (
+                <div className="flex items-center gap-[4px]">
+                  <span>
+                    {formatNumber(record.winner_point_reward, 0, true)}
+                  </span>
+                  <PointIcon size={16} />
+                </div>
+              )}
+            {!!record.winner_ticket_number &&
+              Number(record.winner_ticket_number) !== 0 && (
+                <div className="flex items-center gap-[4px]">
+                  <span>
+                    {formatNumber(record.winner_ticket_number, 0, true)}
+                  </span>
+                  <img
+                    src="/lucky-draw/ticket.png"
+                    alt="ticket"
+                    className="w-[37px] h-[22px]"
+                  />
+                </div>
+              )}
+          </div>
+        );
       }
     },
     {

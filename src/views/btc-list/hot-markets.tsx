@@ -26,20 +26,25 @@ export default function MoreMarkets() {
   }, [prices]);
 
   return (
-    <div className="flex items-center gap-[20px] mt-[20px]">
-      {AMOUNT.map((item, index) => {
-        return (
-          <MarketItem
-            key={item}
-            value={item}
-            price={price}
-            market={allMarketsStore.hotMarkets[index]}
-            img={imgs[index]}
-            index={index}
-          />
-        );
-      })}
-    </div>
+    <>
+      <div className="text-[20px] text-black font-[700] mt-[20px] mb-[10px]">
+        🔥 Hot Markets
+      </div>
+      <div className="flex items-center gap-[20px]">
+        {AMOUNT.map((item, index) => {
+          return (
+            <MarketItem
+              key={item}
+              value={item}
+              price={price}
+              market={allMarketsStore.hotMarkets[index]}
+              img={imgs[index]}
+              index={index}
+            />
+          );
+        })}
+      </div>
+    </>
   );
 }
 

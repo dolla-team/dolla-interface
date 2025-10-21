@@ -97,6 +97,8 @@ export default function RechargeFrom1click() {
         onClick={() => {
           if (showAddress) {
             setShowAddress(false);
+          } else if (walletStore.from === "token") {
+            walletStore.set({ panelType: "token" });
           } else {
             walletStore.set({ depositPanelType: "token-selector" });
           }
@@ -108,15 +110,12 @@ export default function RechargeFrom1click() {
 
       {!showAddress && (
         <div className="pt-[20px]">
-          <div className="text-[16px] font-[500] text-center mb-[16px]">
-            Select Receiving Network
-          </div>
           <div className="flex flex-col items-center">
             <img
               src={walletStore.selectedToken.icon}
-              className="w-[32px] h-[32px] object-cover"
+              className="w-[40px] h-[40px] object-cover"
             />
-            <div className="text-[14px] font-[500] mt-[6px]">
+            <div className="text-[16px] font-[500] mt-[6px]">
               {formatNumber(
                 walletStore.selectedToken.isBaseToken
                   ? nearAccount?.prizeBalance
@@ -127,12 +126,8 @@ export default function RechargeFrom1click() {
               {walletStore.selectedToken.symbol}
             </div>
           </div>
-          <div className="mt-[6px] py-[10px] px-[6px] text-[12px] flex gap-[8px] leading-[14px] text-black font-[300] bg-[#FFC42F]/10 rounded-[12px]">
-            <WarningIcon />
-            <div>
-              Please note that only supported networks on Dolla are shown, if
-              you deposit via another network your assets maybe lost.
-            </div>
+          <div className="text-[14px] font-[500] mt-[20px]">
+            Select Receiving Network
           </div>
           <ChainSelector
             selectedToken={walletStore.selectedToken}
@@ -144,24 +139,16 @@ export default function RechargeFrom1click() {
           />
 
           <div className="absolute bottom-[20px] left-0 right-0">
-            <InfoPanel
-              minDeposit={`> ${
-                chain?.blockchain === "btc"
-                  ? Number(BTC_DEPOSIT_AMOUNT) / 1e8
-                  : walletStore.selectedToken.minDepositAmount
-              } 
-                ${chain?.symbol || walletStore.selectedToken.symbol}`}
-              time={chain?.blockchain === "btc" ? "15" : "1"}
-              maxDeposit={`< ${formatNumber(
-                walletStore.selectedToken.maxDepositAmount,
-                0,
-                true
-              )} 
-                ${chain?.symbol || walletStore.selectedToken.symbol}`}
-            />
+            <div className="mt-[6px] py-[10px] px-[6px] text-[12px] flex gap-[8px] leading-[14px] text-black font-[300] bg-[#FFC42F]/10 rounded-[12px]">
+              <WarningIcon />
+              <div>
+                Your assets must be sent to the same network you select here.
+                Depositing through any other network cannot be recovered.
+              </div>
+            </div>
             <button
               disabled={loading || !quote}
-              className="w-full bg-black cursor-pointer text-white text-[14px] font-[400] rounded-[12px] py-[14px] transition-colors duration-200 hover:bg-[#222] disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full bg-black mt-[10px] cursor-pointer text-white text-[14px] font-[400] rounded-[12px] py-[14px] transition-colors duration-200 hover:bg-[#222] disabled:opacity-50 disabled:cursor-not-allowed"
               onClick={() => {
                 if (quote || loading) {
                   setShowAddress(true);
@@ -193,7 +180,7 @@ export default function RechargeFrom1click() {
             } 
                 ${chain?.symbol || walletStore.selectedToken.symbol}`}
             time={chain?.blockchain === "btc" ? "15" : "1"}
-            maxDeposit={`< ${formatNumber(
+            maxDeposit={`${formatNumber(
               walletStore.selectedToken.maxDepositAmount,
               0,
               true
@@ -201,7 +188,7 @@ export default function RechargeFrom1click() {
                 ${chain?.symbol || walletStore.selectedToken.symbol}`}
           />
           <div className="absolute bottom-[20px] left-0 w-full">
-            <div className="text-[12px] text-[#8A87AA] text-center">
+            <div className="text-[12px] text-[#8A87AA] text-center font-[300]">
               Other way to deposit assets
             </div>
             <div
@@ -211,7 +198,7 @@ export default function RechargeFrom1click() {
                   depositPanelType: "token-selector"
                 });
               }}
-              className="w-full h-[56px] mt-[10px] rounded-[10px] border border-black/10 p-[10px] flex items-center justify-between button"
+              className="w-full h-[56px] mt-[6px] rounded-[10px] border border-black/10 p-[10px] flex items-center justify-between button"
             >
               <div className="flex items-center gap-[8px]">
                 <img
@@ -221,7 +208,7 @@ export default function RechargeFrom1click() {
                 />
                 <div>
                   <div className="text-[12px] text-[#000]">Coinbase</div>
-                  <div className="text-[10px] text-[#8A87AA]">
+                  <div className="text-[10px] text-[#8A87AA] font-[300]">
                     Instant Fees 0.5 - 2.5%
                   </div>
                 </div>

@@ -23,7 +23,7 @@ export default [
     sort: true
   },
   {
-    title: "Players",
+    title: "Bidders",
     dataIndex: "participants",
     width: "15%",
     sort: true

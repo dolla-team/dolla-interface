@@ -27,7 +27,7 @@ export default function PlayerDistribution() {
   return (
     <div className="w-[428px] h-[242px] rounded-[20px] border border-[#E4E4E4] bg-[#FFFFFF99] p-[20px]">
       <div className="flex justify-between items-center text-[14px] text-[#8A87AA]">
-        <span>Player Distribution</span>
+        <span>Bidder Distribution</span>
       </div>
       <div
         className={clsx("h-full pt-[30px] pb-[20px] flex flex-col gap-[18px]")}

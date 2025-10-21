@@ -1,7 +1,7 @@
 import Top from "./top";
 import { formatNumber } from "@/utils/format/number";
 import Tabs from "@/components/tabs";
-import Tokens from "./tokens";
+import Tokens from "./special-tokens";
 import Nfts from "./nfts";
 import Txs from "./txs";
 import { useState } from "react";
@@ -58,11 +58,9 @@ export default function Info({
         {tab === 0 && (
           <Tokens
             onClick={(token) => {
-              onTabChange("deposit");
               walletStore.set({
-                depositMethod: "centralized-exchange",
                 selectedToken: token,
-                depositPanelType: "input"
+                panelType: "token"
               });
             }}
           />
@@ -79,7 +77,7 @@ export default function Info({
   );
 }
 
-const PANELS = [
+export const PANELS = [
   {
     icon: (
       <svg

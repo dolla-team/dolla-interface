@@ -10,6 +10,14 @@ const COLOR: Record<number, { border: string[]; bg: string[] }> = {
   3: {
     border: ["#FEC3A9", "#B26B40"],
     bg: ["#F3C7B1", "#F38779"]
+  },
+  4: {
+    border: ["#000000", "#000000"],
+    bg: ["#FFFFFF", "#FFFFFF"]
+  },
+  5: {
+    border: ["#000000", "#000000"],
+    bg: ["#FFFFFF", "#FFFFFF"]
   }
 };
 
@@ -20,7 +28,7 @@ export default function ItemLevel({
   level: number;
   className?: string;
 }) {
-  if (level > 3 || !level) return null;
+  if (level > 5 || !level) return null;
   const { border, bg } = COLOR[level];
   return (
     <div className={className}>

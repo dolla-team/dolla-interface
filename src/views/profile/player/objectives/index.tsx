@@ -29,11 +29,11 @@ export default function Objectives() {
       }}
     >
       <div className="pr-[20px]">
-        <div className="flex justify-between items-center">
+        <div className="flex gap-[10px] items-center">
           <div className="text-[18px] font-[600]">Level</div>
-          <div className="flex items-center gap-[6px]">
-            <LevelIcon size={30} />
-            <span className="text-[14px] font-[600]">
+          <div className="flex items-center">
+            <LevelIcon size={30} className="relative z-[2]" />
+            <span className="ml-[-14px] text-[12px] text-right pr-[8px] text-white font-[600] w-[58px] h-[20px] bg-black rounded-[12px]">
               Lv. {userInfo?.level}
             </span>
           </div>
