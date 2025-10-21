@@ -369,7 +369,7 @@ const PnlAmountInfo = ({
                     {column.dataIndex === "sold" && (
                       <span className="font-[600]">
                         $
-                        {formatNumber(item.sold, 0, true, {
+                        {formatNumber(item.sold, 2, true, {
                           isShort: true,
                           isShortUppercase: true
                         })}
