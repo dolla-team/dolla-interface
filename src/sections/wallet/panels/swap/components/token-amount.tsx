@@ -20,7 +20,7 @@ export default function TokenAmount({
   onAmountChange,
   onUpdateCurrencyBalance,
   isPrice = true,
-  balanceLabel = "balance",
+  balanceLabel = "Bal.",
   balancePercentClassName,
   balanceContainerClassName,
   inputDisabled,
@@ -85,15 +85,48 @@ export default function TokenAmount({
   return (
     <div
       className={clsx(
-        "border border-[#8A87AA4D] rounded-[10px] p-[11px_11px_17px_12px] leading-[100%]",
+        "border border-[#8A87AA4D] rounded-[10px] px-[6px] py-[10px] leading-[100%] bg-white",
         className
       )}
     >
-      <div className="flex items-center justify-between gap-[10px]">
+      <div className="flex items-center justify-between text-[#8A87AA]">
+        <div className="text-[14px] font-[400]">
+          {type === "in" ? "From" : "To"}
+        </div>
+        <div className="text-[12px]">
+          {balanceLabel}{" "}
+          <span
+            className="underline"
+            onClick={() => {
+              const formatedBalance = balanceFormated(tokenBalance);
+              if (["-", "Loading", "0"].includes(formatedBalance)) return;
+              onAmountChange?.(tokenBalance);
+              setRange(tokenBalance || "0");
+            }}
+          >
+            {formatNumber(tokenBalance, currency?.decimals === 6 ? 2 : 6, true)}
+          </span>
+        </div>
+      </div>
+      <div className="flex items-center justify-between gap-[10px] mt-[10px]">
+        <div className="flex-1">
+          <input
+            className="w-[100%] h-[100%] text-[22px]"
+            value={amount}
+            onChange={(ev) => {
+              if (isNaN(Number(ev.target.value))) return;
+              const val = ev.target.value.replace(/\s+/g, "");
+              onAmountChange?.(val);
+              setRange(val);
+            }}
+            placeholder="0"
+            disabled={inputDisabled}
+          />
+        </div>
         <div
           className={`${
             outputCurrencyReadonly ? "" : "border"
-          } flex items-center justify-between border-[#8A87AA4D] rounded-[8px] w-[140px] h-[46px] px-[7px] cursor-pointer ${
+          } flex items-center justify-between border-[#8A87AA4D] rounded-[10px] w-[124px] h-[42px] px-[7px] cursor-pointer ${
             currencyClassName ?? ""
           }`}
           onClick={() => {
@@ -145,56 +178,25 @@ export default function TokenAmount({
             >
               <path
                 d="M1 1L6 5L11 1"
-                stroke="#000"
+                stroke="#8A87AA"
                 strokeWidth="2"
                 strokeLinecap="round"
               />
             </svg>
           )}
         </div>
-        <div className="flex-1">
-          <input
-            className="w-[100%] h-[100%] text-[22px] text-right"
-            value={amount}
-            onChange={(ev) => {
-              if (isNaN(Number(ev.target.value))) return;
-              const val = ev.target.value.replace(/\s+/g, "");
-              onAmountChange?.(val);
-              setRange(val);
-            }}
-            placeholder="0"
-            disabled={inputDisabled}
-          />
-        </div>
       </div>
 
-      <div
-        onClick={() => {
-          const formatedBalance = balanceFormated(tokenBalance);
-          if (["-", "Loading", "0"].includes(formatedBalance)) return;
-          onAmountChange?.(tokenBalance);
-          setRange(tokenBalance || "0");
-        }}
-        className={clsx(
-          "flex items-center justify-between text-[#8A87AA] mt-[6px] font-medium text-[12px]",
-          balanceContainerClassName
-        )}
-      >
-        <div className="flex items-center gap-[4px]">
-          {balanceLabel}:{" "}
-          {formatNumber(tokenBalance, currency?.decimals === 6 ? 2 : 6, true)}
+      {isPrice && (
+        <div className="text-[12px] text-[#8A87AA]">
+          $
+          {amount && tokenPrice
+            ? balanceFormated(Big(amount).mul(tokenPrice).toString())
+            : "-"}
         </div>
-        {isPrice && (
-          <div>
-            $
-            {amount && tokenPrice
-              ? balanceFormated(Big(amount).mul(tokenPrice).toString())
-              : "-"}
-          </div>
-        )}
-      </div>
+      )}
 
-      {type === "in" && (
+      {/* {type === "in" && (
         <div className="flex justify-between md:flex-col md:items-stretch md:justify-start items-center gap-[22px] mt-[10px]">
           <div className="flex items-center gap-[8px]">
             {BalancePercentList.map((p) => (
@@ -227,7 +229,7 @@ export default function TokenAmount({
             />
           )}
         </div>
-      )}
+      )} */}
     </div>
   );
 }

@@ -40,7 +40,6 @@ export const AuthProvider: React.FC<{
   const { wallets } = useWallets();
   const { wallets: solanaWallets } = useSolanaWallets();
   const { getCode, bindingCode } = useCode();
-  const timer = useRef<any>(0);
   const [logining, setLogining] = useState(false);
   const [accountRefresher, setAccountRefresher] = useState(-1);
   const [isLoggedOut, setIsLoggedOut] = useState(false);
@@ -80,8 +79,11 @@ export const AuthProvider: React.FC<{
       ).address;
 
       if (loginedAddress) {
-        getCode();
         bindingCode();
+      }
+
+      if (!globalStore.code) {
+        getCode();
       }
 
       if (privyWallet?.address === loginedAddress) {
@@ -211,12 +213,6 @@ export const AuthProvider: React.FC<{
     }
 
     (window as any).sign = sign;
-
-    clearTimeout(timer.current);
-
-    return () => {
-      clearTimeout(timer.current);
-    };
   }, [privyWallet?.address, ready, user, isLoggedOut]);
 
   return (

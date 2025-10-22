@@ -19,10 +19,14 @@ export function useSwap(props?: any) {
   const [displayCurrencySelect, setDisplayCurrencySelect] = useState(false);
   const [selectedTokenAddress, setSelectedTokenAddress] = useState("");
   const [maxInputBalance, setMaxInputBalance] = useState("");
+  const [maxOutputBalance, setMaxOutputBalance] = useState("");
   const [errorTips, setErrorTips] = useState("");
   const [updater, setUpdater] = useState(0);
   const [showDetail, setShowDetail] = useState(true);
   const [selectType, setSelectType] = useState<"in" | "out">("in");
+  const [exactType, setExactType] = useState<"EXACT_INPUT" | "EXACT_OUTPUT">(
+    "EXACT_INPUT"
+  );
 
   const tokenIds = useMemo(() => {
     if (!inputCurrency && !outputCurrency) return [];
@@ -59,9 +63,10 @@ export function useSwap(props?: any) {
         inputCurrency,
         outputCurrency,
         inputCurrencyAmount,
+        outputCurrencyAmount,
+        exactType,
         template
       });
-      setOutputCurrencyAmount("");
     },
     {
       wait: 500
@@ -82,7 +87,7 @@ export function useSwap(props?: any) {
       if (token.address.toLowerCase() === inputCurrency?.address.toLowerCase())
         _inputCurrency = null;
     }
-    if (!_inputCurrency || !_outputCurrency) setOutputCurrencyAmount("");
+
     setInputCurrency(_inputCurrency);
     setOutputCurrency(_outputCurrency);
     setDisplayCurrencySelect(false);
@@ -94,26 +99,51 @@ export function useSwap(props?: any) {
   }, [dapp]);
 
   useEffect(() => {
+    if (
+      trade?.outputCurrencyAmount === outputCurrencyAmount &&
+      trade?.inputCurrencyAmount === inputCurrencyAmount
+    ) {
+      console.log(
+        106,
+        trade?.outputCurrencyAmount,
+        outputCurrencyAmount,
+        trade?.inputCurrencyAmount,
+        inputCurrencyAmount
+      );
+      return;
+    }
     if (!inputCurrency || !outputCurrency) {
       setErrorTips("Select a token");
       return;
     }
-    if (Number(inputCurrencyAmount || 0) === 0) {
+    if (
+      Number(inputCurrencyAmount || 0) === 0 &&
+      Number(outputCurrencyAmount || 0) === 0
+    ) {
       setErrorTips("Enter an amount");
-      setOutputCurrencyAmount("");
       return;
     }
-    if (Big(inputCurrencyAmount).gt(maxInputBalance || 0)) {
+    if (Big(inputCurrencyAmount || 0).gt(maxInputBalance || 0)) {
       setErrorTips(`Insufficient ${inputCurrency?.symbol} Balance`);
+    } else if (Big(outputCurrencyAmount || 0).gt(maxOutputBalance || 0)) {
+      setErrorTips(`Insufficient ${outputCurrency?.symbol} Balance`);
     } else {
       setErrorTips("");
     }
 
     runQuoter();
-  }, [inputCurrency, outputCurrency, inputCurrencyAmount, maxInputBalance]);
+  }, [
+    inputCurrency,
+    outputCurrency,
+    inputCurrencyAmount,
+    outputCurrencyAmount,
+    maxInputBalance,
+    maxOutputBalance
+  ]);
 
   useEffect(() => {
     setOutputCurrencyAmount(trade?.outputCurrencyAmount || "");
+    setInputCurrencyAmount(trade?.inputCurrencyAmount || "");
   }, [trade]);
 
   return {
@@ -134,6 +164,8 @@ export function useSwap(props?: any) {
     setSelectedTokenAddress,
     maxInputBalance,
     setMaxInputBalance,
+    maxOutputBalance,
+    setMaxOutputBalance,
     errorTips,
     setErrorTips,
     updater,
@@ -142,6 +174,8 @@ export function useSwap(props?: any) {
     setShowDetail,
     selectType,
     setSelectType,
+    exactType,
+    setExactType,
     tokens,
     prices,
     pricesLoading,

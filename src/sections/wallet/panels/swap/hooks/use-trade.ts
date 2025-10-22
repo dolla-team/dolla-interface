@@ -1,6 +1,6 @@
 import { useCallback, useRef, useState } from "react";
 import useToast from "@/hooks/use-toast";
-import { getNonce, getProvider, quote, viewMethod } from "@/hooks/near/util";
+import { getNonce, getProvider, quote } from "@/hooks/near/util";
 import { transactions } from "near-api-js";
 import { PublicKey } from "near-api-js/lib/utils/key_pair";
 import { functionCall } from "near-api-js/lib/transaction";
@@ -19,6 +19,7 @@ export default function useTrade({ onSuccess }: any) {
   const slippage: any = useSettingsStore((store: any) => store.slippage);
   const [loading, setLoading] = useState(false);
   const [trade, setTrade] = useState<any>();
+
   const toast = useToast();
   const lastestCachedKey = useRef("");
   const cachedTokens = useRef<any>(null);
@@ -29,13 +30,26 @@ export default function useTrade({ onSuccess }: any) {
   const { nearAccount } = useAuth();
 
   const onQuoter = useCallback(
-    async ({ inputCurrency, outputCurrency, inputCurrencyAmount }: any) => {
-      setTrade(null);
-      if (!inputCurrency || !outputCurrency || !inputCurrencyAmount) {
+    async ({
+      inputCurrency,
+      outputCurrency,
+      inputCurrencyAmount,
+      outputCurrencyAmount,
+      exactType
+    }: any) => {
+      if (
+        !inputCurrency ||
+        !outputCurrency ||
+        (!inputCurrencyAmount && !outputCurrencyAmount)
+      ) {
+        setTrade(null);
         return;
       }
       const { publicKey } = await generateKeyPair();
-      if (!publicKey) return;
+      if (!publicKey) {
+        setTrade(null);
+        return;
+      }
 
       lastestCachedKey.current = `${inputCurrency.address}-${outputCurrency.address}-${inputCurrencyAmount}`;
 
@@ -50,13 +64,22 @@ export default function useTrade({ onSuccess }: any) {
           k: publicKey
         };
 
-        const _amount = Big(inputCurrencyAmount)
-          .mul(10 ** inputCurrency.decimals)
+        const _amount = Big(
+          exactType === "EXACT_INPUT"
+            ? inputCurrencyAmount
+            : outputCurrencyAmount
+        )
+          .mul(
+            10 **
+              (exactType === "EXACT_INPUT"
+                ? inputCurrency.decimals
+                : outputCurrency.decimals)
+          )
           .toFixed(0);
 
         const data = await quote({
           dry: false,
-          swapType: "EXACT_INPUT",
+          swapType: exactType,
           slippageTolerance: 50,
           originAsset: inputCurrency.assetId,
           depositType: "ORIGIN_CHAIN",
@@ -115,7 +138,7 @@ export default function useTrade({ onSuccess }: any) {
         const trade = {
           inputCurrency,
           outputCurrency,
-          inputCurrencyAmount,
+          inputCurrencyAmount: data.quote.amountInFormatted,
           isMax: inputCurrencyAmount === balance,
           name: "Near Intents",
           noPair: false,

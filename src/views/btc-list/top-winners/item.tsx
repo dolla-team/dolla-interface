@@ -68,7 +68,14 @@ export default function TopWinnersItem({
               true
             )}`}
           {type === "losers" &&
-            `$${formatNumber(Big(data.claim_amount).div(1e6), 2, true)}`}
+            `$${formatNumber(
+              Big(data.claim_amount)
+                .div(1e6)
+                .minus(data.reward_usd || 0)
+                .abs(),
+              2,
+              true
+            )}`}
         </div>
       </div>
     </div>

@@ -15,13 +15,15 @@ export default function TopWinners({
       const res = await axiosInstance.get(
         type === "winners"
           ? `/api/v1/user/top/winners?limit=10`
-          : `/api/v1/user/top/seller?limit=10&chain=near`
+          : type === "sellers"
+          ? `/api/v1/user/top/seller?limit=10&chain=near`
+          : `/api/v1/user/top/loss?limit=10`
       );
 
       setData(res.data.data || []);
     };
 
-    if (type !== "losers") getData();
+    getData();
   }, []);
   return (
     <TopWinnersContainer

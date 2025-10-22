@@ -34,9 +34,9 @@ export default function Result({
   );
 
   return (
-    <div className="flex items-center justify-between pt-[10px] text-[14px] font-medium text-[#3B3951]">
+    <div className="flex items-center justify-between pt-[10px]">
       <div className="flex items-center gap-[5px]">
-        <div>{priceString}</div>
+        <div className="text-[12px] text-[#8A87AA]">{priceString}</div>
         <button
           className="cursor-pointer p-[5px] duration-500 hover:opacity-60 active:opacity-80"
           onClick={() => {
@@ -52,11 +52,11 @@ export default function Result({
           >
             <path
               d="M1.01514 6.11148C0.887128 4.95763 1.55283 3.03456 3.70343 3.03456C5.85402 3.03456 10.9999 3.03456 10.9999 3.03456M10.9999 3.03456L9.01977 1M10.9999 3.03456L9.01977 5"
-              stroke="black"
+              stroke="currentColor"
             />
             <path
               d="M10.9849 5.88071C11.1129 7.03456 10.4472 8.95763 8.29657 8.95763C6.14598 8.95763 1.00006 8.95763 1.00006 8.95763M1.00006 8.95763L3.01978 11M1.00006 8.95763L3.01978 7"
-              stroke="black"
+              stroke="currentColor"
             />
           </svg>
         </button>

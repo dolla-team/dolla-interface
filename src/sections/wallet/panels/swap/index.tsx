@@ -20,7 +20,9 @@ export default function Swap(props?: any) {
     setDisplayCurrencySelect,
     setSelectedTokenAddress,
     setMaxInputBalance,
+    setMaxOutputBalance,
     setInputCurrencyAmount,
+    setExactType,
     updater,
     loading,
     outputCurrency,
@@ -76,6 +78,7 @@ export default function Swap(props?: any) {
           }}
           onAmountChange={(val: any) => {
             setInputCurrencyAmount(val);
+            setExactType("EXACT_INPUT");
           }}
           updater={`in-${updater}`}
         />
@@ -106,6 +109,13 @@ export default function Swap(props?: any) {
             setDisplayCurrencySelect(true);
             setSelectType("out");
             setSelectedTokenAddress(outputCurrency?.address);
+          }}
+          onUpdateCurrencyBalance={(balance: any) => {
+            setMaxOutputBalance(balance);
+          }}
+          onAmountChange={(val: any) => {
+            setOutputCurrencyAmount(val);
+            setExactType("EXACT_OUTPUT");
           }}
           updater={`out-${updater}`}
         />
