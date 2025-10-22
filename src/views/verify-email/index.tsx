@@ -78,6 +78,20 @@ export default function VerifyEmail() {
           "radial-gradient(27.11% 21.64% at 74.31% 34.42%, rgba(255, 196, 47, 0.40) 0%, rgba(255, 196, 47, 0.00) 100%), #000"
       }}
     >
+      <div className="w-full h-full pointer-events-none overflow-hidden absolute top-0 left-0 opacity-[0.07]">
+        <motion.div
+          className="w-[500%] h-[500%] bg-[url('/bg-noise.png')] [inset:-200%] absolute will-change-transform"
+          animate={{
+            translateX: [0, "-5%", "5%", "-10%", "10%", "-15%", "15%", 0],
+            translateY: [0, "15%", "-15%", "10%", "-10%", "5%", "-5%", 0]
+          }}
+          transition={{
+            duration: 1,
+            repeat: Infinity,
+            ease: "linear"
+          }}
+        />
+      </div>
       <div className="w-[904px] h-[706px] relative bottom-[-44px] z-[2]">
         <img
           src="/verify/verify-woman.png"
