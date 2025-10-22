@@ -36,7 +36,11 @@ export default function useProvablyFair(txHash: string) {
         transaction.receipts[1].outcome.logs[0].split("EVENT_JSON:")[1];
       const parsedProcessedPlayGameLog =
         parseHashPayload(processedPlayGameLog).data[0];
-      console.log("parsedProcessedPlayGameLog", parsedProcessedPlayGameLog);
+      console.log(
+        "parsedProcessedPlayGameLog",
+        parsedPlayGameLog,
+        parsedProcessedPlayGameLog
+      );
 
       setData({
         block_height: parsedPlayGameLog?.block_height,
@@ -139,7 +143,6 @@ export default function useProvablyFair(txHash: string) {
 
 function parseHashPayload(input: string) {
   let s = (input ?? "").trim();
-  console.log("parseHashPayload input:", s);
 
   try {
     const result = JSON.parse(s);

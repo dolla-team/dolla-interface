@@ -133,7 +133,8 @@ const Content = () => {
 
   return isLoading ? (
     <Loading />
-  ) : !user || globalStore.email !== user?.email?.address ? (
+  ) : !user ||
+    globalStore.email.toLowerCase() !== user?.email?.address?.toLowerCase() ? (
     <VerifyEmail />
   ) : (
     <RouterProvider router={router} />

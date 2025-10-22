@@ -99,19 +99,6 @@ export function useSwap(props?: any) {
   }, [dapp]);
 
   useEffect(() => {
-    if (
-      trade?.outputCurrencyAmount === outputCurrencyAmount &&
-      trade?.inputCurrencyAmount === inputCurrencyAmount
-    ) {
-      console.log(
-        106,
-        trade?.outputCurrencyAmount,
-        outputCurrencyAmount,
-        trade?.inputCurrencyAmount,
-        inputCurrencyAmount
-      );
-      return;
-    }
     if (!inputCurrency || !outputCurrency) {
       setErrorTips("Select a token");
       return;
@@ -125,12 +112,15 @@ export function useSwap(props?: any) {
     }
     if (Big(inputCurrencyAmount || 0).gt(maxInputBalance || 0)) {
       setErrorTips(`Insufficient ${inputCurrency?.symbol} Balance`);
-    } else if (Big(outputCurrencyAmount || 0).gt(maxOutputBalance || 0)) {
-      setErrorTips(`Insufficient ${outputCurrency?.symbol} Balance`);
     } else {
       setErrorTips("");
     }
-
+    if (
+      trade?.outputCurrencyAmount === outputCurrencyAmount &&
+      trade?.inputCurrencyAmount === inputCurrencyAmount
+    ) {
+      return;
+    }
     runQuoter();
   }, [
     inputCurrency,

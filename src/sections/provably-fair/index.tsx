@@ -70,7 +70,7 @@ export default function ProvablyFair({
                 <div>
                   time{" "}
                   {hashData?.block_time
-                    ? dayjs(hashData.block_time).format("YYYY-MM-DD")
+                    ? dayjs(Number(hashData.block_time)).format("YYYY-MM-DD")
                     : "-"}
                 </div>
               </div>

@@ -58,7 +58,12 @@ const Item = ({
   onClick?: (token: any) => void;
 }) => {
   return (
-    <div className="relative pt-[80px] group">
+    <div
+      className={clsx(
+        "relative group",
+        token.isBaseToken ? "pt-[80px]" : "pt-[60px]"
+      )}
+    >
       <div className="absolute left-[10px] top-0">
         <img
           src={
@@ -69,17 +74,22 @@ const Item = ({
           className={clsx(
             "object-cover group-hover:scale-[1.1] duration-300 grayscale group-hover:grayscale-0",
             token.isBaseToken
-              ? "w-[77px] h-[80px] mt-[14px]"
-              : "w-[98px] h-[68px] mt-[24px]"
+              ? "w-[77px] h-[80px] mt-[10px]"
+              : "w-[98px] h-[68px] mt-[0px]"
           )}
         />
       </div>
-      <div className="absolute top-[52px] origin-bottom right-0 text-black text-right font-[Bungee] text-[24px] tracking-[-1.2px] transform rotate-[0.083deg] group-hover:text-[30px] group-hover:leading-none group-hover:tracking-[-3px] group-hover:[-webkit-text-stroke-width:2px] group-hover:[-webkit-text-stroke-color:#FFC42F] transition-all duration-200">
+      <div
+        className={clsx(
+          "absolute origin-bottom right-0 text-black text-right font-[Bungee] text-[24px] tracking-[-1.2px] transform rotate-[0.083deg] group-hover:text-[30px] group-hover:leading-none group-hover:tracking-[-3px] group-hover:[-webkit-text-stroke-width:2px] group-hover:[-webkit-text-stroke-color:#FFC42F] transition-all duration-200",
+          token.isBaseToken ? "top-[54px]" : "top-[34px]"
+        )}
+      >
         {token.isBaseToken ? "Seller" : "Bidder"}
       </div>
       <div
         className={clsx(
-          "rounded-[10px] w-[300px] h-[88px] bg-black border border-[#ECECEC] p-[4px] relative z-[5]",
+          "rounded-[10px] w-[300px] h-[88px] bg-black border border-[#ECECEC] hover:border-[#FFC42F] p-[4px] relative z-[5]",
           onClick && "cursor-pointer"
         )}
         onClick={() => {

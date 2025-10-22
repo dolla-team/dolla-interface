@@ -70,42 +70,83 @@ export default function VerifyEmail() {
   }, [user]);
 
   return (
-    <div className="w-screen h-screen bg-linear-to-b from-[#FFC42F00] to-[#FFC42F]/20 bg-white relative">
-      <div className="flex flex-col items-center justify-center pt-[16%] w-full">
-        <DollaEye className="" height={90} />
-        <div className="text-[14px] mt-[40px]">Whitelist only for now</div>
-      </div>
-      <div className="absolute bottom-[100px] left-0 w-full flex flex-col items-center justify-center">
-        <>
-          <input
-            className={`w-[300px] h-[50px] rounded-[10px] border p-[10px] text-[14px] text-center bg-white ${
-              emailError ? "border-[#FF399F]" : "border-[#8A87AA4D]"
-            }`}
-            placeholder="Enter your email"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            onBlur={() => setTouched(true)}
-            onKeyDown={(e) => e.key === "Enter" && handleSendCode()}
-          />
-          {emailError && (
-            <div className="mt-[10px] text-[#FF399F] text-[14px] h-[20px]">
-              Please enter a valid email address
-            </div>
-          )}
-          {error && (
-            <div className="mt-[10px] text-[#FF399F] text-[14px] h-[20px]">
-              {error}
-            </div>
-          )}
-          <Button
-            disabled={!canSubmit || checking}
-            className="w-[300px] h-[50px] !bg-black !text-white mt-[16px]"
-            onClick={handleSendCode}
+    <div
+      className="w-screen h-screen relative  overflow-hidden"
+      style={{
+        background:
+          "radial-gradient(27.11% 21.64% at 74.31% 34.42%, rgba(255, 196, 47, 0.40) 0%, rgba(255, 196, 47, 0.00) 100%), #000"
+      }}
+    >
+      <img
+        src="/verify/verify-woman.png"
+        className="absolute -bottom-[3.5%] -left-[3%] w-3xl object-cover"
+      />
+      <img
+        src="/verify/verify-labels.png"
+        className="absolute bottom-[10px] right-0 w-[185px] h-[151px] object-cover"
+      />
+
+      <div className="absolute bottom-[30px] right-[8%] flex flex-col items-center">
+        <DollaEye className="" height={86} />
+        <div className="text-[17px] text-white w-[528px] text-center leading-[160%] mt-[40px]">
+          The first{" "}
+          <span className="text-[26px] text-[#FFC42F] font-[600]">
+            Trustless Probabilistic Marketplace
+          </span>{" "}
+          for BTC and more
+        </div>
+        <div className="text-[14px] mt-[80px] text-[#D9D9D9]">
+          Whitelist only for now
+        </div>
+        <input
+          className={`w-[300px] h-[50px] mt-[20px] rounded-[10px] border p-[10px] text-[14px] text-center bg-white ${
+            emailError ? "border-[#FF399F]" : "border-[#8A87AA4D]"
+          }`}
+          placeholder="Enter your email"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          onBlur={() => setTouched(true)}
+          onKeyDown={(e) => e.key === "Enter" && handleSendCode()}
+        />
+        {emailError && (
+          <div className="mt-[10px] text-[#FF399F] text-[14px] h-[20px]">
+            Please enter a valid email address
+          </div>
+        )}
+        {error && (
+          <div className="mt-[10px] text-[#FF399F] text-[14px] h-[20px]">
+            {error}
+          </div>
+        )}
+        <Button
+          disabled={!canSubmit || checking}
+          className="w-[300px] h-[50px] !bg-[#FFB700] !text-[#000] mt-[16px]"
+          onClick={handleSendCode}
+        >
+          {checking ? "Checking permission..." : "Check permission"}
+        </Button>
+
+        <button
+          className="button flex items-center gap-[4px] mt-[120px]"
+          onClick={() => {
+            window.open("https://x.com/Dollamarket", "_blank");
+          }}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="15"
+            height="15"
+            viewBox="0 0 15 15"
+            fill="none"
           >
-            {checking ? "Checking permission..." : "Check permission"}
-          </Button>
-        </>
+            <path
+              d="M8.9285 6.35221L14.5135 0H13.1905L8.339 5.5144L4.467 0H0L5.8565 8.33955L0 15H1.323L6.443 9.17535L10.533 15H15M1.8005 0.976187H3.833L13.1895 14.0718H11.1565"
+              fill="#8A87AA"
+            />
+          </svg>
+          <span className="text-[#8A87AA] text-[14px]">Twitter</span>
+        </button>
       </div>
     </div>
   );
