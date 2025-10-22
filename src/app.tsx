@@ -134,7 +134,9 @@ const Content = () => {
   return isLoading ? (
     <Loading />
   ) : !user ||
-    globalStore.email.toLowerCase() !== user?.email?.address?.toLowerCase() ? (
+    globalStore.email.toLowerCase() !==
+      (user?.email?.address?.toLowerCase() ||
+        user?.google?.email?.toLowerCase()) ? (
     <VerifyEmail />
   ) : (
     <RouterProvider router={router} />

@@ -46,7 +46,7 @@ export default function VerifyEmail() {
 
     try {
       // Step 1: Check whitelist
-      const isWhitelisted = await checkWhitelist(email);
+      const isWhitelisted = await checkWhitelist(email.trim());
 
       if (!isWhitelisted) {
         setError("You don't have permission");
@@ -54,7 +54,7 @@ export default function VerifyEmail() {
         return;
       }
       globalStore.set({
-        email: email
+        email: email.trim()
       });
       login();
     } catch (err: any) {
