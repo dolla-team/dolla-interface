@@ -3,6 +3,8 @@ import EstGasIcon from "./est-gas-icon";
 import clsx from "clsx";
 import { useEffect, useState } from "react";
 import { BASE_TOKEN, QUOTE_TOKEN } from "@/config/btc";
+import { formatNumber } from "@/utils/format/number";
+import Big from "big.js";
 
 export default function EstGas({ className }: any) {
   const [gas, setGas] = useState<any>(null);
@@ -30,28 +32,57 @@ export default function EstGas({ className }: any) {
         <div className="flex items-center justify-between py-[2px]">
           <span>Bid</span>
           <div className="flex items-center gap-[4px]">
-            <span>~ 0.23</span>
+            <span>
+              ~{" "}
+              {formatNumber(
+                Big(gas?.bid?.min_usd || 0)
+                  .add(Big(gas?.bid?.max_usd || 0))
+                  .div(2),
+                3,
+                true
+              )}
+            </span>
             <img className="w-[16px] h-[16px]" src={QUOTE_TOKEN.icon} />
           </div>
         </div>
         <div className="flex items-center justify-between py-[2px]">
           <span>Market Creation</span>
           <div className="flex items-center gap-[4px]">
-            <span>&lt; 0.00001</span>
+            <span>
+              ~ 0.0<span className="text-[8px] mt-[4px]">6</span>5
+            </span>
             <img className="w-[16px] h-[16px]" src={BASE_TOKEN.icon} />
           </div>
         </div>
         <div className="flex items-center justify-between py-[2px]">
           <span>Withdraw</span>
           <div className="flex items-center gap-[4px]">
-            <span>~ 0.23</span>
+            <span>
+              ~{" "}
+              {formatNumber(
+                Big(gas?.withdraw?.min_usd || 0)
+                  .add(Big(gas?.withdraw?.max_usd || 0))
+                  .div(2),
+                3,
+                true
+              )}
+            </span>
             <img className="w-[16px] h-[16px]" src={QUOTE_TOKEN.icon} />
           </div>
         </div>
         <div className="flex items-center justify-between py-[2px]">
           <span>Claim</span>
           <div className="flex items-center gap-[4px]">
-            <span>~ 0.23</span>
+            <span>
+              ~{" "}
+              {formatNumber(
+                Big(gas?.claim?.min_usd || 0)
+                  .add(Big(gas?.claim?.max_usd || 0))
+                  .div(2),
+                3,
+                true
+              )}
+            </span>
             <img className="w-[16px] h-[16px]" src={QUOTE_TOKEN.icon} />
           </div>
         </div>

@@ -2,6 +2,8 @@ import { useState, useCallback, useRef, useEffect } from "react";
 import axiosInstance from "@/libs/axios";
 import { useAuth } from "@/contexts/auth";
 import { BASE_TOKEN, QUOTE_TOKEN } from "@/config/btc";
+import { formatNumber } from "@/utils/format/number";
+import { formatAddress } from "@/utils/format/address";
 
 // Type definitions for the records API
 export interface RecordsParams {
@@ -37,7 +39,7 @@ export default function useTokenRecords() {
       setLoading(true);
 
       const response = await axiosInstance.get<RecordsResponse>(
-        "/api/v1/account_records",
+        "/api/v1/account_chain_records",
         {
           params: {
             limit: DEFAULT_LIMIT,
@@ -64,10 +66,6 @@ export default function useTokenRecords() {
         }
         if (item.source === "CHAINDEFUSER") {
           businessType = item.type.charAt(0).toUpperCase() + item.type.slice(1);
-        } else if (item.source === "TICKET") {
-          businessType = "Lucky Draw";
-        } else if (item.source === "CLAIM") {
-          businessType = "Claim";
         }
 
         let status = item.status;
@@ -81,6 +79,20 @@ export default function useTokenRecords() {
           status = "Processing";
         }
 
+        let to = "";
+        if (item.to.includes(BASE_TOKEN.address) && item.type === "swap") {
+          to = formatNumber(item.to_amount, 6, true) + " " + BASE_TOKEN.symbol;
+        } else if (
+          item.to.includes(QUOTE_TOKEN.address) &&
+          item.type === "swap"
+        ) {
+          to = formatNumber(item.to_amount, 2, true) + " " + QUOTE_TOKEN.symbol;
+        } else if (item.type === "withdraw") {
+          to = "to" + " " + formatAddress(item.to);
+        } else if (item.type === "deposit") {
+          to = "from" + " " + formatAddress(item.from);
+        }
+
         return {
           type: item.type,
           business_type: businessType,
@@ -88,7 +100,8 @@ export default function useTokenRecords() {
           amount: item.amount,
           id: item.id,
           updated_at: item.date,
-          status
+          status,
+          to
         };
       });
 
@@ -137,13 +150,13 @@ export default function useTokenRecords() {
     [fetchRecords]
   );
 
-  // useEffect(() => {
-  //   if (userInfo?.user) {
-  //     pageRef.current = 1;
-  //     setCurrentPage(1);
-  //     fetchRecords();
-  //   }
-  // }, [userInfo?.user]);
+  useEffect(() => {
+    if (userInfo?.user) {
+      pageRef.current = 1;
+      setCurrentPage(1);
+      fetchRecords();
+    }
+  }, [userInfo?.user]);
 
   return {
     // Data

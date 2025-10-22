@@ -3,7 +3,6 @@ import React, {
   useEffect,
   useState,
   useCallback,
-  useRef,
   useMemo
 } from "react";
 import { useDebounceFn } from "ahooks";
@@ -15,8 +14,10 @@ import {
   usePrivy,
   useWallets,
   useUser,
-  useSolanaWallets
+  useSolanaWallets,
+  useCreateWallet
 } from "@privy-io/react-auth";
+import { useCreateWallet as useCreateSolanaWallet } from "@privy-io/react-auth/solana";
 import useConfig from "@/hooks/use-config";
 import useUserInfoStore from "@/stores/use-user-info";
 import { useNearKeyStore } from "@/stores/use-near-key";
@@ -39,6 +40,8 @@ export const AuthProvider: React.FC<{
   useConfig();
   const { wallets } = useWallets();
   const { wallets: solanaWallets } = useSolanaWallets();
+  const { createWallet: createPrivyWallet } = useCreateWallet();
+  const { createWallet: createSolanaWallet } = useCreateSolanaWallet();
   const { getCode, bindingCode } = useCode();
   const [logining, setLogining] = useState(false);
   const [accountRefresher, setAccountRefresher] = useState(-1);
@@ -113,22 +116,6 @@ export const AuthProvider: React.FC<{
       const message = `login dolla, sol_address:${solanaWallets[0]?.address}, wallet_id:${userId}, time:${time}`;
       let signature: string;
 
-      // Choose different signing methods based on wallet type
-      // if (privyWallet && "walletClientType" in privyWallet) {
-      //   console.log("privyWallet", 117);
-      //   // Use MetaMask for signing
-      //   const ethereumProvider = await privyWallet.getEthereumProvider();
-      //   if (!ethereumProvider) {
-      //     throw new Error("Failed to get Ethereum provider");
-      //   }
-      //   const provider = new ethers.providers.Web3Provider(ethereumProvider);
-      //   const signer = provider.getSigner();
-      //   signature = await signer.signMessage(message);
-      // } else {
-      //   console.log("privyWallet", 127);
-      //   // Use Privy embedded wallet for signing
-
-      // }
       const { signature: privySignature } = await signMessage({
         message
       });
@@ -164,10 +151,19 @@ export const AuthProvider: React.FC<{
     }
   };
 
-  const login = useCallback(async () => {
-    setIsLoggedOut(false);
-    privyLogin?.();
-  }, [privyLogin]);
+  const login = async () => {
+    if (!user) {
+      setIsLoggedOut(false);
+      privyLogin?.();
+      return;
+    }
+    if (!privyWallet?.address) {
+      createPrivyWallet();
+    }
+    if (!solanaWallets[0]?.address) {
+      createSolanaWallet();
+    }
+  };
 
   const logout = useCallback(async () => {
     setIsLoggedOut(true);
