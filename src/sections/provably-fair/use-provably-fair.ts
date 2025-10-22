@@ -36,11 +36,10 @@ export default function useProvablyFair(txHash: string) {
         transaction.receipts[1].outcome.logs[0].split("EVENT_JSON:")[1];
       const parsedProcessedPlayGameLog =
         parseHashPayload(processedPlayGameLog).data[0];
-      console.log(
-        "parsedProcessedPlayGameLog",
-        parsedPlayGameLog,
-        parsedProcessedPlayGameLog
-      );
+
+      const resultLog =
+        transaction.receipts[1].outcome.logs[1].split("EVENT_JSON:")[1];
+      const parsedResultLog = parseHashPayload(resultLog).data[0];
 
       setData({
         block_height: parsedPlayGameLog?.block_height,
@@ -49,7 +48,8 @@ export default function useProvablyFair(txHash: string) {
         tee_seed: parsedPlayGameLog?.random_number,
         bid_count: parsedProcessedPlayGameLog?.bid_count,
         pool_id: parsedProcessedPlayGameLog?.pool_id,
-        play_log: parsedPlayGameLog // Raw logs from RPC
+        play_log: parsedPlayGameLog, // Raw logs from RPC
+        result_log: parsedResultLog
       });
     } catch (err) {
       const errorMessage =
@@ -63,9 +63,26 @@ export default function useProvablyFair(txHash: string) {
   }, [txHash]);
 
   const onVerfiy = async () => {
-    if (!data?.play_log) {
+    if (!data?.result_log) {
       return;
     }
+
+    // Safe compare using BigInt; if parse fails, mark as null
+    let isWinner: boolean | null = null;
+    try {
+      isWinner =
+        BigInt(data.result_log.random_number) <=
+        BigInt(data.result_log.threshold);
+    } catch {
+      isWinner = null;
+    }
+
+    setVerifyData({
+      randomNumber: data.result_log.random_number,
+      threshold: data.result_log.threshold,
+      isWinner
+    });
+    return;
 
     try {
       setVerifing(true);
@@ -78,9 +95,7 @@ export default function useProvablyFair(txHash: string) {
           game_id: pool_id
         }
       });
-
       await initWasm();
-
       // Use browser-random wrapper for stable WASM loading
       // 1) Calculate random number (string)
       const randomStr = await calculate(JSON.stringify(_log));
@@ -91,7 +106,7 @@ export default function useProvablyFair(txHash: string) {
         1e6,
         poolDetail.odds_bep
       );
-      console.log("thresholdStr", randomStr, thresholdStr);
+
       // Safe compare using BigInt; if parse fails, mark as null
       let isWinner: boolean | null = null;
       try {
@@ -105,7 +120,7 @@ export default function useProvablyFair(txHash: string) {
         threshold: thresholdStr,
         isWinner
       });
-    } catch (err) {
+    } catch (err: any) {
       const message = err instanceof Error ? err.message : "Verify failed";
       setError(message);
       console.error("onVerfiy error", err);
@@ -123,7 +138,9 @@ export default function useProvablyFair(txHash: string) {
   }, []);
 
   useEffect(() => {
-    if (txHash) queryHashInfo();
+    if (txHash) {
+      queryHashInfo();
+    }
   }, [txHash]);
 
   return {
