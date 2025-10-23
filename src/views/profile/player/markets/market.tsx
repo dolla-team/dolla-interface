@@ -36,7 +36,7 @@ export default function MarketItem(props: any) {
       className="!w-[288px] !h-[unset]"
       data={data}
       footer={
-        <div className="w-full px-[13px] bg-black rounded-b-[20px] py-[17px] mt-[20px] relative z-[2] text-white text-center text-[12px] font-normal leading-[100%]">
+        <div className="w-full h-[50px] px-[13px] bg-black rounded-b-[20px] py-[17px] mt-[20px] relative z-[2] text-white text-center text-[12px] font-normal leading-[100%]">
           <div className="flex justify-between items-center gap-[10px]">
             <div>
               Your bid
