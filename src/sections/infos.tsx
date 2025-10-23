@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import clsx from "clsx";
 import axiosInstance from "@/libs/axios";
@@ -19,15 +19,17 @@ interface ScrollProps {
 
 export default function Infos({
   className = "",
-  speed = 60,
+  speed = 120,
   height = 36,
   autoPlay = true
 }: ScrollProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const animationRef = useRef<number | null>(null);
   const [contentWidth, setContentWidth] = useState(0);
   const [isPaused, setIsPaused] = useState(!autoPlay);
   const [data, setData] = useState<any[]>([]);
+  const [scrollPosition, setScrollPosition] = useState(0);
   const walletStore = useWalletStore();
 
   useEffect(() => {
@@ -36,78 +38,135 @@ export default function Infos({
     setContentWidth(totalWidth);
   }, [data]);
 
-  const duration = contentWidth / speed;
+  // JavaScript-based smooth scrolling animation with better performance
+  const animateScroll = useCallback(() => {
+    if (isPaused || !contentWidth) {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+        animationRef.current = null;
+      }
+      return;
+    }
+
+    setScrollPosition((prev: number) => {
+      const newPosition = prev + speed / 60; // 60fps
+      return newPosition >= contentWidth ? 0 : newPosition;
+    });
+
+    animationRef.current = requestAnimationFrame(animateScroll);
+  }, [isPaused, contentWidth, speed]);
+
+  // Start animation when conditions are met
+  useEffect(() => {
+    if (!isPaused && contentWidth > 0 && !animationRef.current) {
+      animationRef.current = requestAnimationFrame(animateScroll);
+    }
+
+    return () => {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+        animationRef.current = null;
+      }
+    };
+  }, [isPaused, contentWidth, animateScroll]);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+        animationRef.current = null;
+      }
+    };
+  }, []);
 
   useEffect(() => {
     const getData = async () => {
-      const res = await axiosInstance.get(`/api/v1/pool/top/market`);
+      try {
+        const res = await axiosInstance.get(`/api/v1/pool/top/market`);
 
-      const _list: any = [];
+        const _list: any = [];
 
-      res?.data?.data?.pool?.forEach((pool: any) => {
-        let label = "New listing live";
-        let icon = "🪶";
-        if (pool.type === 0) {
-          label = "Hot Market";
-          icon = "🔥";
-        }
-        if (pool.type === 1) {
-          label = "Early Entry";
-          icon = "⚡";
-        }
-        _list.push({
-          type: "pool",
-          pool_id: pool.pool_id,
-          value: pool.pool_info.reward_usd,
-          market_type: pool.type, // type: 0: hot, 1: early, 2: new
-          reward_amount: Big(pool.pool_info.reward_amount)
-            .div(10 ** BASE_TOKEN.decimals)
-            .toString(),
-          label,
-          icon
+        res?.data?.data?.pool?.forEach((pool: any) => {
+          let label = "New listing live";
+          let icon = "🪶";
+          if (pool.type === 0) {
+            label = "Hot Market";
+            icon = "🔥";
+          }
+          if (pool.type === 1) {
+            label = "Early Entry";
+            icon = "⚡";
+          }
+          _list.push({
+            type: "pool",
+            pool_id: pool.pool_id,
+            value: pool.pool_info.reward_usd,
+            market_type: pool.type, // type: 0: hot, 1: early, 2: new
+            reward_amount: Big(pool.pool_info.reward_amount)
+              .div(10 ** BASE_TOKEN.decimals)
+              .toString(),
+            label,
+            icon
+          });
         });
-      });
 
-      res?.data?.data?.winner_bid?.forEach((pool: any) => {
-        //#4ee818  profit_ratio < 10
-        // #366ac5  profit_ratio < 50
-        // #993ad8  profit_ratio < 100
-        // #f08227  profit_ratio > 100
+        res?.data?.data?.winner_bid?.forEach((pool: any) => {
+          //#4ee818  profit_ratio < 10
+          // #366ac5  profit_ratio < 50
+          // #993ad8  profit_ratio < 100
+          // #f08227  profit_ratio > 100
 
-        let text_color = "#4ee818";
-        if (Number(pool.profit_ratio) < 50) {
-          text_color = "#366ac5";
-        }
-        if (Number(pool.profit_ratio) < 100) {
-          text_color = "#993ad8";
-        }
-        if (Number(pool.profit_ratio) > 100) {
-          text_color = "#f08227";
-        }
-        _list.push({
-          type: "winner",
-          profit_ratio: pool.profit_ratio,
-          winner_user_name: pool.user_info.name,
-          pool_id: pool.pool_id,
-          winner_user: pool.user_info.user,
-          text_color
+          let text_color = "#4ee818";
+          if (Number(pool.profit_ratio) < 50) {
+            text_color = "#366ac5";
+          }
+          if (Number(pool.profit_ratio) < 100) {
+            text_color = "#993ad8";
+          }
+          if (Number(pool.profit_ratio) > 100) {
+            text_color = "#f08227";
+          }
+          _list.push({
+            type: "winner",
+            profit_ratio: pool.profit_ratio,
+            winner_user_name: pool.user_info.name,
+            pool_id: pool.pool_id,
+            winner_user: pool.user_info.user,
+            text_color
+          });
         });
-      });
 
-      setData(_list);
+        setData(_list);
 
-      walletStore.set({
-        showInfos: !_list.length
-      });
-      window.scrollTimer = setTimeout(() => {
-        getData();
-      }, 10000);
+        walletStore.set({
+          showInfos: !_list.length
+        });
+
+        // Use a more reliable timer management
+        const timerId = setTimeout(() => {
+          getData();
+        }, 10000);
+
+        // Store timer ID for cleanup
+        (window as any).scrollTimer = timerId;
+      } catch (error) {
+        console.error("Failed to fetch market data:", error);
+        // Retry after a shorter interval on error
+        const timerId = setTimeout(() => {
+          getData();
+        }, 5000);
+        (window as any).scrollTimer = timerId;
+      }
     };
 
     getData();
 
     return () => {
-      clearTimeout(window.scrollTimer);
+      if ((window as any).scrollTimer) {
+        clearTimeout((window as any).scrollTimer);
+        (window as any).scrollTimer = undefined;
+      }
     };
   }, []);
 
@@ -123,25 +182,13 @@ export default function Infos({
         style={{ height: `${height}px` }}
       >
         <Bids />
-        <style>
-          {`
-            @keyframes scroll-right-to-left {
-              from {
-                transform: translateX(0);
-              }
-              to {
-                transform: translateX(-${contentWidth}px);
-              }
-            }
-          `}
-        </style>
         <div
           ref={scrollRef}
           className="flex items-center gap-8 h-full whitespace-nowrap"
           style={{
             width: contentWidth * 2,
-            animation: `scroll-right-to-left ${duration}s linear infinite`,
-            animationPlayState: isPaused ? "paused" : "running"
+            transform: `translateX(-${scrollPosition}px)`,
+            willChange: "transform" // Optimize for smooth animation
           }}
         >
           {data.map((item, index) => (
@@ -175,18 +222,29 @@ const Item = ({
   setIsPaused: (isPaused: boolean) => void;
 }) => {
   const navigate = useNavigate();
+  const [isHovered, setIsHovered] = useState(false);
+
+  const handleMouseEnter = useCallback(() => {
+    setIsHovered(true);
+    setIsPaused(true);
+  }, [setIsPaused]);
+
+  const handleMouseLeave = useCallback(() => {
+    setIsHovered(false);
+    setIsPaused(false);
+  }, [setIsPaused]);
 
   return (
     <div
       onClick={() => {
         navigate(`/btc/detail/${item.pool_id}`);
       }}
-      className="flex items-center h-full gap-[4px] px-[30px] text-white transition-transform duration-200 hover:scale-105 button"
-      onMouseEnter={() => {
-        setIsPaused(true);
-      }}
-      onMouseLeave={() => {
-        setIsPaused(false);
+      className="flex items-center h-full gap-[4px] px-[30px] text-white transition-all duration-200 hover:scale-105 button cursor-pointer"
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      style={{
+        transform: isHovered ? "scale(1.05)" : "scale(1)",
+        transition: "transform 0.2s ease-out"
       }}
     >
       {item.type === "winner" ? (
