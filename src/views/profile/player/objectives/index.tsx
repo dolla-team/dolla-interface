@@ -33,7 +33,7 @@ export default function Objectives() {
           <div className="text-[18px] font-[600]">Level</div>
           <div className="flex items-center">
             <LevelIcon size={30} className="relative z-[2]" />
-            <span className="ml-[-14px] text-[12px] text-right pr-[8px] text-white font-[600] w-[58px] h-[20px] bg-black rounded-[12px]">
+            <span className="ml-[-14px] text-[12px] text-right pl-[16px] pr-[8px] text-white font-[600] h-[20px] bg-black rounded-[12px]">
               Lv. {userInfo?.level}
             </span>
           </div>

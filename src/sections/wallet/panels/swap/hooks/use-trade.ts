@@ -142,7 +142,7 @@ export default function useTrade({ onSuccess }: any) {
           isMax: inputCurrencyAmount === balance,
           name: "Near Intents",
           noPair: false,
-          amount: _amount,
+          amountIn: data.quote.amountIn,
           outputCurrencyAmount: data.quote.amountOutFormatted,
           routerStr: `${inputCurrency.symbol} -> ${outputCurrency.symbol}`,
           isGasEnough: true,
@@ -181,7 +181,7 @@ export default function useTrade({ onSuccess }: any) {
       };
 
       if (!trade.isMax) {
-        _args.amount = trade.amount;
+        _args.amount = trade.amountIn;
       }
 
       const withdrawArgs = {
@@ -190,7 +190,6 @@ export default function useTrade({ onSuccess }: any) {
         }
       };
 
-      console.log("swapArgs:", JSON.stringify(withdrawArgs));
       const nonce = await getNonce(publicKey);
       const publicKeyObj = PublicKey.from(publicKey);
 
