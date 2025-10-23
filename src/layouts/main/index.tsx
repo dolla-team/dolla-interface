@@ -17,6 +17,7 @@ import useTaskStore from "@/stores/use-task";
 import useBindSocial from "@/hooks/task/use-bind-social";
 import ProfileSetting from "@/views/profile/components/profile-setting";
 import useUserInfoStore from "@/stores/use-user-info";
+import useRegisterCode from "@/hooks/user/use-register-code";
 
 export default function MainLayout() {
   const { userInfo, login } = useAuth() || {};
@@ -30,6 +31,8 @@ export default function MainLayout() {
   const prevUserInfoStatus = useRef(false);
   const { fetchTasks } = useTaskCurrent();
   const { handleBind } = useBindSocial();
+
+  useRegisterCode();
 
   useEffect(() => {
     if (pathname.pathname.includes("portfolio")) {
