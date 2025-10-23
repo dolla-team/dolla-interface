@@ -3,6 +3,7 @@ import TopWinnersItem from "./item";
 import axiosInstance from "@/libs/axios";
 import Empty from "@/sections/wallet/panels/info/empty";
 import { useEffect, useState } from "react";
+import Big from "big.js";
 
 export default function TopWinners({
   type
@@ -20,7 +21,22 @@ export default function TopWinners({
           : `/api/v1/user/top/loss?limit=10`
       );
 
-      setData(res.data.data || []);
+      let list: any = [];
+      res.data.data.forEach((item: any) => {
+        const profit = Big(item?.claim_amount || 0)
+          .div(1e6)
+          .minus(item?.reward_usd || 0);
+        if (type === "losers" && profit.gt(0)) {
+          return;
+        } else {
+          list.push({
+            ...item,
+            profit: profit
+          });
+        }
+      });
+
+      setData(list);
     };
 
     getData();

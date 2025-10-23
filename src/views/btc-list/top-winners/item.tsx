@@ -16,9 +16,7 @@ export default function TopWinnersItem({
   type: "winners" | "sellers" | "losers";
 }) {
   const navigate = useNavigate();
-  const profit = Big(data?.claim_amount || 0)
-    .div(1e6)
-    .minus(data?.reward_usd || 0);
+
   return (
     <div
       className={clsx(
@@ -62,9 +60,8 @@ export default function TopWinnersItem({
         </div>
         <div className="text-[12px] text-black text-right font-semibold">
           {type === "winners" && `${formatNumber(data.profit_ratio, 0, true)}x`}
-          {type === "sellers" && `$${formatNumber(profit, 2, true)}`}
-          {type === "losers" &&
-            `$${profit.gt(0) ? 0 : formatNumber(profit.abs(), 2, true)}`}
+          {type === "sellers" && `$${formatNumber(data.profit, 2, true)}`}
+          {type === "losers" && `$${formatNumber(data.profit.abs(), 2, true)}`}
         </div>
       </div>
     </div>
