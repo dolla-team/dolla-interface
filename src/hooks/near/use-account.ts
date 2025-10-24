@@ -13,12 +13,25 @@ export default function useAccount(evmAddress: string) {
         args: { user_id: { Evm: evmAddress.replace(/^0x/, "").toLowerCase() } }
       });
 
-      let quoteBalance = "0";
-      let prizeBalance = "0";
+      let quoteBalance = Big(0);
+      let prizeBalance = Big(0);
 
       if (res?.ft_tokens) {
-        quoteBalance = res.ft_tokens[`{"FT":"${QUOTE_TOKEN.address}"}`] || "0";
-        prizeBalance = res.ft_tokens[`{"FT":"${BASE_TOKEN.address}"}`] || "0";
+        quoteBalance = Big(
+          res.ft_tokens[`{"FT":"${QUOTE_TOKEN.address}"}`] || "0"
+        );
+        prizeBalance = Big(
+          res.ft_tokens[`{"FT":"${BASE_TOKEN.address}"}`] || "0"
+        );
+      }
+
+      if (res?.gift_tokens) {
+        quoteBalance = quoteBalance.add(
+          Big(res.gift_tokens[`{"FT":"${QUOTE_TOKEN.address}"}`] || "0")
+        );
+        prizeBalance = prizeBalance.add(
+          Big(res.gift_tokens[`{"FT":"${BASE_TOKEN.address}"}`] || "0")
+        );
       }
       /**
         acc_bet_amount: "0",
