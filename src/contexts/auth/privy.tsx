@@ -21,7 +21,6 @@ import { useCreateWallet as useCreateSolanaWallet } from "@privy-io/react-auth/s
 import useConfig from "@/hooks/use-config";
 import useUserInfoStore from "@/stores/use-user-info";
 import { useNearKeyStore } from "@/stores/use-near-key";
-import useUserNft from "@/hooks/evm/use-user-nft";
 import useAccount from "@/hooks/near/use-account";
 import useCode from "@/hooks/airdrop/use-code";
 import { useGlobalStore } from "@/stores/use-global";
@@ -42,7 +41,7 @@ export const AuthProvider: React.FC<{
   const { wallets: solanaWallets } = useSolanaWallets();
   const { createWallet: createPrivyWallet } = useCreateWallet();
   const { createWallet: createSolanaWallet } = useCreateSolanaWallet();
-  const { getCode, bindingCode } = useCode();
+
   const [logining, setLogining] = useState(false);
   const [accountRefresher, setAccountRefresher] = useState(-1);
   const [isLoggedOut, setIsLoggedOut] = useState(false);
@@ -66,7 +65,7 @@ export const AuthProvider: React.FC<{
     setInfo
   } = useUserInfo(privyWallet?.address);
 
-  useUserNft(userInfo);
+  const { getCode } = useCode(userInfo);
 
   const { signMessage } = useSignMessage();
   const { onLogin } = useLogin();
@@ -80,10 +79,6 @@ export const AuthProvider: React.FC<{
       const loginedAddress = JSON.parse(
         localStorage.getItem("_AK_TOKEN_") || "{}"
       ).address;
-
-      if (loginedAddress) {
-        bindingCode();
-      }
 
       if (!globalStore.code) {
         getCode();
