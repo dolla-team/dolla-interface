@@ -25,9 +25,9 @@ export default function useTaskCurrent() {
             _tasksMap[item.id] = item;
             _tasks.push(item.id);
 
-            _progressTasks[item.category === 6 ? 1 : item.category].list.push(
-              item.id
-            );
+            _progressTasks[
+              item.category === 6 || item.category === 7 ? 1 : item.category
+            ].list.push(item.id);
           }
         }
       );
