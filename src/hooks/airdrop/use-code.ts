@@ -1,8 +1,10 @@
 import axiosInstance from "@/libs/axios";
 import { useGlobalStore } from "@/stores/use-global";
+import { useEffect } from "react";
 
-export default function useCode() {
+export default function useCode(userInfo?: any) {
   const globalStore = useGlobalStore();
+  const code = new URLSearchParams(window.location.search).get("code");
 
   const getCode = async () => {
     if (globalStore.code) {
@@ -20,12 +22,22 @@ export default function useCode() {
   };
 
   const bindingCode = async () => {
-    const code = new URLSearchParams(window.location.search).get("code");
-    if (!code) return;
     await axiosInstance.post("/api/v1/airdrop/binding/code", {
       code
     });
   };
+
+  useEffect(() => {
+    if (userInfo?.user && code) {
+      bindingCode();
+    }
+  }, [userInfo?.user, code]);
+
+  useEffect(() => {
+    if (userInfo?.user) {
+      getCode();
+    }
+  }, [userInfo?.user]);
 
   return {
     getCode,

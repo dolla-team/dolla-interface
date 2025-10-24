@@ -40,10 +40,20 @@ export default function useDeposit() {
     getFullQuote?: boolean;
   }) {
     try {
-      const { publicKey } = await generateKeyPair();
-      if (!publicKey) {
-        throw new Error("Public key not found");
+      const { publicKey } = await generateKeyPair(true);
+
+      const res = await viewMethod({
+        method: "get_account",
+        args: { user_id: { Evm: evmAddress.replace(/^0x/, "").toLowerCase() } }
+      });
+
+      if (!res && !publicKey) {
+        info({
+          title: "Please login to deposit"
+        });
+        return;
       }
+
       setLoading(true);
 
       const msg: any = {
@@ -51,7 +61,7 @@ export default function useDeposit() {
           Evm: evmAddress.replace(/^0x/, "").toLowerCase()
         },
         b: "Deposit",
-        k: publicKey
+        k: !!res ? "" : publicKey
       };
 
       const body = {

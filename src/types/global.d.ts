@@ -8,10 +8,10 @@ declare global {
       flip: Howl;
       bgm: Howl;
     };
+    cachedPoolId: number;
     drawsUpdateTimer: NodeJS.Timeout;
     poolTimer: NodeJS.Timeout;
     winnerTimer: NodeJS.Timeout;
-    cachedPoolId: number;
     scrollTimer: NodeJS.Timeout;
     bidDataTimer: NodeJS.Timeout | number;
     bidResultTimer: NodeJS.Timeout | number;
@@ -21,6 +21,7 @@ declare global {
     joinMarketTimer: NodeJS.Timeout | number;
     createMarketTimer: NodeJS.Timeout | number;
     allMarketsTimer: NodeJS.Timeout | number;
+    loginTimeoutTimer: NodeJS.Timeout | number;
     oddOffset: number;
     Telegram: any;
   }

@@ -8,7 +8,7 @@ export const getButtonText = (task: any) => {
   if (task.category === 4) {
     return ["Swap", "Swapped"];
   }
-  if (task.category === 3) {
+  if (task.category === 3 || task.category === 6 || task.category === 7) {
     return ["Bid Now", "Bid"];
   }
   if (task.category === 2) {

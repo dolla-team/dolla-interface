@@ -7,7 +7,6 @@ import { base_decode } from "near-api-js/lib/utils/serialize";
 import useGenerateKey from "@/hooks/near/use-generate-key";
 import Big from "big.js";
 import useToast from "@/hooks/use-toast";
-import useReport from "../transaction/use-report";
 import reportHash from "@/utils/report-hash";
 import { useAuth } from "@/contexts/auth";
 
@@ -16,7 +15,6 @@ const THIRTY_TGAS = "300000000000000";
 export default function useWithdraw(onSuccess?: () => void) {
   const [loading, setLoading] = useState(false);
   const { generateKeyPair } = useGenerateKey();
-  const { report } = useReport();
   const { address } = useAuth();
 
   const toast = useToast();
@@ -104,10 +102,7 @@ export default function useWithdraw(onSuccess?: () => void) {
       console.log("signedTransaction:", signedTransaction);
       const result: any = await provider.sendTransaction(signedTransaction);
       toast.dismiss(toastId);
-      report({
-        address: recipientAccount,
-        type: "withdraw"
-      });
+
       reportHash({
         hash: result.transaction.hash,
         chain: "near",

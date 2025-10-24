@@ -3,15 +3,18 @@ import { KeyPair, KeyPairSigner } from "near-api-js";
 import { useSignMessage } from "@privy-io/react-auth";
 import { viewMethod } from "./util";
 import { useAuth } from "@/contexts/auth/privy";
-import { BASE_TOKEN, QUOTE_TOKEN } from "@/config/btc";
+import { QUOTE_TOKEN } from "@/config/btc";
 import axiosInstance from "@/libs/axios";
+import Big from "big.js";
+import useToast from "../use-toast";
 
 export default function useGenerateKey() {
   const { set, publicKey, privateKey } = useNearKeyStore();
   const { signMessage } = useSignMessage();
-  const { nearAccount, address } = useAuth();
+  const { address, nearAccount } = useAuth();
+  const toast = useToast();
 
-  async function generateKeyPair() {
+  async function generateKeyPair(isDeposit = false) {
     try {
       const res = await viewMethod({
         method: "get_user_id_ak",
@@ -39,7 +42,7 @@ export default function useGenerateKey() {
         privateKey: newPrivateKey
       } = createKeyPair();
 
-      if (!isCorrect && contractPublicKey) {
+      if (!isCorrect && contractPublicKey && !isDeposit) {
         await updateAk({ publicKey: shortPublicKey });
         saveKeyPair(shortPublicKey, newPrivateKey);
         return {};
@@ -76,6 +79,12 @@ export default function useGenerateKey() {
   }
 
   async function updateAk({ publicKey }: any) {
+    if (Big(nearAccount?.balance || 0).lt(1)) {
+      toast.info({
+        title: `${QUOTE_TOKEN.symbol} is insufficient to update AK`
+      });
+      return;
+    }
     const res = await viewMethod({
       method: "get_account",
       args: { user_id: { Evm: address.replace(/^0x/, "").toLowerCase() } }
@@ -87,10 +96,7 @@ export default function useGenerateKey() {
       ak: publicKey,
       fee_token: { FT: QUOTE_TOKEN.address },
       gas_token: {
-        FT:
-          nearAccount?.balance === "0"
-            ? BASE_TOKEN.address
-            : QUOTE_TOKEN.address
+        FT: QUOTE_TOKEN.address
       },
       nonce: res.nonce,
       deadline: String(Date.now() + 1000 * 60 * 60 * 6)

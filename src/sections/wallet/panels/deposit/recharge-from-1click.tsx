@@ -180,6 +180,13 @@ export default function RechargeFrom1click() {
             } 
                 ${chain?.symbol || walletStore.selectedToken.symbol}`}
             time={chain?.blockchain === "btc" ? "15" : "1"}
+            fee={`${formatNumber(
+              Big(quote?.amountInFormatted || 0)
+                .minus(quote?.amountOutFormatted || 0)
+                .toString(),
+              6,
+              true
+            )} ${chain?.symbol || walletStore.selectedToken.symbol}`}
             maxDeposit={`${formatNumber(
               walletStore.selectedToken.maxDepositAmount,
               0,
@@ -238,10 +245,12 @@ export default function RechargeFrom1click() {
 const InfoPanel = ({
   minDeposit,
   maxDeposit,
+  fee,
   time
 }: {
   minDeposit: string;
   maxDeposit: string;
+  fee: string;
   time: string;
 }) => {
   return (
@@ -253,6 +262,10 @@ const InfoPanel = ({
       <div className="flex justify-between items-center mt-[8px]">
         <span>Max. deposit</span>
         <span>{maxDeposit}</span>
+      </div>
+      <div className="flex justify-between items-center mt-[8px]">
+        <span>Fee</span>
+        <span>{fee}</span>
       </div>
       <div className="flex justify-between items-center mt-[8px]">
         <span>Est. arrival</span>
