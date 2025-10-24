@@ -19,10 +19,35 @@ export default function Docs() {
       description:
         "Dolla is a consumer app that changes the way how people sell and buy on-chain assets.Every assets listed is a probability market with the entry cost to bis as low as 1$ worth of stablecoin.",
       details: [
-        "Transform traditional commerce into probability-based trading",
-        "Win high-value assets through transparent odds",
-        "Real-time on-chain asset transfers",
-        "No queues, no waiting - every bid is a new opportunity"
+        {
+          title: "Changing the ordinary way",
+          description:
+            "Transform traditional commerce into probability-based trading"
+        },
+        {
+          title: "Fair probability",
+          description:
+            "Verifiable randomness, cryptographic fairness, public auditability."
+        },
+        {
+          title: "Designed to work with all stablecoin & native infras",
+          description: (
+            <span>
+              Deposit and withdraw any stablecoin from any chain.
+              <br />
+              Deposit and withdraw any assets from/to its native chain.
+            </span>
+          )
+        },
+        {
+          title: "$1 Accessibility",
+          description:
+            "Anyone can participate even with 1$, equal odds, equal entry."
+        },
+        {
+          title: "Ownership",
+          description: "Win digital assets instantly & transparently."
+        }
       ]
     },
     buyers: {
@@ -158,7 +183,7 @@ export default function Docs() {
 
           {/* Main Content */}
           <div className="lg:col-span-3">
-            <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10">
+            <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-4 border border-white/10">
               {/* Concept Section */}
               {activeSection === "concept" && (
                 <div className="space-y-8">
@@ -172,17 +197,30 @@ export default function Docs() {
                     </p>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="flex flex-wrap gap-[10px]">
                     {content.concept.details.map((detail, index) => (
                       <div
                         key={index}
-                        className="bg-white/5 rounded-lg p-6 border border-white/10"
+                        className={`bg-white/5 rounded-lg p-3 border border-white/10 ${
+                          index === 0
+                            ? "w-full"
+                            : index === 1 || index === 3
+                            ? "w-[calc(40%-5px)]"
+                            : "w-[calc(60%-5px)]"
+                        }`}
                       >
-                        <div className="flex items-start gap-4">
-                          <div className="w-8 h-8 bg-yellow-400/20 rounded-full flex items-center justify-center text-yellow-400 font-bold">
+                        <div className="flex items-start gap-2">
+                          <div className="w-4 shrink-0 rounded-full flex items-center justify-center text-yellow-400 font-bold">
                             {index + 1}
                           </div>
-                          <p className="text-gray-300">{detail}</p>
+                          <div>
+                            <h3 className="text-lg font-semibold mb-2 text-white leading-[120%]">
+                              {detail.title}
+                            </h3>
+                            <p className="text-gray-300 leading-[140%]">
+                              {detail.description}
+                            </p>
+                          </div>
                         </div>
                       </div>
                     ))}
