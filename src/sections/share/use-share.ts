@@ -187,7 +187,9 @@ export function useShare() {
           format: "png",
           quality: 1,
           pixelRatio: 1,
-          backgroundColor: "#fff"
+          backgroundColor: "#000",
+          width: 1000,
+          height: 562.5
         });
 
         // Use CSP-safe method to convert dataURL to Blob
@@ -198,6 +200,10 @@ export function useShare() {
           dir: "share",
           file: blob
         });
+
+        // downloadImage(dataUrl, "share-image");
+
+        // return;
 
         if (!imageUrl) return;
 

@@ -4,7 +4,7 @@ import { formatAddress } from "@/utils/format/address";
 import clsx from "clsx";
 import dayjs from "@/libs/dayjs";
 import { BASE_TOKEN } from "@/config/btc";
-import Bottom from "../bottom";
+import Bottom from "../bottom/share";
 
 export default function UserShareCard({
   type,

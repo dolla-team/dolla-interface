@@ -1,5 +1,5 @@
 import Modal from "@/components/modal";
-import WinnerShareCard from "./winner";
+import { WinnerShareCard, WinnerDownloadCard } from "./winner";
 import { useRef } from "react";
 import Button from "@/components/button";
 import { useShare } from "./use-share";
@@ -12,8 +12,17 @@ const SHARE_OPTIONS: Record<string, any> = {
   }
 };
 
+const DOWNLOAD_IMGS: Record<string, any> = {
+  winner: {
+    width: 375,
+    height: 500,
+    backgroundColor: "#000"
+  }
+};
+
 export default function ShareModal({ open, onClose, type, data }: any) {
   const cardRef = useRef<HTMLDivElement>(null);
+  const downloadCardRef = useRef<HTMLDivElement>(null);
 
   const { generateAndDownload, generateAndShare, downloading, sharing } =
     useShare();
@@ -24,33 +33,34 @@ export default function ShareModal({ open, onClose, type, data }: any) {
         onClose={onClose}
         className="absolute right-[16px] top-[16px] z-[2]"
       />
-      <div className="p-[20px] w-[550px] h-[420px] bg-white rounded-[20px] pt-[30px]">
-        <div className="w-[500px] h-[291px] relative">
-          <div className=" scale-50 origin-center absolute left-[-244px] top-[-130px]">
-            {type === "winner" && (
-              <>
+      <div className="p-[20px] bg-white rounded-[20px] pt-[30px]">
+        <div className="relative">
+          {type === "winner" && (
+            <>
+              <div className="relative z-[2]">
+                <WinnerDownloadCard data={data} cardRef={downloadCardRef} />
+              </div>
+              <div className="absolute z-[1] left-[-300px] top-0 scale-10">
                 <WinnerShareCard data={data} cardRef={cardRef} />
-              </>
-            )}
-          </div>
+              </div>
+            </>
+          )}
         </div>
 
         <div className="flex items-center justify-center gap-[10px] mt-[20px]">
           <Button
             loading={downloading}
             onClick={async () => {
-              if (!cardRef.current || downloading) return;
+              if (!downloadCardRef.current || downloading) return;
 
               await generateAndDownload(
-                cardRef.current,
+                downloadCardRef.current,
                 `share-${Date.now()}`,
                 {
                   format: "png",
                   quality: 1,
                   pixelRatio: 1,
-                  backgroundColor: "#000",
-                  width: 1000,
-                  height: 562.5
+                  ...DOWNLOAD_IMGS[type]
                 }
               );
             }}

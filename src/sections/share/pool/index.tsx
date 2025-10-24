@@ -3,7 +3,7 @@ import { useAuth } from "@/contexts/auth";
 import { formatAddress } from "@/utils/format/address";
 import clsx from "clsx";
 import dayjs from "@/libs/dayjs";
-import Bottom from "../bottom";
+import Bottom from "../bottom/share";
 import Market from "@/views/profile/components/market";
 import { BASE_TOKEN } from "@/config/btc";
 

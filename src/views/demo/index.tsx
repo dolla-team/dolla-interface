@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import { usePrivy } from "@privy-io/react-auth";
-import useGameAction from "@/hooks/near/use-game-action";
 import Button from "@/components/button";
 import useToast from "@/hooks/use-toast";
 import UserShareCard from "@/sections/share/user";
 import { useShare } from "@/sections/share/use-share";
 import PoolShareCard from "@/sections/share/pool";
+import WinnerShareCard from "@/sections/share/winner/share";
+import useGameAction from "@/hooks/near/use-game-action";
 
 // Export Wallet Section Component
 function ExportWalletSection({ exportWallet }: { exportWallet: () => void }) {
