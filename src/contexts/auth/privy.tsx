@@ -24,6 +24,7 @@ import { useNearKeyStore } from "@/stores/use-near-key";
 import useAccount from "@/hooks/near/use-account";
 import useCode from "@/hooks/airdrop/use-code";
 import { useGlobalStore } from "@/stores/use-global";
+import LoginTimeoutModal from "@/components/modal/login-timeout";
 
 export const AuthContext = React.createContext<any | null>(null);
 
@@ -41,6 +42,7 @@ export const AuthProvider: React.FC<{
   const { wallets: solanaWallets } = useSolanaWallets();
   const { createWallet: createPrivyWallet } = useCreateWallet();
   const { createWallet: createSolanaWallet } = useCreateSolanaWallet();
+  const [showTimeoutModal, setShowTimeoutModal] = useState(false);
 
   const [logining, setLogining] = useState(false);
   const [accountRefresher, setAccountRefresher] = useState(-1);
@@ -143,6 +145,9 @@ export const AuthProvider: React.FC<{
   };
 
   const login = async () => {
+    window.loginTimeoutTimer = setTimeout(() => {
+      setShowTimeoutModal(true);
+    }, 1000 * 60 * 1);
     if (!user) {
       setIsLoggedOut(false);
       privyLogin?.();
@@ -194,11 +199,11 @@ export const AuthProvider: React.FC<{
       // login();
       return;
     }
-    console.log("user", user);
+
     if (user) {
       updateAccount();
     }
-
+    clearTimeout(window.loginTimeoutTimer);
     (window as any).sign = sign;
   }, [privyWallet?.address, ready, user, isLoggedOut]);
 
@@ -221,6 +226,12 @@ export const AuthProvider: React.FC<{
       }}
     >
       {children}
+      <LoginTimeoutModal
+        open={showTimeoutModal}
+        onClose={() => {
+          setShowTimeoutModal(false);
+        }}
+      />
     </AuthContext.Provider>
   );
 };
