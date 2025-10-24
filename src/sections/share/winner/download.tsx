@@ -1,7 +1,6 @@
 import MultipleTag from "@/components/multiple-tag";
 import clsx from "clsx";
 import Avatar from "@/components/avatar";
-import { useAuth } from "@/contexts/auth";
 import { formatAddress } from "@/utils/format/address";
 import dayjs from "@/libs/dayjs";
 import Bottom from "../bottom/download";
@@ -40,7 +39,6 @@ export default function WinnerDownloadCard({
   cardRef: React.RefObject<HTMLDivElement | null>;
 }) {
   const randomRef = useRef(Math.floor(Math.random() * 4) + 1);
-  const { userInfo } = useAuth();
   const randomCard = DOWNLOAD_IMGS[randomRef.current];
   return (
     <div
@@ -74,11 +72,7 @@ export default function WinnerDownloadCard({
             <div className="text-[14px] text-center font-[400]">Multiple</div>
           }
         />
-        <Bottom
-          className="absolute z-[3] bottom-[20px] left-0 w-full px-[20px]"
-          textColor="text-white"
-          textClassName="h-[24px] leading-[24px] rounded-[6px] bg-black/5 backdrop-blur-[10px]"
-        />
+        <Bottom className="absolute z-[3] bottom-[20px] left-0 w-full px-[20px]" />
         <div
           className="absolute z-[1] bottom-[0px] left-[50%] translate-x-[-50%]"
           style={{
@@ -102,12 +96,12 @@ export default function WinnerDownloadCard({
           <Avatar
             className="border-[2px] border-[#FFFFFFCC] rounded-[6px] mt-[26px]"
             size={36}
-            src={userInfo?.icon}
-            address={userInfo?.user}
-            email={userInfo?.show_email}
+            src={data.winner_user?.icon}
+            address={data.winner_user?.user}
+            email={data.winner_user?.email}
           />
           <div className="text-[16px] text-white font-[600] leading-[16px] mt-[6px]">
-            {userInfo?.name || formatAddress(userInfo?.user)}
+            {data.winner_user?.name || formatAddress(data.winner_user?.user)}
           </div>
           <div className="text-[20px] text-white font-[900] mt-[20px]">
             {data.bids} Dolla to win

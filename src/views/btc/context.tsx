@@ -33,6 +33,7 @@ export const CannonCoinsProvider = ({
   const [mobileMarketsOpen, setMobileMarketsOpen] = useState(false);
   const [filterVolume, setFilterVolume] = useState(0);
   const poolCachedRef = useRef<any>(null);
+  const { winnerBidList } = useWinnerBidList(pool);
 
   const onMobileMarketsClose = () => {
     setMobileMarketsOpen(false);

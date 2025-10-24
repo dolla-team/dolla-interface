@@ -197,7 +197,13 @@ export default function Winner({ onClose }: { onClose: () => void }) {
           time: Date.now(),
           bids: bids,
           amount: poolAmount,
-          price: pool.reward_usd
+          price: pool.reward_usd,
+          winner_user: {
+            name: userInfo?.name,
+            user: userInfo?.user,
+            email: userInfo?.show_email,
+            icon: userInfo?.icon
+          }
         }}
       />
     </>

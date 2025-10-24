@@ -1,7 +1,6 @@
 import MultipleTag from "@/components/multiple-tag";
 import clsx from "clsx";
 import Avatar from "@/components/avatar";
-import { useAuth } from "@/contexts/auth";
 import { formatAddress } from "@/utils/format/address";
 import dayjs from "@/libs/dayjs";
 import Bottom from "../bottom/share";
@@ -32,7 +31,6 @@ export default function WinnerShareCard({
   cardRef: React.RefObject<HTMLDivElement | null>;
 }) {
   const randomRef = useRef(Math.floor(Math.random() * 4) + 1);
-  const { userInfo } = useAuth();
   const randomCard = CARD_IMGS[randomRef.current - 1];
 
   return (
@@ -77,12 +75,12 @@ export default function WinnerShareCard({
         <Avatar
           className="border-[2px] border-[#FFFFFFCC] rounded-[6px] mt-[26px]"
           size={67}
-          src={userInfo?.icon}
-          address={userInfo?.user}
-          email={userInfo?.show_email}
+          src={data.winner_user?.icon}
+          address={data.winner_user?.user}
+          email={data.winner_user?.email}
         />
         <div className="text-[16px] text-white font-[600] leading-[16px] mt-[12px]">
-          {userInfo?.name || formatAddress(userInfo?.user)}
+          {data.winner_user?.name || formatAddress(data.winner_user?.user)}
         </div>
         <div className="text-[26px] text-white font-[500] mt-[20px]">
           {data.bids} Dolla to win

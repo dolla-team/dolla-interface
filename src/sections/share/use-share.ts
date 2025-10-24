@@ -179,7 +179,11 @@ export function useShare() {
    * @param uploadFile Upload function from useUpload hook
    */
   const generateAndShare = useCallback(
-    async (node: HTMLElement | string, shareOptions: ShareOptions = {}) => {
+    async (
+      node: HTMLElement | string,
+      options: ImageGenerationOptions = {},
+      shareOptions: ShareOptions = {}
+    ) => {
       setSharing(true);
       try {
         // Generate image from DOM node
@@ -187,9 +191,7 @@ export function useShare() {
           format: "png",
           quality: 1,
           pixelRatio: 1,
-          backgroundColor: "#000",
-          width: 1000,
-          height: 562.5
+          ...options
         });
 
         // Use CSP-safe method to convert dataURL to Blob

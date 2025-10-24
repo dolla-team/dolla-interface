@@ -4,7 +4,7 @@ import Button from "@/components/button";
 import useToast from "@/hooks/use-toast";
 import UserShareCard from "@/sections/share/user";
 import { useShare } from "@/sections/share/use-share";
-import PoolShareCard from "@/sections/share/pool";
+import PoolShareCard from "@/sections/share/pool/download";
 import WinnerShareCard from "@/sections/share/winner/share";
 import useGameAction from "@/hooks/near/use-game-action";
 
