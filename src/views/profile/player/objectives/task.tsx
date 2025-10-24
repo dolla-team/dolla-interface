@@ -40,13 +40,13 @@ export default function Task({
         <div className="flex items-center justify-between">
           <div className="text-[14px] text-black">{task.title}</div>
           {!claimed && (
-            <div className="flex items-center gap-[10px]">
+            <div className="flex items-center gap-[10px] shrink-0">
               <RefreshBtn
                 refreshing={refreshing}
                 handleRefresh={fetchTaskStatus}
               />
               <Button
-                className="!bg-black h-[32px] min-w-[60px] px-[10px] !rounded-[8px] text-white button"
+                className="!bg-black h-[32px] shrink-0 min-w-[60px] px-[10px] !rounded-[8px] text-white button"
                 loading={loading}
                 onClick={(e: any) => {
                   e.stopPropagation();
