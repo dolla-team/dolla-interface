@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import axios from "@/libs/axios";
 import { useUsers } from "@/stores/use-users";
 import useUserPrize from "@/hooks/use-user-prize";
@@ -52,12 +52,6 @@ export default function useUserInfo(address?: string) {
       setInfo(null);
     } finally {
       setLoading(false);
-    }
-  }, [address]);
-
-  useEffect(() => {
-    if (address) {
-      onQueryUserInfo();
     }
   }, [address]);
 

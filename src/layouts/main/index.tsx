@@ -63,7 +63,7 @@ export default function MainLayout() {
 
   useEffect(() => {
     const code = new URLSearchParams(window.location.search).get("code");
-    if (!userInfo?.user || !code) return;
+    if (!userInfo?.user || !code || code?.length < 10) return;
     handleBind("twitter", code);
   }, [userInfo?.user]);
 

@@ -33,6 +33,12 @@ export default function useCode(userInfo?: any) {
     }
   }, [userInfo?.user, code]);
 
+  useEffect(() => {
+    if (userInfo?.user) {
+      getCode();
+    }
+  }, [userInfo?.user]);
+
   return {
     getCode,
     bindingCode

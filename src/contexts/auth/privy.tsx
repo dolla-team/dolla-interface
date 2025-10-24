@@ -65,7 +65,7 @@ export const AuthProvider: React.FC<{
     setInfo
   } = useUserInfo(privyWallet?.address);
 
-  const { getCode } = useCode(userInfo);
+  useCode(userInfo);
 
   const { signMessage } = useSignMessage();
   const { onLogin } = useLogin();
@@ -79,10 +79,6 @@ export const AuthProvider: React.FC<{
       const loginedAddress = JSON.parse(
         localStorage.getItem("_AK_TOKEN_") || "{}"
       ).address;
-
-      if (!globalStore.code) {
-        getCode();
-      }
 
       if (privyWallet?.address === loginedAddress) {
         await onQueryUserInfo();
