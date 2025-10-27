@@ -72,7 +72,7 @@ export default function Points({ className }: { className?: string }) {
     <>
       <div
         className={clsx(
-          "flex items-center gap-[8px]",
+          "flex items-center gap-[4px]",
           progress >= 1 ? "button" : "",
           isMobile &&
             "p-[4px] pr-[14px] border border-[#7C68FF] rounded-l-[40px] fixed right-[-2px] bottom-[30px] duration-300 bg-[#000]/30 scale-[0.76] origin-right",
@@ -86,7 +86,7 @@ export default function Points({ className }: { className?: string }) {
           }
         }}
       >
-        <div className="relative w-[44px] h-[44px]">
+        <div className="relative w-[26px] h-[26px]">
           <motion.div
             className="absolute top-0 left-0 w-full h-full border-[3px] border-[rgba(76,45,78,0.6)] rounded-full"
             animate={{
@@ -98,8 +98,8 @@ export default function Points({ className }: { className?: string }) {
           />
           <motion.svg
             className="absolute top-0 left-0 rotate-[-90deg]"
-            width="44"
-            height="44"
+            width="26"
+            height="26"
             viewBox="0 0 44 44"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -146,8 +146,8 @@ export default function Points({ className }: { className?: string }) {
             </defs>
           </motion.svg>
           <PointIcon
-            className="w-[30px] h-[30px] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
-            size={26}
+            className="w-[20px] h-[20px] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+            size={20}
           />
         </div>
 
