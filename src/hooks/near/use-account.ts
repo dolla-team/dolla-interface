@@ -15,6 +15,7 @@ export default function useAccount(evmAddress: string) {
 
       let quoteBalance = Big(0);
       let prizeBalance = Big(0);
+      let onlyQuoteBalance = Big(0);
 
       if (res?.ft_tokens) {
         quoteBalance = Big(
@@ -23,6 +24,7 @@ export default function useAccount(evmAddress: string) {
         prizeBalance = Big(
           res.ft_tokens[`{"FT":"${BASE_TOKEN.address}"}`] || "0"
         );
+        onlyQuoteBalance = quoteBalance;
       }
 
       if (res?.gift_tokens) {
@@ -48,11 +50,15 @@ export default function useAccount(evmAddress: string) {
       const _prizeBalance = Big(prizeBalance)
         .div(10 ** BASE_TOKEN.decimals)
         .toString();
+      const _onlyQuoteBalance = Big(onlyQuoteBalance)
+        .div(10 ** QUOTE_TOKEN.decimals)
+        .toString();
 
       setAccount({
         ...(res || {}),
         balance: _quoteBalance,
-        prizeBalance: _prizeBalance
+        prizeBalance: _prizeBalance,
+        onlyQuoteBalance: _onlyQuoteBalance
       });
 
       window.accountTimer = setTimeout(fetchAccount, 10000);

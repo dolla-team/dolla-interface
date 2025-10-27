@@ -35,7 +35,7 @@ export default function TokenAmount({
             currency && prices ? prices[currency.address] : 0,
             currency?.isBaseToken
               ? nearAccount?.prizeBalance
-              : nearAccount?.balance
+              : nearAccount?.onlyQuoteBalance
           ]
         : [0, "0"],
     [prices, currency, nearAccount]

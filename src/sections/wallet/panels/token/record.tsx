@@ -1,4 +1,5 @@
 import dayjs from "@/libs/dayjs";
+import { formatNumber } from "@/utils/format/number";
 import clsx from "clsx";
 
 export default function Record({ data }: { data: any }) {
@@ -25,7 +26,12 @@ export default function Record({ data }: { data: any }) {
             )}
           >
             {data.type === "deposit" ? "+" : "-"}
-            {data.amount} {data.tokens[0]?.symbol}
+            {formatNumber(
+              data.amount,
+              data.tokens[0]?.isBaseToken ? 6 : 2,
+              true
+            )}{" "}
+            {data.tokens[0]?.symbol}
           </div>
           {/* <div className="text-[10px] text-[#8A77AA] mt-[2px]">
             fee 0.005 USDT

@@ -28,7 +28,7 @@ export default function WithdrawPanel({ onBack }: { onBack: () => void }) {
   const debouncedAmount = useDebounce(amount, { wait: 1000 });
   const balance = walletStore.selectedToken?.isBaseToken
     ? nearAccount?.prizeBalance
-    : nearAccount?.balance;
+    : nearAccount?.onlyQuoteBalance;
   const tokenIds = useMemo(() => {
     return [
       {
