@@ -125,7 +125,6 @@ export default function WithdrawInput({
         <div className="flex items-center justify-between mt-[30px]">
           <div className="flex items-center gap-[8px]">
             <span className="text-[14px] font-[500]">Amount</span>
-            <AmountInfo />
           </div>
         </div>
         <input
@@ -227,7 +226,7 @@ const ReceiveAddressInfo = () => {
   return (
     <Popover
       trigger={PopoverTrigger.Hover}
-      placement={PopoverPlacement.Bottom}
+      placement={PopoverPlacement.TopLeft}
       content={
         <div className="w-[360px] text-[#5E6B7D] text-[12px] font-[300] p-[10px] bg-white rounded-[10px] border border-[#E4E4E4]">
           This is the address where your withdrawal will be sent. Double-check
@@ -246,30 +245,13 @@ const SelectNetworkInfo = () => {
   return (
     <Popover
       trigger={PopoverTrigger.Hover}
-      placement={PopoverPlacement.Bottom}
+      placement={PopoverPlacement.TopLeft}
       content={
         <div className="w-[360px] text-[#5E6B7D] text-[12px] font-[300] p-[10px] bg-white rounded-[10px] border border-[#E4E4E4]">
-          This is the address where your withdrawal will be sent. Double-check
-          that your destination wallet supports the selected network.
-        </div>
-      }
-    >
-      <button className="relative transition-opacity button">
-        <InfoIcon />
-      </button>
-    </Popover>
-  );
-};
-
-const AmountInfo = () => {
-  return (
-    <Popover
-      trigger={PopoverTrigger.Hover}
-      placement={PopoverPlacement.Bottom}
-      content={
-        <div className="w-[360px] text-[#5E6B7D] text-[12px] font-[300] p-[10px] bg-white rounded-[10px] border border-[#E4E4E4]">
-          This is the address where your withdrawal will be sent. Double-check
-          that your destination wallet supports the selected network.
+          Please make sure that the currency is charged and withdrawn onthe same
+          network, otherwise the currency withdrawal cannot besuccessful. The
+          different effects of the network are the rate, theminimum amount of
+          money withdrawn and the transfer time.
         </div>
       }
     >
