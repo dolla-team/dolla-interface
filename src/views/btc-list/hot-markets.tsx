@@ -1,21 +1,32 @@
 import Button from "@/components/button";
 import clsx from "clsx";
 import useTokenPrice from "@/hooks/use-token-price";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState, useCallback } from "react";
 import { formatNumber } from "@/utils/format/number";
 import { AMOUNT, BASE_TOKEN } from "@/config/btc";
 import { useNavigate } from "react-router-dom";
-import { useAllMarketsStore } from "@/stores/use-all-markets";
 import { getReAnchorPrice } from "@/utils/pool";
 import { useBtcCreateStore } from "@/stores/use-btc-create";
 import { motion } from "framer-motion";
+import axiosInstance from "@/libs/axios";
+import Big from "big.js";
+import { useDebounceFn } from "ahooks";
 
 const imgs = ["btc-1", "btc-0.1", "btc-0.01"];
 
+// Cache for hot markets data to avoid repeated requests
+let hotMarketsCache: {
+  data: any[];
+  timestamp: number;
+} | null = null;
+
+const CACHE_DURATION = 30000; // 30 seconds cache
+
 export default function MoreMarkets() {
   const { prices } = useTokenPrice(BASE_TOKEN);
+  const [hotMarkets, setHotMarkets] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
 
-  const allMarketsStore = useAllMarketsStore();
   const price = useMemo(() => {
     if (BASE_TOKEN.address === "usdt.tether-token.near") {
       return 1;
@@ -25,10 +36,91 @@ export default function MoreMarkets() {
     return prices[0].last_price;
   }, [prices]);
 
+  // Optimized data processing function
+  const processHotMarketsData = useCallback((rawData: any[]) => {
+    const markets: any[] = new Array(AMOUNT.length).fill(null);
+
+    rawData.forEach((item: any) => {
+      const _amount = Big(item.reward_amount)
+        .div(10 ** BASE_TOKEN.decimals)
+        .toNumber();
+      const _i = AMOUNT.findIndex((amount) => amount === _amount);
+
+      if (_i !== -1) {
+        markets[_i] = item;
+      }
+    });
+
+    return markets;
+  }, []);
+
+  // Fetch hot markets with caching and error handling
+  const fetchHotMarkets = useCallback(
+    async (forceRefresh = false) => {
+      // Check cache first
+      if (
+        !forceRefresh &&
+        hotMarketsCache &&
+        Date.now() - hotMarketsCache.timestamp < CACHE_DURATION
+      ) {
+        setHotMarkets(hotMarketsCache.data);
+        return;
+      }
+
+      try {
+        setLoading(true);
+
+        const res = await axiosInstance.get(
+          "/api/v1/pool/hot/market?chain=near"
+        );
+        const processedMarkets = processHotMarketsData(res?.data?.data || []);
+
+        // Update cache
+        hotMarketsCache = {
+          data: processedMarkets,
+          timestamp: Date.now()
+        };
+
+        setHotMarkets(processedMarkets);
+      } catch (err) {
+        console.error("Failed to fetch hot markets:", err);
+
+        // Use cached data if available
+        if (hotMarketsCache) {
+          setHotMarkets(hotMarketsCache.data);
+        }
+      } finally {
+        setLoading(false);
+      }
+    },
+    [processHotMarketsData]
+  );
+
+  // Debounced refresh function
+  const { run: refreshHotMarkets } = useDebounceFn(
+    () => fetchHotMarkets(true),
+    { wait: 1000 }
+  );
+
+  useEffect(() => {
+    fetchHotMarkets();
+  }, [fetchHotMarkets]);
+
+  // Auto refresh every 30 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      refreshHotMarkets();
+    }, 30000);
+
+    return () => clearInterval(interval);
+  }, [refreshHotMarkets]);
+
   return (
     <>
-      <div className="text-[20px] text-black font-[700] mt-[20px] mb-[10px]">
-        🔥 Hot Markets
+      <div className="flex items-center justify-between">
+        <div className="text-[20px] text-black font-[700] mt-[20px] mb-[10px]">
+          🔥 Hot Markets
+        </div>
       </div>
       <div className="flex items-center gap-[20px]">
         {AMOUNT.map((item, index) => {
@@ -37,9 +129,10 @@ export default function MoreMarkets() {
               key={item}
               value={item}
               price={price}
-              market={allMarketsStore.hotMarkets[index]}
+              market={hotMarkets[index] || null}
               img={imgs[index]}
               index={index}
+              loading={loading}
             />
           );
         })}
@@ -53,13 +146,15 @@ const MarketItem = ({
   price,
   market,
   img,
-  index
+  index,
+  loading
 }: {
   value: number;
   price: number;
   market: any;
   img: string;
   index: number;
+  loading: boolean;
 }) => {
   const createStore = useBtcCreateStore();
   const navigate = useNavigate();
@@ -147,7 +242,9 @@ const MarketItem = ({
         }}
       />
       <div className="opacity-0 absolute top-0 left-0 z-[10] bg-[#0000004D] backdrop-blur-[25px] group-hover:opacity-100 duration-300 w-full h-full rounded-[16px] flex flex-col items-center justify-center">
-        {!market ? (
+        {loading ? (
+          <div className="text-[#8A87AA] text-[14px] mb-[10px]">Loading...</div>
+        ) : !market ? (
           <div className="text-[#8A87AA] text-[14px] mb-[10px]">
             Nothing here
           </div>

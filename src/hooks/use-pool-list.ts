@@ -6,7 +6,6 @@ import Big from "big.js";
 import { formatNumber } from "@/utils/format/number";
 import { useDebounceFn } from "ahooks";
 import { useAllMarketsStore } from "@/stores/use-all-markets";
-import { AMOUNT } from "@/config/btc";
 
 export default function usePoolList(props?: {
   isScrollList?: boolean;
@@ -51,9 +50,6 @@ export default function usePoolList(props?: {
         }${volume ? "&volume=" + volume : ""}`
       );
 
-      let market1: any = null;
-      let market01: any = null;
-      let market001: any = null;
       const list = res.data.data.list.map((item: any) => {
         const valued = item.nft_ids
           ? getAnchorPrice(item.anchor_price)
@@ -73,39 +69,8 @@ export default function usePoolList(props?: {
               : Big(item.accumulative_bids).div(valued).mul(100).toNumber()
         };
 
-        if (
-          Number(_a) === AMOUNT[0] &&
-          Big(item.accumulative_bids).gt(market1?.accumulative_bids || 0) &&
-          Number(item.status) === 1
-        ) {
-          market1 = market;
-        }
-        if (
-          Number(_a) === AMOUNT[1] &&
-          Big(item.accumulative_bids).gt(market01?.accumulative_bids || 0) &&
-          Number(item.status) === 1
-        ) {
-          market01 = market;
-        }
-        if (
-          Number(_a) === AMOUNT[2] &&
-          Big(item.accumulative_bids).gt(market001?.accumulative_bids || 0) &&
-          Number(item.status) === 1
-        ) {
-          market001 = market;
-        }
         return market;
       });
-
-      if (!volume && allmarketsStore.status === "1") {
-        allmarketsStore.set({
-          hotMarkets: {
-            "0": market1,
-            "1": market01,
-            "2": market001
-          }
-        });
-      }
 
       if (isScrollList) {
         setPoolList((prev) =>
