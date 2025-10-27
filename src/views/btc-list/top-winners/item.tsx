@@ -60,8 +60,10 @@ export default function TopWinnersItem({
         </div>
         <div className="text-[12px] text-black text-right font-semibold">
           {type === "winners" && `${formatNumber(data.profit_ratio, 0, true)}x`}
-          {type === "sellers" && `$${formatNumber(data.profit, 2, true)}`}
-          {type === "losers" && `$${formatNumber(data.profit.abs(), 2, true)}`}
+          {type === "sellers" &&
+            `$${formatNumber(data.profit_amount, 2, true)}`}
+          {type === "losers" &&
+            `$${formatNumber(Big(data.profit_amount || 0).abs(), 2, true)}`}
         </div>
       </div>
     </div>

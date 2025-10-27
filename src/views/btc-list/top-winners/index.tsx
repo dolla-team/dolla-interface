@@ -21,22 +21,7 @@ export default function TopWinners({
           : `/api/v1/user/top/loss?limit=10`
       );
 
-      let list: any = [];
-      res.data.data.forEach((item: any) => {
-        const profit = Big(item?.claim_amount || 0)
-          .div(1e6)
-          .minus(item?.reward_usd || 0);
-        if (type === "losers" && profit.gt(0)) {
-          return;
-        } else {
-          list.push({
-            ...item,
-            profit: profit
-          });
-        }
-      });
-
-      setData(list);
+      setData(res.data.data);
     };
 
     getData();
