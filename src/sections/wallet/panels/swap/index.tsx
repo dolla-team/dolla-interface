@@ -7,6 +7,8 @@ import Fees from "./components/fees";
 import SubmitBtn from "./components/submit-button";
 import TokenSelector from "./components/token-selector";
 import BackIcon from "../../back-icon";
+import BridgeResult from "./components/bridge-result";
+import useUpdateTxns from "./hooks/use-update-txns";
 import { useMemo } from "react";
 
 export default function Swap(props?: any) {
@@ -44,6 +46,8 @@ export default function Swap(props?: any) {
   } = useSwap({
     ...props
   });
+
+  useUpdateTxns();
 
   const tokenPrices = useMemo(() => {
     return prices?.reduce((acc: any, price: any) => {
@@ -167,6 +171,7 @@ export default function Swap(props?: any) {
         }}
         onSelect={onSelectToken}
       />
+      <BridgeResult />
     </div>
   );
 }

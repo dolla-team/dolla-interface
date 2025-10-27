@@ -79,7 +79,7 @@ export default function TokenAmount({
 
   useEffect(() => {
     setPercent(0);
-    onAmountChange?.(0);
+    onAmountChange?.("");
   }, [currency]);
 
   return (

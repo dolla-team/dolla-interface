@@ -12,6 +12,7 @@ import useGenerateKey from "@/hooks/near/use-generate-key";
 import { useAuth } from "@/contexts/auth";
 import useReport from "@/hooks/transaction/use-report";
 import { NEAR_REFUND_ACCOUNT } from "@/config";
+import { useHistoryStore } from "@/stores/use-swap-history";
 
 const THIRTY_TGAS = "300000000000000";
 
@@ -19,7 +20,7 @@ export default function useTrade({ onSuccess }: any) {
   const slippage: any = useSettingsStore((store: any) => store.slippage);
   const [loading, setLoading] = useState(false);
   const [trade, setTrade] = useState<any>();
-
+  const historyStore = useHistoryStore();
   const toast = useToast();
   const lastestCachedKey = useRef("");
   const cachedTokens = useRef<any>(null);
@@ -217,6 +218,16 @@ export default function useTrade({ onSuccess }: any) {
       if (result.status.SuccessValue !== undefined) {
         console.log("Swap success:", result);
         toast.success({ title: "Swap success" });
+        historyStore.addHistory({
+          despoitAddress: trade.recipientAccount,
+          inputCurrencyAmount: trade.inputCurrencyAmount,
+          outputCurrencyAmount: trade.outputCurrencyAmount,
+          inputCurrency: trade.inputCurrency,
+          outputCurrency: trade.outputCurrency,
+          time: Date.now(),
+          txHash: result.transaction.hash
+        });
+        historyStore.updateStatus(trade.recipientAccount, "PENDING_DEPOSIT");
         onSuccess?.();
       } else {
         console.log("Swap failed:", result);
