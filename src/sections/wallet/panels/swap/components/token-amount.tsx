@@ -96,7 +96,7 @@ export default function TokenAmount({
         <div className="text-[12px]">
           {balanceLabel}{" "}
           <span
-            className="underline"
+            className="underline button"
             onClick={() => {
               const formatedBalance = balanceFormated(tokenBalance);
               if (["-", "Loading", "0"].includes(formatedBalance)) return;
