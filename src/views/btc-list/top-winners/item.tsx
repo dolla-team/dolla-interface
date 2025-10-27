@@ -63,7 +63,7 @@ export default function TopWinnersItem({
           {type === "sellers" &&
             `$${formatNumber(data.profit_amount, 2, true)}`}
           {type === "losers" &&
-            `$${formatNumber(Big(data.profit_amount || 0).abs(), 2, true)}`}
+            `-$${formatNumber(Big(data.profit_amount || 0).abs(), 2, true)}`}
         </div>
       </div>
     </div>
