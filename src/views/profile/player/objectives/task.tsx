@@ -45,16 +45,15 @@ export default function Task({
                 refreshing={refreshing}
                 handleRefresh={fetchTaskStatus}
               />
-              <Button
-                className="!bg-black h-[32px] shrink-0 min-w-[60px] px-[10px] !rounded-[8px] text-white button"
-                loading={loading}
-                onClick={(e: any) => {
-                  e.stopPropagation();
-                  handleTaskAction();
-                }}
-              >
-                {completed ? "Claim" : buttonText}
-              </Button>
+              {(!!buttonText || completed) && (
+                <Button
+                  className="px-[7px] h-[26px] text-[10px] !rounded-[8px] min-w-[60px] shrink-0"
+                  loading={loading}
+                  onClick={() => handleTaskAction()}
+                >
+                  {completed ? "Claim" : buttonText}
+                </Button>
+              )}
             </div>
           )}
           {claimed && (

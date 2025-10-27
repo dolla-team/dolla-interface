@@ -63,7 +63,7 @@ const Item = ({ id, onSuccess }: { id: any; onSuccess: () => void }) => {
         )}
       >
         <div className="flex items-center justify-between">
-          <span className="text-[10px]">{task.title}</span>
+          <span className="text-[10px] shrink-1">{task.title}</span>
           {claimed && (
             <div className="flex items-center gap-[6px]">
               <span className="text-[8px] text-white/30">{pastButtonText}</span>
@@ -71,18 +71,20 @@ const Item = ({ id, onSuccess }: { id: any; onSuccess: () => void }) => {
             </div>
           )}
           {!claimed && (
-            <div className="flex items-center gap-[10px]">
+            <div className="flex items-center gap-[10px] shrink-0">
               <RefreshBtn
                 refreshing={refreshing}
                 handleRefresh={fetchTaskStatus}
               />
-              <Button
-                className="px-[7px] h-[26px] text-[10px] !rounded-[8px] min-w-[60px] shrink-0"
-                loading={loading}
-                onClick={() => handleTaskAction()}
-              >
-                {completed ? "Claim" : buttonText}
-              </Button>
+              {(!!buttonText || completed) && (
+                <Button
+                  className="px-[7px] h-[26px] text-[10px] !rounded-[8px] min-w-[60px] shrink-0"
+                  loading={loading}
+                  onClick={() => handleTaskAction()}
+                >
+                  {completed ? "Claim" : buttonText}
+                </Button>
+              )}
             </div>
           )}
         </div>

@@ -101,7 +101,7 @@ export default function useTaskAction(task: any, onSuccess?: () => void) {
       walletStore.set({ panelType: "swap", showWallet: true });
       return;
     }
-    if (task.category === 3 || task.category === 6 || task.category === 7) {
+    if (task.category === 3) {
       navigate("/");
       setTimeout(() => {
         taskStore.set({ isBid: true });
