@@ -47,7 +47,7 @@ export default function Task({
               />
               {(!!buttonText || completed) && (
                 <Button
-                  className="px-[7px] h-[26px] text-[10px] !rounded-[8px] min-w-[60px] shrink-0"
+                  className="px-[7px] h-[26px] text-[10px] !bg-black !text-white !rounded-[8px] min-w-[60px] shrink-0"
                   loading={loading}
                   onClick={() => handleTaskAction()}
                 >

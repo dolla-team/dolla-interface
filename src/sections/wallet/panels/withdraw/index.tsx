@@ -15,6 +15,7 @@ import { useDebounce } from "ahooks";
 import useToast from "@/hooks/use-toast";
 import { NEAR_REFUND_ACCOUNT } from "@/config";
 import dayjs from "dayjs";
+import { isValidAddress } from "@/utils/validate-address";
 
 export default function WithdrawPanel({ onBack }: { onBack: () => void }) {
   const walletStore = useWalletStore();
@@ -63,7 +64,12 @@ export default function WithdrawPanel({ onBack }: { onBack: () => void }) {
   }, [quoteData]);
 
   useEffect(() => {
-    if (debouncedAmount && chain && receiveAddress) {
+    if (
+      debouncedAmount &&
+      chain &&
+      receiveAddress &&
+      isValidAddress(receiveAddress, chain.blockchain)
+    ) {
       (async () => {
         try {
           setQuoteData(null);

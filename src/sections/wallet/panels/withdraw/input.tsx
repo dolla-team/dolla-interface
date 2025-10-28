@@ -14,6 +14,10 @@ import Popover, {
 import ChainSelector from "./chain-selector";
 import WarningIcon from "../deposit/warning-icon";
 import { chainConfig } from "../../chain-config";
+import {
+  isValidAddress,
+  getAddressValidationError
+} from "@/utils/validate-address";
 
 export default function WithdrawInput({
   chain,
@@ -45,6 +49,14 @@ export default function WithdrawInput({
 
     if (!chain) {
       return "Please select a network";
+    }
+
+    // Validate address format based on selected chain
+    if (receiveAddress && chain?.blockchain) {
+      const isValid = isValidAddress(receiveAddress, chain.blockchain);
+      if (!isValid) {
+        return getAddressValidationError(receiveAddress, chain.blockchain);
+      }
     }
 
     if (Big(debouncedAmount || 0).gt(Big(balance || 0))) {
@@ -104,7 +116,13 @@ export default function WithdrawInput({
           <ReceiveAddressInfo />
         </div>
         <input
-          className="w-full h-[40px] rounded-[10px] border border-[#8A87AA4D] bg-white leading-[40px] px-[12px] text-[12px] mt-[6px]"
+          className={`w-full h-[40px] rounded-[10px] border bg-white leading-[40px] px-[12px] text-[12px] mt-[6px] ${
+            receiveAddress &&
+            chain?.blockchain &&
+            !isValidAddress(receiveAddress, chain.blockchain)
+              ? "border-[#FF399F]"
+              : "border-[#8A87AA4D]"
+          }`}
           value={receiveAddress}
           onChange={(e) => {
             setReceiveAddress(e.target.value);
@@ -215,7 +233,7 @@ export default function WithdrawInput({
           }}
           loading={loading}
         >
-          Withdraw
+          {errorTips ? errorTips : "Withdraw"}
         </Button>
       </div>
     </div>
