@@ -81,54 +81,56 @@ export default function Winner({ onClose }: { onClose: () => void }) {
         </div>
 
         <div className="w-full h-full flex pt-[200px] justify-center gap-[78px] relative z-[3]">
-          <div className="cursor-pointer relative w-[270px] h-[270px]">
-            {animationStatus === 2 && (
-              <LightRotation
-                size={270}
-                duration={6}
-                className="pointer-events-none z-[1] absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]"
-              />
-            )}
-            {animationStatus === 2 && (
-              <MultipleTag
-                multipler={formatNumber(returnMultiple, 0, true)}
-                size={110}
-                className="absolute top-[-10px] right-[-10px] z-[3]"
-                textClassName="text-[30px]"
-              />
-            )}
-            <div
-              className="transition-transform ease-in-out w-full h-full relative z-[2]"
-              style={{
-                transformStyle: "preserve-3d"
-              }}
-              ref={coinRef}
-            >
-              {/* Front face (Heads) */}
-              <BtcFace className="absolute top-0 left-0" />
-
+          <div className="relative flex flex-col items-center">
+            <div className="w-[270px] h-[270px] relative">
+              {animationStatus === 2 && (
+                <LightRotation
+                  size={270}
+                  duration={6}
+                  className="pointer-events-none z-[1] absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]"
+                />
+              )}
+              {animationStatus === 2 && (
+                <MultipleTag
+                  multipler={formatNumber(returnMultiple, 0, true)}
+                  size={110}
+                  className="absolute top-[-10px] right-[-10px] z-[3]"
+                  textClassName="text-[30px]"
+                />
+              )}
               <div
-                className="absolute inset-0 w-full h-full duration-1000 transition-transform ease-in-out rounded-full backface-hidden flex items-center justify-center"
+                className="transition-transform ease-in-out w-full h-full relative z-[2]"
                 style={{
-                  transform: `rotateY(180deg) translateZ(1px)`,
-                  opacity: animationStatus === 2 ? 1 : 0
+                  transformStyle: "preserve-3d"
                 }}
+                ref={coinRef}
               >
-                <Avatar
-                  size={216}
-                  address={userInfo?.user}
-                  email={userInfo?.show_email}
-                  src={userInfo?.icon}
-                  className="rounded-full border-[3px] border-[#DD9000] text-[72px]"
+                {/* Front face (Heads) */}
+                <BtcFace className="absolute top-0 left-0" />
+
+                <div
+                  className="absolute inset-0 w-full h-full duration-1000 transition-transform ease-in-out rounded-full backface-hidden flex items-center justify-center"
+                  style={{
+                    transform: `rotateY(180deg) translateZ(1px)`,
+                    opacity: animationStatus === 2 ? 1 : 0
+                  }}
+                >
+                  <Avatar
+                    size={216}
+                    address={userInfo?.user}
+                    email={userInfo?.show_email}
+                    src={userInfo?.icon}
+                    className="rounded-full border-[3px] border-[#DD9000] text-[72px]"
+                  />
+                </div>
+                <BtcFace
+                  className="backface-hidden absolute top-0 left-0"
+                  style={{
+                    transform: `rotateY(180deg) translateZ(1px)`,
+                    opacity: animationStatus === 2 ? 0 : 1
+                  }}
                 />
               </div>
-              <BtcFace
-                className="backface-hidden absolute top-0 left-0"
-                style={{
-                  transform: `rotateY(180deg) translateZ(1px)`,
-                  opacity: animationStatus === 2 ? 0 : 1
-                }}
-              />
             </div>
             <div
               className="text-center text-white duration-500"
