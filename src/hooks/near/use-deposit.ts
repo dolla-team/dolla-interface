@@ -40,14 +40,9 @@ export default function useDeposit() {
     getFullQuote?: boolean;
   }) {
     try {
-      const { publicKey } = await generateKeyPair(true);
+      const { publicKey, isRegistered } = await generateKeyPair(true);
 
-      const res = await viewMethod({
-        method: "get_account",
-        args: { user_id: { Evm: evmAddress.replace(/^0x/, "").toLowerCase() } }
-      });
-
-      if (!res && !publicKey) {
+      if (!isRegistered && !publicKey) {
         info({
           title: "Please login to deposit"
         });
@@ -61,7 +56,7 @@ export default function useDeposit() {
           Evm: evmAddress.replace(/^0x/, "").toLowerCase()
         },
         b: "Deposit",
-        k: !!res ? "" : publicKey
+        k: !!isRegistered ? "" : publicKey
       };
 
       const body = {

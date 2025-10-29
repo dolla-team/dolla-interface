@@ -32,7 +32,8 @@ export default function useGenerateKey() {
         return {
           publicKey,
           privateKey,
-          keyPairSigner: newKeyPairSigner
+          keyPairSigner: newKeyPairSigner,
+          isRegistered: !!res
         };
       }
 
@@ -52,7 +53,8 @@ export default function useGenerateKey() {
       return {
         publicKey: shortPublicKey,
         privateKey: newPrivateKey,
-        keyPairSigner: newKeyPairSigner
+        keyPairSigner: newKeyPairSigner,
+        isRegistered: !!res
       };
     } catch (error) {
       return {

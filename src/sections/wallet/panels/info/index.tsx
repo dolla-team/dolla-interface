@@ -7,6 +7,7 @@ import Txs from "./txs";
 import { useState } from "react";
 import useBalance from "@/hooks/near/use-balance";
 import useWalletStore from "@/stores/use-wallet";
+import RedeemCode from "@/sections/redeem-code";
 
 export default function Info({
   onTabChange
@@ -73,6 +74,7 @@ export default function Info({
         )}
         {tab === 2 && <Txs />}
       </div>
+      <RedeemCode />
     </div>
   );
 }
