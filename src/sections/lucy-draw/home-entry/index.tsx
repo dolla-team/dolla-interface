@@ -13,7 +13,7 @@ export default function HomeEntry({
 }: any) {
   return (
     <div
-      className="absolute z-[10] top-[30px] cursor-pointer left-[10px] w-[156px] h-[146px]"
+      className="fixed z-[10] top-[120px] cursor-pointer left-[10px] w-[156px] h-[146px]"
       onClick={onShowDetail}
     >
       <Round size={130} status={status} />

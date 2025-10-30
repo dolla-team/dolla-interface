@@ -187,9 +187,21 @@ const LuckyInfo = () => {
       trigger={PopoverTrigger.Hover}
       placement={PopoverPlacement.Top}
       content={
-        <div className="w-[360px] text-[#5E6B7D] text-[12px] font-[300] p-[10px] bg-white rounded-[10px] border border-[#E4E4E4]">
-          This is the address where your withdrawal will be sent. Double-check
-          that your destination wallet supports the selected network.
+        <div className="w-[440px] text-[#5E6B7D] text-[12px] font-[300] p-[10px] bg-white rounded-[10px] border border-[#E4E4E4]">
+          <div>
+            {" "}
+            A continuous platform event that runs in 24-hour cycles, drawing 10
+            lucky winners each round.
+          </div>{" "}
+          <div>Prize Distribution:</div>{" "}
+          <div>1st tier – 1 winner shares 50 % of the prize pool</div>{" "}
+          <div>2nd tier – 3 winners share 30 % of the prize pool</div>{" "}
+          <div>3rd tier – 6 winners share 20 % of the prize pool</div>
+          <div>
+            Tickets: Tickets earned by players in the bid market are
+            automatically entered into the current round. Tickets can also be
+            purchased directly at 1 USDT per ticket.
+          </div>
         </div>
       }
     >

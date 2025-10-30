@@ -3,7 +3,6 @@ import useLucyDraw from "./use-lucky-draw";
 import { useConfigStore } from "@/stores/use-config";
 import useUserInfoStore from "@/stores/use-user-info";
 import { useEffect, useMemo, useRef, useState } from "react";
-import LucyDrawHistory from "./history";
 import BuyTicket from "./buy-ticket";
 import DetailModal from "./detail-modal";
 import useLuckyDrawStore from "@/stores/use-lucky-draw";
@@ -38,16 +37,6 @@ export default function LucyDraw({
       ? "99+"
       : userInfoStore?.prize?.tickets;
   }, [userInfoStore?.prize?.tickets]);
-
-  const prizeAmount = useMemo(() => {
-    if (!configStore.config?.ticket_prize) return 0;
-    return configStore.config?.ticket_prize?.reduce(
-      (acc: number, curr: any) => {
-        return acc + curr.volume * curr.winner_count;
-      },
-      0
-    );
-  }, [configStore.config?.ticket_prize]);
 
   const fetchResult = async () => {
     try {
@@ -98,7 +87,7 @@ export default function LucyDraw({
   const params = {
     currentRound,
     participation,
-    prizeAmount,
+    prizeAmount: configStore.config?.prizeAmount,
     status,
     tickets,
     winningList,
@@ -115,7 +104,6 @@ export default function LucyDraw({
     historyRound: lucyDrawStore.historyRound,
     isLoading,
     fetchCurrentRound,
-    prizeAmount,
     currentRound
   };
 
@@ -123,13 +111,6 @@ export default function LucyDraw({
     <>
       {from === "home" && <HomeEntry {...params} />}
       {from === "detail" && <BtcDetailEntry {...params} />}
-      {lucyDrawStore.showHistory && (
-        <LucyDrawHistory
-          open={lucyDrawStore.showHistory}
-          onClose={() => lucyDrawStore.set({ showHistory: false })}
-          {...historyParams}
-        />
-      )}
       {showBuyTicket && (
         <BuyTicket
           showBuyTicket={showBuyTicket}

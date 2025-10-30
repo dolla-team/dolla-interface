@@ -113,8 +113,6 @@ export default function BidSelection({
         <BidBtn
           disabled={disabled}
           balanceNotEnough={balanceNotEnough}
-          bids={bids}
-          probability={probability}
           onClick={() => {
             if (flipStatus === 4) {
               setFlipStatus(5);
