@@ -12,7 +12,7 @@ export default function Home() {
         <Banner />
         <HotMarkets />
         <Markets />
-        <div className="flex items-center gap-[22px] h-[300px]">
+        <div className="flex items-center gap-[22px] h-[300px] mt-[30px]">
           <div className="w-1/3 h-full">
             <TopWinners type="winners" />
           </div>
