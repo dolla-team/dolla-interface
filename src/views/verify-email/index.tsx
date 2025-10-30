@@ -5,6 +5,7 @@ import axios from "@/libs/axios";
 import { useAuth } from "@/contexts/auth";
 import { useGlobalStore } from "@/stores/use-global";
 import { motion } from "framer-motion";
+import { TgIcon, TwitterIcon } from "./social-icons";
 
 export default function VerifyEmail() {
   const [email, setEmail] = useState("");
@@ -205,26 +206,26 @@ export default function VerifyEmail() {
           {checking ? "Checking permission..." : "Check permission"}
         </Button>
 
-        <button
-          className="button flex items-center gap-[4px] mt-[120px]"
-          onClick={() => {
-            window.open("https://x.com/Dollamarket", "_blank");
-          }}
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="15"
-            height="15"
-            viewBox="0 0 15 15"
-            fill="none"
+        <div className="mt-[120px] w-full flex items-center justify-center gap-[18px] pr-[30px]">
+          <button
+            className="button flex items-center gap-[4px]"
+            onClick={() => {
+              window.open("https://x.com/Dollamarket", "_blank");
+            }}
           >
-            <path
-              d="M8.9285 6.35221L14.5135 0H13.1905L8.339 5.5144L4.467 0H0L5.8565 8.33955L0 15H1.323L6.443 9.17535L10.533 15H15M1.8005 0.976187H3.833L13.1895 14.0718H11.1565"
-              fill="#8A87AA"
-            />
-          </svg>
-          <span className="text-[#8A87AA] text-[14px]">Twitter</span>
-        </button>
+            <TwitterIcon />
+            <span className="text-[#8A87AA] text-[14px]">Twitter</span>
+          </button>
+          <button
+            className="button flex items-center gap-[4px]"
+            onClick={() => {
+              window.open("https://t.me/+rlArBTaYhw8zNDM1", "_blank");
+            }}
+          >
+            <TgIcon />
+            <span className="text-[#8A87AA] text-[14px]">Telegram</span>
+          </button>
+        </div>
       </div>
     </div>
   );
