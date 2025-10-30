@@ -8,19 +8,21 @@ import Big from "big.js";
 import useUserInfoStore from "@/stores/use-user-info";
 import { QUOTE_TOKEN } from "@/config/btc";
 import Button from "@/components/button";
+import { useAuth } from "@/contexts/auth";
 
 export default memo(function BuyTicket({
   showBuyTicket,
-  onClose,
-  tokenBalance
+  onClose
 }: {
   showBuyTicket: boolean;
   onClose: () => void;
-  tokenBalance: string;
 }) {
+  const { nearAccount } = useAuth();
   const isMobile = useIsMobile();
   const [ticket, setTicket] = useState(1);
   const userInfoStore = useUserInfoStore();
+
+  const tokenBalance = nearAccount?.onlyQuoteBalance;
 
   const errorTips = useMemo(() => {
     if (Big(ticket).gt(Big(tokenBalance || 0))) {

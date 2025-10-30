@@ -42,7 +42,7 @@ export default function Timer({
   return (
     <div
       className={clsx(
-        "w-[118px] h-[30px] text-center text-[10px] px-[10px] border border-[#6A5D3A] text-white flex items-center justify-between rounded-[10px] border border-[#F2F2F233] bg-[#F2F2F21A]",
+        "w-full h-full text-center px-[10px] text-white flex items-center justify-between",
         className
       )}
     >

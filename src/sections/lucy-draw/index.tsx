@@ -1,6 +1,3 @@
-import useIsMobile from "@/hooks/use-is-mobile";
-import LucyDrawMobile from "./mobile";
-import LucyDrawLaptop from "./laptop";
 import useUserPrize from "@/hooks/use-user-prize";
 import useLucyDraw from "./use-lucky-draw";
 import { useConfigStore } from "@/stores/use-config";
@@ -8,17 +5,22 @@ import useUserInfoStore from "@/stores/use-user-info";
 import { useEffect, useMemo, useRef, useState } from "react";
 import LucyDrawHistory from "./history";
 import BuyTicket from "./buy-ticket";
+import DetailModal from "./detail-modal";
 import useLuckyDrawStore from "@/stores/use-lucky-draw";
+import HomeEntry from "./home-entry";
+import BtcDetailEntry from "./btc-detail-entry";
+import Big from "big.js";
+import { useAuth } from "@/contexts/auth";
 
 export default function LucyDraw({
-  tokenBalance,
-  className
+  className,
+  from
 }: {
-  tokenBalance: string;
   className?: string;
+  from: "home" | "detail";
 }) {
-  const isMobile = useIsMobile();
   const userInfoStore = useUserInfoStore();
+  const { userInfo } = useAuth();
   const lucyDrawStore = useLuckyDrawStore();
   const { currentRound, isLoading, fetchCurrentRound, participation } =
     useLucyDraw();
@@ -26,7 +28,9 @@ export default function LucyDraw({
   const [status, setStatus] = useState(0); // 0: running, 1: drawing, 2: end
   const timerRef = useRef<any>(null);
   const [showBuyTicket, setShowBuyTicket] = useState(false);
+  const [showDetail, setShowDetail] = useState(false);
   const [winningList, setWinningList] = useState<any[]>([]);
+  const [winningAmount, setWinningAmount] = useState(0);
   const { getUserPrize } = useUserPrize();
 
   const tickets = useMemo(() => {
@@ -47,15 +51,30 @@ export default function LucyDraw({
 
   const fetchResult = async () => {
     try {
-      const { winningList, number } = await fetchCurrentRound(412);
+      await new Promise((resolve) => setTimeout(resolve, 5000));
+      const { winningList, number } = await fetchCurrentRound();
       if (winningList.length > 0 || number === 0) {
         setStatus(2);
         setWinningList(winningList);
+
+        let amount = Big(0);
+        winningList?.forEach((item: any) => {
+          if (item.user.toLowerCase() === userInfo?.user?.toLowerCase()) {
+            amount = amount.plus(Big(item.volume));
+          }
+        });
+
+        if (amount.gt(0)) {
+          setWinningAmount(amount.toNumber());
+        }
+
+        setWinningAmount(amount.toNumber());
+
         setTimeout(async () => {
           await getUserPrize();
           await fetchCurrentRound();
           setStatus(0);
-        }, 10 * 1000);
+        }, 3 * 1000);
       } else {
         throw new Error("No winning list");
       }
@@ -87,29 +106,45 @@ export default function LucyDraw({
     userInfoStore,
     fetchResult,
     setStatus,
-    className
+    className,
+    winningAmount,
+    onShowDetail: () => setShowDetail(true)
   };
+
+  const historyParams = {
+    historyRound: lucyDrawStore.historyRound,
+    isLoading,
+    fetchCurrentRound,
+    prizeAmount,
+    currentRound
+  };
+
   return (
     <>
-      {isMobile ? (
-        <LucyDrawMobile {...params} />
-      ) : (
-        <LucyDrawLaptop {...params} />
+      {from === "home" && <HomeEntry {...params} />}
+      {from === "detail" && <BtcDetailEntry {...params} />}
+      {lucyDrawStore.showHistory && (
+        <LucyDrawHistory
+          open={lucyDrawStore.showHistory}
+          onClose={() => lucyDrawStore.set({ showHistory: false })}
+          {...historyParams}
+        />
       )}
-      <LucyDrawHistory
-        open={lucyDrawStore.showHistory}
-        onClose={() => lucyDrawStore.set({ showHistory: false })}
-        historyRound={lucyDrawStore.historyRound}
-        isLoading={isLoading}
-        fetchCurrentRound={fetchCurrentRound}
-        prizeAmount={prizeAmount}
-        currentRound={currentRound}
-      />
-      <BuyTicket
-        showBuyTicket={showBuyTicket}
-        onClose={() => setShowBuyTicket(false)}
-        tokenBalance={tokenBalance}
-      />
+      {showBuyTicket && (
+        <BuyTicket
+          showBuyTicket={showBuyTicket}
+          onClose={() => setShowBuyTicket(false)}
+        />
+      )}
+      {showDetail && (
+        <DetailModal
+          open={showDetail}
+          onClose={() => setShowDetail(false)}
+          onShowBuyTicket={() => setShowBuyTicket(true)}
+          {...params}
+          {...historyParams}
+        />
+      )}
     </>
   );
 }

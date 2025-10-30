@@ -22,6 +22,7 @@ import Result from "./components/result";
 import { useEffect, useMemo } from "react";
 import useWalletStore from "@/stores/use-wallet";
 import Confetti from "@/components/confetti";
+import LucyDraw from "@/sections/lucy-draw";
 
 // import ProvablyFair from "@/sections/provably-fair";
 
@@ -97,6 +98,7 @@ const Content = () => {
         {...{ sumPoints, sumTickets, isWinner, points, tickets }}
       />
       <BidSelection tokenBalance={nearAccount?.balance} />
+      {!isMobile && <LucyDraw from="detail" />}
       {!isMobile && <BidsInfo />}
       {/* {!isMobile && <MoreMarkets />} */}
       {/* {!isMobile && (

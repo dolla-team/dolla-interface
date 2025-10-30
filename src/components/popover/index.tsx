@@ -293,7 +293,7 @@ const Card = (props: CardProps) => {
   return (
     <AnimatePresence mode="wait">
       <motion.div
-        className={`fixed z-[12] left-0 top-0 z-[100] ${className}`}
+        className={`fixed z-[12] left-0 top-0 z-[220] ${className}`}
         ref={cardRef}
         style={{
           left: x,
