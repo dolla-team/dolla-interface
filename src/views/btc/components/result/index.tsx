@@ -1,37 +1,41 @@
 import { addThousandSeparator } from "@/utils/format/number";
 import ResultBg from "./bg";
 import Modal from "@/components/modal";
-import { useMemo, useEffect } from "react";
+import { useMemo } from "react";
 import PointIcon from "@/components/icons/point-icon";
 import Winner from "./winner";
 import DollaEye from "@/components/dolla-eye";
 import clsx from "clsx";
 import useIsMobile from "@/hooks/use-is-mobile";
+import Tabs from "@/components/tabs";
+import { BID_UNITS } from "@/config";
+import { useBtcContext } from "../../context";
+import Button from "@/components/button";
 
 const Config = {
   0: {
-    gifHeight: 210,
+    gifHeight: 120,
     gifSrc: "/btc/level0.gif",
     title: "OPPPS",
     desc: "Good luck next round",
     key: 0
   },
   1: {
-    gifHeight: 183,
+    gifHeight: 120,
     gifSrc: "/btc/level1.gif",
     title: "OPPPS",
     desc: "But you got 1 Lucky Ticket",
     key: 1
   },
   2: {
-    gifHeight: 222,
+    gifHeight: 120,
     gifSrc: "/btc/level2.gif",
     title: "Nice!",
     desc: "You’ve got",
     key: 2
   },
   3: {
-    gifHeight: 222,
+    gifHeight: 120,
     gifSrc: "/btc/level3.gif",
     title: "Good Job!",
     desc: "You’ve got",
@@ -39,8 +43,17 @@ const Config = {
   }
 };
 
-export default function Result({ points, tickets, isWinner, onClose }: any) {
+export default function Result({
+  points,
+  tickets,
+  isWinner,
+  onClose,
+  disabled,
+  balanceNotEnough,
+  onBidClick
+}: any) {
   const isMobile = useIsMobile();
+  const { bids, setBids } = useBtcContext();
   const config = useMemo(() => {
     if (!points && !tickets) {
       return Config[0];
@@ -52,20 +65,8 @@ export default function Result({ points, tickets, isWinner, onClose }: any) {
     return points > 10000 ? Config[3] : Config[2];
   }, [points, tickets]);
 
-  useEffect(() => {
-    if (isWinner) {
-      return;
-    }
-    const timer = setTimeout(() => {
-      onClose();
-    }, 10000);
-    return () => {
-      clearTimeout(timer);
-    };
-  }, [isWinner]);
-
   return isWinner ? (
-    <Winner points={points} onClose={onClose} />
+    <Winner onClose={onClose} />
   ) : (
     <Modal open={true} onClose={() => {}} className="backdrop-blur-[10px]">
       <div
@@ -84,58 +85,64 @@ export default function Result({ points, tickets, isWinner, onClose }: any) {
             src={config.gifSrc}
             style={{
               height: config.gifHeight,
-              marginTop: config.key === 0 ? 30 : 0
+              marginTop: 30
             }}
+            className="rounded-[12px]"
           />
-          <div className="text-[32px] text-white font-[700] mt-[20px]">
+          <div className="text-[26px] text-white font-[600] mt-[20px]">
             {config.title}
           </div>
-          <div className="text-[16px] text-white font-[DelaGothicOne]">
+          <div className="text-[16px] text-white font-[600] mt-[10px]">
             {config.desc}
           </div>
-          {config.key === 1 && (
-            <img src="/btc/ticket2.png" className="w-[218px]" />
-          )}
-          {config.key !== 0 && config.key !== 1 && (
-            <div className="flex items-center gap-[50px] pt-[18px] pb-[30px]">
-              {points > 0 && (
-                <div className="flex items-center gap-[8px]">
-                  <PointIcon />
-                  <span
-                    className="text-[#FFEF43] text-[20px] font-bold font-[AlfaSlabOne]"
-                    style={{
-                      WebkitTextStrokeWidth: "1px",
-                      WebkitTextStrokeColor: "#5E3737"
-                    }}
-                  >
-                    x{addThousandSeparator(points.toString())}
-                  </span>
-                </div>
-              )}
-              {tickets > 0 && (
-                <div className="relative w-[122px] h-[30px]">
-                  <div className="bg-[url(/btc/ticket1.png)] w-[122px] h-[100px] bg-no-repeat bg-center bg-contain absolute top-[-36px] left-[-20px]" />
-                  <span
-                    className="absolute left-[80px] text-[#FFEF43] font-[AlfaSlabOne] text-[20px]"
-                    style={{
-                      WebkitTextStroke: "2px #5E3737"
-                    }}
-                  >
-                    x{tickets}
-                  </span>
-                </div>
-              )}
-            </div>
-          )}
-          <button
-            style={{
-              marginTop: config.key === 0 ? 40 : 0
+          <div className="mt-[30px] h-[36px] flex items-center gap-[50px]">
+            {points > 0 && (
+              <div className="flex items-center gap-[8px]">
+                <PointIcon size={36} />
+                <span className="text-[20px] font-[900] bg-[radial-gradient(50%_50%_at_50%_50%,#FFEF43_0%,#FFC42F_100%)] bg-clip-text text-transparent">
+                  +{addThousandSeparator(points.toString())}
+                </span>
+              </div>
+            )}
+            {tickets > 0 && (
+              <div className="flex items-center gap-[2px]">
+                <img
+                  src="/lucky-draw/ticket-1.png"
+                  alt="ticket"
+                  className="w-[53px] h-[32px]"
+                />
+                <span className="text-[20px] font-[900] bg-[radial-gradient(50%_50%_at_50%_50%,#FFEF43_0%,#FFC42F_100%)] bg-clip-text text-transparent">
+                  +{tickets.toLocaleString()}
+                </span>
+              </div>
+            )}
+          </div>
+          <Tabs
+            tabs={BID_UNITS.map((item) => ({ label: `$${item}`, key: item }))}
+            currentTab={bids}
+            onChangeTab={(tab: any) => {
+              setBids(tab);
             }}
-            onClick={onClose}
-            className="h-[44px] w-[228px] button rounded-[8px] bg-linear-to-b from-[#FFF698] to-[#FFC42F] text-[#111111] font-[600] text-[16px]"
+            className="w-[346px] h-[38px] mt-[50px] p-[2px] !gap-0 rounded-[10px] backdrop-blur-[25px] border border-[#F2F2F233] bg-[#FFFFFF1F]"
+            tabClassName={clsx(
+              "text-[12px] w-[85px] text-center h-[18px] leading-[18px] text-white not-first:border-l border-[#8A87AA]/30"
+            )}
+            activeClassName="!text-black"
+            cursorClassName={clsx(
+              "!h-[32px] !w-[85px] rounded-[8px] !left-[50%] translate-x-[-50%] !bottom-[-7px] !bg-[#FFC42F]"
+            )}
+          />
+          <Button
+            onClick={() => {
+              if (disabled) return;
+              onClose();
+              onBidClick();
+            }}
+            disabled={disabled || balanceNotEnough}
+            className="h-[44px] w-[346px] mt-[20px] button rounded-[8px] bg-linear-to-b from-[#FFF698] to-[#FFC42F] text-[#111111] font-[600] text-[16px]"
           >
-            Try Your Luck Again
-          </button>
+            {balanceNotEnough ? "Insufficient Balance" : "Bid Again"}
+          </Button>
         </div>
       </div>
     </Modal>

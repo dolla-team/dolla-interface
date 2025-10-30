@@ -158,7 +158,6 @@ export const CannonCoinsProvider = ({
         poolAmount,
         bids,
         setBids: (bids: number) => {
-          if (flipStatus !== 0) return;
           setBids(bids);
         },
         setFlipStatus,

@@ -2,92 +2,19 @@ import useIsMobile from "@/hooks/use-is-mobile";
 import MobileBidSelection from "./mobile";
 import LaptopBidSelection from "./laptop";
 import { useBtcContext } from "../../context";
-import { useMemo } from "react";
-import { useAuth } from "@/contexts/auth";
-import useBid from "@/hooks/near/use-bid";
-import { BET_UNIT } from "@/config";
-import { useContractConfigStore } from "@/stores/use-contract-config";
-import useToast from "@/hooks/use-toast";
 
-export default function BidSelection({ tokenBalance }: any) {
-  const { userInfo, address, login } = useAuth();
+export default function BidSelection({
+  tokenBalance,
+  disabled,
+  balanceNotEnough,
+  onBidClick
+}: any) {
   const isMobile = useIsMobile();
-  const {
-    bids,
-    setBids,
-    flipStatus,
-    pool,
-    setFlipStatus,
-    setBidResult,
-    onReset
-  } = useBtcContext();
-  const toast = useToast();
-  const contractConfig = useContractConfigStore((state) => state.config);
-
-  const [disabled, balanceNotEnough] = useMemo(() => {
-    if (pool?.status !== 1) {
-      return [true, false];
-    }
-    if (!userInfo?.user) {
-      return [true, false];
-    }
-
-    if (
-      Number(tokenBalance) <
-      bids * (Number(BET_UNIT) / 1e6) + contractConfig.play_game_fee
-    ) {
-      return [true, true];
-    }
-    if (flipStatus === 0 || flipStatus === 6) {
-      return [false, false];
-    }
-    return [true, false];
-  }, [flipStatus, userInfo, tokenBalance, bids, pool]);
-
-  const { onBid } = useBid(
-    pool?.pool_id,
-    (result) => {
-      setFlipStatus(bids === 1 ? 5 : 4);
-      setBidResult(result);
-      console.log("success", 4);
-    },
-    () => {
-      setFlipStatus(2);
-      console.log("tx success", 2);
-    },
-    () => {
-      setTimeout(() => {
-        setFlipStatus(0);
-        onReset(true);
-        toast.fail({
-          title: "Bid failed"
-        });
-      }, 30);
-    },
-    () => {
-      setFlipStatus(0);
-    }
-  );
+  const { bids, setBids, flipStatus, pool } = useBtcContext();
 
   const onChangeBids = (bids: number) => {
     if (flipStatus === 1) return;
     setBids(bids);
-  };
-
-  const onBidClick = () => {
-    if (disabled) {
-      return;
-    }
-    if (!userInfo?.user) {
-      login();
-      return;
-    }
-    if (flipStatus === 6) {
-      onReset();
-    }
-    setBidResult(null);
-    setFlipStatus(1);
-    onBid(bids);
   };
 
   const props = {

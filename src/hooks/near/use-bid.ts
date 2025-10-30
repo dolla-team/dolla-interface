@@ -55,8 +55,13 @@ export default function useBid(
     //       id: 1,
     //       status: 1,
     //       times: times,
-    //       created_at: Date.now(),
-    //       is_winner: true
+    //       created_at: Date.now()
+    //     },
+    //     ticket: {
+    //       result: "0"
+    //     },
+    //     point: {
+    //       wild_coin_ev_result: "20000"
     //     }
     //   });
     // }, 3000);
