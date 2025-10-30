@@ -22,7 +22,7 @@ export default function ProvablyFair({
     verifyData,
     verifing,
     onVerfiy
-  } = useProvablyFair(data?.hash || data?.result_tx_hash);
+  } = useProvablyFair(data?.hash || data?.tx_hash);
 
   return (
     <Modal open={open} onClose={onClose}>

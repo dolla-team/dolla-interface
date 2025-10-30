@@ -222,7 +222,12 @@ export default function EndPanel({ data }: { data: any }) {
         </div>
 
         <ProvablyFair
-          data={data}
+          data={{
+            hash: data.result_tx_hash,
+            pool_id: data.pool_id,
+            market_size: data.reward_usd,
+            bids: totalBids
+          }}
           open={openProvablyFair}
           onClose={() => {
             setOpenProvablyFair(false);

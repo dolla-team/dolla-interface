@@ -155,7 +155,7 @@ const BidHistory = (props: any) => {
               className="text-[#0095FF] text-[14px] underline cursor-pointer button"
               onClick={() => {
                 window.open(
-                  `https://nearblocks.io/txns/${record.result_tx_hash}`,
+                  `https://nearblocks.io/txns/${record.tx_hash}`,
                   "_blank"
                 );
               }}
@@ -166,7 +166,7 @@ const BidHistory = (props: any) => {
             <svg
               className="cursor-pointer"
               onClick={() => {
-                onCopy(record.result_tx_hash);
+                onCopy(record.tx_hash);
               }}
               width="12"
               height="13"
@@ -183,7 +183,7 @@ const BidHistory = (props: any) => {
               onClick={() => {
                 setSelectedData({
                   pool_id: record.pool_id,
-                  hash: record.result_tx_hash,
+                  hash: record.tx_hash,
                   market_size: record.reward_usd,
                   bids: record.times
                 });
