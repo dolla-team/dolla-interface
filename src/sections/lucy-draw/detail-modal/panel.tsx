@@ -24,7 +24,9 @@ export default function DetailModalPanel({
   winningList,
   winningAmount,
   status,
-  onChangePanel
+  onChangePanel,
+  from,
+  poolStatus
 }: any) {
   const taskStore = useTaskStore();
   const navigate = useNavigate();
@@ -140,10 +142,12 @@ export default function DetailModalPanel({
           <div
             onClick={() => {
               onClose();
-              navigate("/");
-              setTimeout(() => {
-                taskStore.set({ isBid: true });
-              }, 300);
+              if (from === "home" || poolStatus !== 1) {
+                navigate("/");
+                setTimeout(() => {
+                  taskStore.set({ isBid: true });
+                }, 300);
+              }
             }}
             className="button w-[196px] h-[46px] leading-[46px] text-[12px] text-black font-[500] text-center rounded-[12px] shadow-[0_0_10px_0_#8465FF] bg-[url('/lucky-draw/winner-bg.png')] bg-size-[140%_160%] bg-no-repeat bg-center bg-cover"
           >
@@ -193,14 +197,17 @@ const LuckyInfo = () => {
             A continuous platform event that runs in 24-hour cycles, drawing 10
             lucky winners each round.
           </div>{" "}
-          <div>Prize Distribution:</div>{" "}
+          <div className="font-[500] text-black mt-[4px]">
+            Prize Distribution:
+          </div>{" "}
           <div>1st tier – 1 winner shares 50 % of the prize pool</div>{" "}
           <div>2nd tier – 3 winners share 30 % of the prize pool</div>{" "}
           <div>3rd tier – 6 winners share 20 % of the prize pool</div>
+          <div className="font-[500] text-black mt-[4px]">Tickets:</div>
           <div>
-            Tickets: Tickets earned by players in the bid market are
-            automatically entered into the current round. Tickets can also be
-            purchased directly at 1 USDT per ticket.
+            Tickets earned by players in the bid market are automatically
+            entered into the current round. Tickets can also be purchased
+            directly at 1 USDT per ticket.
           </div>
         </div>
       }

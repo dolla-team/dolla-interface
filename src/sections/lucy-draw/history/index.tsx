@@ -12,7 +12,7 @@ export default function LucyDrawHistory() {
     historyRound: lucyDrawStore.historyRound,
     isLoading,
     fetchCurrentRound,
-    prizeAmount: configStore.config?.prizeAmount,
+    prizeAmount: configStore.config?.prizeAmount || 0,
     currentRound
   };
   return (

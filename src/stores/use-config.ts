@@ -9,9 +9,7 @@ interface ConfigState {
 export const useConfigStore = create(
   persist<ConfigState>(
     (set) => ({
-      config: {
-        prizeAmount: 0
-      },
+      config: null,
       set: (params) => set(() => ({ ...params }))
     }),
     {

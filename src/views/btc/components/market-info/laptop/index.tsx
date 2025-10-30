@@ -109,8 +109,12 @@ const ProbabilityInfo = () => {
       trigger={PopoverTrigger.Hover}
       placement={PopoverPlacement.Top}
       content={
-        <div className="w-[330px] text-[#5E6B7D] text-[12px] font-[300] p-[10px] bg-white rounded-[10px] border border-[#E4E4E4]">
-          Dolla Probability
+        <div className="w-[298px] text-[12px] p-[10px] bg-white rounded-[10px] border border-[#E4E4E4]">
+          <div className="font-[500] text-black">Dolla Probability</div>
+          <div className="text-[12px] text-[#5E6B7D] font-[300] mt-[4px] leading-[120%]">
+            Your fixed on-chain chance to win per 1 Dollar bid — calculated as 1
+            / Anchor Price, where Anchor Price = asset listing price × premium.
+          </div>
         </div>
       }
     >

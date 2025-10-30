@@ -221,9 +221,9 @@ const CreditsInfo = () => {
       trigger={PopoverTrigger.Hover}
       placement={PopoverPlacement.TopLeft}
       content={
-        <div>
-          <div className="text-[12px] text-black font-[500]">Credits</div>
-          <div className="w-[360px] text-[#5E6B7D] text-[12px] font-[300] p-[10px] bg-white rounded-[10px] border border-[#E4E4E4]">
+        <div className="w-[298px] text-[12px] p-[10px] bg-white rounded-[10px] border border-[#E4E4E4]">
+          <div className="font-[500] text-black">Credits</div>
+          <div className="text-[12px] text-[#5E6B7D] font-[300] mt-[4px] leading-[120%]">
             Credits can only be obtained through market bidding, and can be
             exchanged for USDT or bid chances.
           </div>

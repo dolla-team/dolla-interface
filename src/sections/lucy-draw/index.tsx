@@ -13,10 +13,12 @@ import { useAuth } from "@/contexts/auth";
 
 export default function LucyDraw({
   className,
-  from
+  from,
+  poolStatus
 }: {
   className?: string;
   from: "home" | "detail";
+  poolStatus: number;
 }) {
   const userInfoStore = useUserInfoStore();
   const { userInfo } = useAuth();
@@ -41,7 +43,7 @@ export default function LucyDraw({
   const fetchResult = async () => {
     try {
       await new Promise((resolve) => setTimeout(resolve, 5000));
-      const { winningList, number } = await fetchCurrentRound();
+      const { winningList, number } = await fetchCurrentRound(currentRound);
       if (winningList.length > 0 || number === 0) {
         setStatus(2);
         setWinningList(winningList);
@@ -87,7 +89,7 @@ export default function LucyDraw({
   const params = {
     currentRound,
     participation,
-    prizeAmount: configStore.config?.prizeAmount,
+    prizeAmount: configStore.config?.prizeAmount || 0,
     status,
     tickets,
     winningList,
@@ -122,6 +124,8 @@ export default function LucyDraw({
           open={showDetail}
           onClose={() => setShowDetail(false)}
           onShowBuyTicket={() => setShowBuyTicket(true)}
+          from={from}
+          poolStatus={poolStatus}
           {...params}
           {...historyParams}
         />

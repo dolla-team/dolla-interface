@@ -98,7 +98,7 @@ const Content = () => {
         {...{ sumPoints, sumTickets, isWinner, points, tickets }}
       />
       <BidSelection tokenBalance={nearAccount?.balance} />
-      {!isMobile && <LucyDraw from="detail" />}
+      {!isMobile && <LucyDraw from="detail" poolStatus={pool?.status} />}
       {!isMobile && <BidsInfo />}
       {/* {!isMobile && <MoreMarkets />} */}
       {/* {!isMobile && (
