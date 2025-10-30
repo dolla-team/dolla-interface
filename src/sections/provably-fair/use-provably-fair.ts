@@ -38,7 +38,9 @@ export default function useProvablyFair(txHash: string) {
         parseHashPayload(processedPlayGameLog).data[0];
 
       const resultLog =
-        transaction.receipts[1].outcome.logs[1].split("EVENT_JSON:")[1];
+        transaction.receipts[1].outcome.logs[
+          transaction.receipts[1].outcome.logs.length - 1
+        ].split("EVENT_JSON:")[1];
       const parsedResultLog = parseHashPayload(resultLog).data[0];
 
       setData({
