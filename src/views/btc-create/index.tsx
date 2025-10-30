@@ -15,10 +15,6 @@ import SuccessModal from "./success-modal";
 import { useAuth } from "@/contexts/auth";
 import { formatAddress } from "@/utils/format/address";
 import Loading from "@/components/icons/loading";
-import Popover, {
-  PopoverPlacement,
-  PopoverTrigger
-} from "@/components/popover";
 import useQuote from "./hooks/use-quote";
 import useWalletStore from "@/stores/use-wallet";
 import PageBack from "@/views/profile/components/page-back";
@@ -26,6 +22,7 @@ import { AMOUNT } from "@/config/btc";
 import ConfirmModal from "./confirm-modal";
 import { useBtcCreateStore } from "@/stores/use-btc-create";
 import { useNavigate } from "react-router-dom";
+import { BTC_CREATE_FORM_URL } from "@/config";
 
 export default function BTCCreate() {
   const btcCreateStore = useBtcCreateStore();
@@ -38,7 +35,8 @@ export default function BTCCreate() {
     updateNearAccount,
     nearAccount,
     address,
-    login
+    login,
+    isCreatedWhitelist
   } = useAuth() || {};
   const { token } = useQuote();
   const tokenBalance = nearAccount?.prizeBalance;
@@ -157,6 +155,21 @@ export default function BTCCreate() {
               </div>
               <div className="w-[1px] h-[200px] bg-[#424242] mx-[30px]" />
               <div className="relative flex-1">
+                {!isCreatedWhitelist && (
+                  <div className="absolute z-[2] top-[-40px] left-[-20px] w-[500px] h-[230px] flex flex-col items-center justify-center rounded-[20px] bg-[#00000099] backdrop-blur-[5px]">
+                    <div className="text-white text-[18px] font-[300] text-center leading-[150%]">
+                      You need to apply before using Create.
+                    </div>
+                    <Button
+                      onClick={() => {
+                        window.open(BTC_CREATE_FORM_URL, "_blank");
+                      }}
+                      className="w-[108px] h-[42px] !bg-[#FFC42F] !text-black !rounded-[10px] text-[16px] mt-[20px]"
+                    >
+                      Apply
+                    </Button>
+                  </div>
+                )}
                 <div className="text-center text-white text-[14px] font-[500]">
                   {userInfo?.name || formatAddress(userInfo?.user)}
                 </div>
@@ -169,6 +182,10 @@ export default function BTCCreate() {
                 </div>
                 <button
                   onClick={(ev: any) => {
+                    if (!isCreatedWhitelist) {
+                      window.open(BTC_CREATE_FORM_URL, "_blank");
+                      return;
+                    }
                     if (!address) {
                       login();
                       return;
