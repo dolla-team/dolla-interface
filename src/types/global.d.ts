@@ -24,6 +24,7 @@ declare global {
     loginTimeoutTimer: NodeJS.Timeout | number;
     updateSwapHistoryTimer: NodeJS.Timeout | number;
     updateLucyDrawTimer: NodeJS.Timeout | number;
+    bidHintsTimer: NodeJS.Timeout | number;
     oddOffset: number;
     Telegram: any;
   }

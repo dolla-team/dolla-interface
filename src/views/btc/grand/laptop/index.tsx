@@ -6,6 +6,7 @@ import FlippingCoin from "../../components/fliping-coin";
 import PreLoading from "../pre-loading";
 import EndPanel from "../../detail/end";
 import Cancel from "../../detail/cancel";
+import BidHints from "../../components/bid-hints";
 
 export default function Grand({
   className,
@@ -14,7 +15,7 @@ export default function Grand({
   className?: string;
   restProps: any;
 }) {
-  const { flipStatus, pool } = useBtcContext();
+  const { flipStatus, pool, taskId } = useBtcContext();
 
   return (
     <div
@@ -26,6 +27,7 @@ export default function Grand({
         className
       )}
     >
+      <BidHints taskId={taskId} />
       {(pool?.status === 1 || flipStatus !== 0) && (
         <>
           <FlipCoins {...restProps} />

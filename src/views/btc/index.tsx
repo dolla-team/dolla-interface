@@ -51,7 +51,8 @@ const Content = () => {
     onReset,
     setFlipStatus,
     bids,
-    setBidResult
+    setBidResult,
+    setTaskId
   } = useBtcContext();
   const navigate = useNavigate();
   const walletStore = useWalletStore();
@@ -66,9 +67,10 @@ const Content = () => {
       setBidResult(result);
       console.log("success", 4);
     },
-    () => {
+    (taskId: string) => {
       setFlipStatus(2);
       console.log("tx success", 2);
+      setTaskId(taskId);
     },
     () => {
       setTimeout(() => {

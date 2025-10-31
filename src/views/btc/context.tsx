@@ -12,7 +12,6 @@ import usePoolInfo from "@/hooks/use-pool-info";
 import { formatNumber } from "@/utils/format/number";
 import Big from "big.js";
 import { useAuth } from "@/contexts/auth";
-
 export const CannonCoinsContext = createContext<any>({});
 
 export const CannonCoinsProvider = ({
@@ -22,6 +21,7 @@ export const CannonCoinsProvider = ({
 }) => {
   const [flipStatus, setFlipStatus] = useState(0); // 0: not flipping, 1: bidding, 2: bid success, 3: waiting, 4: bid complete, 5: auto flipping, 6: complete
   const [bids, setBids] = useState(1);
+  const [taskId, setTaskId] = useState<string>("");
   const coinsRef = useRef<any>({});
   const flipedNumberRef = useRef(0);
   const [bidResult, setBidResult] = useState<any>(null);
@@ -163,6 +163,8 @@ export const CannonCoinsProvider = ({
         setFlipStatus,
         coinsRef,
         bidResult,
+        taskId,
+        setTaskId,
         setSelectedMarket: (market: any) => {
           setPool(market);
           loopUpdatePool(market);
