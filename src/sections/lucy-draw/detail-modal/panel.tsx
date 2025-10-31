@@ -18,7 +18,7 @@ export default function DetailModalPanel({
   setStatus,
   fetchResult,
   prizeAmount,
-  participation,
+  totalTickets,
   tickets,
   onShowBuyTicket,
   winningList,
@@ -99,7 +99,7 @@ export default function DetailModalPanel({
         >
           <div className="flex flex-col items-center">
             <div className="text-[18px] text-white font-[700]">
-              {participation.toLocaleString()}
+              {totalTickets.toLocaleString()}
             </div>
             <div className="text-[12px] text-white">Total tickets</div>
           </div>
@@ -119,9 +119,10 @@ export default function DetailModalPanel({
           <div className="flex flex-col items-center">
             <div className="text-[18px] text-white font-[700]">
               {formatNumber(
-                Big(tickets || 0)
-                  .div(participation || 1)
-                  .toNumber(),
+                Math.min(
+                  Math.max(Math.floor((tickets / totalTickets) * 100), 0),
+                  100
+                ),
                 1,
                 true
               )}

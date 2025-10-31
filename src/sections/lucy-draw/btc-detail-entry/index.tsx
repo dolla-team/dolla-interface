@@ -118,6 +118,7 @@ export default function BtcDetailEntry({
                     src="/lucky-draw/ticket-1.png"
                     alt="ticket"
                     className="w-[40px] h-[24px]"
+                    id="animation-lucky-draw-ticket"
                   />
                   <span className="text-[12px] text-white font-[700]">
                     x{tickets.toLocaleString()}

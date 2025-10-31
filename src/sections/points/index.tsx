@@ -148,6 +148,7 @@ export default function Points({ className }: { className?: string }) {
           <PointIcon
             className="w-[20px] h-[20px] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
             size={20}
+            id="animation-points-point-icon"
           />
         </div>
 

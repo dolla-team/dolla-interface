@@ -4,9 +4,11 @@ import { useEffect, useState } from "react";
 export default function useLucyDraw() {
   const [currentRound, setCurrentRound] = useState(0);
   const [participation, setParticipation] = useState(0);
+  const [tickets, setTickets] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
 
   const fetchCurrentRound = async (id?: number) => {
+    clearTimeout(window.updateLucyDrawTimer);
     try {
       setIsLoading(true);
       let path = "/api/v1/ticket/lucky_draw";
@@ -16,7 +18,12 @@ export default function useLucyDraw() {
       const res = await axiosInstance.get(path);
       if (!id) {
         setCurrentRound(res.data.data.ticket_prize_draw.id);
-        setParticipation(res.data.data.ticket_prize_draw.number);
+        setTickets(res.data.data.ticket_prize_draw.number);
+        setParticipation(res.data.data.ticket_prize_draw.user_count);
+
+        window.updateLucyDrawTimer = setTimeout(() => {
+          fetchCurrentRound();
+        }, 5000);
       }
 
       setIsLoading(false);
@@ -35,11 +42,15 @@ export default function useLucyDraw() {
 
   useEffect(() => {
     fetchCurrentRound();
+    return () => {
+      clearTimeout(window.updateLucyDrawTimer);
+    };
   }, []);
 
   return {
     currentRound,
     participation,
+    totalTickets: tickets,
     isLoading,
     fetchCurrentRound
   };

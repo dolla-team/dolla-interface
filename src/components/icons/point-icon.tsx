@@ -1,9 +1,11 @@
 export default function PointIcon({
   className,
-  size = 26
+  size = 26,
+  id
 }: {
   className?: string;
   size?: number;
+  id?: string;
 }) {
   return (
     <svg
@@ -13,6 +15,7 @@ export default function PointIcon({
       viewBox="0 0 16 16"
       fill="none"
       className={className}
+      id={id}
     >
       <g filter="url(#filter0_i_5137_10861)">
         <circle cx="8" cy="8" r="8" fill="url(#paint0_linear_5137_10861)" />

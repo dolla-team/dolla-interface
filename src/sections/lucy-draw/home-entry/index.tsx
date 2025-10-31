@@ -1,4 +1,5 @@
 import clsx from "clsx";
+import { motion } from "framer-motion";
 import Round from "../round";
 import Timer from "../timer";
 
@@ -51,15 +52,23 @@ export default function HomeEntry({
           />
         )}
         {status === 1 && (
-          <div className="text-[12px] text-white text-center leading-[34px]">
+          <motion.div
+            className="text-[12px] text-white text-center leading-[34px]"
+            animate={{ scale: [1, 1.12, 1] }}
+            transition={{ duration: 1, ease: "easeInOut", repeat: Infinity }}
+          >
             Drawing...
-          </div>
+          </motion.div>
         )}
         {status === 2 &&
           (winningAmount > 0 ? (
-            <div className="text-[12px] text-black leading-[54px] font-[600] text-center">
+            <motion.div
+              className="text-[12px] text-black leading-[54px] font-[600] text-center"
+              animate={{ scale: [1, 1.12, 1] }}
+              transition={{ duration: 1, ease: "easeInOut", repeat: Infinity }}
+            >
               You win ${winningAmount.toLocaleString()}!
-            </div>
+            </motion.div>
           ) : (
             <div className="text-[12px] text-white text-center leading-[34px]">
               You Missed

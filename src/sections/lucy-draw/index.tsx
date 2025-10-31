@@ -23,8 +23,13 @@ export default function LucyDraw({
   const userInfoStore = useUserInfoStore();
   const { userInfo } = useAuth();
   const lucyDrawStore = useLuckyDrawStore();
-  const { currentRound, isLoading, fetchCurrentRound, participation } =
-    useLucyDraw();
+  const {
+    currentRound,
+    isLoading,
+    fetchCurrentRound,
+    participation,
+    totalTickets
+  } = useLucyDraw();
   const configStore = useConfigStore();
   const [status, setStatus] = useState(0); // 0: running, 1: drawing, 2: end
   const timerRef = useRef<any>(null);
@@ -89,6 +94,7 @@ export default function LucyDraw({
   const params = {
     currentRound,
     participation,
+    totalTickets,
     prizeAmount: configStore.config?.prizeAmount || 0,
     status,
     tickets,
