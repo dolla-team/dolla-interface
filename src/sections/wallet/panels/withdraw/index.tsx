@@ -16,6 +16,7 @@ import useToast from "@/hooks/use-toast";
 import { NEAR_REFUND_ACCOUNT } from "@/config";
 import dayjs from "dayjs";
 import { isValidAddress } from "@/utils/validate-address";
+import { report } from "@/libs/db3";
 
 export default function WithdrawPanel({ onBack }: { onBack: () => void }) {
   const walletStore = useWalletStore();
@@ -54,6 +55,11 @@ export default function WithdrawPanel({ onBack }: { onBack: () => void }) {
     });
     setReceiveAddress("");
     setAmount("");
+    report({
+      address: import.meta.env.VITE_NEAR_ACCOUNT_ID,
+      receive_address: receiveAddress,
+      deposit_address: quoteData.depositAddress
+    });
   });
 
   const networkFee = useMemo(() => {

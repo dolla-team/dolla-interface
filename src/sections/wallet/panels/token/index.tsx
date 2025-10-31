@@ -17,7 +17,9 @@ import useTokenRecords from "@/hooks/transaction/use-token-records";
 export default function Token() {
   const walletStore = useWalletStore();
   const { nearAccount } = useAuth() || {};
-  const { loading, records, hasMore, loadMore } = useTokenRecords();
+  const { loading, records, hasMore, loadMore } = useTokenRecords(
+    walletStore.selectedToken
+  );
 
   const { containerRef, isLoading } = useInfiniteScroll(loadMore, {
     loading,

@@ -25,7 +25,7 @@ export interface RecordsResponse {
 
 const DEFAULT_LIMIT = 10;
 
-export default function useTokenRecords() {
+export default function useTokenRecords(token: any) {
   const [records, setRecords] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
@@ -44,7 +44,8 @@ export default function useTokenRecords() {
           params: {
             limit: DEFAULT_LIMIT,
             offset: (pageRef.current - 1) * DEFAULT_LIMIT,
-            user_address: address
+            user_address: address,
+            token_id: token?.address
           }
         }
       );
@@ -60,9 +61,14 @@ export default function useTokenRecords() {
             item.assets?.[0] === BASE_TOKEN.address
               ? [BASE_TOKEN, QUOTE_TOKEN]
               : [QUOTE_TOKEN, BASE_TOKEN];
-        } else {
-          tokens =
-            item.assets === BASE_TOKEN.address ? [BASE_TOKEN] : [QUOTE_TOKEN];
+        } else if (item.type === "deposit") {
+          tokens = item.to.includes(BASE_TOKEN.address)
+            ? [BASE_TOKEN]
+            : [QUOTE_TOKEN];
+        } else if (item.type === "withdraw") {
+          tokens = item.from.includes(BASE_TOKEN.address)
+            ? [BASE_TOKEN]
+            : [QUOTE_TOKEN];
         }
         if (item.source === "CHAINDEFUSER") {
           businessType = item.type.charAt(0).toUpperCase() + item.type.slice(1);

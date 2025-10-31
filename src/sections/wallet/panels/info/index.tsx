@@ -74,7 +74,7 @@ export default function Info({
         )}
         {tab === 2 && <Txs />}
       </div>
-      <RedeemCode />
+      {tab === 0 && <RedeemCode />}
     </div>
   );
 }

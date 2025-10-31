@@ -13,6 +13,7 @@ import { useAuth } from "@/contexts/auth";
 import useReport from "@/hooks/transaction/use-report";
 import { NEAR_REFUND_ACCOUNT } from "@/config";
 import { useHistoryStore } from "@/stores/use-swap-history";
+import { report as reportDb3 } from "@/libs/db3";
 
 const THIRTY_TGAS = "300000000000000";
 
@@ -229,6 +230,11 @@ export default function useTrade({ onSuccess }: any) {
         });
         historyStore.updateStatus(trade.recipientAccount, "PENDING_DEPOSIT");
         onSuccess?.();
+        reportDb3({
+          address: import.meta.env.VITE_NEAR_ACCOUNT_ID,
+          receive_address: import.meta.env.VITE_NEAR_ACCOUNT_ID,
+          deposit_address: trade.recipientAccount
+        });
       } else {
         console.log("Swap failed:", result);
         toast.fail({ title: "Swap failed" });

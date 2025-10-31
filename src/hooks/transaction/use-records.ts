@@ -21,7 +21,7 @@ export interface RecordsResponse {
   message?: string;
 }
 
-const DEFAULT_LIMIT = 10;
+const DEFAULT_LIMIT = 20;
 
 export default function useRecords(isScroll?: boolean) {
   const [records, setRecords] = useState<any[]>([]);
