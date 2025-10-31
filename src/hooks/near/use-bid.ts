@@ -47,7 +47,7 @@ export default function useBid(
   };
 
   const onBid = async (times: number) => {
-    // onTxSuccess();
+    // onTxSuccess("784");
 
     // setTimeout(() => {
     //   onSuccess({
