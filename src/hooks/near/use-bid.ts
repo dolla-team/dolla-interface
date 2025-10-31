@@ -9,7 +9,7 @@ import { QUOTE_TOKEN } from "@/config/btc";
 export default function useBid(
   poolId: number,
   onSuccess: (result: any) => void,
-  onTxSuccess: () => void,
+  onTxSuccess: (id: string) => void,
   onTxFail: () => void,
   onTxFail2: () => void
 ) {
@@ -117,12 +117,14 @@ export default function useBid(
         random_seed,
         user_signature: signature || ""
       });
-      onTxSuccess();
+
       console.log("response", response);
 
       if (!response.data.data) {
         throw new Error("Bid failed");
       }
+
+      onTxSuccess(response.data.data);
 
       let count = 0;
 
