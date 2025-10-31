@@ -3,14 +3,13 @@ import Popover, {
   PopoverTrigger
 } from "@/components/popover";
 import Timer from "../timer";
-import { formatNumber } from "@/utils/format/number";
-import Big from "big.js";
 import useTaskStore from "@/stores/use-task";
 import { useNavigate } from "react-router-dom";
 import CloseIcon from "../close-icon";
 import clsx from "clsx";
 import FlipAvater from "./flip-avater";
 import Avatar from "@/components/avatar";
+import { useMemo } from "react";
 
 export default function DetailModalPanel({
   onClose,
@@ -30,6 +29,11 @@ export default function DetailModalPanel({
 }: any) {
   const taskStore = useTaskStore();
   const navigate = useNavigate();
+  const winRate = useMemo(() => {
+    if (totalTickets === 0 || tickets === 0) return "0";
+    const _rate = Math.min(Math.floor((tickets / totalTickets) * 100), 100);
+    return _rate < 1 ? "~ 1" : _rate;
+  }, [tickets, totalTickets]);
   return (
     <div className="pb-[18px]">
       <div className="px-[24px] py-[18px] flex items-center justify-between">
@@ -117,17 +121,7 @@ export default function DetailModalPanel({
             <div className="text-[12px] text-white">Your tickets</div>
           </div>
           <div className="flex flex-col items-center">
-            <div className="text-[18px] text-white font-[700]">
-              {formatNumber(
-                Math.min(
-                  Math.max(Math.floor((tickets / totalTickets) * 100), 0),
-                  100
-                ),
-                1,
-                true
-              )}
-              %
-            </div>
+            <div className="text-[18px] text-white font-[700]">{winRate}%</div>
             <div className="text-[12px] text-white">Win rate</div>
           </div>
         </div>
