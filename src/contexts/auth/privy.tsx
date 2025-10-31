@@ -23,6 +23,7 @@ import useUserInfoStore from "@/stores/use-user-info";
 import { useNearKeyStore } from "@/stores/use-near-key";
 import useAccount from "@/hooks/near/use-account";
 import useCode from "@/hooks/airdrop/use-code";
+import useCreateWhitelist from "@/hooks/user/use-create-whitelist";
 import { useGlobalStore } from "@/stores/use-global";
 import LoginTimeoutModal from "@/components/modal/login-timeout";
 
@@ -66,6 +67,8 @@ export const AuthProvider: React.FC<{
     onQueryUserInfo,
     setInfo
   } = useUserInfo(privyWallet?.address);
+
+  const { isCreatedWhitelist } = useCreateWhitelist(userInfo?.show_email);
 
   useCode(userInfo);
 
@@ -219,6 +222,7 @@ export const AuthProvider: React.FC<{
         ready,
         user,
         nearAccount: account,
+        isCreatedWhitelist,
         updateNearAccount,
         login,
         logout,

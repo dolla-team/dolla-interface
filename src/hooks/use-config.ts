@@ -7,7 +7,14 @@ export default function useConfig() {
 
   const getConfig = async () => {
     axiosInstance.get("/api/v1/config").then((res) => {
-      configStore.set({ config: res.data.data });
+      const config = res.data.data;
+      const prizeAmount = config.ticket_prize?.reduce(
+        (acc: number, curr: any) => {
+          return acc + curr.volume * curr.winner_count;
+        },
+        0
+      );
+      configStore.set({ config: { ...config, prizeAmount } });
     });
   };
 
@@ -17,6 +24,6 @@ export default function useConfig() {
   }, []);
 
   return {
-    getConfig,
+    getConfig
   };
 }

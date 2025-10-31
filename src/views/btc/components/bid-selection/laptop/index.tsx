@@ -9,12 +9,11 @@ import { useAuth } from "@/contexts/auth";
 import { useTipsStore } from "@/stores/use-tips";
 import { QUOTE_TOKEN } from "@/config/btc";
 import { motion, AnimatePresence } from "framer-motion";
-import { useMemo } from "react";
-import Big from "big.js";
 import Popover, {
   PopoverPlacement,
   PopoverTrigger
 } from "@/components/popover";
+import { BID_UNITS } from "@/config";
 
 const animate: any = {
   initial: {
@@ -67,15 +66,6 @@ export default function BidSelection({
   const { set } = useWalletStore();
   const { setFlipStatus } = useBtcContext();
   const { address, login } = useAuth();
-  const probability = useMemo(() => {
-    const _probability = Big(bids)
-      .div(Big(pool?.anchor_price || 1).div(1e6))
-      .mul(100);
-    if (_probability.gt(100)) {
-      return "99.99";
-    }
-    return _probability.toFixed(2);
-  }, [bids, pool?.anchor_price]);
 
   return (
     <div className="absolute bottom-0 left-0 w-full h-[202px]">
@@ -113,8 +103,6 @@ export default function BidSelection({
         <BidBtn
           disabled={disabled}
           balanceNotEnough={balanceNotEnough}
-          bids={bids}
-          probability={probability}
           onClick={() => {
             if (flipStatus === 4) {
               setFlipStatus(5);
@@ -126,7 +114,7 @@ export default function BidSelection({
         />
 
         <div className="flex items-end text-black text-[18px] font-normal leading-[100%] uppercase mt-[60px]">
-          {[1, 10, 50, 100].map((item) => (
+          {BID_UNITS.map((item) => (
             <div
               key={`bids-${item}`}
               className={clsx(
@@ -223,9 +211,9 @@ const CreditsInfo = () => {
       trigger={PopoverTrigger.Hover}
       placement={PopoverPlacement.TopLeft}
       content={
-        <div>
-          <div className="text-[12px] text-black font-[500]">Credits</div>
-          <div className="w-[360px] text-[#5E6B7D] text-[12px] font-[300] p-[10px] bg-white rounded-[10px] border border-[#E4E4E4]">
+        <div className="w-[298px] text-[12px] p-[10px] bg-white rounded-[10px] border border-[#E4E4E4]">
+          <div className="font-[500] text-black">Credits</div>
+          <div className="text-[12px] text-[#5E6B7D] font-[300] mt-[4px] leading-[120%]">
             Credits can only be obtained through market bidding, and can be
             exchanged for USDT or bid chances.
           </div>

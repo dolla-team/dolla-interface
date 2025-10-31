@@ -21,3 +21,7 @@ export const TWITTER_CLIENT_ID = "NWZlaG93WlNfNW4xVmxNZHdvUVo6MTpjaQ";
 
 export const TELEGRAM_BOT = "dolla_test_bot";
 export const TELEGRAM_BOT_ID = "8234415143";
+
+export const BTC_CREATE_FORM_URL = "https://tally.so/r/3q0QqY";
+
+export const BID_UNITS = [1, 10, 50, 100];

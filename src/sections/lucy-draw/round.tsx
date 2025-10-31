@@ -1,16 +1,15 @@
 import clsx from "clsx";
 import { motion } from "framer-motion";
 
-export default function Round({ status }: any) {
+export default function Round({ status, size, className }: any) {
   return (
-    <div
-      className={clsx(
-        "absolute bottom-[-250px] left-[30%]",
-        status === 0 && "opacity-30"
-      )}
-    >
+    <div className={clsx("absolute left-0 top-0", className)}>
       <motion.div
-        className="w-[342px] h-[342px] bg-[url('/lucky-draw/lucky-draw-round.png')] bg-no-repeat bg-center bg-contain"
+        className="bg-[url('/lucky-draw/lucky-draw-round.png')] bg-no-repeat bg-center bg-contain"
+        style={{
+          width: size,
+          height: size
+        }}
         animate={
           status === 1
             ? {
@@ -30,33 +29,33 @@ export default function Round({ status }: any) {
       />
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        width="77"
-        height="90"
-        viewBox="0 0 77 90"
+        width={size * 0.5}
+        height={size * 0.5}
+        viewBox="0 0 65 67"
         fill="none"
-        className="absolute top-[-10px] left-[50%] translate-x-[-50%]"
+        className="absolute top-[-20%] left-[50%] translate-x-[-50%]"
       >
-        <g filter="url(#filter0_d_5136_10585)">
+        <g filter="url(#filter0_d_5387_51474)">
           <path
-            d="M36.5721 62.025C37.1935 63.8188 39.7303 63.8188 40.3517 62.025L53.014 25.4722C53.3999 24.3583 52.7405 23.167 51.5804 22.9575C48.9648 22.4852 44.1846 21.8001 38.4621 21.8001C32.7394 21.8001 27.9591 22.4852 25.3434 22.9575C24.1833 23.167 23.5239 24.3583 23.9098 25.4722L36.5721 62.025Z"
-            fill="#10FFBF"
+            d="M30.4774 39.4039C31.1833 40.9814 33.4227 40.9814 34.1286 39.4039L40.6321 24.8692C41.1598 23.6897 40.4452 22.3473 39.1617 22.198C37.4808 22.0024 35.0718 21.7999 32.3031 21.7999C29.5343 21.7999 27.1253 22.0024 25.4443 22.198C24.1608 22.3473 23.4462 23.6898 23.9739 24.8692L30.4774 39.4039Z"
+            fill="#FFC42F"
           />
           <path
-            d="M36.0996 62.1885C36.8763 64.4307 40.0475 64.4307 40.8242 62.1885L53.4863 25.6357C53.9674 24.2468 53.1463 22.7326 51.6689 22.4658C49.0333 21.9899 44.2223 21.2998 38.4619 21.2998C32.7015 21.2998 27.8906 21.9899 25.2549 22.4658C23.7775 22.7326 22.9564 24.2468 23.4375 25.6357L36.0996 62.1885Z"
-            stroke="black"
+            d="M30.0215 39.6079C30.9038 41.5798 33.7026 41.5798 34.585 39.6079L41.0889 25.0737C41.7459 23.6054 40.8592 21.8926 39.2197 21.7017C37.5244 21.5044 35.0951 21.3003 32.3027 21.3003C29.5106 21.3003 27.082 21.5044 25.3867 21.7017C23.7471 21.8924 22.8605 23.6053 23.5176 25.0737L30.0215 39.6079Z"
+            stroke="url(#paint0_linear_5387_51474)"
           />
         </g>
         <defs>
           <filter
-            id="filter0_d_5136_10585"
-            x="-7.24792e-05"
-            y="4.95911e-05"
-            width="76.9239"
-            height="89.1703"
+            id="filter0_d_5387_51474"
+            x="-0.00019455"
+            y="-0.00019455"
+            width="64.6059"
+            height="66.3871"
             filterUnits="userSpaceOnUse"
-            colorInterpolationFilters="sRGB"
+            color-interpolation-filters="sRGB"
           >
-            <feFlood floodOpacity="0" result="BackgroundImageFix" />
+            <feFlood flood-opacity="0" result="BackgroundImageFix" />
             <feColorMatrix
               in="SourceAlpha"
               type="matrix"
@@ -73,15 +72,26 @@ export default function Round({ status }: any) {
             <feBlend
               mode="normal"
               in2="BackgroundImageFix"
-              result="effect1_dropShadow_5136_10585"
+              result="effect1_dropShadow_5387_51474"
             />
             <feBlend
               mode="normal"
               in="SourceGraphic"
-              in2="effect1_dropShadow_5136_10585"
+              in2="effect1_dropShadow_5387_51474"
               result="shape"
             />
           </filter>
+          <linearGradient
+            id="paint0_linear_5387_51474"
+            x1="32.303"
+            y1="21.7999"
+            x2="32.303"
+            y2="43.4839"
+            gradientUnits="userSpaceOnUse"
+          >
+            <stop stopColor="white" />
+            <stop offset="1" stopColor="#999999" />
+          </linearGradient>
         </defs>
       </svg>
     </div>

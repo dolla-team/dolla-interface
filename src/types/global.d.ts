@@ -23,6 +23,7 @@ declare global {
     allMarketsTimer: NodeJS.Timeout | number;
     loginTimeoutTimer: NodeJS.Timeout | number;
     updateSwapHistoryTimer: NodeJS.Timeout | number;
+    updateLucyDrawTimer: NodeJS.Timeout | number;
     oddOffset: number;
     Telegram: any;
   }

@@ -50,7 +50,7 @@ function BidsInfoInner({ onRefresher }: any) {
   return (
     <div
       ref={containerRef}
-      className="flex flex-col gap-[10px] absolute right-[20px] bottom-[36%] text-white h-[280px] overflow-hidden [mask-image:linear-gradient(to_bottom,rgba(0,0,0,0),rgba(0,0,0,1)_10%,rgba(0,0,0,0))]"
+      className="flex flex-col gap-[10px] absolute right-[20px] bottom-[30%] text-white h-[280px] overflow-hidden [mask-image:linear-gradient(to_bottom,rgba(0,0,0,0),rgba(0,0,0,1)_10%,rgba(0,0,0,0))]"
     >
       <AnimatePresence>
         {show && (

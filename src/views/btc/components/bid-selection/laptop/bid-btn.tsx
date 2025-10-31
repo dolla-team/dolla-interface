@@ -5,15 +5,11 @@ import { motion } from "framer-motion";
 
 export default function BidBtn({
   disabled,
-  bids,
   balanceNotEnough,
-  probability,
   onClick
 }: {
   disabled: boolean;
-  bids: number;
   balanceNotEnough: boolean;
-  probability: string;
   onClick: () => void;
 }) {
   const { flipStatus, setFlipStatus } = useBtcContext();
@@ -108,12 +104,6 @@ export default function BidBtn({
             </div>
           )}
         </button>
-      </div>
-      <div className="text-[#FFC42F] text-[12px] text-center mt-[16px]">
-        Dolla Probability{" "}
-        <span className="font-[500]">
-          {bids} Bid = {probability}%
-        </span>
       </div>
     </div>
   );

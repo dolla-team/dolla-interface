@@ -18,6 +18,7 @@ import useBindSocial from "@/hooks/task/use-bind-social";
 import ProfileSetting from "@/views/profile/components/profile-setting";
 import useUserInfoStore from "@/stores/use-user-info";
 import useRegisterCode from "@/hooks/user/use-register-code";
+import LucyDrawHistory from "@/sections/lucy-draw/history";
 
 export default function MainLayout() {
   const { userInfo, login } = useAuth() || {};
@@ -136,6 +137,7 @@ export default function MainLayout() {
           userInfoStore.set({ showSetting: false });
         }}
       />
+      <LucyDrawHistory />
     </div>
   );
 }

@@ -14,10 +14,14 @@ import Popover, {
 } from "@/components/popover";
 import { useAllMarketsStore } from "@/stores/use-all-markets";
 import Pagination from "@/components/pagination";
+import Button from "@/components/button";
+import { BTC_CREATE_FORM_URL } from "@/config";
+import { useAuth } from "@/contexts/auth";
 
 export default function Markets() {
   const navigate = useNavigate();
   const taskStore = useTaskStore();
+  const { isCreatedWhitelist } = useAuth();
   const allMarketsStore = useAllMarketsStore();
   const {
     poolList,
@@ -108,6 +112,18 @@ export default function Markets() {
               </button>
             ))}
           </div>
+          {isCreatedWhitelist ? (
+            <Button
+              onClick={() => {
+                navigate("/btc/create");
+              }}
+              className="w-[86px] h-[38px] !bg-[#1C1C23] !text-white !rounded-[10px]"
+            >
+              + Create
+            </Button>
+          ) : (
+            <CreateButton />
+          )}
         </div>
       </div>
       <div className="flex items-center text-[#8A87AA] text-[12px] mt-[20px] pl-[14px] pr-[20px]">
@@ -173,6 +189,35 @@ export default function Markets() {
     </div>
   );
 }
+
+const CreateButton = () => {
+  return (
+    <Popover
+      trigger={PopoverTrigger.Hover}
+      placement={PopoverPlacement.Top}
+      content={
+        <div className="w-[168px] text-[#5E6B7D] text-[12px] p-[10px] bg-white rounded-[10px] border border-[#E4E4E4]">
+          <div>You need to apply before using Create.</div>
+          <Button
+            onClick={() => {
+              window.open(BTC_CREATE_FORM_URL, "_blank");
+            }}
+            className="w-full h-[26px] !bg-[#FFC42F] !text-black !rounded-[6px] text-[12px] mt-[10px]"
+          >
+            Apply
+          </Button>
+        </div>
+      }
+    >
+      <Button
+        disabled
+        className="w-[86px] h-[38px] !bg-[#1C1C23] !text-white !rounded-[10px]"
+      >
+        + Create
+      </Button>
+    </Popover>
+  );
+};
 
 const MarketInfo = () => {
   return (
