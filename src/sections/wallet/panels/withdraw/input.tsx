@@ -266,10 +266,10 @@ const SelectNetworkInfo = () => {
       placement={PopoverPlacement.TopLeft}
       content={
         <div className="w-[360px] text-[#5E6B7D] text-[12px] font-[300] p-[10px] bg-white rounded-[10px] border border-[#E4E4E4]">
-          Please make sure that the currency is charged and withdrawn onthe same
-          network, otherwise the currency withdrawal cannot besuccessful. The
-          different effects of the network are the rate, theminimum amount of
-          money withdrawn and the transfer time.
+          Please make sure that the currency is charged and withdrawn on the
+          same network, otherwise the currency withdrawal cannot be successful.
+          The different effects of the network are the rate, the minimum amount
+          of money withdrawn and the transfer time.
         </div>
       }
     >
