@@ -68,7 +68,7 @@ export default function Result({
   return isWinner ? (
     <Winner onClose={onClose} />
   ) : (
-    <Modal open={true} onClose={() => {}} className="backdrop-blur-[10px]">
+    <Modal open={true} onClose={onClose} className="backdrop-blur-[10px]">
       <div
         className={clsx(
           "relative h-[584px]",
