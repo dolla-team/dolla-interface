@@ -10,16 +10,9 @@ export default function useVersionCheck() {
 
         console.log("current version", current, version);
 
+        localStorage.setItem("app_version", version);
         if (current && current !== version) {
-          const shouldReload = window.confirm(
-            "A new version of this site is available. Reload now?"
-          );
-          if (shouldReload) {
-            localStorage.setItem("app_version", version);
-            window.location.reload();
-          }
-        } else {
-          localStorage.setItem("app_version", version);
+          window.location.reload();
         }
       } catch (err) {
         console.warn("Version check failed:", err);
