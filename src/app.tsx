@@ -7,6 +7,7 @@ import { ToastContainer } from "react-toastify";
 import Loading from "@/components/loading";
 import VerifyEmail from "./views/verify-email";
 import { useGlobalStore } from "@/stores/use-global";
+import useVersionCheck from "@/hooks/use-version-check";
 import ErrorPage from "./views/error-page";
 // import "react-toastify/dist/ReactToastify.css";
 
@@ -144,6 +145,7 @@ const Content = () => {
 };
 
 function App() {
+  useVersionCheck();
   return (
     <DollaEyeContextProvider>
       <WalletProvider>
