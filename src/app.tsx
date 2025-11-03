@@ -7,6 +7,7 @@ import { ToastContainer } from "react-toastify";
 import Loading from "@/components/loading";
 import VerifyEmail from "./views/verify-email";
 import { useGlobalStore } from "@/stores/use-global";
+import ErrorPage from "./views/error-page";
 // import "react-toastify/dist/ReactToastify.css";
 
 import MainLayout from "./layouts/main";
@@ -33,6 +34,7 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <MainLayout />,
+    errorElement: <ErrorPage />,
     children: [
       {
         index: true,
@@ -86,11 +88,13 @@ const router = createBrowserRouter([
   },
   {
     path: "btc/detail",
-    element: <LazyBtc />
+    element: <LazyBtc />,
+    errorElement: <ErrorPage />
   },
   {
     path: "btc/detail/:poolId",
-    element: <LazyBtc />
+    element: <LazyBtc />,
+    errorElement: <ErrorPage />
   },
   {
     path: "/callback",
