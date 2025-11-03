@@ -58,6 +58,14 @@ export default function useRecords(isScroll?: boolean) {
             item.assets?.[0] === BASE_TOKEN.address
               ? [BASE_TOKEN, QUOTE_TOKEN]
               : [QUOTE_TOKEN, BASE_TOKEN];
+        } else if (item.type === "deposit") {
+          tokens = item.to.includes(BASE_TOKEN.address)
+            ? [BASE_TOKEN]
+            : [QUOTE_TOKEN];
+        } else if (item.type === "withdraw") {
+          tokens = item.from.includes(BASE_TOKEN.address)
+            ? [BASE_TOKEN]
+            : [QUOTE_TOKEN];
         } else {
           tokens =
             item.assets === BASE_TOKEN.address ? [BASE_TOKEN] : [QUOTE_TOKEN];

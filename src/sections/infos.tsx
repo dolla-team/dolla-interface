@@ -20,20 +20,21 @@ interface ScrollProps {
 export default function Infos({
   className = "",
   speed = 120,
-  height = 36,
-  autoPlay = true
+  height = 36
 }: ScrollProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const scrollRef = useRef<HTMLDivElement>(null);
+  const wrapperRef = useRef<HTMLDivElement>(null);
   const animationRef = useRef<number | null>(null);
-  const [isPaused, setIsPaused] = useState(!autoPlay);
+  const [isPaused, setIsPaused] = useState(false);
   const [data, setData] = useState<any[]>([]);
-  const [scrollPosition, setScrollPosition] = useState(0);
+  const [offset, setOffset] = useState(0);
+  const [contentWidth, setContentWidth] = useState(0);
   const walletStore = useWalletStore();
+  const pausedRef = useRef(false);
 
-  // JavaScript-based smooth scrolling animation with better performance
+  // Seamless scroll animation from right to left
   const animateScroll = useCallback(() => {
-    if (isPaused || !data?.length) {
+    if (pausedRef.current || !data?.length || !contentWidth) {
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current);
         animationRef.current = null;
@@ -41,19 +42,26 @@ export default function Infos({
       return;
     }
 
-    setScrollPosition((prev: number) => {
-      const newPosition = prev + speed / 60; // 60fps
-      return newPosition >= (scrollRef.current?.clientWidth || 0)
-        ? 0
-        : newPosition;
+    setOffset((prev) => {
+      let newOffset = prev + speed / 60; // 60fps, move right to left
+
+      // When we've scrolled one full set width, reset to 0 seamlessly
+      // Since we duplicate the content, this creates a perfect loop
+      if (newOffset >= contentWidth) {
+        newOffset = newOffset - contentWidth;
+      }
+
+      return newOffset;
     });
 
     animationRef.current = requestAnimationFrame(animateScroll);
-  }, [isPaused, scrollRef.current?.clientWidth, speed]);
+  }, [speed, contentWidth, data?.length]);
 
-  // Start animation when conditions are met
+  // Start/stop animation based on pause state
   useEffect(() => {
-    if (!isPaused && scrollRef.current?.clientWidth && !animationRef.current) {
+    pausedRef.current = isPaused;
+
+    if (!isPaused && data?.length && contentWidth && !animationRef.current) {
       animationRef.current = requestAnimationFrame(animateScroll);
     }
 
@@ -63,17 +71,51 @@ export default function Infos({
         animationRef.current = null;
       }
     };
-  }, [isPaused, scrollRef.current?.clientWidth, animateScroll]);
+  }, [isPaused, data?.length, contentWidth, animateScroll]);
 
-  // Cleanup on unmount
+  // Measure content width after render
   useEffect(() => {
-    return () => {
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current);
-        animationRef.current = null;
+    if (!wrapperRef.current || !data?.length) return;
+
+    const measureWidth = () => {
+      if (!wrapperRef.current) return;
+
+      // Get the first set of items (we render data twice, so first set is data.length items)
+      const children = wrapperRef.current.children;
+      if (children.length >= data.length) {
+        const firstItem = children[0] as HTMLElement;
+        const secondSetFirstItem = children[data.length] as HTMLElement;
+
+        if (firstItem && secondSetFirstItem) {
+          // Measure distance from start of first set to start of second set
+          const width = secondSetFirstItem.offsetLeft - firstItem.offsetLeft;
+          if (width > 0) {
+            setContentWidth(width);
+            return;
+          }
+        }
+      }
+
+      // Fallback: measure scrollWidth / 2
+      const totalWidth = wrapperRef.current.scrollWidth;
+      if (totalWidth > 0) {
+        setContentWidth(totalWidth / 2);
       }
     };
-  }, []);
+
+    // Wait for layout to be calculated
+    const rafId1 = requestAnimationFrame(() => {
+      const rafId2 = requestAnimationFrame(measureWidth);
+      return () => cancelAnimationFrame(rafId2);
+    });
+
+    window.addEventListener("resize", measureWidth);
+
+    return () => {
+      cancelAnimationFrame(rafId1);
+      window.removeEventListener("resize", measureWidth);
+    };
+  }, [data?.length]);
 
   useEffect(() => {
     const getData = async () => {
@@ -165,6 +207,20 @@ export default function Infos({
     };
   }, []);
 
+  // Reset offset when data changes
+  useEffect(() => {
+    setOffset(0);
+  }, [data?.length]);
+
+  // Handle hover pause on container
+  const handleMouseEnter = useCallback(() => {
+    setIsPaused(true);
+  }, []);
+
+  const handleMouseLeave = useCallback(() => {
+    setIsPaused(false);
+  }, []);
+
   return (
     !!data?.length && (
       <div
@@ -175,31 +231,28 @@ export default function Infos({
           className
         )}
         style={{ height: `${height}px` }}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
       >
         <Bids />
         <div
-          ref={scrollRef}
+          ref={wrapperRef}
           className="flex items-center gap-8 h-full whitespace-nowrap"
           style={{
-            transform: `translateX(-${scrollPosition}px)`,
-            willChange: "transform" // Optimize for smooth animation
+            transform: `translateX(-${offset}px)`,
+            willChange: "transform"
           }}
         >
+          {/* First set */}
           {data.map((item, index) => (
-            <Item
-              item={item}
-              key={`first-${index}`}
-              index={index}
-              setIsPaused={setIsPaused}
-            />
+            <Item item={item} key={`first-${index}`} />
+          ))}
+          {/* Second set (duplicate for seamless loop) */}
+          {data.map((item, index) => (
+            <Item item={item} key={`second-${index}`} />
           ))}
           {data.map((item, index) => (
-            <Item
-              item={item}
-              key={`second-${index}`}
-              index={index}
-              setIsPaused={setIsPaused}
-            />
+            <Item item={item} key={`second-${index}`} />
           ))}
         </div>
       </div>
@@ -207,26 +260,9 @@ export default function Infos({
   );
 }
 
-const Item = ({
-  item,
-  setIsPaused
-}: {
-  item: any;
-  index: number;
-  setIsPaused: (isPaused: boolean) => void;
-}) => {
+const Item = ({ item }: { item: any }) => {
   const navigate = useNavigate();
   const [isHovered, setIsHovered] = useState(false);
-
-  const handleMouseEnter = useCallback(() => {
-    setIsHovered(true);
-    setIsPaused(true);
-  }, [setIsPaused]);
-
-  const handleMouseLeave = useCallback(() => {
-    setIsHovered(false);
-    setIsPaused(false);
-  }, [setIsPaused]);
 
   return (
     <div
@@ -234,8 +270,8 @@ const Item = ({
         navigate(`/btc/detail/${item.pool_id}`);
       }}
       className="flex items-center h-full gap-[4px] px-[30px] text-white transition-all duration-200 hover:scale-105 button cursor-pointer"
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
       style={{
         transform: isHovered ? "scale(1.05)" : "scale(1)",
         transition: "transform 0.2s ease-out"

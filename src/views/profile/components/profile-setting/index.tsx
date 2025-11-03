@@ -27,7 +27,7 @@ export default function ProfileSetting({ open, onClose }: ProfileSettingProps) {
   });
 
   useEffect(() => {
-    setUsername(userInfo?.name || userInfo?.show_email);
+    setUsername(userInfo?.name || "");
     setAvatarUrl(userInfo?.icon);
   }, [userInfo]);
 
