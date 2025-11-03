@@ -1,6 +1,7 @@
 import Modal from "@/components/modal";
 import { WinnerShareCard, WinnerDownloadCard } from "./winner";
 import { PoolShareCard, PoolDownloadCard } from "./pool";
+import { InviteDownloadCard, InviteShareCard } from "./invite";
 import { useRef } from "react";
 import Button from "@/components/button";
 import { useShare } from "./use-share";
@@ -12,6 +13,14 @@ const SHARE_OPTIONS: Record<string, any> = {
   winner: {
     title: "I am a title",
     description: "I am a description"
+  },
+  pool: {
+    title: "I am a title",
+    description: "I am a description"
+  },
+  invite: {
+    title: "I am a title",
+    description: "I am a description"
   }
 };
 
@@ -19,12 +28,17 @@ const DOWNLOAD_IMGS: Record<string, any> = {
   winner: {
     width: 375,
     height: 500,
-    backgroundColor: "#000"
+    backgroundColor: "transparent"
   },
   pool: {
     width: 375,
     height: 580,
-    backgroundColor: "#fff"
+    backgroundColor: "transparent"
+  },
+  invite: {
+    width: 375,
+    height: 580,
+    backgroundColor: "transparent"
   }
 };
 
@@ -32,12 +46,17 @@ const SHARE_IMGS: Record<string, any> = {
   winner: {
     width: 1000,
     height: 562.5,
-    backgroundColor: "#000"
+    backgroundColor: "transparent"
   },
   pool: {
     width: 666,
     height: 375,
-    backgroundColor: "#fff"
+    backgroundColor: "transparent"
+  },
+  invite: {
+    width: 666,
+    height: 375,
+    backgroundColor: "transparent"
   }
 };
 
@@ -80,6 +99,16 @@ export default function ShareModal({
               </div>
               <div className="absolute z-[1] left-[-300px] top-0 scale-10">
                 <PoolShareCard data={data} cardRef={cardRef} />
+              </div>
+            </>
+          )}
+          {type === "invite" && (
+            <>
+              <div className="relative z-[2]">
+                <InviteDownloadCard cardRef={downloadCardRef} />
+              </div>
+              <div className="absolute z-[1] left-[-300px] top-0 scale-10">
+                <InviteShareCard cardRef={cardRef} />
               </div>
             </>
           )}
