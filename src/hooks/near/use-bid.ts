@@ -47,23 +47,24 @@ export default function useBid(
   };
 
   const onBid = async (times: number) => {
-    // onTxSuccess("784");
+    // onTxSuccess("800");
 
     // setTimeout(() => {
-    //   onSuccess({
-    //     bid: {
-    //       id: 1,
-    //       status: 1,
-    //       times: times,
-    //       created_at: Date.now()
-    //     },
-    //     ticket: {
-    //       result: "0"
-    //     },
-    //     point: {
-    //       wild_coin_ev_result: "20000"
-    //     }
-    //   });
+    //   // onSuccess({
+    //   //   bid: {
+    //   //     id: 1,
+    //   //     status: 1,
+    //   //     times: times,
+    //   //     created_at: Date.now()
+    //   //   },
+    //   //   ticket: {
+    //   //     result: "0"
+    //   //   },
+    //   //   point: {
+    //   //     wild_coin_ev_result: "20000"
+    //   //   }
+    //   // });
+    //   onTxFail();
     // }, 3000);
 
     // return;

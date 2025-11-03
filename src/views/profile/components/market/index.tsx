@@ -1,5 +1,4 @@
 import clsx from "clsx";
-import { motion } from "framer-motion";
 import { formatNumber } from "@/utils/format/number";
 import { useMemo } from "react";
 import { getReAnchorPrice } from "@/utils/pool";
@@ -9,6 +8,7 @@ import Avatar from "@/components/avatar";
 import BtcImg from "@/views/btc-list/markets/btc-bg";
 import MarketStatus from "../market-status";
 import { BASE_TOKEN, AMOUNT } from "@/config/btc";
+import Particles from "@/components/animations/Particles";
 
 export default function Market({
   data,
@@ -165,56 +165,31 @@ export default function Market({
             </span>
           </div>
         </div>
-        <div
-          className={clsx(
-            "mt-[10px] rounded-[6px] relative mx-[11px]",
-            isActive
-              ? "h-[6px] bg-white/10 border border-[#948254]"
-              : "h-[3px] bg-[#191E27]"
-          )}
-        >
+        {from !== "share" && (
           <div
-            className="h-full absolute left-0 top-0 rounded-[6px]"
-            style={{
-              background:
-                progress >= 100
-                  ? "linear-gradient(270deg, #FFC42F 0%, #FF43E0 54.81%, #53EABF 100%)"
-                  : "linear-gradient(90deg, #6F37FF 0%, #00FFBB 100%)",
-              width: `${Math.min(progress, 100)}%`
-            }}
-          >
-            {progress >= 80 && progress < 100 && data.status === 1 && (
-              <>
-                <motion.div
-                  className="absolute right-0 top-[-3px] w-[4px] h-[2px] bg-[#FFC42F] rounded-full rotate-45"
-                  initial={{ x: 0, opacity: 0 }}
-                  animate={{
-                    x: [-2, -16, -2],
-                    opacity: [1, 0.6, 1]
-                  }}
-                  transition={{
-                    duration: 0.3,
-                    ease: "easeInOut",
-                    repeat: Infinity
-                  }}
-                />
-                <motion.div
-                  className="absolute right-0 bottom-[-3px] w-[4px] h-[2px] bg-[#FFC42F] rounded-full rotate-[-45deg]"
-                  initial={{ x: 0, opacity: 0 }}
-                  animate={{
-                    x: [-2, -16, -2],
-                    opacity: [0.6, 0.4, 0.6]
-                  }}
-                  transition={{
-                    duration: 0.3,
-                    ease: "easeInOut",
-                    repeat: Infinity
-                  }}
-                ></motion.div>
-              </>
+            className={clsx(
+              "mt-[10px] rounded-[6px] relative mx-[11px]",
+              isActive
+                ? "h-[6px] bg-white/10 border border-[#948254]"
+                : "h-[3px] bg-[#191E27]"
             )}
+          >
+            <div
+              className="h-full absolute left-0 top-0 rounded-[6px]"
+              style={{
+                background:
+                  progress >= 100
+                    ? "linear-gradient(270deg, #FFC42F 0%, #FF43E0 54.81%, #53EABF 100%)"
+                    : "linear-gradient(90deg, #6F37FF 0%, #00FFBB 100%)",
+                width: `${Math.min(progress, 100)}%`
+              }}
+            >
+              {progress >= 80 && progress < 100 && data.status === 1 && (
+                <Particles />
+              )}
+            </div>
           </div>
-        </div>
+        )}
         {footer}
       </div>
 

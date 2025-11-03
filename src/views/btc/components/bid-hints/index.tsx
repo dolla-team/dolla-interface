@@ -39,6 +39,7 @@ export default function BidHints({ taskId }: { taskId: string }) {
   useEffect(() => {
     if (flipStatus === 0) {
       setStep(0);
+      clearTimeout(window.bidHintsTimer);
     }
   }, [flipStatus]);
 

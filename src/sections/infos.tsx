@@ -26,21 +26,14 @@ export default function Infos({
   const containerRef = useRef<HTMLDivElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const animationRef = useRef<number | null>(null);
-  const [contentWidth, setContentWidth] = useState(0);
   const [isPaused, setIsPaused] = useState(!autoPlay);
   const [data, setData] = useState<any[]>([]);
   const [scrollPosition, setScrollPosition] = useState(0);
   const walletStore = useWalletStore();
 
-  useEffect(() => {
-    if (!data?.length) return;
-    const totalWidth = data.length * 300;
-    setContentWidth(totalWidth);
-  }, [data]);
-
   // JavaScript-based smooth scrolling animation with better performance
   const animateScroll = useCallback(() => {
-    if (isPaused || !contentWidth) {
+    if (isPaused || !data?.length) {
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current);
         animationRef.current = null;
@@ -50,15 +43,17 @@ export default function Infos({
 
     setScrollPosition((prev: number) => {
       const newPosition = prev + speed / 60; // 60fps
-      return newPosition >= contentWidth ? 0 : newPosition;
+      return newPosition >= (scrollRef.current?.clientWidth || 0)
+        ? 0
+        : newPosition;
     });
 
     animationRef.current = requestAnimationFrame(animateScroll);
-  }, [isPaused, contentWidth, speed]);
+  }, [isPaused, scrollRef.current?.clientWidth, speed]);
 
   // Start animation when conditions are met
   useEffect(() => {
-    if (!isPaused && contentWidth > 0 && !animationRef.current) {
+    if (!isPaused && scrollRef.current?.clientWidth && !animationRef.current) {
       animationRef.current = requestAnimationFrame(animateScroll);
     }
 
@@ -68,7 +63,7 @@ export default function Infos({
         animationRef.current = null;
       }
     };
-  }, [isPaused, contentWidth, animateScroll]);
+  }, [isPaused, scrollRef.current?.clientWidth, animateScroll]);
 
   // Cleanup on unmount
   useEffect(() => {
@@ -186,7 +181,6 @@ export default function Infos({
           ref={scrollRef}
           className="flex items-center gap-8 h-full whitespace-nowrap"
           style={{
-            width: contentWidth * 2,
             transform: `translateX(-${scrollPosition}px)`,
             willChange: "transform" // Optimize for smooth animation
           }}
