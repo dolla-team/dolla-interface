@@ -1,5 +1,5 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { Suspense, lazy, useEffect, useState } from "react";
+import { lazy, useEffect, useState } from "react";
 import WalletProvider from "./contexts/wallet";
 import { AuthProvider } from "./contexts/auth";
 import { usePrivy, useUser } from "@privy-io/react-auth";
@@ -14,7 +14,6 @@ import MainLayout from "./layouts/main";
 import Callback from "./views/callback";
 import DollaEyeContextProvider from "./contexts/dolla-eye";
 import BtcList from "./views/btc-list";
-import ErrorPage from "./views/error-page";
 
 const LazyNftCreate = lazy(() => import("./views/nft-create"));
 const LazyBtcCreate = lazy(() => import("./views/btc-create"));
@@ -34,7 +33,6 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <MainLayout />,
-    errorElement: <ErrorPage />,
     children: [
       {
         index: true,
@@ -88,12 +86,10 @@ const router = createBrowserRouter([
   },
   {
     path: "btc/detail",
-    errorElement: <ErrorPage />,
     element: <LazyBtc />
   },
   {
     path: "btc/detail/:poolId",
-    errorElement: <ErrorPage />,
     element: <LazyBtc />
   },
   {
@@ -146,24 +142,22 @@ const Content = () => {
 function App() {
   return (
     <DollaEyeContextProvider>
-      <Suspense>
-        <WalletProvider>
-          <AuthProvider>
-            <Content />
-          </AuthProvider>
-        </WalletProvider>
-        <ToastContainer
-          position="top-right"
-          autoClose={5000}
-          hideProgressBar={true}
-          theme="light"
-          toastStyle={{ backgroundColor: "transparent", boxShadow: "none" }}
-          newestOnTop
-          rtl={false}
-          pauseOnFocusLoss
-          closeButton={false}
-        />
-      </Suspense>
+      <WalletProvider>
+        <AuthProvider>
+          <Content />
+        </AuthProvider>
+      </WalletProvider>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={true}
+        theme="light"
+        toastStyle={{ backgroundColor: "transparent", boxShadow: "none" }}
+        newestOnTop
+        rtl={false}
+        pauseOnFocusLoss
+        closeButton={false}
+      />
     </DollaEyeContextProvider>
   );
 }
