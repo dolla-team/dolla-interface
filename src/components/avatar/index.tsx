@@ -1,14 +1,9 @@
 import clsx from "clsx";
-// @ts-ignore
-import crypto from "crypto-browserify";
-import { useRef, useEffect } from "react";
-import { AvatarColors } from "@/config/user";
-import { useUsers } from "@/stores/use-users";
+import { useMemo } from "react";
 
 export default function Avatar({
   size,
   src,
-  email = "",
   className,
   address,
   onClick
@@ -21,49 +16,21 @@ export default function Avatar({
   className?: string;
   onClick?: (e: any) => void;
 }) {
-  const usersStore = useUsers();
-  const randomRef = useRef(Math.floor(Math.random() * AvatarColors.length));
+  const mergedSrc = useMemo(() => {
+    if (src) return src;
+    if (!address) return null;
 
-  useEffect(() => {
-    if (!address) return;
-    if (usersStore.users[address.toLowerCase()]) {
-      return;
-    }
+    const random = (parseInt(address.slice(2, 5), 16) % 45) + 1;
+    return `https://assets.dolla.market/avatar/${random}.jpg`;
+  }, [src, address]);
 
-    usersStore.setUsers({
-      [address.toLowerCase()]: {
-        color: AvatarColors[randomRef.current]
-      }
-    });
-  }, [address]);
-  if (!src && !email) {
+  if (!mergedSrc) {
     return null;
-  }
-
-  if (!src && email) {
-    return (
-      <div
-        className={clsx(
-          "uppercase flex items-center justify-center rounded-[6px]",
-          className
-        )}
-        style={{
-          width: size,
-          height: size,
-          backgroundColor:
-            (address && usersStore.users[address.toLowerCase()]?.color) ||
-            AvatarColors[randomRef.current]
-        }}
-        onClick={onClick}
-      >
-        {email.charAt(0)}
-      </div>
-    );
   }
 
   return (
     <img
-      src={src}
+      src={mergedSrc}
       alt="avatar"
       className={clsx("rounded-[6px]", className)}
       style={{
