@@ -51,10 +51,6 @@ export default function usePoolList(props?: {
       );
 
       const list = res.data.data.list.map((item: any) => {
-        const valued = item.nft_ids
-          ? getAnchorPrice(item.anchor_price)
-          : item.value;
-
         const reward_amount = item.reward_amount || 0;
         const decimals = item.reward_token_info?.[0]?.decimals || 1;
         const _an = Big(reward_amount).div(10 ** decimals);
@@ -62,11 +58,7 @@ export default function usePoolList(props?: {
 
         const market = {
           ...item,
-          amount: _a,
-          progress:
-            Number(valued) === 0
-              ? 0
-              : Big(item.accumulative_bids).div(valued).mul(100).toNumber()
+          amount: _a
         };
 
         return market;

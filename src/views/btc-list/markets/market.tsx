@@ -99,7 +99,7 @@ export default function Market({
           )}
           {column.dataIndex === "hitting" && (
             <div className="w-full">
-              {data.progress >= 100 && (
+              {spilled > 0 && (
                 <div className="text-[#2B3337] text-[12px] mb-[10px] font-[600]">
                   Overfilled {formatNumber(spilled, 0, true, { prefix: "$" })}
                 </div>
