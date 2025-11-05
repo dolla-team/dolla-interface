@@ -27,7 +27,11 @@ export default function ProfileSetting({ open, onClose }: ProfileSettingProps) {
   });
 
   useEffect(() => {
-    setUsername(userInfo?.name || "");
+    let name = userInfo?.name;
+    if (!name) {
+      name = Math.random().toString(36).slice(2, 10);
+    }
+    setUsername(name);
     setAvatarUrl(userInfo?.icon);
   }, [userInfo]);
 
@@ -129,6 +133,7 @@ export default function ProfileSetting({ open, onClose }: ProfileSettingProps) {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               placeholder="Enter your username"
+              maxLength={32}
             />
           </div>
 
