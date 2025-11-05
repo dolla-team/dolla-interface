@@ -4,7 +4,7 @@ import Popover, {
 } from "@/components/popover";
 import Timer from "../timer";
 import useTaskStore from "@/stores/use-task";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@/libs/router";
 import CloseIcon from "../close-icon";
 import clsx from "clsx";
 import FlipAvater from "./flip-avater";

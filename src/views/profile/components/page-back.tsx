@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@/libs/router";
 import clsx from "clsx";
 
 export default function PageBack({ className }: { className?: string }) {
@@ -10,7 +10,7 @@ export default function PageBack({ className }: { className?: string }) {
         className
       )}
       onClick={() => {
-        navigate(-1);
+        navigate(-1 as any);
       }}
     >
       <svg

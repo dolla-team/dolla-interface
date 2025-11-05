@@ -13,7 +13,7 @@ import clsx from "clsx";
 // import MarketsModal from "./components/more-markets/mobile/modal";
 import { useAuth } from "@/contexts/auth";
 import "@/libs/howl";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@/libs/router";
 import { ShareBtn, CloseBtn } from "./share-btn";
 import Loading from "./loading";
 import Wallet from "@/sections/wallet";

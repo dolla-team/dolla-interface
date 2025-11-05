@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import Empty from "./empty";
 import Button from "@/components/button/v2";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@/libs/router";
 import useNftsStore from "@/stores/use-nfts";
 import useTokenPrice from "@/hooks/use-token-price";
 import { useEffect, useMemo } from "react";

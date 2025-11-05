@@ -4,7 +4,7 @@ import useTokenPrice from "@/hooks/use-token-price";
 import { useEffect, useMemo, useState, useCallback } from "react";
 import { formatNumber } from "@/utils/format/number";
 import { AMOUNT, BASE_TOKEN } from "@/config/btc";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@/libs/router";
 import { getReAnchorPrice } from "@/utils/pool";
 import { useBtcCreateStore } from "@/stores/use-btc-create";
 import { motion } from "framer-motion";

@@ -3,7 +3,7 @@ import { useNftContext } from "../../context";
 import Avatar from "@/components/avatar";
 import SellerLevel from "@/components/seller-level";
 import { formatNumber } from "@/utils/format/number";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@/libs/router";
 import { getAnchorPrice } from "@/utils/pool";
 
 export default function MarketInfo() {

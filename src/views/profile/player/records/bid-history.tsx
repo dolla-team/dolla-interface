@@ -3,7 +3,7 @@ import GridTable, { GridTableAlign } from "@/components/grid-table";
 import dayjs from "dayjs";
 import Pagination from "@/components/pagination";
 import { formatNumber } from "@/utils/format/number";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@/libs/router";
 import useCopy from "@/hooks/use-copy";
 import { useAuth } from "@/contexts/auth";
 import { BASE_TOKEN } from "@/config/btc";

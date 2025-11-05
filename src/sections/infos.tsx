@@ -4,7 +4,7 @@ import clsx from "clsx";
 import axiosInstance from "@/libs/axios";
 import { formatAddress } from "@/utils/format/address";
 import useWalletStore from "@/stores/use-wallet";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@/libs/router";
 import { formatNumber } from "@/utils/format/number";
 import useIsWindowVisible from "@/hooks/use-is-window-visible";
 import Big from "big.js";

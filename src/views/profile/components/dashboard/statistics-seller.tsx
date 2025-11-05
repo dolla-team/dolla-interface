@@ -5,7 +5,7 @@ import { formatNumber } from "@/utils/format/number";
 import Big from "big.js";
 import { useAuth } from "@/contexts/auth";
 import { useMemo } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@/libs/router";
 import { getProfitFee } from "@/utils/pool";
 import Popover, {
   PopoverPlacement,

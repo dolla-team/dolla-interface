@@ -1,6 +1,6 @@
 import usePlayerRefund from "@/hooks/near/use-player-refund";
 import { formatNumber } from "@/utils/format/number";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@/libs/router";
 import Button from "@/components/button";
 import Market from "@/views/profile/components/market";
 import { EMarketStatus } from "@/views/profile/components/market-status";

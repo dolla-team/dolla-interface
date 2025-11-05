@@ -6,7 +6,7 @@ import { useMemo } from "react";
 import clsx from "clsx";
 import Nfts from "./nfts";
 import { useAuth } from "@/contexts/auth";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@/libs/router";
 
 export default function ListNFT() {
   const navigate = useNavigate();

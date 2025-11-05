@@ -1,5 +1,6 @@
 import AvatarAction from "./avatar-action";
-import { Outlet, useNavigate, useLocation } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
+import { useNavigate } from "@/libs/router";
 import Button from "@/components/button";
 import { useAuth } from "@/contexts/auth";
 import DollaEye from "@/components/dolla-eye";

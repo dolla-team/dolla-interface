@@ -21,7 +21,7 @@ import PageBack from "@/views/profile/components/page-back";
 import { AMOUNT } from "@/config/btc";
 import ConfirmModal from "./confirm-modal";
 import { useBtcCreateStore } from "@/stores/use-btc-create";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@/libs/router";
 import { BTC_CREATE_FORM_URL } from "@/config";
 
 export default function BTCCreate() {

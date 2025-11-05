@@ -1,5 +1,5 @@
+import { useNavigate } from "@/libs/router";
 import useCopy from "@/hooks/use-copy";
-import { useNavigate } from "react-router-dom";
 
 export function ShareBtn() {
   const { onCopy } = useCopy();
@@ -63,7 +63,7 @@ export function CloseBtn() {
     <button
       className="flex items-center button border border-[#3B3951] bg-[#FFFFFF1A] rounded-[8px] px-[10px] py-[6px] gap-[6px]"
       onClick={() => {
-        navigate(-1);
+        navigate(-1 as any);
       }}
     >
       <svg
