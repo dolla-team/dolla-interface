@@ -1,6 +1,7 @@
 import Tabs from "@/components/tabs";
 import { useState, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import { useNavigate } from "@/libs/router";
 import useIsBtc from "@/hooks/use-is-btc";
 import clsx from "clsx";
 import { useAuth } from "@/contexts/auth";

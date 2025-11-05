@@ -3,7 +3,7 @@ import NftCard from "@/components/nft-card";
 import usePoolList from "@/hooks/use-pool-list";
 import Empty from "@/components/empty";
 // import { useConfigStore } from "@/stores/use-config";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@/libs/router";
 import Loading from "@/components/icons/loading";
 
 // const defultTabCls =
@@ -20,7 +20,6 @@ export default function MoreMarkets() {
     // collection,
     // setCollection
   } = usePoolList({
-    pageLimit: 10,
     tokenStatus: 1
   });
   const navigate = useNavigate();

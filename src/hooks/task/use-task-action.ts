@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { getButtonText } from "./util";
 import useWalletStore from "@/stores/use-wallet";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@/libs/router";
 import useCopy from "../use-copy";
 import { useGlobalStore } from "@/stores/use-global";
 import useTaskComplete from "./use-task-complete";

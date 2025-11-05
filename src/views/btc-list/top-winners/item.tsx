@@ -3,7 +3,7 @@ import ItemLevel from "./item-level";
 import { formatAddress } from "@/utils/format/address";
 import { formatNumber } from "@/utils/format/number";
 import clsx from "clsx";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@/libs/router";
 import Big from "big.js";
 
 export default function TopWinnersItem({

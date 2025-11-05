@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@/libs/router";
 import useTaskStore from "@/stores/use-task";
 
 export default function Docs() {

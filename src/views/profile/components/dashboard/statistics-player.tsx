@@ -8,7 +8,7 @@ import useUserWinner from "@/hooks/user/use-user-winner";
 import useWalletStore from "@/stores/use-wallet";
 import useBalance from "@/hooks/near/use-balance";
 import { BASE_TOKEN, QUOTE_TOKEN } from "@/config/btc";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@/libs/router";
 import Popover, {
   PopoverPlacement,
   PopoverTrigger

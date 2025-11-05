@@ -1,5 +1,5 @@
 import Switch from "@/components/switch";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@/libs/router";
 
 export default function Tabs({ tab }: { tab: string }) {
   const navigate = useNavigate();

@@ -1,5 +1,5 @@
 import { useAuth } from "@/contexts/auth";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@/libs/router";
 import useIsBtc from "@/hooks/use-is-btc";
 import { useGlobalStore } from "@/stores/use-global";
 

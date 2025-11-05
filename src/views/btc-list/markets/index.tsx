@@ -3,7 +3,7 @@ import SortIcon from "./sort-icon";
 import Market from "./market";
 import usePoolList from "@/hooks/use-pool-list";
 import Loading from "@/components/icons/loading";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@/libs/router";
 import clsx from "clsx";
 import { BASE_TOKEN, AMOUNT } from "@/config/btc";
 import useTaskStore from "@/stores/use-task";

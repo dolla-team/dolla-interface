@@ -5,7 +5,7 @@ import Pagination from "@/components/pagination";
 import { formatNumber } from "@/utils/format/number";
 import { ESellerRecordsType } from "../hooks/use-create-pool-list";
 import useIsMobile from "@/hooks/use-is-mobile";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@/libs/router";
 import { BASE_TOKEN } from "@/config/btc";
 
 const Records = (props: any) => {
