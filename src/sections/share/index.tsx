@@ -7,22 +7,9 @@ import Button from "@/components/button";
 import { useShare } from "./use-share";
 import ModalClose from "@/components/button/modal-close";
 import clsx from "clsx";
-import { useNavigate } from "react-router-dom";
-
-const SHARE_OPTIONS: Record<string, any> = {
-  winner: {
-    title: "I am a title",
-    description: "I am a description"
-  },
-  pool: {
-    title: "I am a title",
-    description: "I am a description"
-  },
-  invite: {
-    title: "I am a title",
-    description: "I am a description"
-  }
-};
+import { useNavigate } from "@/libs/router";
+import { useGlobalStore } from "@/stores/use-global";
+import { BASE_TOKEN } from "@/config/btc";
 
 const DOWNLOAD_IMGS: Record<string, any> = {
   winner: {
@@ -70,9 +57,32 @@ export default function ShareModal({
   const navigate = useNavigate();
   const cardRef = useRef<HTMLDivElement>(null);
   const downloadCardRef = useRef<HTMLDivElement>(null);
+  const globalStore = useGlobalStore();
 
   const { generateAndDownload, generateAndShare, downloading, sharing } =
     useShare();
+
+  const getShareOptions = (type: string) => {
+    const shareUrl = `${window.location.origin}?code=${globalStore.code}`;
+    if (type === "winner") {
+      return {
+        description: " ",
+        title: `Probabilistic PvP duel! One dolla won ${data.amount} ${BASE_TOKEN.symbol} off the seller! [${shareUrl}]`
+      };
+    }
+    if (type === "pool") {
+      return {
+        description: " ",
+        title: `Probabilistic PvP duel! One dolla to win ${data.amount} ${BASE_TOKEN.symbol} off the seller. [${shareUrl}]`
+      };
+    }
+    if (type === "invite") {
+      return {
+        description: " ",
+        title: `Trade tokenized probability, today, on @dollamarket.Join me with my referral code: [${shareUrl}]`
+      };
+    }
+  };
 
   return (
     <Modal open={open} onClose={onClose}>
@@ -171,7 +181,7 @@ export default function ShareModal({
               generateAndShare(
                 cardRef.current as HTMLElement,
                 SHARE_IMGS[type],
-                SHARE_OPTIONS[type]
+                getShareOptions(type)
               );
             }}
             className={clsx(
