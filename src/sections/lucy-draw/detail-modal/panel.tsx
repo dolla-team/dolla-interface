@@ -186,23 +186,14 @@ const LuckyInfo = () => {
       trigger={PopoverTrigger.Hover}
       placement={PopoverPlacement.Top}
       content={
-        <div className="w-[440px] text-[#5E6B7D] text-[12px] font-[300] p-[10px] bg-white rounded-[10px] border border-[#E4E4E4]">
+        <div className="w-[298px] text-[#5E6B7D] text-[12px] font-[300] p-[16px] bg-white rounded-[10px] border border-[#E4E4E4]">
+          <div className="font-[500] text-black mb-[4px]">Lucky Draw</div>{" "}
           <div>
-            {" "}
-            A continuous platform event that runs in 24-hour cycles, drawing 10
-            lucky winners each round.
-          </div>{" "}
-          <div className="font-[500] text-black mt-[4px]">
-            Prize Distribution:
-          </div>{" "}
-          <div>1st tier – 1 winner shares 50 % of the prize pool</div>{" "}
-          <div>2nd tier – 3 winners share 30 % of the prize pool</div>{" "}
-          <div>3rd tier – 6 winners share 20 % of the prize pool</div>
-          <div className="font-[500] text-black mt-[4px]">Tickets:</div>
-          <div>
-            Tickets earned by players in the bid market are automatically
-            entered into the current round. Tickets can also be purchased
-            directly at 1 USDT per ticket.
+            Earn tickets from your bids for a chance to win part of the $X daily
+            pool. 10 winners every 24h — tickets reset each round. <br />
+            🥇 1 winner – $A <br />
+            🥈 3 winners – share $B <br />
+            🥉 6 winners – share $C
           </div>
         </div>
       }
