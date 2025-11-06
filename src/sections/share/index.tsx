@@ -66,20 +66,20 @@ export default function ShareModal({
     const shareUrl = `${window.location.origin}?code=${globalStore.code}`;
     if (type === "winner") {
       return {
-        description: " ",
-        title: `Probabilistic PvP duel! One dolla won ${data.amount} ${BASE_TOKEN.symbol} off the seller! [${shareUrl}]`
+        title: "Dolla",
+        description: `Probabilistic PvP duel! One dolla won ${data.amount} ${BASE_TOKEN.symbol} off the seller! [${shareUrl}]`
       };
     }
     if (type === "pool") {
       return {
-        description: " ",
-        title: `Probabilistic PvP duel! One dolla to win ${data.amount} ${BASE_TOKEN.symbol} off the seller. [${shareUrl}]`
+        title: "Dolla",
+        description: `Probabilistic PvP duel! One dolla to win ${data.amount} ${BASE_TOKEN.symbol} off the seller. [${shareUrl}]`
       };
     }
     if (type === "invite") {
       return {
-        description: " ",
-        title: `Trade tokenized probability, today, on @dollamarket.Join me with my referral code: [${shareUrl}]`
+        title: "Dolla",
+        description: `Trade tokenized probability, today, on @dollamarket.Join me with my referral code: [${shareUrl}]`
       };
     }
   };
