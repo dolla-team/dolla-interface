@@ -3,15 +3,15 @@ import PlayerDistribution from "./player-distribution";
 import { formatAddress } from "@/utils/format/address";
 import dayjs from "@/libs/dayjs";
 import { addThousandSeparator, formatNumber } from "@/utils/format/number";
-import useWinnerBidList from "../use-winner-bid-list";
 import { useMemo, useState } from "react";
 import useIsMobile from "@/hooks/use-is-mobile";
 import clsx from "clsx";
 import MultipleTag from "@/components/multiple-tag";
 import ProvablyFair from "@/sections/provably-fair";
+import { useBtcContext } from "../../context";
 
 export default function EndPanel({ data }: { data: any }) {
-  const { winnerBidList } = useWinnerBidList(data);
+  const { winnerBidList } = useBtcContext();
   const isMobile = useIsMobile();
   const [openProvablyFair, setOpenProvablyFair] = useState(false);
 

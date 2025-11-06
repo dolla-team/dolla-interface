@@ -167,7 +167,7 @@ const Content = () => {
       />
 
       <div className="absolute top-[10px] right-[30px] z-[10] flex items-center gap-[20px]">
-        <ShareBtn />
+        {(pool?.status === 1 || pool?.status === 2) && <ShareBtn />}
         <CloseBtn />
       </div>
       {!isMobile && <Header className="h-[214px]" />}
