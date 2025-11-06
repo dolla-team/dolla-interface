@@ -57,7 +57,12 @@ export default function Market({
       onClick={onClick}
     >
       {header}
-      <div className="relative z-[2] bg-white rounded-[18px] pt-[20px]">
+      <div
+        className={clsx(
+          "relative z-[2] bg-white rounded-[18px]",
+          from === "share" ? "pt-[16px]" : "pt-[20px]"
+        )}
+      >
         <div className="flex items-center justify-between px-[12px]">
           <div className="flex items-center gap-[8px]">
             {data?.reward_amount && (
@@ -88,10 +93,19 @@ export default function Market({
             </div>
           </div>
           <div>
-            <div className="text-[12px] text-[#5E6B7D] text-right mb-[4px]">
+            <div
+              className={clsx(
+                "text-right",
+                from === "share"
+                  ? "text-[14px] text-black mb-[10px] font-[500] py-[4px] px-[12px] rounded-[18px] bg-[#FFB700]"
+                  : "text-[12px] text-[#5E6B7D] mb-[4px]"
+              )}
+            >
               #{data?.pool_id}
             </div>
-            <MarketStatus value={data?.status} market={data} from={from} />
+            {from !== "share" && (
+              <MarketStatus value={data?.status} market={data} from={from} />
+            )}
           </div>
         </div>
 
@@ -134,7 +148,11 @@ export default function Market({
             <span
               className={clsx(
                 "",
-                isActive ? "text-[#FFE9B2]" : "text-[#ADBCCF]"
+                isActive
+                  ? "text-[#FFE9B2]"
+                  : from === "share"
+                  ? "text-[#5E6B7D]"
+                  : "text-[#ADBCCF]"
               )}
             >
               {data?.participants}
@@ -156,7 +174,11 @@ export default function Market({
             <span
               className={clsx(
                 "",
-                isActive ? "text-[#FFE9B2]" : "text-[#ADBCCF]"
+                isActive
+                  ? "text-[#FFE9B2]"
+                  : from === "share"
+                  ? "text-[#5E6B7D]"
+                  : "text-[#ADBCCF]"
               )}
             >
               {formatNumber(data?.accumulative_bids || 0, 0, true, {

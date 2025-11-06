@@ -12,6 +12,8 @@ import usePoolInfo from "@/hooks/use-pool-info";
 import { formatNumber } from "@/utils/format/number";
 import Big from "big.js";
 import { useAuth } from "@/contexts/auth";
+import useWinnerBidList from "./detail/use-winner-bid-list";
+
 export const CannonCoinsContext = createContext<any>({});
 
 export const CannonCoinsProvider = ({
@@ -33,6 +35,7 @@ export const CannonCoinsProvider = ({
   const [mobileMarketsOpen, setMobileMarketsOpen] = useState(false);
   const [filterVolume, setFilterVolume] = useState(0);
   const poolCachedRef = useRef<any>(null);
+  const { winnerBidList } = useWinnerBidList(pool);
 
   const onMobileMarketsClose = () => {
     setMobileMarketsOpen(false);
@@ -163,6 +166,7 @@ export const CannonCoinsProvider = ({
         setFlipStatus,
         coinsRef,
         bidResult,
+        winnerBidList,
         taskId,
         setTaskId,
         setSelectedMarket: (market: any) => {

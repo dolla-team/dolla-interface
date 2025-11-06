@@ -29,7 +29,7 @@ export default function useProvablyFair(txHash: string) {
 
       const transaction = apiData.txns[0];
 
-      const playGameLog = transaction.outcomes.logs[0].split("EVENT_JSON:")[1];
+      const playGameLog = transaction.outcomes?.logs[0].split("EVENT_JSON:")[1];
       const parsedPlayGameLog = parseHashPayload(playGameLog).data[0];
 
       const processedPlayGameLog =

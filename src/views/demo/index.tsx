@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import { usePrivy } from "@privy-io/react-auth";
-import useGameAction from "@/hooks/near/use-game-action";
 import Button from "@/components/button";
 import useToast from "@/hooks/use-toast";
 import UserShareCard from "@/sections/share/user";
-import { useDomToImage } from "@/sections/share/use-share";
-import PoolShareCard from "@/sections/share/pool";
+import { useShare } from "@/sections/share/use-share";
+import PoolShareCard from "@/sections/share/pool/download";
+import WinnerShareCard from "@/sections/share/winner/share";
+import useGameAction from "@/hooks/near/use-game-action";
 
 // Export Wallet Section Component
 function ExportWalletSection({ exportWallet }: { exportWallet: () => void }) {
@@ -61,7 +62,7 @@ function ExportWalletSection({ exportWallet }: { exportWallet: () => void }) {
 function ShareSection() {
   const cardRef = useRef<HTMLDivElement>(null);
 
-  const { generateAndDownload, generateAndShare } = useDomToImage();
+  const { generateAndDownload, generateAndShare } = useShare();
 
   // Handle image download
   const handleDownload = async () => {
@@ -84,28 +85,6 @@ function ShareSection() {
     }
   };
 
-  // Handle image sharing
-  const handleShare = async () => {
-    if (!cardRef.current) return;
-    try {
-      await generateAndShare(
-        cardRef.current,
-        {
-          format: "png",
-          quality: 2,
-          pixelRatio: 2,
-          backgroundColor: "#000000"
-        },
-        {
-          url: window.location.href
-        }
-      );
-    } catch (error) {
-      console.error("Share failed:", error);
-      alert("Share failed, please try again");
-    }
-  };
-
   return (
     <div className="space-y-4">
       <h2 className="text-xl font-semibold text-gray-800">Share</h2>
@@ -119,12 +98,6 @@ function ShareSection() {
           onClick={handleDownload}
         >
           Download Image
-        </Button>
-        <Button
-          className="w-full h-8 !bg-gray-600 text-white rounded text-sm border border-gray-600"
-          onClick={handleShare}
-        >
-          Share on Twitter
         </Button>
       </div>
     </div>
