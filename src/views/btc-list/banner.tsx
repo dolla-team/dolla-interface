@@ -35,8 +35,8 @@ export default function Banner() {
         </div>
       </div>
       <div className="absolute right-[40px] bottom-[0px] button group">
-        <div className="absolute right-0 bottom-0 w-[296px] h-[240px] bg-[url('/home/banner-seller-gray.png')] bg-cover bg-center opacity-100 group-hover:opacity-0 transition-opacity duration-300"></div>
-        <div className="absolute right-[-110px] bottom-0 w-[467px] h-[293px] bg-[url('/home/banner-seller.png')] bg-cover bg-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+        <div className="absolute right-0 bottom-0 w-[287px] h-[245px] bg-[url('/home/banner-seller-gray.png')] bg-cover bg-center opacity-100 group-hover:opacity-0 transition-opacity duration-300"></div>
+        <div className="absolute right-[-110px] bottom-0 w-[438px] h-[327px] bg-[url('/home/banner-seller.png')] bg-cover bg-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
         <div
           onClick={() => {
             navigate("/btc/create");
