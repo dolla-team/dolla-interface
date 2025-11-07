@@ -67,7 +67,7 @@ export default function useBid(
     //   onTxFail();
     // }, 3000);
 
-    return;
+    // return;
     if (!address) {
       onTxFail2();
       return;
