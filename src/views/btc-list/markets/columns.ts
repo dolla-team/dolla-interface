@@ -52,7 +52,12 @@ export const soldColumns = [
   {
     title: "Markets",
     dataIndex: "market",
-    width: "25%"
+    width: "20%"
+  },
+  {
+    title: "Lasted",
+    dataIndex: "lasted",
+    width: "10%"
   },
   {
     title: "Value",
@@ -67,21 +72,21 @@ export const soldColumns = [
     sort: true
   },
   {
-    title: "#Bidders",
-    dataIndex: "participants",
-    width: "10%",
-    sort: true
-  },
-  {
     title: "Fill level",
     dataIndex: "hitting",
     width: "20%",
     sort: true
   },
   {
-    title: "Status",
-    dataIndex: "status",
-    width: "15%",
-    align: "center"
+    title: "#Bidders",
+    dataIndex: "participants",
+    width: "10%",
+    sort: true
+  },
+  {
+    title: "Winner",
+    dataIndex: "winner",
+    width: "10%",
+    align: "right"
   }
 ];
