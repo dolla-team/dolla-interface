@@ -19,7 +19,8 @@ export default function HowItWorkModal({
             Dolla allows <span className="text-black font-[600]">anyone</span>{" "}
             to list assets through a{" "}
             <span className="text-black font-[600]">fair</span>, on-chain
-            <span className="text-black font-[600]">probabilistic market</span>.
+            <span className="text-black font-[600]"> probabilistic market</span>
+            .
           </div>
           <div className="text-[16px] text-[#5E6B7D] font-[300]">
             Every <span className="text-black font-[600]">$1 bid</span> = one
