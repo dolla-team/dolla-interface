@@ -1,8 +1,7 @@
 import SellerLevel from "@/components/seller-level";
-import columns from "./columns";
+import { liveColumns, soldColumns } from "./columns";
 import { formatAddress } from "@/utils/format/address";
 import { formatNumber } from "@/utils/format/number";
-import { getAnchorPrice } from "@/utils/pool";
 import ProgressBar from "./progress-bar";
 import BtcImg from "./btc-bg";
 import { useAuth } from "@/contexts/auth";
@@ -19,6 +18,28 @@ import Popover, {
   PopoverTrigger
 } from "@/components/popover";
 
+// Format relative time to short format (e.g., "9 days" -> "9d", "5 months" -> "5m")
+function formatRelativeTime(
+  date: string | number | Date,
+  compareDate?: string | number | Date
+): string {
+  const start = dayjs(date);
+  const end = compareDate ? dayjs(compareDate) : dayjs();
+  const diffSeconds = end.diff(start, "second");
+  const diffMinutes = end.diff(start, "minute");
+  const diffHours = end.diff(start, "hour");
+  const diffDays = end.diff(start, "day");
+  const diffMonths = end.diff(start, "month");
+  const diffYears = end.diff(start, "year");
+
+  if (diffYears > 0) return `${diffYears}y`;
+  if (diffMonths > 0) return `${diffMonths}m`;
+  if (diffDays > 0) return `${diffDays}d`;
+  if (diffHours > 0) return `${diffHours}h`;
+  if (diffMinutes > 0) return `${diffMinutes}min`;
+  return `${diffSeconds}s`;
+}
+
 export default function Market({
   data,
   onClick
@@ -30,6 +51,10 @@ export default function Market({
   const [progress, spilled, spilledPercent] = useMemo(() => {
     return getSpilledAmount(data);
   }, [data]);
+  const amountIndex = AMOUNT.indexOf(Number(data.amount));
+  const columns = useMemo(() => {
+    return data.status === 1 ? liveColumns : soldColumns;
+  }, [data.status]);
   return (
     <div
       onClick={onClick}
@@ -45,17 +70,23 @@ export default function Market({
           key={column.title}
           className={clsx(
             "flex items-center",
-            column.align === "center" && "justify-center"
+            column.align === "center" && "justify-center",
+            column.align === "right" && "justify-end"
           )}
           style={{ width: column.width }}
         >
           {column.dataIndex === "pool_id" && (
             <div className="text-[14px] text-black button">{data.pool_id}</div>
           )}
+          {column.dataIndex === "live" && (
+            <div className="text-[14px] text-black">
+              {formatRelativeTime(data.created_at)}
+            </div>
+          )}
           {column.dataIndex === "market" && (
             <div className="flex items-center gap-[16px]">
               <BtcImg
-                index={AMOUNT.indexOf(Number(data.amount))}
+                index={amountIndex}
                 id={data.pool_id}
                 amount={data.amount}
               />
@@ -81,8 +112,21 @@ export default function Market({
             </div>
           )}
           {column.dataIndex === "anchor_price" && (
-            <div className="text-[14px] text-black">
-              {formatNumber(getAnchorPrice(data?.anchor_price), 1, true, {
+            <div
+              className={clsx("text-[14px]", amountIndex !== 2 && "font-[500]")}
+              style={{
+                background:
+                  amountIndex === 0
+                    ? "linear-gradient(90deg, #BF8B29 0%, #FFA600 100%)"
+                    : amountIndex === 1
+                    ? "linear-gradient(90deg, #717A8D 0%, #7282B9 23.56%, #ACA1C4 100%)"
+                    : "#000",
+                backgroundClip: "text",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent"
+              }}
+            >
+              {formatNumber(data?.reward_usd || 0, 1, true, {
                 prefix: "$"
               })}
             </div>
@@ -99,14 +143,35 @@ export default function Market({
           )}
           {column.dataIndex === "hitting" && (
             <div className="w-full">
-              {spilled > 0 && (
-                <div className="text-[#2B3337] text-[12px] mb-[10px] font-[600]">
-                  Overfilled {formatNumber(spilled, 0, true, { prefix: "$" })}
+              {spilled > 0 ? (
+                <div className="text-[14px] mb-[10px] font-[500]">
+                  <span
+                    className="text-[#2B3337]"
+                    style={{
+                      background:
+                        "linear-gradient(90deg, #BF8B29 0%, #FFA600 100%)",
+                      backgroundClip: "text",
+                      WebkitBackgroundClip: "text",
+                      WebkitTextFillColor: "transparent"
+                    }}
+                  >
+                    Overfilled
+                  </span>
+                  <span className="text-[#22D25D]">
+                    {" "}
+                    +{formatNumber(spilled, 0, true, { prefix: "$" })}
+                  </span>
                 </div>
+              ) : (
+                <ProgressBar
+                  {...{
+                    progress,
+                    spilled,
+                    spilledPercent,
+                    status: data.status
+                  }}
+                />
               )}
-              <ProgressBar
-                {...{ progress, spilled, spilledPercent, status: data.status }}
-              />
             </div>
           )}
           {column.dataIndex === "status" && (

@@ -1,4 +1,4 @@
-import columns from "./columns";
+import { liveColumns, soldColumns } from "./columns";
 import SortIcon from "./sort-icon";
 import Market from "./market";
 import usePoolList from "@/hooks/use-pool-list";
@@ -17,6 +17,7 @@ import Pagination from "@/components/pagination";
 import Button from "@/components/button";
 import { BTC_CREATE_FORM_URL } from "@/config";
 import { useAuth } from "@/contexts/auth";
+import { useMemo } from "react";
 
 export default function Markets() {
   const navigate = useNavigate();
@@ -37,6 +38,10 @@ export default function Markets() {
     tokenStatus: 0,
     volume: allMarketsStore.tab
   });
+
+  const columns = useMemo(() => {
+    return allMarketsStore.status === "1" ? liveColumns : soldColumns;
+  }, [allMarketsStore.status]);
 
   return (
     <div
@@ -133,7 +138,8 @@ export default function Markets() {
             className={clsx(
               "flex items-center gap-[4px] ",
               column.sort && "cursor-pointer",
-              column.align === "center" && "justify-center"
+              column.align === "center" && "justify-center",
+              column.align === "right" && "justify-end"
             )}
             style={{ width: column.width }}
             onClick={() => {
@@ -144,7 +150,7 @@ export default function Markets() {
             }}
           >
             <span>{column.title}</span>
-            {column.dataIndex === "anchor_price" && <MarketInfo />}
+
             {column.sort && (
               <SortIcon
                 active={sortField === column.dataIndex}
