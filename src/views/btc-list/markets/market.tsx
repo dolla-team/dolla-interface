@@ -167,7 +167,7 @@ export default function Market({
           {column.dataIndex === "hitting" && (
             <div className="w-full">
               {spilled > 0 ? (
-                <div className="text-[14px] mb-[10px] font-[500]">
+                <div className="text-[14px] font-[500]">
                   <span
                     className="text-[#2B3337]"
                     style={{
