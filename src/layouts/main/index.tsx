@@ -120,7 +120,7 @@ export default function MainLayout() {
       <Infos />
       <div className="flex h-full">
         <div
-          className="h-[calc(100vh-60px)] overflow-y-auto relative z-[2] bg-white"
+          className="h-[calc(100vh-60px)] overflow-y-auto relative z-[2] bg-[#F0F0F0]"
           style={{
             width: globalStore.showUserInfo ? window.innerWidth - 294 : "100%",
             scrollBehavior: "smooth"
