@@ -47,7 +47,7 @@ export default function Recharge({
       </div>
       <div
         className={clsx(
-          "mt-[24px] p-[12px] rounded-[10px] border bg-white border-[#8A87AA4D] w-full",
+          "mt-[24px] p-[8px] rounded-[10px] border bg-white border-[#8A87AA4D] w-full",
           tokenPanelClassName
         )}
       >
@@ -96,6 +96,10 @@ export default function Recharge({
           </svg>
           <span className="text-[14px] text-white">Copy Deposit Address</span>
         </Button>
+        <div className="text-[12px] text-[#39A883] text-center pt-[6px]">
+          <div>Please reserve fees for network cost</div>
+          <div>$0.5</div>
+        </div>
       </div>
     </div>
   );

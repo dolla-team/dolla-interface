@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import axiosInstance from "@/libs/axios";
 import { useAuth } from "@/contexts/auth";
-import { getAnchorPrice } from "@/utils/pool";
 import Big from "big.js";
 import { formatNumber } from "@/utils/format/number";
 import { useDebounceFn } from "ahooks";
@@ -39,7 +38,7 @@ export default function usePoolList(props?: {
         setLoading(true);
         setPoolList([]);
       }
-      const limit = allmarketsStore.status === "1" ? 20 : 10;
+      const limit = allmarketsStore.status === "1" ? 100 : 10;
       const res = await axiosInstance.get(
         `/api/v1/pool/list?limit=${limit}&offset=${
           pageRef.current * limit
