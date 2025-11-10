@@ -24,7 +24,7 @@ export default function Routes({
       {show && (
         <motion.div
           initial={{ opacity: 0, height: 0 }}
-          animate={{ opacity: 1, height: 120 }}
+          animate={{ opacity: 1, height: 110 }}
           exit={{ opacity: 0, height: 0 }}
           className="border border-[#373A53] rounded-[12px] mt-[10px]"
         >
@@ -44,17 +44,7 @@ export default function Routes({
             <Fee
               name="Route"
               valueClassName="text-[#3B3951]"
-              value={
-                <div className="flex items-center gap-2">
-                  <img
-                    src="/near-intents-logo.png"
-                    alt={name}
-                    width={80}
-                    height={20}
-                  />
-                  <span>{routerStr}</span>
-                </div>
-              }
+              value={routerStr}
             />
           </div>
         </motion.div>

@@ -8,7 +8,7 @@ export default function BannerCoin() {
       height="142"
       viewBox="0 0 155 142"
       fill="none"
-      className="absolute top-[-30px] right-[372px] z-[10]"
+      className="absolute top-[-20px] z-[10]"
       animate={{
         y: [0, -10, 0]
       }}

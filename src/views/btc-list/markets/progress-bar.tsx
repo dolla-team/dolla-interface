@@ -19,21 +19,17 @@ export default function ProgressBar({
         Number(status) !== 1 && "grayscale"
       )}
     >
-      <div
-        className={clsx(
-          "h-[10px] w-[110px] rounded-[30px] bg-[#0000001A] p-[2px]"
-        )}
-      >
+      <div className={clsx("h-[10px] w-[110px] rounded-[30px] bg-[#00000033]")}>
         <div
           className={clsx(
-            "rounded-[10px] h-[6px] relative",
-            "bg-[linear-gradient(to_right,#FFE9B2_0%,#FFC42F_47.6%,#F88E51_100%)]"
+            "rounded-[10px] h-full relative",
+            progress > 80 ? "bg-[#FFB700]" : "bg-[#22D25D]"
           )}
           style={{
             width: `${Math.min(progress, 100)}%`
           }}
         >
-          {progress > 0 && spilled <= 0 && Number(status) === 1 && (
+          {progress > 80 && spilled <= 0 && Number(status) === 1 && (
             <Particles />
           )}
         </div>

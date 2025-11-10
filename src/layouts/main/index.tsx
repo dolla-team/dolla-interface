@@ -20,6 +20,7 @@ import ProfileSetting from "@/views/profile/components/profile-setting";
 import useUserInfoStore from "@/stores/use-user-info";
 import useRegisterCode from "@/hooks/user/use-register-code";
 import LucyDrawHistory from "@/sections/lucy-draw/history";
+import HowItWork from "@/sections/how-it-work";
 
 export default function MainLayout() {
   const { userInfo, login } = useAuth() || {};
@@ -138,6 +139,7 @@ export default function MainLayout() {
           userInfoStore.set({ showSetting: false });
         }}
       />
+      <HowItWork />
       <LucyDrawHistory />
     </div>
   );
