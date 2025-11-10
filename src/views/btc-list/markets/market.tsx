@@ -231,7 +231,7 @@ export default function Market({
                     color: textColor
                   }}
                 >
-                  {formatNumber(data.winner_profit_ratio, 0, true)}
+                  {formatNumber(data.winner_profit_ratio, 0, true)}x
                 </div>
               </div>
             </div>
