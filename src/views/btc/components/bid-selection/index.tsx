@@ -13,8 +13,9 @@ export default function BidSelection({
   const { bids, setBids, flipStatus, pool } = useBtcContext();
 
   const onChangeBids = (bids: number) => {
-    if (disabled) return;
-    setBids(bids);
+    if (flipStatus === 0 || flipStatus === 6) {
+      setBids(bids);
+    }
   };
 
   const props = {

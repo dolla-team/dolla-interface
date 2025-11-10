@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@/libs/router";
 import ShareModal from "@/sections/share";
 import { useBtcContext } from "./context";
 import { useMemo, useState } from "react";

@@ -4,78 +4,52 @@ export const FlipCoinBg = ({ size, className }: any) => {
       xmlns="http://www.w3.org/2000/svg"
       width={size}
       height={size}
-      viewBox="0 0 214 214"
+      viewBox="0 0 194 194"
       fill="none"
       className={className}
     >
       <circle
-        cx="106.801"
-        cy="107.038"
-        r="104.731"
-        fill="#FFD364"
-        stroke="#DD9000"
-        strokeWidth="3"
+        cx="96.9936"
+        cy="96.9936"
+        r="95.9936"
+        fill="url(#paint0_linear_5699_38975)"
+        stroke="#107257"
+        stroke-width="2"
       />
-      <g filter="url(#filter0_i_77_3)">
-        <circle
-          cx="106.801"
-          cy="107.038"
-          r="82.6242"
-          fill="url(#paint0_linear_77_3)"
-        />
-      </g>
       <circle
-        cx="106.801"
-        cy="107.038"
-        r="81.1242"
-        stroke="#DD9000"
-        strokeWidth="3"
+        cx="96.8184"
+        cy="97.0293"
+        r="75.4395"
+        fill="url(#paint1_linear_5699_38975)"
+        stroke="#85FFDE"
+        stroke-width="3"
+      />
+      <path
+        d="M106.97 100.917C106.413 100.959 103.536 101.132 97.1183 101.132C92.0139 101.132 88.3898 100.978 87.1183 100.917C67.3921 100.042 52.6682 96.5808 52.6682 92.4361C52.6682 88.2915 67.3921 84.8345 87.1183 83.9457V97.4696C88.4084 97.5632 92.1021 97.783 97.2065 97.783C103.332 97.783 106.399 97.5257 106.951 97.4743V83.955C126.636 84.8392 141.327 88.3008 141.327 92.4361C141.327 96.5714 126.64 100.033 106.951 100.913L106.97 100.917ZM106.97 82.5563V70.4545H134.441V52H59.6473V70.4545H87.1137V82.5516C64.7889 83.5855 48 88.0435 48 93.3858C48 98.728 64.7889 103.181 87.1137 104.22V143H106.965V104.206C129.239 103.172 146 98.7186 146 93.3811C146 88.0435 129.253 83.5901 106.965 82.5516L106.97 82.5563Z"
+        fill="white"
       />
       <defs>
-        <filter
-          id="filter0_i_77_3"
-          x="24.1768"
-          y="24.4134"
-          width="165.248"
-          height="165.248"
-          filterUnits="userSpaceOnUse"
-          colorInterpolationFilters="sRGB"
-        >
-          <feFlood floodOpacity="0" result="BackgroundImageFix" />
-          <feBlend
-            mode="normal"
-            in="SourceGraphic"
-            in2="BackgroundImageFix"
-            result="shape"
-          />
-          <feColorMatrix
-            in="SourceAlpha"
-            type="matrix"
-            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-            result="hardAlpha"
-          />
-          <feOffset dx="1" dy="3" />
-          <feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1" />
-          <feColorMatrix
-            type="matrix"
-            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"
-          />
-          <feBlend
-            mode="normal"
-            in2="shape"
-            result="effect1_innerShadow_77_3"
-          />
-        </filter>
         <linearGradient
-          id="paint0_linear_77_3"
-          x1="24.1768"
-          y1="107.038"
-          x2="189.425"
-          y2="107.038"
+          id="paint0_linear_5699_38975"
+          x1="96.9936"
+          y1="0"
+          x2="96.9936"
+          y2="193.987"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stopColor="#FFCE52" />
-          <stop offset="1" stopColor="#FFE9B2" />
+          <stop stop-color="#4AD9B2" />
+          <stop offset="1" stop-color="#50AF95" />
+        </linearGradient>
+        <linearGradient
+          id="paint1_linear_5699_38975"
+          x1="96.8184"
+          y1="21.5898"
+          x2="96.8184"
+          y2="172.469"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop stop-color="#50AF95" />
+          <stop offset="1" stop-color="#4AD9B2" />
         </linearGradient>
       </defs>
     </svg>
