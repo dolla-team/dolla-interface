@@ -1,4 +1,8 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  Navigate,
+  RouterProvider
+} from "react-router-dom";
 import { lazy, useEffect, useState } from "react";
 import WalletProvider from "./contexts/wallet";
 import { AuthProvider } from "./contexts/auth";
@@ -26,6 +30,7 @@ const LazyBtc = lazy(() => import("./views/btc/index"));
 const LazyTerms = lazy(() => import("./views/terms"));
 const LazyPolicy = lazy(() => import("./views/policy"));
 const LazyDocs = lazy(() => import("./views/docs"));
+const LazyTemp = lazy(() => import("./views/temp"));
 
 import("react-toastify/dist/ReactToastify.css");
 
@@ -98,6 +103,14 @@ const router = createBrowserRouter([
   {
     path: "/docs",
     element: <LazyDocs />
+  },
+  {
+    path: "/temp",
+    element: <LazyTemp />
+  },
+  {
+    path: "*",
+    element: <Navigate to="/" replace />
   }
 ]);
 
