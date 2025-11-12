@@ -26,28 +26,32 @@ export default function HowItWorkModal({
             Every <span className="text-black font-[600]">$1 bid</span> = one
             verifiable chance to win the entire asset from the seller.
           </div>
-          <div className="rounded-[16px] bg-black p-[16px] mt-[16px]">
+          <div
+            className="rounded-[16px] p-[16px] mt-[16px] w-full"
+            style={{
+              background:
+                "radial-gradient(36.09% 100% at 0% 0%, #FFC42F 0%, rgba(255, 196, 47, 0.00) 100%), #F5F5F5"
+            }}
+          >
             <div className="flex gap-[4px]">
-              <span className="text-[16px] text-[#FFC42F] font-[600] w-[80px] shrink-0">
+              <span className="text-[16px] font-[600] w-[80px] shrink-0">
                 Step 1.{" "}
               </span>
-              <span className="text-[16px] text-white font-[300]">
-                Pick a market you like
-              </span>
+              <span className="text-[16px]">Pick a market you like</span>
             </div>
             <div className="flex gap-[4px] mt-[10px]">
-              <span className="text-[16px] text-[#FFC42F] font-[600] w-[80px] shrink-0">
+              <span className="text-[16px] font-[600] w-[80px] shrink-0">
                 Step 2.{" "}
               </span>
-              <span className="text-[16px] text-white font-[300]">
+              <span className="text-[16px]">
                 Place your bid — each bid = 1 USD = one verifiable chance
               </span>
             </div>
             <div className="flex gap-[4px] mt-[10px]">
-              <span className="text-[16px] text-[#FFC42F] font-[600] w-[80px] shrink-0">
+              <span className="text-[16px] font-[600] w-[80px] shrink-0">
                 Step 3.{" "}
               </span>
-              <span className="text-[16px] text-white font-[300]">
+              <span className="text-[16px]">
                 If you win, you receive the asset instantly. If not, you can bid
                 again or explore other markets
               </span>
@@ -64,18 +68,18 @@ export default function HowItWorkModal({
             No hidden odds, no unfair advantage — just mathematically fair
             markets for everyone.
           </div>
-          <div className="flex justify-center relative mt-[10px]">
-            <button
-              className="button text-[#2B3337] absolute left-0 top-[10px]"
+          <div className="flex justify-center relative mt-[20px] gap-[20px]">
+            <Button
+              className="w-[196px] h-[50px] text-[#2B3337] border border-black"
               onClick={() => {
                 window.open(window.location.origin + "/docs", "_blank");
               }}
             >
               Read more
-            </button>
+            </Button>
             <Button
               onClick={() => setShowModal(false)}
-              className="w-[208px] h-[40px] rounded-[12px] !text-[14px] !text-black !font-[600] !bg-radial-[50%_50%_at_50%_50%,_#FFB700_0%,_#FFCE54_100%] shadow-[0_0_10px_0_#FFCE52]"
+              className="w-[370px] h-[50px] rounded-[12px] !text-[14px] !text-black !font-[600] !bg-radial-[50%_50%_at_50%_50%,_#FFB700_0%,_#FFCE54_100%]"
             >
               I’m ready to win
             </Button>
