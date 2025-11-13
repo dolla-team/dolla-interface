@@ -17,7 +17,8 @@ import Pagination from "@/components/pagination";
 import Button from "@/components/button";
 import { BTC_CREATE_FORM_URL } from "@/config";
 import { useAuth } from "@/contexts/auth";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
+import { useBidResultSubscription } from "@/hooks/use-websocket";
 
 export default function Markets() {
   const navigate = useNavigate();
@@ -26,6 +27,7 @@ export default function Markets() {
   const allMarketsStore = useAllMarketsStore();
   const {
     poolList,
+    pools,
     loading,
     sortField,
     sortOrder,
@@ -42,6 +44,29 @@ export default function Markets() {
   const columns = useMemo(() => {
     return allMarketsStore.status === "1" ? liveColumns : soldColumns;
   }, [allMarketsStore.status]);
+
+  // Subscribe to WebSocket bid result updates
+  useBidResultSubscription((data: any) => {
+    if (!data?.data?.length) return;
+    data.data.forEach((item: any) => {
+      if (!item?.pool_id) return;
+      const poolId = item.pool_id;
+      const currentPool = allMarketsStore.pools[poolId];
+
+      if (currentPool) {
+        // Update pool data with new bid result
+        allMarketsStore.set({
+          pools: {
+            ...allMarketsStore.pools,
+            [poolId]: {
+              ...currentPool,
+              ...item // Merge new data into existing pool data
+            }
+          }
+        });
+      }
+    });
+  });
 
   return (
     <div
@@ -168,32 +193,32 @@ export default function Markets() {
         ) : poolList.length === 0 ? (
           <Empty className="!py-[50px]" text="No Data" />
         ) : (
-          poolList.map((item: any) => (
-            <Market
-              key={item.id}
-              data={item}
-              onClick={() => {
-                navigate(`/btc/detail/${item.pool_id}`);
-              }}
-            />
-          ))
+          poolList
+            .filter((item: any) => pools[item])
+            .map((item: any) => (
+              <Market
+                key={item}
+                data={pools[item]}
+                onClick={() => {
+                  navigate(`/btc/detail/${item}`);
+                }}
+              />
+            ))
         )}
       </div>
-      {allMarketsStore.status !== "1" && (
-        <div className="flex justify-end items-center pt-[10px]">
-          <Pagination
-            current={pageRef.current + 1}
-            hasNextPage={hasMore}
-            onNext={() => {
-              onNextPage(1);
-            }}
-            onPrev={() => {
-              console.log("prev");
-              onNextPage(-1);
-            }}
-          />
-        </div>
-      )}
+      <div className="flex justify-end items-center pt-[10px]">
+        <Pagination
+          current={pageRef.current + 1}
+          hasNextPage={hasMore}
+          onNext={() => {
+            onNextPage(1);
+          }}
+          onPrev={() => {
+            console.log("prev");
+            onNextPage(-1);
+          }}
+        />
+      </div>
     </div>
   );
 }

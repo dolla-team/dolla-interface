@@ -109,7 +109,7 @@ export default function AnimatedCounter({
     if (decimals > 0) {
       return formatNumber(Number(latest.toFixed(decimals)), decimals);
     }
-    return formatNumber(Math.floor(latest), 0);
+    return formatNumber(Math.round(latest), 0);
   });
 
   const [shouldAnimateScale, setShouldAnimateScale] = useState(false);

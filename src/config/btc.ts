@@ -1,29 +1,33 @@
-export const BASE_TOKEN: Record<string, any> = {
-  // ETH
-  // assetId: "nep141:eth.bridge.near",
-  // address: "eth.bridge.near",
-  // decimals: 18,
-  // chain: "near",
-  // name: "ETH",
-  // symbol: "ETH",
-  // icon: "/tokens/eth.png",
-  // pointsIcon: "/tokens/eth.png",
-  // isBaseToken: true,
-  // minDepositAmount: "0.001"
+import { IS_TEST } from ".";
 
-  // BTC
-  assetId: "nep141:nbtc.bridge.near",
-  address: "nbtc.bridge.near",
-  decimals: 8,
-  chain: "near",
-  name: "BTC",
-  symbol: "BTC",
-  icon: "/tokens/btc.png",
-  pointsIcon: "/tokens/btc.png",
-  isBaseToken: true,
-  minDepositAmount: "0.000001",
-  maxDepositAmount: "1"
-};
+export const BASE_TOKEN: Record<string, any> = IS_TEST
+  ? {
+      assetId: "nep141:eth.bridge.near",
+      address: "eth.bridge.near",
+      decimals: 18,
+      chain: "near",
+      name: "ETH",
+      symbol: "ETH",
+      icon: "/tokens/eth.png",
+      pointsIcon: "/tokens/eth.png",
+      isBaseToken: true,
+      minDepositAmount: "0.001",
+      maxDepositAmount: "1"
+    }
+  : {
+      // BTC
+      assetId: "nep141:nbtc.bridge.near",
+      address: "nbtc.bridge.near",
+      decimals: 8,
+      chain: "near",
+      name: "BTC",
+      symbol: "BTC",
+      icon: "/tokens/btc.png",
+      pointsIcon: "/tokens/btc.png",
+      isBaseToken: true,
+      minDepositAmount: "0.000001",
+      maxDepositAmount: "1"
+    };
 
 export const QUOTE_TOKEN: Record<string, any> = {
   assetId: "nep141:usdt.tether-token.near",
@@ -40,6 +44,6 @@ export const QUOTE_TOKEN: Record<string, any> = {
 
 export const PAID_TOKEN = QUOTE_TOKEN;
 
-export const AMOUNT = [0.1, 0.01, 0.001];
+export const AMOUNT = IS_TEST ? [1, 0.1, 0.01] : [0.1, 0.01, 0.001];
 
 export const BTC_DEPOSIT_AMOUNT = "20000";

@@ -9,15 +9,9 @@ import { useAllMarketsStore } from "@/stores/use-all-markets";
 export default function usePoolList(props?: {
   isScrollList?: boolean;
   tokenStatus?: number;
-  onFirstPageLoad?(list: any): void;
   volume?: number;
 }) {
-  const {
-    isScrollList,
-    onFirstPageLoad,
-    tokenStatus = 0,
-    volume = 0
-  } = props ?? {};
+  const { tokenStatus = 0, volume = 0 } = props ?? {};
   const allmarketsStore = useAllMarketsStore();
   const [poolList, setPoolList] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -28,8 +22,6 @@ export default function usePoolList(props?: {
   const pageRef = useRef(0);
   const { userInfo } = useAuth();
 
-  const cachedList = useRef<any[]>([]);
-
   const onQueryPoolList = async (withoutLoading = false) => {
     try {
       clearTimeout(window.allMarketsTimer);
@@ -38,7 +30,7 @@ export default function usePoolList(props?: {
         setLoading(true);
         setPoolList([]);
       }
-      const limit = allmarketsStore.status === "1" ? 100 : 10;
+      const limit = allmarketsStore.status === "1" ? 10 : 10;
       const res = await axiosInstance.get(
         `/api/v1/pool/list?limit=${limit}&offset=${
           pageRef.current * limit
@@ -49,7 +41,9 @@ export default function usePoolList(props?: {
         }${volume ? "&volume=" + volume : ""}`
       );
 
-      const list = res.data.data.list.map((item: any) => {
+      let pool_ids: number[] = [];
+      let _pools: { [key: number]: any } = {};
+      res.data.data.list.forEach((item: any) => {
         const reward_amount = item.reward_amount || 0;
         const decimals = item.reward_token_info?.[0]?.decimals || 1;
         const _an = Big(reward_amount).div(10 ** decimals);
@@ -60,22 +54,12 @@ export default function usePoolList(props?: {
           amount: _a
         };
 
-        return market;
+        pool_ids.push(item.pool_id);
+        _pools[item.pool_id] = market;
       });
 
-      if (isScrollList) {
-        setPoolList((prev) =>
-          pageRef.current === 0 ? list : [...prev, ...list]
-        );
-      } else {
-        setPoolList(list);
-      }
-      if (pageRef.current === 0) {
-        onFirstPageLoad?.(list);
-      }
-
-      cachedList.current =
-        pageRef.current === 0 ? list : [...cachedList.current, ...list];
+      setPoolList(pool_ids);
+      allmarketsStore.set({ pools: _pools });
 
       setHasMore(res.data.data.has_next_page);
 
@@ -93,7 +77,6 @@ export default function usePoolList(props?: {
   const { run: onQueryPoolListDebounced } = useDebounceFn(
     () => {
       pageRef.current = 0;
-      cachedList.current = [];
       setPoolList([]);
       onQueryPoolList();
     },
@@ -140,6 +123,7 @@ export default function usePoolList(props?: {
 
   return {
     poolList,
+    pools: allmarketsStore.pools,
     loading,
     onQueryPoolList,
     onNextPage,
