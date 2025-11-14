@@ -31,7 +31,7 @@ export default function Banner() {
           }}
           className="absolute left-[102px] bottom-[16px] z-[3] w-[152px] h-[40px] bg-linear-to-b from-[#37EFA8] to-[#5BF5BA] flex items-center justify-center rounded-[12px] text-[14px] text-[#2B3337] font-[600] group-hover:animate-[pulse-scale_1s_ease-in-out_infinite]"
         >
-          Bidder
+          Bid
           <div className="w-full h-full rounded-[12px] bg-black/30 absolute left-0 top-0 opacity-100 group-hover:opacity-0 transition-opacity duration-300" />
         </div>
       </div>
@@ -45,7 +45,7 @@ export default function Banner() {
           }}
           className="absolute right-[60px] bottom-[16px] z-[3] w-[152px] h-[40px] bg-linear-to-b from-[#FFB700] to-[#FFCE54] flex items-center justify-center rounded-[12px] text-[14px] text-[#2B3337] font-[600] group-hover:animate-[pulse-scale_1s_ease-in-out_infinite]"
         >
-          Seller
+          Sell
           <div className="w-full h-full rounded-[12px] bg-black/30 absolute left-0 top-0 opacity-100 group-hover:opacity-0 transition-opacity duration-300" />
         </div>
       </div>
