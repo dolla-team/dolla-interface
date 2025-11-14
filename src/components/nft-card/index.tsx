@@ -46,13 +46,9 @@ export default function NftCard({
         <div className="w-full h-full rounded-[12px] absolute top-0 left-0 z-[10] bg-[#00000080]">
           <div className="flex justify-center mt-[100px]">
             <div className="p-[2px] pr-[10px] min-w-[100px] inline-flex gap-[3px] rounded-[12px] bg-[#FFFFFF1A] backdrop-blur-[10px]">
-              <Avatar
-                address={data.winner_user_info?.user}
-                email={data.winner_user_info?.email}
-                size={24}
-              />
+              <Avatar address={data.winner_user_info?.user} size={24} />
               <span className="text-[12px] font-semibold text-white">
-                {data.winner_user_info?.email ||
+                {data.winner_user_info?.name ||
                   formatAddress(data.winner_user_info?.user)}
               </span>
             </div>

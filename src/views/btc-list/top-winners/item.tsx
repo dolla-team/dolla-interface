@@ -37,7 +37,6 @@ export default function TopWinnersItem({
         <div className="w-[40px] h-[40px] p-[2px] rounded-full bg-linear-to-b from-[#FFE093] via-[#FFECBC] to-[#DEAF37]">
           <Avatar
             address={data?.user_info?.user}
-            email={data?.user_info?.email_desensitization}
             src={data?.user_info?.icon}
             size={36}
             className="rounded-full text-[18px]"

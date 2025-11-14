@@ -34,7 +34,6 @@ export default function MWinnerCard({
               <Avatar
                 size={32}
                 address={data?.user_info?.user}
-                email={data?.user_info?.show_email}
                 src={data?.user_info?.icon}
                 className="rounded-full text-[16px]"
               />
@@ -60,7 +59,7 @@ export default function MWinnerCard({
               )}
             </div>
             <div className="text-[14px] text-white ml-[20px]">
-              {data?.pool_info?.winner_user_email ||
+              {data?.pool_info?.winner_user_name ||
                 formatAddress(data?.pool_info?.winner_user)}{" "}
               just won
             </div>

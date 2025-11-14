@@ -94,8 +94,6 @@ export default function EndPanel({ data }: { data: any }) {
               <Avatar
                 size={150}
                 src={data.winner_user_info?.icon}
-                // email={data.winner_user_info?.email_desensitization}
-                email={"A"}
                 address={data.winner_user_info?.user}
                 className="rounded-full text-[48px] font-[500]"
               />
@@ -135,7 +133,6 @@ export default function EndPanel({ data }: { data: any }) {
                     <Avatar
                       size={32}
                       src={data.user_info?.icon}
-                      email={data.user_info?.email_desensitization}
                       address={data.user_info?.user}
                       className="text-[16px]"
                     />
@@ -258,7 +255,6 @@ const ProgressAvatar = ({
       <Avatar
         size={26}
         src={data.winner_user_info?.icon}
-        email={data.winner_user_info?.email_desensitization}
         address={data.winner_user_info?.user}
         className="text-[12px] !rounded-[4px]"
       />

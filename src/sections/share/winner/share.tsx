@@ -77,7 +77,6 @@ export default function WinnerShareCard({
           size={67}
           src={data.winner_user?.icon}
           address={data.winner_user?.user}
-          email={data.winner_user?.email}
         />
         <div className="text-[16px] text-white font-[600] leading-[16px] mt-[12px]">
           {data.winner_user?.name || formatAddress(data.winner_user?.user)}

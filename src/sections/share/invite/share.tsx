@@ -31,12 +31,7 @@ export default function InviteShareCard({ cardRef }: any) {
       </div>
       <div className="flex items-center justify-between pl-[30px] pr-[20px] mt-[30px]">
         <div className="flex items-center gap-[14px]">
-          <Avatar
-            size={60}
-            src={userInfo?.icon}
-            email={userInfo?.show_email}
-            address={userInfo?.user}
-          />
+          <Avatar size={60} src={userInfo?.icon} address={userInfo?.user} />
           <div>
             <div className="flex items-center gap-[6px]">
               <div className="text-[16px] text-white font-[600] max-w-[100px] truncate">

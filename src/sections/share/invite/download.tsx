@@ -25,12 +25,7 @@ export default function InviteDownloadCard({ cardRef }: any) {
           </span>
         </div>
         <div className="flex items-center mx-auto mt-[10px] gap-[8px] rotate-[-3.462deg] w-[242px]">
-          <Avatar
-            size={60}
-            src={userInfo?.icon}
-            email={userInfo?.show_email}
-            address={userInfo?.user}
-          />
+          <Avatar size={60} src={userInfo?.icon} address={userInfo?.user} />
           <div>
             <div className="flex items-center gap-[6px]">
               <div className="text-[16px] text-white font-[600] max-w-[100px] truncate">

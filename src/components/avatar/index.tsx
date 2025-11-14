@@ -10,7 +10,6 @@ export default function Avatar({
 }: {
   size: number;
   src?: string;
-  email?: string;
   address?: string;
   active?: boolean;
   className?: string;

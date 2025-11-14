@@ -98,7 +98,6 @@ export default function EndPanel({ data }: { data: any }) {
               <Avatar
                 size={80}
                 address={data.winner_user_info?.user}
-                email={data.winner_user_info?.show_email}
                 src={data.winner_user_info?.icon}
                 className="rounded-full border-[3px] border-[#DD9000] text-[24px]"
               />
@@ -120,7 +119,7 @@ export default function EndPanel({ data }: { data: any }) {
               </button> */}
             </div>
             <div className="text-white text-center text-[16px] font-[DelaGothicOne] mt-[10px]">
-              {data.winner_user_info?.email ||
+              {data.winner_user_info?.name ||
                 formatAddress(data.winner_user_info?.user)}
             </div>
             <div className="flex items-center justify-between mt-[20px]">
@@ -268,7 +267,6 @@ const ProgressAvatar = ({
       <Avatar
         size={26}
         address={data.winner_user_info?.user}
-        email={data.winner_user_info?.show_email}
         src={data.winner_user_info?.icon}
         className="text-[14px]"
       />

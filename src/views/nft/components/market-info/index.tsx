@@ -26,7 +26,6 @@ export default function MarketInfo() {
               <Avatar
                 size={35}
                 address={pool?.user_info?.address}
-                email={pool?.user_info?.show_email}
                 src={pool?.user_info?.icon}
                 className="rounded-[12px] text-[16px]"
               />

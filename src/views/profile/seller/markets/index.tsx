@@ -145,7 +145,6 @@ const MarketItem = (props: any) => {
       pool_user_info: {
         icon: userInfo.icon,
         name: userInfo.name,
-        email_desensitization: userInfo.show_email,
         user: userInfo.user
       },
       participants: order.participants
