@@ -6,7 +6,7 @@ interface GlobalState {
   playBgm: boolean;
   code: string;
   showUserInfo: boolean;
-  email: string;
+  isInWhitelist: boolean;
   set: (params: any) => void;
   init: () => void;
 }
@@ -16,7 +16,7 @@ const initialState = {
   playBgm: true,
   code: "",
   showUserInfo: false,
-  email: ""
+  isInWhitelist: false
 } as GlobalState;
 
 export const useGlobalStore = create(
@@ -26,13 +26,13 @@ export const useGlobalStore = create(
       playBgm: true,
       code: "",
       showUserInfo: false,
-      email: "",
+      isInWhitelist: false,
       set: (params) => set(() => ({ ...params })),
       init: () => set(() => initialState)
     }),
     {
       name: "_global",
-      version: 0.1,
+      version: 0.11,
       storage: createJSONStorage(() => localStorage)
     }
   )
