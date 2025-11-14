@@ -221,9 +221,11 @@ export default function VerifyEmail() {
                 </svg>
               </button>
             </Button>
-            <div className="w-[300px] h-[101px] absolute top-0 left-0 pt-[56px] px-[4px] rounded-[10px] bg-[#FFC42F33] text-center text-[14px] text-[#FFC42F] font-[400px] leading-[120%]">
-              Sorry, your account is temporarily unavailable
-            </div>
+            {!globalStore.isInWhitelist && (
+              <div className="w-[300px] h-[101px] absolute top-0 left-0 pt-[56px] px-[4px] rounded-[10px] bg-[#FFC42F33] text-center text-[14px] text-[#FFC42F] font-[400px] leading-[120%]">
+                Sorry, your account is temporarily unavailable
+              </div>
+            )}
           </div>
         ) : (
           <Button
