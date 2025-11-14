@@ -66,8 +66,6 @@ export default function VerifyEmail() {
     }
   };
 
-  console.log(user);
-
   useEffect(() => {
     if (!user) {
       return;

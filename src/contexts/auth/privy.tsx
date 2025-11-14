@@ -110,12 +110,14 @@ export const AuthProvider: React.FC<{
     try {
       const time = Date.now();
       const userId = user.id.split(":")[2];
+      let chainType = "";
 
       let signature: string;
 
       if (
         // @ts-ignore
-        privyWallet?.type === "ethereum"
+        privyWallet?.type === "ethereum" &&
+        user?.wallet?.connectorType === "injected"
       ) {
         const message = `login dolla, address:${privyWallet?.address.toLowerCase()}, time:${time}`;
         // Use MetaMask for signing
@@ -128,6 +130,7 @@ export const AuthProvider: React.FC<{
         const provider = new ethers.providers.Web3Provider(ethereumProvider);
         const signer = provider.getSigner();
         signature = await signer.signMessage(message);
+        chainType = "Evm";
       } else {
         const message = `login dolla, sol_address:${solanaWallets[0]?.address}, wallet_id:${userId}, time:${time}`;
         // Use Privy embedded wallet for signing
@@ -143,7 +146,7 @@ export const AuthProvider: React.FC<{
         signature,
         time,
         userId,
-        chainType: (privyWallet as any)?.type || "",
+        chainType,
         onSuccess: async () => {
           await onQueryUserInfo();
           setAccountRefresher(1);

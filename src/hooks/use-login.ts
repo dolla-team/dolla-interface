@@ -35,8 +35,8 @@ export default function useLogin() {
         if (solAddress) {
           path += `&sol_address=${solAddress}`;
         }
-        if (chainType === "ethereum") {
-          path += "&type=Evm";
+        if (chainType) {
+          path += `&type=${chainType}`;
         }
         const res = await axios.get(path);
 
