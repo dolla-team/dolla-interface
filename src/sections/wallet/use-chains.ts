@@ -16,10 +16,13 @@ export const useChains = () => {
         return false;
       if (
         walletStore.selectedToken?.symbol === QUOTE_TOKEN.symbol &&
-        ["ETH", "SOL", "BSC", "POL"].includes(token.blockchain.toUpperCase())
+        ["ETH", "SOL", "BSC", "POL", "ARB"].includes(
+          token.blockchain.toUpperCase()
+        )
       ) {
         return true;
       }
+
       if (
         walletStore.selectedToken?.symbol === "ETH" &&
         ["ETH", "ARB", "OP"].includes(token.blockchain.toUpperCase())

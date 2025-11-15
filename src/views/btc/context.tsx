@@ -13,6 +13,7 @@ import { formatNumber } from "@/utils/format/number";
 import Big from "big.js";
 import { useAuth } from "@/contexts/auth";
 import useWinnerBidList from "./detail/use-winner-bid-list";
+import useBtcDetailStore from "@/stores/use-btc-detail";
 
 export const CannonCoinsContext = createContext<any>({});
 
@@ -21,12 +22,9 @@ export const CannonCoinsProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const [flipStatus, setFlipStatus] = useState(0); // 0: not flipping, 1: bidding, 2: bid success, 3: waiting, 4: bid complete, 5: auto flipping, 6: complete
-  const [bids, setBids] = useState(1);
   const [taskId, setTaskId] = useState<string>("");
   const coinsRef = useRef<any>({});
   const flipedNumberRef = useRef(0);
-  const [bidResult, setBidResult] = useState<any>(null);
   const params = useParams();
   const { onQueryUserInfo } = useAuth();
   const { onQueryPoolInfo } = usePoolInfo();
@@ -36,38 +34,38 @@ export const CannonCoinsProvider = ({
   const [filterVolume, setFilterVolume] = useState(0);
   const poolCachedRef = useRef<any>(null);
   const { winnerBidList } = useWinnerBidList(pool);
-
+  const btcDetailStore = useBtcDetailStore();
   const onMobileMarketsClose = () => {
     setMobileMarketsOpen(false);
   };
 
   useEffect(() => {
-    if (flipStatus === 0) {
+    if (btcDetailStore.flipStatus === 0) {
       window.howl.bgm.fade(0.1, 0.2, 1000);
     }
 
-    if (flipStatus === 1 || flipStatus === 0) {
+    if (btcDetailStore.flipStatus === 1 || btcDetailStore.flipStatus === 0) {
       flipedNumberRef.current = 0;
     }
 
-    if (flipStatus === 2) {
-      for (let i = 0; i < bids; i++) {
+    if (btcDetailStore.flipStatus === 2) {
+      for (let i = 0; i < btcDetailStore.bids; i++) {
         coinsRef.current[i]?.collect();
       }
       setTimeout(() => {
-        setFlipStatus(3);
+        btcDetailStore.set({ flipStatus: 3 });
       }, 600);
     }
 
-    if (flipStatus === 4) {
+    if (btcDetailStore.flipStatus === 4) {
       window.howl.bgm.fade(0.2, 0, 1000);
-      for (let i = 0; i < bids; i++) {
+      for (let i = 0; i < btcDetailStore.bids; i++) {
         coinsRef.current[i]?.revert();
       }
     }
 
-    if (flipStatus === 5) {
-      if (bids === 1) {
+    if (btcDetailStore.flipStatus === 5) {
+      if (btcDetailStore.bids === 1) {
         coinsRef.current[0]?.revert();
         coinsRef.current[0]?.flip();
       } else {
@@ -78,16 +76,16 @@ export const CannonCoinsProvider = ({
       }
     }
 
-    if (flipStatus === 6 && poolCachedRef.current) {
+    if (btcDetailStore.flipStatus === 6 && poolCachedRef.current) {
       if (params?.poolId) {
         setPool(poolCachedRef.current);
       }
-      if (!params?.poolId && !bidResult?.bid?.is_winner) {
+      if (!params?.poolId && !btcDetailStore.bidResult?.is_winner) {
         clearTimeout(window.poolTimer);
         getPoolRecommend();
       }
     }
-  }, [flipStatus]);
+  }, [btcDetailStore.flipStatus]);
 
   const loopUpdatePool = async (_pool: any) => {
     clearTimeout(window.poolTimer);
@@ -156,52 +154,58 @@ export const CannonCoinsProvider = ({
     <CannonCoinsContext.Provider
       value={{
         isDetail: !!params?.poolId,
-        flipStatus,
         pool,
         poolAmount,
-        bids,
-        setBids: (bids: number) => {
-          setBids(bids);
-        },
-        setFlipStatus,
         coinsRef,
-        bidResult,
         winnerBidList,
         taskId,
+        flipStatus: btcDetailStore.flipStatus,
         setTaskId,
+        setFlipStatus: (status: number) => {
+          btcDetailStore.set({ flipStatus: status });
+        },
+        bids: btcDetailStore.bids,
+        setBids: (bids: number) => {
+          btcDetailStore.set({ bids });
+        },
         setSelectedMarket: (market: any) => {
           setPool(market);
           loopUpdatePool(market);
         },
-        setBidResult,
         flipComplete: (index: number, addNumber: boolean, notAuto = false) => {
           if (addNumber) flipedNumberRef.current++;
 
-          if (flipedNumberRef.current === bids) {
+          if (flipedNumberRef.current === btcDetailStore.bids) {
             flipedNumberRef.current = 0;
 
-            if (!bidResult.bid.is_winner) {
-              setFlipStatus(flipStatus !== 6 ? 6 : 0);
+            if (!btcDetailStore.bidResult?.is_winner) {
+              btcDetailStore.set({
+                flipStatus: btcDetailStore.flipStatus !== 6 ? 6 : 0
+              });
             } else {
-              for (let i = 0; i < bids; i++) {
+              for (let i = 0; i < btcDetailStore.bids; i++) {
                 coinsRef.current[i].collect();
               }
               setTimeout(() => {
-                setFlipStatus(6);
+                btcDetailStore.set({ flipStatus: 6 });
               }, 600);
             }
             return;
           }
 
-          if (flipStatus === 5 && flipedNumberRef.current < bids && !notAuto) {
+          if (
+            btcDetailStore.flipStatus === 5 &&
+            flipedNumberRef.current < btcDetailStore.bids &&
+            !notAuto
+          ) {
             coinsRef.current[index + 1]?.flip();
           }
         },
         onReset: (isFail = false) => {
           flipedNumberRef.current = 0;
-          setBidResult(null);
+          btcDetailStore.set({ bidResult: null });
           onQueryUserInfo();
-          for (let i = 0; i < bids; i++) {
+          for (let i = 0; i < btcDetailStore.bids; i++) {
             if (isFail) coinsRef.current[i]?.revert();
             else coinsRef.current[i]?.flip(true);
           }

@@ -163,22 +163,6 @@ class WebSocketService {
     }
   }
 
-  // Subscribe to bid result stream
-  subscribeBidResult(handler: MessageHandler, stream: string): void {
-    this.addMessageHandler(stream, handler);
-    this.subscribe([stream], 1);
-  }
-
-  // Unsubscribe from bid result stream
-  unsubscribeBidResult(stream: string, handler?: MessageHandler): void {
-    if (handler) {
-      this.removeMessageHandler(stream, handler);
-    } else {
-      this.removeAllHandlers(stream);
-    }
-    this.unsubscribe([stream], 1);
-  }
-
   // Add message handler for a specific stream
   addMessageHandler(stream: string, handler: MessageHandler): void {
     if (!this.messageHandlers.has(stream)) {

@@ -5,6 +5,7 @@ import { EEyeType, EyeTypeMap } from "@/hooks/use-dolla-eye";
 import useIsMobile from "@/hooks/use-is-mobile";
 import clsx from "clsx";
 import Coins from "./coins";
+import useBtcDetailStore from "@/stores/use-btc-detail";
 
 export default function FlipCoins({
   sumPoints,
@@ -13,17 +14,10 @@ export default function FlipCoins({
   points,
   tickets
 }: any) {
-  const {
-    bids,
-    flipStatus,
-    pool,
-    coinsRef,
-    flipComplete,
-    bidResult,
-    setFlipStatus
-  } = useBtcContext();
+  const { bids, flipStatus, pool, coinsRef, flipComplete, setFlipStatus } =
+    useBtcContext();
   const isMobile = useIsMobile();
-
+  const btcDetailStore = useBtcDetailStore();
   const SIZE: Record<number, number> = isMobile
     ? {
         1: 212,
@@ -49,7 +43,7 @@ export default function FlipCoins({
 
     if (sumTickets === 1 && sumPoints === 0) {
       setCurrentEye(EyeTypeMap[EEyeType.PrizeTicket]);
-    } else if (bidResult?.bid?.is_winner) {
+    } else if (btcDetailStore.bidResult?.is_winner) {
       setCurrentEye(EyeTypeMap[EEyeType.PrizeBTC]);
     } else if (sumTickets === 0 && sumPoints > 0 && sumPoints < 1000) {
       setCurrentEye(EyeTypeMap[EEyeType.PrizeLowPTS]);

@@ -1,5 +1,8 @@
 import { useEffect, useRef, useCallback } from "react";
 import { wsService, type MessageHandler } from "@/service/ws";
+import { useAllMarketsStore } from "@/stores/use-all-markets";
+import useBtcDetailStore from "@/stores/use-btc-detail";
+import { useAuth } from "@/contexts/auth";
 
 /**
  * Hook for WebSocket subscription
@@ -13,6 +16,7 @@ export default function useWebSocket(
   stream: string = "bid@bidResult"
 ) {
   const handlerRef = useRef<MessageHandler | undefined>(onMessage);
+  const { userInfo } = useAuth();
 
   // Update handler ref when onMessage changes
   useEffect(() => {
@@ -27,7 +31,8 @@ export default function useWebSocket(
   }, []);
 
   useEffect(() => {
-    if (!autoConnect) {
+    const userId = userInfo?.id;
+    if (!autoConnect || !userId) {
       return;
     }
 
@@ -36,7 +41,8 @@ export default function useWebSocket(
       .connect()
       .then(() => {
         wsService.addMessageHandler(stream, handleMessage);
-        wsService.subscribe([stream], 1);
+
+        wsService.subscribe([stream, `${userId}@account`], 1);
       })
       .catch((error) => {
         console.error("Failed to connect WebSocket:", error);
@@ -48,14 +54,14 @@ export default function useWebSocket(
       // Note: We don't disconnect here to allow other components to use the same connection
       // If you want to disconnect when no handlers remain, you can add that logic
     };
-  }, [autoConnect, stream, handleMessage]);
+  }, [autoConnect, stream, handleMessage, userInfo?.id]);
 
   // Manual connect function
   const connect = useCallback(async () => {
     try {
       await wsService.connect();
       wsService.addMessageHandler(stream, handleMessage);
-      wsService.subscribe([stream], 1);
+      wsService.subscribe([stream, `1@account`], 1);
     } catch (error) {
       console.error("Failed to connect WebSocket:", error);
       throw error;
@@ -83,9 +89,43 @@ export default function useWebSocket(
  * @param onMessage - Callback function when message is received
  * @param stream - Stream name to subscribe to (default: "bid@bidResult")
  */
-export function useBidResultSubscription(
-  onMessage?: MessageHandler,
-  stream: string = "bid@bidResult"
-) {
-  return useWebSocket(onMessage, true, stream);
+export function useBidResultSubscription() {
+  const allMarketsStore = useAllMarketsStore();
+  const btcDetailStore = useBtcDetailStore();
+  // Subscribe to WebSocket bid result updates
+  useWebSocket((data: any) => {
+    console.log("data", data);
+    if (data.type === "bidResult") {
+      if (!data?.data?.length) return;
+      data.data.forEach((item: any) => {
+        if (!item?.pool_id) return;
+        const poolId = item.pool_id;
+        const currentPool = allMarketsStore.pools[poolId];
+        if (currentPool) {
+          // Update pool data with new bid result
+          allMarketsStore.set({
+            pools: {
+              ...allMarketsStore.pools,
+              [poolId]: {
+                ...currentPool,
+                ...item // Merge new data into existing pool data
+              }
+            }
+          });
+        }
+      });
+      return;
+    }
+
+    if (
+      data.type === "bidAccountResult" &&
+      btcDetailStore.currentHash === data.data?.tx_hash
+    ) {
+      btcDetailStore.set({
+        bidResult: data.data,
+        currentHash: "",
+        flipStatus: btcDetailStore.bids === 1 ? 5 : 4
+      });
+    }
+  });
 }

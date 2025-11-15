@@ -17,8 +17,7 @@ import Pagination from "@/components/pagination";
 import Button from "@/components/button";
 import { BTC_CREATE_FORM_URL } from "@/config";
 import { useAuth } from "@/contexts/auth";
-import { useEffect, useMemo } from "react";
-import { useBidResultSubscription } from "@/hooks/use-websocket";
+import { useMemo } from "react";
 
 export default function Markets() {
   const navigate = useNavigate();
@@ -44,29 +43,6 @@ export default function Markets() {
   const columns = useMemo(() => {
     return allMarketsStore.status === "1" ? liveColumns : soldColumns;
   }, [allMarketsStore.status]);
-
-  // Subscribe to WebSocket bid result updates
-  useBidResultSubscription((data: any) => {
-    if (!data?.data?.length) return;
-    data.data.forEach((item: any) => {
-      if (!item?.pool_id) return;
-      const poolId = item.pool_id;
-      const currentPool = allMarketsStore.pools[poolId];
-
-      if (currentPool) {
-        // Update pool data with new bid result
-        allMarketsStore.set({
-          pools: {
-            ...allMarketsStore.pools,
-            [poolId]: {
-              ...currentPool,
-              ...item // Merge new data into existing pool data
-            }
-          }
-        });
-      }
-    });
-  });
 
   return (
     <div

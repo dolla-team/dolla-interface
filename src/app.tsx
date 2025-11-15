@@ -12,6 +12,7 @@ import Loading from "@/components/loading";
 import VerifyEmail from "./views/verify-email";
 import { useGlobalStore } from "@/stores/use-global";
 import ErrorPage from "./views/error-page";
+import { useBidResultSubscription } from "@/hooks/use-websocket";
 // import "react-toastify/dist/ReactToastify.css";
 
 import MainLayout from "./layouts/main";
@@ -144,8 +145,13 @@ const Content = () => {
   ) : !user || !globalStore.isInWhitelist ? (
     <VerifyEmail />
   ) : (
-    <RouterProvider router={router} />
+    <RouterContent />
   );
+};
+
+const RouterContent = () => {
+  useBidResultSubscription();
+  return <RouterProvider router={router} />;
 };
 
 function App() {
