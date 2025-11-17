@@ -83,14 +83,15 @@ export default function Market({
     const currentBids = data.accumulative_bids;
     const prevBids = prevAccumulativeBidsRef.current;
 
+    setShowShine(false);
+    clearTimeout(window.shineTimer);
+
     if (prevBids !== undefined && currentBids !== prevBids) {
       setShowShine(true);
       // Hide shine after animation completes
-      const timer = setTimeout(() => {
+      window.shineTimer = setTimeout(() => {
         setShowShine(false);
       }, 6000);
-
-      return () => clearTimeout(timer);
     }
 
     prevAccumulativeBidsRef.current = currentBids;
