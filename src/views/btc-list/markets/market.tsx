@@ -88,7 +88,7 @@ export default function Market({
       // Hide shine after animation completes
       const timer = setTimeout(() => {
         setShowShine(false);
-      }, 3000);
+      }, 6000);
 
       return () => clearTimeout(timer);
     }
