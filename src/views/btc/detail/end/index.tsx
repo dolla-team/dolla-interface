@@ -98,7 +98,7 @@ export default function EndPanel({ data }: { data: any }) {
                 className="rounded-full text-[48px] font-[500]"
               />
             </div>
-            <div className="text-white text-center text-[16px] font-[DelaGothicOne] mt-[10px]">
+            <div className="text-white text-center text-[16px] max-w-full truncate mt-[10px]">
               {data.winner_user_info?.name ||
                 formatAddress(data.winner_user_info?.user)}
             </div>
