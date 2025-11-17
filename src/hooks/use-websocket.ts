@@ -121,6 +121,7 @@ export function useBidResultSubscription() {
       data.type === "bidAccountResult" &&
       btcDetailStore.currentHash === data.data?.tx_hash
     ) {
+      clearTimeout(window.bidResultTimer);
       btcDetailStore.set({
         bidResult: data.data,
         currentHash: "",

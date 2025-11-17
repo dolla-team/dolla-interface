@@ -161,6 +161,7 @@ export default function useBid(
       //   description:
       //     error instanceof Error ? error.message : "Unknown error occurred"
       // });
+      console.log("bid error", error);
       onTxFail();
     }
   };

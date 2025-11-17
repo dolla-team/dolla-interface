@@ -121,7 +121,9 @@ export default function Market({
               opacity: 0
             }}
             transition={{
-              duration: 3,
+              duration: 2,
+              repeat: 2,
+              repeatType: "loop",
               ease: "linear"
             }}
           />
@@ -175,7 +177,6 @@ export default function Market({
                       size={10}
                       address={data?.user}
                       src={data?.user_info?.icon}
-                      email={data?.user_info?.email_desensitization}
                       className="text-[8px]"
                     />
                     <span className="text-[10px] text-[#2B3337]">
@@ -271,7 +272,6 @@ export default function Market({
                   <Avatar
                     size={30}
                     src={data.winner_user_info?.icon}
-                    email={data.winner_user_info?.email_desensitization}
                     address={data.winner_user_info?.user}
                     className="rounded-full"
                   />
