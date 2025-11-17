@@ -33,7 +33,6 @@ export default function WinnerCard({
                 <Avatar
                   size={58}
                   address={data?.user_info?.user}
-                  email={data?.user_info?.show_email}
                   src={data?.user_info?.icon}
                   className="rounded-full border-[1px] border-[#DD9000] text-[28px]"
                 />
@@ -47,7 +46,7 @@ export default function WinnerCard({
                 Last Winner
               </div>
               <div className="text-[12px] text-white font-[DelaGothicOne]">
-                {data.pool_info?.winner_user_email ||
+                {data.pool_info?.winner_user_name ||
                   formatAddress(data.pool_info.winner_user)}
               </div>
               <div className="text-[10px] mt-[4px] px-[20px] w-full">

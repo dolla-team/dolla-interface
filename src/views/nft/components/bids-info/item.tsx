@@ -9,7 +9,6 @@ export default function Item({ data }: any) {
       <div className="h-full p-[6px] inline-flex items-center text-[#3B3951] relative z-[2]">
         <Avatar
           address={data.user}
-          email={data.user_email}
           src={data.user_icon}
           size={30}
           className="border border-[#131417] mr-[6px] rounded-full text-[16px]"

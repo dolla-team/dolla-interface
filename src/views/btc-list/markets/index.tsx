@@ -26,6 +26,7 @@ export default function Markets() {
   const allMarketsStore = useAllMarketsStore();
   const {
     poolList,
+    pools,
     loading,
     sortField,
     sortOrder,
@@ -168,32 +169,32 @@ export default function Markets() {
         ) : poolList.length === 0 ? (
           <Empty className="!py-[50px]" text="No Data" />
         ) : (
-          poolList.map((item: any) => (
-            <Market
-              key={item.id}
-              data={item}
-              onClick={() => {
-                navigate(`/btc/detail/${item.pool_id}`);
-              }}
-            />
-          ))
+          poolList
+            .filter((item: any) => pools[item])
+            .map((item: any) => (
+              <Market
+                key={item}
+                data={pools[item]}
+                onClick={() => {
+                  navigate(`/btc/detail/${item}`);
+                }}
+              />
+            ))
         )}
       </div>
-      {allMarketsStore.status !== "1" && (
-        <div className="flex justify-end items-center pt-[10px]">
-          <Pagination
-            current={pageRef.current + 1}
-            hasNextPage={hasMore}
-            onNext={() => {
-              onNextPage(1);
-            }}
-            onPrev={() => {
-              console.log("prev");
-              onNextPage(-1);
-            }}
-          />
-        </div>
-      )}
+      <div className="flex justify-end items-center pt-[10px]">
+        <Pagination
+          current={pageRef.current + 1}
+          hasNextPage={hasMore}
+          onNext={() => {
+            onNextPage(1);
+          }}
+          onPrev={() => {
+            console.log("prev");
+            onNextPage(-1);
+          }}
+        />
+      </div>
     </div>
   );
 }

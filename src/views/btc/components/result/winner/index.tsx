@@ -120,7 +120,6 @@ export default function Winner({ onClose }: { onClose: () => void }) {
                   <Avatar
                     size={216}
                     address={userInfo?.user}
-                    email={userInfo?.show_email}
                     src={userInfo?.icon}
                     className="rounded-full border-[3px] border-[#DD9000] text-[72px]"
                   />
@@ -201,7 +200,6 @@ export default function Winner({ onClose }: { onClose: () => void }) {
           winner_user: {
             name: userInfo?.name,
             user: userInfo?.user,
-            email: userInfo?.show_email,
             icon: userInfo?.icon
           }
         }}

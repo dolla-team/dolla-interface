@@ -21,6 +21,7 @@ import Big from "big.js";
 import useUserInfoStore from "@/stores/use-user-info";
 import ShareModal from "@/sections/share";
 import { useState } from "react";
+import { formatAddress } from "@/utils/format/address";
 
 const Dashboard = (props: any) => {
   const { className, tab, pnlList, pnl } = props;
@@ -45,13 +46,12 @@ const Dashboard = (props: any) => {
             size={74}
             className="shrink-0 rounded-[8px] border-[2px] border-[#FFFFFFCC] text-[26px]"
             src={userInfo?.icon}
-            email={userInfo?.show_email}
             address={userInfo?.user}
           />
           <div className="flex justify-center items-center gap-[6px] mt-[8px]">
             <div className="flex items-center gap-[6px]">
               <div className="font-bold text-[#2B3337] text-[20px]">
-                {userInfo?.name || userInfo?.show_email}
+                {userInfo?.name}
               </div>
               {tab === "seller" && (
                 <div className="flex items-center gap-[7px]">
@@ -101,12 +101,12 @@ const Dashboard = (props: any) => {
           <div className="flex items-center gap-[14px] mt-[8px]">
             <div className="flex items-center gap-[3px]">
               <span className="text-[12px] text-[#2B3337]">
-                {userInfo?.show_email}
+                {userInfo?.show_email || formatAddress(userInfo?.user)}
               </span>
               <button
                 className="button"
                 onClick={() => {
-                  onCopy(userInfo?.show_email);
+                  onCopy(userInfo?.show_email || userInfo?.user);
                 }}
               >
                 <CopyIcon />
@@ -164,7 +164,6 @@ const Dashboard = (props: any) => {
                             <Avatar
                               key={index}
                               src={item.account_icon}
-                              email={item.account_name}
                               address={item.account_id}
                               size={26}
                               className={clsx(

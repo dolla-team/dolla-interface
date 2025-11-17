@@ -12,13 +12,12 @@ export default function Top() {
           <Avatar
             size={46}
             src={userInfo?.icon}
-            email={userInfo?.show_email}
             address={userInfo?.user}
             className="border-2 border-[#FFFFFFCC] rounded-[6px] text-[26px]"
           />
           <div className="text-black w-[calc(100%-90px)]">
             <div className="text-[16px] font-bold whitespace-nowrap text-ellipsis overflow-hidden">
-              {userInfo?.name || userInfo?.show_email}
+              {userInfo?.name}
             </div>
             <div className="flex items-center gap-[6px]">
               <span className="text-[12px]">

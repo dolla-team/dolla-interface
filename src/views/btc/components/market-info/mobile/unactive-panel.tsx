@@ -26,7 +26,6 @@ export default function UnactivePanel({ pool }: { pool: any }) {
           <Avatar
             size={24}
             address={pool?.user_info?.address}
-            email={pool?.user_info?.show_email}
             src={pool?.user_info?.icon}
             className="rounded-[6px] text-[12px]"
           />

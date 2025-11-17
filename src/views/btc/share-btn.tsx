@@ -18,14 +18,12 @@ export function ShareBtn() {
       winner_user: {
         name: pool.winner_user_info?.name,
         user: pool.winner_user_info?.user,
-        email: pool.winner_user_info?.email_desensitization,
         icon: pool.winner_user_info?.icon,
         code: pool.winner_user_info?.code
       },
       user: {
         name: pool.user_info?.name,
         user: pool.user_info?.user,
-        email: pool.user_info?.email_desensitization,
         icon: pool.user_info?.icon,
         code: pool.user_info?.code
       },

@@ -2,7 +2,17 @@
 // export const HOST_API = import.meta.env.DEV ? "/api" : "/";
 
 // export const HOST_API = "https://test-api.dolla.market";
-export const HOST_API = "https://api.dolla.market";
+
+export const IS_TEST =
+  import.meta.env.VITE_PRIVY_APP_ID === "cmbkf9huq00tnl80lnrjj94eg";
+
+export const HOST_API = IS_TEST
+  ? "https://test-api.dolla.market"
+  : "https://api.dolla.market";
+
+export const WS_URL = IS_TEST
+  ? "wss://test-ws.dolla.market/ws"
+  : "wss://ws.dolla.market/ws";
 
 export const INVATE_ACTIVE = false;
 

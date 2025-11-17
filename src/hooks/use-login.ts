@@ -17,6 +17,7 @@ export default function useLogin() {
       time,
       solAddress,
       userId,
+      chainType,
       onSuccess
     }: {
       address: string;
@@ -24,13 +25,20 @@ export default function useLogin() {
       time: number;
       solAddress: string;
       userId: string;
+      chainType: string;
       onSuccess: () => void;
     }) => {
       try {
         setLoging(true);
-        const res = await axios.get(
-          `/api/v1/account/token?address=${address}&signature=${signature}&time=${time}&sol_address=${solAddress}&privy_wallet_id=${userId}`
-        );
+        let path = `/api/v1/account/token?address=${address}&signature=${signature}&time=${time}&privy_wallet_id=${userId}`;
+
+        if (solAddress) {
+          path += `&sol_address=${solAddress}`;
+        }
+        if (chainType) {
+          path += `&type=${chainType}`;
+        }
+        const res = await axios.get(path);
 
         localStorage.setItem(
           "_AK_TOKEN_",

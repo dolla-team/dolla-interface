@@ -10,7 +10,6 @@ export default function Info() {
       <Avatar
         size={50}
         address={userInfo?.user}
-        email={userInfo?.show_email}
         src={userInfo?.icon}
         className="shrink-0 border-[2px] border-[#FFFFFFCC] text-[26px]"
       />

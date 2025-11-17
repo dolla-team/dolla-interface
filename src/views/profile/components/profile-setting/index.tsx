@@ -7,6 +7,7 @@ import useUpdateUserInfo from "@/hooks/user/use-update-userinfo";
 import { useAuth } from "@/contexts/auth";
 import ModalClose from "@/components/button/modal-close";
 import Avatar from "@/components/avatar";
+import { formatAddress } from "@/utils/format/address";
 
 interface ProfileSettingProps {
   open: boolean;
@@ -72,13 +73,12 @@ export default function ProfileSetting({ open, onClose }: ProfileSettingProps) {
                   size={74}
                   className="shrink-0 rounded-[8px] border-[2px] border-[#FFFFFFCC] text-[26px]"
                   src={userInfo?.icon}
-                  email={userInfo?.show_email}
                   address={userInfo?.user}
                 />
               )}
             </div>
             <div className="text-[14px] text-[#8A87AA] text-center mt-[6px]">
-              {userInfo?.show_email}
+              {userInfo?.show_email || formatAddress(userInfo?.user)}
             </div>
             <div className="flex items-center gap-[10px] mt-[18px]">
               <Button

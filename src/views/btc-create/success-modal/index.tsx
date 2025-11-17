@@ -28,7 +28,6 @@ export default function SuccessModal({
         pool_id: data?.pool_id,
         user: {
           icon: userInfo?.icon,
-          email: userInfo?.show_email,
           name: userInfo?.name,
           user: userInfo?.user
         },

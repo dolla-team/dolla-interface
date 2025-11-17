@@ -88,7 +88,6 @@ export default function Header({ className }: { className?: string }) {
               <Avatar
                 size={35}
                 address={pool?.user_info?.address}
-                email={pool?.user_info?.email}
                 className="rounded-[12px]"
               />
             </div>

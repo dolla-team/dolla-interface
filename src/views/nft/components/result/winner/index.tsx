@@ -65,7 +65,7 @@ export default function Winner() {
               <div className="flex flex-col items-center justify-center w-[200px] h-[200px] absolute left-[10px] top-[10px] bg-black/50 rounded-[12px] z-[6]">
                 <BtcFace userInfo={userInfo} />
                 <div className="text-[16px] font-semibold text-white text-center mt-[10px]">
-                  {userInfo?.email || formatAddress(userInfo?.user)}
+                  {userInfo?.name || formatAddress(userInfo?.user)}
                 </div>
               </div>
             }
@@ -108,7 +108,6 @@ const BtcFace = ({
       <Avatar
         size={94}
         address={userInfo?.user}
-        email={userInfo?.show_email}
         src={userInfo?.icon}
         className="rounded-full border-[3px] border-[#DD9000] text-[30px]"
       />

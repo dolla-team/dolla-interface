@@ -75,7 +75,6 @@ const Item = ({ data, number, total, winner, bidsDistribution }: any) => {
               <Avatar
                 size={20}
                 address={winner?.user}
-                email={winner?.show_email}
                 src={winner?.icon}
                 className="text-[12px]"
               />

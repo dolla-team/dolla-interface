@@ -26,6 +26,7 @@ import useCode from "@/hooks/airdrop/use-code";
 import useCreateWhitelist from "@/hooks/user/use-create-whitelist";
 import { useGlobalStore } from "@/stores/use-global";
 import LoginTimeoutModal from "@/components/modal/login-timeout";
+import { ethers } from "ethers";
 
 export const AuthContext = React.createContext<any | null>(null);
 
@@ -51,11 +52,12 @@ export const AuthProvider: React.FC<{
   const userInfoStore = useUserInfoStore();
 
   const privyWallet = useMemo(() => {
-    if (isLoggedOut) return { address: "" };
-    if (wallets.length === 0) return { address: "" };
-    const privyItem = wallets.find((item) => item.walletClientType === "privy");
+    if (isLoggedOut || !user || wallets.length === 0) return { address: "" };
+    const privyItem = wallets.find(
+      (item) => item.walletClientType === user?.wallet?.walletClientType
+    );
     return privyItem || { address: "" };
-  }, [wallets, isLoggedOut]);
+  }, [wallets, isLoggedOut, user]);
 
   const { account, fetchAccount: updateNearAccount } = useAccount(
     privyWallet?.address
@@ -108,14 +110,35 @@ export const AuthProvider: React.FC<{
     try {
       const time = Date.now();
       const userId = user.id.split(":")[2];
+      let chainType = "";
 
-      const message = `login dolla, sol_address:${solanaWallets[0]?.address}, wallet_id:${userId}, time:${time}`;
       let signature: string;
 
-      const { signature: privySignature } = await signMessage({
-        message
-      });
-      signature = privySignature;
+      if (
+        // @ts-ignore
+        privyWallet?.type === "ethereum" &&
+        user?.wallet?.connectorType === "injected"
+      ) {
+        const message = `login dolla, address:${privyWallet?.address.toLowerCase()}, time:${time}`;
+        // Use MetaMask for signing
+        const ethereumProvider = await (
+          privyWallet as any
+        ).getEthereumProvider();
+        if (!ethereumProvider) {
+          throw new Error("Failed to get Ethereum provider");
+        }
+        const provider = new ethers.providers.Web3Provider(ethereumProvider);
+        const signer = provider.getSigner();
+        signature = await signer.signMessage(message);
+        chainType = "Evm";
+      } else {
+        const message = `login dolla, sol_address:${solanaWallets[0]?.address}, wallet_id:${userId}, time:${time}`;
+        // Use Privy embedded wallet for signing
+        const { signature: privySignature } = await signMessage({
+          message
+        });
+        signature = privySignature;
+      }
 
       onLogin({
         address: privyWallet?.address,
@@ -123,6 +146,7 @@ export const AuthProvider: React.FC<{
         signature,
         time,
         userId,
+        chainType,
         onSuccess: async () => {
           await onQueryUserInfo();
           setAccountRefresher(1);
@@ -203,12 +227,23 @@ export const AuthProvider: React.FC<{
       return;
     }
 
-    if (user) {
+    if (user?.wallet?.address !== privyWallet?.address) {
+      logout();
+      return;
+    }
+
+    if (user && globalStore.isInWhitelist) {
       updateAccount();
     }
     clearTimeout(window.loginTimeoutTimer);
     (window as any).sign = sign;
-  }, [privyWallet?.address, ready, user, isLoggedOut]);
+  }, [
+    privyWallet?.address,
+    ready,
+    user,
+    isLoggedOut,
+    globalStore.isInWhitelist
+  ]);
 
   return (
     <AuthContext.Provider

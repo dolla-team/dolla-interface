@@ -86,7 +86,6 @@ export default function DetailModalPanel({
                   key={index}
                   className="rounded-full"
                   size={34}
-                  email={item.user_info?.show_email}
                   src={item.user_info?.icon}
                 />
               </div>

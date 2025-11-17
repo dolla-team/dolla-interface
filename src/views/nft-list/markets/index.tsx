@@ -20,7 +20,6 @@ export default function Markets() {
     // collection,
     // setCollection
   } = usePoolList({
-    pageLimit: 100,
     tokenStatus: 1
   });
 
