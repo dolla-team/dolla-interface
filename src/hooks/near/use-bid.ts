@@ -1,5 +1,4 @@
 import axiosInstance from "@/libs/axios";
-import { useState } from "react";
 import { useAuth } from "@/contexts/auth";
 import useGenerateKey from "@/hooks/near/use-generate-key";
 import { KeyPair } from "near-api-js";
@@ -49,21 +48,14 @@ export default function useBid(
     // onTxSuccess("800");
 
     // setTimeout(() => {
-    //   // onSuccess({
-    //   //   bid: {
-    //   //     id: 1,
-    //   //     status: 1,
-    //   //     times: times,
-    //   //     created_at: Date.now()
-    //   //   },
-    //   //   ticket: {
-    //   //     result: "0"
-    //   //   },
-    //   //   point: {
-    //   //     wild_coin_ev_result: "20000"
-    //   //   }
-    //   // });
-    //   onTxFail();
+    //   btcDetailStore.set({
+    //     bidResult: {
+    //       is_winner: false,
+    //       winner_point: "10,10",
+    //       winner_ticket: "0,0"
+    //     },
+    //     flipStatus: 4
+    //   });
     // }, 3000);
 
     // return;
