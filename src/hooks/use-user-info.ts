@@ -30,7 +30,7 @@ export default function useUserInfo(address?: string) {
       _info.points_progress = progress;
 
       if (!_info?.name) userInfoStore.set({ showSetting: true });
-      setInfo(_info);
+      setInfo({ ..._info, user: _info.user || _info.sol_user });
       getUserPrize();
     } catch (err) {
       console.log("err", err);

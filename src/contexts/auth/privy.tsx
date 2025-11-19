@@ -14,9 +14,11 @@ import {
   usePrivy,
   useWallets,
   useUser,
-  useSolanaWallets,
   useCreateWallet
 } from "@privy-io/react-auth";
+// @ts-ignore
+import { useWallets as useSolanaWallets } from "@privy-io/react-auth/solana";
+
 import { useCreateWallet as useCreateSolanaWallet } from "@privy-io/react-auth/solana";
 import useConfig from "@/hooks/use-config";
 import useUserInfoStore from "@/stores/use-user-info";
@@ -41,7 +43,9 @@ export const AuthProvider: React.FC<{
 
   useConfig();
   const { wallets } = useWallets();
+
   const { wallets: solanaWallets } = useSolanaWallets();
+
   const { createWallet: createPrivyWallet } = useCreateWallet();
   const { createWallet: createSolanaWallet } = useCreateSolanaWallet();
   const [showTimeoutModal, setShowTimeoutModal] = useState(false);
@@ -51,24 +55,51 @@ export const AuthProvider: React.FC<{
   const [isLoggedOut, setIsLoggedOut] = useState(false);
   const userInfoStore = useUserInfoStore();
 
-  const privyWallet = useMemo(() => {
-    if (isLoggedOut || !user || wallets.length === 0) return { address: "" };
-    const privyItem = wallets.find(
-      (item) => item.walletClientType === user?.wallet?.walletClientType
+  const chainType = useMemo(() => {
+    if (user?.wallet?.connectorType === "injected") {
+      return "Evm";
+    }
+    if (user?.wallet?.connectorType === "solana_adapter") {
+      return "solana";
+    }
+    return "";
+  }, [user]);
+
+  const privyEvmWallet = useMemo(() => {
+    if (isLoggedOut || !user) return { address: "" };
+    const privyItem = wallets.find((item) =>
+      chainType === "solana"
+        ? item.connectorType === "embedded"
+        : item.walletClientType === user?.wallet?.walletClientType
     );
     return privyItem || { address: "" };
-  }, [wallets, isLoggedOut, user]);
+  }, [wallets, isLoggedOut, user, chainType]);
 
-  const { account, fetchAccount: updateNearAccount } = useAccount(
-    privyWallet?.address
-  );
+  const [privySolanaWallet] = useMemo(() => {
+    if (solanaWallets.length === 0) return [null];
+    return [
+      solanaWallets.find((item: any) =>
+        chainType === "solana"
+          ? item.address === user?.wallet?.address
+          : item?.standardWallet?.isPrivyWallet
+      )
+    ];
+  }, [solanaWallets, chainType, user?.wallet]);
+
+  const address = useMemo(() => {
+    return chainType === "solana" && user?.wallet
+      ? user.wallet.address
+      : privyEvmWallet?.address;
+  }, [chainType, user?.wallet]);
+
+  const { account, fetchAccount: updateNearAccount } = useAccount(address);
 
   const {
     info: userInfo,
     loading: userInfoLoading,
     onQueryUserInfo,
     setInfo
-  } = useUserInfo(privyWallet?.address);
+  } = useUserInfo(address);
 
   const { isCreatedWhitelist } = useCreateWhitelist(userInfo?.show_email);
 
@@ -79,7 +110,7 @@ export const AuthProvider: React.FC<{
 
   const { run: updateAccount } = useDebounceFn(
     async () => {
-      if (!privyWallet?.address) {
+      if (!address) {
         return;
       }
 
@@ -87,7 +118,7 @@ export const AuthProvider: React.FC<{
         localStorage.getItem("_AK_TOKEN_") || "{}"
       ).address;
 
-      if (privyWallet?.address === loginedAddress) {
+      if (address === loginedAddress) {
         await onQueryUserInfo();
         setAccountRefresher(1);
         return;
@@ -100,29 +131,26 @@ export const AuthProvider: React.FC<{
   );
 
   const sign = async () => {
-    if (!privyWallet?.address || !user) {
+    if (!address || !user) {
       login();
       return;
     }
-    if (!solanaWallets[0]?.address) {
+
+    if (!privySolanaWallet?.address && chainType !== "Evm") {
       return;
     }
     try {
       const time = Date.now();
       const userId = user.id.split(":")[2];
-      let chainType = "";
 
       let signature: string;
+      let message: string;
 
-      if (
-        // @ts-ignore
-        privyWallet?.type === "ethereum" &&
-        user?.wallet?.connectorType === "injected"
-      ) {
-        const message = `login dolla, address:${privyWallet?.address.toLowerCase()}, time:${time}`;
+      if (chainType === "Evm") {
+        message = `login dolla, address:${address.toLowerCase()}, time:${time}`;
         // Use MetaMask for signing
         const ethereumProvider = await (
-          privyWallet as any
+          privyEvmWallet as any
         ).getEthereumProvider();
         if (!ethereumProvider) {
           throw new Error("Failed to get Ethereum provider");
@@ -130,9 +158,37 @@ export const AuthProvider: React.FC<{
         const provider = new ethers.providers.Web3Provider(ethereumProvider);
         const signer = provider.getSigner();
         signature = await signer.signMessage(message);
-        chainType = "Evm";
+      } else if (chainType === "solana") {
+        const message = `login dolla, address:${address}, time:${time}`;
+        // const message = `login dolla, address:E4APdiYDj6W58tsfSgYbxu6GfckvZ4SQBDbDGobh3YEt, time:1763545168104`;
+
+        // Convert message to Buffer for Solana signing (signMessage expects Buffer)
+        const encodedMessage = new TextEncoder().encode(message);
+
+        // Sign message with Solana wallet
+
+        const signResult = await (window as any).solana?.signMessage(
+          encodedMessage
+        );
+
+        // Handle different signature formats
+        // Privy Solana wallet may return signature as Uint8Array or base58 string
+        if (typeof signResult === "string") {
+          signature = signResult;
+        } else if (signResult?.signature) {
+          // If it's an object with signature property
+          const sig = signResult.signature;
+          signature =
+            typeof sig === "string" ? sig : Buffer.from(sig).toString("base64");
+        } else if (signResult instanceof Uint8Array) {
+          // Convert Uint8Array to base64 string
+          signature = Buffer.from(signResult).toString("base64");
+        } else {
+          throw new Error("Unexpected signature format from Solana wallet");
+        }
+        console.log(190, message, signature);
       } else {
-        const message = `login dolla, sol_address:${solanaWallets[0]?.address}, wallet_id:${userId}, time:${time}`;
+        const message = `login dolla, sol_address:${privySolanaWallet?.address}, wallet_id:${userId}, time:${time}`;
         // Use Privy embedded wallet for signing
         const { signature: privySignature } = await signMessage({
           message
@@ -141,8 +197,8 @@ export const AuthProvider: React.FC<{
       }
 
       onLogin({
-        address: privyWallet?.address,
-        solAddress: solanaWallets[0]?.address,
+        address: address,
+        solAddress: privySolanaWallet?.address,
         signature,
         time,
         userId,
@@ -154,6 +210,7 @@ export const AuthProvider: React.FC<{
         }
       });
     } catch (error: any) {
+      console.log(212, error);
       setLogining(false);
       // If signing fails, it might be an authentication issue, redirect to login
       if (
@@ -175,15 +232,21 @@ export const AuthProvider: React.FC<{
     window.loginTimeoutTimer = setTimeout(() => {
       setShowTimeoutModal(true);
     }, 1000 * 60 * 1);
+
     if (!user) {
       setIsLoggedOut(false);
       privyLogin?.();
       return;
     }
-    if (!privyWallet?.address) {
+
+    if (user) {
+      sign();
+    }
+
+    if (!privyEvmWallet?.address) {
       createPrivyWallet();
     }
-    if (!solanaWallets[0]?.address) {
+    if (!privySolanaWallet?.address) {
       createSolanaWallet();
     }
   };
@@ -211,7 +274,7 @@ export const AuthProvider: React.FC<{
     nearKeyStore.set({ publicKey: null, privateKey: null });
     userInfoStore.init();
     globalStore.init();
-  }, [privyWallet?.address, privyLogout, wallets, solanaWallets]);
+  }, [address, privyLogout, wallets, solanaWallets]);
 
   useEffect(() => {
     if (!ready) {
@@ -222,12 +285,12 @@ export const AuthProvider: React.FC<{
       return;
     }
 
-    if (!privyWallet?.address) {
+    if (!address) {
       // login();
       return;
     }
 
-    if (user?.wallet?.address !== privyWallet?.address) {
+    if (user?.wallet?.address !== address) {
       logout();
       return;
     }
@@ -237,19 +300,12 @@ export const AuthProvider: React.FC<{
     }
     clearTimeout(window.loginTimeoutTimer);
     (window as any).sign = sign;
-  }, [
-    privyWallet?.address,
-    ready,
-    user,
-    isLoggedOut,
-    globalStore.isInWhitelist
-  ]);
+  }, [address, ready, user, isLoggedOut, globalStore.isInWhitelist]);
 
   return (
     <AuthContext.Provider
       value={{
-        address: privyWallet?.address,
-        wallet: privyWallet,
+        address: address,
         userInfo,
         userInfoLoading,
         accountRefresher,
