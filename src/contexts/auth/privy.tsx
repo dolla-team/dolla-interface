@@ -90,7 +90,7 @@ export const AuthProvider: React.FC<{
     return chainType === "solana" && user?.wallet
       ? user.wallet.address
       : privyEvmWallet?.address;
-  }, [chainType, user?.wallet]);
+  }, [chainType, user?.wallet, privyEvmWallet]);
 
   const { account, fetchAccount: updateNearAccount } = useAccount(address);
 
@@ -131,11 +131,10 @@ export const AuthProvider: React.FC<{
   );
 
   const sign = async () => {
-    if (!address || !user) {
+    if (!user) {
       login();
       return;
     }
-
     if (!privySolanaWallet?.address && chainType !== "Evm") {
       return;
     }
@@ -186,7 +185,6 @@ export const AuthProvider: React.FC<{
         } else {
           throw new Error("Unexpected signature format from Solana wallet");
         }
-        console.log(190, message, signature);
       } else {
         const message = `login dolla, sol_address:${privySolanaWallet?.address}, wallet_id:${userId}, time:${time}`;
         // Use Privy embedded wallet for signing
@@ -210,7 +208,6 @@ export const AuthProvider: React.FC<{
         }
       });
     } catch (error: any) {
-      console.log(212, error);
       setLogining(false);
       // If signing fails, it might be an authentication issue, redirect to login
       if (
@@ -284,7 +281,6 @@ export const AuthProvider: React.FC<{
     if (isLoggedOut) {
       return;
     }
-
     if (!address) {
       // login();
       return;
@@ -314,6 +310,7 @@ export const AuthProvider: React.FC<{
         user,
         nearAccount: account,
         isCreatedWhitelist,
+        chainType,
         updateNearAccount,
         login,
         logout,

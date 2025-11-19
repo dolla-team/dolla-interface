@@ -23,7 +23,7 @@ export default function useLogin() {
       address: string;
       signature: string;
       time: number;
-      solAddress: string;
+      solAddress?: string;
       userId: string;
       chainType: string;
       onSuccess: () => void;
