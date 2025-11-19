@@ -33,6 +33,7 @@ export default function Confetti() {
       Math.random() * (max - min) + min;
 
     const initConfetti = () => {
+      window.howl.coinDrop.play();
       for (let i = 0; i < confettiCount; i++) {
         const baseSize = randomRange(15, 35); // Base size for square confetti
         confetti.push({
@@ -115,14 +116,16 @@ export default function Confetti() {
     render();
 
     //----------Resize----------
-    window.addEventListener("resize", function () {
-      resizeCanvas();
-    });
+    window.addEventListener("resize", resizeCanvas);
 
     //------------Click------------
-    window.addEventListener("click", function () {
-      initConfetti();
-    });
+    window.addEventListener("click", initConfetti);
+
+    return () => {
+      window.howl.coinDrop.stop();
+      window.removeEventListener("resize", resizeCanvas);
+      window.removeEventListener("click", initConfetti);
+    };
   }, []);
 
   return ReactDOM.createPortal(

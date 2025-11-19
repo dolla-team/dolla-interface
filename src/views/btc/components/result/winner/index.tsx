@@ -26,6 +26,7 @@ export default function Winner({ onClose }: { onClose: () => void }) {
     useBtcContext();
 
   useEffect(() => {
+    window.howl.bidSuccess.play();
     if (coinRef.current) {
       gsap
         .timeline()

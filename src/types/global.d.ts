@@ -7,6 +7,8 @@ declare global {
     howl: {
       flip: Howl;
       bgm: Howl;
+      coinDrop: Howl;
+      bidSuccess: Howl;
     };
     cachedPoolId: number;
     drawsUpdateTimer: NodeJS.Timeout;
