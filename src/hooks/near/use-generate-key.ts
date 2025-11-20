@@ -1,6 +1,5 @@
 import { useNearKeyStore } from "@/stores/use-near-key";
 import { KeyPair, KeyPairSigner } from "near-api-js";
-import { useSignMessage } from "@privy-io/react-auth";
 import { getUserId, viewMethod } from "./util";
 import { useAuth } from "@/contexts/auth/privy";
 import { QUOTE_TOKEN } from "@/config/btc";
@@ -10,8 +9,7 @@ import useToast from "../use-toast";
 
 export default function useGenerateKey() {
   const { set, publicKey, privateKey } = useNearKeyStore();
-  const { signMessage } = useSignMessage();
-  const { address, chainType, nearAccount } = useAuth();
+  const { address, chainType, nearAccount, signMessage } = useAuth();
   const toast = useToast();
 
   async function generateKeyPair(isDeposit = false) {
@@ -104,11 +102,9 @@ export default function useGenerateKey() {
 
     const payloadString = JSON.stringify(payload);
 
-    const _signature = await signMessage({
-      message: payloadString
-    });
+    const _signature = await signMessage(payloadString, true);
 
-    const signature = _signature.signature.replace(/^0x/, "");
+    const signature = _signature.replace(/^0x/, "");
 
     await axiosInstance.put(`/api/v1/user/publickey`, {
       payload: payloadString,

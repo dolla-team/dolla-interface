@@ -10,7 +10,6 @@ import useUserInfo from "@/hooks/use-user-info";
 import type { ReactNode } from "react";
 import useLogin from "@/hooks/use-login";
 import {
-  useSignMessage,
   usePrivy,
   useWallets,
   useUser,
@@ -18,7 +17,7 @@ import {
 } from "@privy-io/react-auth";
 // @ts-ignore
 import { useWallets as useSolanaWallets } from "@privy-io/react-auth/solana";
-
+import useSignMessage from "@/hooks/near/use-sign-message";
 import { useCreateWallet as useCreateSolanaWallet } from "@privy-io/react-auth/solana";
 import useConfig from "@/hooks/use-config";
 import useUserInfoStore from "@/stores/use-user-info";
@@ -28,7 +27,6 @@ import useCode from "@/hooks/airdrop/use-code";
 import useCreateWhitelist from "@/hooks/user/use-create-whitelist";
 import { useGlobalStore } from "@/stores/use-global";
 import LoginTimeoutModal from "@/components/modal/login-timeout";
-import { ethers } from "ethers";
 
 export const AuthContext = React.createContext<any | null>(null);
 
@@ -84,6 +82,8 @@ export const AuthProvider: React.FC<{
     );
   }, [solanaWallets, chainType, user?.wallet]);
 
+  const signMessage = useSignMessage({ privyEvmWallet, chainType });
+
   const address = useMemo(() => {
     return chainType === "solana" && user?.wallet
       ? user.wallet.address
@@ -106,7 +106,6 @@ export const AuthProvider: React.FC<{
 
   useCode(userInfo);
 
-  const { signMessage } = useSignMessage();
   const { onLogin } = useLogin();
 
   const { run: updateAccount } = useDebounceFn(
@@ -143,57 +142,17 @@ export const AuthProvider: React.FC<{
       const time = Date.now();
       const userId = user.id.split(":")[2];
 
-      let signature: string;
       let message: string;
 
       if (chainType === "Evm") {
         message = `login dolla, address:${address.toLowerCase()}, time:${time}`;
-        // Use MetaMask for signing
-        const ethereumProvider = await (
-          privyEvmWallet as any
-        ).getEthereumProvider();
-        if (!ethereumProvider) {
-          throw new Error("Failed to get Ethereum provider");
-        }
-        const provider = new ethers.providers.Web3Provider(ethereumProvider);
-        const signer = provider.getSigner();
-        signature = await signer.signMessage(message);
       } else if (chainType === "solana") {
-        const message = `login dolla, address:${address}, time:${time}`;
-        // const message = `login dolla, address:E4APdiYDj6W58tsfSgYbxu6GfckvZ4SQBDbDGobh3YEt, time:1763545168104`;
-
-        // Convert message to Buffer for Solana signing (signMessage expects Buffer)
-        const encodedMessage = new TextEncoder().encode(message);
-
-        // Sign message with Solana wallet
-
-        const signResult = await (window as any).solana?.signMessage(
-          encodedMessage
-        );
-
-        // Handle different signature formats
-        // Privy Solana wallet may return signature as Uint8Array or base58 string
-        if (typeof signResult === "string") {
-          signature = signResult;
-        } else if (signResult?.signature) {
-          // If it's an object with signature property
-          const sig = signResult.signature;
-          signature =
-            typeof sig === "string" ? sig : Buffer.from(sig).toString("base64");
-        } else if (signResult instanceof Uint8Array) {
-          // Convert Uint8Array to base64 string
-          signature = Buffer.from(signResult).toString("base64");
-        } else {
-          throw new Error("Unexpected signature format from Solana wallet");
-        }
+        message = `login dolla, address:${address}, time:${time}`;
       } else {
-        const message = `login dolla, sol_address:${privySolanaWallet?.address}, wallet_id:${userId}, time:${time}`;
-        // Use Privy embedded wallet for signing
-        const { signature: privySignature } = await signMessage({
-          message
-        });
-        signature = privySignature;
+        message = `login dolla, sol_address:${privySolanaWallet?.address}, wallet_id:${userId}, time:${time}`;
       }
+
+      let signature: string = await signMessage(message);
 
       onLogin({
         address: address,
@@ -315,7 +274,8 @@ export const AuthProvider: React.FC<{
         updateNearAccount,
         login,
         logout,
-        onQueryUserInfo
+        onQueryUserInfo,
+        signMessage
       }}
     >
       {children}
