@@ -37,7 +37,7 @@ export default function useLogin() {
           time,
           privy_wallet_id: userId
         };
-        if (solAddress && chainType === "") {
+        if (solAddress) {
           params.sol_address = solAddress;
         }
         if (chainType) {

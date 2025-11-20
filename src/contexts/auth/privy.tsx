@@ -75,15 +75,13 @@ export const AuthProvider: React.FC<{
     return privyItem || { address: "" };
   }, [wallets, isLoggedOut, user, chainType]);
 
-  const [privySolanaWallet] = useMemo(() => {
-    if (solanaWallets.length === 0) return [null];
-    return [
-      solanaWallets.find((item: any) =>
-        chainType === "solana"
-          ? item.address === user?.wallet?.address
-          : item?.standardWallet?.isPrivyWallet
-      )
-    ];
+  const privySolanaWallet = useMemo(() => {
+    if (solanaWallets.length === 0) return null;
+    return solanaWallets.find((item: any) =>
+      chainType === "solana"
+        ? item.address === user?.wallet?.address
+        : item?.standardWallet?.isPrivyWallet
+    );
   }, [solanaWallets, chainType, user?.wallet]);
 
   const address = useMemo(() => {
@@ -92,7 +90,10 @@ export const AuthProvider: React.FC<{
       : privyEvmWallet?.address;
   }, [chainType, user?.wallet, privyEvmWallet]);
 
-  const { account, fetchAccount: updateNearAccount } = useAccount(address);
+  const { account, fetchAccount: updateNearAccount } = useAccount(
+    address,
+    chainType
+  );
 
   const {
     info: userInfo,

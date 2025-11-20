@@ -3,7 +3,6 @@ import useTokenPrice from "@/hooks/use-token-price";
 import { useDebounceFn } from "ahooks";
 import useTrade from "./use-trade";
 import Big from "big.js";
-import { useAccount } from "@/hooks/evm/use-account";
 import { tokens } from "../config";
 import { useAuth } from "@/contexts/auth";
 import { BASE_TOKEN, QUOTE_TOKEN } from "@/config/btc";
@@ -46,7 +45,6 @@ export function useSwap(props?: any) {
     return _tokenIds;
   }, [inputCurrency, outputCurrency]);
 
-  const { chainId, account } = useAccount();
   const { prices, loading: pricesLoading } = useTokenPrice(tokenIds as any);
 
   const { loading, trade, onQuoter, onSwap } = useTrade({
@@ -137,8 +135,6 @@ export function useSwap(props?: any) {
   }, [trade]);
 
   return {
-    account,
-    chainId,
     inputCurrencyAmount,
     setInputCurrencyAmount,
     outputCurrencyAmount,
