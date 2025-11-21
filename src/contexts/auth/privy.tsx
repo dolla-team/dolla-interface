@@ -246,10 +246,6 @@ export const AuthProvider: React.FC<{
       return;
     }
     console.log(user?.wallet, address, globalStore.isInWhitelist);
-    if (user?.wallet?.address !== address) {
-      logout();
-      return;
-    }
 
     if (user && globalStore.isInWhitelist) {
       updateAccount();
