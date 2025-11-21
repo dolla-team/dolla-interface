@@ -2,7 +2,7 @@ import axiosInstance from "@/libs/axios";
 import { useAuth } from "@/contexts/auth";
 import useGenerateKey from "@/hooks/near/use-generate-key";
 import { KeyPair } from "near-api-js";
-import { viewMethod } from "./util";
+import { viewMethod, getUserId } from "./util";
 import { QUOTE_TOKEN } from "@/config/btc";
 import useBtcDetailStore from "@/stores/use-btc-detail";
 
@@ -12,7 +12,7 @@ export default function useBid(
   onTxFail: () => void,
   onTxFail2: () => void
 ) {
-  const { address } = useAuth();
+  const { address, chainType } = useAuth();
   const { generateKeyPair } = useGenerateKey();
   const btcDetailStore = useBtcDetailStore();
   // Function to sign a message using NEAR private key
@@ -74,7 +74,7 @@ export default function useBid(
     try {
       const res = await viewMethod({
         method: "get_account",
-        args: { user_id: { Evm: address.replace(/^0x/, "").toLowerCase() } }
+        args: { user_id: getUserId(address, chainType) }
       });
       const random_seed = Array.from({ length: 64 }, () =>
         Math.floor(Math.random() * 16).toString(16)
@@ -87,9 +87,7 @@ export default function useBid(
         nonce: res.nonce,
         bet_token: { FT: QUOTE_TOKEN.address },
         gas_token: { FT: QUOTE_TOKEN.address },
-        user_id: {
-          Evm: address.slice(2).toLowerCase()
-        }
+        user_id: getUserId(address, chainType)
       };
 
       // Sign the payload using NEAR private key

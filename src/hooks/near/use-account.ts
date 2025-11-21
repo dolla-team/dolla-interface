@@ -1,16 +1,16 @@
 import { useEffect, useState } from "react";
-import { viewMethod } from "./util";
+import { viewMethod, getUserId } from "./util";
 import Big from "big.js";
 import { QUOTE_TOKEN, BASE_TOKEN } from "@/config/btc";
 
-export default function useAccount(evmAddress: string) {
+export default function useAccount(address: string, chainType: string) {
   const [account, setAccount] = useState<any | null>();
 
   const fetchAccount = async () => {
     try {
       const res = await viewMethod({
         method: "get_account",
-        args: { user_id: { Evm: evmAddress.replace(/^0x/, "").toLowerCase() } }
+        args: { user_id: getUserId(address, chainType) }
       });
 
       let quoteBalance = Big(0);
@@ -68,7 +68,7 @@ export default function useAccount(evmAddress: string) {
   };
 
   useEffect(() => {
-    if (!evmAddress) {
+    if (!address) {
       setAccount(null);
       return;
     }
@@ -79,7 +79,7 @@ export default function useAccount(evmAddress: string) {
         clearTimeout(window.accountTimer);
       }
     };
-  }, [evmAddress]);
+  }, [address]);
 
   return {
     account,

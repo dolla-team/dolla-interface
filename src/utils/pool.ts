@@ -162,7 +162,7 @@ export const getSpilledAmount = (pool: any) => {
   if (!pool) return [0, 0, 0];
   if (!pool?.accumulative_bids || pool?.anchor_price === "0") return [0, 0, 0];
 
-  const value = getReAnchorPrice(pool);
+  const value = pool.reward_usd;
   if (value === 0) return [0, 0, 0];
 
   const _spilled = pool.accumulative_bids - value;

@@ -52,7 +52,6 @@ export default function RechargeFrom1click() {
               : new Big(walletStore.selectedToken.minDepositAmount)
                   .mul(10 ** decimals)
                   .toString(),
-          evmAddress: address || "",
           slippageTolerance: 50,
           swapType: "FLEX_INPUT",
           refundType: "ORIGIN_CHAIN",

@@ -23,22 +23,29 @@ export default function useLogin() {
       address: string;
       signature: string;
       time: number;
-      solAddress: string;
+      solAddress?: string;
       userId: string;
       chainType: string;
       onSuccess: () => void;
     }) => {
       try {
         setLoging(true);
-        let path = `/api/v1/account/token?address=${address}&signature=${signature}&time=${time}&privy_wallet_id=${userId}`;
 
+        const params: any = {
+          address,
+          signature,
+          time,
+          privy_wallet_id: userId
+        };
         if (solAddress) {
-          path += `&sol_address=${solAddress}`;
+          params.sol_address = solAddress;
         }
         if (chainType) {
-          path += `&type=${chainType}`;
+          params.type = chainType;
         }
-        const res = await axios.get(path);
+        const res = await axios.get(`/api/v1/account/token`, {
+          params
+        });
 
         localStorage.setItem(
           "_AK_TOKEN_",

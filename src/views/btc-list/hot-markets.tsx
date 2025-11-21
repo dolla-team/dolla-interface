@@ -160,7 +160,7 @@ const MarketItem = ({
   const navigate = useNavigate();
   const valued = useMemo(() => {
     if (!market) return formatNumber(price * value, 2, true);
-    return formatNumber(getReAnchorPrice(market), 2, true);
+    return formatNumber(market.reward_usd, 2, true);
   }, [price, value, market]);
 
   return (

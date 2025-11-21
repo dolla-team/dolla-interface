@@ -1,6 +1,6 @@
 import { useCallback, useRef, useState } from "react";
 import useToast from "@/hooks/use-toast";
-import { getNonce, getProvider, quote } from "@/hooks/near/util";
+import { getNonce, getProvider, getUserId, quote } from "@/hooks/near/util";
 import { transactions } from "near-api-js";
 import { PublicKey } from "near-api-js/lib/utils/key_pair";
 import { functionCall } from "near-api-js/lib/transaction";
@@ -27,7 +27,7 @@ export default function useTrade({ onSuccess }: any) {
   const cachedTokens = useRef<any>(null);
   const prices = {};
   const { generateKeyPair } = useGenerateKey();
-  const { address } = useAuth();
+  const { address, chainType } = useAuth();
   const { report } = useReport();
   const { nearAccount } = useAuth();
 
@@ -59,9 +59,7 @@ export default function useTrade({ onSuccess }: any) {
         setLoading(true);
 
         const msg: any = {
-          u: {
-            Evm: address.replace(/^0x/, "").toLowerCase()
-          },
+          u: getUserId(address, chainType),
           b: "Deposit",
           k: publicKey
         };
