@@ -92,6 +92,7 @@ export default function useWebSocket(
 export function useBidResultSubscription() {
   const allMarketsStore = useAllMarketsStore();
   const btcDetailStore = useBtcDetailStore();
+  const { updateNearAccount } = useAuth();
   // Subscribe to WebSocket bid result updates
   useWebSocket((data: any) => {
     console.log("data", data);
@@ -127,6 +128,7 @@ export function useBidResultSubscription() {
         currentHash: "",
         flipStatus: btcDetailStore.bids === 1 ? 5 : 4
       });
+      updateNearAccount();
     }
   });
 }
