@@ -245,7 +245,7 @@ export const AuthProvider: React.FC<{
       // login();
       return;
     }
-
+    console.log(user?.wallet, address, globalStore.isInWhitelist);
     if (user?.wallet?.address !== address) {
       logout();
       return;
