@@ -8,6 +8,7 @@ export default function useAccount(address: string, chainType: string) {
 
   const fetchAccount = async () => {
     try {
+      clearTimeout(window.accountTimer);
       const res = await viewMethod({
         method: "get_account",
         args: { user_id: getUserId(address, chainType) }
