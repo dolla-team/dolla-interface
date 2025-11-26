@@ -67,8 +67,8 @@ export const AuthProvider: React.FC<{
     if (isLoggedOut || !user) return { address: "" };
     const privyItem = wallets.find((item) =>
       chainType === "solana"
-        ? item.connectorType === "embedded"
-        : item.walletClientType === user?.wallet?.walletClientType
+        ? item?.connectorType === "embedded"
+        : item?.walletClientType === user?.wallet?.walletClientType
     );
     return privyItem || { address: "" };
   }, [wallets, isLoggedOut, user, chainType]);

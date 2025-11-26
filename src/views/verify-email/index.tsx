@@ -192,10 +192,10 @@ export default function VerifyEmail() {
               className="w-full h-[50px] relative z-[2] !bg-white !text-[#000] !justify-between pr-[10px]"
             >
               <span></span>
-              {user.wallet.connectorType === "injected" ||
-              user.wallet.connectorType === "solana_adapter" ? (
+              {user.wallet?.connectorType === "injected" ||
+              user.wallet?.connectorType === "solana_adapter" ? (
                 <span className="text-[16px] font-[400]">
-                  {formatAddress(user.wallet.address, 5)}
+                  {formatAddress(user.wallet?.address, 5)}
                 </span>
               ) : (
                 <span className="text-[16px] font-[400]">
