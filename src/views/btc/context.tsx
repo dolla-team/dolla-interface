@@ -175,7 +175,16 @@ export const CannonCoinsProvider = ({
         flipComplete: (index: number, addNumber: boolean, notAuto = false) => {
           if (addNumber) flipedNumberRef.current++;
 
-          if (flipedNumberRef.current === btcDetailStore.bids) {
+          if (
+            !notAuto &&
+            btcDetailStore.bidResult?.is_winner &&
+            btcDetailStore.bids > 10 &&
+            index >= btcDetailStore.bids / 2
+          ) {
+            setTimeout(() => {
+              btcDetailStore.set({ flipStatus: 5.5 });
+            }, 600);
+          } else if (flipedNumberRef.current === btcDetailStore.bids) {
             flipedNumberRef.current = 0;
 
             if (!btcDetailStore.bidResult?.is_winner) {
@@ -194,7 +203,7 @@ export const CannonCoinsProvider = ({
           }
 
           if (
-            btcDetailStore.flipStatus === 5 &&
+            btcDetailStore.flipStatus >= 5 &&
             flipedNumberRef.current < btcDetailStore.bids &&
             !notAuto
           ) {
@@ -209,6 +218,13 @@ export const CannonCoinsProvider = ({
             if (isFail) coinsRef.current[i]?.revert();
             else coinsRef.current[i]?.flip(true);
           }
+        },
+        onReplay: () => {
+          flipedNumberRef.current = 0;
+          for (let i = 0; i < btcDetailStore.bids; i++) {
+            coinsRef.current[i]?.flip(true);
+          }
+          btcDetailStore.set({ flipStatus: 5 });
         },
         getPoolRecommend,
         mobileMarketsOpen,

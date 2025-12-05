@@ -20,7 +20,7 @@ export default function Grand({
   return (
     <div
       className={clsx(
-        "relative flex items-center justify-center pr-[10px] mx-auto overflow-hidde h-[calc(100vh-416px)] pt-[25px] xl:scale-none scale-[0.75]",
+        "relative flex items-center justify-center pr-[10px] mx-auto h-[calc(100vh-416px)] pt-[25px] xl:scale-none scale-[0.75]",
         !(pool?.status === 1 || flipStatus !== 0)
           ? "w-[calc(100vw-220px)] z-[20]"
           : "w-[calc(100vw-620px)]",

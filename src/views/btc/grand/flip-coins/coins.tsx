@@ -22,7 +22,7 @@ export function LaptopCoins({
       size={SIZE[bids]}
       points={points[index] || 0}
       ticket={tickets[index] || 0}
-      disabled={flipStatus !== 4 && flipStatus !== 5}
+      disabled={flipStatus !== 4 && flipStatus !== 5 && flipStatus !== 5.5}
       bids={bids}
       index={index}
       ref={(el) => {
@@ -91,7 +91,9 @@ export function MobileCoins({
             size={SIZE[bids]}
             points={points[index] || 0}
             ticket={tickets[index] || 0}
-            disabled={flipStatus !== 4 && flipStatus !== 5}
+            disabled={
+              flipStatus !== 4 && flipStatus !== 5 && flipStatus !== 5.5
+            }
             bids={bids}
             index={index}
             ref={(el) => {

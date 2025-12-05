@@ -21,7 +21,6 @@ import Tips from "./components/tips";
 import Result from "./components/result";
 import { useEffect, useMemo } from "react";
 import useWalletStore from "@/stores/use-wallet";
-import Confetti from "@/components/confetti";
 import LucyDraw from "@/sections/lucy-draw";
 import { BET_UNIT } from "@/config";
 import { useContractConfigStore } from "@/stores/use-contract-config";
@@ -190,7 +189,7 @@ const Content = () => {
       {/* {isMobile && <MarketsModal />} */}
       <Wallet />
       {pool?.status === 1 && <Tips />}
-      {flipStatus === 6 && (
+      {flipStatus > 5 && (
         <Result
           points={sumPoints}
           tickets={sumTickets}
@@ -204,7 +203,6 @@ const Content = () => {
           onBidClick={onBidClick}
         />
       )}
-      {btcDetailStore.bidResult?.is_winner && flipStatus > 4 && <Confetti />}
     </div>
   );
 };
