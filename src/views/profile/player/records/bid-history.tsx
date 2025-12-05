@@ -90,7 +90,7 @@ const BidHistory = (props: any) => {
         ) {
           return (
             <div className="flex items-center gap-[10px]">
-              <div className="bg-[#FFC42F] h-[30px] flex items-center gap-[6px] leading-[30px] rounded-[12px] px-[10px] font-[600] text-[12px]">
+              <div className="bg-[#FFC42F] h-[30px] flex items-center gap-[6px] leading-[30px] rounded-[16px] px-[10px] font-[600] text-[12px]">
                 <span>
                   {formatNumber(
                     Number(record.reward_amount) /
@@ -246,6 +246,7 @@ const RewardInfo = () => {
     <Popover
       trigger={PopoverTrigger.Hover}
       placement={PopoverPlacement.TopLeft}
+      triggerContainerClassName="h-[16px]"
       content={
         <div className="w-[268px] p-[10px] bg-white rounded-[10px] border border-[#E4E4E4]">
           <div className="font-[500] text-black text-[12px]">Winner Fee</div>
