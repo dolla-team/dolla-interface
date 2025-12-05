@@ -93,7 +93,7 @@ const BidHistory = (props: any) => {
               <div className="bg-[#FFC42F] h-[30px] flex items-center gap-[6px] leading-[30px] rounded-[16px] px-[10px] font-[600] text-[12px]">
                 <span>
                   {formatNumber(
-                    Number(record.reward_amount) /
+                    Number(record.claim_reward_amount) /
                       10 ** record.reward_token_info?.[0].decimals,
                     6,
                     true
