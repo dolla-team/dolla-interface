@@ -179,7 +179,7 @@ export const CannonCoinsProvider = ({
             !notAuto &&
             btcDetailStore.bidResult?.is_winner &&
             btcDetailStore.bids > 10 &&
-            index >= btcDetailStore.bids / 2
+            index >= (btcDetailStore.bids === 50 ? 20 : 30)
           ) {
             setTimeout(() => {
               btcDetailStore.set({ flipStatus: 5.5 });

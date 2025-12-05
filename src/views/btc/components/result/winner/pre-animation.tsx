@@ -7,7 +7,9 @@ import { useBtcContext } from "../../../context";
 export default function PreAnimation({ onClose }: { onClose: () => void }) {
   const backdropRef = useRef<HTMLDivElement>(null);
   const [showCenterArea, setShowCenterArea] = useState(false);
-  const { pool } = useBtcContext();
+  const { pool, bids } = useBtcContext();
+
+  const duration = bids === 50 ? 8000 : 14000;
 
   useEffect(() => {
     if (!backdropRef.current) {
@@ -23,7 +25,7 @@ export default function PreAnimation({ onClose }: { onClose: () => void }) {
         setShowCenterArea(true);
         timer = setTimeout(() => {
           onClose();
-        }, 10000);
+        }, duration + 500);
       }
     });
     return () => {
@@ -50,7 +52,7 @@ export default function PreAnimation({ onClose }: { onClose: () => void }) {
             decimals={2}
             className="text-[60px] font-[500] bg-gradient-to-b from-[#FFE39C] to-[#FFC42F] bg-clip-text text-transparent"
             prefix="$"
-            duration={8}
+            duration={duration / 1000}
           />
           <div className="text-[20px] text-white font-[500] mt-[10px]">
             Prize Valued

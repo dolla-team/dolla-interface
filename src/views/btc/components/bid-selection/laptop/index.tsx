@@ -149,7 +149,7 @@ export default function BidSelection({
           ))}
         </div>
       </div>
-      {!isDetail && (
+      {pool?.status !== 2 && (
         <AnimatePresence>
           {bids === 1 && (
             <motion.img
