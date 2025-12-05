@@ -11,6 +11,8 @@ export default function PreAnimation({ onClose }: { onClose: () => void }) {
 
   const duration = bids === 50 ? 8000 : 14000;
 
+  const rewardUsd = Number(pool?.reward_usd || 0);
+
   useEffect(() => {
     if (!backdropRef.current) {
       return;
@@ -47,15 +49,21 @@ export default function PreAnimation({ onClose }: { onClose: () => void }) {
             src="/btc/winner-coins.gif"
             className="w-[500px] h-[500px] object-cover"
           />
-          <AnimatedCounter
-            value={Number(pool?.reward_usd || 0)}
-            decimals={2}
-            className="text-[60px] font-[500] bg-gradient-to-b from-[#FFE39C] to-[#FFC42F] bg-clip-text text-transparent"
-            prefix="$"
-            duration={duration / 1000}
-          />
-          <div className="text-[20px] text-white font-[500] mt-[10px]">
-            Prize Valued
+          <div
+            style={{
+              width: 100 + rewardUsd.toLocaleString().length * 30
+            }}
+          >
+            <AnimatedCounter
+              value={rewardUsd}
+              decimals={2}
+              className="text-[60px] font-[500] bg-gradient-to-b from-[#FFE39C] to-[#FFC42F] bg-clip-text text-transparent"
+              prefix="$"
+              duration={duration / 1000}
+            />
+            <div className="text-[20px] text-white font-[500] mt-[10px] w-full text-center">
+              Prize Valued
+            </div>
           </div>
         </div>
       )}
