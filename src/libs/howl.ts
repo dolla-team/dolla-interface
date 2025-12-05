@@ -26,9 +26,16 @@ const coinSound = new Howl({
   loop: false
 });
 
+const prevAnimationSound = new Howl({
+  src: ["/audios/prev-animation.mp3"],
+  volume: 0.5,
+  loop: true
+});
+
 window.howl = {
   flip: flipSound,
   bgm: bgmSound,
   coinDrop: coinSound,
-  bidSuccess: bidSuccessSound
+  bidSuccess: bidSuccessSound,
+  prevAnimation: prevAnimationSound
 };

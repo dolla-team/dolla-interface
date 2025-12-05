@@ -17,6 +17,7 @@ export default function PreAnimation({ onClose }: { onClose: () => void }) {
     if (!backdropRef.current) {
       return;
     }
+    window.howl.prevAnimation.play();
     let timer: NodeJS.Timeout | null = null;
     gsap.timeline().to(backdropRef.current, {
       delay: 0,
@@ -27,10 +28,12 @@ export default function PreAnimation({ onClose }: { onClose: () => void }) {
         setShowCenterArea(true);
         timer = setTimeout(() => {
           onClose();
+          window.howl.prevAnimation.stop();
         }, duration + 500);
       }
     });
     return () => {
+      window.howl.bgm.stop();
       if (timer) {
         clearTimeout(timer);
       }
