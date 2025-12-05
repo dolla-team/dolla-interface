@@ -239,7 +239,8 @@ export default function EndPanel({ data }: { data: any }) {
             }}
           />
         </div>
-        {data?.winner_user_id === userInfo?.id && (
+        {/* data?.winner_user_id === userInfo?.id */}
+        {true && (
           <div className="absolute bottom-[-40px] left-0 z-[10] w-full flex items-center justify-center">
             <button
               className="button flex items-center gap-[10px]"
