@@ -27,7 +27,7 @@ const coinSound = new Howl({
 });
 
 const prevAnimationSound = new Howl({
-  src: ["/audios/prev-animation.mp3"],
+  src: ["/audios/prev-animation.m4a"],
   volume: 0.5,
   loop: true
 });
