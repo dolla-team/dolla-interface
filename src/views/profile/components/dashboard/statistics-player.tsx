@@ -203,7 +203,7 @@ const YourWonInfo = ({
                 {" "}
                 <span>#{item.pool_id}</span>
                 <span className="ml-[20px]">
-                  {Big(item.reward_amount || 0)
+                  {Big(item.claim_reward_amount || 0)
                     .div(10 ** BASE_TOKEN.decimals)
                     .toString()}{" "}
                   {BASE_TOKEN.symbol}
