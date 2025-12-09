@@ -78,7 +78,7 @@ export default function PreAnimation({ onClose }: { onClose: () => void }) {
           className="relative w-[440px] h-[440px]"
         >
           <img
-            className="w-[348px] h-[386px] object-cover absolute top-0 left-[120px] z-[2]"
+            className="w-[348px] h-[386px] object-cover absolute bottom-0 left-[120px] z-[2]"
             src="/btc/pre-left-woman.png"
           />
           <motion.img
@@ -90,7 +90,7 @@ export default function PreAnimation({ onClose }: { onClose: () => void }) {
               repeat: Infinity,
               ease: "easeInOut"
             }}
-            className="w-[220px] h-[343px] object-cover absolute top-[-92px] left-[20px]"
+            className="w-[220px] h-[343px] object-cover absolute top-[-42px] left-[20px]"
             src="/btc/pre-left-woman-arm.png"
           />
         </motion.div>
@@ -111,7 +111,7 @@ export default function PreAnimation({ onClose }: { onClose: () => void }) {
           className="relative w-[492px] h-[300px]"
         >
           <img
-            className="w-[491px] h-[297px] object-cover absolute top-0 right-[10px]"
+            className="w-[491px] h-[297px] object-cover absolute bottom-0 right-[10px]"
             src="/btc/pre-right-woman.png"
           />
           <motion.img
