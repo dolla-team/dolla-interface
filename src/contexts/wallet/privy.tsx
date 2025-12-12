@@ -21,14 +21,13 @@ export default function WalletProvider({
           loginMessage: "Enter your email to receive a secure code",
           walletList: ["detected_ethereum_wallets", "detected_solana_wallets"]
         },
-        loginMethods: ["email", "google", "wallet"],
+        loginMethods: ["email", "google", "twitter", "wallet"],
         fundingMethodConfig: {
           moonpay: {
             useSandbox: true
           }
         },
         embeddedWallets: {
-          requireUserPasswordOnCreate: false,
           showWalletUIs: true
         },
         mfa: {

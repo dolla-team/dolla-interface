@@ -46,7 +46,10 @@ export default function VerifyEmail() {
 
     try {
       const address = user.wallet?.address;
-      const email = user.email?.address || user.google?.email;
+      let email = user.email?.address || user.google?.email;
+      if (user.twitter) {
+        email = "@" + user.twitter.username;
+      }
 
       // Step 1: Check whitelist
       const isWhitelisted = await checkWhitelist(email, address);
@@ -199,7 +202,9 @@ export default function VerifyEmail() {
                 </span>
               ) : (
                 <span className="text-[16px] font-[400]">
-                  {user.email?.address || user.google?.email}
+                  {user.email?.address ||
+                    user.google?.email ||
+                    user.twitter?.name}
                 </span>
               )}
               <div

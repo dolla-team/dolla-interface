@@ -78,7 +78,9 @@ export default function ProfileSetting({ open, onClose }: ProfileSettingProps) {
               )}
             </div>
             <div className="text-[14px] text-[#8A87AA] text-center mt-[6px]">
-              {userInfo?.show_email || formatAddress(userInfo?.user)}
+              {userInfo?.name ||
+                userInfo?.show_email ||
+                formatAddress(userInfo?.user)}
             </div>
             <div className="flex items-center gap-[10px] mt-[18px]">
               <Button
