@@ -18,6 +18,7 @@ export default function useLogin() {
       solAddress,
       userId,
       chainType,
+      twitterId,
       onSuccess
     }: {
       address: string;
@@ -26,6 +27,7 @@ export default function useLogin() {
       solAddress?: string;
       userId: string;
       chainType: string;
+      twitterId?: string | null;
       onSuccess: () => void;
     }) => {
       try {
@@ -42,6 +44,10 @@ export default function useLogin() {
         }
         if (chainType) {
           params.type = chainType;
+        }
+        if (twitterId) {
+          params.twitter_id = "@" + twitterId;
+          params.type = "privy_twitter";
         }
         const res = await axios.get(`/api/v1/account/token`, {
           params

@@ -100,7 +100,7 @@ export const AuthProvider: React.FC<{
     loading: userInfoLoading,
     onQueryUserInfo,
     setInfo
-  } = useUserInfo(address);
+  } = useUserInfo(address, user);
 
   const { isCreatedWhitelist } = useCreateWhitelist(userInfo?.show_email);
 
@@ -148,6 +148,8 @@ export const AuthProvider: React.FC<{
         message = `login dolla, address:${address.toLowerCase()}, time:${time}`;
       } else if (chainType === "solana") {
         message = `login dolla, address:${address}, time:${time}`;
+      } else if (user.twitter) {
+        message = `login dolla, sol_address:${privySolanaWallet?.address}, wallet_id:${userId}, twitter: @${user.twitter.username}, time:${time}`;
       } else {
         message = `login dolla, sol_address:${privySolanaWallet?.address}, wallet_id:${userId}, time:${time}`;
       }
@@ -160,7 +162,8 @@ export const AuthProvider: React.FC<{
         signature,
         time,
         userId,
-        chainType,
+        chainType: chainType,
+        twitterId: user.twitter?.username,
         onSuccess: async () => {
           await onQueryUserInfo();
           setAccountRefresher(1);
