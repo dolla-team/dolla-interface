@@ -127,7 +127,7 @@ export default function ShareModal({
         {hasViewButton && (
           <Button
             onClick={() => {
-              navigate(`/btc/detail/${data.pool_id}`);
+              navigate(`/btc/${data.pool_id}`);
             }}
             className="w-full h-[52px] !bg-black rounded-[8px] text-white text-[14px] mt-[8px]"
           >

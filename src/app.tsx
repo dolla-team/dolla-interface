@@ -62,10 +62,6 @@ const router = createBrowserRouter([
         element: <LazyNftCreate />
       },
       {
-        path: "btc",
-        element: <BtcList />
-      },
-      {
         path: "btc/create",
         element: <LazyBtcCreate />
       },
@@ -88,12 +84,12 @@ const router = createBrowserRouter([
     ]
   },
   {
-    path: "btc/detail",
+    path: "btc",
     element: <LazyBtc />,
     errorElement: <ErrorPage />
   },
   {
-    path: "btc/detail/:poolId",
+    path: "btc/:poolId",
     element: <LazyBtc />,
     errorElement: <ErrorPage />
   },

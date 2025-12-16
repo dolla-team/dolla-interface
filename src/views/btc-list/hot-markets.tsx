@@ -279,7 +279,7 @@ const MarketItem = ({
                 navigate("/btc/create");
                 return;
               }
-              navigate("/btc/detail/" + market.pool_id);
+              navigate("/btc/" + market.pool_id);
             }}
           >
             {market ? "Bid Now" : "Launch a Market"}

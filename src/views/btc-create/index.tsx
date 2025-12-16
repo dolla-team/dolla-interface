@@ -235,9 +235,7 @@ export default function BTCCreate() {
                         <button
                           className="button"
                           onClick={() => {
-                            navigate(
-                              `/btc/detail/${referenceData?.top_sale_pool_id}`
-                            );
+                            navigate(`/btc/${referenceData?.top_sale_pool_id}`);
                           }}
                         >
                           <svg
