@@ -27,7 +27,7 @@ export default function Banner() {
         <div className="absolute left-[-60px] bottom-[160px] z-[1] w-[209px] h-[169px] bg-[url('/home/banner-bidder-text.png')] bg-cover bg-center opacity-0 group-hover:opacity-100 translate-y-[50px] group-hover:translate-y-0 transition-transform duration-300"></div>
         <div
           onClick={() => {
-            navigate("/btc/detail");
+            navigate("/btc");
           }}
           className="absolute left-[102px] bottom-[16px] z-[3] w-[152px] h-[40px] bg-linear-to-b from-[#37EFA8] to-[#5BF5BA] flex items-center justify-center rounded-[12px] text-[14px] text-[#2B3337] font-[600] group-hover:animate-[pulse-scale_1s_ease-in-out_infinite]"
         >

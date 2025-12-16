@@ -267,7 +267,7 @@ const Item = ({ item }: { item: any }) => {
   return (
     <div
       onClick={() => {
-        navigate(`/btc/detail/${item.pool_id}`);
+        navigate(`/btc/${item.pool_id}`);
       }}
       className="flex items-center h-full gap-[4px] px-[30px] text-white transition-all duration-200 hover:scale-105 button cursor-pointer"
       onMouseEnter={() => setIsHovered(true)}

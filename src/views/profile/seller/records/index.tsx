@@ -33,7 +33,7 @@ const Records = (props: any) => {
           <div
             className="flex items-center gap-[7px] cursor-pointer"
             onClick={() => {
-              navigate(`/btc/detail/${record.pool_id}`);
+              navigate(`/btc/${record.pool_id}`);
             }}
           >
             <div className="">#{record.pool_id}</div>

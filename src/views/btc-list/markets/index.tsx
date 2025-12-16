@@ -176,7 +176,7 @@ export default function Markets() {
                 key={item}
                 data={pools[item]}
                 onClick={() => {
-                  navigate(`/btc/detail/${item}`);
+                  navigate(`/btc/${item}`);
                 }}
               />
             ))

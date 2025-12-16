@@ -26,7 +26,7 @@ export default function TopWinnersItem({
         level === 3 && "from-[#F87168]/10"
       )}
       onClick={() => {
-        navigate("/btc/detail/" + data.pool_id);
+        navigate("/btc/" + data.pool_id);
       }}
     >
       <ItemLevel

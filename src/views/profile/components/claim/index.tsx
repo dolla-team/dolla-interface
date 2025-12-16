@@ -95,7 +95,7 @@ const ClaimIndex = (props: any) => {
               navigate(
                 record?.nft_ids
                   ? `/nft/detail/${record.pool_id}`
-                  : `/btc/detail/${record.pool_id}`
+                  : `/btc/${record.pool_id}`
               );
             }}
           >

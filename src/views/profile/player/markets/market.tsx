@@ -88,7 +88,7 @@ export default function MarketItem(props: any) {
         </div>
       }
       onClick={() => {
-        navigate(`/btc/detail/${order.pool_id}`);
+        navigate(`/btc/${order.pool_id}`);
       }}
     />
   );

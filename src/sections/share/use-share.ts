@@ -16,6 +16,58 @@ function dataURLtoBlob(dataURL: string): Blob {
   return new Blob([u8arr], { type: mime });
 }
 
+// Helper function to wait for all images to load
+async function waitForImages(
+  node: HTMLElement,
+  timeout: number = 10000
+): Promise<void> {
+  const images = node.querySelectorAll<HTMLImageElement>("img");
+  const imagePromises: Promise<void>[] = [];
+
+  images.forEach((img) => {
+    // If image is already loaded, skip
+    if (img.complete && img.naturalHeight !== 0) {
+      return;
+    }
+
+    // Create a promise that resolves when the image loads or times out
+    const imagePromise = new Promise<void>((resolve) => {
+      const timeoutId = setTimeout(() => {
+        console.warn(`Image loading timeout: ${img.src}`);
+        resolve(); // Resolve anyway to not block the process
+      }, timeout);
+
+      const onLoad = () => {
+        clearTimeout(timeoutId);
+        resolve();
+      };
+
+      const onError = () => {
+        clearTimeout(timeoutId);
+        console.warn(`Image failed to load: ${img.src}`);
+        resolve(); // Resolve anyway to not block the process
+      };
+
+      img.addEventListener("load", onLoad, { once: true });
+      img.addEventListener("error", onError, { once: true });
+
+      // If image has a src and is not complete, wait for it
+      if (img.src && !img.complete) {
+        // Image is loading, wait for load/error event
+      } else {
+        // Image might be complete but naturalHeight is 0, or no src
+        clearTimeout(timeoutId);
+        resolve();
+      }
+    });
+
+    imagePromises.push(imagePromise);
+  });
+
+  // Wait for all images to load or timeout
+  await Promise.all(imagePromises);
+}
+
 export interface ImageGenerationOptions {
   width?: number;
   height?: number;
@@ -80,6 +132,9 @@ export function useShare() {
       };
 
       try {
+        // Wait for all images to load before generating the image
+        await waitForImages(targetNode);
+
         const dataUrl = await domtoimage.toPng(targetNode, config);
 
         return dataUrl;

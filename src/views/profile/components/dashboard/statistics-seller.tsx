@@ -256,7 +256,7 @@ const ActiveListingsInfo = ({
             <div
               key={item.id}
               onClick={() => {
-                navigate(`/btc/detail/${item.pool_id}`);
+                navigate(`/btc/${item.pool_id}`);
               }}
               className="button text-[#2B3337] text-[12px] w-full h-[36px] bg-[#F2F2F299] hover:bg-[#FFC42F] rounded-[8px] flex items-center justify-between px-[10px]"
             >
