@@ -9,7 +9,7 @@ import SellerLevel from "@/components/seller-level";
 import useCopy from "@/hooks/use-copy";
 import CopyIcon from "@/components/icons/copy";
 import { useGlobalStore } from "@/stores/use-global";
-import useReferralList from "@/hooks/airdrop/use-referral-list";
+
 import Popover, {
   PopoverPlacement,
   PopoverTrigger
@@ -22,12 +22,13 @@ import useUserInfoStore from "@/stores/use-user-info";
 import ShareModal from "@/sections/share";
 import { useState } from "react";
 import { formatAddress } from "@/utils/format/address";
+import InvitedEntry from "./invited/entry";
 
 const Dashboard = (props: any) => {
   const { className, tab, pnlList, pnl } = props;
   const globalStore = useGlobalStore();
   const { userInfo, address, login } = useAuth();
-  const { referralData } = useReferralList();
+
   const { onCopy } = useCopy();
   const userInfoStore = useUserInfoStore();
   const [open, setOpen] = useState(false);
@@ -153,32 +154,7 @@ const Dashboard = (props: any) => {
             {/*#region Invite frenz*/}
             <div className="flex flex-col gap-[12px] items-end">
               <div className="flex justify-end gap-[13px] mt-[-10px] items-center">
-                {Number(referralData?.total_num) > 0 && (
-                  <>
-                    <div className="text-[#8C8B8B] text-[12px]">Invited</div>
-                    <div className="flex items-center gap-[6px] h-[32px] bg-[#F2F2F299] border border-[#E4E4E4] rounded-[16px] pl-[5px] pr-[14px]">
-                      <div className="flex items-center">
-                        {referralData.list
-                          ?.slice(0, 5)
-                          .map((item: any, index: number) => (
-                            <Avatar
-                              key={index}
-                              src={item.account_icon}
-                              address={item.account_id}
-                              size={26}
-                              className={clsx(
-                                "rounded-full border-[2px] border-[#383F47] shrink-0 text-[12px]",
-                                index > 0 && "ml-[-8px]"
-                              )}
-                            />
-                          ))}
-                      </div>
-                      <div className="[text-shaow:0px_1px_0px_#000]">
-                        {Number(referralData?.total_num) || 0}
-                      </div>
-                    </div>
-                  </>
-                )}
+                {tab === "seller" && <InvitedEntry tab="seller" />}
                 <Button
                   className="border border-[#383F47]/30 h-[32px] w-[32px] !bg-[#F2F2F299] !rounded-full"
                   onClick={() => {
@@ -201,24 +177,26 @@ const Dashboard = (props: any) => {
                   </svg>
                 </Button>
               </div>
-              <div className="flex items-center gap-[10px]">
-                <div className="text-[#8C8B8B] text-[12px]">Invite link</div>
-                <div className="px-[8px] flex items-center h-[32px] gap-[6px] rounded-[8px] border border-[#E4E4E4] bg-[#D9D9D94D] text-[#2B3337]">
-                  <span className="text-[12px]">
-                    {window.location.host}?code={globalStore.code}
-                  </span>
-                  <button
-                    className="button"
-                    onClick={() => {
-                      onCopy(
-                        `${window.location.origin}?code=${globalStore.code}`
-                      );
-                    }}
-                  >
-                    <CopyIcon color="#2B3337" />
-                  </button>
+              {tab === "seller" && (
+                <div className="flex items-center gap-[10px]">
+                  <div className="text-[#8C8B8B] text-[12px]">Invite link</div>
+                  <div className="px-[8px] flex items-center h-[32px] gap-[6px] rounded-[8px] border border-[#E4E4E4] bg-[#D9D9D94D] text-[#2B3337]">
+                    <span className="text-[12px]">
+                      {window.location.host}?code={globalStore.code}
+                    </span>
+                    <button
+                      className="button"
+                      onClick={() => {
+                        onCopy(
+                          `${window.location.origin}?code=${globalStore.code}`
+                        );
+                      }}
+                    >
+                      <CopyIcon color="#2B3337" />
+                    </button>
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
             {/*#endregion*/}
           </div>

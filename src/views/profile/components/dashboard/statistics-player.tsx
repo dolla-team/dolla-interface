@@ -14,6 +14,7 @@ import Popover, {
   PopoverTrigger
 } from "@/components/popover";
 import PopoverCard from "../popover-card";
+import ReferralPanel from "./referral-panel";
 import useUserWon from "@/hooks/user/use-user-won";
 
 const StatisticsPlayer = (props: any) => {
@@ -28,6 +29,7 @@ const StatisticsPlayer = (props: any) => {
     >
       <RewardCard />
       <BalanceCard />
+      <ReferralPanel />
     </div>
   );
 };
@@ -60,7 +62,7 @@ const RewardCard = () => {
   return (
     <div
       className={clsx(
-        "w-[560px] h-[208px] px-[20px] py-[18px] border border-[#E4E4E4] rounded-[16px] shadow-[0px_0px_6px_rgba(0,_0,_0,_0.1)] bg-size-[105%_120%] bg-center bg-no-repeat"
+        "w-[420px] h-[208px] px-[20px] py-[18px] border border-[#E4E4E4] rounded-[16px] shadow-[0px_0px_6px_rgba(0,_0,_0,_0.1)] bg-size-[105%_120%] bg-center bg-no-repeat"
       )}
       style={{ backgroundImage: `url(${backgroundImage})` }}
     >
@@ -111,7 +113,7 @@ const BalanceCard = () => {
   const { address, login } = useAuth();
   const walletStore = useWalletStore();
   return (
-    <div className="w-[560px] h-[208px] border border-[#E4E4E4] bg-white rounded-[16px] px-[20px] py-[18px] shadow-[0px_0px_6px_rgba(0,_0,_0,_0.1)]">
+    <div className="w-[420px] h-[208px] border border-[#E4E4E4] bg-white rounded-[16px] px-[20px] py-[18px] shadow-[0px_0px_6px_rgba(0,_0,_0,_0.1)]">
       <div className="text-[12px]">Balance</div>
       <div className="text-[32px] font-[700] mt-[24px]">
         ${formatNumber(balance || 0, 2, true)}
