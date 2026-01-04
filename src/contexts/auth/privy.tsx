@@ -124,6 +124,11 @@ export const AuthProvider: React.FC<{
         return;
       }
 
+      if (address && loginedAddress && address !== loginedAddress) {
+        logout();
+        return;
+      }
+
       setLogining(true);
       sign();
     },
