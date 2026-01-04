@@ -68,12 +68,17 @@ export default function InvitedModal({
                   key={index}
                   className="flex items-center justify-between h-[48px] pl-[10px] pr-[22px] mx-[8px] rounded-[8px] hover:bg-[#F2F2F299] transition-colors cursor-pointer"
                 >
-                  <Avatar
-                    src={item.account_icon}
-                    address={item.account_id}
-                    size={32}
-                    className="rounded-full"
-                  />
+                  <div className="flex items-center gap-[8px]">
+                    <Avatar
+                      src={item.account_icon}
+                      address={item.account_id}
+                      size={32}
+                      className="rounded-full"
+                    />
+                    <div className="text-[12px] text-[#2B3337] font-[500]">
+                      {item.account_name}
+                    </div>
+                  </div>
                   <div className="text-[12px] text-[#2B3337] font-[500]">
                     {dayjs(item.time).format("YYYY-MM-DD HH:mm:ss")}
                   </div>
