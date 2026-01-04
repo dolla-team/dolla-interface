@@ -1,12 +1,18 @@
-import AnimatedCounter from "@/components/animated-counter";
+import { usePrivy } from "@privy-io/react-auth";
+import Button from "@/components/button";
 
 export default function TempPage() {
+  const { exportWallet } = usePrivy();
   return (
     <div className="h-screen w-screen bg-white">
-      <div>
-        <AnimatedCounter value={1234567} prefix="$" />
-      </div>
-      <AnimatedCounter value={3.14} decimals={2} suffix="%" />
+      <Button
+        onClick={() => {
+          exportWallet();
+        }}
+        className="h-[40px] w-[200px] !bg-black text-white"
+      >
+        Export Private Key
+      </Button>
     </div>
   );
 }
