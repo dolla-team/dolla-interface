@@ -5,8 +5,10 @@ import { formatNumber } from "@/utils/format/number";
 import Big from "big.js";
 
 const MIN_CLAIM_AMOUNT: Record<string, number> = {
-  USDT: 10,
-  BTC: 0.0001
+  // USDT: 10,
+  // BTC: 0.0001
+  USDT: 0,
+  BTC: 0
 };
 
 export default function ClaimModal({

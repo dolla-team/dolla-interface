@@ -53,7 +53,8 @@ export default function useClaim(onSuccess?: () => void) {
       setClaimableAmount({
         totalUsd: totalUsd.toString(),
         totalClaimable: totalClaimable.toString(),
-        tokens: claimable
+        tokens: claimable,
+        user_type: response.data?.data?.user_type
       });
     } catch (err: any) {
       console.error("Failed to fetch claimable rewards:", err);

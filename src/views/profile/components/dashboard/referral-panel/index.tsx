@@ -63,45 +63,71 @@ export default function ReferralPanel() {
               </div>
             )}
           </div>
-          <div>
-            <div className="text-[#2B3337] text-[12px]">To be claimed</div>
+          {claimableAmount?.user_type === "manager" ? (
             <div
-              className="mt-[6px] flex items-center gap-[6px]"
+              className="button flex items-center gap-[4px]"
               onClick={() => {
-                if (Big(claimableAmount.totalClaimable || 0).gt(0)) {
-                  setOpenClaimModal(true);
-                }
+                window.open("https://dashboard.dolla.market/", "_blank");
               }}
             >
-              <span
-                className={clsx(
-                  "text-[#000] text-[14px] font-[700]",
-                  Big(claimableAmount.totalClaimable || 0).gt(0)
-                    ? "underline button"
-                    : ""
-                )}
-              >
-                ${formatNumber(claimableAmount.totalClaimable || 0, 2, true)}
+              <span className="text-[12px] text-[#2B3337] underline">
+                Dashboard
               </span>
-              {Big(claimableAmount.totalClaimable || 0).gt(0) && (
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="12"
-                  height="13"
-                  viewBox="0 0 12 13"
-                  fill="none"
-                  className="button"
-                >
-                  <path
-                    d="M6 8.58623V1.38623M6 1.38623L1.83333 5.38623M6 1.38623L10.1667 5.38623M1 11.3862H11"
-                    stroke="#00B1FF"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                  />
-                </svg>
-              )}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="7"
+                height="13"
+                viewBox="0 0 7 13"
+                fill="none"
+              >
+                <path
+                  d="M0.576172 0.480225L5.57617 6.48022L0.576172 12.4802"
+                  stroke="black"
+                  strokeWidth="1.5"
+                />
+              </svg>
             </div>
-          </div>
+          ) : (
+            <div>
+              <div className="text-[#2B3337] text-[12px]">To be claimed</div>
+              <div
+                className="mt-[6px] flex items-center gap-[6px]"
+                onClick={() => {
+                  if (Big(claimableAmount.totalClaimable || 0).gt(0)) {
+                    setOpenClaimModal(true);
+                  }
+                }}
+              >
+                <span
+                  className={clsx(
+                    "text-[#000] text-[14px] font-[700]",
+                    Big(claimableAmount.totalClaimable || 0).gt(0)
+                      ? "underline button"
+                      : ""
+                  )}
+                >
+                  ${formatNumber(claimableAmount.totalClaimable || 0, 2, true)}
+                </span>
+                {Big(claimableAmount.totalClaimable || 0).gt(0) && (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="12"
+                    height="13"
+                    viewBox="0 0 12 13"
+                    fill="none"
+                    className="button"
+                  >
+                    <path
+                      d="M6 8.58623V1.38623M6 1.38623L1.83333 5.38623M6 1.38623L10.1667 5.38623M1 11.3862H11"
+                      stroke="#00B1FF"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                    />
+                  </svg>
+                )}
+              </div>
+            </div>
+          )}
         </div>
       </div>
       <ClaimModal
