@@ -48,8 +48,8 @@ const Records = (props: any) => {
       <Switch
         tab={tab}
         tabs={[
-          { label: "Bid History", value: "bidHistory" },
-          { label: "Account", value: "account" }
+          { label: "Bid", value: "bidHistory" },
+          { label: "Balance change", value: "account" }
         ]}
         onChange={setTab}
         className="w-[241px] !border-[1px] !border-[#E4E4E4] !rounded-[10px] !p-[0px] max-md:mx-auto !bg-[#F2F2F299]"

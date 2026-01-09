@@ -202,7 +202,7 @@ const Dashboard = (props: any) => {
                 </Button>
               </div>
               <div className="flex items-center gap-[10px]">
-                <div className="text-[#8C8B8B] text-[12px]">Invite link</div>
+                <div className="text-[#8C8B8B] text-[12px]">Referral link</div>
                 <div className="px-[8px] flex items-center h-[32px] gap-[6px] rounded-[8px] border border-[#E4E4E4] bg-[#D9D9D94D] text-[#2B3337]">
                   <span className="text-[12px]">
                     {window.location.host}?code={globalStore.code}
