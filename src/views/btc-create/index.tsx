@@ -403,7 +403,7 @@ const Title = () => {
   return (
     <div className="flex items-center justify-center gap-[10px] text-white">
       <span className="text-[20px] font-[500]">
-        Create {BASE_TOKEN.symbol} Market
+        Create a {BASE_TOKEN.symbol} Market
       </span>
     </div>
   );
