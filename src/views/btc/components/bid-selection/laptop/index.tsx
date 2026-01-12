@@ -64,7 +64,7 @@ export default function BidSelection({
 }) {
   const tipsStore = useTipsStore();
   const { set } = useWalletStore();
-  const { setFlipStatus } = useBtcContext();
+  const { setFlipStatus, isDetail } = useBtcContext();
   const { address, login } = useAuth();
 
   return (
@@ -149,58 +149,64 @@ export default function BidSelection({
           ))}
         </div>
       </div>
-      <AnimatePresence>
-        {bids === 1 && (
-          <motion.img
-            key="bid-1"
-            src={balanceNotEnough ? "/btc/bid1-disabled.png" : "/btc/bid1.png"}
-            alt="bid 1"
-            className={clsx(
-              "w-[282px] h-[239px] absolute bottom-[60px] left-[calc(50%-120px)] xl:scale-none scale-[0.75]"
-            )}
-            {...animate}
-          />
-        )}
-        {bids === 10 && (
-          <motion.img
-            key="bid-10"
-            src={
-              balanceNotEnough ? "/btc/bid10-disabled.png" : "/btc/bid10.png"
-            }
-            alt="bid 10"
-            className={clsx(
-              "w-[331px] h-[194px] absolute bottom-[110px] left-[calc(50%-150px)] xl:scale-none scale-[0.75]"
-            )}
-            {...animate}
-          />
-        )}
-        {bids === 50 && (
-          <motion.img
-            key="bid-50"
-            src={
-              balanceNotEnough ? "/btc/bid50-disabled.png" : "/btc/bid50.png"
-            }
-            alt="bid 50"
-            className={clsx(
-              "w-[272px] h-[225px] absolute bottom-[84px] left-[calc(50%-130px)] xl:scale-none scale-[0.75]"
-            )}
-            {...animate}
-          />
-        )}
-        {bids === 100 && (
-          <motion.img
-            key="bid-100"
-            src={
-              balanceNotEnough ? "/btc/bid100-disabled.png" : "/btc/bid100.png"
-            }
-            alt="bid 100"
-            className={clsx(
-              "w-[289px] h-[198px] absolute bottom-[100px] left-[calc(50%-130px)] xl:scale-none scale-[0.75]"
-            )}
-            {...animate}
-          />
-        )}
-      </AnimatePresence>
+      {pool?.status !== 2 && (
+        <AnimatePresence>
+          {bids === 1 && (
+            <motion.img
+              key="bid-1"
+              src={
+                balanceNotEnough ? "/btc/bid1-disabled.png" : "/btc/bid1.png"
+              }
+              alt="bid 1"
+              className={clsx(
+                "w-[282px] h-[239px] absolute bottom-[60px] left-[calc(50%-120px)] xl:scale-none scale-[0.75] pointer-events-none"
+              )}
+              {...animate}
+            />
+          )}
+          {bids === 10 && (
+            <motion.img
+              key="bid-10"
+              src={
+                balanceNotEnough ? "/btc/bid10-disabled.png" : "/btc/bid10.png"
+              }
+              alt="bid 10"
+              className={clsx(
+                "w-[331px] h-[194px] absolute bottom-[110px] left-[calc(50%-150px)] xl:scale-none scale-[0.75] pointer-events-none"
+              )}
+              {...animate}
+            />
+          )}
+          {bids === 50 && (
+            <motion.img
+              key="bid-50"
+              src={
+                balanceNotEnough ? "/btc/bid50-disabled.png" : "/btc/bid50.png"
+              }
+              alt="bid 50"
+              className={clsx(
+                "w-[272px] h-[225px] absolute bottom-[84px] left-[calc(50%-130px)] xl:scale-none scale-[0.75] pointer-events-none"
+              )}
+              {...animate}
+            />
+          )}
+          {bids === 100 && (
+            <motion.img
+              key="bid-100"
+              src={
+                balanceNotEnough
+                  ? "/btc/bid100-disabled.png"
+                  : "/btc/bid100.png"
+              }
+              alt="bid 100"
+              className={clsx(
+                "w-[289px] h-[198px] absolute bottom-[100px] left-[calc(50%-130px)] xl:scale-none scale-[0.75] pointer-events-none"
+              )}
+              {...animate}
+            />
+          )}
+        </AnimatePresence>
+      )}
     </div>
   );
 }

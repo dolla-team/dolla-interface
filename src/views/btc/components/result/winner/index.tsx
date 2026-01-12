@@ -15,14 +15,16 @@ import MultipleTag from "@/components/multiple-tag";
 import WinnerImg from "./img";
 import ShareModal from "@/sections/share";
 import "./index.scss";
+import Confetti from "@/components/confetti";
+import PreAnimation from "./pre-animation";
 
-export default function Winner({ onClose }: { onClose: () => void }) {
+function Winner({ onClose }: { onClose: () => void }) {
   const { userInfo } = useAuth();
   const [showShareModal, setShowShareModal] = useState(false);
   const [animationStatus, setAnimationStatus] = useState(0); // 0: coin rotating, 1: show bg
   const coinRef = useRef<HTMLDivElement>(null);
   const bgRef = useRef<HTMLDivElement>(null);
-  const { poolAmount, getPoolRecommend, pool, bids, isDetail } =
+  const { poolAmount, getPoolRecommend, pool, bids, isDetail, onReplay } =
     useBtcContext();
 
   useEffect(() => {
@@ -59,6 +61,7 @@ export default function Winner({ onClose }: { onClose: () => void }) {
 
   return (
     <>
+      <Confetti />
       <button
         className="fixed right-[20px] top-[20px] z-[110] button"
         onClick={() => {
@@ -185,6 +188,24 @@ export default function Winner({ onClose }: { onClose: () => void }) {
           </div>
         </div>
         <WinnerImg />
+        <button
+          className="absolute bottom-[20px] right-[20px] z-[110] button flex items-center gap-[10px]"
+          onClick={onReplay}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="13"
+            height="15"
+            viewBox="0 0 13 15"
+            fill="none"
+          >
+            <path
+              d="M12 5.46717C13.3333 6.23697 13.3333 8.16147 12 8.93127L3 14.1274C1.66667 14.8972 -7.31543e-07 13.935 -6.64245e-07 12.3954L-2.09983e-07 2.00307C-1.42685e-07 0.463467 1.66667 -0.498786 3 0.271015L12 5.46717Z"
+              fill="white"
+            />
+          </svg>
+          <span className="text-white text-[20px] font-[Bungee]">Replay</span>
+        </button>
       </div>
       <ShareModal
         open={showShareModal}
@@ -206,5 +227,18 @@ export default function Winner({ onClose }: { onClose: () => void }) {
         }}
       />
     </>
+  );
+}
+
+export default function Result({ onClose }: { onClose: () => void }) {
+  const [showResult, setShowResult] = useState(false);
+  return showResult ? (
+    <Winner onClose={onClose} />
+  ) : (
+    <PreAnimation
+      onClose={() => {
+        setShowResult(true);
+      }}
+    />
   );
 }

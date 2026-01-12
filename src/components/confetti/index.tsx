@@ -106,7 +106,9 @@ export default function Confetti() {
       });
 
       // Fire off another round of confetti
-      if (confetti.length <= 10) initConfetti();
+      // if (confetti.length <= 10) {
+      //   initConfetti();
+      // }
 
       window.requestAnimationFrame(render);
     };
