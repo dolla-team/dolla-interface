@@ -235,18 +235,23 @@ export default function EndPanel({ data }: { data: any }) {
   );
 }
 
-const ProgressAvatar = ({
+export const ProgressAvatar = ({
   data,
   progress,
-  index
+  index,
+  className
 }: {
   data: any;
   progress: number;
   index: number;
+  className?: string;
 }) => {
   return (
     <div
-      className="w-[28px] h-[28px] border border-[#DD9000] rounded-[6px] absolute top-[-33px]"
+      className={clsx(
+        "w-[28px] h-[28px] border border-[#DD9000] rounded-[6px] absolute top-[-33px]",
+        className
+      )}
       style={{
         left: `calc(${progress * 100}% - 14px)`,
         zIndex: index
@@ -256,7 +261,7 @@ const ProgressAvatar = ({
         size={26}
         src={data.winner_user_info?.icon}
         address={data.winner_user_info?.user}
-        className="text-[12px] !rounded-[4px]"
+        className={clsx("text-[12px] !rounded-[4px]", className)}
       />
       <svg
         xmlns="http://www.w3.org/2000/svg"

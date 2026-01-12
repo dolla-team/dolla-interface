@@ -1,3 +1,5 @@
+import clsx from "clsx";
+
 const amountConfig: Record<
   string,
   {
@@ -42,15 +44,17 @@ const amountConfig: Record<
 export default function BTCBg({
   index,
   id,
-  amount
+  amount,
+  className
 }: {
   index: number;
   id: string;
   amount: string;
+  className?: string;
 }) {
   const config = amountConfig[index] || amountConfig[2];
   return (
-    <div className="w-[52px] h-[52px] relative">
+    <div className={clsx("w-[52px] h-[52px] relative", className)}>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="54"

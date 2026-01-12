@@ -34,6 +34,7 @@ export const CannonCoinsProvider = ({
   const [filterVolume, setFilterVolume] = useState(0);
   const poolCachedRef = useRef<any>(null);
   const { winnerBidList } = useWinnerBidList(pool);
+  const [showDetail, setShowDetail] = useState(true);
   const btcDetailStore = useBtcDetailStore();
   const onMobileMarketsClose = () => {
     setMobileMarketsOpen(false);
@@ -160,6 +161,8 @@ export const CannonCoinsProvider = ({
         winnerBidList,
         taskId,
         flipStatus: btcDetailStore.flipStatus,
+        showDetail,
+        setShowDetail,
         setTaskId,
         setFlipStatus: (status: number) => {
           btcDetailStore.set({ flipStatus: status });

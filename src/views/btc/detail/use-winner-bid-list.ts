@@ -8,11 +8,11 @@ export default function useWinnerBidList(data: any) {
       `/api/v1/pool/winner/bid/list?chain=${data.chain}&pool_id=${data.pool_id}`
     );
 
-    setWinnerBidList(res.data.data);
+    setWinnerBidList(res?.data?.data || []);
   };
 
   useEffect(() => {
-    if ((data?.pool_id || data?.pool_id === 0) && data?.status === 2) {
+    if (data?.pool_id || data?.pool_id === 0) {
       queryWinnerBidList();
     }
   }, [data]);

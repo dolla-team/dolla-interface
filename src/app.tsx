@@ -66,7 +66,17 @@ const router = createBrowserRouter([
         element: <LazyBtcCreate />
       },
       {
-        path: "portfolio/player",
+        path: "btc",
+        element: <LazyBtc />,
+        errorElement: <ErrorPage />
+      },
+      {
+        path: "btc/:poolId",
+        element: <LazyBtc />,
+        errorElement: <ErrorPage />
+      },
+      {
+        path: "portfolio/bidder",
         element: <LazyProfilePlayer />
       },
       {
@@ -82,16 +92,6 @@ const router = createBrowserRouter([
         element: <LazyPolicy />
       }
     ]
-  },
-  {
-    path: "btc",
-    element: <LazyBtc />,
-    errorElement: <ErrorPage />
-  },
-  {
-    path: "btc/:poolId",
-    element: <LazyBtc />,
-    errorElement: <ErrorPage />
   },
   {
     path: "/callback",

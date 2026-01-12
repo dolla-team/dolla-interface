@@ -1,89 +1,91 @@
-import clsx from "clsx";
-import GridTable, { GridTableAlign } from "@/components/grid-table";
-import dayjs from "dayjs";
-import Pagination from "@/components/pagination";
+import Avatar from "@/components/avatar";
 import { formatNumber } from "@/utils/format/number";
-import { useNavigate } from "@/libs/router";
-import useCopy from "@/hooks/use-copy";
 import { useAuth } from "@/contexts/auth";
-import { BASE_TOKEN } from "@/config/btc";
+import useCopy from "@/hooks/use-copy";
+import { BASE_TOKEN, QUOTE_TOKEN } from "@/config/btc";
 import ProvablyFair from "@/sections/provably-fair";
-import { useState } from "react";
+import GridTable, { GridTableAlign } from "@/components/grid-table";
 import PointIcon from "@/components/icons/point-icon";
-import Popover, {
-  PopoverPlacement,
-  PopoverTrigger
-} from "@/components/popover";
+import Pagination from "@/components/pagination";
+import { RewardInfo } from "@/views/profile/player/records/bid-history";
+import dayjs from "dayjs";
+import { useState } from "react";
 
-const BidHistory = (props: any) => {
-  const { className, page, loading, data, hasMore, onPageChange } = props;
+export default function Participant({
+  data,
+  hasMore,
+  page,
+  loading,
+  goToPage
+}: {
+  data: any[];
+  hasMore: boolean;
+  page: number;
+  loading: boolean;
+  goToPage: (_page: number) => void;
+}) {
+  const { address } = useAuth();
+  const { onCopy } = useCopy();
   const [selectedData, setSelectedData] = useState<any>(null);
 
-  const navigate = useNavigate();
-  const { onCopy } = useCopy();
-  const { address } = useAuth();
+  const onPageChange = (_page: number) => {
+    goToPage(_page);
+  };
 
   const columns: any[] = [
     {
-      dataIndex: "marketId",
-      title: "Market ID",
-      width: "10%",
+      dataIndex: "user_info",
+      title: "Player",
+      width: "20%",
       fixed: true,
       render: (record: any) => {
         return (
-          <div
-            className="flex items-center gap-[7px] cursor-pointer"
-            onClick={() => {
-              navigate(`/btc/${record.pool_id}`);
-            }}
-          >
-            <div className="">#{record.pool_id}</div>
-            <img
-              src="/profile/icon-share.svg"
-              alt="share"
-              className="w-[9px] h-[9px] shrink-0"
+          <div className="flex items-center gap-[7px] cursor-pointer">
+            <Avatar
+              src={record.user_info.icon}
+              address={record.user_info.user}
+              size={32}
             />
-          </div>
-        );
-      }
-    },
-    {
-      dataIndex: "market_size",
-      title: "Market Size",
-      width: "15%",
-      render: (record: any) => {
-        return (
-          <div>
-            {formatNumber(
-              Number(record.reward_amount) /
-                10 ** record.reward_token_info?.[0].decimals,
-              6,
-              true
-            )}{" "}
-            {BASE_TOKEN.symbol}
+            <div className="max-w-[120px] truncate">
+              {record.user_info.name}
+            </div>
+            {/* <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="11"
+              height="11"
+              viewBox="0 0 11 11"
+              fill="none"
+              className="shrink-0"
+            >
+              <path
+                d="M0.494141 9.70001L9.49414 0.700012M9.49414 0.700012H0.494141M9.49414 0.700012V9.70001"
+                stroke="black"
+                strokeWidth="1.4"
+              />
+            </svg> */}
           </div>
         );
       }
     },
     {
       dataIndex: "purchase_amount",
-      title: "Bid",
-      width: "15%",
+      title: "Amount",
+      width: "20%",
       render: (record: any) => {
-        return `${formatNumber(record.purchase_amount, 4, true, {
+        return `${formatNumber(record.purchase_usd, 4, true, {
           isShort: true,
           isShortUppercase: true,
           prefix: "-"
-        })} ${record.purchase_token_info?.symbol}`;
+        })} ${QUOTE_TOKEN.symbol}`;
       }
     },
     {
       dataIndex: "results",
-      title: "Rewards",
+      title: "Outcome",
       width: "20%",
       render: (record: any) => {
         if (
-          record.pool_info.winner_user?.toLowerCase() ===
+          record.pool_info?.winner_user?.toLowerCase() ===
             address?.toLowerCase() &&
           record.winner_point_reward === "0" &&
           record.winner_ticket_number === 0
@@ -149,9 +151,8 @@ const BidHistory = (props: any) => {
     },
     {
       dataIndex: "date",
-      title: "Date / tx",
-      width: "35%",
-      align: GridTableAlign.Right,
+      title: "Time",
+      width: "24%",
       render: (record: any) => {
         return (
           <div className="flex items-center gap-[10px] whitespace-nowrap">
@@ -186,38 +187,50 @@ const BidHistory = (props: any) => {
                 fill="#ADBCCF"
               />
             </svg>
-            <button
-              onClick={() => {
-                setSelectedData({
-                  pool_id: record.pool_id,
-                  hash: record.tx_hash,
-                  market_size: record.reward_usd,
-                  bids: record.times
-                });
-              }}
-              className="button text-[12px] w-[57px] h-[25px] border border-[#D9D9D9] rounded-[6px] text-center"
-            >
-              Verify
-            </button>
           </div>
+        );
+      }
+    },
+    {
+      dataIndex: "verfiy",
+      title: "Verify",
+      width: "10%",
+      align: GridTableAlign.Right,
+      render: (record: any) => {
+        return (
+          <button
+            onClick={() => {
+              setSelectedData({
+                pool_id: record.pool_id,
+                hash: record.tx_hash,
+                market_size: record.reward_usd,
+                bids: record.times
+              });
+            }}
+            className="button text-[12px] w-[57px] h-[25px] border border-[#D9D9D9] rounded-[6px] text-center"
+          >
+            Verify
+          </button>
         );
       }
     }
   ];
-
   return (
-    <div className={clsx("mt-[20px]", className)}>
+    <div className="mt-[20px]">
+      <div className="text-[16px] font-[600] text-black pl-[30px]">Bids</div>
       <GridTable
         // data={[...data, ...data].slice(0, 10)}
         data={data}
         columns={columns}
         loading={loading}
-        className="max-md:w-full max-md:overflow-x-auto"
+        className="w-full max-md:overflow-x-auto"
         rowClassName="max-md:px-0 max-md:gap-x-0"
-        colClassName="max-md:px-[10px] max-md:bg-[#22201D]"
-        bodyColClassName="max-md:first:border-r max-md:border-[#423930]"
+        colClassName="max-md:bg-[#22201D]"
+        headerColClassName="px-[25px]"
+        bodyColClassName="max-md:first:border-r max-md:border-[#423930] px-[10px] !py-[6px]"
+        bodyRowClassName="my-[6px] hover:bg-linear-to-r hover:from-[#FFC42F] hover:to-[#FFFFFF]"
       />
-      <div className="flex justify-end items-center pt-[18px] max-md:justify-center">
+      <div className="flex justify-end items-center py-[12px] max-md:justify-center pr-[30px]">
         <Pagination
           current={page}
           hasNextPage={hasMore}
@@ -237,45 +250,4 @@ const BidHistory = (props: any) => {
       )}
     </div>
   );
-};
-
-export default BidHistory;
-
-export const RewardInfo = () => {
-  return (
-    <Popover
-      trigger={PopoverTrigger.Hover}
-      placement={PopoverPlacement.TopLeft}
-      triggerContainerClassName="h-[16px]"
-      content={
-        <div className="w-[268px] p-[10px] bg-white rounded-[10px] border border-[#E4E4E4]">
-          <div className="font-[500] text-black text-[12px]">Winner Fee</div>
-          <div className="text-[#5E6B7D] text-[10px] font-[300] mt-[4px]">
-            A 10% fee is applied to your Bitcoin prize.
-          </div>
-        </div>
-      }
-    >
-      <button className="relative transition-opacity button">
-        <InfoIcon />
-      </button>
-    </Popover>
-  );
-};
-
-export const InfoIcon = () => {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="16"
-      height="16"
-      viewBox="0 0 16 16"
-      fill="none"
-    >
-      <path
-        d="M8 16C3.582 16 0 12.418 0 8C0 3.582 3.582 0 8 0C12.418 0 16 3.582 16 8C16 12.418 12.418 16 8 16ZM8 14.6667C11.682 14.6667 14.6667 11.682 14.6667 8C14.6667 4.318 11.682 1.33333 8 1.33333C4.318 1.33333 1.33333 4.318 1.33333 8C1.33333 11.682 4.318 14.6667 8 14.6667ZM7.33333 7.33333C7.33333 7.15652 7.40357 6.98695 7.5286 6.86193C7.65362 6.7369 7.82319 6.66667 8 6.66667C8.17681 6.66667 8.34638 6.7369 8.4714 6.86193C8.59643 6.98695 8.66667 7.15652 8.66667 7.33333V12C8.66667 12.1768 8.59643 12.3464 8.4714 12.4714C8.34638 12.5964 8.17681 12.6667 8 12.6667C7.82319 12.6667 7.65362 12.5964 7.5286 12.4714C7.40357 12.3464 7.33333 12.1768 7.33333 12V7.33333ZM7.93333 5.2C7.6858 5.2 7.4484 5.10167 7.27337 4.92663C7.09833 4.7516 7 4.5142 7 4.26667C7 4.01913 7.09833 3.78173 7.27337 3.6067C7.4484 3.43167 7.6858 3.33333 7.93333 3.33333C8.18087 3.33333 8.41827 3.43167 8.5933 3.6067C8.76833 3.78173 8.86667 4.01913 8.86667 4.26667C8.86667 4.5142 8.76833 4.7516 8.5933 4.92663C8.41827 5.10167 8.18087 5.2 7.93333 5.2Z"
-        fill="#8A87AA"
-      />
-    </svg>
-  );
-};
+}

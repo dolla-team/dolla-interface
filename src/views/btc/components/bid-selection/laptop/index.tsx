@@ -205,7 +205,7 @@ export default function BidSelection({
   );
 }
 
-const CreditsInfo = () => {
+export const CreditsInfo = () => {
   return (
     <Popover
       trigger={PopoverTrigger.Hover}

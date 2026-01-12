@@ -20,7 +20,7 @@ export default function Actions() {
               logout();
             } else if (item.key === "invite") {
             } else if (item.key === "portfolio") {
-              navigate("/portfolio/player");
+              navigate("/portfolio/bidder");
             } else if (item.key === "create-market") {
               navigate(isBtc ? "/btc/create" : "/nft/create");
             } else if (item.key === "claim") {
