@@ -48,8 +48,6 @@ export default function usePoolVolume(params: UsePoolVolumeParams) {
         is_user: item.is_user || false
       }));
 
-      console.log(formattedData);
-
       setData(formattedData);
     } catch (error) {
       console.error("Failed to fetch pool volume:", error);

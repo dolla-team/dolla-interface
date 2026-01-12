@@ -3,7 +3,6 @@ import { Chart } from "chart.js";
 import { ProgressAvatar } from "@/views/btc/detail/end";
 import usePoolVolume from "../use-pool-volume";
 import { useBtcContext } from "@/views/btc/context";
-import { useAuth } from "@/contexts/auth";
 import Empty from "@/components/dolla-eye/empty";
 import Loading from "@/components/icons/loading";
 
@@ -12,6 +11,7 @@ interface BidsChartProps {
   period: "1d" | "1w" | "1m" | "all";
   pool_id: number;
   status: number;
+  winnerInfo: any;
 }
 
 interface PointPosition {
@@ -24,7 +24,8 @@ export default function BidsChart({
   chain,
   period,
   pool_id,
-  status
+  status,
+  winnerInfo
 }: BidsChartProps) {
   const chartRef = useRef<HTMLCanvasElement>(null);
   const chartInstance = useRef<Chart | null>(null);
@@ -39,7 +40,6 @@ export default function BidsChart({
     pool_id
   });
   const { pool } = useBtcContext();
-  const { userInfo } = useAuth();
 
   useEffect(() => {
     if (!chartRef.current || loading) return;
@@ -202,14 +202,14 @@ export default function BidsChart({
 
   // Prepare user data for ProgressAvatar
   const userDataForAvatar = useMemo(() => {
-    if (!userInfo || !pool) return null;
+    if (!winnerInfo || !pool) return null;
     return {
       winner_user_info: {
-        icon: userInfo.icon,
-        user: userInfo.user
+        icon: winnerInfo.icon,
+        user: winnerInfo.user
       }
     };
-  }, [userInfo, pool]);
+  }, [winnerInfo, pool]);
 
   useEffect(() => {
     setShowAvatar(false);

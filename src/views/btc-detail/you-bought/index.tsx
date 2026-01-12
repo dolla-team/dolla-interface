@@ -16,6 +16,7 @@ export default function YouBought({
   const reversedWinnerBidList = useMemo(() => {
     return winnerBidList?.reverse();
   }, [winnerBidList]);
+
   return (
     <div className="mt-[20px]">
       <div className="text-[16px] font-[600] text-black">You Bid</div>

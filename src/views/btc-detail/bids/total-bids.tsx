@@ -65,6 +65,7 @@ export default function TotalBids({ data }: { data: any }) {
         period={active.period}
         pool_id={pool?.pool_id || 0}
         status={pool?.status || 0}
+        winnerInfo={pool?.winner_user_info}
       />
     </div>
   );
