@@ -137,12 +137,12 @@ export function WinnerBg() {
   );
 }
 
-export function WinnerBtc() {
+export function WinnerBtc({ size = 39 }: { size?: number }) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="39"
-      height="39"
+      width={size}
+      height={size}
       viewBox="0 0 39 39"
       fill="none"
       className="relative z-[3]"

@@ -45,7 +45,7 @@ export default function WinnerInfo({
         <div className="flex items-center justify-between pb-[26px]">
           <span className="text-[#A6A4B8] text-[12px]">Winner’s bid</span>
           <span className="text-black text-[12px]">
-            {totalBids.toLocaleString()}
+            ${totalBids.toLocaleString()}
           </span>
         </div>
         <div className="flex items-center justify-between pb-[26px]">

@@ -43,7 +43,11 @@ export default function BasicInfo() {
             </div>
           </div>
           <div className="text-[14px] text-[#8A87AA] mt-[12px]">
-            Listed: {dayjs(pool?.created_at).format("YYYY/DD/MM")}
+            Listed: {dayjs(pool?.created_at).format("YYYY/DD/MM")} (
+            {pool?.created_at && pool?.result_time
+              ? dayjs(pool.created_at).from(dayjs(pool.result_time), true)
+              : "-"}
+            )
           </div>
         </div>
       </div>
@@ -60,7 +64,7 @@ export default function BasicInfo() {
         <div className="w-1/3">
           <div className="text-[14px] text-black/60">Volume</div>
           <div className="text-[20px] text-black font-[600]">
-            {poolAmount} {BASE_TOKEN.symbol}
+            ${formatNumber(pool?.accumulative_bids, 0, true)}
           </div>
         </div>
         <div className="w-[1px] h-[42px] bg-[#E4E4E4] mr-[30px]" />

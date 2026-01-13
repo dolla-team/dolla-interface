@@ -90,9 +90,7 @@ export default function BidsChart({
           fill: true,
           tension: 0.4,
           pointRadius: 0,
-          pointHoverRadius: 4,
-          pointHoverBackgroundColor: "#DD9000",
-          pointHoverBorderColor: "#DD9000"
+          pointHoverRadius: 0
         }
       ]
     };
@@ -149,6 +147,9 @@ export default function BidsChart({
         plugins: {
           legend: {
             display: false
+          },
+          tooltip: {
+            enabled: false
           }
         },
         scales: {
@@ -175,8 +176,9 @@ export default function BidsChart({
         },
         interaction: {
           intersect: false,
-          mode: "index" as const
-        }
+          mode: "nearest" as const
+        },
+        onHover: undefined
       }
     };
 

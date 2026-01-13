@@ -7,9 +7,9 @@ import ProvablyFair from "@/sections/provably-fair";
 import GridTable, { GridTableAlign } from "@/components/grid-table";
 import PointIcon from "@/components/icons/point-icon";
 import Pagination from "@/components/pagination";
-import { RewardInfo } from "@/views/profile/player/records/bid-history";
 import dayjs from "dayjs";
 import { useState } from "react";
+import { WinnerBtc } from "../you-bought/item-bg";
 
 export default function Participant({
   data,
@@ -85,42 +85,25 @@ export default function Participant({
       width: "20%",
       render: (record: any) => {
         if (
-          record.pool_info?.winner_user?.toLowerCase() ===
-            address?.toLowerCase() &&
+          record.is_winner &&
           record.winner_point_reward === "0" &&
           record.winner_ticket_number === 0
         ) {
           return (
-            <div className="flex items-center gap-[10px]">
-              <div className="bg-[#FFC42F] h-[30px] flex items-center gap-[6px] leading-[30px] rounded-[16px] px-[10px] font-[600] text-[12px]">
-                <span>
-                  {formatNumber(
-                    Number(record.claim_reward_amount) /
-                      10 ** record.reward_token_info?.[0].decimals,
-                    6,
-                    true
-                  )}
-                </span>
-                <img className="w-[20px] h-[20px]" src={BASE_TOKEN.icon} />
-              </div>
-              <RewardInfo />
+            <div className="flex items-center gap-[6px]">
+              <span className="font-[600]">
+                {formatNumber(
+                  Number(record.claim_reward_amount) /
+                    10 ** BASE_TOKEN.decimals,
+                  6,
+                  true
+                )}
+              </span>
+              <WinnerBtc size={20} />
             </div>
           );
         }
-        let str = "";
-        if (
-          record.winner_point_reward &&
-          Number(record.winner_point_reward) !== 0
-        ) {
-          str += formatNumber(record.winner_point_reward, 0, true) + " credits";
-        }
-        if (
-          record.winner_ticket_number &&
-          Number(record.winner_ticket_number) !== 0
-        ) {
-          if (str) str += " + ";
-          str += record.winner_ticket_number + " tickets";
-        }
+
         return (
           <div className="flex items-center gap-[10px]">
             {!!record.winner_point_reward &&
@@ -145,6 +128,7 @@ export default function Participant({
                   />
                 </div>
               )}
+            {!record.winner_point_reward && !record.winner_ticket_number && "-"}
           </div>
         );
       }
@@ -228,7 +212,12 @@ export default function Participant({
         colClassName="max-md:bg-[#22201D]"
         headerColClassName="px-[25px]"
         bodyColClassName="max-md:first:border-r max-md:border-[#423930] px-[10px] !py-[6px]"
-        bodyRowClassName="my-[6px] hover:bg-linear-to-r hover:from-[#FFC42F] hover:to-[#FFFFFF]"
+        bodyRowClassName="my-[6px]"
+        bodyRowExtraClassNameFn={(record: any) => {
+          return record.is_winner
+            ? "bg-linear-to-r from-[#FFC42F] to-[#FFFFFF]"
+            : "";
+        }}
       />
       <div className="flex justify-end items-center py-[12px] max-md:justify-center pr-[30px]">
         <Pagination
