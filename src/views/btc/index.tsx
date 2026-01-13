@@ -71,10 +71,7 @@ function BTC() {
       login();
       return;
     }
-    if (flipStatus === 6) {
-      onReset();
-    }
-    btcDetailStore.set({ bidResult: null });
+
     setFlipStatus(1);
     onBid(bids);
   };
@@ -84,6 +81,7 @@ function BTC() {
   }, []);
 
   const [disabled, balanceNotEnough] = useMemo(() => {
+    // return [false, false];
     if (pool?.status !== 1) {
       return [true, false];
     }

@@ -1,21 +1,14 @@
-import { useMemo } from "react";
 import YouBoughtItem from "./item";
 import Cancel from "./cancel";
 import { useBtcContext } from "@/views/btc/context";
+import useUserPoolBids from "../use-user-pool-bids";
 
-export default function YouBought({
-  totalBids,
-  totalTimes,
-  winnerBidList
-}: {
-  totalBids: number;
-  totalTimes: number;
-  winnerBidList: any[];
-}) {
+export default function YouBought() {
   const { pool } = useBtcContext();
-  const reversedWinnerBidList = useMemo(() => {
-    return winnerBidList?.reverse();
-  }, [winnerBidList]);
+  const { bids, loading, totalBids, totalTimes } = useUserPoolBids({
+    chain: "near",
+    pool_id: pool?.pool_id
+  });
 
   return (
     <div className="mt-[20px]">
@@ -30,7 +23,7 @@ export default function YouBought({
             {pool?.status === 3 && pool?.user_draw_attempt && <Cancel />}
           </div>
           <div className="flex flex-col gap-[10px] mt-[10px] max-h-[786px] overflow-y-auto overflow-x-hidden">
-            {reversedWinnerBidList?.map((item) => (
+            {bids?.map((item: any) => (
               <YouBoughtItem key={item.id} data={item} />
             ))}
           </div>

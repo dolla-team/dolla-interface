@@ -7,7 +7,6 @@ import { CreditsInfo } from "@/views/btc/components/bid-selection/laptop";
 import Points from "@/sections/points";
 import Button from "@/components/button";
 import { formatNumber } from "@/utils/format/number";
-import Big from "big.js";
 import { getAnchorPrice } from "@/utils/pool";
 
 export default function Buy({
@@ -19,7 +18,7 @@ export default function Buy({
   balanceNotEnough: boolean;
   onBidClick: () => void;
 }) {
-  const { bids, setBids, pool, poolAmount, nearAccount, setShowDetail } =
+  const { bids, setBids, pool, poolAmount, nearAccount, flipStatus } =
     useBtcContext();
   return (
     <div className="bg-white border border-[#E4E4E4] rounded-[20px] px-[30px] pb-[24px]">
@@ -68,16 +67,25 @@ export default function Buy({
       </div>
       <Button
         disabled={disabled || balanceNotEnough}
-        className="w-full mt-[20px] h-[60px] !bg-[#FFC42F] text-[20px] text-black font-[700] rounded-[12px]"
+        loading={flipStatus === 1}
+        className={clsx(
+          "w-full mt-[20px] h-[60px] text-[20px] font-[700] rounded-[12px]",
+          flipStatus === 2
+            ? "!bg-[#4CB100] text-white"
+            : "!bg-[#FFC42F] text-black"
+        )}
         onClick={() => {
           if (disabled || balanceNotEnough) return;
-          setShowDetail(false);
-          setTimeout(() => {
-            onBidClick();
-          }, 300);
+          onBidClick();
         }}
       >
-        {balanceNotEnough ? "Insufficient Balance" : "Bid"}
+        {balanceNotEnough
+          ? "Insufficient Balance"
+          : flipStatus === 1
+          ? "Bidding"
+          : flipStatus === 2
+          ? "Success"
+          : "Bid"}
       </Button>
     </div>
   );

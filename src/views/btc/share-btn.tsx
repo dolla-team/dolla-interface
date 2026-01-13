@@ -75,33 +75,48 @@ export function ShareBtn() {
 export function CloseBtn() {
   const { setShowDetail } = useBtcContext();
   return (
-    <button
-      className="flex items-center button border border-[#3B3951] bg-[#FFFFFF1A] rounded-[8px] px-[10px] py-[6px] gap-[6px]"
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="38"
+      height="38"
+      viewBox="0 0 38 38"
+      fill="none"
+      className="button"
       onClick={() => {
         setShowDetail(true);
       }}
     >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="13"
-        height="12"
-        viewBox="0 0 13 12"
-        fill="none"
-      >
-        <path
-          d="M11.5 1L1.5 11"
-          stroke="white"
-          strokeWidth="2"
-          strokeLinecap="round"
-        />
-        <path
-          d="M1.5 1L11.5 11"
-          stroke="white"
-          strokeWidth="2"
-          strokeLinecap="round"
-        />
-      </svg>
-      <span className="text-[#FFFFFF] text-[12px]">Close</span>
-    </button>
+      <rect
+        data-figma-bg-blur-radius="50"
+        x="0.5"
+        y="0.5"
+        width="37"
+        height="37"
+        rx="12.5"
+        fill="white"
+        fillOpacity="0.1"
+        stroke="#3B3951"
+      />
+      <path
+        d="M24.4761 13.522L13.5195 24.4785"
+        stroke="white"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
+      <path
+        d="M13.52 13.522L24.4766 24.4785"
+        stroke="white"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
+      <defs>
+        <clipPath
+          id="bgblur_0_6243_16590_clip_path"
+          transform="translate(50 50)"
+        >
+          <rect x="0.5" y="0.5" width="37" height="37" rx="12.5" />
+        </clipPath>
+      </defs>
+    </svg>
   );
 }

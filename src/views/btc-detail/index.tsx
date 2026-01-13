@@ -53,11 +53,7 @@ export default function BtcDetail({
               onBidClick={onBidClick}
             />
           )}
-          <YouBought
-            totalBids={totalBids}
-            totalTimes={totalTimes}
-            winnerBidList={winnerBidList}
-          />
+          <YouBought />
         </div>
       </div>
     </div>

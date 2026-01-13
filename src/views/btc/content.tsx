@@ -3,11 +3,8 @@ import { useBtcContext } from "./context";
 // import MoreMarkets from "./components/more-markets";
 import Header from "./components/header";
 import BidSelection from "./components/bid-selection";
-import BidsInfo from "./components/bids-info";
-import MarketInfo from "./components/market-info";
 import Grand from "./grand";
 import DollaEye from "@/components/dolla-eye";
-import Music from "./components/music";
 import useIsMobile from "@/hooks/use-is-mobile";
 import clsx from "clsx";
 import ReactDOM from "react-dom";
@@ -15,14 +12,12 @@ import ReactDOM from "react-dom";
 import { useAuth } from "@/contexts/auth";
 import "@/libs/howl";
 import { useNavigate } from "@/libs/router";
-import { ShareBtn, CloseBtn } from "./share-btn";
+import { CloseBtn } from "./share-btn";
 import Loading from "./loading";
-import Wallet from "@/sections/wallet";
 import Tips from "./components/tips";
 import Result from "./components/result";
 import { useMemo } from "react";
 import Confetti from "@/components/confetti";
-import LucyDraw from "@/sections/lucy-draw";
 import useBtcDetailStore from "@/stores/use-btc-detail";
 
 // import ProvablyFair from "@/sections/provably-fair";
@@ -55,7 +50,7 @@ const Content = ({
 }) => {
   const { nearAccount } = useAuth() || {};
   const isMobile = useIsMobile();
-  const { pool, flipStatus, onReset, setFlipStatus } = useBtcContext();
+  const { pool, flipStatus, setShowDetail, onReset } = useBtcContext();
   const navigate = useNavigate();
   const btcDetailStore = useBtcDetailStore();
   const [points, tickets, sumPoints, sumTickets, isWinner] = useMemo(() => {
@@ -101,11 +96,9 @@ const Content = ({
       />
 
       <div className="absolute top-[10px] right-[30px] z-[10] flex items-center gap-[20px]">
-        {(pool?.status === 1 || pool?.status === 2) && <ShareBtn />}
         <CloseBtn />
       </div>
       {!isMobile && <Header className="h-[214px]" />}
-      <MarketInfo />
       <Grand
         tokenBalance={nearAccount?.balance}
         {...{ sumPoints, sumTickets, isWinner, points, tickets }}
@@ -116,8 +109,6 @@ const Content = ({
         balanceNotEnough={balanceNotEnough}
         onBidClick={onBidClick}
       />
-      {!isMobile && <LucyDraw from="detail" poolStatus={pool?.status} />}
-      {!isMobile && <BidsInfo />}
       {/* {!isMobile && <MoreMarkets />} */}
       {/* {!isMobile && (
         <div>
@@ -125,16 +116,14 @@ const Content = ({
         </div>
       )} */}
       {/* {!isMobile && <TopWinner />} */}
-      {!isMobile && !btcDetailStore.bidResult?.is_winner && <Music />}
       {/* {isMobile && <MarketsModal />} */}
-      <Wallet />
       {pool?.status === 1 && <Tips />}
-      {flipStatus === 6 && (
+      {btcDetailStore.showResult && btcDetailStore.bidResult && (
         <Result
           points={sumPoints}
           tickets={sumTickets}
           onClose={() => {
-            setFlipStatus(0);
+            setShowDetail(true);
             onReset();
           }}
           isWinner={isWinner}

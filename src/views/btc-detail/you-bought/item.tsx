@@ -8,8 +8,11 @@ import { BASE_TOKEN } from "@/config/btc";
 import Big from "big.js";
 import Button from "@/components/button";
 import { useNavigate } from "@/libs/router";
+import { useBtcContext } from "@/views/btc/context";
+import useBtcDetailStore from "@/stores/use-btc-detail";
 
 export default function YouBoughtItem({ data }: { data: any }) {
+  const btcDetailStore = useBtcDetailStore();
   const [type, ticketNumber, pointReward, poolAmount] = useMemo(() => {
     const _ticketNumber = Number(data.winner_ticket_number) || 0;
     const _pointReward = Number(data.winner_point_reward) || 0;
@@ -25,20 +28,52 @@ export default function YouBoughtItem({ data }: { data: any }) {
   }, [data]);
 
   const navigate = useNavigate();
+  const { onReplay, setShowDetail } = useBtcContext();
 
   return (
     <div className="relative w-[446px] h-[76px] shrink-0 group">
       <ItemBg type={type} id={data.id} />
       {type === 0 && (
         <div className="absolute w-[430px] h-full inset-0 z-[10] opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center">
-          <div className="relative flex items-center justify-center w-full h-full rounded-[12px] border border-[#E4E4E4] bg-white/1 backdrop-blur-[20px]">
+          <div className="relative flex items-center justify-center gap-[10px] w-full h-full rounded-[12px] border border-[#E4E4E4] bg-white/1 backdrop-blur-[20px]">
             <Button
               onClick={() => {
                 navigate(`/portfolio/bidder`);
               }}
-              className="button w-[142px] h-[40px] rounded-[20px] bg-white text-[10px] shadow-[0px_0px_10px_0px_rgba(0,0,0,0.1)]"
+              className="button !w-[142px] h-[40px] rounded-[20px] bg-white text-[10px] shadow-[0px_0px_10px_0px_rgba(0,0,0,0.1)]"
             >
               Check My Profile
+            </Button>
+            <Button
+              onClick={() => {
+                setShowDetail(false);
+                setTimeout(() => {
+                  btcDetailStore.set({
+                    bidResult: {
+                      is_winner: true
+                    },
+                    bids: data.times,
+                    flipStatus: 4
+                  });
+                  onReplay();
+                }, 300);
+              }}
+              className="button !w-[132px] h-[40px] gap-[4px] rounded-[20px] bg-white text-[10px] shadow-[0px_0px_10px_0px_rgba(0,0,0,0.1)]"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 20 20"
+                fill="none"
+              >
+                <circle cx="10" cy="10" r="10" fill="black" />
+                <path
+                  d="M13.5 9.13397C14.1667 9.51887 14.1667 10.4811 13.5 10.866L9 13.4641C8.33333 13.849 7.5 13.3679 7.5 12.5981L7.5 7.40192C7.5 6.63212 8.33333 6.151 9 6.5359L13.5 9.13397Z"
+                  fill="white"
+                />
+              </svg>
+              <span>Play Process</span>
             </Button>
           </div>
         </div>
