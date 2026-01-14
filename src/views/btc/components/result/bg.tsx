@@ -4,13 +4,21 @@ import { addThousandSeparator } from "@/utils/format/number";
 
 export default function ResultBg() {
   return (
-    <svg
+    <motion.svg
       xmlns="http://www.w3.org/2000/svg"
       width="778"
       height="778"
       viewBox="0 0 778 778"
       fill="none"
       className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+      animate={{
+        rotate: 360
+      }}
+      transition={{
+        duration: 20,
+        repeat: Infinity,
+        ease: "linear"
+      }}
     >
       <g opacity="0.2" filter="url(#filter0_f_6243_20250)">
         <path
@@ -52,7 +60,7 @@ export default function ResultBg() {
           <stop offset="1" stopColor="#FFCE52" stopOpacity="0" />
         </radialGradient>
       </defs>
-    </svg>
+    </motion.svg>
   );
 }
 

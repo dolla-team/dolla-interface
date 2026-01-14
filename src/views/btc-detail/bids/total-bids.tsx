@@ -15,10 +15,12 @@ Chart.register(...registerables);
 
 export default function TotalBids({
   data,
-  winnerBidsTime
+  winnerBidsTime,
+  winnerBidList
 }: {
   data: any;
   winnerBidsTime: any;
+  winnerBidList: any[];
 }) {
   const { pool } = useBtcContext();
   const [active, setActive] = useState<{
@@ -73,6 +75,7 @@ export default function TotalBids({
         status={pool?.status || 0}
         winnerInfo={pool?.winner_user_info}
         winnerBidsTime={winnerBidsTime}
+        winnerBidList={winnerBidList}
       />
     </div>
   );

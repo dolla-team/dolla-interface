@@ -1,6 +1,6 @@
 import { useRef, useEffect, useState, useMemo } from "react";
 import { Chart } from "chart.js";
-import { ProgressAvatar } from "@/views/btc/detail/end";
+import ProgressAvatar from "@/views/btc/detail/end/progress-avatar";
 import usePoolVolume from "../use-pool-volume";
 import { useBtcContext } from "@/views/btc/context";
 import Empty from "@/components/dolla-eye/empty";
@@ -13,6 +13,7 @@ interface BidsChartProps {
   status: number;
   winnerInfo: any;
   winnerBidsTime: any;
+  winnerBidList: any[];
 }
 
 interface PointPosition {
@@ -27,11 +28,13 @@ export default function BidsChart({
   pool_id,
   status,
   winnerInfo,
+  winnerBidList,
   winnerBidsTime
 }: BidsChartProps) {
   const chartRef = useRef<HTMLCanvasElement>(null);
   const chartInstance = useRef<Chart | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const updatePointPositionsRef = useRef<(() => void) | null>(null);
   const [showAvatar, setShowAvatar] = useState<boolean>(false);
   const [userPointPositions, setUserPointPositions] = useState<PointPosition[]>(
     []
@@ -134,6 +137,9 @@ export default function BidsChart({
       }
     };
 
+    // Save updatePointPositions to ref so it can be called from other useEffect hooks
+    updatePointPositionsRef.current = updatePointPositions;
+
     const config = {
       type: "line" as const,
       data: data,
@@ -204,6 +210,12 @@ export default function BidsChart({
     };
   }, [volumeData, loading]);
 
+  useEffect(() => {
+    if (winnerBidList.length > 0 && updatePointPositionsRef.current) {
+      updatePointPositionsRef.current();
+    }
+  }, [winnerBidList, updatePointPositionsRef.current]);
+
   // Prepare user data for ProgressAvatar
   const userDataForAvatar = useMemo(() => {
     if (!winnerInfo || !pool) return null;
@@ -237,7 +249,7 @@ export default function BidsChart({
         userDataForAvatar &&
         userPointPositions.length > 0 &&
         showAvatar && (
-          <div className="absolute inset-0 pointer-events-none overflow-visible">
+          <div className="absolute inset-0 overflow-visible">
             {userPointPositions.map((position, idx) => {
               const originalIndex = position.index;
               return (
@@ -245,18 +257,19 @@ export default function BidsChart({
                   key={`${originalIndex}-${idx}`}
                   className="absolute"
                   style={{
-                    left: `${position.x}px`,
+                    left: `${position.x - 14}px`,
                     top: `${position.y - 33}px`, // Position above the point
                     transform: "translateX(-50%)",
                     zIndex: idx
                   }}
                 >
-                  <ProgressAvatar
-                    data={userDataForAvatar}
-                    progress={0} // Not used when positioned absolutely
-                    index={idx}
-                    className="!rounded-full"
-                  />
+                  <div className="absolute top-[-33px] cursor-pointer hover:scale-[1.2] hover:z-[100] transition-all duration-300">
+                    <ProgressAvatar
+                      data={userDataForAvatar}
+                      winnerBid={winnerBidList[idx]}
+                      className="!rounded-full"
+                    />
+                  </div>
                 </div>
               );
             })}

@@ -81,7 +81,7 @@ export default function YouBoughtItem({ data }: { data: any }) {
       <div className={clsx("relative z-[2] pl-[18px] pt-[10px]")}>
         <div
           className={clsx(
-            "text-[18px] text-black font-[500]",
+            "text-[16px] text-black font-[500]",
             type !== 0 && "opacity-30"
           )}
         >

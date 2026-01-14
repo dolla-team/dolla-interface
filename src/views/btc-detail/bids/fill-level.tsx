@@ -7,52 +7,105 @@ import Popover, {
   PopoverTrigger
 } from "@/components/popover";
 import { InfoIcon } from "@/views/profile/player/records/bid-history";
-import { ProgressAvatar } from "@/views/btc/detail/end";
+import ProgressAvatar from "@/views/btc/detail/end/progress-avatar";
+import { formatNumber } from "@/utils/format/number";
 
-export default function FillLevel({ data, winnerBidsProgress }: any) {
-  const [progress] = useMemo(() => {
+export default function FillLevel({
+  data,
+  winnerBidsProgress,
+  winnerBidList
+}: any) {
+  const [progress, spilled, spilledPercent] = useMemo(() => {
     return getSpilledAmount(data);
   }, [data]);
-
+  console.log(spilledPercent);
   return (
     <>
       <div className="flex items-center gap-[6px]">
         <div className="text-[14px] text-black/60">Heat</div>
         <HeatInfo />
       </div>
-      <div className="text-[24px] text-black font-[600]">
-        {progress.toFixed(2)}%
-      </div>
-      {data?.status === 2 ? (
-        <div className="w-[396px] mt-[34px] relative">
-          {winnerBidsProgress?.map((item: any, index: number) => (
-            <ProgressAvatar
-              data={data}
-              progress={item}
-              key={index}
-              index={index}
-              className="!rounded-full"
-            />
-          ))}
+      <div className="flex items-center justify-between pb-[26px]">
+        <div className="text-[24px] text-black font-[600]">
+          {progress.toFixed(2)}%
         </div>
-      ) : (
-        <div className="h-[20px]" />
-      )}
-      <ProgressBar data={data} winnerBidsProgress={winnerBidsProgress} />
+        {spilled > 0 && (
+          <div className="flex items-center gap-[2px]">
+            <div className="w-[10px] h-[10px] rounded-full bg-[#F19D00]" />
+            <div className="text-[12px] text-black font-[600]">
+              Overfilled +
+              {formatNumber(spilled, 2, true, { isShort: true, prefix: "$" })}
+            </div>
+          </div>
+        )}
+      </div>
+
+      <ProgressBar
+        data={data}
+        progress={progress}
+        winnerBidsProgress={winnerBidsProgress || []}
+        winnerBidList={winnerBidList || []}
+        spilledPercent={spilledPercent}
+      />
     </>
   );
 }
 
-function ProgressBar({ data }: any) {
-  const [progress] = useMemo(() => {
-    return getSpilledAmount(data);
-  }, [data]);
-
+function ProgressBar({
+  data,
+  progress,
+  winnerBidsProgress,
+  winnerBidList,
+  spilledPercent
+}: any) {
+  const ProcessAvatars = () => {
+    return (
+      data?.status === 2 &&
+      winnerBidsProgress?.map((item: any, index: number) => (
+        <div
+          className="absolute top-[-33px] cursor-pointer hover:scale-[1.2] hover:z-[3] transition-all duration-300"
+          style={{ left: `calc(${item * 100}% - 14px)` }}
+        >
+          <ProgressAvatar
+            data={data}
+            winnerBid={winnerBidList[index]}
+            className="!rounded-full"
+          />
+        </div>
+      ))
+    );
+  };
+  if (spilledPercent > 0) {
+    return (
+      <div className="relative w-[396px] flex items-center">
+        <ProcessAvatars />
+        <div
+          className={clsx(
+            "h-[14px] rounded-[8px]",
+            data?.status === 1 ? "bg-[#FFC42F]" : "bg-[#ABABAB]"
+          )}
+          style={{
+            width: (100 - spilledPercent)! + "%"
+          }}
+        />
+        <div
+          className={clsx(
+            "h-[14px] rounded-[8px]",
+            data?.status === 1 ? "bg-[#F19D00]" : "bg-[#858585]"
+          )}
+          style={{
+            width: spilledPercent! + "%"
+          }}
+        />
+        {data?.status === 1 && <Particles />}
+      </div>
+    );
+  }
   return (
     <div className="relative w-[396px]">
       <div
         className={clsx(
-          "h-[14px] w-full rounded-[8px] bg-[#0000001A] absolute top-0 left-0 z-[1]"
+          "h-[14px] rounded-[8px] bg-[#0000001A] absolute top-0 left-0 z-[1]"
         )}
       />
       <div
@@ -65,7 +118,8 @@ function ProgressBar({ data }: any) {
           width: `${Math.min(progress, 100)}%`
         }}
       >
-        {progress >= 80 && progress < 100 && data?.status !== 3 && (
+        <ProcessAvatars />
+        {progress >= 80 && progress < 100 && data?.status === 1 && (
           <Particles />
         )}
       </div>

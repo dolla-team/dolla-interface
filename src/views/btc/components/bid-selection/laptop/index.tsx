@@ -61,7 +61,7 @@ export default function BidSelection({
   }, [userInfoStore?.prize?.tickets]);
 
   return (
-    <div className="absolute bottom-0 left-0 w-full h-[202px]">
+    <div className="absolute bottom-[-20px] left-0 w-full h-[202px]">
       <Bg className="absolute top-0 left-0 w-full h-full z-[2]" />
       <div className="relative z-[10] flex items-center justify-center xl:gap-[100px] xl:scale-none gap-[80px] scale-[0.75]">
         <div className="flex items-center justify-end gap-[500px] mt-[20px]">

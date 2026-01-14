@@ -1,6 +1,5 @@
 import Avatar from "@/components/avatar";
 import { formatNumber } from "@/utils/format/number";
-import { useAuth } from "@/contexts/auth";
 import useCopy from "@/hooks/use-copy";
 import { BASE_TOKEN, QUOTE_TOKEN } from "@/config/btc";
 import ProvablyFair from "@/sections/provably-fair";
@@ -24,7 +23,6 @@ export default function Participant({
   loading: boolean;
   goToPage: (_page: number) => void;
 }) {
-  const { address } = useAuth();
   const { onCopy } = useCopy();
   const [selectedData, setSelectedData] = useState<any>(null);
 
@@ -40,12 +38,19 @@ export default function Participant({
       fixed: true,
       render: (record: any) => {
         return (
-          <div className="flex items-center gap-[7px] cursor-pointer">
+          <div className="flex items-center gap-[7px] cursor-pointer relative">
             <Avatar
               src={record.user_info.icon}
               address={record.user_info.user}
               size={32}
+              className="rounded-full"
             />
+            {record.is_winner && (
+              <img
+                src="/btc/crown.png"
+                className="absolute top-[-22px] left-[-2px] w-[38px] h-[38px]"
+              />
+            )}
             <div className="max-w-[120px] truncate">
               {record.user_info.name}
             </div>
@@ -211,11 +216,12 @@ export default function Participant({
         rowClassName="max-md:px-0 max-md:gap-x-0"
         colClassName="max-md:bg-[#22201D]"
         headerColClassName="px-[25px]"
+        headerRowClassName="mx-[18px]"
         bodyColClassName="max-md:first:border-r max-md:border-[#423930] px-[10px] !py-[6px]"
-        bodyRowClassName="my-[6px]"
+        bodyRowClassName="my-[6px] mx-[18px]"
         bodyRowExtraClassNameFn={(record: any) => {
           return record.is_winner
-            ? "bg-linear-to-r from-[#FFC42F] to-[#FFFFFF]"
+            ? "bg-linear-to-r from-[#FFC42F] to-[#FFFFFF] rounded-[8px]"
             : "";
         }}
       />

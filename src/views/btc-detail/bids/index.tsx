@@ -29,13 +29,21 @@ export default function Bids() {
   return (
     <div className="w-full h-[290px] bg-white border border-[#E4E4E4] rounded-[20px] px-[30px] flex items-center">
       <div>
-        <FillLevel data={pool} winnerBidsProgress={bidsProgress} />
+        <FillLevel
+          data={pool}
+          winnerBidsProgress={bidsProgress}
+          winnerBidList={winnerBidList}
+        />
         <SizeDistribution data={pool} winnerDistribution={bidsDistribution} />
       </div>
 
       <div className="w-[1px] h-[218px] bg-[#E4E4E4] mx-[30px]" />
       <div>
-        <TotalBids data={pool} winnerBidsTime={winnerBidsTime} />
+        <TotalBids
+          data={pool}
+          winnerBidsTime={winnerBidsTime}
+          winnerBidList={winnerBidList || []}
+        />
       </div>
     </div>
   );
