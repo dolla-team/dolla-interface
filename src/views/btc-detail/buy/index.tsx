@@ -69,10 +69,11 @@ export default function Buy({
         disabled={disabled || balanceNotEnough}
         loading={flipStatus === 1}
         className={clsx(
-          "w-full mt-[20px] h-[60px] text-[20px] font-[700] rounded-[12px]",
+          "w-full mt-[20px] h-[60px]  font-[700] rounded-[12px]",
           flipStatus === 2
             ? "!bg-[#4CB100] text-white"
-            : "!bg-[#FFC42F] text-black"
+            : "!bg-[#FFC42F] text-black",
+          balanceNotEnough || flipStatus === 2 ? "!text-[16px]" : "!text-[20px]"
         )}
         onClick={() => {
           if (disabled || balanceNotEnough) return;
