@@ -13,7 +13,13 @@ import { useBtcContext } from "@/views/btc/context";
 // Register Chart.js components
 Chart.register(...registerables);
 
-export default function TotalBids({ data }: { data: any }) {
+export default function TotalBids({
+  data,
+  winnerBidsTime
+}: {
+  data: any;
+  winnerBidsTime: any;
+}) {
   const { pool } = useBtcContext();
   const [active, setActive] = useState<{
     label: string;
@@ -66,6 +72,7 @@ export default function TotalBids({ data }: { data: any }) {
         pool_id={pool?.pool_id || 0}
         status={pool?.status || 0}
         winnerInfo={pool?.winner_user_info}
+        winnerBidsTime={winnerBidsTime}
       />
     </div>
   );

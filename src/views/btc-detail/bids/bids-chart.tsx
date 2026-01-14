@@ -12,6 +12,7 @@ interface BidsChartProps {
   pool_id: number;
   status: number;
   winnerInfo: any;
+  winnerBidsTime: any;
 }
 
 interface PointPosition {
@@ -25,7 +26,8 @@ export default function BidsChart({
   period,
   pool_id,
   status,
-  winnerInfo
+  winnerInfo,
+  winnerBidsTime
 }: BidsChartProps) {
   const chartRef = useRef<HTMLCanvasElement>(null);
   const chartInstance = useRef<Chart | null>(null);
@@ -104,7 +106,7 @@ export default function BidsChart({
 
         meta.data.forEach((element: any, index: number) => {
           if (
-            volumeData[index]?.is_user &&
+            winnerBidsTime.includes(volumeData[index]?.timestamp) &&
             element.x !== undefined &&
             element.y !== undefined
           ) {
