@@ -8,6 +8,7 @@ import Points from "@/sections/points";
 import Button from "@/components/button";
 import { formatNumber } from "@/utils/format/number";
 import { getAnchorPrice } from "@/utils/pool";
+import { useAuth } from "@/contexts/auth";
 
 export default function Buy({
   disabled,
@@ -18,8 +19,9 @@ export default function Buy({
   balanceNotEnough: boolean;
   onBidClick: () => void;
 }) {
-  const { bids, setBids, pool, poolAmount, nearAccount, flipStatus } =
-    useBtcContext();
+  const { bids, setBids, pool, poolAmount, flipStatus } = useBtcContext();
+  const { nearAccount } = useAuth();
+
   return (
     <div className="bg-white border border-[#E4E4E4] rounded-[20px] px-[30px] pb-[24px]">
       <div className="text-[16px] font-[600] text-black pt-[20px]">
