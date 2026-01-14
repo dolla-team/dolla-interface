@@ -18,7 +18,7 @@ export default function FillLevel({
   const [progress, spilled, spilledPercent] = useMemo(() => {
     return getSpilledAmount(data);
   }, [data]);
-  console.log(spilledPercent);
+
   return (
     <>
       <div className="flex items-center gap-[6px]">
@@ -105,7 +105,7 @@ function ProgressBar({
     <div className="relative w-[396px]">
       <div
         className={clsx(
-          "h-[14px] rounded-[8px] bg-[#0000001A] absolute top-0 left-0 z-[1]"
+          "h-[14px] rounded-[8px] bg-[#0000001A] absolute top-0 left-0 z-[1] w-full"
         )}
       />
       <div

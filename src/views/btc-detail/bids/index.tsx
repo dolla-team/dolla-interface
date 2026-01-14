@@ -23,6 +23,7 @@ export default function Bids() {
     });
 
     _bidsProgress.sort((a: number, b: number) => a - b);
+    _winnerBidsTime.sort((a: number, b: number) => a - b);
     return [_bidsDistribution, _bidsProgress, _winnerBidsTime];
   }, [winnerBidList, pool]);
 

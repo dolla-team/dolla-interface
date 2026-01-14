@@ -34,7 +34,7 @@ export default function BidsChart({
   const chartRef = useRef<HTMLCanvasElement>(null);
   const chartInstance = useRef<Chart | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const updatePointPositionsRef = useRef<(() => void) | null>(null);
+  const [mounted, setMounted] = useState<boolean>(false);
   const [showAvatar, setShowAvatar] = useState<boolean>(false);
   const [userPointPositions, setUserPointPositions] = useState<PointPosition[]>(
     []
@@ -100,46 +100,6 @@ export default function BidsChart({
       ]
     };
 
-    // Function to update point positions
-    const updatePointPositions = () => {
-      if (chartInstance.current && containerRef.current && chartRef.current) {
-        const chart = chartInstance.current;
-        const meta = chart.getDatasetMeta(0);
-        const positions: PointPosition[] = [];
-
-        meta.data.forEach((element: any, index: number) => {
-          if (
-            winnerBidsTime.includes(volumeData[index]?.timestamp) &&
-            element.x !== undefined &&
-            element.y !== undefined
-          ) {
-            // Get canvas position relative to container
-            const canvasRect = chartRef.current!.getBoundingClientRect();
-            const containerRect = containerRef.current!.getBoundingClientRect();
-
-            // Calculate position relative to container
-            const x = element.x + (canvasRect.left - containerRect.left);
-            const y = element.y + (canvasRect.top - containerRect.top + 33);
-
-            positions.push({
-              x,
-              y,
-              index
-            });
-          }
-        });
-
-        setUserPointPositions(positions);
-
-        setTimeout(() => {
-          setShowAvatar(true);
-        }, 1000);
-      }
-    };
-
-    // Save updatePointPositions to ref so it can be called from other useEffect hooks
-    updatePointPositionsRef.current = updatePointPositions;
-
     const config = {
       type: "line" as const,
       data: data,
@@ -149,7 +109,7 @@ export default function BidsChart({
         animation: {
           onComplete: () => {
             // Get data point positions after chart is drawn
-            updatePointPositions();
+            setMounted(true);
           }
         },
         plugins: {
@@ -192,18 +152,8 @@ export default function BidsChart({
 
     chartInstance.current = new Chart(ctx, config);
 
-    // Also update positions after initial render and on resize
-    setTimeout(updatePointPositions, 100);
-
-    // Update positions on window resize
-    const handleResize = () => {
-      setTimeout(updatePointPositions, 100);
-    };
-    window.addEventListener("resize", handleResize);
-
     // Cleanup function
     return () => {
-      window.removeEventListener("resize", handleResize);
       if (chartInstance.current) {
         chartInstance.current.destroy();
       }
@@ -211,10 +161,56 @@ export default function BidsChart({
   }, [volumeData, loading]);
 
   useEffect(() => {
-    if (winnerBidList.length > 0 && updatePointPositionsRef.current) {
-      updatePointPositionsRef.current();
-    }
-  }, [winnerBidList, updatePointPositionsRef.current]);
+    if (winnerBidList.length === 0) return;
+    if (
+      !chartInstance.current ||
+      !containerRef.current ||
+      !chartRef.current ||
+      !mounted
+    )
+      return;
+
+    const chart = chartInstance.current;
+    const meta = chart.getDatasetMeta(0);
+    const positions: PointPosition[] = [];
+
+    meta.data.forEach((element: any, index: number) => {
+      const bidTimeIndex = winnerBidsTime.findIndex(
+        (time: number) => time === volumeData[index]?.timestamp
+      );
+      if (
+        bidTimeIndex !== -1 &&
+        element.x !== undefined &&
+        element.y !== undefined
+      ) {
+        // Get canvas position relative to container
+        const canvasRect = chartRef.current!.getBoundingClientRect();
+        const containerRect = containerRef.current!.getBoundingClientRect();
+
+        // Calculate position relative to container
+        const x = element.x + (canvasRect.left - containerRect.left);
+        const y = element.y + (canvasRect.top - containerRect.top + 33);
+
+        positions.push({
+          x,
+          y,
+          index: bidTimeIndex
+        });
+      }
+    });
+
+    setUserPointPositions(positions);
+
+    setTimeout(() => {
+      setShowAvatar(true);
+    }, 1000);
+  }, [
+    winnerBidList,
+    chartInstance.current,
+    containerRef.current,
+    chartRef.current,
+    mounted
+  ]);
 
   // Prepare user data for ProgressAvatar
   const userDataForAvatar = useMemo(() => {
@@ -232,7 +228,7 @@ export default function BidsChart({
   }, [period]);
 
   return (
-    <div ref={containerRef} className="h-[200px] w-full mt-4 relative">
+    <div ref={containerRef} className="h-[200px] w-[426px] mt-4 relative">
       {loading ? (
         <div className="w-full h-full flex items-center justify-center">
           <Loading size={20} />
@@ -255,18 +251,17 @@ export default function BidsChart({
               return (
                 <div
                   key={`${originalIndex}-${idx}`}
-                  className="absolute"
+                  className="absolute  cursor-pointer hover:scale-[1.2] hover:z-[100] transition-all duration-300"
                   style={{
                     left: `${position.x - 14}px`,
                     top: `${position.y - 33}px`, // Position above the point
-                    transform: "translateX(-50%)",
-                    zIndex: idx
+                    transform: "translateX(-50%)"
                   }}
                 >
-                  <div className="absolute top-[-33px] cursor-pointer hover:scale-[1.2] hover:z-[100] transition-all duration-300">
+                  <div className="absolute top-[-33px]">
                     <ProgressAvatar
                       data={userDataForAvatar}
-                      winnerBid={winnerBidList[idx]}
+                      winnerBid={winnerBidList[originalIndex]}
                       className="!rounded-full"
                     />
                   </div>
