@@ -1,10 +1,13 @@
-import React, { useState } from "react";
 import Modal from "@/components/modal";
 import Button from "@/components/button";
+import useCheckXkol from "@/hooks/user/use-check-xkol";
 
-interface XKolModalProps {}
+export default function XKolModal() {
+  const { reward, redeemReward, redeeming } = useCheckXkol();
 
-export default function XKolModal({}: XKolModalProps) {
+  if (reward === 0) {
+    return null;
+  }
   return (
     <Modal open={true}>
       <div className="relative bg-cover bg-center bg-no-repeat w-[454px] h-[355px] bg-[url('/kol/x-kol-bg.png')] bg-no-repeat bg-center bg-contain">
@@ -16,10 +19,15 @@ export default function XKolModal({}: XKolModalProps) {
         </div>
         <div className="w-[340px] h-[95px] mt-[20px] mx-auto pl-[60px] flex items-center justify-center bg-[url('/kol/x-kol-ticket.png')] bg-no-repeat bg-center bg-contain">
           <span className="text-[32px] text-black font-[Courier]">
-            $5 Voucher
+            ${reward} Voucher
           </span>
         </div>
-        <Button className="w-[340px] h-[46px] mt-[20px] mx-auto rounded-[12px] !bg-black text-white font-[500] text-[14px]">
+        <Button
+          onClick={redeemReward}
+          disabled={redeeming}
+          loading={redeeming}
+          className="w-[340px] h-[46px] mt-[20px] mx-auto rounded-[12px] !bg-black text-white font-[500] text-[14px]"
+        >
           Redeem
         </Button>
       </div>
