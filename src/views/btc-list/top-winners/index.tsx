@@ -30,9 +30,9 @@ export default function TopWinners({
     <TopWinnersContainer
       title={
         type === "winners"
-          ? "Top Winners"
+          ? "Top Realizations"
           : type === "sellers"
-          ? "Top Market Sell"
+          ? "Top Market List"
           : "Top Market Loss"
       }
     >
