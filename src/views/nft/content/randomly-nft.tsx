@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@/libs/router";
 import { useNftContext } from "../context";
 
 export default function RandomlyNft() {

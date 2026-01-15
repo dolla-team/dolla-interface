@@ -13,7 +13,7 @@ import { useMemo, useState } from "react";
 import Loading from "@/components/icons/loading";
 // import DepositModal from "../deposit-modal";
 import { formatNumber } from "@/utils/format/number";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@/libs/router";
 import { useContractConfigStore } from "@/stores/use-contract-config";
 import Empty from "@/sections/wallet/panels/info/empty";
 import { useAuth } from "@/contexts/auth";
@@ -145,7 +145,6 @@ const MarketItem = (props: any) => {
       pool_user_info: {
         icon: userInfo.icon,
         name: userInfo.name,
-        email_desensitization: userInfo.show_email,
         user: userInfo.user
       },
       participants: order.participants
@@ -259,7 +258,7 @@ const MarketItem = (props: any) => {
         </div>
       }
       onClick={() => {
-        navigate(`/btc/detail/${order.pool_id}`);
+        navigate(`/btc/${order.pool_id}`);
       }}
     />
   );

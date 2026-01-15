@@ -2,7 +2,7 @@ import { CannonCoinsProvider } from "./context";
 import BackButton from "@/components/button/back-button";
 import ShareButton from "@/components/button/share-button";
 import NftContent from "./content";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@/libs/router";
 
 export default function NewNft() {
   return (

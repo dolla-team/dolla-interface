@@ -1,5 +1,6 @@
 import AvatarAction from "./avatar-action";
-import { Outlet, useNavigate, useLocation } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
+import { useNavigate } from "@/libs/router";
 import Button from "@/components/button";
 import { useAuth } from "@/contexts/auth";
 import DollaEye from "@/components/dolla-eye";
@@ -19,6 +20,7 @@ import ProfileSetting from "@/views/profile/components/profile-setting";
 import useUserInfoStore from "@/stores/use-user-info";
 import useRegisterCode from "@/hooks/user/use-register-code";
 import LucyDrawHistory from "@/sections/lucy-draw/history";
+import HowItWork from "@/sections/how-it-work";
 
 export default function MainLayout() {
   const { userInfo, login } = useAuth() || {};
@@ -137,6 +139,7 @@ export default function MainLayout() {
           userInfoStore.set({ showSetting: false });
         }}
       />
+      <HowItWork />
       <LucyDrawHistory />
     </div>
   );

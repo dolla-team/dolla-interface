@@ -55,3 +55,9 @@ export async function getNonce(publicKey: string) {
 
   return BigInt(accessKey.nonce) + 1n;
 }
+
+export function getUserId(address: string, chainType: string) {
+  return chainType === "solana"
+    ? { Sol: address }
+    : { Evm: address.replace(/^0x/, "").toLowerCase() };
+}

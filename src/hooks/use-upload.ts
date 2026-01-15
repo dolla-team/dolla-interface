@@ -26,12 +26,10 @@ export default function useUpload(onSuccess?: (url: string) => void) {
         setLoading(true);
         setProgress(0);
 
-        const dir = "user";
-
         // Upload with progress tracking
         const fileName = Date.now().toString();
         const response = await axiosInstance.post<UploadResponse>(
-          `/api/v1/upload/data?dir=${dir}&file_name=${fileName}`
+          `/api/v1/upload/data?dir=${params.dir}&file_name=${fileName}`
         );
 
         if (response.data.code !== 0) {
@@ -47,8 +45,8 @@ export default function useUpload(onSuccess?: (url: string) => void) {
         });
 
         if (res.ok) {
-          onSuccess?.(`https://assets.dolla.market/${dir}/${fileName}`);
-          return `https://assets.dolla.market/${dir}/${fileName}`;
+          onSuccess?.(`https://assets.dolla.market/${params.dir}/${fileName}`);
+          return `https://assets.dolla.market/${params.dir}/${fileName}`;
         } else {
           throw new Error("Failed to upload file");
           return null;

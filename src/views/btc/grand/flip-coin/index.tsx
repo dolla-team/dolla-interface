@@ -99,14 +99,27 @@ const Coin = forwardRef<any, any>(
       if (notAuto) {
         setFlipStatus(4);
       }
+      const duration = (() => {
+        if (isWinner) {
+          return 200;
+        }
+        if (bids === 10) {
+          return 300;
+        }
+        if (bids === 50) {
+          return 120;
+        }
+        if (bids === 100) {
+          return 60;
+        }
+        return 600;
+      })();
+
       // Trigger callback after animation
-      setTimeout(
-        () => {
-          setIsAnimating(false);
-          onFlipComplete?.(index, true, notAuto);
-        },
-        isWinner ? 200 : 600
-      ); // Reduced from 1000ms to 600ms to start exit animation earlier
+      setTimeout(() => {
+        setIsAnimating(false);
+        onFlipComplete?.(index, true, notAuto);
+      }, duration); // Reduced from 1000ms to 600ms to start exit animation earlier
     };
 
     const onCollect = () => {

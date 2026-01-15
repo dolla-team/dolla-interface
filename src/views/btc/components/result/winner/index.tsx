@@ -13,10 +13,12 @@ import { LightRotation } from "@/views/btc/grand/flip-coin/light";
 import BtcFace from "./btc-face";
 import MultipleTag from "@/components/multiple-tag";
 import WinnerImg from "./img";
+import ShareModal from "@/sections/share";
 import "./index.scss";
 
 export default function Winner({ onClose }: { onClose: () => void }) {
   const { userInfo } = useAuth();
+  const [showShareModal, setShowShareModal] = useState(false);
   const [animationStatus, setAnimationStatus] = useState(0); // 0: coin rotating, 1: show bg
   const coinRef = useRef<HTMLDivElement>(null);
   const bgRef = useRef<HTMLDivElement>(null);
@@ -24,6 +26,7 @@ export default function Winner({ onClose }: { onClose: () => void }) {
     useBtcContext();
 
   useEffect(() => {
+    window.howl.bidSuccess.play();
     if (coinRef.current) {
       gsap
         .timeline()
@@ -118,7 +121,6 @@ export default function Winner({ onClose }: { onClose: () => void }) {
                   <Avatar
                     size={216}
                     address={userInfo?.user}
-                    email={userInfo?.show_email}
                     src={userInfo?.icon}
                     className="rounded-full border-[3px] border-[#DD9000] text-[72px]"
                   />
@@ -172,12 +174,37 @@ export default function Winner({ onClose }: { onClose: () => void }) {
                 >
                   ${formatNumber(pool.reward_usd, 2, true)}
                 </div>
+                <button
+                  className="mt-[20px] button w-[177px] h-[45px] rounded-[12px] bg-linear-to-b from-[#FFF698] to-[#FFC42F] text-[#111111] font-[600] text-[16px]"
+                  onClick={() => setShowShareModal(true)}
+                >
+                  Share dis!
+                </button>
               </>
             </div>
           </div>
         </div>
         <WinnerImg />
       </div>
+      <ShareModal
+        open={showShareModal}
+        onClose={() => {
+          setShowShareModal(false);
+        }}
+        type="winner"
+        data={{
+          multiple: returnMultiple,
+          time: Date.now(),
+          bids: bids,
+          amount: poolAmount,
+          price: pool.reward_usd,
+          winner_user: {
+            name: userInfo?.name,
+            user: userInfo?.user,
+            icon: userInfo?.icon
+          }
+        }}
+      />
     </>
   );
 }

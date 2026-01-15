@@ -1,7 +1,6 @@
 import { useNearKeyStore } from "@/stores/use-near-key";
 import { KeyPair, KeyPairSigner } from "near-api-js";
-import { useSignMessage } from "@privy-io/react-auth";
-import { viewMethod } from "./util";
+import { getUserId, viewMethod } from "./util";
 import { useAuth } from "@/contexts/auth/privy";
 import { QUOTE_TOKEN } from "@/config/btc";
 import axiosInstance from "@/libs/axios";
@@ -10,15 +9,14 @@ import useToast from "../use-toast";
 
 export default function useGenerateKey() {
   const { set, publicKey, privateKey } = useNearKeyStore();
-  const { signMessage } = useSignMessage();
-  const { address, nearAccount } = useAuth();
+  const { address, chainType, nearAccount, signMessage } = useAuth();
   const toast = useToast();
 
   async function generateKeyPair(isDeposit = false) {
     try {
       const res = await viewMethod({
         method: "get_user_id_ak",
-        args: { user_id: { Evm: address.replace(/^0x/, "").toLowerCase() } }
+        args: { user_id: getUserId(address, chainType) }
       });
 
       const isCorrect = res === "ed25519:" + publicKey;
@@ -89,12 +87,10 @@ export default function useGenerateKey() {
     }
     const res = await viewMethod({
       method: "get_account",
-      args: { user_id: { Evm: address.replace(/^0x/, "").toLowerCase() } }
+      args: { user_id: getUserId(address, chainType) }
     });
     const payload = {
-      user_id: {
-        Evm: address.slice(2).toLowerCase()
-      },
+      user_id: getUserId(address, chainType),
       ak: publicKey,
       fee_token: { FT: QUOTE_TOKEN.address },
       gas_token: {
@@ -106,11 +102,9 @@ export default function useGenerateKey() {
 
     const payloadString = JSON.stringify(payload);
 
-    const _signature = await signMessage({
-      message: payloadString
-    });
+    const _signature = await signMessage(payloadString, true);
 
-    const signature = _signature.signature.replace(/^0x/, "");
+    const signature = _signature.replace(/^0x/, "");
 
     await axiosInstance.put(`/api/v1/user/publickey`, {
       payload: payloadString,

@@ -4,7 +4,7 @@ import { formatAddress } from "@/utils/format/address";
 import { formatNumber } from "@/utils/format/number";
 import Big from "big.js";
 import useClaim from "@/hooks/near/use-player-refund";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@/libs/router";
 import { getProfitFee } from "@/utils/pool";
 import GridTable from "@/components/grid-table";
 import useIsMobile from "@/hooks/use-is-mobile";
@@ -95,7 +95,7 @@ const ClaimIndex = (props: any) => {
               navigate(
                 record?.nft_ids
                   ? `/nft/detail/${record.pool_id}`
-                  : `/btc/detail/${record.pool_id}`
+                  : `/btc/${record.pool_id}`
               );
             }}
           >

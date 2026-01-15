@@ -5,7 +5,7 @@ import { formatNumber } from "@/utils/format/number";
 import Big from "big.js";
 import { useAuth } from "@/contexts/auth";
 import { useMemo } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@/libs/router";
 import { getProfitFee } from "@/utils/pool";
 import Popover, {
   PopoverPlacement,
@@ -256,7 +256,7 @@ const ActiveListingsInfo = ({
             <div
               key={item.id}
               onClick={() => {
-                navigate(`/btc/detail/${item.pool_id}`);
+                navigate(`/btc/${item.pool_id}`);
               }}
               className="button text-[#2B3337] text-[12px] w-full h-[36px] bg-[#F2F2F299] hover:bg-[#FFC42F] rounded-[8px] flex items-center justify-between px-[10px]"
             >

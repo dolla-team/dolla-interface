@@ -3,15 +3,15 @@ import PlayerDistribution from "./player-distribution";
 import { formatAddress } from "@/utils/format/address";
 import dayjs from "@/libs/dayjs";
 import { addThousandSeparator, formatNumber } from "@/utils/format/number";
-import useWinnerBidList from "../use-winner-bid-list";
 import { useMemo, useState } from "react";
 import useIsMobile from "@/hooks/use-is-mobile";
 import clsx from "clsx";
 import MultipleTag from "@/components/multiple-tag";
 import ProvablyFair from "@/sections/provably-fair";
+import { useBtcContext } from "../../context";
 
 export default function EndPanel({ data }: { data: any }) {
-  const { winnerBidList } = useWinnerBidList(data);
+  const { winnerBidList } = useBtcContext();
   const isMobile = useIsMobile();
   const [openProvablyFair, setOpenProvablyFair] = useState(false);
 
@@ -94,13 +94,11 @@ export default function EndPanel({ data }: { data: any }) {
               <Avatar
                 size={150}
                 src={data.winner_user_info?.icon}
-                // email={data.winner_user_info?.email_desensitization}
-                email={"A"}
                 address={data.winner_user_info?.user}
                 className="rounded-full text-[48px] font-[500]"
               />
             </div>
-            <div className="text-white text-center text-[16px] font-[DelaGothicOne] mt-[10px]">
+            <div className="text-white text-center text-[16px] max-w-full truncate mt-[10px]">
               {data.winner_user_info?.name ||
                 formatAddress(data.winner_user_info?.user)}
             </div>
@@ -135,7 +133,6 @@ export default function EndPanel({ data }: { data: any }) {
                     <Avatar
                       size={32}
                       src={data.user_info?.icon}
-                      email={data.user_info?.email_desensitization}
                       address={data.user_info?.user}
                       className="text-[16px]"
                     />
@@ -258,7 +255,6 @@ const ProgressAvatar = ({
       <Avatar
         size={26}
         src={data.winner_user_info?.icon}
-        email={data.winner_user_info?.email_desensitization}
         address={data.winner_user_info?.user}
         className="text-[12px] !rounded-[4px]"
       />

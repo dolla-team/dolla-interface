@@ -1,9 +1,9 @@
-import columns from "./columns";
+import { liveColumns, soldColumns } from "./columns";
 import SortIcon from "./sort-icon";
 import Market from "./market";
 import usePoolList from "@/hooks/use-pool-list";
 import Loading from "@/components/icons/loading";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@/libs/router";
 import clsx from "clsx";
 import { BASE_TOKEN, AMOUNT } from "@/config/btc";
 import useTaskStore from "@/stores/use-task";
@@ -17,6 +17,7 @@ import Pagination from "@/components/pagination";
 import Button from "@/components/button";
 import { BTC_CREATE_FORM_URL } from "@/config";
 import { useAuth } from "@/contexts/auth";
+import { useMemo } from "react";
 
 export default function Markets() {
   const navigate = useNavigate();
@@ -25,6 +26,7 @@ export default function Markets() {
   const allMarketsStore = useAllMarketsStore();
   const {
     poolList,
+    pools,
     loading,
     sortField,
     sortOrder,
@@ -37,6 +39,10 @@ export default function Markets() {
     tokenStatus: 0,
     volume: allMarketsStore.tab
   });
+
+  const columns = useMemo(() => {
+    return allMarketsStore.status === "1" ? liveColumns : soldColumns;
+  }, [allMarketsStore.status]);
 
   return (
     <div
@@ -90,7 +96,7 @@ export default function Markets() {
             {[
               { label: "Live", key: "1" },
               {
-                label: "Sold",
+                label: "Ended",
                 key: "2"
               }
             ].map((item) => (
@@ -133,7 +139,8 @@ export default function Markets() {
             className={clsx(
               "flex items-center gap-[4px] ",
               column.sort && "cursor-pointer",
-              column.align === "center" && "justify-center"
+              column.align === "center" && "justify-center",
+              column.align === "right" && "justify-end"
             )}
             style={{ width: column.width }}
             onClick={() => {
@@ -144,7 +151,7 @@ export default function Markets() {
             }}
           >
             <span>{column.title}</span>
-            {column.dataIndex === "anchor_price" && <MarketInfo />}
+
             {column.sort && (
               <SortIcon
                 active={sortField === column.dataIndex}
@@ -162,15 +169,17 @@ export default function Markets() {
         ) : poolList.length === 0 ? (
           <Empty className="!py-[50px]" text="No Data" />
         ) : (
-          poolList.map((item: any) => (
-            <Market
-              key={item.id}
-              data={item}
-              onClick={() => {
-                navigate(`/btc/detail/${item.pool_id}`);
-              }}
-            />
-          ))
+          poolList
+            .filter((item: any) => pools[item])
+            .map((item: any) => (
+              <Market
+                key={item}
+                data={pools[item]}
+                onClick={() => {
+                  navigate(`/btc/${item}`);
+                }}
+              />
+            ))
         )}
       </div>
       <div className="flex justify-end items-center pt-[10px]">

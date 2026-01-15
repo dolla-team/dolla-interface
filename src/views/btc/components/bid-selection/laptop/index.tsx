@@ -213,9 +213,9 @@ const CreditsInfo = () => {
       content={
         <div className="w-[298px] text-[12px] p-[10px] bg-white rounded-[10px] border border-[#E4E4E4]">
           <div className="font-[500] text-black">Credits</div>
-          <div className="text-[12px] text-[#5E6B7D] font-[300] mt-[4px] leading-[120%]">
-            Credits can only be obtained through market bidding, and can be
-            exchanged for USDT or bid chances.
+          <div className="text-[#5E6B7D] font-[300] mt-[4px] leading-[120%]">
+            Earn Credits every time you bid. Redeem Credits for{" "}
+            {QUOTE_TOKEN.symbol}.
           </div>
         </div>
       }

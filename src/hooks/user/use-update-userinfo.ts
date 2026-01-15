@@ -6,6 +6,7 @@ import useUpload from "@/hooks/use-upload";
 interface UpdateUserInfoParams {
   name?: string;
   file?: Blob | null;
+  icon?: string;
 }
 
 export default function useUpdateUserInfo(onSuccess?: () => void) {
@@ -32,6 +33,10 @@ export default function useUpdateUserInfo(onSuccess?: () => void) {
 
         if (params.name) {
           args.name = params.name;
+        }
+
+        if (params.icon) {
+          args.icon = params.icon;
         }
 
         if (fileUrl) {

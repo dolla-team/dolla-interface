@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@/libs/router";
 
 export default function BackButton({ onClick }: { onClick?: () => void }) {
   const navigate = useNavigate();
@@ -10,7 +10,7 @@ export default function BackButton({ onClick }: { onClick?: () => void }) {
           onClick();
           return;
         }
-        navigate(-1);
+        navigate(-1 as any);
       }}
     >
       <svg

@@ -1,12 +1,12 @@
 import clsx from "clsx";
 import { useNftContext } from "../../context";
 
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import Big from "big.js";
 import Btn from "./btn";
 
 import ProgressBar from "@/components/nft-card/progress-bar";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@/libs/router";
 // import ProvablyFair from "@/sections/provably-fair";
 
 export default function Header({ className }: { className?: string }) {
@@ -88,7 +88,6 @@ export default function Header({ className }: { className?: string }) {
               <Avatar
                 size={35}
                 address={pool?.user_info?.address}
-                email={pool?.user_info?.email}
                 className="rounded-[12px]"
               />
             </div>

@@ -17,20 +17,41 @@ export default function useLogin() {
       time,
       solAddress,
       userId,
+      chainType,
+      twitterId,
       onSuccess
     }: {
       address: string;
       signature: string;
       time: number;
-      solAddress: string;
+      solAddress?: string;
       userId: string;
+      chainType: string;
+      twitterId?: string | null;
       onSuccess: () => void;
     }) => {
       try {
         setLoging(true);
-        const res = await axios.get(
-          `/api/v1/account/token?address=${address}&signature=${signature}&time=${time}&sol_address=${solAddress}&privy_wallet_id=${userId}`
-        );
+
+        const params: any = {
+          address,
+          signature,
+          time,
+          privy_wallet_id: userId
+        };
+        if (solAddress) {
+          params.sol_address = solAddress;
+        }
+        if (chainType) {
+          params.type = chainType;
+        }
+        if (twitterId) {
+          params.twitter_id = "@" + twitterId;
+          params.type = "privy_twitter";
+        }
+        const res = await axios.get(`/api/v1/account/token`, {
+          params
+        });
 
         localStorage.setItem(
           "_AK_TOKEN_",

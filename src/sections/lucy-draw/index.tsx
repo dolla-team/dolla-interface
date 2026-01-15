@@ -18,7 +18,7 @@ export default function LucyDraw({
 }: {
   className?: string;
   from: "home" | "detail";
-  poolStatus: number;
+  poolStatus?: number;
 }) {
   const userInfoStore = useUserInfoStore();
   const { userInfo } = useAuth();

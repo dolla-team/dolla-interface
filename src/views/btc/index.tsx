@@ -13,7 +13,7 @@ import clsx from "clsx";
 // import MarketsModal from "./components/more-markets/mobile/modal";
 import { useAuth } from "@/contexts/auth";
 import "@/libs/howl";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@/libs/router";
 import { ShareBtn, CloseBtn } from "./share-btn";
 import Loading from "./loading";
 import Wallet from "@/sections/wallet";
@@ -27,6 +27,7 @@ import { BET_UNIT } from "@/config";
 import { useContractConfigStore } from "@/stores/use-contract-config";
 import useBid from "@/hooks/near/use-bid";
 import useToast from "@/hooks/use-toast";
+import useBtcDetailStore from "@/stores/use-btc-detail";
 
 // import ProvablyFair from "@/sections/provably-fair";
 
@@ -44,29 +45,21 @@ export default function NewBTC() {
 const Content = () => {
   const { nearAccount, login } = useAuth() || {};
   const isMobile = useIsMobile();
-  const {
-    pool,
-    bidResult,
-    flipStatus,
-    onReset,
-    setFlipStatus,
-    bids,
-    setBidResult,
-    setTaskId
-  } = useBtcContext();
+  const { pool, flipStatus, onReset, setFlipStatus, bids, setTaskId } =
+    useBtcContext();
   const navigate = useNavigate();
   const walletStore = useWalletStore();
   const { userInfo } = useAuth();
   const contractConfig = useContractConfigStore((state) => state.config);
   const toast = useToast();
-
+  const btcDetailStore = useBtcDetailStore();
   const { onBid } = useBid(
     pool?.pool_id,
-    (result) => {
-      setFlipStatus(bids === 1 ? 5 : 4);
-      setBidResult(result);
-      console.log("success", 4);
-    },
+    // (result) => {
+    //   setFlipStatus(bids === 1 ? 5 : 4);
+    //   btcDetailStore.set({ bidResult: result });
+    //   console.log("success", 4);
+    // },
     (taskId: string) => {
       setFlipStatus(2);
       console.log("tx success", 2);
@@ -97,7 +90,7 @@ const Content = () => {
     if (flipStatus === 6) {
       onReset();
     }
-    setBidResult(null);
+    btcDetailStore.set({ bidResult: null });
     setFlipStatus(1);
     onBid(bids);
   };
@@ -107,22 +100,24 @@ const Content = () => {
   }, []);
 
   const [points, tickets, sumPoints, sumTickets, isWinner] = useMemo(() => {
-    if (!bidResult) {
+    if (!btcDetailStore.bidResult) {
       return [[], [], 0, 0, false];
     }
-    const _p = bidResult.point
-      ? bidResult.point.wild_coin_ev_result.split(",")
+    const _p = btcDetailStore.bidResult.winner_point
+      ? btcDetailStore.bidResult.winner_point.split(",")
       : [];
 
-    const _t = bidResult.ticket ? bidResult.ticket?.result?.split(",") : [];
+    const _t = btcDetailStore.bidResult.winner_ticket
+      ? btcDetailStore.bidResult.winner_ticket?.split(",")
+      : [];
     const _pt = _p.reduce((acc: number, curr: string) => acc + Number(curr), 0);
     const _tt = _t.reduce(
       (acc: number, curr: string) => acc + Number(curr === "0" ? 1 : 0),
       0
     );
 
-    return [_p, _t, _pt, _tt, bidResult.bid.is_winner];
-  }, [bidResult]);
+    return [_p, _t, _pt, _tt, btcDetailStore.bidResult.is_winner];
+  }, [btcDetailStore.bidResult]);
 
   const [disabled, balanceNotEnough] = useMemo(() => {
     if (pool?.status !== 1) {
@@ -167,7 +162,7 @@ const Content = () => {
       />
 
       <div className="absolute top-[10px] right-[30px] z-[10] flex items-center gap-[20px]">
-        <ShareBtn />
+        {(pool?.status === 1 || pool?.status === 2) && <ShareBtn />}
         <CloseBtn />
       </div>
       {!isMobile && <Header className="h-[214px]" />}
@@ -191,7 +186,7 @@ const Content = () => {
         </div>
       )} */}
       {/* {!isMobile && <TopWinner />} */}
-      {!isMobile && !bidResult?.bid?.is_winner && <Music />}
+      {!isMobile && !btcDetailStore.bidResult?.is_winner && <Music />}
       {/* {isMobile && <MarketsModal />} */}
       <Wallet />
       {pool?.status === 1 && <Tips />}
@@ -209,7 +204,7 @@ const Content = () => {
           onBidClick={onBidClick}
         />
       )}
-      {bidResult?.bid?.is_winner && flipStatus > 4 && <Confetti />}
+      {btcDetailStore.bidResult?.is_winner && flipStatus > 4 && <Confetti />}
     </div>
   );
 };

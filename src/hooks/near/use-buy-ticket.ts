@@ -17,7 +17,7 @@ const THIRTY_TGAS = "300000000000000";
 export default function useBuyTicket(onSuccess?: () => void) {
   const [loading, setLoading] = useState(false);
   const { generateKeyPair } = useGenerateKey();
-  const { updateNearAccount, address } = useAuth();
+  const { updateNearAccount, address, chainType } = useAuth();
   const toast = useToast();
 
   async function transfer(ticket: number) {
@@ -47,7 +47,8 @@ export default function useBuyTicket(onSuccess?: () => void) {
         },
         memo: JSON.stringify({
           type: "dolla_buy_ticket",
-          address: address
+          address: address,
+          address_chain: chainType
         })
       };
 

@@ -5,12 +5,14 @@ export default function MultipleTag({
   multipler,
   size,
   className,
-  textClassName
+  textClassName,
+  extraContent
 }: {
   multipler: number;
   size: number;
   className?: string;
   textClassName?: string;
+  extraContent?: React.ReactNode;
 }) {
   return (
     <div
@@ -21,7 +23,7 @@ export default function MultipleTag({
       style={{ width: size, height: size }}
     >
       <Bg size={size} />
-      {Number(multipler) > 99 ? (
+      {Number(multipler) > 99 && !extraContent ? (
         <motion.div
           animate={{
             rotate: [0, -5, 5, -3, 3, -1, 1, 0],
@@ -57,8 +59,9 @@ export default function MultipleTag({
           {multipler}x
         </motion.div>
       ) : (
-        <div className={clsx("relative z-[1] rotate-[15deg]", textClassName)}>
-          {multipler}x
+        <div className="relative z-[1] rotate-[15deg]">
+          <div className={clsx(textClassName)}>{multipler}x</div>
+          {extraContent}
         </div>
       )}
     </div>

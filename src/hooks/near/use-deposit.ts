@@ -1,18 +1,19 @@
 import { useState } from "react";
 import dayjs from "dayjs";
 import useGenerateKey from "@/hooks/near/use-generate-key";
-import { quote, viewMethod } from "./util";
+import { getUserId, quote } from "./util";
 import useToast from "../use-toast";
+import { useAuth } from "@/contexts/auth";
 
 export default function useDeposit() {
   const [loading, setLoading] = useState(false);
+  const { address, chainType } = useAuth();
   const [depositAddress, setDepositAddress] = useState<string | null>("");
   const { info } = useToast();
   const { generateKeyPair } = useGenerateKey();
 
   async function generateDepositAddress({
     swapType = "EXACT_INPUT",
-    evmAddress,
     slippageTolerance = 50,
     originAsset,
     depositType = "ORIGIN_CHAIN",
@@ -26,7 +27,6 @@ export default function useDeposit() {
     getFullQuote = false
   }: {
     swapType?: string;
-    evmAddress: string;
     slippageTolerance?: number;
     originAsset: string;
     depositType?: string;
@@ -52,9 +52,7 @@ export default function useDeposit() {
       setLoading(true);
 
       const msg: any = {
-        u: {
-          Evm: evmAddress.replace(/^0x/, "").toLowerCase()
-        },
+        u: getUserId(address, chainType),
         b: "Deposit",
         k: !!isRegistered ? "" : publicKey
       };

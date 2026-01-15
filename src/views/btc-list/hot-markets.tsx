@@ -4,7 +4,7 @@ import useTokenPrice from "@/hooks/use-token-price";
 import { useEffect, useMemo, useState, useCallback } from "react";
 import { formatNumber } from "@/utils/format/number";
 import { AMOUNT, BASE_TOKEN } from "@/config/btc";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@/libs/router";
 import { getReAnchorPrice } from "@/utils/pool";
 import { useBtcCreateStore } from "@/stores/use-btc-create";
 import { motion } from "framer-motion";
@@ -160,7 +160,7 @@ const MarketItem = ({
   const navigate = useNavigate();
   const valued = useMemo(() => {
     if (!market) return formatNumber(price * value, 2, true);
-    return formatNumber(getReAnchorPrice(market), 2, true);
+    return formatNumber(market.reward_usd, 2, true);
   }, [price, value, market]);
 
   return (
@@ -279,7 +279,7 @@ const MarketItem = ({
                 navigate("/btc/create");
                 return;
               }
-              navigate("/btc/detail/" + market.pool_id);
+              navigate("/btc/" + market.pool_id);
             }}
           >
             {market ? "Bid Now" : "Launch a Market"}

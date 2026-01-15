@@ -1,22 +1,20 @@
 import axiosInstance from "@/libs/axios";
-import { useState } from "react";
 import { useAuth } from "@/contexts/auth";
 import useGenerateKey from "@/hooks/near/use-generate-key";
 import { KeyPair } from "near-api-js";
-import { viewMethod } from "./util";
+import { viewMethod, getUserId } from "./util";
 import { QUOTE_TOKEN } from "@/config/btc";
+import useBtcDetailStore from "@/stores/use-btc-detail";
 
 export default function useBid(
   poolId: number,
-  onSuccess: (result: any) => void,
   onTxSuccess: (id: string) => void,
   onTxFail: () => void,
   onTxFail2: () => void
 ) {
-  const [biding, setBiding] = useState(false);
-  const { address, updateNearAccount } = useAuth();
+  const { address, chainType } = useAuth();
   const { generateKeyPair } = useGenerateKey();
-
+  const btcDetailStore = useBtcDetailStore();
   // Function to sign a message using NEAR private key
   const signMessage = async (
     message: string,
@@ -50,21 +48,14 @@ export default function useBid(
     // onTxSuccess("800");
 
     // setTimeout(() => {
-    //   // onSuccess({
-    //   //   bid: {
-    //   //     id: 1,
-    //   //     status: 1,
-    //   //     times: times,
-    //   //     created_at: Date.now()
-    //   //   },
-    //   //   ticket: {
-    //   //     result: "0"
-    //   //   },
-    //   //   point: {
-    //   //     wild_coin_ev_result: "20000"
-    //   //   }
-    //   // });
-    //   onTxFail();
+    //   btcDetailStore.set({
+    //     bidResult: {
+    //       is_winner: false,
+    //       winner_point: "10,10",
+    //       winner_ticket: "0,0"
+    //     },
+    //     flipStatus: 4
+    //   });
     // }, 3000);
 
     // return;
@@ -79,13 +70,11 @@ export default function useBid(
       return;
     }
 
-    setBiding(true);
-
     // let toastId = toast.loading({ title: "Bidding..." });
     try {
       const res = await viewMethod({
         method: "get_account",
-        args: { user_id: { Evm: address.replace(/^0x/, "").toLowerCase() } }
+        args: { user_id: getUserId(address, chainType) }
       });
       const random_seed = Array.from({ length: 64 }, () =>
         Math.floor(Math.random() * 16).toString(16)
@@ -98,9 +87,7 @@ export default function useBid(
         nonce: res.nonce,
         bet_token: { FT: QUOTE_TOKEN.address },
         gas_token: { FT: QUOTE_TOKEN.address },
-        user_id: {
-          Evm: address.slice(2).toLowerCase()
-        }
+        user_id: getUserId(address, chainType)
       };
 
       // Sign the payload using NEAR private key
@@ -134,12 +121,15 @@ export default function useBid(
           `/api/v1/user/bid/data/detail?id=${response.data.data}`
         );
         if (result.data.data?.tx_hash) {
-          loopBidResult(result.data.data.tx_hash);
+          btcDetailStore.set({ currentHash: result.data.data.tx_hash });
+          window.bidResultTimer = setTimeout(() => {
+            btcDetailStore.set({ currentHash: "" });
+            onTxFail();
+          }, 20000);
           return;
         }
         if (count > 30) {
           clearTimeout(window.bidDataTimer);
-          setBiding(false);
           onTxFail();
           return;
         }
@@ -150,51 +140,23 @@ export default function useBid(
         window.bidDataTimer = setTimeout(loopBidData, 1000);
       };
 
-      const loopBidResult = async (hash: string) => {
-        const bidResponse = await axiosInstance.get(
-          `/api/v1/user/prize/bid?hash=${hash}`
-        );
-        if (
-          bidResponse.data.data.bid !== null &&
-          bidResponse.data.data.bid.status !== 0
-        ) {
-          console.timeEnd("bid time");
-          console.timeEnd("bid loop");
-          console.log("bidResponse", bidResponse.data.data);
-          // bidResponse.data.data.bid.is_winner = true;
-          onSuccess(bidResponse.data.data);
-          updateNearAccount();
-          return;
-        }
-        if (window.bidResultTimer) {
-          clearTimeout(window.bidResultTimer);
-        }
-        window.bidResultTimer = setTimeout(() => {
-          loopBidResult(hash);
-        }, 1000);
-      };
-
       loopBidData();
 
       // toast.dismiss(toastId);
       // toast.success({ title: "Bid success" });
     } catch (error) {
-      setBiding(false);
       // toast.dismiss(toastId);
       // toast.fail({
       //   title: "Bid failed",
       //   description:
       //     error instanceof Error ? error.message : "Unknown error occurred"
       // });
+      console.log("bid error", error);
       onTxFail();
-    } finally {
-      setBiding(false);
     }
   };
 
   return {
-    biding,
-    onBid,
-    signMessage
+    onBid
   };
 }

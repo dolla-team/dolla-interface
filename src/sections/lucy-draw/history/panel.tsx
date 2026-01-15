@@ -141,7 +141,6 @@ export default function LucyDrawHistoryPanel({
               <Rank rank={index + 1} />
               <Avatar
                 size={30}
-                email={item.user_info?.email_desensitization}
                 src={item.user_info?.icon}
                 address={item.user}
                 className="text-[16px]"

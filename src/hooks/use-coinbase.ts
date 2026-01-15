@@ -2,20 +2,19 @@ import { useCallback, useEffect, useState } from "react";
 import { getOnrampBuyUrl } from "@coinbase/onchainkit/fund";
 import axiosInstance from "@/libs/axios";
 import useDeposit from "./near/use-deposit";
-import { useUser } from "@privy-io/react-auth";
+import { useAuth } from "@/contexts/auth";
 import Big from "big.js";
+import { EVM_REFUND_ACCOUNT } from "@/config";
 
 // const projectId = 'b88afaf3-113e-4ec4-80d0-0178256acc0a';
 
 // const projectId = 'fc6b7f9a-fff8-407f-bdda-0b8ede3ae84c'
 
 export default function useCoinBase({
-  address,
   amount,
   orderId,
   minAmount
 }: {
-  address: string;
   amount: number;
   orderId: string;
   minAmount: number;
@@ -23,10 +22,10 @@ export default function useCoinBase({
   const [loading, setLoading] = useState(false);
   const [coinBaseUrl, setCoinBaseUrl] = useState<string | null>(null);
   const { generateDepositAddress } = useDeposit();
-  const { user } = useUser();
+  const { address } = useAuth();
 
   const getCoinBaseUrl = useCallback(async () => {
-    if (!address || amount < minAmount || !orderId || !user?.wallet?.address) {
+    if (!address || amount < minAmount || !orderId || !address) {
       setCoinBaseUrl(null);
       return;
     }
@@ -41,9 +40,8 @@ export default function useCoinBase({
         destinationAsset:
           "nep141:17208628f84f5d6ad33f0da3bbbeb27ffcb398eac501a31bd6ad2011e36133a1",
         amount: new Big(amount).mul(1e6).toString(),
-        evmAddress: user?.wallet?.address || "",
         slippageTolerance: 50,
-        refundTo: user?.wallet?.address
+        refundTo: EVM_REFUND_ACCOUNT
       });
 
       if (!depositAddress) {

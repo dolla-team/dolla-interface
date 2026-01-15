@@ -1,5 +1,72 @@
 import domtoimage from "dom-to-image";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
+import useUpload from "@/hooks/use-upload";
+import axiosInstance from "@/libs/axios";
+
+// Helper function to convert dataURL to Blob (CSP-safe method)
+function dataURLtoBlob(dataURL: string): Blob {
+  const arr = dataURL.split(",");
+  const mime = arr[0].match(/:(.*?);/)?.[1] || "image/png";
+  const bstr = atob(arr[1]);
+  let n = bstr.length;
+  const u8arr = new Uint8Array(n);
+  while (n--) {
+    u8arr[n] = bstr.charCodeAt(n);
+  }
+  return new Blob([u8arr], { type: mime });
+}
+
+// Helper function to wait for all images to load
+async function waitForImages(
+  node: HTMLElement,
+  timeout: number = 10000
+): Promise<void> {
+  const images = node.querySelectorAll<HTMLImageElement>("img");
+  const imagePromises: Promise<void>[] = [];
+
+  images.forEach((img) => {
+    // If image is already loaded, skip
+    if (img.complete && img.naturalHeight !== 0) {
+      return;
+    }
+
+    // Create a promise that resolves when the image loads or times out
+    const imagePromise = new Promise<void>((resolve) => {
+      const timeoutId = setTimeout(() => {
+        console.warn(`Image loading timeout: ${img.src}`);
+        resolve(); // Resolve anyway to not block the process
+      }, timeout);
+
+      const onLoad = () => {
+        clearTimeout(timeoutId);
+        resolve();
+      };
+
+      const onError = () => {
+        clearTimeout(timeoutId);
+        console.warn(`Image failed to load: ${img.src}`);
+        resolve(); // Resolve anyway to not block the process
+      };
+
+      img.addEventListener("load", onLoad, { once: true });
+      img.addEventListener("error", onError, { once: true });
+
+      // If image has a src and is not complete, wait for it
+      if (img.src && !img.complete) {
+        // Image is loading, wait for load/error event
+      } else {
+        // Image might be complete but naturalHeight is 0, or no src
+        clearTimeout(timeoutId);
+        resolve();
+      }
+    });
+
+    imagePromises.push(imagePromise);
+  });
+
+  // Wait for all images to load or timeout
+  await Promise.all(imagePromises);
+}
 
 export interface ImageGenerationOptions {
   width?: number;
@@ -12,6 +79,7 @@ export interface ImageGenerationOptions {
 
 export interface ShareOptions {
   title?: string;
+  description?: string;
   text?: string;
   url?: string;
   imageUrl?: string;
@@ -23,7 +91,10 @@ export interface ShareOptions {
  * Hook for generating images from DOM nodes
  * Supports download and share functionality
  */
-export function useDomToImage() {
+export function useShare() {
+  const { uploadFile } = useUpload();
+  const [downloading, setDownloading] = useState(false);
+  const [sharing, setSharing] = useState(false);
   /**
    * Convert DOM node to image
    * @param node DOM node or selector
@@ -61,6 +132,9 @@ export function useDomToImage() {
       };
 
       try {
+        // Wait for all images to load before generating the image
+        await waitForImages(targetNode);
+
         const dataUrl = await domtoimage.toPng(targetNode, config);
 
         return dataUrl;
@@ -95,128 +169,34 @@ export function useDomToImage() {
   );
 
   /**
-   * Set Twitter Card meta tags
-   * @param title Card title
-   * @param description Card description
-   * @param image Card image URL
-   * @param url Card URL
-   * @param cardType Card type
-   * @param site Twitter site handle
-   * @param creator Twitter creator handle
-   */
-  const setTwitterCard = useCallback(
-    (
-      title: string,
-      description: string,
-      image: string,
-      url?: string,
-      cardType:
-        | "summary"
-        | "summary_large_image"
-        | "app"
-        | "player" = "summary_large_image",
-      site?: string,
-      creator?: string
-    ) => {
-      const setMetaTag = (name: string, content: string) => {
-        let meta = document.querySelector(
-          `meta[name="${name}"]`
-        ) as HTMLMetaElement;
-        if (!meta) {
-          meta = document.createElement("meta");
-          meta.name = name;
-          document.head.appendChild(meta);
-        }
-        meta.content = content;
-      };
-
-      // Set Twitter Card properties
-      setMetaTag("twitter:card", cardType);
-      setMetaTag("twitter:title", title);
-      setMetaTag("twitter:description", description);
-      setMetaTag("twitter:image", image);
-
-      if (url) {
-        setMetaTag("twitter:url", url);
-      }
-
-      if (site) {
-        setMetaTag("twitter:site", site);
-      }
-
-      if (creator) {
-        setMetaTag("twitter:creator", creator);
-      }
-
-      // Also set Open Graph tags for better compatibility
-      setMetaTag("og:title", title);
-      setMetaTag("og:description", description);
-      setMetaTag("og:image", image);
-      setMetaTag("og:type", "website");
-
-      if (url) {
-        setMetaTag("og:url", url);
-      }
-    },
-    []
-  );
-
-  /**
    * Share image via Twitter with Twitter Card
-   * @param dataUrl Base64 image data
    * @param options Share options
    */
   const shareImage = useCallback(
-    async (dataUrl: string, options: ShareOptions = {}) => {
-      const {
-        text = "Check out this image",
-        url,
-        hashtags = ["Dolla", "Crypto", "Trading", "Bitcoin"],
-        via,
-        title,
-        imageUrl
-      } = options;
+    async (options: ShareOptions = {}) => {
+      const { title, description, imageUrl } = options;
 
       try {
-        // Set Twitter Card meta tags if title and imageUrl are provided
-        if (title && imageUrl) {
-          setTwitterCard(
-            title,
-            text,
-            imageUrl,
-            url,
-            "summary_large_image",
-            via ? `@${via}` : undefined,
-            via ? `@${via}` : undefined
-          );
-        }
+        const res = await axiosInstance.post("/api/v1/share/create", {
+          title,
+          description,
+          image: imageUrl
+        });
+        const url = res.data.data.share_url;
 
-        // First download the image to get the file
-        const filename = `shared-image-${Date.now()}`;
-        downloadImage(dataUrl, filename);
+        const twitterText = encodeURIComponent(`${title}\n${description}`);
 
-        // Create hashtags string
-        const hashtagsString = hashtags.map((tag) => `#${tag}`).join(" ");
-
-        // Create Twitter share URL with enhanced parameters
-        const twitterText = encodeURIComponent(`${text}\n\n${hashtagsString}`);
-        const twitterUrl = url ? encodeURIComponent(url) : "";
-        const viaParam = via ? `&via=${encodeURIComponent(via)}` : "";
-
-        const twitterShareUrl = `https://twitter.com/intent/tweet?text=${twitterText}${
-          twitterUrl ? `&url=${twitterUrl}` : ""
-        }${viaParam}`;
-
+        const twitterShareUrl = `https://twitter.com/intent/tweet?text=${twitterText}&url=${url}`;
         // Open Twitter in new window
-        window.open(twitterShareUrl, "_blank", "width=600,height=400");
+        window.open(twitterShareUrl, "_blank");
       } catch (error) {
         console.error("Failed to share image:", error);
         // Fallback to download only
-        downloadImage(dataUrl, "shared-image");
+        // downloadImage(dataUrl, "shared-image");
         throw new Error("Failed to share image, downloaded instead");
       }
     },
-    [downloadImage, setTwitterCard]
+    [downloadImage]
   );
 
   /**
@@ -231,6 +211,7 @@ export function useDomToImage() {
       filename: string = "image",
       options: ImageGenerationOptions = {}
     ) => {
+      setDownloading(true);
       try {
         const dataUrl = await generateImage(node, options);
         downloadImage(dataUrl, filename);
@@ -238,6 +219,8 @@ export function useDomToImage() {
       } catch (error) {
         console.error("Failed to generate and download image:", error);
         throw error;
+      } finally {
+        setDownloading(false);
       }
     },
     [generateImage, downloadImage]
@@ -248,6 +231,7 @@ export function useDomToImage() {
    * @param node DOM node or selector
    * @param options Generation options
    * @param shareOptions Share options
+   * @param uploadFile Upload function from useUpload hook
    */
   const generateAndShare = useCallback(
     async (
@@ -255,24 +239,53 @@ export function useDomToImage() {
       options: ImageGenerationOptions = {},
       shareOptions: ShareOptions = {}
     ) => {
+      setSharing(true);
       try {
-        const dataUrl = await generateImage(node, options);
-        await shareImage(dataUrl, shareOptions);
-        return dataUrl;
+        // Generate image from DOM node
+        const dataUrl = await generateImage(node, {
+          format: "png",
+          quality: 1,
+          pixelRatio: 1,
+          ...options
+        });
+
+        // Use CSP-safe method to convert dataURL to Blob
+        // This avoids CSP issues with data: protocol
+        const blob = dataURLtoBlob(dataUrl);
+
+        const imageUrl = await uploadFile({
+          dir: "share",
+          file: blob
+        });
+
+        // downloadImage(dataUrl, "share-image");
+
+        // return;
+
+        if (!imageUrl) return;
+
+        // Share with uploaded image URL
+        await shareImage({
+          ...shareOptions,
+          imageUrl
+        });
       } catch (error) {
         console.error("Failed to generate and share image:", error);
         throw error;
+      } finally {
+        setSharing(false);
       }
     },
     [generateImage, shareImage]
   );
 
   return {
+    downloading,
+    sharing,
     generateImage,
     downloadImage,
     shareImage,
     generateAndDownload,
-    generateAndShare,
-    setTwitterCard
+    generateAndShare
   };
 }

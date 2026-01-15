@@ -21,7 +21,7 @@ import PageBack from "@/views/profile/components/page-back";
 import { AMOUNT } from "@/config/btc";
 import ConfirmModal from "./confirm-modal";
 import { useBtcCreateStore } from "@/stores/use-btc-create";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@/libs/router";
 import { BTC_CREATE_FORM_URL } from "@/config";
 
 export default function BTCCreate() {
@@ -235,9 +235,7 @@ export default function BTCCreate() {
                         <button
                           className="button"
                           onClick={() => {
-                            navigate(
-                              `/btc/detail/${referenceData?.top_sale_pool_id}`
-                            );
+                            navigate(`/btc/${referenceData?.top_sale_pool_id}`);
                           }}
                         >
                           <svg
@@ -405,7 +403,7 @@ const Title = () => {
   return (
     <div className="flex items-center justify-center gap-[10px] text-white">
       <span className="text-[20px] font-[500]">
-        Create {BASE_TOKEN.symbol} Market
+        Create a {BASE_TOKEN.symbol} Market
       </span>
     </div>
   );

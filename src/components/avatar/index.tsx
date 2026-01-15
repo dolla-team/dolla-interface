@@ -1,69 +1,61 @@
 import clsx from "clsx";
-// @ts-ignore
-import crypto from "crypto-browserify";
-import { useRef, useEffect } from "react";
-import { AvatarColors } from "@/config/user";
-import { useUsers } from "@/stores/use-users";
+import { useMemo } from "react";
+import {
+  isValidSolanaAddress,
+  isValidEVMAddress
+} from "@/utils/validate-address";
 
 export default function Avatar({
   size,
   src,
-  email = "",
   className,
   address,
   onClick
 }: {
   size: number;
   src?: string;
-  email?: string;
   address?: string;
   active?: boolean;
   className?: string;
   onClick?: (e: any) => void;
 }) {
-  const usersStore = useUsers();
-  const randomRef = useRef(Math.floor(Math.random() * AvatarColors.length));
+  const mergedSrc = useMemo(() => {
+    if (src) return src;
+    if (!address) return null;
 
-  useEffect(() => {
-    if (!address) return;
-    if (usersStore.users[address.toLowerCase()]) {
-      return;
+    let random: number;
+
+    // Check if it's a Solana address
+    if (isValidSolanaAddress(address)) {
+      // Calculate random from Solana address using first few characters
+      // Sum character codes of first 6 characters and take modulo
+      const charSum = address
+        .slice(0, 6)
+        .split("")
+        .reduce((sum, char) => sum + char.charCodeAt(0), 0);
+      random = (charSum % 45) + 1;
+    } else if (isValidEVMAddress(address)) {
+      // EVM address (starts with 0x)
+      random = (parseInt(address.slice(2, 5), 16) % 45) + 1;
+    } else {
+      // Fallback for other address formats
+      const charSum = address
+        .slice(0, 6)
+        .split("")
+        .reduce((sum, char) => sum + char.charCodeAt(0), 0);
+      random = (charSum % 45) + 1;
     }
 
-    usersStore.setUsers({
-      [address.toLowerCase()]: {
-        color: AvatarColors[randomRef.current]
-      }
-    });
-  }, [address]);
-  if (!src && !email) {
-    return null;
-  }
+    return `https://assets.dolla.market/avatar/${random}.jpg`;
+  }, [src, address]);
 
-  if (!src && email) {
-    return (
-      <div
-        className={clsx(
-          "uppercase flex items-center justify-center rounded-[6px]",
-          className
-        )}
-        style={{
-          width: size,
-          height: size,
-          backgroundColor:
-            (address && usersStore.users[address.toLowerCase()]?.color) ||
-            AvatarColors[randomRef.current]
-        }}
-        onClick={onClick}
-      >
-        {email.charAt(0)}
-      </div>
-    );
+  if (!mergedSrc) {
+    return null;
   }
 
   return (
     <img
-      src={src}
+      src={mergedSrc}
       alt="avatar"
       className={clsx("rounded-[6px]", className)}
       style={{

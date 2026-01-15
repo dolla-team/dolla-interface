@@ -1,5 +1,5 @@
 import Switch from "@/components/switch";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@/libs/router";
 
 export default function Tabs({ tab }: { tab: string }) {
   const navigate = useNavigate();
@@ -9,7 +9,7 @@ export default function Tabs({ tab }: { tab: string }) {
         tab={tab}
         tabs={[
           { label: "Bidder", value: "player" },
-          { label: "Seller", value: "seller" }
+          { label: "Lister", value: "seller" }
         ]}
         onChange={(value) => {
           navigate(`/portfolio/${value}`);

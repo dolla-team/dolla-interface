@@ -11,7 +11,6 @@ export default function UserInfo() {
         size={56}
         className="rounded-[8px] border border-[2px] border-[#FFFFFFCC] text-[28px]"
         address={userInfo?.user}
-        email={userInfo?.show_email}
         src={userInfo?.icon}
       />
       <div className="text-white">

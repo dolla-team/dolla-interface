@@ -1,4 +1,8 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  Navigate,
+  RouterProvider
+} from "react-router-dom";
 import { lazy, useEffect, useState } from "react";
 import WalletProvider from "./contexts/wallet";
 import { AuthProvider } from "./contexts/auth";
@@ -8,6 +12,7 @@ import Loading from "@/components/loading";
 import VerifyEmail from "./views/verify-email";
 import { useGlobalStore } from "@/stores/use-global";
 import ErrorPage from "./views/error-page";
+import { useBidResultSubscription } from "@/hooks/use-websocket";
 // import "react-toastify/dist/ReactToastify.css";
 
 import MainLayout from "./layouts/main";
@@ -25,8 +30,8 @@ const LazyNftList = lazy(() => import("./views/nft-list"));
 const LazyBtc = lazy(() => import("./views/btc/index"));
 const LazyTerms = lazy(() => import("./views/terms"));
 const LazyPolicy = lazy(() => import("./views/policy"));
-const LazyDemo = lazy(() => import("./views/demo"));
 const LazyDocs = lazy(() => import("./views/docs"));
+const LazyTemp = lazy(() => import("./views/temp"));
 
 import("react-toastify/dist/ReactToastify.css");
 
@@ -57,10 +62,6 @@ const router = createBrowserRouter([
         element: <LazyNftCreate />
       },
       {
-        path: "btc",
-        element: <BtcList />
-      },
-      {
         path: "btc/create",
         element: <LazyBtcCreate />
       },
@@ -79,20 +80,16 @@ const router = createBrowserRouter([
       {
         path: "privacy-policy",
         element: <LazyPolicy />
-      },
-      {
-        path: "demo",
-        element: <LazyDemo />
       }
     ]
   },
   {
-    path: "btc/detail",
+    path: "btc",
     element: <LazyBtc />,
     errorElement: <ErrorPage />
   },
   {
-    path: "btc/detail/:poolId",
+    path: "btc/:poolId",
     element: <LazyBtc />,
     errorElement: <ErrorPage />
   },
@@ -103,6 +100,14 @@ const router = createBrowserRouter([
   {
     path: "/docs",
     element: <LazyDocs />
+  },
+  {
+    path: "/temp",
+    element: <LazyTemp />
+  },
+  {
+    path: "*",
+    element: <Navigate to="/" replace />
   }
 ]);
 
@@ -133,14 +138,16 @@ const Content = () => {
 
   return isLoading ? (
     <Loading />
-  ) : !user ||
-    globalStore.email.toLowerCase() !==
-      (user?.email?.address?.toLowerCase() ||
-        user?.google?.email?.toLowerCase()) ? (
+  ) : !user || !globalStore.isInWhitelist ? (
     <VerifyEmail />
   ) : (
-    <RouterProvider router={router} />
+    <RouterContent />
   );
+};
+
+const RouterContent = () => {
+  useBidResultSubscription();
+  return <RouterProvider router={router} />;
 };
 
 function App() {

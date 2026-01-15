@@ -78,7 +78,7 @@ export default function Result({
             />
           </svg>
         )}
-        <button onClick={onClose}>
+        <button onClick={onClose} className="button">
           <svg
             width="12"
             height="7"

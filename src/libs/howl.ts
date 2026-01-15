@@ -14,7 +14,21 @@ const bgmSound = new Howl({
   autoplay: false
 });
 
+const bidSuccessSound = new Howl({
+  src: ["/audios/winning.mp3"],
+  volume: 0.1,
+  loop: false
+});
+
+const coinSound = new Howl({
+  src: ["/audios/coin-drop.mp3"],
+  volume: 1,
+  loop: false
+});
+
 window.howl = {
   flip: flipSound,
-  bgm: bgmSound
+  bgm: bgmSound,
+  coinDrop: coinSound,
+  bidSuccess: bidSuccessSound
 };

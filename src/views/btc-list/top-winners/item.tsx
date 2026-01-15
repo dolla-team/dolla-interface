@@ -3,7 +3,7 @@ import ItemLevel from "./item-level";
 import { formatAddress } from "@/utils/format/address";
 import { formatNumber } from "@/utils/format/number";
 import clsx from "clsx";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@/libs/router";
 import Big from "big.js";
 
 export default function TopWinnersItem({
@@ -26,7 +26,7 @@ export default function TopWinnersItem({
         level === 3 && "from-[#F87168]/10"
       )}
       onClick={() => {
-        navigate("/btc/detail/" + data.pool_id);
+        navigate("/btc/" + data.pool_id);
       }}
     >
       <ItemLevel
@@ -37,7 +37,6 @@ export default function TopWinnersItem({
         <div className="w-[40px] h-[40px] p-[2px] rounded-full bg-linear-to-b from-[#FFE093] via-[#FFECBC] to-[#DEAF37]">
           <Avatar
             address={data?.user_info?.user}
-            email={data?.user_info?.email_desensitization}
             src={data?.user_info?.icon}
             size={36}
             className="rounded-full text-[18px]"
@@ -45,7 +44,7 @@ export default function TopWinnersItem({
         </div>
         <div>
           <div className="text-[10px] text-black/30">
-            {type === "winners" ? "Winner" : "Seller"}
+            {type === "winners" ? "Winner" : "Lister"}
           </div>
           <div className="text-[12px] text-black font-semibold">
             {data?.user_info?.name || formatAddress(data?.user)}{" "}
@@ -55,7 +54,7 @@ export default function TopWinnersItem({
       <div>
         <div className="text-[10px] text-black/30 text-right">
           {type === "winners" && "Multiple"}
-          {type === "sellers" && "Profit"}
+          {type === "sellers" && "Premium"}
           {type === "losers" && "Loss"}
         </div>
         <div className="text-[12px] text-black text-right font-semibold">

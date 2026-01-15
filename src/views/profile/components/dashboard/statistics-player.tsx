@@ -8,7 +8,7 @@ import useUserWinner from "@/hooks/user/use-user-winner";
 import useWalletStore from "@/stores/use-wallet";
 import useBalance from "@/hooks/near/use-balance";
 import { BASE_TOKEN, QUOTE_TOKEN } from "@/config/btc";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@/libs/router";
 import Popover, {
   PopoverPlacement,
   PopoverTrigger
@@ -64,7 +64,7 @@ const RewardCard = () => {
       )}
       style={{ backgroundImage: `url(${backgroundImage})` }}
     >
-      <div className="text-[12px]">Total Reward Value</div>
+      <div className="text-[12px]">Total Realizations Value</div>
       <div className="text-[32px] font-[700] mt-[24px]">
         ${formatNumber(totalAmountWithPrice || 0, 2, true)}
       </div>
@@ -80,7 +80,7 @@ const RewardCard = () => {
         </div>
       </div>
       <div className="flex mt-[18px]">
-        <LabelValue label="Your Bid" className="whitespace-nowrap w-1/3">
+        <LabelValue label="Total volume" className="whitespace-nowrap w-1/3">
           <span className="text-[16px]">
             {formatNumber(userInfo?.player_total_bid, 2, true, {
               isShort: Big(userInfo?.player_total_bid || 0).gt(10000),
@@ -88,14 +88,17 @@ const RewardCard = () => {
             })}
           </span>
         </LabelValue>
-        <LabelValue label="Wins" className="whitespace-nowrap w-1/3">
+        <LabelValue
+          label="Markets realized"
+          className="whitespace-nowrap w-1/3"
+        >
           {userWonData?.length === 0 ? (
             WinsAmount
           ) : (
             <YourWonInfo list={userWonData || []}>{WinsAmount}</YourWonInfo>
           )}
         </LabelValue>
-        <LabelValue label="Top Multiplier" className="whitespace-nowrap w-1/3">
+        <LabelValue label="Top Multiple" className="whitespace-nowrap w-1/3">
           <span className="text-[16px]">
             {formatNumber(userInfo?.highest_multiple, 2, true)}x
           </span>
@@ -195,7 +198,7 @@ const YourWonInfo = ({
             <div
               key={item.id}
               onClick={() => {
-                navigate(`/btc/detail/${item.pool_id}`);
+                navigate(`/btc/${item.pool_id}`);
               }}
               className="button text-[#2B3337] text-[12px] w-full h-[36px] bg-[#F2F2F299] hover:bg-[#FFC42F] rounded-[8px] flex items-center justify-between px-[10px]"
             >
@@ -203,7 +206,7 @@ const YourWonInfo = ({
                 {" "}
                 <span>#{item.pool_id}</span>
                 <span className="ml-[20px]">
-                  {Big(item.reward_amount || 0)
+                  {Big(item.claim_reward_amount || 0)
                     .div(10 ** BASE_TOKEN.decimals)
                     .toString()}{" "}
                   {BASE_TOKEN.symbol}

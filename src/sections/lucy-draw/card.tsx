@@ -105,7 +105,6 @@ export default function LucyDrawCard({
                     key={index}
                     className="border border-[#DD9000] rounded-full"
                     size={30}
-                    email={item.user_info?.show_email}
                     src={item.user_info?.icon}
                   />
                 ))}
