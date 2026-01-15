@@ -44,7 +44,7 @@ export default function TopWinnersItem({
         </div>
         <div>
           <div className="text-[10px] text-black/30">
-            {type === "winners" ? "Winner" : "Seller"}
+            {type === "winners" ? "Winner" : "Lister"}
           </div>
           <div className="text-[12px] text-black font-semibold">
             {data?.user_info?.name || formatAddress(data?.user)}{" "}
@@ -54,7 +54,7 @@ export default function TopWinnersItem({
       <div>
         <div className="text-[10px] text-black/30 text-right">
           {type === "winners" && "Multiple"}
-          {type === "sellers" && "Profit"}
+          {type === "sellers" && "Premium"}
           {type === "losers" && "Loss"}
         </div>
         <div className="text-[12px] text-black text-right font-semibold">

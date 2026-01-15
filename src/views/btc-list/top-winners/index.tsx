@@ -32,7 +32,7 @@ export default function TopWinners({
         type === "winners"
           ? "Top Winners"
           : type === "sellers"
-          ? "Top Market Sell"
+          ? "Top Market List"
           : "Top Market Loss"
       }
     >
