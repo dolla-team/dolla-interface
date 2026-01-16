@@ -2,8 +2,14 @@ import clsx from "clsx";
 import TopItemBg from "./item-bg";
 import Avatar from "@/components/avatar";
 import LevelIcon from "@/components/icons/level-icon";
+import { formatAddress } from "@/utils/format/address";
+import Big from "big.js";
+import { BASE_TOKEN } from "@/config/btc";
+import { formatNumber } from "@/utils/format/number";
+import { useNavigate } from "@/libs/router";
 
-export default function TopItem({ className, number }: any) {
+export default function TopItem({ className, number, data }: any) {
+  const navigate = useNavigate();
   return (
     <div
       className={clsx(
@@ -12,27 +18,48 @@ export default function TopItem({ className, number }: any) {
       )}
     >
       <div className="flex flex-col items-center justify-center h-[calc(100%-76px)]">
-        <Avatar size={54} email="A" />
+        <Avatar
+          size={54}
+          address={data?.user_info?.user}
+          src={data?.user_info?.icon}
+        />
         <div className="flex items-center gap-[6px] mt-[6px]">
           <div className="text-[14px] text-blackfont-[500] max-w-[100px] truncate">
-            11bbcc
+            {data?.user_info?.name || formatAddress(data?.user)}
           </div>
           <div className="flex items-center">
             <LevelIcon size={15} className="relative z-[2]" />
             <span className="ml-[-14px] pl-[16px] pr-[6px] text-[8px] text-right text-white border border-white bg-[#3C3C3C] rounded-[12px]">
-              {1}
+              {data?.user_info?.level}
             </span>
           </div>
         </div>
-        <div className="text-[26px] text-black font-[700]">11bbcc</div>
+        <div className="text-[26px] text-black font-[700]">
+          {data?.user_info?.name || formatAddress(data?.user)}
+        </div>
       </div>
       <div className="absolute bottom-0 left-0 flex flex-col items-center justify-center w-full h-[86px]">
-        <div className="relative z-[2] px-[26px] rounded-[10px] h-[30px] flex items-center justify-center gap-[10px] border border-[#F2F2F233] bg-[#0000001A] text-[14px] font-[500] text-white">
-          <span>#237</span>
-          <span>0.1 BTC</span>
+        <div
+          onClick={() => {
+            navigate(`/btc/${data?.pool_id}`);
+          }}
+          className="relative button z-[2] px-[26px] rounded-[10px] h-[30px] flex items-center justify-center gap-[10px] border border-[#F2F2F233] bg-[#0000001A] text-[14px] font-[500] text-white"
+        >
+          <span>#{data?.pool_id}</span>
+          <span>
+            {Big(data?.reward_amount || 0)
+              .div(10 ** BASE_TOKEN.decimals)
+              .toString()}{" "}
+            {BASE_TOKEN.symbol}
+          </span>
         </div>
         <div className="mt-[6px] relative z-[2] flex items-center justify-center gap-[8px] text-[12px] text-white">
-          <span>$10</span>
+          <span>
+            $
+            {Big(data?.purchase_amount || 0)
+              .div(1e6)
+              .toString()}
+          </span>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="10"
@@ -45,7 +72,7 @@ export default function TopItem({ className, number }: any) {
               fill="white"
             />
           </svg>
-          <span>$11,035.62</span>
+          <span>${formatNumber(data?.reward_usd || 0, 2, true)}</span>
         </div>
         <TopItemBg number={number} />
       </div>

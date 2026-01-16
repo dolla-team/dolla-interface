@@ -32,6 +32,7 @@ const LazyTerms = lazy(() => import("./views/terms"));
 const LazyPolicy = lazy(() => import("./views/policy"));
 const LazyDocs = lazy(() => import("./views/docs"));
 const LazyTemp = lazy(() => import("./views/temp"));
+const LazyLeaderboard = lazy(() => import("./views/leaderboard"));
 
 import("react-toastify/dist/ReactToastify.css");
 
@@ -80,6 +81,10 @@ const router = createBrowserRouter([
       {
         path: "privacy-policy",
         element: <LazyPolicy />
+      },
+      {
+        path: "leaderboard",
+        element: <LazyLeaderboard />
       }
     ]
   },
