@@ -23,7 +23,7 @@ export default function Leaderboard() {
           Leaderboard
         </div>
         <Top top3Winners={top3Winners} />
-        <div className="flex justify-center gap-[22px] mt-[30px]">
+        <div className="flex justify-center gap-[22px] mt-[30px] h-[560px]">
           <div className="w-[372px]">
             <TopWinners
               type="winners"
