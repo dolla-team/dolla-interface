@@ -53,6 +53,7 @@ export default function TopWinners({
           data={item}
           level={index + 1}
           type={type}
+          maxLevel={limit === 10 ? 5 : limit}
         />
       ))}
       {data.length === 0 && (

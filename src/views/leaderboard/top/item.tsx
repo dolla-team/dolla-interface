@@ -35,7 +35,7 @@ export default function TopItem({ className, number, data }: any) {
           </div>
         </div>
         <div className="text-[26px] text-black font-[700]">
-          {data?.user_info?.name || formatAddress(data?.user)}
+          {formatNumber(data?.profit_ratio, 0, true)}x
         </div>
       </div>
       <div className="absolute bottom-0 left-0 flex flex-col items-center justify-center w-full h-[86px]">
