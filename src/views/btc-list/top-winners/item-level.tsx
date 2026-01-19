@@ -23,13 +23,15 @@ const COLOR: Record<number, { border: string[]; bg: string[] }> = {
 
 export default function ItemLevel({
   level = 0,
-  className
+  className,
+  maxLevel = 5
 }: {
   level: number;
   className?: string;
+  maxLevel?: number;
 }) {
-  if (level > 5 || !level) return null;
-  const { border, bg } = COLOR[level];
+  if (level > maxLevel || !level) return null;
+  const { border, bg } = COLOR[level > 5 ? 5 : level];
   return (
     <div className={className}>
       <svg

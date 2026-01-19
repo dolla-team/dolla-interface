@@ -9,11 +9,13 @@ import Big from "big.js";
 export default function TopWinnersItem({
   data,
   level,
-  type
+  type,
+  maxLevel
 }: {
   data: any;
   level: number;
   type: "winners" | "sellers" | "losers";
+  maxLevel: number;
 }) {
   const navigate = useNavigate();
 
@@ -32,6 +34,7 @@ export default function TopWinnersItem({
       <ItemLevel
         level={level}
         className="absolute top-[-10px] left-[-10px] z-[2]"
+        maxLevel={maxLevel}
       />
       <div className="flex items-center gap-[10px]">
         <div className="w-[40px] h-[40px] p-[2px] rounded-full bg-linear-to-b from-[#FFE093] via-[#FFECBC] to-[#DEAF37]">
