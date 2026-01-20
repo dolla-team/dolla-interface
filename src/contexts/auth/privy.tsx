@@ -123,7 +123,7 @@ export const AuthProvider: React.FC<{
         setAccountRefresher(1);
         return;
       }
-
+      console.log("address not equal", address, loginedAddress);
       if (address && loginedAddress && address !== loginedAddress) {
         logout();
         return;
