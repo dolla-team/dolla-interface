@@ -3,12 +3,11 @@ import clsx from "clsx";
 import Button from "@/components/button";
 import { formatNumber } from "@/utils/format/number";
 import Big from "big.js";
+import { IS_TEST } from "@/config";
 
 const MIN_CLAIM_AMOUNT: Record<string, number> = {
-  // USDT: 10,
-  // BTC: 0.0001
-  USDT: 0,
-  BTC: 0
+  USDT: IS_TEST ? 1 : 10,
+  BTC: IS_TEST ? 0.00001: 0.0001
 };
 
 export default function ClaimModal({
