@@ -63,6 +63,25 @@ export const AuthProvider: React.FC<{
     return "";
   }, [user]);
 
+  const loginMethod = useMemo(() => {
+    if (user?.wallet?.connectorType === "solana_adapter") {
+      return "solana";
+    }
+    if (user?.wallet?.connectorType === "injected") {
+      return "evm";
+    }
+    if (user?.google) {
+      return "google";
+    }
+    if (user?.twitter) {
+      return "twitter";
+    }
+    if (user?.email) {
+      return "email";
+    }
+    return "";
+  }, [user]);
+
   const privyEvmWallet = useMemo(() => {
     if (isLoggedOut || !user) return { address: "" };
     const privyItem = wallets.find((item) =>
@@ -123,14 +142,17 @@ export const AuthProvider: React.FC<{
         setAccountRefresher(1);
         return;
       }
-      console.log("address not equal", address, loginedAddress);
-      if (address && loginedAddress && address !== loginedAddress) {
+      console.log("address not equal", address, loginedAddress, loginMethod, globalStore.loginMethod);
+      if (address && loginedAddress && address !== loginedAddress && loginMethod === globalStore.loginMethod) {
         logout();
         return;
       }
-
+      globalStore.set({
+        loginMethod
+      })
       setLogining(true);
       sign();
+
     },
     { wait: 800 }
   );
