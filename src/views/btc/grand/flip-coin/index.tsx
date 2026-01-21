@@ -158,12 +158,23 @@ const Coin = forwardRef<any, any>(
     const thickness = Math.max(8, size * 0.1);
 
     const [left, top] = useMemo(() => {
-      if (!coinRef.current) return [0, 0];
+      if (
+        !coinRef.current ||
+        !coinContainerRef.current ||
+        !isAnimating ||
+        !isWinner
+      )
+        return [0, 0];
       const _left = coinRef.current.offsetLeft;
-      const _top = coinRef.current.offsetTop;
+      const _top =
+        coinRef.current.offsetTop - coinContainerRef.current?.scrollTop;
+      if (index === 90) {
+        console.log(coinRef.current.getBoundingClientRect());
+        console.dir(coinRef.current);
+      }
 
       return [_left, _top];
-    }, [coinRef.current]);
+    }, [coinRef.current, coinContainerRef.current, isAnimating, isWinner]);
 
     return (
       <>
@@ -268,7 +279,7 @@ const Coin = forwardRef<any, any>(
             </span>
           </motion.div>
         )}
-        {!!(left && top) && isAnimating && isWinner && (
+        {!!(left && top) && (
           <LightRotation
             size={size}
             duration={6}

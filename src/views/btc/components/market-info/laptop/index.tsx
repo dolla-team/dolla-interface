@@ -101,7 +101,7 @@ export default function MarketInfo() {
   );
 }
 
-const ProbabilityInfo = () => {
+export const ProbabilityInfo = () => {
   return (
     <Popover
       trigger={PopoverTrigger.Hover}

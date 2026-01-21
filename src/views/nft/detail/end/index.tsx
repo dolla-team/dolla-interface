@@ -1,19 +1,16 @@
 import Avatar from "@/components/avatar";
-import MultiIcon from "./multi-icon";
 import PlayerDistribution from "./player-distribution";
 import { formatAddress } from "@/utils/format/address";
 import dayjs from "@/libs/dayjs";
 import { addThousandSeparator, formatNumber } from "@/utils/format/number";
-import useWinnerBidList from "../use-winner-bid-list";
-import { useMemo, useState } from "react";
+import { useBtcContext } from "@/views/btc/context";
+import { useMemo } from "react";
 import Big from "big.js";
 import useIsMobile from "@/hooks/use-is-mobile";
 import clsx from "clsx";
-// import ProvablyFair from "@/sections/provably-fair";
-import { getAnchorPrice } from "@/utils/pool";
 
 export default function EndPanel({ data }: { data: any }) {
-  const { winnerBidList } = useWinnerBidList(data);
+  const { winnerBidList } = useBtcContext();
   const isMobile = useIsMobile();
   // const [openProvablyFair, setOpenProvablyFair] = useState(false);
 
@@ -22,8 +19,7 @@ export default function EndPanel({ data }: { data: any }) {
     totalTimes,
     returnMultiple,
     bidsDistribution,
-    bidsProgress,
-    anchorPrice
+    bidsProgress
   ] = useMemo(() => {
     if (!winnerBidList?.length) return [0, 0, 0, {}, [], 0];
     let _totalBids = 0;
@@ -45,9 +41,8 @@ export default function EndPanel({ data }: { data: any }) {
         lastBids = item.times;
       }
     });
-    const _price = getAnchorPrice(data?.anchor_price);
 
-    const _returnMultiple = Big(_price)
+    const _returnMultiple = Big(data?.reward_usd)
       .div(lastBids || 1)
       .toFixed(0);
 
@@ -57,8 +52,7 @@ export default function EndPanel({ data }: { data: any }) {
       winnerBidList.length,
       _returnMultiple,
       _bidsDistribution,
-      _bidsProgress,
-      _price
+      _bidsProgress
     ];
   }, [winnerBidList, data]);
 
@@ -163,7 +157,7 @@ export default function EndPanel({ data }: { data: any }) {
                         WebkitTextFillColor: "transparent"
                       }}
                     >
-                      {formatNumber(anchorPrice, 2, true, {
+                      {formatNumber(data?.reward_usd, 2, true, {
                         prefix: "$"
                       })}
                     </div>

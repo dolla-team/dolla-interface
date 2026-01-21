@@ -130,7 +130,7 @@ export default function ListNFT() {
             if (type === "create") {
               setNft({});
               setTimeout(() => {
-                navigate(`/portfolio/seller`);
+                navigate(`/portfolio/lister`);
               }, 1000);
             }
           }}

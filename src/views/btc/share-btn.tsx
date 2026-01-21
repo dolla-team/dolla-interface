@@ -1,40 +1,13 @@
-import { useNavigate } from "@/libs/router";
 import ShareModal from "@/sections/share";
 import { useBtcContext } from "./context";
-import { useMemo, useState } from "react";
+import { useState } from "react";
+import useShareData from "../btc-detail/use-share-data";
 
 export function ShareBtn() {
-  const { pool, poolAmount, winnerBidList } = useBtcContext();
+  const { pool } = useBtcContext();
   const [open, setOpen] = useState(false);
-  const data = useMemo(() => {
-    if (!pool) return null;
+  const data = useShareData();
 
-    return {
-      multiple: pool.winner_profit_ratio,
-      time: pool.status === 2 ? pool.result_time : pool.created_at,
-      bids: winnerBidList[winnerBidList.length - 1]?.times,
-      amount: poolAmount,
-      price: pool.reward_usd,
-      winner_user: {
-        name: pool.winner_user_info?.name,
-        user: pool.winner_user_info?.user,
-        icon: pool.winner_user_info?.icon,
-        code: pool.winner_user_info?.code
-      },
-      user: {
-        name: pool.user_info?.name,
-        user: pool.user_info?.user,
-        icon: pool.user_info?.icon,
-        code: pool.user_info?.code
-      },
-      accumulative_bids: pool.accumulative_bids,
-      status: pool.status,
-      participants: pool.participants,
-      reward_amount: pool.reward_amount,
-      pool_id: pool.pool_id,
-      anchor_price: pool.anchor_price
-    };
-  }, [pool, poolAmount, winnerBidList]);
   return (
     <>
       <button
@@ -100,35 +73,50 @@ export function ShareBtn() {
 }
 
 export function CloseBtn() {
-  const navigate = useNavigate();
+  const { setShowDetail } = useBtcContext();
   return (
-    <button
-      className="flex items-center button border border-[#3B3951] bg-[#FFFFFF1A] rounded-[8px] px-[10px] py-[6px] gap-[6px]"
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="38"
+      height="38"
+      viewBox="0 0 38 38"
+      fill="none"
+      className="button"
       onClick={() => {
-        navigate(-1 as any);
+        setShowDetail(true);
       }}
     >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="13"
-        height="12"
-        viewBox="0 0 13 12"
-        fill="none"
-      >
-        <path
-          d="M11.5 1L1.5 11"
-          stroke="white"
-          strokeWidth="2"
-          strokeLinecap="round"
-        />
-        <path
-          d="M1.5 1L11.5 11"
-          stroke="white"
-          strokeWidth="2"
-          strokeLinecap="round"
-        />
-      </svg>
-      <span className="text-[#FFFFFF] text-[12px]">Close</span>
-    </button>
+      <rect
+        data-figma-bg-blur-radius="50"
+        x="0.5"
+        y="0.5"
+        width="37"
+        height="37"
+        rx="12.5"
+        fill="white"
+        fillOpacity="0.1"
+        stroke="#3B3951"
+      />
+      <path
+        d="M24.4761 13.522L13.5195 24.4785"
+        stroke="white"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
+      <path
+        d="M13.52 13.522L24.4766 24.4785"
+        stroke="white"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
+      <defs>
+        <clipPath
+          id="bgblur_0_6243_16590_clip_path"
+          transform="translate(50 50)"
+        >
+          <rect x="0.5" y="0.5" width="37" height="37" rx="12.5" />
+        </clipPath>
+      </defs>
+    </svg>
   );
 }

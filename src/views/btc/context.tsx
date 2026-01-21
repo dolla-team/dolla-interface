@@ -34,6 +34,7 @@ export const CannonCoinsProvider = ({
   const [filterVolume, setFilterVolume] = useState(0);
   const poolCachedRef = useRef<any>(null);
   const { winnerBidList } = useWinnerBidList(pool);
+  const [showDetail, setShowDetail] = useState(true);
   const btcDetailStore = useBtcDetailStore();
   const onMobileMarketsClose = () => {
     setMobileMarketsOpen(false);
@@ -49,12 +50,21 @@ export const CannonCoinsProvider = ({
     }
 
     if (btcDetailStore.flipStatus === 2) {
-      for (let i = 0; i < btcDetailStore.bids; i++) {
-        coinsRef.current[i]?.collect();
-      }
+      setTimeout(() => {
+        setShowDetail(false);
+        btcDetailStore.set({ bidResult: null, showResult: false });
+      }, 1000);
+
+      setTimeout(() => {
+        // btcDetailStore.set({ flipStatus: 3 });
+        for (let i = 0; i < btcDetailStore.bids; i++) {
+          coinsRef.current[i]?.collect();
+        }
+      }, 1200);
+
       setTimeout(() => {
         btcDetailStore.set({ flipStatus: 3 });
-      }, 600);
+      }, 1600);
     }
 
     if (btcDetailStore.flipStatus === 4) {
@@ -62,6 +72,10 @@ export const CannonCoinsProvider = ({
       for (let i = 0; i < btcDetailStore.bids; i++) {
         coinsRef.current[i]?.revert();
       }
+
+      setTimeout(() => {
+        btcDetailStore.set({ flipStatus: 5 });
+      }, 1000);
     }
 
     if (btcDetailStore.flipStatus === 5) {
@@ -160,6 +174,8 @@ export const CannonCoinsProvider = ({
         winnerBidList,
         taskId,
         flipStatus: btcDetailStore.flipStatus,
+        showDetail,
+        setShowDetail,
         setTaskId,
         setFlipStatus: (status: number) => {
           btcDetailStore.set({ flipStatus: status });
@@ -175,26 +191,36 @@ export const CannonCoinsProvider = ({
         flipComplete: (index: number, addNumber: boolean, notAuto = false) => {
           if (addNumber) flipedNumberRef.current++;
 
-          if (flipedNumberRef.current === btcDetailStore.bids) {
+          if (
+            !notAuto &&
+            btcDetailStore.bidResult?.is_winner &&
+            btcDetailStore.bids > 10 &&
+            index >= (btcDetailStore.bids === 50 ? 20 : 30)
+          ) {
+            setTimeout(() => {
+              btcDetailStore.set({ flipStatus: 5.5 });
+            }, 600);
+          } else if (flipedNumberRef.current === btcDetailStore.bids) {
             flipedNumberRef.current = 0;
 
             if (!btcDetailStore.bidResult?.is_winner) {
               btcDetailStore.set({
-                flipStatus: btcDetailStore.flipStatus !== 6 ? 6 : 0
+                flipStatus: btcDetailStore.flipStatus !== 6 ? 6 : 0,
+                showResult: true
               });
             } else {
               for (let i = 0; i < btcDetailStore.bids; i++) {
                 coinsRef.current[i].collect();
               }
               setTimeout(() => {
-                btcDetailStore.set({ flipStatus: 6 });
+                btcDetailStore.set({ flipStatus: 6, showResult: true });
               }, 600);
             }
             return;
           }
 
           if (
-            btcDetailStore.flipStatus === 5 &&
+            btcDetailStore.flipStatus >= 5 &&
             flipedNumberRef.current < btcDetailStore.bids &&
             !notAuto
           ) {
@@ -203,12 +229,19 @@ export const CannonCoinsProvider = ({
         },
         onReset: (isFail = false) => {
           flipedNumberRef.current = 0;
-          btcDetailStore.set({ bidResult: null });
+          btcDetailStore.set({ bidResult: null, showResult: false });
           onQueryUserInfo();
           for (let i = 0; i < btcDetailStore.bids; i++) {
             if (isFail) coinsRef.current[i]?.revert();
             else coinsRef.current[i]?.flip(true);
           }
+        },
+        onReplay: () => {
+          flipedNumberRef.current = 0;
+          for (let i = 0; i < btcDetailStore.bids; i++) {
+            coinsRef.current[i]?.flip(true);
+          }
+          btcDetailStore.set({ flipStatus: 4, showResult: false });
         },
         getPoolRecommend,
         mobileMarketsOpen,

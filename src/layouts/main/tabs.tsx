@@ -39,7 +39,7 @@ export default function PageTabs() {
         }
         setTab(tab);
         navigate(
-          tab === 0 ? "/" : tab === 1 ? "/portfolio/player" : "/leaderboard"
+          tab === 0 ? "/" : tab === 1 ? "/portfolio/bidder" : "/leaderboard"
         );
       }}
       className="absolute left-[50%] translate-x-[-50%] w-[336px] h-[40px] p-[2px] !gap-0 rounded-[12px] backdrop-blur-[25px]"

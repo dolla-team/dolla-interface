@@ -13,6 +13,7 @@ const GridTable = (props: Props, ref: any) => {
     rowClassName,
     headerRowClassName,
     bodyRowClassName,
+    bodyRowExtraClassNameFn,
     colClassName,
     headerColClassName,
     bodyColClassName,
@@ -191,7 +192,8 @@ const GridTable = (props: Props, ref: any) => {
               className={clsx(
                 "grid gap-x-[10px] px-[5px]",
                 rowClassName,
-                bodyRowClassName
+                bodyRowClassName,
+                bodyRowExtraClassNameFn?.(item, index)
               )}
               style={{
                 gridTemplateColumns
@@ -274,6 +276,7 @@ export interface Props {
   rowClassName?: string;
   headerRowClassName?: string;
   bodyRowClassName?: string;
+  bodyRowExtraClassNameFn?: (item: any, index: number) => string;
   colClassName?: string;
   headerColClassName?: string;
   bodyColClassName?: string;

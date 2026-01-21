@@ -241,7 +241,7 @@ const BidHistory = (props: any) => {
 
 export default BidHistory;
 
-const RewardInfo = () => {
+export const RewardInfo = () => {
   return (
     <Popover
       trigger={PopoverTrigger.Hover}
@@ -263,7 +263,7 @@ const RewardInfo = () => {
   );
 };
 
-const InfoIcon = () => {
+export const InfoIcon = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

@@ -1,104 +1,138 @@
-import useIsMobile from "@/hooks/use-is-mobile";
 import clsx from "clsx";
+import { motion } from "framer-motion";
+import { addThousandSeparator } from "@/utils/format/number";
 
 export default function ResultBg() {
-  const isMobile = useIsMobile();
   return (
-    <svg
+    <motion.svg
       xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 464 584"
+      width="778"
+      height="778"
+      viewBox="0 0 778 778"
       fill="none"
-      preserveAspectRatio="none"
-      className={clsx(
-        "absolute",
-        isMobile
-          ? "w-[120%] h-[120%] top-[0%] left-[-10%]"
-          : "w-[464px] h-[584px] top-[0px] left-[0px]"
-      )}
+      className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+      animate={{
+        rotate: 360
+      }}
+      transition={{
+        duration: 20,
+        repeat: Infinity,
+        ease: "linear"
+      }}
     >
-      <g filter="url(#filter0_d_1746_1693)">
-        <mask
-          id="path-1-outside-1_1746_1693"
-          maskUnits="userSpaceOnUse"
-          x="30"
-          y="30"
-          width="404"
-          height="524"
-          fill="black"
-        >
-          <rect fill="white" x="30" y="30" width="404" height="524" />
-          <path d="M420 31C427.18 31 433 36.8203 433 44V540C433 547.18 427.18 553 420 553H44C36.8203 553 31 547.18 31 540V44C31 36.8203 36.8203 31 44 31H129.959C137.462 31 144.333 35.1983 147.756 41.8738L149.424 45.1262C152.847 51.8017 159.718 56 167.22 56H297.78C305.282 56 312.153 51.8017 315.576 45.1262L317.244 41.8738C320.667 35.1983 327.538 31 335.04 31H420Z" />
-        </mask>
+      <g opacity="0.2" filter="url(#filter0_f_6243_20250)">
         <path
-          d="M420 31C427.18 31 433 36.8203 433 44V540C433 547.18 427.18 553 420 553H44C36.8203 553 31 547.18 31 540V44C31 36.8203 36.8203 31 44 31H129.959C137.462 31 144.333 35.1983 147.756 41.8738L149.424 45.1262C152.847 51.8017 159.718 56 167.22 56H297.78C305.282 56 312.153 51.8017 315.576 45.1262L317.244 41.8738C320.667 35.1983 327.538 31 335.04 31H420Z"
-          fill="url(#paint0_radial_1746_1693)"
-          shape-rendering="crispEdges"
-        />
-        <path
-          d="M433 44H434H433ZM433 540H434H433ZM31 540H30H31ZM31 44L30 44V44H31ZM317.244 41.8738L316.354 41.4175L317.244 41.8738ZM315.576 45.1262L316.466 45.5825L315.576 45.1262ZM149.424 45.1262L150.314 44.6699L149.424 45.1262ZM147.756 41.8738L148.646 41.4175L147.756 41.8738ZM420 31V32C426.627 32 432 37.3726 432 44H433H434C434 36.268 427.732 30 420 30V31ZM433 44H432V540H433H434V44H433ZM433 540H432C432 546.627 426.627 552 420 552V553V554C427.732 554 434 547.732 434 540H433ZM420 553V552H44V553V554H420V553ZM44 553V552C37.3726 552 32 546.627 32 540H31H30C30 547.732 36.268 554 44 554V553ZM31 540H32V44H31H30V540H31ZM31 44L32 44C32 37.3726 37.3726 32 44 32V31V30C36.268 30 30 36.268 30 44L31 44ZM44 31V32H129.959V31V30H44V31ZM147.756 41.8738L146.866 42.3301L148.534 45.5825L149.424 45.1262L150.314 44.6699L148.646 41.4175L147.756 41.8738ZM167.22 56V57H297.78V56V55H167.22V56ZM315.576 45.1262L316.466 45.5825L318.134 42.3301L317.244 41.8738L316.354 41.4175L314.686 44.6699L315.576 45.1262ZM335.04 31V32H420V31V30H335.04V31ZM317.244 41.8738L318.134 42.3301C321.386 35.9884 327.914 32 335.04 32V31V30C327.163 30 319.949 34.4082 316.354 41.4175L317.244 41.8738ZM297.78 56V57C305.657 57 312.872 52.5918 316.466 45.5825L315.576 45.1262L314.686 44.6699C311.434 51.0116 304.907 55 297.78 55V56ZM149.424 45.1262L148.534 45.5825C152.128 52.5918 159.343 57 167.22 57V56V55C160.093 55 153.566 51.0116 150.314 44.6699L149.424 45.1262ZM129.959 31V32C137.086 32 143.614 35.9884 146.866 42.3301L147.756 41.8738L148.646 41.4175C145.051 34.4082 137.837 30 129.959 30V31Z"
-          fill="url(#paint1_linear_1746_1693)"
-          mask="url(#path-1-outside-1_1746_1693)"
+          d="M388.998 388.97L494.657 33.6924L560.093 60.165L388.999 388.978L389.003 388.988L624.964 103.119L674.876 153.031L389.004 388.99L389.006 388.997H389.008L717.849 217.945L744.312 283.385L389.022 388.996L758 353.705V424.293L389.012 388.999L389.008 389L389.017 389.007L744.305 494.67L717.833 560.105L389.028 389.017L674.881 624.964L624.969 674.876L389.013 389.009L389.011 389.008L560.067 717.857L494.628 744.32L389.008 389.007L389.001 389.003L389.008 389.005V389.004L389.006 389.001L388.997 389.003L424.291 758H353.703L388.996 389.004L388.994 389.005L388.998 389.002L388.993 389L388.988 389.006L388.994 389.005L388.986 389.008L283.322 744.301L217.887 717.829L388.981 389.015L153.031 674.876L103.119 624.964L388.975 389.015L60.1387 560.063L33.6758 494.624L388.982 389.008L388.985 389.005L388.988 388.999L20 424.293V353.705L388.977 388.995L33.6973 283.335L60.1689 217.899L388.989 388.997L388.996 388.998L388.995 388.99L388.994 388.989L388.99 388.997L388.992 388.988L103.124 153.031L153.036 103.119L388.993 388.986V388.984L388.992 388.973L217.949 60.1475L283.389 33.6836L388.989 388.94L353.703 20H424.291L388.998 388.97ZM388.988 389.003L388.992 389L388.988 388.999V389.003ZM389.002 388.991L388.997 388.997L388.999 388.994L388.997 388.992V388.998L389 388.999H388.997V389L388.996 388.999H388.994L388.999 389.001L389.005 388.999H389L389.005 388.997L389.002 388.991ZM388.997 388.99L389 388.993L389.002 388.99L388.997 388.982V388.99Z"
+          fill="url(#paint0_radial_6243_20250)"
         />
       </g>
       <defs>
         <filter
-          id="filter0_d_1746_1693"
+          id="filter0_f_6243_20250"
           x="0"
           y="0"
-          width="464"
-          height="584"
+          width="778"
+          height="778"
           filterUnits="userSpaceOnUse"
           colorInterpolationFilters="sRGB"
         >
           <feFlood floodOpacity="0" result="BackgroundImageFix" />
-          <feColorMatrix
-            in="SourceAlpha"
-            type="matrix"
-            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-            result="hardAlpha"
-          />
-          <feOffset />
-          <feGaussianBlur stdDeviation="15" />
-          <feComposite in2="hardAlpha" operator="out" />
-          <feColorMatrix
-            type="matrix"
-            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.3 0"
-          />
-          <feBlend
-            mode="normal"
-            in2="BackgroundImageFix"
-            result="effect1_dropShadow_1746_1693"
-          />
           <feBlend
             mode="normal"
             in="SourceGraphic"
-            in2="effect1_dropShadow_1746_1693"
+            in2="BackgroundImageFix"
             result="shape"
+          />
+          <feGaussianBlur
+            stdDeviation="10"
+            result="effect1_foregroundBlur_6243_20250"
           />
         </filter>
         <radialGradient
-          id="paint0_radial_1746_1693"
+          id="paint0_radial_6243_20250"
           cx="0"
           cy="0"
           r="1"
           gradientUnits="userSpaceOnUse"
-          gradientTransform="translate(232 31) rotate(90) scale(283.722 273.124)"
+          gradientTransform="translate(389 389) rotate(90) scale(369)"
         >
-          <stop stopColor="#715B47" />
-          <stop offset="1" stopColor="#0A070B" />
+          <stop stopColor="#FFCE52" />
+          <stop offset="1" stopColor="#FFCE52" stopOpacity="0" />
         </radialGradient>
-        <linearGradient
-          id="paint1_linear_1746_1693"
-          x1="232"
-          y1="31"
-          x2="232"
-          y2="503.871"
-          gradientUnits="userSpaceOnUse"
-        >
-          <stop stopColor="#C79E5C" />
-          <stop offset="1" stopColor="#614D2D" stopOpacity="0.58" />
-        </linearGradient>
       </defs>
-    </svg>
+    </motion.svg>
   );
 }
+
+export const PointsCardBg = ({
+  className,
+  points
+}: {
+  className: string;
+  points: number;
+}) => {
+  return (
+    <motion.div
+      className={clsx(
+        "absolute bg-[url('/btc/points-card.png')] bg-cover bg-center bg-no-repeat w-[431px] h-[495px]",
+        className
+      )}
+      animate={{
+        y: [0, -15, 0]
+      }}
+      transition={{
+        duration: 2.5,
+        repeat: Infinity,
+        ease: "easeInOut"
+      }}
+    >
+      <div
+        className="text-[42px] font-[700] w-full text-center rotate-[9deg] absolute top-[102px] left-[24px] bg-[linear-gradient(115deg,#FFE9B2_42.41%,#BC9B48_94.73%)] bg-clip-text text-transparent"
+        style={{
+          WebkitBackgroundClip: "text",
+          WebkitTextFillColor: "transparent"
+        }}
+      >
+        {points > 9999 ? "9,999+" : addThousandSeparator(points.toString())}
+      </div>
+    </motion.div>
+  );
+};
+
+export const TicketsCardBg = ({
+  className,
+  tickets
+}: {
+  className: string;
+  tickets: number;
+}) => {
+  return (
+    <motion.div
+      className={clsx(
+        "absolute bg-[url('/btc/tickets-card.png')] bg-cover bg-center bg-no-repeat w-[431px] h-[495px]",
+        className
+      )}
+      animate={{
+        y: [0, -15, 0]
+      }}
+      transition={{
+        duration: 2.5,
+        repeat: Infinity,
+        ease: "easeInOut",
+        delay: 0.3
+      }}
+    >
+      <div className="text-[36px] font-[700] w-full text-center rotate-[-9deg] absolute top-[124px] left-[-18px]">
+        <span
+          className="bg-[linear-gradient(270deg,_#000_8%,_#80F_79.15%)] bg-clip-text text-transparent"
+          style={{
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent"
+          }}
+        >
+          x{tickets > 100 ? "99+" : tickets}
+        </span>
+      </div>
+    </motion.div>
+  );
+};
