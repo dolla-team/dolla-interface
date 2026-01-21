@@ -34,7 +34,7 @@ const PlayerMarkets = (props: any) => {
     <div className="w-full bg-white border border-[#E4E4E4] rounded-[20px] relative">
       <div className="flex items-center justify-between px-[20px] pt-[20px]">
         <div className="flex items-center gap-[24px]">
-          <div className="text-[14px] font-[600]">Joined Markets</div>
+          <div className="text-[14px] font-[600]">Participated Markets</div>
           <div className="flex items-center gap-[10px]">
             {[
               {
@@ -43,7 +43,7 @@ const PlayerMarkets = (props: any) => {
               },
               {
                 key: "2",
-                label: "Sold"
+                label: "Ended"
               },
               {
                 key: "3",
@@ -69,7 +69,7 @@ const PlayerMarkets = (props: any) => {
                     className={clsx(
                       "w-[7px] h-[7px] rounded-full",
                       item.label === "Live" && "bg-[#54FF59]",
-                      item.label === "Sold" && "bg-[#C9C9C9]",
+                      item.key === "2" && "bg-[#C9C9C9]",
                       item.label === "Cancelled" && "bg-[#FF399F]"
                     )}
                   />
@@ -82,7 +82,7 @@ const PlayerMarkets = (props: any) => {
 
                   <span>
                     {item.label === "Live" && userInfo?.join_live_count}
-                    {item.label === "Sold" && userInfo?.join_ended_count}
+                    {item.key === "2" && userInfo?.join_ended_count}
                     {item.label === "Cancelled" &&
                       userInfo?.join_cancelled_count}{" "}
                     {item.label}

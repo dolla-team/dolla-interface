@@ -26,7 +26,7 @@ const BidHistory = (props: any) => {
   const columns: any[] = [
     {
       dataIndex: "marketId",
-      title: "Market ID",
+      title: "ID",
       width: "10%",
       fixed: true,
       render: (record: any) => {
@@ -49,7 +49,7 @@ const BidHistory = (props: any) => {
     },
     {
       dataIndex: "market_size",
-      title: "Market Size",
+      title: "Market Type",
       width: "15%",
       render: (record: any) => {
         return (

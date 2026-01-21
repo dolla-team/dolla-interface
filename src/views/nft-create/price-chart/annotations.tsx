@@ -34,7 +34,7 @@ export default function Annotations({
         <div className="w-[19px] h-[8px] bg-[rgba(255,90,151,0.50)] rounded-[1px] mr-[3px]" />
         <span className="ml-[6px]">Loss</span>
         <div className="w-[19px] h-[8px] bg-[rgba(87,255,112,0.50)] rounded-[1px] mr-[3px] ml-[45px]" />
-        <span className="ml-[6px]">Profit</span>
+        <span className="ml-[6px]">Premium</span>
       </div>
     </div>
   );

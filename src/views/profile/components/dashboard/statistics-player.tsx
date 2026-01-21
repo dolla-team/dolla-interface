@@ -64,7 +64,7 @@ const RewardCard = () => {
       )}
       style={{ backgroundImage: `url(${backgroundImage})` }}
     >
-      <div className="text-[12px]">Total Reward Value</div>
+      <div className="text-[12px]">Total Realizations Value</div>
       <div className="text-[32px] font-[700] mt-[24px]">
         ${formatNumber(totalAmountWithPrice || 0, 2, true)}
       </div>
@@ -80,7 +80,7 @@ const RewardCard = () => {
         </div>
       </div>
       <div className="flex mt-[18px]">
-        <LabelValue label="Your Bid" className="whitespace-nowrap w-1/3">
+        <LabelValue label="Total volume" className="whitespace-nowrap w-1/3">
           <span className="text-[16px]">
             {formatNumber(userInfo?.player_total_bid, 2, true, {
               isShort: Big(userInfo?.player_total_bid || 0).gt(10000),
@@ -88,14 +88,17 @@ const RewardCard = () => {
             })}
           </span>
         </LabelValue>
-        <LabelValue label="Wins" className="whitespace-nowrap w-1/3">
+        <LabelValue
+          label="Markets realized"
+          className="whitespace-nowrap w-1/3"
+        >
           {userWonData?.length === 0 ? (
             WinsAmount
           ) : (
             <YourWonInfo list={userWonData || []}>{WinsAmount}</YourWonInfo>
           )}
         </LabelValue>
-        <LabelValue label="Top Multiplier" className="whitespace-nowrap w-1/3">
+        <LabelValue label="Top Multiple" className="whitespace-nowrap w-1/3">
           <span className="text-[16px]">
             {formatNumber(userInfo?.highest_multiple, 2, true)}x
           </span>
