@@ -13,7 +13,7 @@ const amountConfig: Record<
   }
 > = {
   0: {
-    textColor: "linear-gradient(180deg, #FFDD70 0%, #DFBC4D 100%)",
+    textColor: "#FFC42F",
     bgColor: ["#99761C", "#FFC42F"],
     borderColor: ["#FFE89E", "#C4A235"],
     circleBgColor: ["#FFDD70", "#DFBC4D"],
@@ -22,7 +22,7 @@ const amountConfig: Record<
     textBorderColor: ["#FFC229", "#FCF3D9"]
   },
   1: {
-    textColor: "linear-gradient(180deg, #ECECEC 0%, #818181 100%)",
+    textColor: "#A8A8A8",
     bgColor: ["#474747", "#A8A8A8"],
     borderColor: ["#CBCBCB", "#68748A"],
     circleBgColor: ["#ECECEC", "#818181"],
@@ -31,7 +31,7 @@ const amountConfig: Record<
     textBorderColor: ["#B4B8B9", "#B4B8B9"]
   },
   2: {
-    textColor: "linear-gradient(180deg, #FFE7DB 0%, #D3AC90 100%)",
+    textColor: "#BE9774",
     bgColor: ["#746454", "#BE9774"],
     borderColor: ["#F5D4B9", "#725A40"],
     circleBgColor: ["#E5B59F", "#AD876C"],
@@ -53,6 +53,7 @@ export default function BTCBg({
   className?: string;
 }) {
   const config = amountConfig[index] || amountConfig[2];
+  
   return (
     <div className={clsx("w-[52px] h-[52px] relative", className)}>
       <svg
@@ -236,10 +237,7 @@ export default function BTCBg({
       <span
         className="text-[8px] font-semibold absolute bottom-[3px] w-full text-center"
         style={{
-          background: config.textColor,
-          backgroundClip: "text",
-          WebkitBackgroundClip: "text",
-          WebkitTextFillColor: "transparent"
+          color: config.textColor
         }}
       >
         {amount}
