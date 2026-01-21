@@ -1,9 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import axiosInstance from "@/libs/axios";
 import useToast from "@/hooks/use-toast";
-import { useAuth } from "@/contexts/auth";
-import { useSignMessage } from "@privy-io/react-auth";
-import useGenerateKey from "@/hooks/near/use-generate-key";
 
 /**
  * Hook to check if there is a reward for a given code
