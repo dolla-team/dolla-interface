@@ -44,7 +44,7 @@ export default function Player() {
       <PageBack />
       <div className="relative z-1 pt-[30px] w-[1200px] mx-auto max-md:w-full max-md:pt-[70px] max-md:bg-[url('/profile/bg.png')] max-md:bg-cover max-md:bg-no-repeat max-md:bg-[position:center_top_-44px]">
         <Header />
-        <ProfileTabs tab="player" />
+        <ProfileTabs tab="bidder" />
         <SwitchPanel className="max-md:w-full">
           <div className="max-md:px-[10px]">
             <Dashboard tab="player" className="mt-[20px] max-md:mt-[20px]" />

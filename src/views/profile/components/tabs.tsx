@@ -8,8 +8,8 @@ export default function Tabs({ tab }: { tab: string }) {
       <Switch
         tab={tab}
         tabs={[
-          { label: "Bidder", value: "player" },
-          { label: "Lister", value: "seller" }
+          { label: "Bidder", value: "bidder" },
+          { label: "Lister", value: "lister" }
         ]}
         onChange={(value) => {
           navigate(`/portfolio/${value}`);

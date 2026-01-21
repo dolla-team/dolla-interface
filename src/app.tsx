@@ -81,7 +81,7 @@ const router = createBrowserRouter([
         element: <LazyProfilePlayer />
       },
       {
-        path: "portfolio/seller",
+        path: "portfolio/lister",
         element: <LazyProfileSeller />
       },
       {
