@@ -4,6 +4,7 @@ import useToast from "@/hooks/use-toast";
 import useGenerateKey from "@/hooks/near/use-generate-key";
 import { useAuth } from "@/contexts/auth";
 import { useSignMessage } from "@privy-io/react-auth";
+import { getUserId } from "../near/util";
 
 /**
  * Hook to check if there is a reward for a given code
@@ -17,7 +18,7 @@ export default function useCheckXkol() {
   const [redeeming, setRedeeming] = useState(false);
   const { signMessage } = useSignMessage();
   const { generateKeyPair } = useGenerateKey();
-  const { userInfo } = useAuth();
+  const { address, chainType } = useAuth();
 
   const xCode = new URLSearchParams(window.location.search).get("xCode");
 
@@ -69,10 +70,11 @@ export default function useCheckXkol() {
         // new account
         const time = Date.now();
         const message = {
-          user_id: { Evm: userInfo.user.replace(/^0x/, "").toLowerCase() },
+          user_id: getUserId(address, chainType),
           invite_code: xCode,
           operation_key: publicKey
         };
+        console.log("message", message);
         const { signature: privySignature } = await signMessage({
           message: JSON.stringify(message)
         });
@@ -102,7 +104,7 @@ export default function useCheckXkol() {
     } finally {
       setRedeeming(false);
     }
-  }, [xCode]);
+  }, [xCode, address, chainType]);
 
   // Automatically check reward if xCode exists in URL
   useEffect(() => {
