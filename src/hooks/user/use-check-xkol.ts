@@ -1,6 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import axiosInstance from "@/libs/axios";
 import useToast from "@/hooks/use-toast";
+import useGenerateKey from "@/hooks/near/use-generate-key";
+import { useAuth } from "@/contexts/auth";
+import { useSignMessage } from "@privy-io/react-auth";
 
 /**
  * Hook to check if there is a reward for a given code
@@ -12,6 +15,9 @@ export default function useCheckXkol() {
   const toast = useToast();
   const [reward, setReward] = useState(0);
   const [redeeming, setRedeeming] = useState(false);
+  const { signMessage } = useSignMessage();
+  const { generateKeyPair } = useGenerateKey();
+  const { userInfo } = useAuth();
 
   const xCode = new URLSearchParams(window.location.search).get("xCode");
 
@@ -50,11 +56,40 @@ export default function useCheckXkol() {
   const redeemReward = useCallback(async () => {
     let toastId = toast.loading({ title: "Redeeming reward..." });
     try {
+      const { publicKey, isRegistered } = await generateKeyPair(true);
+       if (!publicKey && !isRegistered) {
+        toast.info({
+          title: "Please login to bind gift code"
+        });
+        return;
+      }
       setRedeeming(true);
-      const response = await axiosInstance.post("/api/v1/gift/voucher/redeem", {
-        code: xCode
-      });
-      if (response.data.code !== 0) {
+       let bindingRes: any = null;
+      if (!isRegistered) {
+        // new account
+        const time = Date.now();
+        const message = {
+          user_id: { Evm: userInfo.user.replace(/^0x/, "").toLowerCase() },
+          invite_code: xCode,
+          operation_key: publicKey
+        };
+        const { signature: privySignature } = await signMessage({
+          message: JSON.stringify(message)
+        });
+
+        bindingRes = await axiosInstance.post("/api/v1/code/invite/gift/redeem", {
+          code: xCode,
+          signature: privySignature.replace(/^0x/, ""),
+          public_key: publicKey,
+          time: time
+        });
+      } else {
+        // old account
+        bindingRes = await axiosInstance.post("/api/v1/gift/voucher/redeem", {
+          code: xCode
+        });
+      }
+      if (bindingRes.data.code !== 0) {
         toast.fail({ title: "Redeeming reward failed" });
         return;
       }
