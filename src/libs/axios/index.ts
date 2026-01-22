@@ -6,7 +6,7 @@ import { HOST_API } from "@/config";
 
 const axiosInstance = axios.create({
   baseURL: HOST_API,
-  timeout: 30000, // 30 seconds timeout
+  timeout: 70000, // 70 seconds timeout
   headers: {
     "Content-Type": "application/json",
     Accept: "application/json"

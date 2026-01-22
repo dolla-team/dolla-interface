@@ -5,6 +5,7 @@ import useGenerateKey from "@/hooks/near/use-generate-key";
 import { useAuth } from "@/contexts/auth";
 import { useSignMessage } from "@privy-io/react-auth";
 import { getUserId } from "../near/util";
+import { useAnalysisDataStore } from "@/stores/use-analysis-data";
 
 /**
  * Hook to check if there is a reward for a given code
@@ -19,8 +20,9 @@ export default function useCheckXkol() {
   const { signMessage } = useSignMessage();
   const { generateKeyPair } = useGenerateKey();
   const { address, chainType } = useAuth();
+  const analysisData = useAnalysisDataStore();
 
-  const xCode = new URLSearchParams(window.location.search).get("xCode");
+  const xCode = analysisData?.xCode;
 
   /**
    * Check if there is a reward for the given code
