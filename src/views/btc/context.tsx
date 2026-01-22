@@ -30,15 +30,10 @@ export const CannonCoinsProvider = ({
   const { onQueryPoolInfo } = usePoolInfo();
   const [pool, setPool] = useState<any>(null);
   const { data, getPoolRecommend } = usePoolRecommend(0, !params?.poolId);
-  const [mobileMarketsOpen, setMobileMarketsOpen] = useState(false);
-  const [filterVolume, setFilterVolume] = useState(0);
   const poolCachedRef = useRef<any>(null);
   const { winnerBidList } = useWinnerBidList(pool);
   const [showDetail, setShowDetail] = useState(true);
   const btcDetailStore = useBtcDetailStore();
-  const onMobileMarketsClose = () => {
-    setMobileMarketsOpen(false);
-  };
 
   useEffect(() => {
     if (btcDetailStore.flipStatus === 0) {
@@ -244,11 +239,9 @@ export const CannonCoinsProvider = ({
           btcDetailStore.set({ flipStatus: 4, showResult: false });
         },
         getPoolRecommend,
-        mobileMarketsOpen,
-        setMobileMarketsOpen,
-        onMobileMarketsClose,
-        filterVolume,
-        setFilterVolume
+        onUpdatePool: (_pool: any) => {
+          setPool({ ...pool, ..._pool });
+        }
       }}
     >
       {children}

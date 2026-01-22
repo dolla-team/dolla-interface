@@ -2,7 +2,6 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useBtcContext } from "../../../context";
 import clsx from "clsx";
-import MArrowBtn from "./m-arrow-btn";
 import ActivePanel from "./active-panel";
 import UnactivePanel from "./unactive-panel";
 import LastWinner from "@/sections/winners";
@@ -10,7 +9,7 @@ import Info from "./info";
 // import ShareBtn from "./share-btn";
 
 export default function MobileMarketInfo() {
-  const { poolAmount, pool, setMobileMarketsOpen } = useBtcContext();
+  const { poolAmount, pool } = useBtcContext();
 
   const [expand, setExpand] = useState(true);
   return (
@@ -39,10 +38,6 @@ export default function MobileMarketInfo() {
               {" "}
               #{pool?.pool_id}
             </span>
-            <MArrowBtn
-              expand={expand}
-              onClick={() => setMobileMarketsOpen(true)}
-            />
           </div>
           {/* <ShareBtn /> */}
         </div>

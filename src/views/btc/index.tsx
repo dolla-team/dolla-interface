@@ -7,9 +7,10 @@ import { BET_UNIT } from "@/config";
 import { useContractConfigStore } from "@/stores/use-contract-config";
 import useBid from "@/hooks/near/use-bid";
 import useToast from "@/hooks/use-toast";
-import useBtcDetailStore from "@/stores/use-btc-detail";
 import BtcContent from "./content";
 import BtcDetailContent from "../btc-detail";
+
+
 
 export default function NewBTC() {
   return (
@@ -29,14 +30,13 @@ function BTC() {
     bids,
     setTaskId,
     showDetail,
-    setShowDetail
+    onUpdatePool
   } = useBtcContext();
 
   const walletStore = useWalletStore();
   const { userInfo } = useAuth();
   const contractConfig = useContractConfigStore((state) => state.config);
   const toast = useToast();
-  const btcDetailStore = useBtcDetailStore();
   const { onBid } = useBid(
     pool?.pool_id,
     // (result) => {
@@ -58,7 +58,13 @@ function BTC() {
         });
       }, 30);
     },
-    () => {
+    (type?: string, pool?: any) => {
+      if (type === "pool_status_changed") {
+        onUpdatePool(pool);
+        toast.fail({
+          title: "Pool status has been changed"
+        });
+      }
       setFlipStatus(0);
     }
   );
