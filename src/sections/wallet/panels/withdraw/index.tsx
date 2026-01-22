@@ -58,7 +58,8 @@ export default function WithdrawPanel({ onBack }: { onBack: () => void }) {
     report({
       address: import.meta.env.VITE_NEAR_ACCOUNT_ID,
       receive_address: receiveAddress,
-      deposit_address: quoteData.depositAddress
+      deposit_address: quoteData.depositAddress,
+      type: 2
     });
   });
 
