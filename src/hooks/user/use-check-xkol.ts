@@ -49,6 +49,9 @@ export default function useCheckXkol() {
         setReward(
           response?.data?.data?.is_used ? 0 : response.data.data?.amount ?? 0
         );
+        if (response?.data?.data?.is_used) {
+          analysisData.set({ xCode: '' })
+        }
       }
     } catch (error) {
       console.error("Check reward error:", error);
@@ -99,6 +102,7 @@ export default function useCheckXkol() {
       }
       setReward(0);
       toast.success({ title: "Redeeming reward successfully" });
+      analysisData.set({ xCode: '' })
     } catch (error) {
       console.error("Redeeming reward error:", error);
       toast.dismiss(toastId);

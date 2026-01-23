@@ -29,23 +29,23 @@ export default function useAnalysis() {
     set({ status: "loading" });
     const startTime = Date.now();
     try {
-      const response = await dollaService.memeFate(handle ?? "");
-      const rewardResponse = await dollaService.checkReward(handle ?? "");
+      const response = await dollaService.memeFate(handle ?? '')
+      const rewardResponse = await dollaService.checkReward(handle ?? '')
 
-      set({ reward: rewardResponse?.data?.data?.amount });
+      set({ reward: rewardResponse?.data?.data?.amount })
 
-      const elapsedTime = Date.now() - startTime;
-      const remainingTime = Math.max(0, 5000 - elapsedTime);
+      const elapsedTime = Date.now() - startTime
+      const remainingTime = Math.max(0, 5000 - elapsedTime)
 
-      await new Promise((resolve) => setTimeout(resolve, remainingTime));
+      await new Promise(resolve => setTimeout(resolve, remainingTime))
 
       set({
         result: response.data?.data || {},
         reward: rewardResponse?.data?.data?.amount,
-        status: "result",
-        handle: handle ?? "",
-        xCode: rewardResponse?.data?.data?.x_code ?? ""
-      });
+        status: 'result',
+        handle: handle ?? '',
+        xCode: response?.data?.data?.inviteCode ?? '',
+      })
     } catch (error) {
       console.error(error);
       set({ status: "input", amount: 0, result: null });
