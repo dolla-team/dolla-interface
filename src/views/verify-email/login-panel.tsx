@@ -74,8 +74,10 @@ export default function LoginPanel({ onChangeHasAccount, setIsBgSpread }: any) {
     handleSendCode();
   }, [user]);
 
-  return <div className="h-[400px] flex flex-col items-center pt-[80px]">
-    <div className="text-white text-[18px] leading-[130%] uppercase mb-[30px]"> <span className="font-bold">Dolla Market</span> <span className="text-[#FFB700] font-bold text-[20px]">$1</span> Infinite Exposure.</div>
+  return <div className="h-[500px] flex flex-col items-center pt-[40px]">
+    <div className="text-white text-[42px] text-center font-bold">Dolla Market </div>
+    <div className="text-[#FFC42F] text-[18px] text-center uppercase"> $1. Infinite Exposure.</div>
+    <div className="mt-[8px] mb-[30px] text-white text-[12px] text-center w-[345px] leading-[130%]">Get exposure to blue chip assets that's out of reach, one dolla at a time.</div>
     {user ? (
       <div className="w-[300px] relative mt-[16px]">
         <Button
@@ -133,12 +135,12 @@ export default function LoginPanel({ onChangeHasAccount, setIsBgSpread }: any) {
         onMouseOver={() => setIsBgSpread(true)}
         onMouseOut={() => setIsBgSpread(false)}
       >
-        Open App
+          Sign In
       </Button>
     )
     }
     <div onClick={() => onChangeHasAccount(false)} className="mt-[40px] text-center text-white text-[14px] leading-[130%] underline cursor-pointer">
-      Back to analyze
+      Back
     </div>
   </div>;
 }

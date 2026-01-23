@@ -140,9 +140,9 @@ export default function ResultPanel({ result, reward, onBackToAnalyze }: any) {
         </div>
       </div>
       {reward > 0 ? <VoucherPanel reward={reward} login={handleLogin} /> : <NoVoucherPanel reward={reward} login={handleLogin} />}
-      <div onClick={() => onBackToAnalyze()} className="mt-[40px] text-center text-white text-[14px] leading-[130%] underline cursor-pointer">
+      {/* <div onClick={() => onBackToAnalyze()} className="mt-[40px] text-center text-white text-[14px] leading-[130%] underline cursor-pointer">
         Back to analyze
-      </div>
+      </div> */}
       <SavedImage
         imageRef={savedImageRef}
         result={result}
@@ -165,8 +165,8 @@ export const NoVoucherPanel = ({ reward, login }: any) => {
   return (
     <>
       <div className="w-[542px] mt-[20px] text-center font-mono text-[16px] font-normal leading-[120%] tracking-[-1.08px] text-white">
-        <div>Your dolla eligibility index (DEI) is {reward}.</div>
-        <div className="mt-[8px]">Complete the following tasks to the access.</div>
+        <div>Your Dolla Eligibility Index (DEI) is too low.</div>
+        <div className="mt-[4px] leading-[150%]">Get access via another user's referral link or complete the following tasks:</div>
       </div>
       <div className="w-[542px] px-[24px] py-[16px] mt-[20px] font-[Courier] rounded-[20px] border border-[#3E300E] bg-[#3F3F3F99] shadow-[0_2px_6px_0_rgba(0,0,0,0.25)_inset] backdrop-blur-[10px]">
         <div className="flex flex-col gap-[10px]">
@@ -282,19 +282,15 @@ const VoucherPanel = ({ reward, login }: any) => {
         <div>Your dolla eligibility index (DEI) is {reward}.</div>
         <div className="mt-[8px]">Congrats! You've got voucher.</div>
       </div>
-      <div className="w-[340px] h-[95px] font-[Courier] mt-[20px] shrink-0 bg-[url('/verify/voucher-bg.png')] bg-cover bg-center">
-        <div className="h-full flex items-center gap-[18px] pl-[74px]">
-          <div className="text-center leading-[100%]">
-            <div className="text-[30px] font-[700]">${reward} Voucher</div>
-            <button
-              className="text-[14px] underline cursor-pointer mt-[8px]"
-              onClick={goToApp}
-            >
-              Login by X
-            </button>
-          </div>
-          <button
-            onClick={goToApp}
+      <div className="w-[357px] h-[78px] flex items-center justify-center pl-[50px] font-[Courier] mt-[20px] text-[30px] font-[700] shrink-0 bg-[url('/verify/voucher-bg.png')] bg-cover bg-center">
+        {reward} USDT Voucher
+      </div>
+      <Button
+        onClick={goToApp}
+        className="mx-auto mt-[10px] px-[20px] h-[50px] gap-[12px] rounded-[12px] !bg-[#FFC42F] !text-[#000] mt-[8px] text-[14px] font-[Unbounded]"
+      >
+        <span>Login by X to claim</span>
+        <div
             className="w-[36px] h-[36px] rounded-full bg-black flex items-center justify-center cursor-pointer"
           >
             <svg
@@ -311,10 +307,10 @@ const VoucherPanel = ({ reward, login }: any) => {
                 strokeLinecap="round"
                 strokeLinejoin="round"
               />
-            </svg>
-          </button>
+          </svg>
         </div>
-      </div>
+      </Button>
+
     </>
   );
 };

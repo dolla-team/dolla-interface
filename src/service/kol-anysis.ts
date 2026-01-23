@@ -8,18 +8,6 @@ class DollaService {
   }
 
   /**
-   * Generate invite code
-   * @param code Invite code
-   * @param redirect_url Redirect URL
-   */
-  async generateCode(code: string, redirect_url: string) {
-    return this.api.post("/api/v1/code/invite/gift/generate", {
-      code,
-      redirect_url
-    });
-  }
-
-  /**
    * Check reward
    * @param username Twitter username
    */

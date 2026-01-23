@@ -1,4 +1,16 @@
+import { useState, useEffect } from "react";
 import clsx from "clsx";
+
+const Texts = [
+  "69% to be investigated by @ZachXBT next",
+  "47% says “zoom out” while being down 63%",
+  "99% retarded",
+  "81% says “this is my last trade” at least once a week",
+  "58% watched a candle instead of sleeping and still lost money",
+  "66% bought because of a tweet",
+  "42% still waiting for a retest that never comes",
+  "76% round-tripped a winner because “it felt early",
+];
 
 export default function AnalyzeInputPanel({
   xProfileUrl,
@@ -8,6 +20,38 @@ export default function AnalyzeInputPanel({
   setIsBgSpread,
   onChangeHasAccount
 }: any) {
+  const [currentText, setCurrentText] = useState(Texts[0]);
+  const [nextText, setNextText] = useState("");
+  const [isAnimating, setIsAnimating] = useState(false);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const randomIndex = Math.floor(Math.random() * Texts.length);
+      const newText = Texts[randomIndex];
+
+      if (newText !== currentText) {
+        // 先设置新文本在下方
+        setNextText(newText);
+        setIsAnimating(false);
+
+        // 使用 requestAnimationFrame 确保 DOM 更新后再开始动画
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            setIsAnimating(true);
+
+            setTimeout(() => {
+              setCurrentText(newText);
+              setIsAnimating(false);
+              setNextText("");
+            }, 300);
+          });
+        });
+      }
+    }, 2000);
+
+    return () => clearInterval(interval);
+  }, [currentText]);
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     // Prevent input if it contains spaces
@@ -56,7 +100,29 @@ export default function AnalyzeInputPanel({
           Go
         </button>
       </div>
-      {/* <div className="mt-[4px] text-center font-mono text-[18px] font-normal leading-[120%] tracking-[-1.08px] mt-[10px] text-[#8FFFC9]">5% to be investigate by @ZachXBT next.</div> */}
+      <div className="mt-[4px] text-center font-[Courier] text-[18px] font-normal leading-[120%] tracking-[-1.08px] mt-[10px] text-[#8FFFC9] overflow-hidden relative" style={{ minHeight: '22px' }}>
+        <div className="opacity-0 pointer-events-none h-[22px] flex items-center justify-center">{currentText}</div>
+        <div
+          className={clsx(
+            "transition-all duration-300 ease-in-out absolute top-0 left-0 right-0 text-center flex items-center justify-center",
+            isAnimating ? "translate-y-[-150%] opacity-0" : "translate-y-0 opacity-100"
+          )}
+          style={{ height: '22px' }}
+        >
+          {currentText}
+        </div>
+        {nextText && (
+          <div
+            className={clsx(
+              "transition-all duration-300 ease-in-out absolute top-0 left-0 right-0 text-center flex items-center justify-center",
+              isAnimating ? "translate-y-[150%] opacity-100" : "translate-y-0 opacity-0"
+            )}
+            style={{ height: '22px' }}
+          >
+            {nextText}
+          </div>
+        )}
+      </div>
       <div onClick={() => onChangeHasAccount(true)} className="mt-[180px] text-center text-white text-[14px] leading-[130%] underline cursor-pointer">
         I already have an account
       </div>
