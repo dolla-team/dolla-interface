@@ -42,9 +42,9 @@ export const AuthProvider: React.FC<{
   const globalStore = useGlobalStore();
 
   useConfig();
-  const { wallets } = useWallets();
+  const { wallets, ready: walletsReady } = useWallets();
 
-  const { wallets: solanaWallets } = useSolanaWallets();
+  const { wallets: solanaWallets, ready: solanaWalletsReady } = useSolanaWallets();
 
   const { createWallet: createPrivyWallet } = useCreateWallet();
   const { createWallet: createSolanaWallet } = useCreateSolanaWallet();
@@ -277,6 +277,16 @@ export const AuthProvider: React.FC<{
       return;
     }
 
+    if (chainType === 'solana' && !solanaWalletsReady) {
+      console.log('solana wallets not ready');
+      return;
+    }
+
+    if (!walletsReady) {
+      console.log('evm wallets not ready');
+      return;
+    }
+
     if (isLoggedOut) {
       return;
     }
@@ -291,7 +301,7 @@ export const AuthProvider: React.FC<{
     }
     clearTimeout(window.loginTimeoutTimer);
     (window as any).sign = sign;
-  }, [address, ready, user, isLoggedOut, globalStore.isInWhitelist]);
+  }, [address, ready, user, isLoggedOut, globalStore.isInWhitelist, chainType]);
 
   return (
     <AuthContext.Provider
