@@ -161,7 +161,7 @@ export const AuthProvider: React.FC<{
   );
 
   const sign = async () => {
-    console.log("signing", user);
+    console.log("signing", address);
     if (!user) {
       login();
       return;
