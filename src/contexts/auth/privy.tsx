@@ -27,14 +27,16 @@ import useCode from "@/hooks/airdrop/use-code";
 import useCreateWhitelist from "@/hooks/user/use-create-whitelist";
 import { useGlobalStore } from "@/stores/use-global";
 import LoginTimeoutModal from "@/components/modal/login-timeout";
-
+import { useVerifyStore } from "@/stores/use-verify";
+import { useAnalysisDataStore } from "@/stores/use-analysis-data";
 export const AuthContext = React.createContext<any | null>(null);
 
 export const AuthProvider: React.FC<{
   children: ReactNode;
 }> = ({ children }) => {
   const { logout: privyLogout, login: privyLogin, ready } = usePrivy();
-
+  const verifyStore = useVerifyStore();
+  const analysisData = useAnalysisDataStore();
   const { user } = useUser();
   const nearKeyStore = useNearKeyStore();
   const globalStore = useGlobalStore();
@@ -142,8 +144,9 @@ export const AuthProvider: React.FC<{
         setAccountRefresher(1);
         return;
       }
-      console.log("address not equal", address, loginedAddress, loginMethod, globalStore.loginMethod);
+
       if (address && loginedAddress && address !== loginedAddress && loginMethod === globalStore.loginMethod) {
+        console.log("address not equal", address, loginedAddress, loginMethod, globalStore.loginMethod);
         logout();
         return;
       }
@@ -158,6 +161,7 @@ export const AuthProvider: React.FC<{
   );
 
   const sign = async () => {
+    console.log("signing", user);
     if (!user) {
       login();
       return;
@@ -180,8 +184,9 @@ export const AuthProvider: React.FC<{
       } else {
         message = `login dolla, sol_address:${privySolanaWallet?.address}, wallet_id:${userId}, time:${time}`;
       }
-
+      console.log("message", message);
       let signature: string = await signMessage(message);
+      console.log("signature", signature);
 
       onLogin({
         address: address,
@@ -231,9 +236,11 @@ export const AuthProvider: React.FC<{
     }
 
     if (!privyEvmWallet?.address) {
+      console.log("creating evm wallet");
       createPrivyWallet();
     }
     if (!privySolanaWallet?.address) {
+      console.log("creating solana wallet");
       createSolanaWallet();
     }
   };
@@ -261,6 +268,8 @@ export const AuthProvider: React.FC<{
     nearKeyStore.set({ publicKey: null, privateKey: null });
     userInfoStore.init();
     globalStore.init();
+    verifyStore.init();
+    analysisData.init();
   }, [address, privyLogout, wallets, solanaWallets]);
 
   useEffect(() => {
