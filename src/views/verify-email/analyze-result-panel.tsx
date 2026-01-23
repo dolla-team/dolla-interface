@@ -139,7 +139,7 @@ export default function ResultPanel({ result, reward, onBackToAnalyze }: any) {
           </button>
         </div>
       </div>
-      {reward > 0 ? <VoucherPanel reward={reward} login={handleLogin} /> : <NoVoucherPanel reward={reward} login={handleLogin} />}
+      {reward > 0 ? <VoucherPanel dei={result.finalScore} login={handleLogin} reward={reward} /> : <NoVoucherPanel login={handleLogin} />}
       {/* <div onClick={() => onBackToAnalyze()} className="mt-[40px] text-center text-white text-[14px] leading-[130%] underline cursor-pointer">
         Back to analyze
       </div> */}
@@ -153,7 +153,7 @@ export default function ResultPanel({ result, reward, onBackToAnalyze }: any) {
   );
 }
 
-export const NoVoucherPanel = ({ reward, login }: any) => {
+export const NoVoucherPanel = ({ login }: any) => {
   const [refreshingFollow, setRefreshingFollow] = useState(false);
   const [refreshingRetweet, setRefreshingRetweet] = useState(false);
   const { followed, retweeted, followClicked, retweetClicked, set } = useVerifyStore();
@@ -272,14 +272,14 @@ export const NoVoucherPanel = ({ reward, login }: any) => {
   );
 };
 
-const VoucherPanel = ({ reward, login }: any) => {
+const VoucherPanel = ({ dei, reward, login }: any) => {
   const goToApp = async () => {
     login();
   };
   return (
     <>
       <div className="w-[542px] mt-[20px] text-center font-mono text-[16px] font-normal leading-[120%] tracking-[-1.08px] text-white">
-        <div>Your dolla eligibility index (DEI) is {reward}.</div>
+        <div>Your dolla eligibility index (DEI) is {dei}.</div>
         <div className="mt-[8px]">Congrats! You've got voucher.</div>
       </div>
       <div className="w-[357px] h-[78px] flex items-center justify-center pl-[50px] font-[Courier] mt-[20px] text-[30px] font-[700] shrink-0 bg-[url('/verify/voucher-bg.png')] bg-cover bg-center">
