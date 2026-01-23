@@ -69,30 +69,6 @@ export default function Header({ className }: { className?: string }) {
             ${formatNumber(pool?.reward_usd, 2, true)}
           </span>
 
-          {/* {!!prev && (
-            <div className="absolute left-[-180px] top-[-20px] flex items-center gap-[8px]">
-              <TriIcon
-                className="button"
-                onClick={() => {
-                  getPoolRecommend(prev * 10 ** BASE_TOKEN.decimals);
-                  setFilterVolume(prev);
-                }}
-              />
-              <span className="text-[20px] text-[#FFEF43]">{prev} BTC</span>
-            </div>
-          )}
-          {!!next && (
-            <div className="absolute right-[-180px] top-[-20px] flex items-center gap-[8px]">
-              <span className="text-[20px] text-[#FFEF43]">{next} BTC</span>
-              <TriIcon
-                className="rotate-y-[180deg] button"
-                onClick={() => {
-                  getPoolRecommend(next * 10 ** BASE_TOKEN.decimals);
-                  setFilterVolume(next);
-                }}
-              />
-            </div>
-          )} */}
         </div>
         <div />
         <div
