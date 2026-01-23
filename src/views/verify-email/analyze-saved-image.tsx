@@ -25,7 +25,7 @@ export default function SavedImage({
   return ReactDOM.createPortal(
     <div
       ref={imageRef}
-      className="w-[1332px] h-[750px] bg-black overflow-hidden absolute top-0 left-0 z-[1]"
+      className="w-[1332px] h-[750px] font-[Courier] bg-black overflow-hidden absolute top-0 left-0 z-[1]"
     >
       <div className="relative z-[2] pt-[68px] pl-[44px]">
         <DollaEye className="" height={64} />
@@ -53,7 +53,7 @@ export default function SavedImage({
               />
             )}
             <div className="text-white leading-[120%]">
-              <div className="text-[48px]">
+              <div className="text-[48px] truncate max-w-[460px] leading-[100%]">
                 {result?.profile?.user?.displayName}
               </div>
               <div className="text-[32px] mt-[30px]">@{handle}</div>

@@ -49,7 +49,7 @@ export default function ResultPanel({ result, reward, onBackToAnalyze }: any) {
 
   return (
     <>
-      <div className="w-[542px] p-[24px] mt-[20px] rounded-[20px] border-[#3E300E] bg-[#3F3F3F99] shadow-[0_2px_6px_0_rgba(0,0,0,0.25)_inset] backdrop-blur-[10px]">
+      <div className="w-[542px] p-[24px] font-[Courier] mt-[20px] rounded-[20px] border-[#3E300E] bg-[#3F3F3F99] shadow-[0_2px_6px_0_rgba(0,0,0,0.25)_inset] backdrop-blur-[10px]">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-[15px]">
             {result?.profile?.user?.profileImageUrl && (
@@ -59,8 +59,8 @@ export default function ResultPanel({ result, reward, onBackToAnalyze }: any) {
                 className="w-[62px] h-[62px] rounded-full object-cover"
               />
             )}
-            <div className="text-white leading-[120%]">
-              <div className="text-[26px]">
+            <div className="text-white">
+              <div className="text-[26px] truncate max-w-[300px] leading-[100%]">
                 {result?.profile?.user?.displayName}
               </div>
               <div className="text-[18px] mt-[8px]">@{analysisData?.handle}</div>
@@ -88,7 +88,7 @@ export default function ResultPanel({ result, reward, onBackToAnalyze }: any) {
             >
               <div
                 className={clsx(
-                  "w-[98px] text-[28px] shrink-0",
+                  "w-[80px] text-[30px] shrink-0",
                   index === 0 && "text-[#5C69FF]",
                   index === 1 && "text-[#FFCE52]",
                   index === 2 && "text-[#00FF84]"

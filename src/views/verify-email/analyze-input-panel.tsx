@@ -1,15 +1,15 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import clsx from "clsx";
 
 const Texts = [
   "69% to be investigated by @ZachXBT next",
-  "47% says “zoom out” while being down 63%",
+  "47% says \"zoom out\" while being down 63%",
   "99% retarded",
-  "81% says “this is my last trade” at least once a week",
+  "81% says \"this is my last trade\" at least once a week",
   "58% watched a candle instead of sleeping and still lost money",
   "66% bought because of a tweet",
   "42% still waiting for a retest that never comes",
-  "76% round-tripped a winner because “it felt early",
+  "76% round-tripped a winner because \"it felt early\"",
 ];
 
 export default function AnalyzeInputPanel({
@@ -23,34 +23,51 @@ export default function AnalyzeInputPanel({
   const [currentText, setCurrentText] = useState(Texts[0]);
   const [nextText, setNextText] = useState("");
   const [isAnimating, setIsAnimating] = useState(false);
+  const lastIndexRef = useRef(0);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      const randomIndex = Math.floor(Math.random() * Texts.length);
-      const newText = Texts[randomIndex];
+    let timeoutId: NodeJS.Timeout | null = null;
 
-      if (newText !== currentText) {
-        // 先设置新文本在下方
-        setNextText(newText);
-        setIsAnimating(false);
+    const scheduleNext = () => {
+      timeoutId = setTimeout(() => {
+        let randomIndex = Math.floor(Math.random() * Texts.length);
+        while (randomIndex === lastIndexRef.current) {
+          randomIndex = Math.floor(Math.random() * Texts.length);
+        }
+        lastIndexRef.current = randomIndex;
+        const newText = Texts[randomIndex];
 
-        // 使用 requestAnimationFrame 确保 DOM 更新后再开始动画
-        requestAnimationFrame(() => {
+        if (newText !== currentText) {
+
+          setNextText(newText);
+          setIsAnimating(false);
+
+
           requestAnimationFrame(() => {
-            setIsAnimating(true);
+            requestAnimationFrame(() => {
+              setIsAnimating(true);
 
-            setTimeout(() => {
-              setCurrentText(newText);
-              setIsAnimating(false);
-              setNextText("");
-            }, 300);
+              setTimeout(() => {
+                setCurrentText(newText);
+                setIsAnimating(false);
+                setNextText("");
+              }, 300);
+            });
           });
-        });
-      }
-    }, 2000);
+        }
 
-    return () => clearInterval(interval);
-  }, [currentText]);
+        scheduleNext();
+      }, 2000);
+    };
+
+    scheduleNext();
+
+    return () => {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+    };
+  }, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
