@@ -160,6 +160,11 @@ export const AuthProvider: React.FC<{
       loginMethod
     })
     setLogining(true);
+    if (!chainType) {
+      console.log('no chain type, waiting 1 seconds');
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      console.log('chain type is', chainType);
+    }
     sign();
   };
 
