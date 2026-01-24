@@ -5,11 +5,11 @@ import React, {
   useCallback,
   useMemo
 } from "react";
-import { useDebounceFn } from "ahooks";
 import useUserInfo from "@/hooks/use-user-info";
 import type { ReactNode } from "react";
 import useLogin from "@/hooks/use-login";
 import {
+  useLogin as usePrivyLogin,
   usePrivy,
   useWallets,
   useUser,
@@ -34,7 +34,14 @@ export const AuthContext = React.createContext<any | null>(null);
 export const AuthProvider: React.FC<{
   children: ReactNode;
 }> = ({ children }) => {
-  const { logout: privyLogout, login: privyLogin, ready } = usePrivy();
+  const { logout: privyLogout, ready } = usePrivy();
+  const [isCompleted, setIsCompleted] = useState(false);
+  const { login: privyLogin } = usePrivyLogin({
+    onComplete: async () => {
+      console.log('privy login complete', wallets, user);
+      setIsCompleted(true);
+    }
+  });
   const verifyStore = useVerifyStore();
   const analysisData = useAnalysisDataStore();
   const { user } = useUser();
@@ -42,9 +49,9 @@ export const AuthProvider: React.FC<{
   const globalStore = useGlobalStore();
 
   useConfig();
-  const { wallets, ready: walletsReady } = useWallets();
+  const { wallets } = useWallets();
 
-  const { wallets: solanaWallets, ready: solanaWalletsReady } = useSolanaWallets();
+  const { wallets: solanaWallets } = useSolanaWallets();
 
   const { createWallet: createPrivyWallet } = useCreateWallet();
   const { createWallet: createSolanaWallet } = useCreateSolanaWallet();
@@ -52,7 +59,6 @@ export const AuthProvider: React.FC<{
 
   const [logining, setLogining] = useState(false);
   const [accountRefresher, setAccountRefresher] = useState(-1);
-  const [isLoggedOut, setIsLoggedOut] = useState(false);
   const userInfoStore = useUserInfoStore();
 
   const chainType = useMemo(() => {
@@ -67,10 +73,10 @@ export const AuthProvider: React.FC<{
 
   const loginMethod = useMemo(() => {
     if (user?.wallet?.connectorType === "solana_adapter") {
-      return "solana";
+      return "wallet";
     }
     if (user?.wallet?.connectorType === "injected") {
-      return "evm";
+      return "wallet";
     }
     if (user?.google) {
       return "google";
@@ -85,14 +91,14 @@ export const AuthProvider: React.FC<{
   }, [user]);
 
   const privyEvmWallet = useMemo(() => {
-    if (isLoggedOut || !user) return { address: "" };
+    if (!user) return { address: "" };
     const privyItem = wallets.find((item) =>
       chainType === "solana"
         ? item?.connectorType === "embedded"
         : item?.walletClientType === user?.wallet?.walletClientType
     );
     return privyItem || { address: "" };
-  }, [wallets, isLoggedOut, user, chainType]);
+  }, [wallets, user, chainType]);
 
   const privySolanaWallet = useMemo(() => {
     if (solanaWallets.length === 0) return null;
@@ -117,11 +123,11 @@ export const AuthProvider: React.FC<{
   );
 
   const {
-    info: userInfo,
     loading: userInfoLoading,
     onQueryUserInfo,
-    setInfo
   } = useUserInfo(address, user);
+
+  const userInfo = userInfoStore.userInfo;
 
   const { isCreatedWhitelist } = useCreateWhitelist(userInfo?.show_email);
 
@@ -129,36 +135,33 @@ export const AuthProvider: React.FC<{
 
   const { onLogin } = useLogin();
 
-  const { run: updateAccount } = useDebounceFn(
-    async () => {
-      if (!address) {
-        return;
-      }
+  const updateAccount = async () => {
+    console.log('updateAccount', address);
+    if (!address) {
+      return;
+    }
 
-      const loginedAddress = JSON.parse(
-        localStorage.getItem("_AK_TOKEN_") || "{}"
-      ).address;
+    const loginedAddress = JSON.parse(
+      localStorage.getItem("_AK_TOKEN_") || "{}"
+    ).address;
 
-      if (address === loginedAddress) {
-        await onQueryUserInfo();
-        setAccountRefresher(1);
-        return;
-      }
+    if (address === loginedAddress) {
+      await onQueryUserInfo();
+      setAccountRefresher(1);
+      return;
+    }
 
-      if (address && loginedAddress && address !== loginedAddress && loginMethod === globalStore.loginMethod) {
-        console.log("address not equal", address, loginedAddress, loginMethod, globalStore.loginMethod);
-        logout();
-        return;
-      }
-      globalStore.set({
-        loginMethod
-      })
-      setLogining(true);
-      sign();
-
-    },
-    { wait: 800 }
-  );
+    if (address && loginedAddress && address !== loginedAddress && loginMethod === globalStore.loginMethod && loginMethod === "wallet") {
+      console.log("address not equal", address, loginedAddress, loginMethod, globalStore.loginMethod);
+      logout();
+      return;
+    }
+    globalStore.set({
+      loginMethod
+    })
+    setLogining(true);
+    sign();
+  };
 
   const sign = async () => {
     console.log("signing", address);
@@ -226,7 +229,6 @@ export const AuthProvider: React.FC<{
     }, 1000 * 60 * 1);
 
     if (!user) {
-      setIsLoggedOut(false);
       privyLogin?.();
       return;
     }
@@ -246,8 +248,6 @@ export const AuthProvider: React.FC<{
   };
 
   const logout = useCallback(async () => {
-    setIsLoggedOut(true);
-
     try {
       for (const wallet of wallets) {
         await wallet?.disconnect();
@@ -263,7 +263,7 @@ export const AuthProvider: React.FC<{
     await privyLogout?.();
 
     localStorage.removeItem("_AK_TOKEN_");
-    setInfo(null);
+    userInfoStore.set({ userInfo: null });
     setAccountRefresher(0);
     nearKeyStore.set({ publicKey: null, privateKey: null });
     userInfoStore.init();
@@ -273,35 +273,15 @@ export const AuthProvider: React.FC<{
   }, [address, privyLogout, wallets, solanaWallets]);
 
   useEffect(() => {
-    if (!ready) {
-      return;
-    }
-
-    if (chainType === 'solana' && !solanaWalletsReady) {
-      console.log('solana wallets not ready');
-      return;
-    }
-
-    if (!walletsReady) {
-      console.log('evm wallets not ready');
-      return;
-    }
-
-    if (isLoggedOut) {
-      return;
-    }
-    if (!address) {
-      // login();
-      return;
-    }
-    console.log(user?.wallet, address, globalStore.isInWhitelist);
-
-    if (user && globalStore.isInWhitelist) {
-      updateAccount();
-    }
+    if (!user) return;
+    if (!globalStore.isInWhitelist) return;
+    if (!isCompleted) return;
+    const embeddedWallet = wallets.find((w) => w.walletClientType === 'privy');
+    if (!chainType && !embeddedWallet) return;
+    updateAccount();
     clearTimeout(window.loginTimeoutTimer);
     (window as any).sign = sign;
-  }, [address, ready, user, isLoggedOut, globalStore.isInWhitelist, chainType]);
+  }, [user, globalStore.isInWhitelist, isCompleted, wallets, chainType]);
 
   return (
     <AuthContext.Provider
