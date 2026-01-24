@@ -1,5 +1,11 @@
 import { useEffect, useRef, useState } from "react";
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import {
+  motion,
+  useMotionValue,
+  useSpring,
+  useTransform,
+  animate
+} from "framer-motion";
 
 /**
  * Format number with thousand separators
@@ -63,6 +69,11 @@ export interface AnimatedCounterProps {
    */
   delay?: number;
   /**
+   * Animation duration in seconds (default: undefined, uses spring physics)
+   * If provided, animation will use fixed duration instead of spring physics
+   */
+  duration?: number;
+  /**
    * Custom className for the number container
    */
   className?: string;
@@ -75,14 +86,19 @@ export interface AnimatedCounterProps {
 /**
  * AnimatedCounter Component
  *
- * Displays a number that animates smoothly from the previous value to the target value
- * using spring physics. Animation only triggers when the value changes.
+ * Displays a number that animates smoothly from the previous value to the target value.
+ * Animation only triggers when the value changes.
  * Supports formatting with thousand separators, decimal places, prefixes, and suffixes.
+ *
+ * Animation modes:
+ * - Spring physics (default): Uses damping and stiffness for natural spring animation
+ * - Fixed duration: If duration is provided, uses fixed time-based animation
  *
  * @example
  * ```tsx
  * <AnimatedCounter value={1234} prefix="$" />
  * <AnimatedCounter value={3.14} decimals={2} suffix="%" />
+ * <AnimatedCounter value={1000} duration={8} /> // 8 second animation
  * ```
  */
 export default function AnimatedCounter({
@@ -93,47 +109,82 @@ export default function AnimatedCounter({
   damping = 60,
   stiffness = 100,
   delay = 0,
+  duration,
   className = "",
   enableScaleAnimation = true
 }: AnimatedCounterProps) {
   const prevValueRef = useRef<number | null>(null);
   const isInitialMount = useRef(true);
   const motionValue = useMotionValue(0);
-  const spring = useSpring(motionValue, {
-    damping,
-    stiffness
-  });
 
-  // Transform the spring value to formatted number string
-  const formattedValue = useTransform(spring, (latest) => {
-    if (decimals > 0) {
-      return formatNumber(Number(latest.toFixed(decimals)), decimals);
+  // Use spring physics if duration is not provided, otherwise use duration-based animation
+  const spring = useSpring(
+    motionValue,
+    duration === undefined
+      ? {
+          damping,
+          stiffness
+        }
+      : undefined
+  );
+
+  // Transform the spring value or motion value to formatted number string
+  const formattedValue = useTransform(
+    duration === undefined ? spring : motionValue,
+    (latest) => {
+      if (decimals > 0) {
+        return formatNumber(Number(latest.toFixed(decimals)), decimals);
+      }
+      return formatNumber(Math.round(latest), 0);
     }
-    return formatNumber(Math.round(latest), 0);
-  });
+  );
 
   const [shouldAnimateScale, setShouldAnimateScale] = useState(false);
 
   useEffect(() => {
     let timer: NodeJS.Timeout | null = null;
+    let animationControls: any = null;
 
     // On initial mount, animate from 0 to the initial value
     if (isInitialMount.current) {
       isInitialMount.current = false;
-      motionValue.set(value);
+      if (duration !== undefined) {
+        // Use duration-based animation
+        animationControls = animate(motionValue, value, {
+          duration: duration,
+          delay: delay,
+          ease: "easeOut"
+        });
+      } else {
+        // Use spring physics
+        motionValue.set(value);
+      }
       prevValueRef.current = value;
       return;
     }
 
     // Only animate if the value has actually changed
-    // Spring will automatically animate from current value to the new value
     if (prevValueRef.current !== null && prevValueRef.current !== value) {
-      motionValue.set(value);
+      if (duration !== undefined) {
+        // Use duration-based animation
+        const currentValue = motionValue.get();
+        animationControls = animate(currentValue, value, {
+          duration: duration,
+          delay: delay,
+          ease: "easeOut"
+        });
+      } else {
+        // Spring will automatically animate from current value to the new value
+        motionValue.set(value);
+      }
+
       // Trigger scale animation on value change
       if (enableScaleAnimation) {
         setShouldAnimateScale(true);
         // Reset after animation completes
-        timer = setTimeout(() => setShouldAnimateScale(false), 300);
+        const scaleTimeout =
+          duration !== undefined ? duration * 1000 + delay * 1000 : 300;
+        timer = setTimeout(() => setShouldAnimateScale(false), scaleTimeout);
       }
     }
 
@@ -143,8 +194,11 @@ export default function AnimatedCounter({
       if (timer) {
         clearTimeout(timer);
       }
+      if (animationControls) {
+        animationControls.stop();
+      }
     };
-  }, [motionValue, value, enableScaleAnimation]);
+  }, [motionValue, value, enableScaleAnimation, duration, delay]);
 
   return (
     <span className={className}>

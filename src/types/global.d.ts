@@ -9,6 +9,7 @@ declare global {
       bgm: Howl;
       coinDrop: Howl;
       bidSuccess: Howl;
+      prevAnimation: Howl;
     };
     cachedPoolId: number;
     drawsUpdateTimer: NodeJS.Timeout;

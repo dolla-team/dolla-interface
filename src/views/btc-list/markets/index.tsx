@@ -96,7 +96,7 @@ export default function Markets() {
             {[
               { label: "Live", key: "1" },
               {
-                label: "Sold",
+                label: "Ended",
                 key: "2"
               }
             ].map((item) => (

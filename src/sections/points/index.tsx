@@ -10,7 +10,13 @@ import { useConfigStore } from "@/stores/use-config";
 import { BASE_TOKEN, QUOTE_TOKEN } from "@/config/btc";
 import useIsMobile from "@/hooks/use-is-mobile";
 
-export default function Points({ className }: { className?: string }) {
+export default function Points({
+  className,
+  textClassName
+}: {
+  className?: string;
+  textClassName?: string;
+}) {
   const { prize } = useUserInfoStore();
 
   const { config } = useConfigStore();
@@ -152,7 +158,9 @@ export default function Points({ className }: { className?: string }) {
           />
         </div>
 
-        <span className={clsx("text-white font-[600] text-[16px]")}>
+        <span
+          className={clsx("font-[600] text-[16px] text-white", textClassName)}
+        >
           x
           {isMobile
             ? formatNumber(prize.points, 0, true, { isShort: false })

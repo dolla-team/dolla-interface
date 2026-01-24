@@ -1,8 +1,19 @@
-export default function ShareButton() {
+import clsx from "clsx";
+
+export default function ShareButton({
+  className,
+  onClick
+}: {
+  className?: string;
+  onClick?: () => void;
+}) {
   return (
     <button
-      className="button w-[104px] h-[34px] rounded-[20px] border border-[#E4E4E4] bg-[#FFFFFF80] flex items-center justify-center gap-[8px]"
-      onClick={() => {}}
+      className={clsx(
+        "button w-[104px] h-[34px] rounded-[20px] border border-[#E4E4E4] bg-[#FFFFFF80] flex items-center justify-center gap-[8px]",
+        className
+      )}
+      onClick={onClick}
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"

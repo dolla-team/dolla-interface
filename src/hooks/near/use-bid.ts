@@ -6,15 +6,17 @@ import { viewMethod, getUserId } from "./util";
 import { QUOTE_TOKEN } from "@/config/btc";
 import useBtcDetailStore from "@/stores/use-btc-detail";
 
+
 export default function useBid(
   poolId: number,
   onTxSuccess: (id: string) => void,
   onTxFail: () => void,
-  onTxFail2: () => void
+  onTxFail2: (msg?: string,args?: any) => void
 ) {
   const { address, chainType } = useAuth();
   const { generateKeyPair } = useGenerateKey();
   const btcDetailStore = useBtcDetailStore();
+
   // Function to sign a message using NEAR private key
   const signMessage = async (
     message: string,
@@ -59,6 +61,8 @@ export default function useBid(
     // }, 3000);
 
     // return;
+
+   
     if (!address) {
       onTxFail2();
       return;
@@ -72,6 +76,20 @@ export default function useBid(
 
     // let toastId = toast.loading({ title: "Bidding..." });
     try {
+      const poolInfo = await viewMethod({
+        method: "get_game",
+        args: { game_id: poolId }
+      });
+      if(poolInfo?.status !== 0){
+        let _status = 1;
+        if(poolInfo?.status === 1){
+          _status = 3;
+        }else if(poolInfo?.status === 2){
+          _status = 2;
+        }
+        onTxFail2("pool_status_changed",{status: _status});
+        return;
+      }
       const res = await viewMethod({
         method: "get_account",
         args: { user_id: getUserId(address, chainType) }

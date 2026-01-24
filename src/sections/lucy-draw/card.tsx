@@ -141,7 +141,7 @@ export default function LucyDrawCard({
   );
 }
 
-const LuckyInfo = () => {
+export const LuckyInfo = () => {
   return (
     <Popover
       trigger={PopoverTrigger.Hover}

@@ -10,13 +10,14 @@ export default function Banner() {
         <div className="text-[42px] text-white font-[700] mt-[-10px]">
           Dolla Market
         </div>
-        <div className="w-[312px] text-center mt-[8px]">
-          <span className="text-[18px] text-white">The first</span>{" "}
-          <span className="text-[18px] text-[#FFC42F] font-[600]">
-            Trustless Probabilistic Marketplace
-          </span>
+        <div className="text-[18px] text-[#FFC42F] text-center uppercase">
+          $1. Infinite Exposure.
         </div>
-        <div className="text-[14px] text-white mt-[20px] flex gap-[20px]">
+        <div className="w-[344px] text-[12px] text-white text-center mt-[4px]">
+          Get exposure to blue chip assets that's out of reach, one dolla at a
+          time.
+        </div>
+        <div className="text-[14px] text-white mt-[34px] flex gap-[20px]">
           <span>· $1 Accessibility</span>
           <span>· Verifiable Probability</span>
         </div>
@@ -31,7 +32,7 @@ export default function Banner() {
           }}
           className="absolute left-[102px] bottom-[16px] z-[3] w-[152px] h-[40px] bg-linear-to-b from-[#37EFA8] to-[#5BF5BA] flex items-center justify-center rounded-[12px] text-[14px] text-[#2B3337] font-[600] group-hover:animate-[pulse-scale_1s_ease-in-out_infinite]"
         >
-          Bid
+          Get Exposure
           <div className="w-full h-full rounded-[12px] bg-black/30 absolute left-0 top-0 opacity-100 group-hover:opacity-0 transition-opacity duration-300" />
         </div>
       </div>
@@ -45,7 +46,7 @@ export default function Banner() {
           }}
           className="absolute right-[60px] bottom-[16px] z-[3] w-[152px] h-[40px] bg-linear-to-b from-[#FFB700] to-[#FFCE54] flex items-center justify-center rounded-[12px] text-[14px] text-[#2B3337] font-[600] group-hover:animate-[pulse-scale_1s_ease-in-out_infinite]"
         >
-          Sell
+          List
           <div className="w-full h-full rounded-[12px] bg-black/30 absolute left-0 top-0 opacity-100 group-hover:opacity-0 transition-opacity duration-300" />
         </div>
       </div>

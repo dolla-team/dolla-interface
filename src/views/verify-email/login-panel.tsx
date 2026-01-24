@@ -18,6 +18,15 @@ export default function LoginPanel({ onChangeHasAccount, setIsBgSpread }: any) {
     address?: string
   ): Promise<boolean> => {
     try {
+      const code = new URLSearchParams(window.location.search).get("code");
+      if (code && code?.length === 6) {
+        const res = await axios.get("/api/v1/airdrop/code/valid", {
+          params: {
+            code
+          }
+        });
+        return res.data.data?.valid || false;
+      }
       let path = "/api/v1/user/whitelist";
       const params = new URLSearchParams();
       if (email) params.append("email", email);

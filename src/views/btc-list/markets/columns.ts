@@ -22,13 +22,13 @@ export const liveColumns = [
     sort: true
   },
   {
-    title: "Total Bids",
+    title: "Volume",
     dataIndex: "accumulative_bids",
     width: "15%",
     sort: true
   },
   {
-    title: "Fill level",
+    title: "Heat",
     dataIndex: "hitting",
     width: "20%",
     sort: true
