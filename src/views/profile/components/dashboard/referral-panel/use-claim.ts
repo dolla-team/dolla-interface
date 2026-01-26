@@ -75,14 +75,16 @@ export default function useClaim(onSuccess?: () => void) {
       );
 
       // Check if claim was successful
+      toast.dismiss(toastId);
       if (response.data?.code === 0 || response.status === 200) {
-        toast.dismiss(toastId);
         toast.success({ title: "Claim successfully" });
         onSuccess?.();
         // Refresh claimable amount after successful claim
         fetchClaimableRewards();
       } else {
-        throw new Error(response.data?.message || "Claim failed");
+        toast.fail({
+          title: response?.data?.message || "Claim failed"
+        });
       }
     } catch (err: any) {
       console.error("Failed to claim rewards:", err);
