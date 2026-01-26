@@ -244,13 +244,13 @@ export default function BidsChart({
         userDataForAvatar &&
         userPointPositions.length > 0 &&
         showAvatar && (
-          <div className="absolute inset-0 overflow-visible">
+        <div className="absolute inset-0 overflow-visible">
             {userPointPositions.map((position, idx) => {
               const originalIndex = position.index;
               return (
                 <div
                   key={`${originalIndex}-${idx}`}
-                  className="absolute  cursor-pointer hover:scale-[1.2] hover:z-[100] transition-all duration-300"
+                  className="absolute z-[5] cursor-pointer hover:scale-[1.2] hover:z-[100] transition-all duration-300"
                   style={{
                     left: `${position.x - 14}px`,
                     top: `${position.y - 33}px`, // Position above the point
