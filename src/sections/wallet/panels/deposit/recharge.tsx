@@ -38,12 +38,17 @@ export default function Recharge({
           }}
         />
       </div>
-      <div className="mt-[6px] py-[10px] px-[6px] text-[12px] flex gap-[8px] leading-[14px] text-black font-[300] bg-[#FFC42F]/10 rounded-[12px]">
+      <div className="mt-[6px] py-[10px] px-[6px] text-[12px] flex gap-[12px] leading-[14px] text-black font-[300] bg-[#FFC42F]/10 rounded-[12px]">
         <WarningIcon />
-        <div>
-          Only supported networks are shown. Depositing via an unsupported
-          network may result in permanent loss of assets.
-        </div>
+        <ul className="list-disc">
+          <li>
+            Only supported networks are shown. Depositing via an unsupported
+            network may result in permanent loss of assets.
+          </li>
+          <li className="mt-[10px]">
+            This is a <span className="font-[500]">one-time deposit address</span>, do not save it for future deposits.
+          </li>
+        </ul>
       </div>
       <div
         className={clsx(
