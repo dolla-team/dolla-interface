@@ -57,6 +57,9 @@ export default function BidsChart({
     const ctx = chartRef.current.getContext("2d");
     if (!ctx) return;
 
+    setMounted(false);
+    setShowAvatar(false);
+
     // Transform API data to chart format
     const chartData = volumeData.map((item) => ({
       x: item.timestamp,
@@ -222,10 +225,6 @@ export default function BidsChart({
       }
     };
   }, [winnerInfo, pool]);
-
-  useEffect(() => {
-    setShowAvatar(false);
-  }, [period]);
 
   return (
     <div ref={containerRef} className="h-[200px] w-[426px] mt-4 relative">
