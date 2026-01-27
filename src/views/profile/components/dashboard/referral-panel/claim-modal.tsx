@@ -62,7 +62,7 @@ export default function ClaimModal({
                 </div>
                 <div className="flex items-center gap-[10px]">
                   <span className="text-[12px] text-[#2B3337]">
-                    ${formatNumber(item.total_amount_usd || 0, 2, true)}{" "}
+                    ${formatNumber(item.claimable_amount_usd || 0, 2, true)}{" "}
                   </span>
                   <div
                     className={clsx(

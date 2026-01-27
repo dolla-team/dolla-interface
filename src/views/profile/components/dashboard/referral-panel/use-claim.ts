@@ -42,12 +42,12 @@ export default function useClaim(onSuccess?: () => void) {
       let totalUsd = Big(0);
       let totalClaimable = Big(0);
       claimable.forEach((item: any) => {
-        totalUsd = totalUsd.add(Big(item.total_amount_usd));
-        totalClaimable = totalClaimable.add(Big(item.claimable_amount_usd));
         if (item.token_type === "USDT") {
           item.claimable_amount_usd = item.claimable_amount;
           item.total_amount_usd = item.total_amount;
         }
+        totalUsd = totalUsd.add(Big(item.total_amount_usd));
+        totalClaimable = totalClaimable.add(Big(item.claimable_amount_usd));
       });
 
       setClaimableAmount({
