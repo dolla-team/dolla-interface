@@ -57,6 +57,9 @@ export default function BidsChart({
     const ctx = chartRef.current.getContext("2d");
     if (!ctx) return;
 
+    setMounted(false);
+    setShowAvatar(false);
+
     // Transform API data to chart format
     const chartData = volumeData.map((item) => ({
       x: item.timestamp,
@@ -223,10 +226,6 @@ export default function BidsChart({
     };
   }, [winnerInfo, pool]);
 
-  useEffect(() => {
-    setShowAvatar(false);
-  }, [period]);
-
   return (
     <div ref={containerRef} className="h-[200px] w-[426px] mt-4 relative">
       {loading ? (
@@ -243,15 +242,15 @@ export default function BidsChart({
       )}
       {!loading &&
         userDataForAvatar &&
-        userPointPositions.length > 0 &&
+        userPointPositions.length > 0 && volumeData.length > 0 &&
         showAvatar && (
-          <div className="absolute inset-0 overflow-visible">
+        <div className="absolute inset-0 overflow-visible">
             {userPointPositions.map((position, idx) => {
               const originalIndex = position.index;
               return (
                 <div
                   key={`${originalIndex}-${idx}`}
-                  className="absolute  cursor-pointer hover:scale-[1.2] hover:z-[100] transition-all duration-300"
+                  className="absolute z-[5] cursor-pointer hover:scale-[1.2] hover:z-[100] transition-all duration-300"
                   style={{
                     left: `${position.x - 14}px`,
                     top: `${position.y - 33}px`, // Position above the point
