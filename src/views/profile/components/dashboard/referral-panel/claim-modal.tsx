@@ -6,8 +6,8 @@ import Big from "big.js";
 import { IS_TEST } from "@/config";
 
 const MIN_CLAIM_AMOUNT: Record<string, number> = {
-  USDT: IS_TEST ? 1 : 10,
-  BTC: IS_TEST ? 0.00001: 0.0001
+  USDT: IS_TEST ? 0 : 10,
+  BTC: IS_TEST ? 0 : 0.0001
 };
 
 export default function ClaimModal({
