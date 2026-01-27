@@ -2,8 +2,9 @@ import { ethers } from "ethers";
 import { useSignMessage as usePrivySignMessage } from "@privy-io/react-auth";
 
 export default function useSignMessage({ privyEvmWallet, chainType }: any) {
-  const { signMessage: privySignMessage } = usePrivySignMessage();
+  const { signMessage: privySignMessage } = usePrivySignMessage()
   const signMessage = async (message: string, isContract = false) => {
+    console.log('signing message', chainType)
     if (chainType === "Evm") {
       // Use MetaMask for signing
       const ethereumProvider = await (
@@ -47,11 +48,10 @@ export default function useSignMessage({ privyEvmWallet, chainType }: any) {
     } else {
       // Use Privy embedded wallet for signing
       const { signature: privySignature } = await privySignMessage({
-        message
-      });
-      return privySignature;
+        message,
+      })
+      return privySignature
     }
-    return "";
   };
 
   return signMessage;

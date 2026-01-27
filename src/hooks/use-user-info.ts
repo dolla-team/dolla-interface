@@ -4,47 +4,46 @@ import useUserPrize from "@/hooks/use-user-prize";
 import useUserInfoStore from "@/stores/use-user-info";
 
 export default function useUserInfo(address?: string, user?: any) {
-  const [info, setInfo] = useState<any>();
-  const [loading, setLoading] = useState(false);
-  const { getUserPrize } = useUserPrize();
-  const userInfoStore = useUserInfoStore();
+  const [loading, setLoading] = useState(false)
+  const { getUserPrize } = useUserPrize()
+  const userInfoStore = useUserInfoStore()
 
   const onQueryUserInfo = useCallback(async () => {
     if (!address) {
-      return;
+      return
     }
 
-    setLoading(true);
+    setLoading(true)
 
     try {
-      const res = await axios.get("/api/v1/user?chain=near");
-      const _info = res.data.data;
+      const res = await axios.get('/api/v1/user?chain=near')
+      const _info = res.data.data
 
       const progress = (() => {
         if (!_info?.current_points || !_info?.next_level_points) {
-          return 0;
+          return 0
         }
-        return (_info.current_points / _info.next_level_points) * 100;
-      })();
+        return (_info.current_points / _info.next_level_points) * 100
+      })()
 
-      _info.points_progress = progress;
+      _info.points_progress = progress
 
       if (!_info?.name) {
-        userInfoStore.set({ showSetting: true });
+        userInfoStore.set({ showSetting: true })
         if (user.twitter) {
-          _info.name = user.twitter.name;
-          _info.icon = user.twitter.profilePictureUrl;
+          _info.name = user.twitter.name
+          _info.icon = user.twitter.profilePictureUrl
         }
       }
-      setInfo({ ..._info, user: _info.user || address });
-      getUserPrize();
+      userInfoStore.set({ userInfo: { ..._info, user: _info.user || address } })
+      getUserPrize()
     } catch (err) {
-      console.log("err", err);
-      setInfo(null);
+      console.log('err', err)
+      userInfoStore.set({ userInfo: null })
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  }, [address, user]);
+  }, [address, user])
 
-  return { info, loading, onQueryUserInfo, setInfo };
+  return { loading, onQueryUserInfo }
 }

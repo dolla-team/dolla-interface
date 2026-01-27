@@ -21,6 +21,7 @@ import useUserInfoStore from "@/stores/use-user-info";
 import useRegisterCode from "@/hooks/user/use-register-code";
 import LucyDrawHistory from "@/sections/lucy-draw/history";
 import HowItWork from "@/sections/how-it-work";
+import XKolModal from "@/sections/x-kol";
 
 export default function MainLayout() {
   const { userInfo, login } = useAuth() || {};
@@ -141,6 +142,7 @@ export default function MainLayout() {
       />
       <HowItWork />
       <LucyDrawHistory />
+      <XKolModal />
     </div>
   );
 }
