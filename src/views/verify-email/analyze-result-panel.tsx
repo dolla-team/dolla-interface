@@ -110,13 +110,13 @@ export default function ResultPanel({ result, reward, onBackToAnalyze }: any) {
                 return;
               }
               try {
-                await generateAndDownload(savedImageRef.current, "dolla-voucher.png", {
-                  format: "png",
+                await generateAndDownload(savedImageRef.current, 'dolla-voucher', {
+                  format: 'png',
                   width: 1332,
                   height: 750,
-                  backgroundColor: "#000",
+                  backgroundColor: '#000',
                   pixelRatio: 2,
-                });
+                })
               } catch (error) {
                 console.error("Failed to generate and download image:", error);
               }

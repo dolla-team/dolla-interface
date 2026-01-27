@@ -40,7 +40,7 @@ export default function SavedImage({
         className="absolute z-[3] top-[48px] right-[40px] w-[972px] h-[652px] p-[52px] rounded-[32px] border-[#3E300E] shadow-[0_4px_12px_0_rgba(0,0,0,0.25)_inset] backdrop-blur-[10px]"
         style={{
           background:
-            "radial-gradient(51.7% 45.95% at 95.06% 0%, rgba(0, 255, 132, 0.50) 0%, rgba(0, 0, 0, 0.50) 100%), rgba(68, 68, 68, 0.80)"
+            'radial-gradient(51.7% 45.95% at 95.06% 0%, rgba(0, 255, 132, 0.50) 0%, rgba(0, 0, 0, 0.50) 100%), rgba(68, 68, 68, 0.80)',
         }}
       >
         <div className="flex items-center justify-between">
@@ -59,14 +59,14 @@ export default function SavedImage({
               <div className="text-[32px] mt-[30px]">@{handle}</div>
             </div>
           </div>
-          <div className="text-right leading-[120%]">
+          <div className="text-right">
             <div className="text-[36px] text-white">DEI Score</div>
-            <div className="text-[92px] text-[#00FF84] mt-[28px]">
+            <div className="text-[92px] text-[#00FF84] leading-[100%]">
               {result.finalScore || 0}
             </div>
           </div>
         </div>
-        <div className="mt-[56px] flex flex-col gap-[16px]">
+        <div className="mt-[20px] flex flex-col gap-[16px]">
           {predictions?.map((prediction: any, index: number) => (
             <div
               key={index}
@@ -74,18 +74,18 @@ export default function SavedImage({
               style={{
                 background:
                   index === 0
-                    ? "radial-gradient(85.14% 31.19% at 1.58% 4.1%, rgba(92, 105, 255, 0.20) 0%, rgba(0, 0, 0, 0.20) 100%), rgba(255, 255, 255, 0.15)"
+                    ? 'radial-gradient(85.14% 31.19% at 1.58% 4.1%, rgba(92, 105, 255, 0.20) 0%, rgba(0, 0, 0, 0.20) 100%), rgba(255, 255, 255, 0.15)'
                     : index === 1
-                      ? "radial-gradient(85.14% 31.19% at 1.58% 4.1%, rgba(255, 206, 82, 0.20) 0%, rgba(0, 0, 0, 0.20) 100%), rgba(255, 255, 255, 0.15)"
-                      : "radial-gradient(85.14% 31.19% at 1.58% 4.1%, rgba(0, 255, 132, 0.20) 0%, rgba(0, 0, 0, 0.20) 100%), rgba(255, 255, 255, 0.15)"
+                      ? 'radial-gradient(85.14% 31.19% at 1.58% 4.1%, rgba(255, 206, 82, 0.20) 0%, rgba(0, 0, 0, 0.20) 100%), rgba(255, 255, 255, 0.15)'
+                      : 'radial-gradient(85.14% 31.19% at 1.58% 4.1%, rgba(0, 255, 132, 0.20) 0%, rgba(0, 0, 0, 0.20) 100%), rgba(255, 255, 255, 0.15)',
               }}
             >
               <div
                 className={clsx(
-                  "w-[160px] text-[60px] shrink-0",
-                  index === 0 && "text-[#5C69FF]",
-                  index === 1 && "text-[#FFCE52]",
-                  index === 2 && "text-[#00FF84]"
+                  'w-[160px] text-[60px] shrink-0',
+                  index === 0 && 'text-[#5C69FF]',
+                  index === 1 && 'text-[#FFCE52]',
+                  index === 2 && 'text-[#00FF84]'
                 )}
               >
                 {prediction.probability}%
@@ -114,5 +114,5 @@ export default function SavedImage({
       />
     </div>,
     container
-  );
+  )
 }
