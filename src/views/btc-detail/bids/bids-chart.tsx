@@ -242,7 +242,7 @@ export default function BidsChart({
       )}
       {!loading &&
         userDataForAvatar &&
-        userPointPositions.length > 0 &&
+        userPointPositions.length > 0 && volumeData.length > 0 &&
         showAvatar && (
         <div className="absolute inset-0 overflow-visible">
             {userPointPositions.map((position, idx) => {
