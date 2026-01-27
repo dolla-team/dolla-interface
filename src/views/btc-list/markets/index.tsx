@@ -37,7 +37,7 @@ export default function Markets() {
     setSortOrder
   } = usePoolList({
     tokenStatus: 0,
-    volume: allMarketsStore.tab
+    type: allMarketsStore.tab
   });
 
   const columns = useMemo(() => {
@@ -54,35 +54,42 @@ export default function Markets() {
       )}
     >
       <div className="flex items-center justify-between">
-        <div className="text-[20px] text-black font-[700] mb-[10px]">
-          All Markets
-        </div>
-        <div className="flex items-center gap-[14px]">
+        <div className="flex items-center gap-[10px]">
+          <div className="text-[20px] text-black font-[700] mb-[10px]">
+            All Markets
+          </div>
           <div className="flex items-center h-[40px] p-[2px] bg-[#0000000D] border border-[#F2F2F233] rounded-[10px]">
             {[
-              { label: "All", key: 0 },
+              { label: "All", key: "all" },
               {
-                label: AMOUNT[0] + " " + BASE_TOKEN.symbol,
-                key: AMOUNT[0] * 10 ** BASE_TOKEN.decimals
+                label: "BTC",
+                key: "btc"
               },
               {
-                label: AMOUNT[1] + " " + BASE_TOKEN.symbol,
-                key: AMOUNT[1] * 10 ** BASE_TOKEN.decimals
+                label: "NFTs",
+                key: "nfts",
+                disabled: true
               },
               {
-                label: AMOUNT[2] + " " + BASE_TOKEN.symbol,
-                key: AMOUNT[2] * 10 ** BASE_TOKEN.decimals
+                label: "RWAs",
+                key: "rwas",
+                disabled: true
+              },
+              {
+                label: "Gold",
+                key: "gold",
+                disabled: true
               }
             ].map((item) => (
               <button
                 key={item.key}
                 className={clsx(
-                  "button min-w-[50px] text-center h-[34px] rounded-[8px] text-[12px] px-[10px]",
-                  allMarketsStore.tab === item.key
-                    ? "bg-[#FFC42F] text-black"
-                    : "text-[#8A87AA]"
+                  "min-w-[50px] text-center h-[34px] rounded-[8px] text-[12px] px-[10px]",
+                  allMarketsStore.tab === item.key && "bg-[#FFC42F]",
+                  item.disabled ? "text-[#8A87AA]" : "text-black button"
                 )}
                 onClick={() => {
+                  if (item.disabled) return;
                   allMarketsStore.set({
                     tab: item.key
                   });
@@ -92,6 +99,8 @@ export default function Markets() {
               </button>
             ))}
           </div>
+        </div>
+        <div className="flex items-center gap-[14px]">
           <div className="flex items-center h-[40px] p-[2px] bg-[#0000000D] border border-[#F2F2F233] rounded-[10px]">
             {[
               { label: "Live", key: "1" },
