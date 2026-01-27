@@ -193,7 +193,7 @@ export default function RechargeFrom1click() {
             )} 
                 ${chain?.symbol || walletStore.selectedToken.symbol}`}
           />
-          <div className="absolute bottom-[20px] left-0 w-full">
+          {/* <div className="absolute bottom-[20px] left-0 w-full">
             <div className="text-[12px] text-[#8A87AA] text-center font-[300]">
               Other way to deposit assets
             </div>
@@ -234,7 +234,7 @@ export default function RechargeFrom1click() {
                 />
               </svg>
             </div>
-          </div>
+          </div> */}
         </div>
       )}
     </div>
