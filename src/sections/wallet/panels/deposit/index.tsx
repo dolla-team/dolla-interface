@@ -32,14 +32,14 @@ export default function Deposit({ onBack }: { onBack: () => void }) {
         walletStore.depositMethod === "centralized-exchange" && (
           <RechargeFrom1click />
         )}
-      {walletStore.depositPanelType === "input" &&
+      {/* {walletStore.depositPanelType === "input" &&
         walletStore.depositMethod === "coinbase" && (
           <FundFromCoinbase
             onBack={() => {
               walletStore.set({ depositPanelType: "token-selector" });
             }}
           />
-        )}
+        )} */}
     </div>
   );
 }
