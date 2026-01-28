@@ -41,7 +41,7 @@ export default function Banner() {
           <div className="text-[#C57EFF]/20">NFTs</div>
         </div>
       </div>
-      <div className="absolute right-[500px] bottom-[0px] cursor-pointer group">
+      <div className="absolute right-[500px] bottom-[0px] group">
         <BannerCoin />
         <div className="absolute left-0 bottom-0 w-[262px] h-[182px] bg-[url('/home/banner-bidder-gray.png')] bg-cover bg-center opacity-100 group-hover:opacity-0 transition-opacity duration-300"></div>
         <div className="absolute left-[-30px] bottom-0 z-[2] w-[353px] h-[246px] bg-[url('/home/banner-bidder.png')] bg-cover bg-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
@@ -49,19 +49,19 @@ export default function Banner() {
           onClick={() => {
             navigate("/btc");
           }}
-          className="absolute left-[80px] bottom-[16px] z-[3] w-[152px] h-[40px] bg-[#D9D9D9] group-hover:bg-[#FFC42F] group-hover:shadow-[0px_0px_10px_0px_#FFC42F] flex items-center justify-center rounded-[12px] text-[14px] text-[#2B3337] font-[600] group-hover:animate-[pulse-scale_1s_ease-in-out_infinite]"
+          className="cursor-pointer absolute left-[80px] bottom-[16px] z-[3] w-[152px] h-[40px] bg-[#D9D9D9] group-hover:bg-[#FFC42F] group-hover:shadow-[0px_0px_10px_0px_#FFC42F] flex items-center justify-center rounded-[12px] text-[14px] text-[#2B3337] font-[600] group-hover:animate-[pulse-scale_1s_ease-in-out_infinite]"
         >
           Get Exposure
         </div>
       </div>
-      <div className="absolute right-[0px] bottom-[0px] cursor-pointer group">
+      <div className="absolute right-[0px] bottom-[0px] group">
         <div className="absolute right-[0px] bottom-0 w-[273px] h-[300px] bg-[url('/home/banner-seller-gray.png')] bg-cover bg-center opacity-100 group-hover:opacity-0 transition-opacity duration-300"></div>
         <div className="absolute right-[0px] bottom-[0px] z-[2] w-[355px] h-[300px] bg-[url('/home/banner-seller.png')] bg-cover bg-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
         <div
           onClick={() => {
             navigate("/btc/create");
           }}
-          className="absolute right-[60px] bottom-[16px] z-[3] w-[152px] h-[40px] bg-[#D9D9D9] group-hover:bg-[#00FF95] group-hover:shadow-[0px_0px_10px_0px_#00FF95] flex items-center justify-center rounded-[12px] text-[14px] text-[#2B3337] font-[600] group-hover:animate-[pulse-scale_1s_ease-in-out_infinite]"
+          className="cursor-pointer absolute right-[60px] bottom-[16px] z-[3] w-[152px] h-[40px] bg-[#D9D9D9] group-hover:bg-[#00FF95] group-hover:shadow-[0px_0px_10px_0px_#00FF95] flex items-center justify-center rounded-[12px] text-[14px] text-[#2B3337] font-[600] group-hover:animate-[pulse-scale_1s_ease-in-out_infinite]"
         >
           List
         </div>
