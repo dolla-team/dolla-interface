@@ -76,6 +76,8 @@ export default function useRecords(isScroll?: boolean) {
           businessType = "Lucky Draw";
         } else if (item.source === "CLAIM") {
           businessType = "Claim";
+        } else if (item.source === "KOL_REWARD") {
+          businessType = "Profit Share";
         }
 
         let status = item.status;
@@ -85,6 +87,10 @@ export default function useRecords(isScroll?: boolean) {
           status = "Failed";
         } else if (item.status === "REFUNDED") {
           status = "Refunded";
+        } else if (item.status === "CLAIMABLE") {
+          status = "Claimable";
+        } else if (item.status === "CLAIMAING") {
+          status = "Claiming";
         } else {
           status = "Processing";
         }
