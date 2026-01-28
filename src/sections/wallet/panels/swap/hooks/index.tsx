@@ -101,12 +101,10 @@ export function useSwap(props?: any) {
       setErrorTips("Select a token");
       return;
     }
-    if (
-      Number(inputCurrencyAmount || 0) === 0 &&
-      Number(outputCurrencyAmount || 0) === 0
-    ) {
-      setErrorTips("Enter an amount");
-      return;
+    if (Number(inputCurrencyAmount || 0) === 0) {
+      setErrorTips('Enter an amount')
+      setOutputCurrencyAmount('')
+      return
     }
     if (Big(inputCurrencyAmount || 0).gt(maxInputBalance || 0)) {
       setErrorTips(`Insufficient ${inputCurrency?.symbol} Balance`);

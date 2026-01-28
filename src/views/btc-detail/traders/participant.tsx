@@ -215,14 +215,14 @@ export default function Participant({
         className="w-full max-md:overflow-x-auto"
         rowClassName="max-md:px-0 max-md:gap-x-0"
         colClassName="max-md:bg-[#22201D]"
+        bodyClassName="h-[500px]"
+        emptyClassName="h-[510px]"
         headerColClassName="px-[25px]"
         headerRowClassName="mx-[18px]"
         bodyColClassName="max-md:first:border-r max-md:border-[#423930] px-[10px] !py-[6px]"
         bodyRowClassName="my-[6px] mx-[18px]"
         bodyRowExtraClassNameFn={(record: any) => {
-          return record.is_winner
-            ? "bg-linear-to-r from-[#FFC42F] to-[#FFFFFF] rounded-[8px]"
-            : "";
+          return record.is_winner ? 'bg-linear-to-r from-[#FFC42F] to-[#FFFFFF] rounded-[8px]' : ''
         }}
       />
       <div className="flex justify-end items-center py-[12px] max-md:justify-center pr-[30px]">
@@ -239,10 +239,10 @@ export default function Participant({
           open={!!selectedData}
           data={selectedData}
           onClose={() => {
-            setSelectedData(null);
+            setSelectedData(null)
           }}
         />
       )}
     </div>
-  );
+  )
 }

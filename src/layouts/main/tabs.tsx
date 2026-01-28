@@ -27,29 +27,27 @@ export default function PageTabs() {
   return (
     <Tabs
       tabs={[
-        { label: "Explore", key: 0 },
-        { label: "Profile", key: 1 },
-        { label: "Leaderboard", key: 2 }
+        { label: 'Explore', key: 0 },
+        { label: 'Profile', key: 1 },
+        { label: 'Leaderboard', key: 2 },
       ]}
       currentTab={tab}
       onChangeTab={(tab: any) => {
         if (!userInfo?.user) {
-          login();
-          return;
+          login()
+          return
         }
-        setTab(tab);
-        navigate(
-          tab === 0 ? "/" : tab === 1 ? "/portfolio/bidder" : "/leaderboard"
-        );
+        setTab(tab)
+        navigate(tab === 0 ? '/' : tab === 1 ? '/portfolio/bidder' : '/leaderboard')
       }}
       className="absolute left-[50%] translate-x-[-50%] w-[336px] h-[40px] p-[2px] !gap-0 rounded-[12px] backdrop-blur-[25px]"
       tabClassName={clsx(
-        "text-[14px] w-1/3 text-center h-[34px] leading-[34px] text-[#2B3337]"
+        'text-[14px] px-[30px] text-center h-[34px] leading-[34px] text-[#2B3337]'
       )}
       activeClassName="font-[600]"
       cursorClassName={clsx(
-        "!h-[4px] !w-[32px] rounded-[10px] !left-[50%] translate-x-[-50%] !bottom-[-2px] !bg-[#000]"
+        '!h-[4px] !w-[32px] rounded-[10px] !left-[50%] translate-x-[-50%] !bottom-[-2px] !bg-[#000]'
       )}
     />
-  );
+  )
 }
