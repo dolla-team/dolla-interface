@@ -44,6 +44,8 @@ export default function ResultPanel({ result, reward, onBackToAnalyze }: any) {
   const handleLogout = () => {
     if (user) {
       logout()
+    } else {
+      analysisData.init()
     }
     onBackToAnalyze()
   }

@@ -11,6 +11,7 @@ export default function LoginPanel({ onChangeHasAccount, setIsBgSpread }: any) {
   const globalStore = useGlobalStore();
   const [error, setError] = useState("");
   const [checking, setChecking] = useState(false);
+  const code = new URLSearchParams(window.location.search).get('code')
 
   // Check if email is in whitelist
   const checkWhitelist = async (
@@ -148,12 +149,14 @@ export default function LoginPanel({ onChangeHasAccount, setIsBgSpread }: any) {
           Sign In
         </Button>
       )}
-      <div
-        onClick={() => onChangeHasAccount(false)}
-        className="mt-[40px] text-center text-white text-[14px] leading-[130%] underline cursor-pointer"
-      >
-        Back
-      </div>
+      {!(code && code.length === 6) && (
+        <div
+          onClick={() => onChangeHasAccount(false)}
+          className="mt-[40px] text-center text-white text-[14px] leading-[130%] underline cursor-pointer"
+        >
+          Back
+        </div>
+      )}
     </div>
   )
 }
