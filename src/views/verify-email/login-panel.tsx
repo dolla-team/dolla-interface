@@ -131,9 +131,15 @@ export default function LoginPanel({ onChangeHasAccount, setIsBgSpread }: any) {
             </div>
           </Button>
           {!globalStore.isInWhitelist && !checking && (
-            <div className="w-[300px] h-[101px] mt-[-50px] pt-[56px] px-[4px] rounded-[10px] bg-[#FFC42F33] text-center text-[14px] text-[#FFC42F] font-[400px] leading-[120%]">
-              Sorry, your account is temporarily unavailable
-            </div>
+            <>
+              <div className="w-[300px] h-[101px] mt-[-50px] pt-[56px] px-[4px] rounded-[10px] bg-[#FFC42F33] text-center text-[14px] text-[#FFC42F] font-[400px] leading-[120%]">
+                Sorry, your account is temporarily unavailable
+              </div>
+              <div className="ml-[-40px] text-center text-[12px] text-[#8C8C8C] font-[300] w-[382px] mt-[10px]">
+                Dolla Market is currently in private alpha. A whitelisted socials & address or a
+                valid referral link is required. You can ask for a refferal link in the telegram.
+              </div>
+            </>
           )}
         </div>
       ) : (
