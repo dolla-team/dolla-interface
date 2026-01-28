@@ -9,9 +9,9 @@ import { useAllMarketsStore } from "@/stores/use-all-markets";
 export default function usePoolList(props?: {
   isScrollList?: boolean;
   tokenStatus?: number;
-  volume?: number;
+  type?: string;
 }) {
-  const { tokenStatus = 0, volume = 0 } = props ?? {};
+  const { tokenStatus = 0, type = "" } = props ?? {};
   const allmarketsStore = useAllMarketsStore();
   const [poolList, setPoolList] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -38,7 +38,7 @@ export default function usePoolList(props?: {
           allmarketsStore.status
         }&chain=${"near"}&token_status=${tokenStatus}${
           collection?.address ? "&token=" + collection.address : ""
-        }${volume ? "&volume=" + volume : ""}`
+        }`
       );
 
       let pool_ids: number[] = [];
@@ -103,7 +103,6 @@ export default function usePoolList(props?: {
     sortOrder,
     sortField,
     collection,
-    volume,
     allmarketsStore.status
   ]);
 

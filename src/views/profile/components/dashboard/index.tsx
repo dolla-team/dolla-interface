@@ -1,43 +1,41 @@
-import clsx from "clsx";
-import Avatar from "@/components/avatar";
-import { useAuth } from "@/contexts/auth";
-import dayjs from "dayjs";
-import StatisticsPlayer from "./statistics-player";
-import StatisticsSeller from "./statistics-seller";
-import Button from "@/components/button";
-import SellerLevel from "@/components/seller-level";
-import useCopy from "@/hooks/use-copy";
-import CopyIcon from "@/components/icons/copy";
-import { useGlobalStore } from "@/stores/use-global";
-import useReferralList from "@/hooks/airdrop/use-referral-list";
-import Popover, {
-  PopoverPlacement,
-  PopoverTrigger
-} from "@/components/popover";
-import PopoverCard from "../popover-card";
-import Badge from "../badge";
-import { formatNumber } from "@/utils/format/number";
-import Big from "big.js";
-import useUserInfoStore from "@/stores/use-user-info";
-import ShareModal from "@/sections/share";
-import { useState } from "react";
-import { formatAddress } from "@/utils/format/address";
+import clsx from 'clsx'
+import Avatar from '@/components/avatar'
+import { useAuth } from '@/contexts/auth'
+import dayjs from 'dayjs'
+import StatisticsPlayer from './statistics-player'
+import StatisticsSeller from './statistics-seller'
+import Button from '@/components/button'
+import SellerLevel from '@/components/seller-level'
+import useCopy from '@/hooks/use-copy'
+import CopyIcon from '@/components/icons/copy'
+import { useGlobalStore } from '@/stores/use-global'
+
+import Popover, { PopoverPlacement, PopoverTrigger } from '@/components/popover'
+import PopoverCard from '../popover-card'
+import Badge from '../badge'
+import { formatNumber } from '@/utils/format/number'
+import Big from 'big.js'
+import useUserInfoStore from '@/stores/use-user-info'
+import ShareModal from '@/sections/share'
+import { useState } from 'react'
+import { formatAddress } from '@/utils/format/address'
+import InvitedEntry from './invited/entry'
 
 const Dashboard = (props: any) => {
-  const { className, tab, pnlList, pnl } = props;
-  const globalStore = useGlobalStore();
-  const { userInfo, address, login } = useAuth();
-  const { referralData } = useReferralList();
-  const { onCopy } = useCopy();
-  const userInfoStore = useUserInfoStore();
-  const [open, setOpen] = useState(false);
+  const { className, tab, pnlList, pnl } = props
+  const globalStore = useGlobalStore()
+  const { userInfo, address, login } = useAuth()
+
+  const { onCopy } = useCopy()
+  const userInfoStore = useUserInfoStore()
+  const [open, setOpen] = useState(false)
 
   return (
     <>
       <div
         className={clsx(
-          "text-[14px] font-[400] leading-[100%] w-full p-[20px_20px_14px_13px] rounded-[20px] border border-[#E4E4E4] bg-white relative",
-          "max-md:p-[12px_10px_17px]",
+          'text-[14px] font-[400] leading-[100%] w-full p-[20px_20px_14px_13px] rounded-[20px] border border-[#E4E4E4] bg-white relative',
+          'max-md:p-[12px_10px_17px]',
           className
         )}
       >
@@ -50,17 +48,11 @@ const Dashboard = (props: any) => {
           />
           <div className="flex justify-center items-center gap-[6px] mt-[8px]">
             <div className="flex items-center gap-[6px]">
-              <div className="font-bold text-[#2B3337] text-[20px]">
-                {userInfo?.name}
-              </div>
-              {tab === "seller" && (
+              <div className="font-bold text-[#2B3337] text-[20px]">{userInfo?.name}</div>
+              {tab === 'seller' && (
                 <div className="flex items-center gap-[7px]">
                   <Popover
-                    content={
-                      <PopoverCard className="w-[140px]">
-                        Bidder Engagement
-                      </PopoverCard>
-                    }
+                    content={<PopoverCard className="w-[140px]">Bidder Engagement</PopoverCard>}
                     placement={PopoverPlacement.Top}
                     trigger={PopoverTrigger.Hover}
                     closeDelayDuration={0}
@@ -70,22 +62,15 @@ const Dashboard = (props: any) => {
                     </Badge>
                   </Popover>
                   <Popover
-                    content={
-                      <PopoverCard className="w-[140px]">
-                        Cancellation Rate
-                      </PopoverCard>
-                    }
+                    content={<PopoverCard className="w-[140px]">Cancellation Rate</PopoverCard>}
                     placement={PopoverPlacement.Top}
                     trigger={PopoverTrigger.Hover}
                     closeDelayDuration={0}
                   >
                     <Badge icon="/profile/icon-cancel.svg">
-                      {Big(userInfo?.created || 0).gt(0) &&
-                      Big(userInfo?.cancel || 0).gt(0)
+                      {Big(userInfo?.created || 0).gt(0) && Big(userInfo?.cancel || 0).gt(0)
                         ? formatNumber(
-                            Big(userInfo?.cancel)
-                              .div(userInfo?.created)
-                              .times(100),
+                            Big(userInfo?.cancel).div(userInfo?.created).times(100),
                             2,
                             true
                           )
@@ -96,7 +81,7 @@ const Dashboard = (props: any) => {
                 </div>
               )}
             </div>
-            {tab === "seller" && <SellerLevel />}
+            {tab === 'seller' && <SellerLevel />}
           </div>
           <div className="flex items-center gap-[14px] mt-[8px]">
             <div className="flex items-center gap-[3px]">
@@ -106,7 +91,7 @@ const Dashboard = (props: any) => {
               <button
                 className="button"
                 onClick={() => {
-                  onCopy(userInfo?.show_email || userInfo?.user);
+                  onCopy(userInfo?.show_email || userInfo?.user)
                 }}
               >
                 <CopyIcon />
@@ -121,10 +106,10 @@ const Dashboard = (props: any) => {
               <button
                 onClick={() => {
                   if (!address) {
-                    login();
-                    return;
+                    login()
+                    return
                   }
-                  userInfoStore.set({ showSetting: true });
+                  userInfoStore.set({ showSetting: true })
                 }}
                 className="w-[92px] h-[32px] border border-[#383F47]/30 rounded-[8px] button flex gap-[6px] items-center justify-center"
               >
@@ -143,46 +128,19 @@ const Dashboard = (props: any) => {
                 <span className="text-[12px] text-[#2B3337]">Setting</span>
               </button>
               <div className="text-[#8C8B8B] mt-[10px] text-[12px] max-md:translate-y-[15px] max-md:absolute max-md:right-[0px] max-md:bottom-[20px]">
-                Joined{" "}
-                {userInfo?.created_at
-                  ? dayjs(userInfo.created_at).format("MMMM D, YYYY")
-                  : ""}
+                Joined{' '}
+                {userInfo?.created_at ? dayjs(userInfo.created_at).format('MMMM D, YYYY') : ''}
               </div>
             </div>
             {/*#endregion*/}
             {/*#region Invite frenz*/}
             <div className="flex flex-col gap-[12px] items-end">
               <div className="flex justify-end gap-[13px] mt-[-10px] items-center">
-                {Number(referralData?.total_num) > 0 && (
-                  <>
-                    <div className="text-[#8C8B8B] text-[12px]">Invited</div>
-                    <div className="flex items-center gap-[6px] h-[32px] bg-[#F2F2F299] border border-[#E4E4E4] rounded-[16px] pl-[5px] pr-[14px]">
-                      <div className="flex items-center">
-                        {referralData.list
-                          ?.slice(0, 5)
-                          .map((item: any, index: number) => (
-                            <Avatar
-                              key={index}
-                              src={item.account_icon}
-                              address={item.account_id}
-                              size={26}
-                              className={clsx(
-                                "rounded-full border-[2px] border-[#383F47] shrink-0 text-[12px]",
-                                index > 0 && "ml-[-8px]"
-                              )}
-                            />
-                          ))}
-                      </div>
-                      <div className="[text-shaow:0px_1px_0px_#000]">
-                        {Number(referralData?.total_num) || 0}
-                      </div>
-                    </div>
-                  </>
-                )}
+                {tab === 'seller' && <InvitedEntry tab="seller" />}
                 <Button
                   className="border border-[#383F47]/30 h-[32px] w-[32px] !bg-[#F2F2F299] !rounded-full"
                   onClick={() => {
-                    setOpen(true);
+                    setOpen(true)
                   }}
                 >
                   <svg
@@ -201,32 +159,32 @@ const Dashboard = (props: any) => {
                   </svg>
                 </Button>
               </div>
-              <div className="flex items-center gap-[10px]">
-                <div className="text-[#8C8B8B] text-[12px]">Referral link</div>
-                <div className="px-[8px] flex items-center h-[32px] gap-[6px] rounded-[8px] border border-[#E4E4E4] bg-[#D9D9D94D] text-[#2B3337]">
-                  <span className="text-[12px]">
-                    {window.location.host}?code={globalStore.code}
-                  </span>
-                  <button
-                    className="button"
-                    onClick={() => {
-                      onCopy(
-                        `${window.location.origin}?code=${globalStore.code}`
-                      );
-                    }}
-                  >
-                    <CopyIcon color="#2B3337" />
-                  </button>
+              {tab === 'seller' && (
+                <div className="flex items-center gap-[10px]">
+                  <div className="text-[#8C8B8B] text-[12px]">Invite link</div>
+                  <div className="px-[8px] flex items-center h-[32px] gap-[6px] rounded-[8px] border border-[#E4E4E4] bg-[#D9D9D94D] text-[#2B3337]">
+                    <span className="text-[12px]">
+                      {window.location.host}?code={globalStore.code}
+                    </span>
+                    <button
+                      className="button"
+                      onClick={() => {
+                        onCopy(`${window.location.origin}?code=${globalStore.code}`)
+                      }}
+                    >
+                      <CopyIcon color="#2B3337" />
+                    </button>
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
             {/*#endregion*/}
           </div>
         </div>
-        {tab === "player" ? (
+        {tab === 'player' ? (
           <StatisticsPlayer
             onShare={() => {
-              onCopy(`${window.location.origin}?code=${globalStore.code}`);
+              onCopy(`${window.location.origin}?code=${globalStore.code}`)
             }}
           />
         ) : (
@@ -238,11 +196,11 @@ const Dashboard = (props: any) => {
         onClose={() => setOpen(false)}
         type="invite"
         data={{
-          code: globalStore.code
+          code: globalStore.code,
         }}
       />
     </>
-  );
-};
+  )
+}
 
-export default Dashboard;
+export default Dashboard

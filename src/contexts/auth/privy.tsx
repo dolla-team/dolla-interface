@@ -278,14 +278,17 @@ export const AuthProvider: React.FC<{
   }, [address, privyLogout, wallets, solanaWallets]);
 
   useEffect(() => {
-    if (!user) return;
-    if (!globalStore.isInWhitelist) return;
-    if (!isCompleted) return;
-    const embeddedWallet = wallets.find((w) => w.walletClientType === 'privy');
-    if (!chainType && !embeddedWallet) return;
-    updateAccount();
-    clearTimeout(window.loginTimeoutTimer);
-    (window as any).sign = sign;
+    if (!user) return
+    if (!globalStore.isInWhitelist) {
+      clearTimeout(window.loginTimeoutTimer)
+      return
+    }
+    if (!isCompleted) return
+    const embeddedWallet = wallets.find(w => w.walletClientType === 'privy')
+    if (!chainType && !embeddedWallet) return
+    updateAccount()
+    clearTimeout(window.loginTimeoutTimer)
+    ;(window as any).sign = sign
   }, [user, globalStore.isInWhitelist, isCompleted, wallets, chainType]);
 
   return (

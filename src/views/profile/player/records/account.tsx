@@ -74,9 +74,11 @@ const Account = (props: any) => {
             className={clsx(
               record.status === "Success"
                 ? "text-[#4DCF5E]"
-                : record.status === "Processing"
-                ? "text-[#FFC42F]"
-                : "text-[#FF6A8E]"
+                : record.status === "Processing" ||
+                    record.status === "Claiming" ||
+                    record.status === "Claimable"
+                  ? "text-[#FFC42F]"
+                  : "text-[#FF6A8E]"
             )}
           >
             {record.status}

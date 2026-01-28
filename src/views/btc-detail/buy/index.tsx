@@ -38,15 +38,15 @@ export default function Buy({
         </div>
       </div>
       <div className="flex items-center h-[62px] p-[6px] bg-[#0000000D] border border-[#F2F2F233] rounded-[16px] mt-[20px]">
-        {BID_UNITS.map((item) => (
+        {BID_UNITS.map(item => (
           <button
             key={item}
             className={clsx(
-              "button min-w-[50px] text-center h-[46px] rounded-[12px] text-[16px] text-black px-[30px] font-[700]",
-              bids === item ? "bg-[#FFC42F]" : ""
+              'button min-w-[50px] text-center h-[46px] rounded-[12px] text-[16px] text-black px-[30px] font-[700]',
+              bids === item ? 'bg-[#FFC42F]' : ''
             )}
             onClick={() => {
-              setBids(item);
+              setBids(item)
             }}
           >
             ${item}
@@ -56,8 +56,7 @@ export default function Buy({
       <div className="flex items-center justify-between text-[14px] text-black mt-[20px]">
         <span>Balance</span>
         <span>
-          {formatNumber(nearAccount?.balance || 0, 2, true)}{" "}
-          {QUOTE_TOKEN.symbol}
+          {formatNumber(nearAccount?.balance || 0, 2, true)} {QUOTE_TOKEN.symbol}
         </span>
       </div>
       <div className="flex items-center justify-between text-[14px] text-black mt-[20px]">
@@ -65,31 +64,37 @@ export default function Buy({
           <span>Credits</span>
           <CreditsInfo />
         </div>
-        <Points textClassName="!text-[14px] !text-black !font-[400]" />
+        <div
+          className="rounded-[12px] border border-[#E4E4E4] p-[8px]"
+          style={{
+            background:
+              'linear-gradient(270deg, rgba(255, 196, 47, 0.00) 0%, rgba(255, 196, 47, 0.20) 100%), rgba(255, 255, 255, 0.60)',
+          }}
+        >
+          <Points textClassName="!text-[14px] !text-black !font-[400]" />
+        </div>
       </div>
       <Button
         disabled={disabled || balanceNotEnough}
         loading={flipStatus === 1}
         className={clsx(
-          "w-full mt-[20px] h-[60px]  font-[700] rounded-[12px]",
-          flipStatus === 2
-            ? "!bg-[#4CB100] text-white"
-            : "!bg-[#FFC42F] text-black",
-          balanceNotEnough || flipStatus === 2 ? "!text-[16px]" : "!text-[20px]"
+          'w-full mt-[20px] h-[60px]  font-[700] rounded-[12px]',
+          flipStatus === 2 ? '!bg-[#4CB100] text-white' : '!bg-[#FFC42F] text-black',
+          balanceNotEnough || flipStatus === 2 ? '!text-[16px]' : '!text-[20px]'
         )}
         onClick={() => {
-          if (disabled || balanceNotEnough) return;
-          onBidClick();
+          if (disabled || balanceNotEnough) return
+          onBidClick()
         }}
       >
         {balanceNotEnough
-          ? "Insufficient Balance"
+          ? 'Insufficient Balance'
           : flipStatus === 1
-          ? "Bidding"
-          : flipStatus === 2
-          ? "Success"
-          : "Bid"}
+            ? 'Bidding'
+            : flipStatus === 2
+              ? 'Success'
+              : 'Bid'}
       </Button>
     </div>
-  );
+  )
 }

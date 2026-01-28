@@ -60,9 +60,11 @@ const Item = ({ data }: { data: any }) => {
                 "text-[12px]",
                 data.status === "Success"
                   ? "text-[#4DCF5E]"
-                  : data.status === "Processing"
-                  ? "text-[#FFC42F]"
-                  : "text-[#FF6A8E]"
+                  : data.status === "Processing" ||
+                      data.status === "Claiming" ||
+                      data.status === "Claimable"
+                    ? "text-[#FFC42F]"
+                    : "text-[#FF6A8E]"
               )}
             >
               {data.status}

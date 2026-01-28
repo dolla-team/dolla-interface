@@ -29,15 +29,15 @@ export default function SavedImage({
     >
       <div className="relative z-[2] pt-[68px] pl-[44px]">
         <DollaEye className="" height={64} />
-        <div className="w-[264px] mt-[40px] text-[#767676] text-[32px] leading-[180%] tracking-[-1.92px]">
+        {/* <div className="w-[264px] mt-[40px] text-[#767676] text-[32px] leading-[180%] tracking-[-1.92px]">
           <div className="border-b border-[#767676]">The first</div>
           <div className="border-b border-[#767676]">Trustless</div>
           <div className="border-b border-[#767676]">Probabilistic</div>
           <div className="border-b border-[#767676]">Marketplace.</div>
-        </div>
+        </div> */}
       </div>
       <div
-        className="absolute z-[3] top-[48px] right-[40px] w-[972px] h-[652px] p-[52px] rounded-[32px] border-[#3E300E] shadow-[0_4px_12px_0_rgba(0,0,0,0.25)_inset] backdrop-blur-[10px]"
+        className="absolute z-[3] top-[48px] right-[40px] w-[972px] h-[660px] p-[52px] rounded-[32px] border-[#3E300E] shadow-[0_4px_12px_0_rgba(0,0,0,0.25)_inset] backdrop-blur-[10px]"
         style={{
           background:
             'radial-gradient(51.7% 45.95% at 95.06% 0%, rgba(0, 255, 132, 0.50) 0%, rgba(0, 0, 0, 0.50) 100%), rgba(68, 68, 68, 0.80)',
@@ -66,7 +66,7 @@ export default function SavedImage({
             </div>
           </div>
         </div>
-        <div className="mt-[20px] flex flex-col gap-[16px]">
+        <div className="mt-[10px] flex flex-col gap-[16px]">
           {predictions?.map((prediction: any, index: number) => (
             <div
               key={index}
@@ -95,6 +95,7 @@ export default function SavedImage({
               </div>
             </div>
           ))}
+          <div className="text-center text-[20px] text-[#FFC42F]">app.dolla.market</div>
         </div>
       </div>
       <img

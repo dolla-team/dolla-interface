@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import clsx from "clsx";
+import useLoginStore from '@/stores/use-login'
 
 const Texts = [
   "69% to be investigated by @ZachXBT next",
@@ -24,6 +25,7 @@ export default function AnalyzeInputPanel({
   const [nextText, setNextText] = useState("");
   const [isAnimating, setIsAnimating] = useState(false);
   const lastIndexRef = useRef(0);
+  const loginStore = useLoginStore()
 
   useEffect(() => {
     let timeoutId: NodeJS.Timeout | null = null;
@@ -79,7 +81,10 @@ export default function AnalyzeInputPanel({
   };
   return (
     <>
-      <img src="/verify/verify-labels.png" className="absolute w-[154px] h-[122px] object-cover top-[60px] right-[20px]" />
+      <img
+        src="/verify/verify-labels.png"
+        className="absolute w-[154px] h-[122px] object-cover top-[60px] right-[20px]"
+      />
       <div className="mt-[60px] text-white text-center text-[20px] font-semibold leading-[130%] uppercase">
         attempt to get access to dolla
       </div>
@@ -94,8 +99,8 @@ export default function AnalyzeInputPanel({
               onChange={handleInputChange}
               placeholder="Enter your X profile URL"
               className={clsx(
-                "bg-transparent rounded-[8px] w-full h-full pl-[16px] text-[16px] text-[#000] border border-transparent",
-                !isValid && "!border-[#F87168]"
+                'bg-transparent rounded-[8px] w-full h-full pl-[16px] text-[16px] text-[#000] border border-transparent',
+                !isValid && '!border-[#F87168]'
               )}
               autoFocus={true}
             />
@@ -105,24 +110,30 @@ export default function AnalyzeInputPanel({
           onMouseEnter={() => setIsBgSpread(true)}
           onMouseLeave={() => setIsBgSpread(false)}
           onClick={() => {
-            if (!isValid || xProfileUrl === "") {
-              return;
+            if (!isValid || xProfileUrl === '') {
+              return
             }
-            onAnalyze();
+            onAnalyze()
+            loginStore.set({ isX: true })
           }}
           className={clsx(
-            "button w-[126px] h-[50px] text-[16px] text-[#000] rounded-[8px] bg-gradient-to-r from-[#FFCE52] to-[#FFE9B2] shadow-[3px_3px_0_0_#AB6F00]"
+            'button w-[126px] h-[50px] text-[16px] text-[#000] rounded-[8px] bg-gradient-to-r from-[#FFCE52] to-[#FFE9B2] shadow-[3px_3px_0_0_#AB6F00]'
           )}
         >
           Go
         </button>
       </div>
-      <div className="mt-[4px] text-center font-[Courier] text-[18px] font-normal leading-[120%] tracking-[-1.08px] mt-[10px] text-[#8FFFC9] overflow-hidden relative" style={{ minHeight: '22px' }}>
-        <div className="opacity-0 pointer-events-none h-[22px] flex items-center justify-center">{currentText}</div>
+      <div
+        className="mt-[4px] text-center font-[Courier] text-[18px] font-normal leading-[120%] tracking-[-1.08px] mt-[10px] text-[#8FFFC9] overflow-hidden relative"
+        style={{ minHeight: '22px' }}
+      >
+        <div className="opacity-0 pointer-events-none h-[22px] flex items-center justify-center">
+          {currentText}
+        </div>
         <div
           className={clsx(
-            "transition-all duration-300 ease-in-out absolute top-0 left-0 right-0 text-center flex items-center justify-center",
-            isAnimating ? "translate-y-[-150%] opacity-0" : "translate-y-0 opacity-100"
+            'transition-all duration-300 ease-in-out absolute top-0 left-0 right-0 text-center flex items-center justify-center',
+            isAnimating ? 'translate-y-[-150%] opacity-0' : 'translate-y-0 opacity-100'
           )}
           style={{ height: '22px' }}
         >
@@ -131,8 +142,8 @@ export default function AnalyzeInputPanel({
         {nextText && (
           <div
             className={clsx(
-              "transition-all duration-300 ease-in-out absolute top-0 left-0 right-0 text-center flex items-center justify-center",
-              isAnimating ? "translate-y-[150%] opacity-100" : "translate-y-0 opacity-0"
+              'transition-all duration-300 ease-in-out absolute top-0 left-0 right-0 text-center flex items-center justify-center',
+              isAnimating ? 'translate-y-[150%] opacity-100' : 'translate-y-0 opacity-0'
             )}
             style={{ height: '22px' }}
           >
@@ -140,9 +151,15 @@ export default function AnalyzeInputPanel({
           </div>
         )}
       </div>
-      <div onClick={() => onChangeHasAccount(true)} className="mt-[180px] text-center text-white text-[14px] leading-[130%] underline cursor-pointer">
+      <div
+        onClick={() => {
+          onChangeHasAccount(true)
+          loginStore.set({ isX: false })
+        }}
+        className="mt-[180px] text-center text-white text-[14px] leading-[130%] underline cursor-pointer"
+      >
         I already have an account
       </div>
     </>
-  );
+  )
 }
