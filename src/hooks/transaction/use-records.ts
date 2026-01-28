@@ -87,6 +87,10 @@ export default function useRecords(isScroll?: boolean) {
           status = "Failed";
         } else if (item.status === "REFUNDED") {
           status = "Refunded";
+        } else if (item.status === "CLAIMABLE") {
+          status = "Claimable";
+        } else if (item.status === "CLAIMAING") {
+          status = "Claiming";
         } else {
           status = "Processing";
         }

@@ -10,26 +10,28 @@ export default function InvitedEntry({ tab }: { tab: "player" | "seller" }) {
   const [open, setOpen] = useState(false);
 
   return (
-    Number(referralData?.total_num) > 0 && (
-      <>
-        {tab === "player" ? (
-          <PlayerInvitedEntry
-            referralData={referralData}
-            onOpen={() => setOpen(true)}
-          />
-        ) : (
+    <>
+      {tab === "player" ? (
+        <PlayerInvitedEntry
+          referralData={referralData}
+          onOpen={() => setOpen(true)}
+        />
+      ) : (
+        Number(referralData?.total_num) > 0 && (
           <SellerInvitedEntry
             referralData={referralData}
             onOpen={() => setOpen(true)}
           />
-        )}
+        )
+      )}
+      {Number(referralData?.total_num) > 0 && (
         <InvitedModal
           open={open}
           onClose={() => setOpen(false)}
           {...{ referralData, currentPage, nextPage, prevPage, loading }}
         />
-      </>
-    )
+      )}
+    </>
   );
 }
 
