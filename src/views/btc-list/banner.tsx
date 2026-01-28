@@ -1,8 +1,10 @@
 import BannerCoin from "./banner-coin";
 import { useNavigate } from "@/libs/router";
+import useDocsStore from "@/stores/use-docs";
 
 export default function Banner() {
   const navigate = useNavigate();
+  const { set } = useDocsStore();
   return (
     <div className="w-full h-[300px] relative rounded-[20px] bg-[#000]">
       <div className="flex">
@@ -16,7 +18,7 @@ export default function Banner() {
           <div
             className="flex items-center gap-[6px] button mt-[80px]"
             onClick={() => {
-              navigate("/docs");
+              set({ showModal: true });
             }}
           >
             <svg
