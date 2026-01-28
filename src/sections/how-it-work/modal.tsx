@@ -1,90 +1,146 @@
-import Button from "@/components/button";
 import Modal from "@/components/modal";
+import { motion } from "framer-motion";
+import useDocsStore from "@/stores/use-docs";
 
-export default function HowItWorkModal({
-  showModal,
-  setShowModal
-}: {
-  showModal: boolean;
-  setShowModal: (showModal: boolean) => void;
-}) {
+export default function HowItWorkModal() {
+  const { showModal, set } = useDocsStore();
   return (
-    <Modal open={showModal} onClose={() => setShowModal(false)}>
-      <div className="rounded-[16px] border border-[#E4E4E4] bg-white w-[730px]">
-        <div className="h-[54px] bg-[#000000] rounded-t-[16px] flex items-center justify-between px-[30px]">
-          <div className="text-[16px] text-white font-[600]">How it works</div>
-        </div>
-        <div className="p-[20px]">
-          <div className="text-[16px] text-[#5E6B7D] font-[300]">
-            Dolla allows <span className="text-black font-[600]">anyone</span>{" "}
-            to list assets through a{" "}
-            <span className="text-black font-[600]">fair</span>, on-chain
-            <span className="text-black font-[600]"> probabilistic market</span>
-            .
-          </div>
-          <div className="text-[16px] text-[#5E6B7D] font-[300]">
-            Every <span className="text-black font-[600]">$1 bid</span> = one
-            verifiable chance to win the entire asset from the seller.
-          </div>
-          <div
-            className="rounded-[16px] p-[16px] mt-[16px] w-full"
-            style={{
-              background:
-                "radial-gradient(36.09% 100% at 0% 0%, #FFC42F 0%, rgba(255, 196, 47, 0.00) 100%), #F5F5F5"
+    <Modal
+      isForceNormal={false}
+      className="items-end"
+      open={showModal}
+      onClose={() => set({ showModal: false })}
+    >
+      <div
+        style={{ perspective: "1000px", perspectiveOrigin: "center bottom" }}
+      >
+        <motion.div
+          className="w-[1137px] h-[693px] relative"
+          initial={{
+            rotateX: 90,
+            opacity: 0
+          }}
+          animate={{
+            rotateX: 0,
+            opacity: 1
+          }}
+          exit={{
+            rotateX: 90,
+            opacity: 0
+          }}
+          transition={{
+            duration: 0.5,
+            ease: [0.25, 0.46, 0.45, 0.94],
+            opacity: { duration: 0.5 }
+          }}
+          style={{
+            transformOrigin: "bottom center",
+            transformStyle: "preserve-3d"
+          }}
+        >
+          <button
+            onClick={() => {
+              window.open("https://docs.dolla.market/", "_blank");
             }}
+            className="button absolute z-[3] bottom-[70px] right-[510px] text-[14px] text-black font-[Courier] underline"
           >
-            <div className="flex gap-[4px]">
-              <span className="text-[16px] font-[600] w-[80px] shrink-0">
-                Step 1.{" "}
-              </span>
-              <span className="text-[16px]">Pick a market you like</span>
-            </div>
-            <div className="flex gap-[4px] mt-[10px]">
-              <span className="text-[16px] font-[600] w-[80px] shrink-0">
-                Step 2.{" "}
-              </span>
-              <span className="text-[16px]">
-                Place your bid — each bid = 1 USD = one verifiable chance
-              </span>
-            </div>
-            <div className="flex gap-[4px] mt-[10px]">
-              <span className="text-[16px] font-[600] w-[80px] shrink-0">
-                Step 3.{" "}
-              </span>
-              <span className="text-[16px]">
-                If you win, you receive the asset instantly. If not, you can bid
-                again or explore other markets
-              </span>
-            </div>
-          </div>
-          <div className="text-[16px] text-[#5E6B7D] font-[300] mt-[10px]">
-            All bids are processed through{" "}
-            <span className="text-black font-[600]">
-              verifiable on-chain randomness
-            </span>{" "}
-            (TEE + smart-contract validation).
-          </div>
-          <div className="text-[16px] text-[#5E6B7D] font-[300]">
-            No hidden odds, no unfair advantage — just mathematically fair
-            markets for everyone.
-          </div>
-          <div className="flex justify-center relative mt-[20px] gap-[20px]">
-            <Button
-              className="w-[196px] h-[50px] text-[#2B3337] border border-black"
-              onClick={() => {
-                window.open(window.location.origin + "/docs", "_blank");
-              }}
-            >
-              Read more
-            </Button>
-            <Button
-              onClick={() => setShowModal(false)}
-              className="w-[370px] h-[50px] rounded-[12px] !text-[14px] !text-black !font-[600] !bg-radial-[50%_50%_at_50%_50%,_#FFB700_0%,_#FFCE54_100%]"
-            >
-              I’m ready to win
-            </Button>
-          </div>
-        </div>
+            Read more
+          </button>
+          <img
+            src="/how-it-works.png"
+            alt="how-it-work"
+            className="w-full h-full object-cover relative z-[1]"
+          />
+          <button
+            onClick={() => set({ showModal: false })}
+            className="button absolute z-[2] top-[50px] right-[44px] bg-[url('/how-it-works/close.png')] bg-no-repeat bg-center bg-cover w-[14px] h-[14px]"
+          />
+          <motion.img
+            src="/how-it-works/woman-1.png"
+            alt="woman-1"
+            className="absolute z-[3] bottom-[-10px] right-[-96px] w-[307px] h-[318px] object-cover cursor-pointer"
+            whileHover={{
+              rotate: [-2, 2],
+              transition: {
+                duration: 0.3,
+                repeat: Infinity,
+                repeatType: "reverse",
+                ease: "easeInOut"
+              }
+            }}
+            style={{
+              transformOrigin: "center bottom"
+            }}
+          />
+          <motion.img
+            src="/how-it-works/woman-2.png"
+            alt="woman-2"
+            className="absolute z-[2] top-[20px] left-[34px] w-[305px] h-[266px] object-cover cursor-pointer"
+            whileHover={{
+              rotate: [-2, 2],
+              transition: {
+                duration: 0.3,
+                repeat: Infinity,
+                repeatType: "reverse",
+                ease: "easeInOut"
+              }
+            }}
+            style={{
+              transformOrigin: "center bottom"
+            }}
+          />
+          <motion.img
+            src="/how-it-works/tips-1.png"
+            alt="tips-1"
+            className="absolute z-[2] top-[-2px] left-[330px] w-[360px] h-[175px] object-cover cursor-pointer"
+            whileHover={{
+              rotate: [-2, 2],
+              transition: {
+                duration: 0.3,
+                repeat: Infinity,
+                repeatType: "reverse",
+                ease: "easeInOut"
+              }
+            }}
+            style={{
+              transformOrigin: "center bottom"
+            }}
+          />
+          <motion.img
+            src="/how-it-works/tips-2.png"
+            alt="tips-2"
+            className="absolute z-[2] top-[176px] left-[206px] w-[309px] h-[175px] object-cover cursor-pointer"
+            whileHover={{
+              rotate: [-2, 2],
+              transition: {
+                duration: 0.3,
+                repeat: Infinity,
+                repeatType: "reverse",
+                ease: "easeInOut"
+              }
+            }}
+            style={{
+              transformOrigin: "center bottom"
+            }}
+          />
+          <motion.img
+            src="/how-it-works/tips-3.png"
+            alt="tips-3"
+            className="absolute z-[2] top-[418px] left-[684px] w-[328px] h-[267px] object-cover cursor-pointer"
+            whileHover={{
+              rotate: [-2, 2],
+              transition: {
+                duration: 0.3,
+                repeat: Infinity,
+                repeatType: "reverse",
+                ease: "easeInOut"
+              }
+            }}
+            style={{
+              transformOrigin: "center bottom"
+            }}
+          />
+        </motion.div>
       </div>
     </Modal>
   );

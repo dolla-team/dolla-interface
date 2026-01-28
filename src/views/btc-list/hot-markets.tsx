@@ -5,14 +5,11 @@ import { useEffect, useMemo, useState, useCallback } from "react";
 import { formatNumber } from "@/utils/format/number";
 import { AMOUNT, BASE_TOKEN } from "@/config/btc";
 import { useNavigate } from "@/libs/router";
-import { getReAnchorPrice } from "@/utils/pool";
 import { useBtcCreateStore } from "@/stores/use-btc-create";
 import { motion } from "framer-motion";
 import axiosInstance from "@/libs/axios";
 import Big from "big.js";
 import { useDebounceFn } from "ahooks";
-
-const imgs = ["btc-1", "btc-0.1", "btc-0.01"];
 
 // Cache for hot markets data to avoid repeated requests
 let hotMarketsCache: {
@@ -36,65 +33,49 @@ export default function MoreMarkets() {
     return prices[0].last_price;
   }, [prices]);
 
-  // Optimized data processing function
-  const processHotMarketsData = useCallback((rawData: any[]) => {
-    const markets: any[] = new Array(AMOUNT.length).fill(null);
-
-    rawData.forEach((item: any) => {
-      const _amount = Big(item.reward_amount)
-        .div(10 ** BASE_TOKEN.decimals)
-        .toNumber();
-      const _i = AMOUNT.findIndex((amount) => amount === _amount);
-
-      if (_i !== -1) {
-        markets[_i] = item;
-      }
-    });
-
-    return markets;
-  }, []);
-
   // Fetch hot markets with caching and error handling
-  const fetchHotMarkets = useCallback(
-    async (forceRefresh = false) => {
-      // Check cache first
-      if (
-        !forceRefresh &&
-        hotMarketsCache &&
-        Date.now() - hotMarketsCache.timestamp < CACHE_DURATION
-      ) {
+  const fetchHotMarkets = useCallback(async (forceRefresh = false) => {
+    // Check cache first
+    if (
+      !forceRefresh &&
+      hotMarketsCache &&
+      Date.now() - hotMarketsCache.timestamp < CACHE_DURATION
+    ) {
+      setHotMarkets(hotMarketsCache.data);
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      const res = await axiosInstance.get("/api/v1/pool/hot/market?chain=near");
+      const processedMarkets = res?.data?.data || [];
+
+      // Update cache
+      hotMarketsCache = {
+        data: processedMarkets,
+        timestamp: Date.now()
+      };
+
+      setHotMarkets(
+        processedMarkets?.map((item: any) => {
+          const amount = Big(item.reward_amount)
+            .div(10 ** BASE_TOKEN.decimals)
+            .toNumber();
+          return { ...item, amount };
+        })
+      );
+    } catch (err) {
+      console.error("Failed to fetch hot markets:", err);
+
+      // Use cached data if available
+      if (hotMarketsCache) {
         setHotMarkets(hotMarketsCache.data);
-        return;
       }
-
-      try {
-        setLoading(true);
-
-        const res = await axiosInstance.get(
-          "/api/v1/pool/hot/market?chain=near"
-        );
-        const processedMarkets = processHotMarketsData(res?.data?.data || []);
-
-        // Update cache
-        hotMarketsCache = {
-          data: processedMarkets,
-          timestamp: Date.now()
-        };
-
-        setHotMarkets(processedMarkets);
-      } catch (err) {
-        console.error("Failed to fetch hot markets:", err);
-
-        // Use cached data if available
-        if (hotMarketsCache) {
-          setHotMarkets(hotMarketsCache.data);
-        }
-      } finally {
-        setLoading(false);
-      }
-    },
-    [processHotMarketsData]
-  );
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
   // Debounced refresh function
   const { run: refreshHotMarkets } = useDebounceFn(
@@ -114,59 +95,76 @@ export default function MoreMarkets() {
 
     return () => clearInterval(interval);
   }, [refreshHotMarkets]);
-
   return (
     <>
       <div className="flex items-center justify-between">
         <div className="text-[20px] text-black font-[700] mt-[20px] mb-[10px]">
-          🔥 Hot Markets
+          Exposure Markets
         </div>
       </div>
       <div className="flex items-center gap-[20px]">
-        {AMOUNT.map((item, index) => {
-          return (
-            <MarketItem
-              key={item}
-              value={item}
-              price={price}
-              market={hotMarkets[index] || null}
-              img={imgs[index]}
-              index={index}
-              loading={loading}
-            />
-          );
-        })}
+        <MarketItem
+          price={price}
+          market={hotMarkets[0] || null}
+          img="/home/btc-1.png"
+          loading={loading}
+          type="btc"
+        />
+        <MarketItem
+          price={0}
+          market={null}
+          img="/home/nfts.png"
+          loading={loading}
+          type="nfts"
+          disabled={true}
+        />
+        <MarketItem
+          price={0}
+          market={null}
+          img="/home/rwas.png"
+          loading={loading}
+          type="rwas"
+          disabled={true}
+        />
+        <MarketItem
+          price={0}
+          market={null}
+          img="/home/gold.png"
+          loading={loading}
+          type="gold"
+          disabled={true}
+        />
       </div>
     </>
   );
 }
 
 const MarketItem = ({
-  value,
   price,
   market,
   img,
-  index,
-  loading
+  loading,
+  type,
+  disabled = false
 }: {
-  value: number;
   price: number;
   market: any;
   img: string;
-  index: number;
   loading: boolean;
+  type: "btc" | "nfts" | "rwas" | "gold";
+  disabled?: boolean;
 }) => {
   const createStore = useBtcCreateStore();
   const navigate = useNavigate();
   const valued = useMemo(() => {
-    if (!market) return formatNumber(price * value, 2, true);
+    if (!market) return formatNumber(price * AMOUNT[0], 2, true);
     return formatNumber(market.reward_usd, 2, true);
-  }, [price, value, market]);
+  }, [price, market]);
 
   return (
     <div
       className={clsx(
-        "w-[372px] h-[200px] rounded-[16px] border border-[rgba(242,242,242,0.20)] relative group backdrop-blur-[25px]",
+        "w-[276px] h-[150px] rounded-[16px] border border-[rgba(242,242,242,0.20)] relative group backdrop-blur-[25px]",
         !market && "bg-[#0F0F0F] backdrop-blur-[25px]"
       )}
     >
@@ -180,112 +178,146 @@ const MarketItem = ({
             : ""
         }}
       />
-      <div
-        className={clsx(
-          "absolute top-0 left-0 w-full h-full rounded-[16px] z-[5] flex flex-col justify-center",
-          index === 2 ? "pl-[90px]" : "pl-[140px]"
-        )}
-      >
-        <div className="flex items-center gap-[4px]">
-          {market && (
-            <div className="flex items-center gap-[4px] text-white">
-              <ParticipantsIcon />
-              <span>{market?.participants}</span>
-            </div>
-          )}
-          <div className="text-[14px] text-white">Bid for</div>
-        </div>
+      {type === "btc" ? (
         <div
           className={clsx(
-            `
-            text-[32px] font-[500]
+            "absolute top-0 left-0 w-full h-full rounded-[16px] z-[5] flex flex-col justify-center pl-[100px]"
+          )}
+        >
+          <div className="flex items-center gap-[4px] text-[14px] text-white">
+            {market && (
+              <div className="flex items-center gap-[4px]">
+                <ParticipantsIcon />
+                <span>{market?.participants}</span>
+              </div>
+            )}
+            <div>Bid for</div>
+          </div>
+          <div
+            className={clsx(
+              `
+            text-[26px] font-[500]
             bg-clip-text
             text-transparent
             [background-clip:text]
             [-webkit-background-clip:text]
             [-webkit-text-fill-color:transparent]
           `,
-            market
-              ? "bg-gradient-to-b from-[#FFC42F] to-[#FFE39C]"
-              : "bg-gradient-to-b from-[#7F7F7F] to-[#A0A0A0]"
-          )}
-        >
-          {value} {BASE_TOKEN.symbol}
-        </div>
-        <div className="flex items-center gap-[4px] text-[14px]">
-          <span className="text-white">Valued</span>
-          <span
-            className={clsx(
-              `
+              market
+                ? "bg-gradient-to-b from-[#FFC42F] to-[#FFE39C]"
+                : "bg-gradient-to-b from-[#7F7F7F] to-[#A0A0A0]"
+            )}
+          >
+            {market?.amount} {BASE_TOKEN.symbol}
+          </div>
+          <div className="flex items-center gap-[4px] text-[14px]">
+            <span className="text-white">Valued</span>
+            <span
+              className={clsx(
+                `
               bg-clip-text
               text-transparent
               [background-clip:text]
               [-webkit-background-clip:text]
               [-webkit-text-fill-color:transparent]
               `,
-              market
-                ? "bg-[linear-gradient(180deg,_#FFC42F_0%,_#FFE39C_100%)]"
-                : "bg-[linear-gradient(180deg,_#8E8E8E_0%,_#BDBDBD_100%)]"
-            )}
-          >
-            ${valued}
-          </span>
+                market
+                  ? "bg-[linear-gradient(180deg,_#FFC42F_0%,_#FFE39C_100%)]"
+                  : "bg-[linear-gradient(180deg,_#8E8E8E_0%,_#BDBDBD_100%)]"
+              )}
+            >
+              ${valued}
+            </span>
+          </div>
         </div>
-      </div>
+      ) : (
+        <div className="absolute top-0 left-0 opacity-30 w-full h-full rounded-[16px] z-[5] flex flex-col justify-center pl-[100px]">
+          <div className="text-[30px] font-[700] leading-[90%]">
+            {type === "nfts" && <span className="text-[#C57EFF]">NFTs</span>}
+            {type === "rwas" && <span className="text-[#7BFF7B]">RWAS</span>}
+            {type === "gold" && <span className="text-[#FFDD00]">GOLD</span>}
+          </div>
+          <div className="text-[20px] font-[700] leading-[90%] text-[#D9D9D9] mt-[4px]">
+            markets
+          </div>
+        </div>
+      )}
       <div
         className={clsx(
-          "absolute top-0 left-0 w-full h-full rounded-[16px] z-[2] bg-cover bg-center",
-          !market && "grayscale"
+          "absolute top-0 left-0 rounded-[16px] z-[2] bg-cover bg-center",
+          !market && type === "btc" && "grayscale",
+          type === "btc"
+            ? "w-full h-full"
+            : type === "nfts"
+              ? "w-[100px] h-[150px]"
+              : "w-[96px] h-[150px]"
         )}
         style={{
-          backgroundImage: `url('/home/${img}.png')`
+          backgroundImage: `url('${img}')`
         }}
       />
-      <div className="opacity-0 absolute top-0 left-0 z-[10] bg-[#0000004D] backdrop-blur-[25px] group-hover:opacity-100 duration-300 w-full h-full rounded-[16px] flex flex-col items-center justify-center">
-        {loading ? (
-          <div className="text-[#8A87AA] text-[14px] mb-[10px]">Loading...</div>
-        ) : !market ? (
-          <div className="text-[#8A87AA] text-[14px] mb-[10px]">
-            Nothing here
-          </div>
-        ) : (
-          <>
-            <div className="text-[12px] text-white">Hottest market</div>
-            <div className="flex items-center mb-[10px] mt-[4px]">
-              <img src="/fire.gif" className="w-[30px] h-[30px]" />
-              <span className="text-[18px] text-white font-bold mt-[2px]">
-                #{market?.pool_id}
-              </span>
+      {!disabled ? (
+        <div className="opacity-0 absolute top-0 left-0 z-[10] bg-[#0000004D] backdrop-blur-[25px] group-hover:opacity-100 duration-300 w-full h-full rounded-[16px] flex flex-col items-center justify-center">
+          {loading ? (
+            <div className="text-[#8A87AA] text-[14px] mb-[10px]">
+              Loading...
             </div>
-          </>
-        )}
-        <motion.div
-          animate={{
-            scale: [0.9, 1, 0.9]
-          }}
-          transition={{
-            duration: 2,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
-        >
-          <Button
-            className="w-[160px] h-[42px] !bg-[#FFC42F]"
-            onClick={() => {
-              if (!market) {
-                createStore.set({
-                  amount: value
-                });
-                navigate("/btc/create");
-                return;
-              }
-              navigate("/btc/" + market.pool_id);
+          ) : !market ? (
+            <div className="text-[#8A87AA] text-[14px] mb-[10px]">
+              Nothing here
+            </div>
+          ) : (
+            <>
+              <div className="text-[12px] text-white">Hottest market</div>
+              <div className="flex items-center mb-[10px] mt-[4px]">
+                <img src="/fire.gif" className="w-[30px] h-[30px]" />
+                <span className="text-[18px] text-white font-bold mt-[2px]">
+                  #{market?.pool_id}
+                </span>
+              </div>
+            </>
+          )}
+          <motion.div
+            animate={{
+              scale: [0.9, 1, 0.9]
+            }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              ease: "easeInOut"
             }}
           >
-            {market ? "Bid Now" : "Launch a Market"}
-          </Button>
-        </motion.div>
-      </div>
+            <Button
+              className="w-[160px] h-[42px] !bg-[#FFC42F]"
+              onClick={() => {
+                if (!market) {
+                  createStore.set({
+                    amount: market?.amount
+                  });
+                  navigate("/btc/create");
+                  return;
+                }
+                navigate("/btc/" + market.pool_id);
+              }}
+            >
+              {market ? "Bid Now" : "Launch a Market"}
+            </Button>
+          </motion.div>
+        </div>
+      ) : (
+        <>
+          <div
+            className="absolute w-full h-full top-0 left-0 z-[1] backdrop-blur-[25px] rounded-[16px]"
+            style={{
+              background:
+                "radial-gradient(61.75% 61.75% at 50% 100%, rgba(140, 139, 139, 0.60) 0%, rgba(0, 0, 0, 0.00) 100%), #000"
+            }}
+          />
+          <div className="absolute top-0 left-0 w-full h-full rounded-[16px] z-[5] flex flex-col justify-center pl-[90px]">
+            <div className="text-[14px] text-white">Coming soon...</div>
+          </div>
+        </>
+      )}
     </div>
   );
 };
@@ -294,8 +326,8 @@ const ParticipantsIcon = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="12"
-      height="13"
+      width="10"
+      height="12"
       viewBox="0 0 12 13"
       fill="none"
     >

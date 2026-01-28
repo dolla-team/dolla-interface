@@ -4,11 +4,10 @@ export default function BannerCoin() {
   return (
     <motion.svg
       xmlns="http://www.w3.org/2000/svg"
-      width="155"
-      height="142"
+      width="120"
       viewBox="0 0 155 142"
       fill="none"
-      className="absolute top-[-20px] z-[10]"
+      className="absolute top-[-320px] z-[10]"
       animate={{
         y: [0, -10, 0]
       }}
