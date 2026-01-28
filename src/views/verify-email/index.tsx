@@ -1,6 +1,6 @@
 import DollaEye from "@/components/dolla-eye";
 import { motion } from "framer-motion";
-import { TgIcon, TwitterIcon } from "./social-icons";
+import { TgIcon, TwitterIcon, GitBookIcon } from './social-icons'
 import { LineIcon } from "./icons";
 import AnalyzePanel from "./analyze-panel";
 import BlackholeBg from "./bg";
@@ -20,55 +20,52 @@ export default function VerifyEmail() {
 
 
   return (
-    <div
-      className="w-screen h-screen relative overflow-hidden"
-      id="verify-email-container"
-    >
-      <div className="w-full h-full flex items-end justify-center gap-[30px] relative z-[2] overflow-hidden" style={{
-        background:
-          "radial-gradient(27.11% 21.64% at 74.31% 34.42%, rgba(255, 196, 47, 0.40) 0%, rgba(255, 196, 47, 0.00) 100%), #000"
-      }}>
+    <div className="w-screen h-screen relative overflow-hidden" id="verify-email-container">
+      <div
+        className="w-full h-full flex items-end justify-center gap-[30px] relative z-[2] overflow-hidden"
+        style={{
+          background:
+            'radial-gradient(27.11% 21.64% at 74.31% 34.42%, rgba(255, 196, 47, 0.40) 0%, rgba(255, 196, 47, 0.00) 100%), #000',
+        }}
+      >
         <div className="w-full h-full pointer-events-none overflow-hidden absolute top-0 left-0 opacity-[0.07]">
           <motion.div
             className="w-[500%] h-[500%] bg-[url('/bg-noise.png')] [inset:-200%] absolute will-change-transform"
             animate={{
-              translateX: [0, "-5%", "5%", "-10%", "10%", "-15%", "15%", 0],
-              translateY: [0, "15%", "-15%", "10%", "-10%", "5%", "-5%", 0]
+              translateX: [0, '-5%', '5%', '-10%', '10%', '-15%', '15%', 0],
+              translateY: [0, '15%', '-15%', '10%', '-10%', '5%', '-5%', 0],
             }}
             transition={{
               duration: 1,
               repeat: Infinity,
-              ease: "linear"
+              ease: 'linear',
             }}
           />
         </div>
         <div className="w-[613px] h-[420px] relative shrink-1 z-[2]">
-          <img
-            src="/verify/verify-woman.png"
-            className="w-full h-full object-cover"
-          />
+          <img src="/verify/verify-woman.png" className="w-full h-full object-cover" />
           <motion.img
             src="/verify/verify-usdt.png"
             className="absolute top-[60px] left-[10px] w-[76px] h-[89px] object-cover"
             animate={{
-              y: [0, -10, 0]
+              y: [0, -10, 0],
             }}
             transition={{
               duration: 2,
               repeat: Infinity,
-              ease: "easeInOut"
+              ease: 'easeInOut',
             }}
           />
           <motion.img
             src="/verify/verify-btc.png"
             className="absolute top-[-360px] right-[-60px] w-[245px] h-[244px] object-cover"
             animate={{
-              y: [0, -10, 0]
+              y: [0, -10, 0],
             }}
             transition={{
               duration: 2,
               repeat: Infinity,
-              ease: "easeInOut"
+              ease: 'easeInOut',
             }}
           />
           <LineIcon />
@@ -77,31 +74,49 @@ export default function VerifyEmail() {
           <BlackholeBg isSpread={isBgSpread} />
           <div className="flex flex-col items-center relative z-[2]">
             <DollaEye className="" height={86} />
-            {hasAccount ? <LoginPanel onChangeHasAccount={onChangeHasAccount} setIsBgSpread={setIsBgSpread} hasAccount={hasAccount} /> : <AnalyzePanel hasAccount={hasAccount} setIsBgSpread={setIsBgSpread} onChangeHasAccount={onChangeHasAccount} />}
+            {hasAccount ? (
+              <LoginPanel
+                onChangeHasAccount={onChangeHasAccount}
+                setIsBgSpread={setIsBgSpread}
+                hasAccount={hasAccount}
+              />
+            ) : (
+              <AnalyzePanel
+                hasAccount={hasAccount}
+                setIsBgSpread={setIsBgSpread}
+                onChangeHasAccount={onChangeHasAccount}
+              />
+            )}
 
             <div className="absolute bottom-[0px] w-full flex items-center justify-center gap-[50px] pr-[30px]">
               <button
                 className="button flex items-center gap-[4px]"
                 onClick={() => {
-                  window.open("https://x.com/Dollamarket", "_blank");
+                  window.open('https://x.com/Dollamarket', '_blank')
                 }}
               >
                 <TwitterIcon />
-                <span className="text-[#8A87AA] text-[14px]">Twitter</span>
               </button>
               <button
                 className="button flex items-center gap-[4px]"
                 onClick={() => {
-                  window.open("https://t.me/+rlArBTaYhw8zNDM1", "_blank");
+                  window.open('https://t.me/+rlArBTaYhw8zNDM1', '_blank')
                 }}
               >
                 <TgIcon />
-                <span className="text-[#8A87AA] text-[14px]">Telegram</span>
+              </button>
+              <button
+                className="button flex items-center gap-[4px]"
+                onClick={() => {
+                  window.open('https://docs.dolla.market/', '_blank')
+                }}
+              >
+                <GitBookIcon />
               </button>
             </div>
           </div>
         </div>
       </div>
     </div>
-  );
+  )
 }

@@ -1,10 +1,14 @@
 import axiosInstance from "@/libs/axios";
 import { useGlobalStore } from "@/stores/use-global";
 import { useEffect } from "react";
+import { useVerifyStore } from '@/stores/use-verify'
+import useLoginStore from '@/stores/use-login'
 
 export default function useCode(userInfo?: any) {
   const globalStore = useGlobalStore();
   const code = new URLSearchParams(window.location.search).get("code");
+  const verifyStore = useVerifyStore()
+  const loginStore = useLoginStore()
 
   const getCode = async () => {
     if (globalStore.code) {
@@ -28,10 +32,17 @@ export default function useCode(userInfo?: any) {
   };
 
   useEffect(() => {
-    if (userInfo?.user && code) {
-      bindingCode();
+    if (userInfo?.user && code && code.length === 6) {
+      bindingCode()
     }
   }, [userInfo?.user, code]);
+
+  useEffect(() => {
+    if (code && code.length === 6) {
+      verifyStore.set({ hasAccount: true })
+      loginStore.set({ isX: false })
+    }
+  }, [code])
 
   useEffect(() => {
     if (userInfo?.user) {
