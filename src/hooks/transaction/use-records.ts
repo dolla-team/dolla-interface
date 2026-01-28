@@ -76,6 +76,8 @@ export default function useRecords(isScroll?: boolean) {
           businessType = "Lucky Draw";
         } else if (item.source === "CLAIM") {
           businessType = "Claim";
+        } else if (item.source === "KOL_REWARD") {
+          businessType = "Profit Share";
         }
 
         let status = item.status;

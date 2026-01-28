@@ -54,12 +54,12 @@ export default function ReferralPanel() {
             {Big(claimableAmount.totalUsd || 0).gt(0) ? (
               <CommissionInfo data={claimableAmount.tokens}>
                 <div className="text-[#000] text-[14px] font-[700] mt-[6px] underline button">
-                  ${formatNumber(claimableAmount.totalUsd || 0, 2, true)}
+                  ~${formatNumber(claimableAmount.totalUsd || 0, 2, true)}
                 </div>
               </CommissionInfo>
             ) : (
-              <div className="text-[#000] text-[14px] font-[700] mt-[6px]">
-                0.00
+              <div className="text-[#000] text-[14px] font-[700] mt-[6px] opacity-30">
+                $0
               </div>
             )}
           </div>
@@ -103,10 +103,11 @@ export default function ReferralPanel() {
                     "text-[#000] text-[14px] font-[700]",
                     Big(claimableAmount.totalClaimable || 0).gt(0)
                       ? "underline button"
-                      : ""
+                      : "opacity-30"
                   )}
                 >
-                  ${formatNumber(claimableAmount.totalClaimable || 0, 2, true)}
+                  {Big(claimableAmount.totalClaimable || 0).gt(0) && "~"}$
+                  {formatNumber(claimableAmount.totalClaimable || 0, 2, true)}
                 </span>
                 {Big(claimableAmount.totalClaimable || 0).gt(0) && (
                   <svg

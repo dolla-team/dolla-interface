@@ -40,7 +40,11 @@ const PlayerInvitedEntry = ({
   referralData: any;
   onOpen: () => void;
 }) => {
-  return (
+  return referralData?.total_num === 0 ? (
+    <div className="w-full h-[40px] rounded-[10px] border border-[#E4E4E4] bg-white flex items-center justify-center text-[12px] text-[#2B3337] opacity-30">
+      You didn’t invite anyone.
+    </div>
+  ) : (
     <div
       onClick={() => onOpen()}
       className="flex items-center justify-between h-[40px] bg-[#FFFFFF4D] border border-[#E4E4E4] rounded-[10px] p-[8px] button"
