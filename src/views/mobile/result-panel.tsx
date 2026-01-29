@@ -15,7 +15,7 @@ export default function ResultPanel({ setXProfileUrl }: any) {
     setXProfileUrl('')
   }
   return (
-    <div className="pt-[20px] pb-[20px] relative overflow-y-auto h-screen">
+    <div className="pt-[20px] pb-[20px] relative">
       <BackButton onClick={handleLogout} className="fixed z-[5] top-[20px] left-[10px]" />
       <div className="flex justify-center">
         <DollaEye height={34} />

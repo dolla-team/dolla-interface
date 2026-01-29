@@ -8,8 +8,8 @@ export default function Mobile() {
   const analysisData = useAnalysisDataStore()
   const { isValid, xProfileUrl, handle, setXProfileUrl, onAnalyze } = useAnalysis()
   return (
-    <div className="relative w-screen h-screen overflow-hidden" id="verify-email-container">
-      <div className="relative z-[2] bg-black h-screen">
+    <div className="relative overflow-y-auto overflow-x-hidden" id="verify-email-container">
+      <div className="relative z-[2] bg-black h-full">
         {analysisData.status === 'result' ? (
           <ResultPanel setXProfileUrl={setXProfileUrl} />
         ) : (
