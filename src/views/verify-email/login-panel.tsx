@@ -64,12 +64,11 @@ export default function LoginPanel({ onChangeHasAccount, setIsBgSpread }: any) {
 
       if (!isWhitelisted) {
         setError("You don't have permission");
-        setChecking(false);
-        return;
+        setChecking(false)
       }
       globalStore.set({
-        isInWhitelist: true
-      });
+        isInWhitelist: isWhitelisted,
+      })
     } catch (err: any) {
       setError(String(err) || "Failed to send code");
     } finally {
