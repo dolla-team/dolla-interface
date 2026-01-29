@@ -38,9 +38,8 @@ export const AuthProvider: React.FC<{
   const [isCompleted, setIsCompleted] = useState(false);
   const { login: privyLogin } = usePrivyLogin({
     onComplete: async () => {
-      console.log('privy login complete', wallets, user);
-      setIsCompleted(true);
-      clearTimeout(window.loginTimeoutTimer)
+      console.log('privy login complete', wallets, user)
+      setIsCompleted(true)
     }
   });
   const verifyStore = useVerifyStore();
@@ -283,11 +282,12 @@ export const AuthProvider: React.FC<{
       () => {
         setShowTimeoutModal(true)
       },
-      1000 * 60 * 2
+      1000 * 60 * 1
     )
     if (!isCompleted) return
     const embeddedWallet = wallets.find(w => w.walletClientType === 'privy')
     if (!chainType && !embeddedWallet) return
+    clearTimeout(window.loginTimeoutTimer)
     updateAccount()
     ;(window as any).sign = sign
   }, [user, globalStore.isInWhitelist, isCompleted, wallets, chainType]);
