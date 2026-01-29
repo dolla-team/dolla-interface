@@ -13,6 +13,7 @@ import VerifyEmail from "./views/verify-email";
 import { useGlobalStore } from "@/stores/use-global";
 import ErrorPage from "./views/error-page";
 import { useBidResultSubscription } from "@/hooks/use-websocket";
+import useIsMobile from '@/hooks/use-is-mobile'
 // import "react-toastify/dist/ReactToastify.css";
 
 import MainLayout from "./layouts/main";
@@ -33,6 +34,7 @@ const LazyPolicy = lazy(() => import("./views/policy"));
 const LazyDocs = lazy(() => import("./views/docs"));
 const LazyTemp = lazy(() => import("./views/temp"));
 const LazyLeaderboard = lazy(() => import("./views/leaderboard"));
+const LazyMobile = lazy(() => import('./views/mobile'))
 
 import("react-toastify/dist/ReactToastify.css");
 
@@ -117,28 +119,29 @@ const router = createBrowserRouter([
 ]);
 
 const Content = () => {
-  const [isLoading, setIsLoading] = useState(true);
-  const { ready } = usePrivy();
-  const { user } = useUser();
-  const globalStore = useGlobalStore();
+  const [isLoading, setIsLoading] = useState(true)
+  const { ready } = usePrivy()
+  const { user } = useUser()
+  const globalStore = useGlobalStore()
+
 
   useEffect(() => {
     if (!ready) {
-      return;
+      return
     }
 
     if (!user) {
-      setIsLoading(false);
-      return;
+      setIsLoading(false)
+      return
     }
 
     setTimeout(() => {
-      setIsLoading(false);
-    }, 2000);
-  }, [ready, user]);
+      setIsLoading(false)
+    }, 2000)
+  }, [ready, user])
 
-  if (window.location.pathname === "/docs") {
-    return <RouterProvider router={router} />;
+  if (window.location.pathname === '/docs') {
+    return <RouterProvider router={router} />
   }
 
   return isLoading ? (
@@ -147,7 +150,7 @@ const Content = () => {
     <VerifyEmail />
   ) : (
     <RouterContent />
-  );
+  )
 };
 
 const RouterContent = () => {
@@ -156,26 +159,31 @@ const RouterContent = () => {
 };
 
 function App() {
+  const isMobile = useIsMobile()
   return (
     <DollaEyeContextProvider>
-      <WalletProvider>
-        <AuthProvider>
-          <Content />
-        </AuthProvider>
-      </WalletProvider>
+      {isMobile ? (
+        <LazyMobile />
+      ) : (
+        <WalletProvider>
+          <AuthProvider>
+            <Content />
+          </AuthProvider>
+        </WalletProvider>
+      )}
       <ToastContainer
         position="top-right"
         autoClose={5000}
         hideProgressBar={true}
         theme="light"
-        toastStyle={{ backgroundColor: "transparent", boxShadow: "none" }}
+        toastStyle={{ backgroundColor: 'transparent', boxShadow: 'none' }}
         newestOnTop
         rtl={false}
         pauseOnFocusLoss
         closeButton={false}
       />
     </DollaEyeContextProvider>
-  );
+  )
 }
 
 export default App;

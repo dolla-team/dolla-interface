@@ -1,23 +1,22 @@
-import DollaEye from "@/components/dolla-eye";
-import { motion } from "framer-motion";
-import { TgIcon, TwitterIcon, GitBookIcon } from './social-icons'
-import { LineIcon } from "./icons";
-import AnalyzePanel from "./analyze-panel";
-import BlackholeBg from "./bg";
-import LoginPanel from "./login-panel";
-import { useVerifyStore } from "@/stores/use-verify";
+import DollaEye from '@/components/dolla-eye'
+import { motion } from 'framer-motion'
+import { LineIcon } from './icons'
+import AnalyzePanel from './analyze-panel'
+import BlackholeBg from './bg'
+import LoginPanel from './login-panel'
+import { useVerifyStore } from '@/stores/use-verify'
+import SocialLinks from './social-links'
 
 export default function VerifyEmail() {
-  const { hasAccount, isBgSpread, set } = useVerifyStore();
+  const { hasAccount, isBgSpread, set } = useVerifyStore()
 
   const onChangeHasAccount = (value: boolean) => {
-    set({ hasAccount: value });
+    set({ hasAccount: value })
   }
 
   const setIsBgSpread = (value: boolean) => {
-    set({ isBgSpread: value });
+    set({ isBgSpread: value })
   }
-
 
   return (
     <div className="w-screen h-screen relative overflow-hidden" id="verify-email-container">
@@ -68,7 +67,7 @@ export default function VerifyEmail() {
               ease: 'easeInOut',
             }}
           />
-          <LineIcon />
+          <LineIcon className="absolute left-[60px] top-[-230px] w-[343px] h-[248px]" />
         </div>
         <div className="pb-[40px] w-[780px] shrink-0 relative">
           <BlackholeBg isSpread={isBgSpread} />
@@ -87,33 +86,7 @@ export default function VerifyEmail() {
                 onChangeHasAccount={onChangeHasAccount}
               />
             )}
-
-            <div className="absolute bottom-[0px] w-full flex items-center justify-center gap-[50px] pr-[30px]">
-              <button
-                className="button flex items-center gap-[4px]"
-                onClick={() => {
-                  window.open('https://x.com/Dollamarket', '_blank')
-                }}
-              >
-                <TwitterIcon />
-              </button>
-              <button
-                className="button flex items-center gap-[4px]"
-                onClick={() => {
-                  window.open('https://t.me/+rlArBTaYhw8zNDM1', '_blank')
-                }}
-              >
-                <TgIcon />
-              </button>
-              <button
-                className="button flex items-center gap-[4px]"
-                onClick={() => {
-                  window.open('https://docs.dolla.market/', '_blank')
-                }}
-              >
-                <GitBookIcon />
-              </button>
-            </div>
+            <SocialLinks className="absolute bottom-[0px] w-full flex items-center justify-center gap-[50px] pr-[30px]" />
           </div>
         </div>
       </div>

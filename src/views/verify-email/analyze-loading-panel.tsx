@@ -2,19 +2,21 @@ import { motion } from "framer-motion";
 import clsx from "clsx";
 import { useEffect, useMemo, useRef, useState } from "react";
 import Typewriter from "./typewriter";
+import useIsMobile from '@/hooks/use-is-mobile'
 
-const Texts = [
-  "Scanning Meme Signals…",
-  "Detecting Degen Frequency…",
-  "Generating personalized predictions…",
-  "Syncing with Dolla Random Engine…"
-];
+export const Texts = [
+  'Scanning Meme Signals…',
+  'Detecting Degen Frequency…',
+  'Generating personalized predictions…',
+  'Syncing with Dolla Random Engine…',
+]
 
 export default function LoadingPanel({ handle, onRetry }: any) {
   const [showBusyMessage, setShowBusyMessage] = useState(false);
   const [showRetryButton, setShowRetryButton] = useState(true);
   const [retryKey, setRetryKey] = useState(0);
   const startTimeRef = useRef<number>(Date.now());
+  const isMobile = useIsMobile()
 
   useEffect(() => {
     startTimeRef.current = Date.now();
@@ -49,55 +51,74 @@ export default function LoadingPanel({ handle, onRetry }: any) {
 
   return (
     <>
-      <div className="text-[26px] text-[#FFC42F] mt-[100px] mb-[40px]">
-        Looking into <span className="text-[#37C2FF]">@{handle}</span>'s inner soul...
-      </div>
+      {!isMobile && (
+        <div className="text-[26px] text-[#FFC42F] mt-[100px] mb-[40px]">
+          Looking into <span className="text-[#37C2FF]">@{handle}</span>'s inner soul...
+        </div>
+      )}
       {showBusyMessage ? (
         <div className="text-[16px] text-[#FFC42F] mt-[8px] animate-pulse text-center">
-          {showRetryButton ? "This request timed out. Please tap Retry to try again." : <>
-            <div>Too much attention at once.</div>
-            <div>Dolla social checks are running hot. Your score’s in line — give us a sec.</div>
-          </>}
+          {showRetryButton ? (
+            'This request timed out. Please tap Retry to try again.'
+          ) : (
+            <>
+              <div>Too much attention at once.</div>
+              <div>Dolla social checks are running hot. Your score’s in line — give us a sec.</div>
+            </>
+          )}
         </div>
-      ) : <div className="relative">
-        <div className="rounded-[6px] relative z-[2] bg-gradient-to-r from-[#FFCC49] to-[#564210] shadow-[0_0_10px_0_rgba(255,206,82,0.5)] p-[1px]">
-          <div className="w-[460px] h-[58px] text-[20px] text-[#FFDB7E] relative overflow-hidden mx-auto text-center leading-[58px] rounded-[7px] bg-gradient-to-r from-[#4B433A] to-[#423424]">
-            <Typewriter texts={Texts} />
-            <motion.div
-              className="absolute top-0 w-[30%] h-full blur-[10px]"
-              style={{
-                background:
-                  "linear-gradient(90deg, rgba(27, 27, 27, 0.00) 0%, rgba(255, 206, 82, 0.30) 50.96%, rgba(27, 27, 27, 0.00) 100%)"
-              }}
-              animate={{
-                x: ["-100%", "300%"]
-              }}
-              transition={{
-                duration: 2,
-                repeat: Infinity,
-                ease: "linear"
-              }}
-            />
+      ) : (
+        <div className="relative">
+          <div className="rounded-[6px] relative z-[2] bg-gradient-to-r from-[#FFCC49] to-[#564210] shadow-[0_0_10px_0_rgba(255,206,82,0.5)] p-[1px]">
+            <div
+              className={clsx(
+                'text-[#FFDB7E] relative overflow-hidden mx-auto text-center rounded-[7px] bg-gradient-to-r from-[#4B433A] to-[#423424]',
+                isMobile
+                  ? 'w-[348px] h-[50px] text-[14px] leading-[50px]'
+                  : 'w-[460px] h-[58px] text-[20px] leading-[58px]'
+              )}
+            >
+              <Typewriter texts={Texts} />
+              <motion.div
+                className="absolute top-0 w-[30%] h-full blur-[10px]"
+                style={{
+                  background:
+                    'linear-gradient(90deg, rgba(27, 27, 27, 0.00) 0%, rgba(255, 206, 82, 0.30) 50.96%, rgba(27, 27, 27, 0.00) 100%)',
+                }}
+                animate={{
+                  x: ['-100%', '300%'],
+                }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  ease: 'linear',
+                }}
+              />
+            </div>
           </div>
+          <motion.div
+            className="absolute top-[1px] left-[50%] translate-x-[-50%] blur-[10px] h-[56px]"
+            style={{
+              background:
+                'linear-gradient(90deg, rgba(27, 27, 27, 0.00) 0%, rgba(255, 206, 82, 0.30) 50.96%, rgba(27, 27, 27, 0.00) 100%)',
+            }}
+            animate={{
+              width: [400, 900, 400],
+            }}
+            transition={{
+              duration: 3,
+              repeat: Infinity,
+              ease: 'easeInOut',
+            }}
+          />
         </div>
-        <motion.div
-          className="absolute top-[1px] left-[50%] translate-x-[-50%] blur-[10px] h-[56px]"
-          style={{
-            background: "linear-gradient(90deg, rgba(27, 27, 27, 0.00) 0%, rgba(255, 206, 82, 0.30) 50.96%, rgba(27, 27, 27, 0.00) 100%)"
-          }}
-          animate={{
-            width: [400, 900, 400]
-          }}
-          transition={{
-            duration: 3,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
-        />
-      </div>}
-
-
-      <div className="mt-[40px]">
+      )}
+      {isMobile && (
+        <div className="text-[16px] text-[#FFC42F] mt-[40px] mb-[20px]">
+          Looking into <span className="text-[#37C2FF]">@{handle}</span>'s inner soul...
+        </div>
+      )}
+      <div className={clsx(isMobile ? 'mt-[0px]' : 'mt-[40px]')}>
         {showRetryButton ? (
           <motion.button
             initial={{ opacity: 0, y: 10 }}
@@ -107,26 +128,28 @@ export default function LoadingPanel({ handle, onRetry }: any) {
           >
             Retry
           </motion.button>
-        ) : <ProgressBar />}
+        ) : (
+          <ProgressBar isMobile={isMobile} />
+        )}
       </div>
     </>
-  );
+  )
 }
 
-const ProgressBar = () => {
-  const progressInnerRef = useRef<any>(null);
-  const [progressWidth, setProgressWidth] = useState(0);
+const ProgressBar = ({ isMobile }: { isMobile: boolean }) => {
+  const progressInnerRef = useRef<any>(null)
+  const [progressWidth, setProgressWidth] = useState(0)
   const particles = useMemo(
     () =>
       Array.from({ length: 12 }, (_, i) => {
-        const size = Math.random() * 2 + 1;
-        const delay = Math.random() * 0.3;
-        const duration = Math.random() * 0.6 + 0.4;
-        const angle = (Math.random() * 60 - 30) * (Math.PI / 180);
-        const distance = 30 + Math.random() * 20;
-        const x = -Math.abs(Math.cos(angle) * distance);
-        const y = Math.sin(angle) * distance;
-        const top = Math.random() * 12 - 6;
+        const size = Math.random() * 2 + 1
+        const delay = Math.random() * 0.3
+        const duration = Math.random() * 0.6 + 0.4
+        const angle = (Math.random() * 60 - 30) * (Math.PI / 180)
+        const distance = 30 + Math.random() * 20
+        const x = -Math.abs(Math.cos(angle) * distance)
+        const y = Math.sin(angle) * distance
+        const top = Math.random() * 12 - 6
 
         return {
           id: i,
@@ -138,82 +161,87 @@ const ProgressBar = () => {
           x,
           y,
           top,
-          left: i * 2
-        };
+          left: i * 2,
+        }
       }),
     []
-  );
+  )
   useEffect(() => {
-    const startTime = Date.now();
-    const maxProgress = 95;
+    const startTime = Date.now()
+    const maxProgress = 95
 
     const animateProgress = () => {
-      const elapsed = Date.now() - startTime;
-      const progress = elapsed / 3000;
+      const elapsed = Date.now() - startTime
+      const progress = elapsed / 3000
 
-      const easeOutQuart = 1 - Math.pow(1 - Math.min(progress, 0.95), 4);
-      const currentWidth = easeOutQuart * maxProgress;
+      const easeOutQuart = 1 - Math.pow(1 - Math.min(progress, 0.95), 4)
+      const currentWidth = easeOutQuart * maxProgress
 
-      setProgressWidth(currentWidth);
+      setProgressWidth(currentWidth)
 
       if (progress < 0.95) {
-        requestAnimationFrame(animateProgress);
+        requestAnimationFrame(animateProgress)
       }
-    };
+    }
 
-    requestAnimationFrame(animateProgress);
+    requestAnimationFrame(animateProgress)
 
     return () => {
-      setProgressWidth(100);
-    };
-  }, []);
+      setProgressWidth(100)
+    }
+  }, [])
   return (
-    <div className="w-[390px] h-[12px] mt-[10px] rounded-[6px] border border-[#3E300E] bg-[#3F3F3F99] shadow-[0_2px_6px_0_rgba(0,0,0,0.25)_inset] relative">
+    <div
+      className={clsx(
+        'mt-[10px]  h-[12px] rounded-[6px] border border-[#3E300E] bg-[#3F3F3F99] shadow-[0_2px_6px_0_rgba(0,0,0,0.25)_inset] relative',
+        isMobile ? 'w-[348px]' : 'w-[390px]'
+      )}
+    >
       <motion.div
         ref={progressInnerRef}
         className={clsx(
-          "h-[10px] rounded-[6px] relative",
-          "bg-linear-to-r from-[#FFE9B2] via-[#FFC42F] to-[#F88E51]"
+          'h-[10px] rounded-[6px] relative',
+          'bg-linear-to-r from-[#FFE9B2] via-[#FFC42F] to-[#F88E51]'
         )}
         initial={{ width: 0 }}
         animate={{
-          width: `${progressWidth}%`
+          width: `${progressWidth}%`,
         }}
       >
         <div className="absolute top-0 right-[-35px] w-[50px] h-[50px] flex items-center justify-center pointer-events-none">
-          {particles.map((particle) => (
+          {particles.map(particle => (
             <motion.div
               key={particle.id}
-              className={clsx("absolute rounded-full", "bg-[#FFC42F]")}
+              className={clsx('absolute rounded-full', 'bg-[#FFC42F]')}
               style={{
                 width: `${particle.size}px`,
                 height: `${particle.size}px`,
                 left: `${particle.left}px`,
-                top: `${particle.top}px`
+                top: `${particle.top}px`,
               }}
               initial={{
                 opacity: 0,
                 scale: 0,
                 x: 0,
-                y: 0
+                y: 0,
               }}
               animate={{
                 opacity: [0, 1, 0],
                 scale: [0, 1, 0.3],
                 x: [0, particle.x],
-                y: [0, particle.y]
+                y: [0, particle.y],
               }}
               transition={{
                 duration: particle.duration,
                 delay: particle.delay,
                 repeat: Infinity,
                 repeatDelay: 0.1,
-                ease: "linear"
+                ease: 'linear',
               }}
             />
           ))}
         </div>
       </motion.div>
     </div>
-  );
-};
+  )
+}

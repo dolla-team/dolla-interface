@@ -3,15 +3,15 @@ import clsx from "clsx";
 import useLoginStore from '@/stores/use-login'
 
 const Texts = [
-  "69% to be investigated by @ZachXBT next",
-  "47% says \"zoom out\" while being down 63%",
-  "99% retarded",
-  "81% says \"this is my last trade\" at least once a week",
-  "58% watched a candle instead of sleeping and still lost money",
-  "66% bought because of a tweet",
-  "42% still waiting for a retest that never comes",
-  "76% round-tripped a winner because \"it felt early\"",
-];
+  '69% to be investigated by @ZachXBT next',
+  '47% says "zoom out" while being down 63%',
+  '99% retarded',
+  '81% says "this is my last trade" at least once a week',
+  '58% watched a candle instead of sleeping and still lost money',
+  '66% bought because of a tweet',
+  '42% still waiting for a retest that never comes',
+  '76% round-tripped a winner because "it felt early"',
+]
 
 export default function AnalyzeInputPanel({
   xProfileUrl,
@@ -19,66 +19,18 @@ export default function AnalyzeInputPanel({
   isValid,
   onAnalyze,
   setIsBgSpread,
-  onChangeHasAccount
+  onChangeHasAccount,
 }: any) {
-  const [currentText, setCurrentText] = useState(Texts[0]);
-  const [nextText, setNextText] = useState("");
-  const [isAnimating, setIsAnimating] = useState(false);
-  const lastIndexRef = useRef(0);
   const loginStore = useLoginStore()
 
-  useEffect(() => {
-    let timeoutId: NodeJS.Timeout | null = null;
-
-    const scheduleNext = () => {
-      timeoutId = setTimeout(() => {
-        let randomIndex = Math.floor(Math.random() * Texts.length);
-        while (randomIndex === lastIndexRef.current) {
-          randomIndex = Math.floor(Math.random() * Texts.length);
-        }
-        lastIndexRef.current = randomIndex;
-        const newText = Texts[randomIndex];
-
-        if (newText !== currentText) {
-
-          setNextText(newText);
-          setIsAnimating(false);
-
-
-          requestAnimationFrame(() => {
-            requestAnimationFrame(() => {
-              setIsAnimating(true);
-
-              setTimeout(() => {
-                setCurrentText(newText);
-                setIsAnimating(false);
-                setNextText("");
-              }, 300);
-            });
-          });
-        }
-
-        scheduleNext();
-      }, 2000);
-    };
-
-    scheduleNext();
-
-    return () => {
-      if (timeoutId) {
-        clearTimeout(timeoutId);
-      }
-    };
-  }, []);
-
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
+    const value = e.target.value
     // Prevent input if it contains spaces
-    if (value.includes(" ")) {
-      return;
+    if (value.includes(' ')) {
+      return
     }
-    setXProfileUrl(value);
-  };
+    setXProfileUrl(value)
+  }
   return (
     <>
       <img
@@ -123,34 +75,7 @@ export default function AnalyzeInputPanel({
           Go
         </button>
       </div>
-      <div
-        className="mt-[4px] text-center font-[Courier] text-[18px] font-normal leading-[120%] tracking-[-1.08px] mt-[10px] text-[#8FFFC9] overflow-hidden relative"
-        style={{ minHeight: '22px' }}
-      >
-        <div className="opacity-0 pointer-events-none h-[22px] flex items-center justify-center">
-          {currentText}
-        </div>
-        <div
-          className={clsx(
-            'transition-all duration-300 ease-in-out absolute top-0 left-0 right-0 text-center flex items-center justify-center',
-            isAnimating ? 'translate-y-[-150%] opacity-0' : 'translate-y-0 opacity-100'
-          )}
-          style={{ height: '22px' }}
-        >
-          {currentText}
-        </div>
-        {nextText && (
-          <div
-            className={clsx(
-              'transition-all duration-300 ease-in-out absolute top-0 left-0 right-0 text-center flex items-center justify-center',
-              isAnimating ? 'translate-y-[150%] opacity-100' : 'translate-y-0 opacity-0'
-            )}
-            style={{ height: '22px' }}
-          >
-            {nextText}
-          </div>
-        )}
-      </div>
+      <RandomText />
       <div
         onClick={() => {
           onChangeHasAccount(true)
@@ -161,5 +86,82 @@ export default function AnalyzeInputPanel({
         I already have an account
       </div>
     </>
+  )
+}
+
+export const RandomText = () => {
+  const [currentText, setCurrentText] = useState(Texts[0])
+  const [nextText, setNextText] = useState('')
+  const [isAnimating, setIsAnimating] = useState(false)
+  const lastIndexRef = useRef(0)
+
+  useEffect(() => {
+    let timeoutId: NodeJS.Timeout | null = null
+
+    const scheduleNext = () => {
+      timeoutId = setTimeout(() => {
+        let randomIndex = Math.floor(Math.random() * Texts.length)
+        while (randomIndex === lastIndexRef.current) {
+          randomIndex = Math.floor(Math.random() * Texts.length)
+        }
+        lastIndexRef.current = randomIndex
+        const newText = Texts[randomIndex]
+
+        if (newText !== currentText) {
+          setNextText(newText)
+          setIsAnimating(false)
+
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+              setIsAnimating(true)
+
+              setTimeout(() => {
+                setCurrentText(newText)
+                setIsAnimating(false)
+                setNextText('')
+              }, 300)
+            })
+          })
+        }
+
+        scheduleNext()
+      }, 2000)
+    }
+
+    scheduleNext()
+
+    return () => {
+      if (timeoutId) {
+        clearTimeout(timeoutId)
+      }
+    }
+  }, [])
+  return (
+    <div
+      className="mt-[4px] text-center font-[Courier] text-[18px] font-normal leading-[120%] tracking-[-1.08px] mt-[10px] text-[#8FFFC9] overflow-hidden relative"
+      style={{ minHeight: '22px' }}
+    >
+      <div className="opacity-0 pointer-events-none h-[22px] truncate">{currentText}</div>
+      <div
+        className={clsx(
+          'transition-all duration-300 ease-in-out absolute top-0 left-0 right-0 truncate',
+          isAnimating ? 'translate-y-[-150%] opacity-0' : 'translate-y-0 opacity-100'
+        )}
+        style={{ height: '22px' }}
+      >
+        {currentText}
+      </div>
+      {nextText && (
+        <div
+          className={clsx(
+            'transition-all duration-300 ease-in-out absolute top-0 left-0 right-0 truncate',
+            isAnimating ? 'translate-y-[150%] opacity-100' : 'translate-y-0 opacity-0'
+          )}
+          style={{ height: '22px' }}
+        >
+          {nextText}
+        </div>
+      )}
+    </div>
   )
 }

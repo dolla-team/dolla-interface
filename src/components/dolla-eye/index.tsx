@@ -4,6 +4,7 @@ import clsx from "clsx";
 import { motion } from "framer-motion";
 import { useRef, useEffect, useState, useMemo } from "react";
 import useIsBtc from "@/hooks/use-is-btc";
+import useIsMobile from '@/hooks/use-is-mobile'
 
 const BASE_HEIGHT = 56;
 
@@ -17,6 +18,7 @@ const DollaEye = (props: any) => {
 
   const { currentEye } = useDollaEyeContext();
   const isBtc = useIsBtc();
+  const isMobile = useIsMobile()
   const eyeRef = useRef<any>(null);
   const eyePupil = useRef<any>(null);
   const [pupilPosition, setPupilPosition] = useState({ x: 0, y: 0 });
@@ -109,18 +111,15 @@ const DollaEye = (props: any) => {
   if (!currentEye) return null;
 
   return (
-    <div
-      className={clsx("flex items-center flex-nowrap", className)}
-      {...restProps}
-    >
+    <div className={clsx('flex items-center flex-nowrap', className)} {...restProps}>
       {!onlyEye && (
         <img
-          src={isBtc ? "/logo-eye/d-btc.svg" : "/logo-eye/d.svg"}
+          src={isBtc ? '/logo-eye/d-btc.svg' : '/logo-eye/d.svg'}
           alt="d"
           className="shrink-0 object-contain object-center relative z-[3]"
           style={{
             width: textDWidth,
-            height: textHeight
+            height: textHeight,
           }}
         />
       )}
@@ -131,13 +130,14 @@ const DollaEye = (props: any) => {
           marginLeft: -eyeLeft,
           width: eyeWidth,
           height: height,
-          borderRadius: height / 2
+          borderRadius: height / 2,
+          boxShadow: isMobile ? '0 0 40px 0 #FFF9BB' : 'none',
         }}
       >
         {/*#region eye socket*/}
         <div
           className={clsx(
-            "z-100 absolute w-full h-full left-0 top-0 bg-no-repeat bg-contain bg-center",
+            'z-100 absolute w-full h-full left-0 top-0 bg-no-repeat bg-contain bg-center',
             isBtc
               ? "bg-[url('/logo-eye/eye-socket-btc.svg')]"
               : "bg-[url('/logo-eye/eye-socket.svg')]"
@@ -160,11 +160,11 @@ const DollaEye = (props: any) => {
               className="shrink-0 rounded-full bg-[#000000]"
               style={{
                 width: currentPupilSize,
-                height: currentPupilSize
+                height: currentPupilSize,
               }}
               animate={{
                 x: pupilPosition.x,
-                y: pupilPosition.y
+                y: pupilPosition.y,
               }}
             ></motion.div>
           </div>
@@ -180,47 +180,47 @@ const DollaEye = (props: any) => {
                 className="shrink-0 rounded-full bg-[#000000] flex justify-center items-center"
                 style={{
                   width: currentPupilSize ?? 40,
-                  height: currentPupilSize ?? 40
+                  height: currentPupilSize ?? 40,
                 }}
               >
                 {currentEye.icon &&
-                  (currentEye.icon === "sparkling" ? (
+                  (currentEye.icon === 'sparkling' ? (
                     <div className="relative w-full h-full flex justify-center items-center flex-col gap-[2px]">
                       <motion.div
                         className="w-[7px] h-[7px] rounded-full bg-white ml-[7px]"
                         style={{
                           width: sparklingSize?.[0],
-                          height: sparklingSize?.[0]
+                          height: sparklingSize?.[0],
                         }}
                         animate={{
                           scaleX: [0.8, 1.1, 0.8],
                           scaleY: [0.9, 1.05, 0.9],
                           translateX: [0, -2, 2, 0],
-                          translateY: [0, -1, 1, 0]
+                          translateY: [0, -1, 1, 0],
                         }}
                         transition={{
                           duration: 2,
                           repeat: Infinity,
-                          ease: "easeInOut"
+                          ease: 'easeInOut',
                         }}
                       />
                       <motion.div
                         className="w-[15px] h-[15px] rounded-full bg-white ml-[-7px]"
                         style={{
                           width: sparklingSize?.[1],
-                          height: sparklingSize?.[1]
+                          height: sparklingSize?.[1],
                         }}
                         animate={{
                           scaleX: [0.9, 1.1, 0.9],
                           scaleY: [0.9, 1.05, 0.9],
                           translateX: [0, -1, 1, 0],
-                          translateY: [0, -1, 1, 0]
+                          translateY: [0, -1, 1, 0],
                         }}
                         transition={{
                           duration: 2.5,
                           repeat: Infinity,
-                          ease: "easeInOut",
-                          delay: 0.8
+                          ease: 'easeInOut',
+                          delay: 0.8,
                         }}
                       />
                     </div>
@@ -231,20 +231,16 @@ const DollaEye = (props: any) => {
                       className="shrink-0 object-contain object-center"
                       style={{
                         width: currentIconSize?.[0] ?? 20,
-                        height: currentIconSize?.[1] ?? 20
+                        height: currentIconSize?.[1] ?? 20,
                       }}
                       {...currentEye.animation}
                     />
                   ))}
               </div>
             </div>
-            {[EEyeType.PrizeLowPTS, EEyeType.PrizeBoth].includes(
-              currentEye.type
-            ) && (
+            {[EEyeType.PrizeLowPTS, EEyeType.PrizeBoth].includes(currentEye.type) && (
               <motion.img
-                src={
-                  isBtc ? "/logo-eye/eyelid-btc.svg" : "/logo-eye/eyelid.svg"
-                }
+                src={isBtc ? '/logo-eye/eyelid-btc.svg' : '/logo-eye/eyelid.svg'}
                 alt=""
                 className="z-[3] absolute w-full h-full shrink-0 object-contain object-top"
                 {...currentEye.animation}
@@ -264,7 +260,7 @@ const DollaEye = (props: any) => {
                 className="shrink-0 object-contain object-center"
                 style={{
                   width: currentIconSize?.[0] ?? 52,
-                  height: currentIconSize?.[1] ?? 52
+                  height: currentIconSize?.[1] ?? 52,
                 }}
                 {...currentEye.animation}
               />
@@ -286,7 +282,7 @@ const DollaEye = (props: any) => {
                 className="shrink-0 object-contain object-center"
                 style={{
                   width: currentIconSize?.[0] ?? 34,
-                  height: currentIconSize?.[1] ?? 40
+                  height: currentIconSize?.[1] ?? 40,
                 }}
               />
             )}
@@ -296,18 +292,18 @@ const DollaEye = (props: any) => {
       </div>
       {!onlyEye && (
         <img
-          src={isBtc ? "/logo-eye/lla-btc.svg" : "/logo-eye/lla.svg"}
+          src={isBtc ? '/logo-eye/lla-btc.svg' : '/logo-eye/lla.svg'}
           alt="lla"
           className="shrink-0 object-contain object-center relative z-[1]"
           style={{
             marginLeft: -textLeft,
             width: textLlaWidth,
-            height: textHeight
+            height: textHeight,
           }}
         />
       )}
     </div>
-  );
+  )
 };
 
 export default DollaEye;

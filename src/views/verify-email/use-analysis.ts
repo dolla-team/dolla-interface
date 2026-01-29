@@ -3,8 +3,10 @@ import dollaService from '@/service/kol-anysis'
 import { useAnalysisDataStore } from '@/stores/use-analysis-data'
 import { useAuth } from '@/contexts/auth/privy'
 import { useGlobalStore } from '@/stores/use-global'
+import useIsMobile from '@/hooks/use-is-mobile'
 
 export default function useAnalysis() {
+  const isMobile = useIsMobile()
   const [xProfileUrl, setXProfileUrl] = useState('')
   const { set } = useAnalysisDataStore()
   const { login } = useAuth()
@@ -32,10 +34,13 @@ export default function useAnalysis() {
     const res = await dollaService.checkUser(handle ?? '')
 
     if (res.data.code === 0 && res.data.data?.has_login && res.data.data?.has_analysis) {
-      login()
       globalStore.set({
         isInWhitelist: true,
       })
+      if (!isMobile) {
+        login()
+      }
+
       return
     }
 

@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 
-export const LineIcon = () => {
+export const LineIcon = ({ className }: any) => {
   return (
     <motion.svg
       xmlns="http://www.w3.org/2000/svg"
@@ -8,7 +8,7 @@ export const LineIcon = () => {
       height="248"
       viewBox="0 0 343 248"
       fill="none"
-      className="absolute left-[60px] top-[-230px] w-[343px] h-[248px]"
+      className={className}
       initial={{
         scale: 0,
         transformOrigin: 'bottom left',
