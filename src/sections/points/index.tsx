@@ -41,7 +41,7 @@ export default function Points({
             : QUOTE_TOKEN.pointsIcon;
         name = item.token_volume === "1" ? "Free Bid" : QUOTE_TOKEN.name;
       }
-      _itemsMap[item.token + "_" + item.token_volume] = { name };
+      _itemsMap[item.token] = { name }
 
       if (Number(item.number) < min || min === 0) {
         min = Number(item.number);
@@ -78,28 +78,24 @@ export default function Points({
     <>
       <div
         className={clsx(
-          "flex items-center gap-[4px]",
-          progress >= 1 ? "button" : "",
+          'flex items-center gap-[4px] button',
           isMobile &&
-            "p-[4px] pr-[14px] border border-[#7C68FF] rounded-l-[40px] fixed right-[-2px] bottom-[30px] duration-300 bg-[#000]/30 scale-[0.76] origin-right",
-          isMobile &&
-            (prize.points > 0 ? "!translate-x-[0]" : "translate-x-[100%]"),
+            'p-[4px] pr-[14px] border border-[#7C68FF] rounded-l-[40px] fixed right-[-2px] bottom-[30px] duration-300 bg-[#000]/30 scale-[0.76] origin-right',
+          isMobile && (prize.points > 0 ? '!translate-x-[0]' : 'translate-x-[100%]'),
           className
         )}
         onClick={() => {
-          if (progress >= 1) {
-            setShowRedeemSelection(true);
-          }
+          setShowRedeemSelection(true)
         }}
       >
         <div className="relative w-[26px] h-[26px]">
           <motion.div
             className="absolute top-0 left-0 w-full h-full border-[3px] border-[rgba(76,45,78,0.6)] rounded-full"
             animate={{
-              opacity: progress >= 1 ? [1, 0, 1] : 1
+              opacity: progress >= 1 ? [1, 0, 1] : 1,
             }}
             transition={{
-              opacity: { duration: 2, repeat: Infinity, ease: "easeOut" }
+              opacity: { duration: 2, repeat: Infinity, ease: 'easeOut' },
             }}
           />
           <motion.svg
@@ -119,22 +115,22 @@ export default function Points({
               strokeLinecap="round"
               style={{
                 strokeWidth: 3,
-                strokeLinecap: "round"
+                strokeLinecap: 'round',
               }}
               initial={{
                 pathLength: 0,
-                opacity: 0
+                opacity: 0,
               }}
               animate={{
                 pathLength: progress,
-                opacity: progress >= 1 ? [1, 0, 1] : progress > 0 ? 1 : 0
+                opacity: progress >= 1 ? [1, 0, 1] : progress > 0 ? 1 : 0,
               }}
               transition={{
-                pathLength: { duration: 0.5, ease: "easeOut" },
+                pathLength: { duration: 0.5, ease: 'easeOut' },
                 opacity:
                   progress >= 1
-                    ? { duration: 2, repeat: Infinity, ease: "easeOut" }
-                    : { duration: 0.3 }
+                    ? { duration: 2, repeat: Infinity, ease: 'easeOut' }
+                    : { duration: 0.3 },
               }}
             />
             <defs>
@@ -158,9 +154,7 @@ export default function Points({
           />
         </div>
 
-        <span
-          className={clsx("font-[600] text-[16px] text-white", textClassName)}
-        >
+        <span className={clsx('font-[600] text-[16px] text-white', textClassName)}>
           x
           {isMobile
             ? formatNumber(prize.points, 0, true, { isShort: false })
@@ -175,5 +169,5 @@ export default function Points({
         itemsMap={itemsMap}
       />
     </>
-  );
+  )
 }

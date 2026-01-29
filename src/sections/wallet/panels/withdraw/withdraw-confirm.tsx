@@ -23,7 +23,7 @@ export default function WithdrawConfirm({
       <div
         className="flex items-center gap-[8px] text-[16px] cursor-pointer button px-[16px]"
         onClick={() => {
-          walletStore.set({ withdrawPanelType: "input" });
+          walletStore.set({ withdrawPanelType: 'input' })
         }}
       >
         <BackIcon />
@@ -37,15 +37,19 @@ export default function WithdrawConfirm({
           {formatNumber(
             quoteData?.amountOutFormatted || 0,
             walletStore.selectedToken?.isBaseToken ? 6 : 2,
-            true
-          )}{" "}
+            true,
+            {
+              round: 0,
+            }
+          )}{' '}
         </span>
-        <span className="text-[14px] font-[400]">
-          {walletStore.selectedToken?.symbol}
-        </span>
+        <span className="text-[14px] font-[400]">{walletStore.selectedToken?.symbol}</span>
       </div>
       <div className="text-[12px] text-[#8A87AA] text-center mt-[10px]">
-        ${formatNumber(quoteData?.amountOutUsd || 0, 2, true)}
+        $
+        {formatNumber(quoteData?.amountOutUsd || 0, 2, true, {
+          round: 0,
+        })}
       </div>
       <div className="border-t border-[#D9D9D9] mt-[20px] px-[16px]">
         <div className="flex items-center justify-between py-[12px]">
@@ -69,11 +73,7 @@ export default function WithdrawConfirm({
         <div className="flex items-center justify-between py-[12px]">
           <div className="text-[12px] text-[#8A87AA]">Network fee</div>
           <div className="text-[12px] text-[#000]">
-            {formatNumber(
-              networkFee || 0,
-              walletStore.selectedToken?.isBaseToken ? 6 : 2,
-              true
-            )}{" "}
+            {formatNumber(networkFee || 0, walletStore.selectedToken?.isBaseToken ? 6 : 2, true)}{' '}
             {walletStore.selectedToken?.symbol}
           </div>
         </div>
@@ -83,9 +83,8 @@ export default function WithdrawConfirm({
         <div className="w-full mt-[6px] py-[10px] px-[6px] text-[12px] flex gap-[8px] leading-[14px] text-black font-[300] bg-[#FFC42F]/10 rounded-[12px]">
           <WarningIcon />
           <div>
-            Ensure this address supports{" "}
-            {chainConfig[chain?.blockchain]?.name || chain?.blockchain} network
-            deposits. Sending to another network may result in loss of funds.
+            Ensure this address supports {chainConfig[chain?.blockchain]?.name || chain?.blockchain}{' '}
+            network deposits. Sending to another network may result in loss of funds.
           </div>
         </div>
         <Button
@@ -97,13 +96,13 @@ export default function WithdrawConfirm({
               fromToken: walletStore.selectedToken,
               amount: amount,
               recipientAccount: quoteData.depositAddress,
-              isMax: amount === balance
-            });
+              isMax: amount === balance,
+            })
           }}
         >
           Confirm
         </Button>
       </div>
     </div>
-  );
+  )
 }

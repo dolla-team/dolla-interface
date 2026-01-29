@@ -185,6 +185,7 @@ export const AuthProvider: React.FC<{
       } else {
         message = `login dolla, sol_address:${privySolanaWallet?.address}, wallet_id:${userId}, time:${time}`;
       }
+      window.isSigning = true
       console.log("message", message);
       let signature: string = await signMessage(message);
       console.log("signature", signature);
@@ -201,6 +202,7 @@ export const AuthProvider: React.FC<{
           await onQueryUserInfo();
           setAccountRefresher(1);
           setLogining(false);
+          window.isSigning = false
         }
       });
     } catch (error: any) {
@@ -281,12 +283,19 @@ export const AuthProvider: React.FC<{
     clearTimeout(window.loginTimeoutTimer)
     const embeddedWallet = wallets.find(w => w.walletClientType === 'privy')
     if (!chainType && !embeddedWallet) return
-    if (loginMethod === 'wallet' && address !== user?.wallet?.address) {
-      console.log('address not equal', address, user?.wallet?.address)
+    if (
+      loginMethod === 'wallet' &&
+      address &&
+      globalStore?.address &&
+      address !== globalStore?.address
+    ) {
+      console.log('address not equal', address, globalStore?.address)
       logout()
       return
     }
-    console.log('updateAccount', address, user)
+    globalStore.set({
+      address,
+    })
     updateAccount()
     ;(window as any).sign = sign
   }, [user, globalStore.isInWhitelist, isCompleted, wallets, chainType])
