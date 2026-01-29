@@ -37,110 +37,101 @@ export default function useTrade({ onSuccess }: any) {
       outputCurrency,
       inputCurrencyAmount,
       outputCurrencyAmount,
-      exactType
+      exactType,
+      onReset,
     }: any) => {
-      if (
-        !inputCurrency ||
-        !outputCurrency ||
-        (!inputCurrencyAmount && !outputCurrencyAmount)
-      ) {
-        setTrade(null);
-        return;
+      if (!inputCurrency || !outputCurrency || (!inputCurrencyAmount && !outputCurrencyAmount)) {
+        setTrade(null)
+        return
       }
-      const { publicKey } = await generateKeyPair();
+      const { publicKey } = await generateKeyPair()
       if (!publicKey) {
-        setTrade(null);
-        return;
+        setTrade(null)
+        onReset?.()
+        return
       }
 
-      lastestCachedKey.current = `${inputCurrency.address}-${outputCurrency.address}-${inputCurrencyAmount}`;
+      lastestCachedKey.current = `${inputCurrency.address}-${outputCurrency.address}-${inputCurrencyAmount}`
 
       try {
-        setLoading(true);
+        setLoading(true)
 
         const msg: any = {
           u: getUserId(address, chainType),
-          b: "Deposit",
-          k: publicKey
-        };
+          b: 'Deposit',
+          k: publicKey,
+        }
 
         const _amount = Big(
-          exactType === "EXACT_INPUT"
-            ? inputCurrencyAmount
-            : outputCurrencyAmount
+          exactType === 'EXACT_INPUT' ? inputCurrencyAmount : outputCurrencyAmount
         )
           .mul(
-            10 **
-              (exactType === "EXACT_INPUT"
-                ? inputCurrency.decimals
-                : outputCurrency.decimals)
+            10 ** (exactType === 'EXACT_INPUT' ? inputCurrency.decimals : outputCurrency.decimals)
           )
-          .toFixed(0);
+          .toFixed(0)
 
         const data = await quote({
           dry: false,
           swapType: exactType,
           slippageTolerance: 50,
           originAsset: inputCurrency.assetId,
-          depositType: "ORIGIN_CHAIN",
+          depositType: 'ORIGIN_CHAIN',
           destinationAsset: outputCurrency.assetId,
           amount: _amount,
           refundTo: NEAR_REFUND_ACCOUNT,
-          refundType: "ORIGIN_CHAIN",
+          refundType: 'ORIGIN_CHAIN',
           recipient: import.meta.env.VITE_NEAR_ACCOUNT_ID,
-          recipientType: "DESTINATION_CHAIN",
-          deadline: dayjs().add(1, "hour").toISOString(),
-          customRecipientMsg: JSON.stringify(msg)
-        });
+          recipientType: 'DESTINATION_CHAIN',
+          deadline: dayjs().add(1, 'hour').toISOString(),
+          customRecipientMsg: JSON.stringify(msg),
+        })
 
         if (!data) {
-          throw new Error("No Data.");
+          throw new Error('No Data.')
         }
 
         if (
           `${inputCurrency.address}-${outputCurrency.address}-${inputCurrencyAmount}` !==
           lastestCachedKey.current
         ) {
-          setLoading(false);
-          return;
+          setLoading(false)
+          return
         }
 
         let priceImpact = Big(data.quote.amountInUsd)
           .minus(data.quote.amountOutUsd)
           .div(data.quote.amountInUsd)
-          .mul(100);
+          .mul(100)
 
-        let priceImpactType = 0;
+        let priceImpactType = 0
 
         if (Big(priceImpact).gt(100)) {
-          priceImpact = Big(100);
+          priceImpact = Big(100)
         }
         if (
           Big(priceImpact || 0)
             .abs()
             .gt(1)
         ) {
-          priceImpactType = 1;
+          priceImpactType = 1
         }
         if (
           Big(priceImpact || 0)
             .abs()
             .gt(2)
         ) {
-          priceImpactType = 2;
+          priceImpactType = 2
         }
 
         // const gasUsd = Big(Number(result.gasUseEstimateUSD)).toFixed(18);
-        const balance = inputCurrency.isBaseToken
-          ? nearAccount?.prizeBalance
-          : nearAccount?.balance;
+        const balance = inputCurrency.isBaseToken ? nearAccount?.prizeBalance : nearAccount?.balance
 
         const trade = {
           inputCurrency,
           outputCurrency,
           inputCurrencyAmount: data.quote.amountInFormatted,
           isMax: inputCurrencyAmount === balance,
-          name: "Near Intents",
+          name: 'Near Intents',
           noPair: false,
           amountIn: data.quote.amountIn,
           outputCurrencyAmount: data.quote.amountOutFormatted,
@@ -149,22 +140,22 @@ export default function useTrade({ onSuccess }: any) {
           priceImpact: priceImpact.toFixed(2),
           priceImpactType,
           gasUsd: 0,
-          recipientAccount: data.quote.depositAddress
-        };
+          recipientAccount: data.quote.depositAddress,
+        }
 
-        setTrade(trade);
-        setLoading(false);
+        setTrade(trade)
+        setLoading(false)
       } catch (err: any) {
-        console.log(err);
-        setTrade(null);
-        setLoading(false);
+        console.log(err)
+        setTrade(null)
+        setLoading(false)
         toast.info({
-          title: err.message
-        });
+          title: err.message,
+        })
       }
     },
     [slippage, prices, cachedTokens]
-  );
+  )
 
   const onSwap = useCallback(async () => {
     const { publicKey, keyPairSigner } = await generateKeyPair();

@@ -81,8 +81,8 @@ export default function useGenerateKey() {
   async function updateAk({ publicKey }: any) {
     if (Big(nearAccount?.balance || 0).lt(1)) {
       toast.info({
-        title: `${QUOTE_TOKEN.symbol} is insufficient to update AK`
-      });
+        title: `A minimum of 1 ${QUOTE_TOKEN.symbol} is required to update the AK. Please make a deposit`,
+      })
       return;
     }
     const res = await viewMethod({

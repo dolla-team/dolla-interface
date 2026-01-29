@@ -24,7 +24,7 @@ export default function Recharge({
   const depositAddress = address || rechargeToken.depositAddress;
   const { onCopy } = useCopy();
   return (
-    <div className={clsx("flex flex-col items-center", className)}>
+    <div className={clsx('flex flex-col items-center', className)}>
       <div className="w-[160px] h-[160px] mt-[10px] rounded-[6px] bg-white p-2">
         <QRCodeSVG
           value={depositAddress}
@@ -34,7 +34,7 @@ export default function Recharge({
             src: rechargeToken.icon,
             height: 24,
             width: 24,
-            excavate: true
+            excavate: true,
           }}
         />
       </div>
@@ -42,17 +42,18 @@ export default function Recharge({
         <WarningIcon />
         <ul className="list-disc">
           <li>
-            Only supported networks are shown. Depositing via an unsupported
-            network may result in permanent loss of assets.
+            Only supported networks are shown. Depositing via an unsupported network may result in
+            permanent loss of assets.
           </li>
           <li className="mt-[10px]">
-            This is a <span className="font-[500]">one-time deposit address</span>, do not save it for future deposits.
+            This is a <span className="font-[500]">one-time deposit address</span>, do not save it
+            for future deposits.
           </li>
         </ul>
       </div>
       <div
         className={clsx(
-          "mt-[24px] p-[8px] rounded-[10px] border bg-white border-[#8A87AA4D] w-full",
+          'mt-[24px] p-[8px] rounded-[10px] border bg-white border-[#8A87AA4D] w-full',
           tokenPanelClassName
         )}
       >
@@ -83,7 +84,7 @@ export default function Recharge({
           className="w-full mx-auto h-[50px] mt-[10px] flex items-center gap-[10px] !bg-black"
           onClick={() => {
             if (depositAddress) {
-              onCopy(depositAddress);
+              onCopy(depositAddress)
             }
           }}
         >
@@ -107,5 +108,5 @@ export default function Recharge({
         </div>
       </div>
     </div>
-  );
+  )
 }

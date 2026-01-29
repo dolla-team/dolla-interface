@@ -285,9 +285,9 @@ export const AuthProvider: React.FC<{
       1000 * 60 * 1
     )
     if (!isCompleted) return
+    clearTimeout(window.loginTimeoutTimer)
     const embeddedWallet = wallets.find(w => w.walletClientType === 'privy')
     if (!chainType && !embeddedWallet) return
-    clearTimeout(window.loginTimeoutTimer)
     updateAccount()
     ;(window as any).sign = sign
   }, [user, globalStore.isInWhitelist, isCompleted, wallets, chainType]);

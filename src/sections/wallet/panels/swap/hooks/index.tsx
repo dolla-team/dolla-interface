@@ -63,8 +63,12 @@ export function useSwap(props?: any) {
         inputCurrencyAmount,
         outputCurrencyAmount,
         exactType,
-        template
-      });
+        template,
+        onReset: () => {
+          setInputCurrencyAmount('')
+          setOutputCurrencyAmount('')
+        },
+      })
     },
     {
       wait: 500
