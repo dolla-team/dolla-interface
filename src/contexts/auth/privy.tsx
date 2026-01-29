@@ -185,6 +185,7 @@ export const AuthProvider: React.FC<{
       } else {
         message = `login dolla, sol_address:${privySolanaWallet?.address}, wallet_id:${userId}, time:${time}`;
       }
+      window.isSigning = true
       console.log("message", message);
       let signature: string = await signMessage(message);
       console.log("signature", signature);
@@ -201,6 +202,7 @@ export const AuthProvider: React.FC<{
           await onQueryUserInfo();
           setAccountRefresher(1);
           setLogining(false);
+          window.isSigning = false
         }
       });
     } catch (error: any) {
