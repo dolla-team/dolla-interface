@@ -286,14 +286,16 @@ export const AuthProvider: React.FC<{
     if (
       loginMethod === 'wallet' &&
       address &&
-      user?.wallet?.address &&
-      address !== user?.wallet?.address
+      globalStore?.address &&
+      address !== globalStore?.address
     ) {
-      console.log('address not equal', address, user?.wallet?.address)
+      console.log('address not equal', address, globalStore?.address)
       logout()
       return
     }
-    console.log('updateAccount', address, user)
+    globalStore.set({
+      address,
+    })
     updateAccount()
     ;(window as any).sign = sign
   }, [user, globalStore.isInWhitelist, isCompleted, wallets, chainType])
