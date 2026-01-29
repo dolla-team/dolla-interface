@@ -41,7 +41,7 @@ export default function Points({
             : QUOTE_TOKEN.pointsIcon;
         name = item.token_volume === "1" ? "Free Bid" : QUOTE_TOKEN.name;
       }
-      _itemsMap[item.token + "_" + item.token_volume] = { name };
+      _itemsMap[item.token] = { name }
 
       if (Number(item.number) < min || min === 0) {
         min = Number(item.number);
