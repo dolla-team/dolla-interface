@@ -141,6 +141,7 @@ export default function useBid(
         if (result.data.data?.tx_hash) {
           btcDetailStore.set({ currentHash: result.data.data.tx_hash });
           window.bidResultTimer = setTimeout(() => {
+            console.log('bid fail timeout')
             btcDetailStore.set({ currentHash: "" });
             onTxFail();
           }, 20000);
@@ -148,6 +149,7 @@ export default function useBid(
         }
         if (count > 30) {
           clearTimeout(window.bidDataTimer);
+          console.log('bid fail count')
           onTxFail();
           return;
         }
