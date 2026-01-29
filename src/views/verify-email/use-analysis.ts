@@ -2,12 +2,13 @@ import { useMemo, useState } from "react";
 import dollaService from "@/service/kol-anysis";
 import { useAnalysisDataStore } from "@/stores/use-analysis-data";
 import { useAuth } from '@/contexts/auth/privy'
+import { useGlobalStore } from '@/stores/use-global'
 
 export default function useAnalysis() {
   const [xProfileUrl, setXProfileUrl] = useState("");
   const { set } = useAnalysisDataStore();
   const { login } = useAuth()
-
+  const globalStore = useGlobalStore()
   const isValid = useMemo(() => {
     if (xProfileUrl === "") {
       return true;
@@ -32,6 +33,9 @@ export default function useAnalysis() {
 
     if (res.data.code === 0 && res.data.data?.has_login && res.data.data?.has_analysis) {
       login()
+      globalStore.set({
+        isInWhitelist: true,
+      })
       return
     }
     
