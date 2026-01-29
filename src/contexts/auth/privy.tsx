@@ -229,9 +229,12 @@ export const AuthProvider: React.FC<{
   };
 
   const login = async () => {
-    window.loginTimeoutTimer = setTimeout(() => {
-      setShowTimeoutModal(true);
-    }, 1000 * 60 * 1);
+    window.loginTimeoutTimer = setTimeout(
+      () => {
+        setShowTimeoutModal(true)
+      },
+      1000 * 60 * 2
+    )
 
     if (!user) {
       privyLogin?.();
