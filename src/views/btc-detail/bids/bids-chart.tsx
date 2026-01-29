@@ -6,6 +6,7 @@ import { useBtcContext } from "@/views/btc/context";
 import Empty from "@/components/dolla-eye/empty";
 import Loading from "@/components/icons/loading";
 import { formatNumber } from '@/utils/format/number'
+import Big from 'big.js'
 
 interface BidsChartProps {
   label: string
@@ -206,14 +207,23 @@ export default function BidsChart({
     }
   }, [winnerInfo, pool])
 
+  const volume = useMemo(() => {
+    if (volumeData.length === 0) return '-'
+    if (volumeData.length === 1) return volumeData[0].volume
+    return formatNumber(
+      Big(volumeData[0].volume)
+        .minus(volumeData[volumeData.length - 1].volume)
+        .toString(),
+      0,
+      true,
+      { prefix: '$' }
+    )
+  }, [volumeData])
+
   return (
     <>
       <div className="absolute  z-[2]">
-        <div className="text-[24px] font-[600] text-black">
-          {volumeData[0]?.volume
-            ? formatNumber(volumeData[0].volume, 0, true, { prefix: '$' })
-            : '-'}
-        </div>
+        <div className="text-[24px] font-[600] text-black">{volume}</div>
         <div className="text-[14px] text-black/60">{label}-Time</div>
       </div>
       <div ref={containerRef} className="h-[200px] w-[426px] mt-4 relative">
