@@ -186,13 +186,14 @@ export const LuckyInfo = () => {
       placement={PopoverPlacement.Top}
       content={
         <div className="w-[298px] text-[#5E6B7D] text-[12px] font-[300] p-[16px] bg-white rounded-[10px] border border-[#E4E4E4]">
-          <div className="font-[500] text-black mb-[4px]">Lucky Draw</div>{" "}
+          <div className="font-[500] text-black mb-[4px]">Lucky Draw</div>{' '}
           <div>
-            Earn tickets from your bids for a chance to win part of the $X daily
-            pool. 10 winners every 24h — tickets reset each round. <br />
-            🥇 1 winner – $A <br />
-            🥈 3 winners – share $B <br />
-            🥉 6 winners – share $C
+            Earn tickets from your bids for a chance to win part of the 100 USDT daily pool every
+            24h — tickets reset each round. <br />
+            🥇1st winner: 50 USDT <br />
+            🥈2nd winner: 15 USDT <br />
+            🥉3rd winner: 10 USDT <br />
+            🍀Lucky players: 5 USDT
           </div>
         </div>
       }
@@ -212,5 +213,5 @@ export const LuckyInfo = () => {
         </svg>
       </button>
     </Popover>
-  );
+  )
 };

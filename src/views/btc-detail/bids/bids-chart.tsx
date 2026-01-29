@@ -213,6 +213,7 @@ export default function BidsChart({
     return formatNumber(
       Big(volumeData[0].volume)
         .minus(volumeData[volumeData.length - 1].volume)
+        .add(1)
         .toString(),
       0,
       true,
