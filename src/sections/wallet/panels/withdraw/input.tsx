@@ -95,20 +95,18 @@ export default function WithdrawInput({
       <div
         className="flex items-center gap-[8px] text-[16px] cursor-pointer button"
         onClick={() => {
-          if (walletStore.from === "token") {
-            walletStore.set({ panelType: "token" });
+          if (walletStore.from === 'token') {
+            walletStore.set({ panelType: 'token' })
           } else {
-            walletStore.set({ withdrawPanelType: "token-selector" });
+            walletStore.set({ withdrawPanelType: 'token-selector' })
           }
-          setChain(null);
-          setReceiveAddress("");
-          setAmount("");
+          setChain(null)
+          setReceiveAddress('')
+          setAmount('')
         }}
       >
         <BackIcon />
-        <div className="text-black text-[14px]">
-          Withdraw {walletStore.selectedToken.symbol}
-        </div>
+        <div className="text-black text-[14px]">Withdraw {walletStore.selectedToken.symbol}</div>
       </div>
       <>
         <div className="flex items-center gap-[8px] mt-[30px]">
@@ -117,15 +115,13 @@ export default function WithdrawInput({
         </div>
         <input
           className={`w-full h-[40px] rounded-[10px] border bg-white leading-[40px] px-[12px] text-[12px] mt-[6px] ${
-            receiveAddress &&
-            chain?.blockchain &&
-            !isValidAddress(receiveAddress, chain.blockchain)
-              ? "border-[#FF399F]"
-              : "border-[#8A87AA4D]"
+            receiveAddress && chain?.blockchain && !isValidAddress(receiveAddress, chain.blockchain)
+              ? 'border-[#FF399F]'
+              : 'border-[#8A87AA4D]'
           }`}
           value={receiveAddress}
-          onChange={(e) => {
-            setReceiveAddress(e.target.value);
+          onChange={e => {
+            setReceiveAddress(e.target.value)
           }}
           placeholder="Address"
         />
@@ -148,17 +144,15 @@ export default function WithdrawInput({
         <input
           className="w-full h-[40px] rounded-[10px] border border-[#8A87AA4D] bg-white leading-[40px] px-[12px] text-[12px] mt-[6px]"
           value={amount}
-          onChange={(e) => {
-            const value = e.target.value;
+          onChange={e => {
+            const value = e.target.value
             // Only allow numbers and decimal point
-            const numericValue = value.replace(/[^0-9.]/g, "");
+            const numericValue = value.replace(/[^0-9.]/g, '')
             // Prevent multiple decimal points
-            const parts = numericValue.split(".");
+            const parts = numericValue.split('.')
             const validValue =
-              parts.length > 2
-                ? parts[0] + "." + parts.slice(1).join("")
-                : numericValue;
-            setAmount(validValue);
+              parts.length > 2 ? parts[0] + '.' + parts.slice(1).join('') : numericValue
+            setAmount(validValue)
           }}
           placeholder="Minimum 0"
         />
@@ -166,18 +160,16 @@ export default function WithdrawInput({
           <div>≈ ${formatNumber(amountUSD, 2, true)}</div>
           <div className="flex items-center gap-[8px]">
             <span>
-              Bal.{" "}
+              Bal.{' '}
               {formatNumber(
                 balance,
-                walletStore.selectedToken?.address === BASE_TOKEN.address
-                  ? 6
-                  : 2,
+                walletStore.selectedToken?.address === BASE_TOKEN.address ? 6 : 2,
                 true
               )}
             </span>
             <button
               onClick={() => {
-                if (balance) setAmount(balance || 0);
+                if (balance) setAmount(balance || 0)
               }}
               className="button text-[#DD9000] text-[12px] h-[28px] rounded-[14px]"
             >
@@ -187,32 +179,27 @@ export default function WithdrawInput({
         </div>
         <div className="flex items-center justify-between text-[12px] text-[#8A87AA]">
           <div>Max withdraw</div>
-          <div>
-            {formatNumber(walletStore.selectedToken.maxDepositAmount, 0, true)}
-          </div>
+          <div>{formatNumber(walletStore.selectedToken.maxDepositAmount, 0, true)}</div>
         </div>
       </>
       <div className="absolute bottom-[20px] left-[0px] px-[16px]">
         {!!quoteData && (
           <>
-            <div className="text-center text-[#8A87AA] text-[12px]">
-              Receive Amount
-            </div>
+            <div className="text-center text-[#8A87AA] text-[12px]">Receive Amount</div>
             <div className="text-center text-black font-[500] text-[16px] mt-[6px]">
               {formatNumber(
                 quoteData?.amountOutFormatted || 0,
                 walletStore.selectedToken?.isBaseToken ? 6 : 2,
-                true
-              )}{" "}
+                true,
+                {
+                  round: 0,
+                }
+              )}{' '}
               {walletStore.selectedToken?.symbol}
             </div>
             <div className="text-center text-[#8A87AA] text-[12px] mt-[6px]">
-              Network fee{" "}
-              {formatNumber(
-                networkFee,
-                walletStore.selectedToken?.isBaseToken ? 6 : 2,
-                true
-              )}{" "}
+              Network fee{' '}
+              {formatNumber(networkFee, walletStore.selectedToken?.isBaseToken ? 6 : 2, true)}{' '}
               {walletStore.selectedToken?.symbol}
             </div>
           </>
@@ -220,24 +207,23 @@ export default function WithdrawInput({
         <div className="mt-[6px] py-[10px] px-[6px] text-[12px] flex gap-[8px] leading-[14px] text-black font-[300] bg-[#FFC42F]/10 rounded-[12px]">
           <WarningIcon />
           <div>
-            Ensure this address supports{" "}
-            {chainConfig[chain?.blockchain]?.name || chain?.blockchain} network
-            deposits. Sending to another network may result in loss of funds.
+            Ensure this address supports {chainConfig[chain?.blockchain]?.name || chain?.blockchain}{' '}
+            network deposits. Sending to another network may result in loss of funds.
           </div>
         </div>
         <Button
           disabled={!amount || !!errorTips || loading}
           className="w-full h-[50px] !bg-[black] !text-white mt-[10px]"
           onClick={() => {
-            walletStore.set({ withdrawPanelType: "withdraw-confirm" });
+            walletStore.set({ withdrawPanelType: 'withdraw-confirm' })
           }}
           loading={loading}
         >
-          {errorTips ? errorTips : "Withdraw"}
+          {errorTips ? errorTips : 'Withdraw'}
         </Button>
       </div>
     </div>
-  );
+  )
 }
 
 const ReceiveAddressInfo = () => {

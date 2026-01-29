@@ -2,9 +2,9 @@ import  { type AxiosInstance } from "axios";
 import axiosInstance from "@/libs/axios";
 
 class DollaService {
-  private api: AxiosInstance;
+  private api: AxiosInstance
   constructor() {
-    this.api = axiosInstance;
+    this.api = axiosInstance
   }
 
   /**
@@ -12,11 +12,11 @@ class DollaService {
    * @param username Twitter username
    */
   async checkReward(username: string) {
-    return this.api.get("/api/v1/code/invite/gift/reward", {
+    return this.api.get('/api/v1/code/invite/gift/reward', {
       params: {
-        twitter_username: username
-      }
-    });
+        twitter_username: username,
+      },
+    })
   }
 
   /**
@@ -24,10 +24,22 @@ class DollaService {
    * @param username Username
    */
   async memeFate(username: string) {
-    return this.api.post("/api/v1/meme-fate", {
+    return this.api.post('/api/v1/meme-fate', {
       profileUrl: `https://x.com/${username}`,
-      refresh: false
-    });
+      refresh: false,
+    })
+  }
+
+  /**
+   * Check xkol
+   * @param username Username
+   */
+  async checkUser(username: string) {
+    return this.api.get('/api/v1/user/twitter/status', {
+      params: {
+        twitter_username: username,
+      },
+    })
   }
 }
 

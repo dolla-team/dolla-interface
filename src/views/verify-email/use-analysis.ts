@@ -1,33 +1,46 @@
-import { useMemo, useState } from "react";
-import dollaService from "@/service/kol-anysis";
-import { useAnalysisDataStore } from "@/stores/use-analysis-data";
+import { useMemo, useState } from 'react'
+import dollaService from '@/service/kol-anysis'
+import { useAnalysisDataStore } from '@/stores/use-analysis-data'
+import { useAuth } from '@/contexts/auth/privy'
+import { useGlobalStore } from '@/stores/use-global'
 
 export default function useAnalysis() {
-  const [xProfileUrl, setXProfileUrl] = useState("");
-  const { set } = useAnalysisDataStore();
-
+  const [xProfileUrl, setXProfileUrl] = useState('')
+  const { set } = useAnalysisDataStore()
+  const { login } = useAuth()
+  const globalStore = useGlobalStore()
   const isValid = useMemo(() => {
-    if (xProfileUrl === "") {
-      return true;
+    if (xProfileUrl === '') {
+      return true
     }
-    if (xProfileUrl.includes(" ")) {
-      return false;
+    if (xProfileUrl.includes(' ')) {
+      return false
     }
-    if (xProfileUrl.includes("https://")) {
-      const twitterPattern = /^https:\/\/(twitter\.com|x\.com)\/[^\s]+$/;
-      return twitterPattern.test(xProfileUrl);
+    if (xProfileUrl.includes('https://')) {
+      const twitterPattern = /^https:\/\/(twitter\.com|x\.com)\/[^\s]+$/
+      return twitterPattern.test(xProfileUrl)
     }
-    const twitterHandlePattern = /^[a-zA-Z_][a-zA-Z0-9_]{0,14}$/;
-    return twitterHandlePattern.test(xProfileUrl);
-  }, [xProfileUrl]);
+    const twitterHandlePattern = /^[a-zA-Z_][a-zA-Z0-9_]{0,14}$/
+    return twitterHandlePattern.test(xProfileUrl)
+  }, [xProfileUrl])
 
   const handle = useMemo(() => {
-    return xProfileUrl?.split("/").pop();
-  }, [xProfileUrl]);
+    return xProfileUrl?.split('/').pop()
+  }, [xProfileUrl])
 
   const onAnalyze = async () => {
-    set({ status: "loading" });
-    const startTime = Date.now();
+    const res = await dollaService.checkUser(handle ?? '')
+
+    if (res.data.code === 0 && res.data.data?.has_login && res.data.data?.has_analysis) {
+      login()
+      globalStore.set({
+        isInWhitelist: true,
+      })
+      return
+    }
+
+    set({ status: 'loading' })
+    const startTime = Date.now()
     try {
       const response = await dollaService.memeFate(handle ?? '')
       const rewardResponse = await dollaService.checkReward(handle ?? '')
@@ -47,16 +60,16 @@ export default function useAnalysis() {
         xCode: response?.data?.data?.inviteCode ?? '',
       })
     } catch (error) {
-      console.error(error);
-      set({ status: "input", amount: 0, result: null });
+      console.error(error)
+      set({ status: 'input', amount: 0, result: null })
     }
-  };
+  }
 
   return {
     handle,
     isValid,
     xProfileUrl,
     setXProfileUrl,
-    onAnalyze
-  };
+    onAnalyze,
+  }
 }

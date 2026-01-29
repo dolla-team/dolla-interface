@@ -136,36 +136,29 @@ export const AuthProvider: React.FC<{
   const { onLogin } = useLogin();
 
   const updateAccount = async () => {
-    console.log('updateAccount', address);
+    console.log('updateAccount', address)
     if (!address) {
-      return;
+      return
     }
 
-    const loginedAddress = JSON.parse(
-      localStorage.getItem("_AK_TOKEN_") || "{}"
-    ).address;
+    const loginedAddress = JSON.parse(localStorage.getItem('_AK_TOKEN_') || '{}').address
 
     if (address === loginedAddress) {
-      await onQueryUserInfo();
-      setAccountRefresher(1);
-      return;
+      await onQueryUserInfo()
+      setAccountRefresher(1)
+      return
     }
 
-    if (address && loginedAddress && address !== loginedAddress && loginMethod === globalStore.loginMethod && loginMethod === "wallet") {
-      console.log("address not equal", address, loginedAddress, loginMethod, globalStore.loginMethod);
-      logout();
-      return;
-    }
     globalStore.set({
-      loginMethod
+      loginMethod,
     })
-    setLogining(true);
+    setLogining(true)
     if (!chainType) {
-      console.log('no chain type, waiting 1 seconds');
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      console.log('chain type is', chainType);
+      console.log('no chain type, waiting 1 seconds')
+      await new Promise(resolve => setTimeout(resolve, 1000))
+      console.log('chain type is', chainType)
     }
-    sign();
+    sign()
   };
 
   const sign = async () => {
@@ -282,15 +275,23 @@ export const AuthProvider: React.FC<{
       () => {
         setShowTimeoutModal(true)
       },
-      1000 * 60 * 1
+      1000 * 60 * 2
     )
     if (!isCompleted) return
     clearTimeout(window.loginTimeoutTimer)
     const embeddedWallet = wallets.find(w => w.walletClientType === 'privy')
     if (!chainType && !embeddedWallet) return
+    if (loginMethod === 'wallet' && address !== user?.wallet?.address) {
+      console.log('address not equal', address, user?.wallet?.address)
+      logout()
+      return
+    }
+    console.log('updateAccount', address, user)
     updateAccount()
     ;(window as any).sign = sign
-  }, [user, globalStore.isInWhitelist, isCompleted, wallets, chainType]);
+  }, [user, globalStore.isInWhitelist, isCompleted, wallets, chainType])
+
+
 
   return (
     <AuthContext.Provider
