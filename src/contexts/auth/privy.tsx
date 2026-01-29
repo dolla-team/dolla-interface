@@ -40,6 +40,7 @@ export const AuthProvider: React.FC<{
     onComplete: async () => {
       console.log('privy login complete', wallets, user);
       setIsCompleted(true);
+      clearTimeout(window.loginTimeoutTimer)
     }
   });
   const verifyStore = useVerifyStore();
@@ -229,31 +230,24 @@ export const AuthProvider: React.FC<{
   };
 
   const login = async () => {
-    window.loginTimeoutTimer = setTimeout(
-      () => {
-        setShowTimeoutModal(true)
-      },
-      1000 * 60 * 2
-    )
-
     if (!user) {
-      privyLogin?.();
-      return;
+      privyLogin?.()
+      return
     }
 
     if (user) {
-      sign();
+      sign()
     }
 
     if (!privyEvmWallet?.address) {
-      console.log("creating evm wallet");
-      createPrivyWallet();
+      console.log('creating evm wallet')
+      createPrivyWallet()
     }
     if (!privySolanaWallet?.address) {
-      console.log("creating solana wallet");
-      createSolanaWallet();
+      console.log('creating solana wallet')
+      createSolanaWallet()
     }
-  };
+  }
 
   const logout = useCallback(async () => {
     try {
@@ -283,14 +277,18 @@ export const AuthProvider: React.FC<{
   useEffect(() => {
     if (!user) return
     if (!globalStore.isInWhitelist) {
-      clearTimeout(window.loginTimeoutTimer)
       return
     }
+    window.loginTimeoutTimer = setTimeout(
+      () => {
+        setShowTimeoutModal(true)
+      },
+      1000 * 60 * 2
+    )
     if (!isCompleted) return
     const embeddedWallet = wallets.find(w => w.walletClientType === 'privy')
     if (!chainType && !embeddedWallet) return
     updateAccount()
-    clearTimeout(window.loginTimeoutTimer)
     ;(window as any).sign = sign
   }, [user, globalStore.isInWhitelist, isCompleted, wallets, chainType]);
 
