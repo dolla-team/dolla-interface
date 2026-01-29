@@ -14,13 +14,14 @@ interface GlobalState {
 }
 
 const initialState = {
-  chainId: "",
+  chainId: '',
   playBgm: true,
-  code: "",
+  code: '',
   showUserInfo: false,
   isInWhitelist: false,
-  loginMethod: "",
-} as GlobalState;
+  loginMethod: '',
+  address: '',
+} as GlobalState
 
 export const useGlobalStore = create(
   persist<GlobalState>(
