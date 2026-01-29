@@ -1,10 +1,12 @@
 import { useMemo, useState } from "react";
 import dollaService from "@/service/kol-anysis";
 import { useAnalysisDataStore } from "@/stores/use-analysis-data";
+import { useAuth } from '@/contexts/auth/privy'
 
 export default function useAnalysis() {
   const [xProfileUrl, setXProfileUrl] = useState("");
   const { set } = useAnalysisDataStore();
+  const { login } = useAuth()
 
   const isValid = useMemo(() => {
     if (xProfileUrl === "") {
@@ -26,6 +28,13 @@ export default function useAnalysis() {
   }, [xProfileUrl]);
 
   const onAnalyze = async () => {
+    const res = await dollaService.checkUser(handle ?? '')
+
+    if (res.data.code === 0 && res.data.data?.has_login && res.data.data?.has_analysis) {
+      login()
+      return
+    }
+    
     set({ status: "loading" });
     const startTime = Date.now();
     try {
