@@ -23,12 +23,12 @@ export default function TopWinnersItem({
     <div
       className={clsx(
         `button w-full h-[48px] mt-[5px] px-[10px] relative flex items-center justify-between rounded-[10px] border border-[#F2F2F233] bg-linear-to-r to-[#8C8C8C]/10`,
-        level === 1 && "from-[#D565C4]/10",
-        level === 2 && "from-[#F87168]/10",
-        level === 3 && "from-[#F87168]/10"
+        level === 1 && 'from-[#D565C4]/10',
+        level === 2 && 'from-[#F87168]/10',
+        level === 3 && 'from-[#F87168]/10'
       )}
       onClick={() => {
-        navigate("/btc/" + data.pool_id);
+        navigate('/btc/' + data.pool_id)
       }}
     >
       <ItemLevel
@@ -37,7 +37,7 @@ export default function TopWinnersItem({
         maxLevel={maxLevel}
       />
       <div className="flex items-center gap-[10px]">
-        <div className="w-[40px] h-[40px] p-[2px] rounded-full bg-linear-to-b from-[#FFE093] via-[#FFECBC] to-[#DEAF37]">
+        <div className="w-[40px] h-[40px] shrink-0 p-[2px] rounded-full bg-linear-to-b from-[#FFE093] via-[#FFECBC] to-[#DEAF37]">
           <Avatar
             address={data?.user_info?.user}
             src={data?.user_info?.icon}
@@ -47,27 +47,25 @@ export default function TopWinnersItem({
         </div>
         <div>
           <div className="text-[10px] text-black/30">
-            {type === "winners" ? "Winner" : "Lister"}
+            {type === 'winners' ? 'Winner' : 'Lister'}
           </div>
           <div className="text-[12px] text-black font-semibold">
-            {data?.user_info?.name || formatAddress(data?.user)}{" "}
+            {data?.user_info?.name || formatAddress(data?.user)}{' '}
           </div>
         </div>
       </div>
       <div>
         <div className="text-[10px] text-black/30 text-right">
-          {type === "winners" && "Multiple"}
-          {type === "sellers" && "Premium"}
-          {type === "losers" && "Loss"}
+          {type === 'winners' && 'Multiple'}
+          {type === 'sellers' && 'Premium'}
+          {type === 'losers' && 'Loss'}
         </div>
         <div className="text-[12px] text-black text-right font-semibold">
-          {type === "winners" && `${formatNumber(data.profit_ratio, 0, true)}x`}
-          {type === "sellers" &&
-            `$${formatNumber(data.profit_amount, 2, true)}`}
-          {type === "losers" &&
-            `-$${formatNumber(Big(data.profit_amount || 0).abs(), 2, true)}`}
+          {type === 'winners' && `${formatNumber(data.profit_ratio, 0, true)}x`}
+          {type === 'sellers' && `$${formatNumber(data.profit_amount, 2, true)}`}
+          {type === 'losers' && `-$${formatNumber(Big(data.profit_amount || 0).abs(), 2, true)}`}
         </div>
       </div>
     </div>
-  );
+  )
 }

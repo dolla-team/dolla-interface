@@ -262,11 +262,9 @@ export const NoVoucherPanel = ({ login }: any) => {
           {/* Follow button */}
           <button
             onClick={() => {
-              set({
-                followClicked: true,
-              })
               const path = `https://x.com/intent/follow?screen_name=Dollamarket`
               window.open(path, '_blank')
+              set({ followClicked: true, followed: true })
             }}
             className="w-full h-[42px] cursor-pointer rounded-[12px] bg-[#00000026] flex items-center justify-between px-[16px] hover:bg-[#333333] transition-colors"
           >
@@ -281,7 +279,7 @@ export const NoVoucherPanel = ({ login }: any) => {
                     setTimeout(() => {
                       if (followClicked) set({ followed: true })
                       setRefreshingFollow(false)
-                    }, 5000)
+                    }, 2000)
                   }}
                 >
                   <Refresh refreshing={refreshingFollow} size={16} />
@@ -311,11 +309,9 @@ export const NoVoucherPanel = ({ login }: any) => {
           {/* Retweet button */}
           <button
             onClick={() => {
-              set({
-                retweetClicked: true,
-              })
               const path = `https://x.com/Dollamarket`
               window.open(path, '_blank')
+              set({ retweetClicked: true, retweeted: true })
             }}
             className="w-full h-[42px] cursor-pointer rounded-[12px] bg-[#00000026] flex items-center justify-between px-[16px] hover:bg-[#333333] transition-colors"
           >
@@ -330,7 +326,7 @@ export const NoVoucherPanel = ({ login }: any) => {
                     setTimeout(() => {
                       if (retweetClicked) set({ retweeted: true })
                       setRefreshingRetweet(false)
-                    }, 5000)
+                    }, 2000)
                   }}
                 >
                   <Refresh refreshing={refreshingRetweet} size={16} />
