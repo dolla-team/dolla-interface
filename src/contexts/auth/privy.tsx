@@ -283,7 +283,12 @@ export const AuthProvider: React.FC<{
     clearTimeout(window.loginTimeoutTimer)
     const embeddedWallet = wallets.find(w => w.walletClientType === 'privy')
     if (!chainType && !embeddedWallet) return
-    if (loginMethod === 'wallet' && address !== user?.wallet?.address) {
+    if (
+      loginMethod === 'wallet' &&
+      address &&
+      user?.wallet?.address &&
+      address !== user?.wallet?.address
+    ) {
       console.log('address not equal', address, user?.wallet?.address)
       logout()
       return
