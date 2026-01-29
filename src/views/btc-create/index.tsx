@@ -384,6 +384,7 @@ export default function BTCCreate() {
         pricePerBTC={pricePerBTC}
         onSuccess={(id: string) => {
           updateNearAccount?.();
+          setShowConfirmModal(false)
 
           // navigate("/portfolio/seller");
           setSuccessResult({

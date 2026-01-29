@@ -95,11 +95,11 @@ export default function RechargeFrom1click() {
         className="flex items-center gap-[8px] text-[16px] cursor-pointer button"
         onClick={() => {
           if (showAddress) {
-            setShowAddress(false);
-          } else if (walletStore.from === "token") {
-            walletStore.set({ panelType: "token" });
+            setShowAddress(false)
+          } else if (walletStore.from === 'token') {
+            walletStore.set({ panelType: 'token' })
           } else {
-            walletStore.set({ depositPanelType: "token-selector" });
+            walletStore.set({ depositPanelType: 'token-selector' })
           }
         }}
       >
@@ -110,10 +110,7 @@ export default function RechargeFrom1click() {
       {!showAddress && (
         <div className="pt-[20px]">
           <div className="flex flex-col items-center">
-            <img
-              src={walletStore.selectedToken.icon}
-              className="w-[40px] h-[40px] object-cover"
-            />
+            <img src={walletStore.selectedToken.icon} className="w-[40px] h-[40px] object-cover" />
             <div className="text-[16px] font-[500] mt-[6px]">
               {formatNumber(
                 walletStore.selectedToken.isBaseToken
@@ -121,18 +118,16 @@ export default function RechargeFrom1click() {
                   : nearAccount?.balance,
                 walletStore.selectedToken.isBaseToken ? 6 : 2,
                 true
-              )}{" "}
+              )}{' '}
               {walletStore.selectedToken.symbol}
             </div>
           </div>
-          <div className="text-[14px] font-[500] mt-[20px]">
-            Select Receiving Network
-          </div>
+          <div className="text-[14px] font-[500] mt-[20px]">Select Receiving Network</div>
           <ChainSelector
             selectedToken={walletStore.selectedToken}
             selectedChain={chain}
             onSelect={(chain: any) => {
-              setChain(chain);
+              setChain(chain)
             }}
             className="h-[calc(100vh-390px)] mt-[10px]"
           />
@@ -141,8 +136,8 @@ export default function RechargeFrom1click() {
             <div className="mt-[6px] py-[10px] px-[6px] text-[12px] flex gap-[8px] leading-[14px] text-black font-[300] bg-[#FFC42F]/10 rounded-[12px]">
               <WarningIcon />
               <div>
-                Your assets must be sent to the same network you select here.
-                Depositing through any other network cannot be recovered.
+                Your assets must be sent to the same network you select here. Depositing through any
+                other network cannot be recovered.
               </div>
             </div>
             <button
@@ -150,22 +145,22 @@ export default function RechargeFrom1click() {
               className="w-full bg-black mt-[10px] cursor-pointer text-white text-[14px] font-[400] rounded-[12px] py-[14px] transition-colors duration-200 hover:bg-[#222] disabled:opacity-50 disabled:cursor-not-allowed"
               onClick={() => {
                 if (quote || loading) {
-                  setShowAddress(true);
+                  setShowAddress(true)
                   report({
                     address: quote?.depositAddress,
-                    type: "deposit"
-                  });
+                    type: 'deposit',
+                  })
                 }
               }}
             >
-              {loading ? <Loading size={20} /> : errorTips || "Confirm"}
+              {loading ? <Loading size={20} /> : errorTips || 'Confirm'}
             </button>
           </div>
         </div>
       )}
 
       {showAddress && quote && (
-        <div className="pt-[50px]">
+        <div className="pt-[50px] overflow-y-auto h-[calc(100%-20px)]">
           <Recharge
             token={walletStore.selectedToken}
             address={quote?.depositAddress}
@@ -173,12 +168,12 @@ export default function RechargeFrom1click() {
           />
           <InfoPanel
             minDeposit={`> ${
-              chain?.blockchain === "btc"
+              chain?.blockchain === 'btc'
                 ? Number(BTC_DEPOSIT_AMOUNT) / 1e8
                 : walletStore.selectedToken.minDepositAmount
             } 
                 ${chain?.symbol || walletStore.selectedToken.symbol}`}
-            time={chain?.blockchain === "btc" ? "15" : "1"}
+            time={chain?.blockchain === 'btc' ? '15' : '1'}
             fee={`${formatNumber(
               Big(quote?.amountInFormatted || 0)
                 .minus(quote?.amountOutFormatted || 0)
@@ -186,11 +181,7 @@ export default function RechargeFrom1click() {
               6,
               true
             )} ${chain?.symbol || walletStore.selectedToken.symbol}`}
-            maxDeposit={`${formatNumber(
-              walletStore.selectedToken.maxDepositAmount,
-              0,
-              true
-            )} 
+            maxDeposit={`${formatNumber(walletStore.selectedToken.maxDepositAmount, 0, true)} 
                 ${chain?.symbol || walletStore.selectedToken.symbol}`}
           />
           {/* <div className="absolute bottom-[20px] left-0 w-full">
@@ -238,7 +229,7 @@ export default function RechargeFrom1click() {
         </div>
       )}
     </div>
-  );
+  )
 }
 
 const InfoPanel = ({

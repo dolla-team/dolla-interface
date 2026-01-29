@@ -1,7 +1,6 @@
 import clsx from "clsx";
 import { useState } from "react";
-import { Chart, registerables } from "chart.js";
-import { formatNumber } from "@/utils/format/number";
+import { Chart, registerables } from 'chart.js'
 import Popover, {
   PopoverPlacement,
   PopoverTrigger
@@ -42,18 +41,18 @@ export default function TotalBids({
         </div>
         <div className="flex">
           {[
-            { label: "1D", value: 1, period: "1d" as const },
-            { label: "1W", value: 7, period: "1w" as const },
-            { label: "1M", value: 30, period: "1m" as const },
-            { label: "All", value: 0, period: "all" as const }
-          ].map((item) => (
+            { label: '1D', value: 1, period: '1d' as const },
+            { label: '1W', value: 7, period: '1w' as const },
+            { label: '1M', value: 30, period: '1m' as const },
+            { label: 'All', value: 0, period: 'all' as const },
+          ].map(item => (
             <div
               key={item.value}
               className={clsx(
-                "w-[46px] h-[30px] flex items-center justify-center rounded-[8px] text-[12px] text-black cursor-pointer",
+                'w-[46px] h-[30px] flex items-center justify-center rounded-[8px] text-[12px] text-black cursor-pointer',
                 item.value === active.value
-                  ? "border border-[#F2F2F233] bg-[#0000000D]"
-                  : "opacity-60"
+                  ? 'border border-[#F2F2F233] bg-[#0000000D]'
+                  : 'opacity-60'
               )}
               onClick={() => setActive(item)}
             >
@@ -62,12 +61,7 @@ export default function TotalBids({
           ))}
         </div>
       </div>
-      <div className="absolute  z-[2]">
-        <div className="text-[24px] font-[600] text-black">
-          {formatNumber(data?.accumulative_bids, 0, true, { prefix: "$" })}
-        </div>
-        <div className="text-[14px] text-black/60">{active.label}-Time</div>
-      </div>
+
       <BidsChart
         chain="near"
         period={active.period}
@@ -76,9 +70,10 @@ export default function TotalBids({
         winnerInfo={pool?.winner_user_info}
         winnerBidsTime={winnerBidsTime}
         winnerBidList={winnerBidList}
+        label={active.label}
       />
     </div>
-  );
+  )
 }
 
 const VolumeInfo = () => {

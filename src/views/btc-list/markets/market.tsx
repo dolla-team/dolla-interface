@@ -16,25 +16,27 @@ import AnimatedCounter from "@/components/animated-counter";
 import { motion, AnimatePresence } from "framer-motion";
 
 // Format relative time to short format (e.g., "9 days" -> "9d", "5 months" -> "5m")
-function formatRelativeTime(
+export function formatRelativeTime(
   date: string | number | Date,
-  compareDate?: string | number | Date
+  compareDate?: string | number | Date,
+  isShort?: boolean
 ): string {
-  const start = dayjs(date);
-  const end = compareDate ? dayjs(compareDate) : dayjs();
-  const diffSeconds = end.diff(start, "second");
-  const diffMinutes = end.diff(start, "minute");
-  const diffHours = end.diff(start, "hour");
-  const diffDays = end.diff(start, "day");
-  const diffMonths = end.diff(start, "month");
-  const diffYears = end.diff(start, "year");
+  const start = dayjs(date)
+  const end = compareDate ? dayjs(compareDate) : dayjs()
+  const diffSeconds = end.diff(start, 'second')
+  const diffMinutes = end.diff(start, 'minute')
+  const diffHours = end.diff(start, 'hour')
+  const diffDays = end.diff(start, 'day')
+  const diffMonths = end.diff(start, 'month')
+  const diffYears = end.diff(start, 'year')
 
-  if (diffYears > 0) return `${diffYears}y`;
-  if (diffMonths > 0) return `${diffMonths}m`;
-  if (diffDays > 0) return `${diffDays}d`;
-  if (diffHours > 0) return `${diffHours}h`;
-  if (diffMinutes > 0) return `${diffMinutes}min`;
-  return `${diffSeconds}s`;
+  if (diffYears > 0) return isShort ? `${diffYears}y` : `${diffYears} years`
+  if (diffMonths > 0) return isShort ? `${diffMonths}m` : `${diffMonths} months`
+  if (diffDays > 0) return isShort ? `${diffDays}d` : `${diffDays} days`
+  if (diffHours > 0) return isShort ? `${diffHours}h` : `${diffHours} hours`
+  if (diffMinutes > 0) return isShort ? `${diffMinutes}min` : `${diffMinutes} minutes`
+
+  return isShort ? `${diffSeconds}s` : `${diffSeconds} seconds`
 }
 
 export default function Market({
@@ -101,7 +103,7 @@ export default function Market({
       onClick={onClick}
       className="relative h-[70px] button rounded-[10px] bg-[#0000000D] border border-[#F2F2F233] overflow-hidden"
       style={{
-        background: bgColor
+        background: bgColor,
       }}
     >
       <AnimatePresence>
@@ -110,22 +112,22 @@ export default function Market({
             className="absolute top-0 left-0 w-1/2 z-[1] h-full rounded-[10px]"
             style={{
               background:
-                "linear-gradient(90deg, transparent 30%, rgba(255, 166, 0, 0.5) 50%, transparent 70%)"
+                'linear-gradient(90deg, transparent 30%, rgba(255, 166, 0, 0.5) 50%, transparent 70%)',
             }}
             initial={{
-              x: -200
+              x: -200,
             }}
             animate={{
-              x: 1200
+              x: 1200,
             }}
             exit={{
-              opacity: 0
+              opacity: 0,
             }}
             transition={{
               duration: 2,
               repeat: 2,
-              repeatType: "loop",
-              ease: "linear"
+              repeatType: 'loop',
+              ease: 'linear',
             }}
           />
         )}
@@ -140,34 +142,28 @@ export default function Market({
           <div
             key={column.title}
             className={clsx(
-              "flex items-center",
-              column.align === "center" && "justify-center",
-              column.align === "right" && "justify-end"
+              'flex items-center',
+              column.align === 'center' && 'justify-center',
+              column.align === 'right' && 'justify-end'
             )}
             style={{ width: column.width }}
           >
-            {column.dataIndex === "pool_id" && (
-              <div className="text-[14px] text-black button">
-                {data.pool_id}
-              </div>
+            {column.dataIndex === 'pool_id' && (
+              <div className="text-[14px] text-black button">{data.pool_id}</div>
             )}
-            {column.dataIndex === "live" && (
+            {column.dataIndex === 'live' && (
               <div className="text-[14px] text-black">
-                {formatRelativeTime(data.created_at)}
+                {formatRelativeTime(data.created_at, dayjs().toDate(), true)}
               </div>
             )}
-            {column.dataIndex === "lasted" && (
+            {column.dataIndex === 'lasted' && (
               <div className="text-[14px] text-black">
-                {formatRelativeTime(data.created_at, data.result_time)}
+                {formatRelativeTime(data.created_at, data.result_time, true)}
               </div>
             )}
-            {column.dataIndex === "market" && (
+            {column.dataIndex === 'market' && (
               <div className="flex items-center gap-[16px]">
-                <BtcImg
-                  index={amountIndex}
-                  id={data.pool_id}
-                  amount={data.amount}
-                />
+                <BtcImg index={amountIndex} id={data.pool_id} amount={data.amount} />
                 <div>
                   <div className="text-[14px] text-black font-semibold">
                     {data.amount} {BASE_TOKEN.symbol}
@@ -188,30 +184,27 @@ export default function Market({
                 </div>
               </div>
             )}
-            {column.dataIndex === "anchor_price" && (
+            {column.dataIndex === 'anchor_price' && (
               <div
-                className={clsx(
-                  "text-[14px]",
-                  amountIndex !== 2 && "font-[500]"
-                )}
+                className={clsx('text-[14px]', amountIndex !== 2 && 'font-[500]')}
                 style={{
                   background:
                     amountIndex === 0
-                      ? "linear-gradient(90deg, #BF8B29 0%, #FFA600 100%)"
+                      ? 'linear-gradient(90deg, #BF8B29 0%, #FFA600 100%)'
                       : amountIndex === 1
-                      ? "linear-gradient(90deg, #717A8D 0%, #7282B9 23.56%, #ACA1C4 100%)"
-                      : "#000",
-                  backgroundClip: "text",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent"
+                        ? 'linear-gradient(90deg, #717A8D 0%, #7282B9 23.56%, #ACA1C4 100%)'
+                        : '#000',
+                  backgroundClip: 'text',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
                 }}
               >
                 {formatNumber(data?.reward_usd || 0, 1, true, {
-                  prefix: "$"
+                  prefix: '$',
                 })}
               </div>
             )}
-            {column.dataIndex === "accumulative_bids" &&
+            {column.dataIndex === 'accumulative_bids' &&
               (data?.status === 1 ? (
                 <AnimatedCounter
                   value={data.accumulative_bids}
@@ -221,14 +214,14 @@ export default function Market({
               ) : (
                 <div className="text-[14px] text-black">
                   {formatNumber(data.accumulative_bids, 0, true, {
-                    prefix: "$"
+                    prefix: '$',
                   })}
                 </div>
               ))}
-            {column.dataIndex === "participants" && (
+            {column.dataIndex === 'participants' && (
               <div className="text-[14px] text-black">{data.participants}</div>
             )}
-            {column.dataIndex === "hitting" && (
+            {column.dataIndex === 'hitting' && (
               <div className="w-full">
                 {spilled > 0 ? (
                   <div className="text-[14px] font-[500]">
@@ -237,22 +230,18 @@ export default function Market({
                       style={{
                         background:
                           data.status === 1
-                            ? "linear-gradient(90deg, #BF8B29 0%, #FFA600 100%)"
-                            : "#8A87AA",
-                        backgroundClip: "text",
-                        WebkitBackgroundClip: "text",
-                        WebkitTextFillColor: "transparent"
+                            ? 'linear-gradient(90deg, #BF8B29 0%, #FFA600 100%)'
+                            : '#8A87AA',
+                        backgroundClip: 'text',
+                        WebkitBackgroundClip: 'text',
+                        WebkitTextFillColor: 'transparent',
                       }}
                     >
                       Overfilled
                     </span>
-                    <span
-                      className={clsx(
-                        data.status === 1 ? "text-[#22D25D]" : "text-[#8A87AA]"
-                      )}
-                    >
-                      {" "}
-                      +{formatNumber(spilled, 0, true, { prefix: "$" })}
+                    <span className={clsx(data.status === 1 ? 'text-[#22D25D]' : 'text-[#8A87AA]')}>
+                      {' '}
+                      +{formatNumber(spilled, 0, true, { prefix: '$' })}
                     </span>
                   </div>
                 ) : (
@@ -261,13 +250,13 @@ export default function Market({
                       progress,
                       spilled,
                       spilledPercent,
-                      status: data.status
+                      status: data.status,
                     }}
                   />
                 )}
               </div>
             )}
-            {column.dataIndex === "winner" && (
+            {column.dataIndex === 'winner' && (
               <div className="flex items-center justify-end gap-[8px]">
                 <div className="relative shrink-0">
                   <Avatar
@@ -285,13 +274,12 @@ export default function Market({
                 </div>
                 <div>
                   <div className="text-[14px] text-black w-[100px] truncate">
-                    {data.winner_user_info?.name ||
-                      formatAddress(data.winner_user_info?.user)}
+                    {data.winner_user_info?.name || formatAddress(data.winner_user_info?.user)}
                   </div>
                   <div
-                    className={clsx("text-[14px] font-[500]")}
+                    className={clsx('text-[14px] font-[500]')}
                     style={{
-                      color: textColor
+                      color: textColor,
                     }}
                   >
                     {formatNumber(data.winner_profit_ratio, 0, true)}x
@@ -303,5 +291,5 @@ export default function Market({
         ))}
       </div>
     </div>
-  );
+  )
 }
