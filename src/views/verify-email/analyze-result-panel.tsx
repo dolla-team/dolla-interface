@@ -123,7 +123,10 @@ export const PredictionsPanel = ({ analysisData }: any) => {
                   delay: index * 0.5,
                   ease: 'easeOut',
                 }}
-                className="w-[494px] h-[68px] gap-[10px] rounded-[12px] bg-[#00000026] flex items-center pl-[18px]"
+                className={clsx(
+                  'h-[68px] gap-[10px] rounded-[12px] bg-[#00000026] flex items-center pl-[18px]',
+                  isMobile ? 'w-full' : 'w-[494px]'
+                )}
               >
                 <div
                   className={clsx(

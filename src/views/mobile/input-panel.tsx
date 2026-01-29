@@ -5,8 +5,18 @@ import { motion } from 'framer-motion'
 import { LineIcon } from '@/views/verify-email/icons'
 import AnalyzeLoadingPanel from '@/views/verify-email/analyze-loading-panel'
 import { useGlobalStore } from '@/stores/use-global'
+import SocialLinks from '@/views/verify-email/social-links'
+import { BackButton } from '@/views/verify-email/analyze-result-panel'
 
-export default function InputPanel({ xProfileUrl, setXProfileUrl, isValid, data, onAnalyze }: any) {
+
+export default function InputPanel({
+  xProfileUrl,
+  setXProfileUrl,
+  isValid,
+  handle,
+  data,
+  onAnalyze,
+}: any) {
   const globalStore = useGlobalStore()
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
@@ -19,12 +29,22 @@ export default function InputPanel({ xProfileUrl, setXProfileUrl, isValid, data,
 
   return (
     <div className="pt-[50px] h-screen">
+      {globalStore.isInWhitelist && (
+        <BackButton
+          onClick={() => {
+            globalStore.set({
+              isInWhitelist: false,
+            })
+          }}
+          className="fixed z-[5] top-[20px] left-[10px]"
+        />
+      )}
       <div className="text-white text-center text-lg font-semibold leading-[130%] uppercase">
-        {data?.status === 'input' ? 'attemp to get access to' : ''}
+        {data?.status === 'input' && !globalStore.isInWhitelist ? 'attemp to get access to' : ''}
       </div>
       <div className="flex justify-center mt-[10px] relative">
         <DollaEye height={60} />
-        {data?.status === 'input' && (
+        {data?.status === 'input' && !globalStore.isInWhitelist && (
           <img
             src="/verify/verify-labels.png"
             className="absolute w-[107px] h-[71px] object-cover top-[-10px] right-[calc(50%-180px)]"
@@ -32,7 +52,7 @@ export default function InputPanel({ xProfileUrl, setXProfileUrl, isValid, data,
         )}
       </div>
       <div className="w-[348px] mx-auto mt-[14px] text-[#D9D9D9] text-center font-[Courier] text-base leading-[120%] tracking-[-0.96px]">
-        {data?.status === 'input'
+        {data?.status === 'input' && !globalStore.isInWhitelist
           ? "and get personalized probabilistic facts that you don't even know about yourself"
           : ''}
       </div>
@@ -115,11 +135,12 @@ export default function InputPanel({ xProfileUrl, setXProfileUrl, isValid, data,
           )}
           {data?.status === 'loading' && (
             <div className="absolute z-[2] bottom-[60px] left-0 right-0 w-full h-[210px] overflow-hidden flex flex-col items-center">
-              <AnalyzeLoadingPanel handle={data?.handle} onAnalyze={onAnalyze} />
+              <AnalyzeLoadingPanel handle={handle} onAnalyze={onAnalyze} />
             </div>
           )}
         </>
       )}
+      <SocialLinks className="absolute bottom-[20px] w-full flex items-center justify-center gap-[50px]" />
     </div>
   )
 }
