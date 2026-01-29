@@ -10,24 +10,13 @@ import { useVerifyStore } from '@/stores/use-verify'
 import { useAuth } from '@/contexts/auth'
 import { useAnalysisDataStore } from '@/stores/use-analysis-data'
 import { useGlobalStore } from '@/stores/use-global'
+import useIsMobile from '@/hooks/use-is-mobile'
 import { EmptyIcon } from './icons'
 
 export default function ResultPanel({ result, reward, onBackToAnalyze }: any) {
-  const savedImageRef = useRef<HTMLDivElement>(null)
-  const { generateAndDownload } = useShare()
   const { login, logout, user } = useAuth()
   const analysisData = useAnalysisDataStore()
   const globalStore = useGlobalStore()
-
-  const handleShareToTwitter = () => {
-    const currentUrl = window.location.href
-    const text = `turns out my life has a probability curve.%0A%0Amath is kinda exposing me rn.%0A%0Aget your own probabilistic facts card at: dolla.market`
-    const twitterUrl = `https://twitter.com/intent/tweet?text=${text}&url=${encodeURIComponent(currentUrl)}`
-    window.open(twitterUrl, '_blank', 'width=550,height=420')
-  }
-
-  const predictions =
-    result.aiPredictions?.sort((a: any, b: any) => a.probability - b.probability) || []
 
   const isSameUser = user ? user?.twitter?.username === analysisData?.handle : true
 
@@ -55,7 +44,47 @@ export default function ResultPanel({ result, reward, onBackToAnalyze }: any) {
 
   return (
     <>
-      <div className="w-[542px] p-[24px] font-[Courier] mt-[20px] rounded-[20px] border-[#3E300E] bg-[#3F3F3F99] shadow-[0_2px_6px_0_rgba(0,0,0,0.25)_inset] backdrop-blur-[10px]">
+      <PredictionsPanel analysisData={analysisData} />
+
+      {reward > 0 ? (
+        <VoucherPanel
+          dei={result.finalScore}
+          rankInfo={result.rankInfo}
+          login={handleLogin}
+          logout={handleLogout}
+          reward={reward}
+          isSameUser={isSameUser}
+        />
+      ) : (
+        <NoVoucherPanel login={handleLogin} />
+      )}
+      <BackButton onClick={() => handleLogout()} className="fixed top-[20px] left-[20px]" />
+    </>
+  )
+}
+
+export const PredictionsPanel = ({ analysisData }: any) => {
+  const predictions =
+    analysisData.result?.aiPredictions?.sort((a: any, b: any) => a.probability - b.probability) ||
+    []
+  const isMobile = useIsMobile()
+  const savedImageRef = useRef<HTMLDivElement>(null)
+  const { generateAndDownload } = useShare()
+  const handleShareToTwitter = () => {
+    const currentUrl = window.location.href
+    const text = `turns out my life has a probability curve.%0A%0Amath is kinda exposing me rn.%0A%0Aget your own probabilistic facts card at: dolla.market`
+    const twitterUrl = `https://twitter.com/intent/tweet?text=${text}&url=${encodeURIComponent(currentUrl)}`
+    window.open(twitterUrl, '_blank', 'width=550,height=420')
+  }
+  const result = analysisData?.result || {}
+  return (
+    <>
+      <div
+        className={clsx(
+          'p-[24px] font-[Courier] mt-[20px] rounded-[20px] border-[#3E300E] bg-[#3F3F3F99] shadow-[0_2px_6px_0_rgba(0,0,0,0.25)_inset] backdrop-blur-[10px]',
+          isMobile ? 'w-full' : 'w-[542px]'
+        )}
+      >
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-[15px]">
             {result?.profile?.user?.profileImageUrl && (
@@ -95,7 +124,10 @@ export default function ResultPanel({ result, reward, onBackToAnalyze }: any) {
                   delay: index * 0.5,
                   ease: 'easeOut',
                 }}
-                className="w-[494px] h-[68px] gap-[10px] rounded-[12px] bg-[#00000026] flex items-center pl-[18px]"
+                className={clsx(
+                  'h-[68px] gap-[10px] rounded-[12px] bg-[#00000026] flex items-center pl-[18px]',
+                  isMobile ? 'w-full' : 'w-[494px]'
+                )}
               >
                 <div
                   className={clsx(
@@ -123,7 +155,12 @@ export default function ResultPanel({ result, reward, onBackToAnalyze }: any) {
         </div>
       </div>
       {predictions?.length > 0 && (
-        <div className="flex items-center justify-end gap-[14px] mt-[10px] w-full font-[Courier]">
+        <div
+          className={clsx(
+            'flex items-center gap-[14px] mt-[10px] w-full font-[Courier]',
+            isMobile ? 'justify-center' : 'justify-end'
+          )}
+        >
           <button
             onClick={async () => {
               if (!savedImageRef.current) {
@@ -180,42 +217,10 @@ export default function ResultPanel({ result, reward, onBackToAnalyze }: any) {
           </button>
         </div>
       )}
-      {reward > 0 ? (
-        <VoucherPanel
-          dei={result.finalScore}
-          rankInfo={result.rankInfo}
-          login={handleLogin}
-          logout={handleLogout}
-          reward={reward}
-          isSameUser={isSameUser}
-        />
-      ) : (
-        <NoVoucherPanel login={handleLogin} />
-      )}
-      <button
-        onClick={() => handleLogout()}
-        className="fixed top-[20px] left-[20px] button w-[88px] h-[34px] rounded-[20px] border border-[#373737] bg-[#00000080] backdrop-blur-[15px] flex items-center justify-center gap-[10px]"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="8"
-          height="12"
-          viewBox="0 0 8 12"
-          fill="none"
-        >
-          <path
-            d="M6.41406 1L1.41406 6L6.41406 11"
-            stroke="white"
-            strokeWidth="2"
-            strokeLinecap="round"
-          />
-        </svg>
-        <span className="text-white text-[12px]">Back</span>
-      </button>
       {predictions?.length > 0 && (
         <SavedImage
           imageRef={savedImageRef}
-          result={result}
+          result={analysisData?.result}
           handle={analysisData?.handle}
           predictions={predictions}
         />
@@ -228,29 +233,38 @@ export const NoVoucherPanel = ({ login }: any) => {
   const [refreshingFollow, setRefreshingFollow] = useState(false)
   const [refreshingRetweet, setRefreshingRetweet] = useState(false)
   const { followed, retweeted, followClicked, retweetClicked, set } = useVerifyStore()
+  const isMobile = useIsMobile()
 
   const handleGetStart = () => {
-    login()
+    login?.()
   }
 
   return (
     <>
-      <div className="w-[542px] mt-[20px] text-center font-mono text-[16px] font-normal leading-[120%] tracking-[-1.08px] text-white">
+      <div
+        className={clsx(
+          'mt-[20px] text-center font-[Courier] text-[16px] font-normal leading-[120%] tracking-[-1.08px] text-white',
+          isMobile ? 'w-full' : 'w-[542px]'
+        )}
+      >
         <div>Your Dolla Eligibility Index (DEI) is too low.</div>
         <div className="mt-[4px] leading-[150%]">
           Get access via another user's referral link or complete the following tasks:
         </div>
       </div>
-      <div className="w-[542px] px-[24px] py-[16px] mt-[20px] font-[Courier] rounded-[20px] border border-[#3E300E] bg-[#3F3F3F99] shadow-[0_2px_6px_0_rgba(0,0,0,0.25)_inset] backdrop-blur-[10px]">
+      <div
+        className={clsx(
+          ' px-[24px] py-[16px] mt-[20px] font-[Courier] rounded-[20px] border border-[#3E300E] bg-[#3F3F3F99] shadow-[0_2px_6px_0_rgba(0,0,0,0.25)_inset] backdrop-blur-[10px]',
+          isMobile ? 'w-full' : 'w-[542px]'
+        )}
+      >
         <div className="flex flex-col gap-[10px]">
           {/* Follow button */}
           <button
             onClick={() => {
-              set({
-                followClicked: true,
-              })
               const path = `https://x.com/intent/follow?screen_name=Dollamarket`
               window.open(path, '_blank')
+              set({ followClicked: true, followed: true })
             }}
             className="w-full h-[42px] cursor-pointer rounded-[12px] bg-[#00000026] flex items-center justify-between px-[16px] hover:bg-[#333333] transition-colors"
           >
@@ -265,7 +279,7 @@ export const NoVoucherPanel = ({ login }: any) => {
                     setTimeout(() => {
                       if (followClicked) set({ followed: true })
                       setRefreshingFollow(false)
-                    }, 5000)
+                    }, 2000)
                   }}
                 >
                   <Refresh refreshing={refreshingFollow} size={16} />
@@ -295,11 +309,9 @@ export const NoVoucherPanel = ({ login }: any) => {
           {/* Retweet button */}
           <button
             onClick={() => {
-              set({
-                retweetClicked: true,
-              })
               const path = `https://x.com/Dollamarket`
               window.open(path, '_blank')
+              set({ retweetClicked: true, retweeted: true })
             }}
             className="w-full h-[42px] cursor-pointer rounded-[12px] bg-[#00000026] flex items-center justify-between px-[16px] hover:bg-[#333333] transition-colors"
           >
@@ -314,7 +326,7 @@ export const NoVoucherPanel = ({ login }: any) => {
                     setTimeout(() => {
                       if (retweetClicked) set({ retweeted: true })
                       setRefreshingRetweet(false)
-                    }, 5000)
+                    }, 2000)
                   }}
                 >
                   <Refresh refreshing={refreshingRetweet} size={16} />
@@ -342,76 +354,111 @@ export const NoVoucherPanel = ({ login }: any) => {
           </button>
 
           {/* Get Start button */}
-          <Button
-            onClick={handleGetStart}
-            disabled={!followed || !retweeted}
-            className="mx-auto w-[208px] h-[50px] rounded-[12px] !bg-[#FFC42F] !text-[#000] mt-[8px] text-[14px] font-[Unbounded]"
-          >
-            Sign In
-          </Button>
+          {!isMobile ? (
+            <Button
+              onClick={handleGetStart}
+              disabled={!followed || !retweeted}
+              className="mx-auto w-[208px] h-[50px] rounded-[12px] !bg-[#FFC42F] !text-[#000] mt-[8px] text-[14px] font-[Unbounded]"
+            >
+              Sign In
+            </Button>
+          ) : (
+            <div className="mt-[10px] font-bold">Please head to website on PC to sign in</div>
+          )}
         </div>
       </div>
     </>
   )
 }
 
-const VoucherPanel = ({ dei, reward, rankInfo, login, logout, isSameUser }: any) => {
+export const VoucherPanel = ({ dei, reward, rankInfo, login, logout, isSameUser }: any) => {
   const goToApp = async () => {
-    login()
+    login?.()
   }
   const percentage =
     !rankInfo?.rank || !rankInfo?.total ? 0 : (rankInfo.rank / rankInfo?.total) * 100
 
+  const isMobile = useIsMobile()
+
   return (
     <div
-      className="w-[542px] rounded-[20px] border border-[#FFE1AA] mt-[20px] px-[24px] py-[18px] font-[Courier]"
+      className={clsx(
+        'rounded-[20px] border border-[#FFE1AA] mt-[20px] px-[24px] py-[18px] font-[Courier]',
+        isMobile ? 'w-full' : 'w-[542px]'
+      )}
       style={{
         background: 'linear-gradient(90deg, #FFCE52 0%, #FFE9B2 100%)',
       }}
     >
-      <div className="text-[16px] leading-[120%] text-black w-[444px] text-center mx-auto">
-        Your dolla eligibility index (DEI) is {dei}, in top {percentage.toFixed(0)}% Congrats!
-        You’ve got voucher
+      <div
+        className={clsx(
+          'text-[16px] leading-[120%] text-black text-center mx-auto',
+          isMobile ? 'w-full' : 'w-[444px]'
+        )}
+      >
+        <div>
+          Your dolla eligibility index (DEI) is {dei}, in top {percentage.toFixed(0)}%
+        </div>
+        <div>Congrats! You’ve got voucher</div>
       </div>
-      <div className="flex items-center gap-[15px] text-[18px] text-black italic font-[700] mt-[12px]">
-        <div className="w-[216px] h-[60px] rounded-[12px] bg-[#0000001A] flex items-center justify-center gap-[4px] ">
+      <div
+        className={clsx(
+          'flex items-center gap-[15px] text-[18px] text-black italic font-[700] mt-[12px]',
+          isMobile ? 'flex-col' : 'flex-row'
+        )}
+      >
+        <div
+          className={clsx(
+            'h-[60px] rounded-[12px] bg-[#0000001A] flex items-center gap-[4px]',
+            isMobile ? 'w-full pl-[20px]' : 'w-[216px] justify-center'
+          )}
+        >
           <span>·</span>
           <img src="/tokens/usdt.png" alt="usdt" className="w-[24px] h-[24px]" />
           <span>{reward} USDT Voucher</span>
         </div>
-        <div className="w-[262px] h-[60px] rounded-[12px] bg-[#0000001A] flex items-center justify-center gap-[4px] ">
+        <div
+          className={clsx(
+            'h-[60px] rounded-[12px] bg-[#0000001A] flex items-center gap-[4px]',
+            isMobile ? 'w-full pl-[20px]' : 'w-[262px] justify-center'
+          )}
+        >
           <span>·</span>
           <span>Dollar Priority Access</span>
         </div>
       </div>
-      <Button
-        onClick={goToApp}
-        disabled={!isSameUser}
-        className="w-full h-[50px] gap-[10px] rounded-[12px] !bg-[#000] !text-[#fff] mt-[20px] text-[14px] font-[Unbounded] font-[400]"
-      >
-        {isSameUser ? (
-          <>
-            <span>Verify X to claim</span>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="15"
-              height="11"
-              viewBox="0 0 15 11"
-              fill="none"
-            >
-              <path
-                d="M1 5.5H13.5M13.5 5.5L9 1M13.5 5.5L9 10"
-                stroke="white"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </>
-        ) : (
-          'Verify failed'
-        )}
-      </Button>
+      {!isMobile ? (
+        <Button
+          onClick={goToApp}
+          disabled={!isSameUser}
+          className="w-full h-[50px] gap-[10px] rounded-[12px] !bg-[#000] !text-[#fff] mt-[20px] text-[14px] font-[Unbounded] font-[400]"
+        >
+          {isSameUser ? (
+            <>
+              <span>Verify X to claim</span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="15"
+                height="11"
+                viewBox="0 0 15 11"
+                fill="none"
+              >
+                <path
+                  d="M1 5.5H13.5M13.5 5.5L9 1M13.5 5.5L9 10"
+                  stroke="white"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </>
+          ) : (
+            'Verify failed'
+          )}
+        </Button>
+      ) : (
+        <div className="mt-[10px] font-bold">Please head to website on PC to claim</div>
+      )}
       {!isSameUser && (
         <div className="text-[12px] text-[#FF2F2F] mt-[10px] text-center font-[Unbounded]">
           The X account is inconsistent, please{' '}
@@ -441,3 +488,25 @@ const Completed = () => (
     <span className="text-[#54FF59] text-[14px]">Complete</span>
   </div>
 )
+
+export const BackButton = ({ onClick, className }: { onClick: () => void; className: string }) => {
+  return (
+    <button
+      onClick={onClick}
+      className={clsx(
+        'button w-[88px] h-[34px] rounded-[20px] border border-[#373737] bg-[#00000080] backdrop-blur-[15px] flex items-center justify-center gap-[10px]',
+        className
+      )}
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" width="8" height="12" viewBox="0 0 8 12" fill="none">
+        <path
+          d="M6.41406 1L1.41406 6L6.41406 11"
+          stroke="white"
+          strokeWidth="2"
+          strokeLinecap="round"
+        />
+      </svg>
+      <span className="text-white text-[12px]">Back</span>
+    </button>
+  )
+}
