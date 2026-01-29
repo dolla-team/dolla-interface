@@ -8,6 +8,7 @@ import dayjs from "@/libs/dayjs";
 import { formatNumber } from "@/utils/format/number";
 import BidsInfo from "../bids-info";
 import SoldOut from "./sold-out";
+import { formatRelativeTime } from '@/views/btc-list/markets/market'
 
 export default function BasicInfo() {
   const { poolAmount, pool } = useBtcContext();
@@ -44,8 +45,11 @@ export default function BasicInfo() {
           </div>
           <div className="text-[14px] text-[#8A87AA] mt-[12px]">
             Listed: {dayjs(pool?.created_at).format('YYYY/MM/DD')} (
-            {pool?.created_at && pool?.result_time
-              ? dayjs(pool.created_at).from(dayjs(pool.result_time), true)
+            {pool?.created_at
+              ? formatRelativeTime(
+                  pool?.created_at,
+                  pool?.status === 1 ? dayjs() : pool.result_time
+                )
               : '-'}
             )
           </div>
