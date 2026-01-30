@@ -12,68 +12,77 @@ interface UserPoolBid {
   [key: string]: any;
 }
 
-const DEFAULT_LIMIT = 100;
-const DEFAULT_OFFSET = 0;
+const DEFAULT_LIMIT = 9
 
 export default function useUserPoolBids(params: UseUserPoolBidsParams) {
-  const {
-    chain,
-    pool_id,
-    limit = DEFAULT_LIMIT,
-    offset = DEFAULT_OFFSET
-  } = params;
-  const [bids, setBids] = useState<UserPoolBid[]>([]);
-  const [totalTimes, setTotalTimes] = useState(0);
-  const [totalBids, setTotalBids] = useState(0);
+  const { chain, pool_id, limit = DEFAULT_LIMIT } = params
+  const [bids, setBids] = useState<UserPoolBid[]>([])
   const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(1)
+  const [hasMore, setHasMore] = useState(false)
+
+  // Calculate offset from page
+  const offset = (page - 1) * limit
 
   const fetchUserPoolBids = useCallback(async () => {
     if (!pool_id) {
-      setLoading(false);
-      return;
+      setLoading(false)
+      return
     }
 
     try {
-      setLoading(true);
+      setLoading(true)
 
       const queryParams = new URLSearchParams({
         chain,
         limit: limit.toString(),
         offset: offset.toString(),
-        pool_id: pool_id.toString()
-      });
+        pool_id: pool_id.toString(),
+      })
 
-      const res = await axiosInstance.get(
-        `/api/v1/user/pool/bids?${queryParams.toString()}`
-      );
+      const res = await axiosInstance.get(`/api/v1/user/pool/bids?${queryParams.toString()}`)
 
-      const bidsList = res.data?.data?.list || [];
-      let _bids = 0;
-      bidsList.forEach((item: any) => {
-        _bids += item.times;
-      });
-      setTotalBids(_bids);
-      setTotalTimes(bidsList?.length || 0);
-      setBids(bidsList);
+      const bidsList = res.data?.data?.list || []
+      const hasNextPage = res.data?.data?.has_next_page ?? bidsList.length === limit
+
+      setBids(bidsList)
+      setHasMore(hasNextPage)
     } catch (error) {
-      console.error("Failed to fetch user pool bids:", error);
-      setBids([]);
+      console.error('Failed to fetch user pool bids:', error)
+      setBids([])
+      setHasMore(false)
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  }, [chain, pool_id, limit, offset]);
+  }, [chain, pool_id, limit, offset])
+
+  // Reset page when pool_id changes
+  useEffect(() => {
+    setPage(1)
+  }, [pool_id])
 
   useEffect(() => {
     if (pool_id) {
-      fetchUserPoolBids();
+      fetchUserPoolBids()
     }
-  }, [pool_id]);
+  }, [pool_id, page, fetchUserPoolBids])
+
+  // Go to specific page
+  const goToPage = useCallback(
+    (targetPage: number) => {
+      if (targetPage >= 1 && !loading) {
+        setPage(targetPage)
+      }
+    },
+    [loading]
+  )
 
   return {
     bids,
-    totalBids,
-    totalTimes,
     loading,
-    refetch: fetchUserPoolBids
-  };
+    page,
+    hasMore,
+    goToPage,
+    refetch: fetchUserPoolBids,
+  }
 }
