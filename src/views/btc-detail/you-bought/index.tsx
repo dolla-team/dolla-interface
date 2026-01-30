@@ -2,13 +2,20 @@ import YouBoughtItem from "./item";
 import Cancel from "./cancel";
 import { useBtcContext } from "@/views/btc/context";
 import useUserPoolBids from "../use-user-pool-bids";
+import Pagination from '@/components/pagination'
+import Loading from '@/components/icons/loading'
+import { useMemo } from 'react'
 
 export default function YouBought() {
   const { pool } = useBtcContext();
-  const { bids, loading, totalBids, totalTimes } = useUserPoolBids({
-    chain: "near",
-    pool_id: pool?.pool_id
-  });
+  const { bids, page, hasMore, loading, goToPage } = useUserPoolBids({
+    chain: 'near',
+    pool_id: pool?.pool_id,
+  })
+  const [totalBids, totalTimes] = useMemo(() => {
+    const userData = pool?.user_draw_attempt
+    return [userData?.times || 0, userData?.played_number || 0]
+  }, [pool])
 
   return (
     <div className="mt-[20px]">
@@ -22,17 +29,31 @@ export default function YouBought() {
             </div>
             {pool?.status === 3 && pool?.user_draw_attempt && <Cancel />}
           </div>
-          <div className="flex flex-col gap-[10px] mt-[10px] max-h-[786px] overflow-y-auto overflow-x-hidden">
-            {bids?.map((item: any) => (
-              <YouBoughtItem key={item.id} data={item} />
-            ))}
+          <div className="flex flex-col gap-[8px] mt-[10px] h-[760px] overflow-x-hidden">
+            {loading ? (
+              <div className="flex items-center justify-center h-full">
+                <Loading size={20} />
+              </div>
+            ) : (
+              bids?.map((item: any) => <YouBoughtItem key={item.id} data={item} />)
+            )}
           </div>
+          {totalTimes > 9 && (
+            <div className="flex justify-end items-center mr-[20px]">
+              <Pagination
+                current={page}
+                hasNextPage={hasMore}
+                onNext={() => goToPage(page + 1)}
+                onPrev={() => goToPage(page - 1)}
+              />
+            </div>
+          )}
         </>
       ) : (
         <div className="w-full h-[42px] bg-[#0000000D] border border-[#F2F2F233] rounded-[12px] mt-[16px] flex items-center justify-around text-[14px] text-[#8C8B8B] font-[400]">
-          <span>You didn’t participate in</span>
+          {loading ? <Loading size={20} /> : <span>You didn’t participate in</span>}
         </div>
       )}
     </div>
-  );
+  )
 }
