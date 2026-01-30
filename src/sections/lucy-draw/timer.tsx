@@ -18,16 +18,15 @@ export default function Timer({
   const configStore = useConfigStore();
 
   const time = useMemo(() => {
-    if (!configStore.config) return 0;
-    const interval = parser?.default.parse(
-      configStore.config?.ticket_job_time,
-      {
-        tz: "America/New_York"
-      }
-    );
-    const next = interval.next().getTime();
+    if (!configStore.config) return 0
 
-    return next / 1000;
+    const interval = parser?.default.parse(configStore.config?.ticket_job_time, {
+      // tz: 'America/New_York',
+      tz: 'Europe/London',
+    })
+    const next = interval.next().getTime()
+    console.log('Lucky draw time:', new Date(next).toString())
+    return next / 1000
   }, [configStore.config, currentRound]);
 
   const { secondsRemaining } = useCountdown(time);
