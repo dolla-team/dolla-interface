@@ -22,93 +22,100 @@ export default function useRegisterCode({
   const toast = useToast();
 
   const bindGiftCode = async (code: string) => {
-    if (!code) return;
-    if (!userInfo?.show_email) return;
+    if (!code) {
+      toast.info({
+        title: 'Please enter gift code',
+      })
+      return
+    }
+    if (!userInfo?.show_email) {
+      toast.info({
+        title: 'Please login by email',
+      })
+      return
+    }
 
     if (giftCode.trim().length !== 20) {
       setCodeValidate({
         is_valid: false,
-        msg: "This code is invalid"
-      });
-      return;
+        msg: 'This code is invalid',
+      })
+      return
     }
 
-    let toastId = toast.loading({ title: "Binding gift code..." });
+    let toastId = toast.loading({ title: 'Binding gift code...' })
     try {
-      let bindingRes: any = null;
+      let bindingRes: any = null
 
-      const { publicKey, isRegistered } = await generateKeyPair(true);
+      const { publicKey, isRegistered } = await generateKeyPair(true)
 
       if (!publicKey && !isRegistered) {
         toast.info({
-          title: "Please login to bind gift code"
-        });
-        return;
+          title: 'Please login to bind gift code',
+        })
+        return
       }
-      setBinding(true);
+      setBinding(true)
       // new account
       if (!isRegistered) {
-        const checkRes = await axiosInstance.get(
-          "/api/v1/code/invite/gift/check",
-          {
-            params: {
-              code: giftCode.trim(),
-              email: userInfo.show_email
-            }
-          }
-        );
+        const checkRes = await axiosInstance.get('/api/v1/code/invite/gift/check', {
+          params: {
+            code: giftCode.trim(),
+            email: userInfo.show_email,
+          },
+        })
 
         if (!checkRes.data.data?.is_valid) {
-          toast.dismiss(toastId);
+          toast.dismiss(toastId)
           setCodeValidate({
             is_valid: false,
-            msg: "This code is invalid"
-          });
-          return;
+            msg: 'This code is invalid',
+          })
+          return
         }
-        const time = Date.now();
+        const time = Date.now()
         const message = {
-          user_id: { Evm: userInfo.user.replace(/^0x/, "").toLowerCase() },
+          user_id: { Evm: userInfo.user.replace(/^0x/, '').toLowerCase() },
           invite_code: code,
-          operation_key: publicKey
-        };
+          operation_key: publicKey,
+        }
         const { signature: privySignature } = await signMessage({
-          message: JSON.stringify(message)
-        });
+          message: JSON.stringify(message),
+        })
 
-        bindingRes = await axiosInstance.post("/api/v1/code/invite/gift", {
+        bindingRes = await axiosInstance.post('/api/v1/code/invite/gift', {
           code: code,
-          signature: privySignature.replace(/^0x/, ""),
+          signature: privySignature.replace(/^0x/, ''),
           email: userInfo.show_email,
           public_key: publicKey,
-          time: time
-        });
+          time: time,
+        })
       } else {
         // old account
-        bindingRes = await axiosInstance.post("/api/v1/gift/voucher", {
-          code: code
-        });
+        bindingRes = await axiosInstance.post('/api/v1/gift/voucher', {
+          code: code,
+        })
       }
-      toast.dismiss(toastId);
+      toast.dismiss(toastId)
       if (bindingRes?.data?.code !== 0) {
         toast.fail({
-          title: bindingRes?.data?.message || "Binding gift code failed"
-        });
+          title: bindingRes?.data?.message || 'Binding gift code failed',
+        })
         setCodeValidate({
           is_valid: false,
-          msg: bindingRes?.data?.message || "This code is invalid"
-        });
-        return;
+          msg: bindingRes?.data?.message || 'This code is invalid',
+        })
+        return
       }
-      onSuccess();
-      toast.success({ title: "Binding gift code successfully" });
+      onSuccess()
+      toast.success({ title: 'Binding gift code successfully' })
     } catch (error) {
-      console.error("Binding gift code error:", error);
-      toast.dismiss(toastId);
+      console.error('Binding gift code error:', error)
+      toast.dismiss(toastId)
 
-      toast.fail({ title: "Binding gift code failed" });
+      toast.fail({ title: 'Binding gift code failed' })
     } finally {
-      setBinding(false);
+      setBinding(false)
     }
   };
 
