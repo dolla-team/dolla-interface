@@ -1,26 +1,36 @@
-import { useCallback } from "react";
-import { useRequest } from "ahooks";
-import axiosInstance from "@/libs/axios";
+import { useCallback, useMemo } from 'react'
+import { useRequest } from 'ahooks'
+import axiosInstance from '@/libs/axios'
 
-export default function useCreateWhitelist(email?: string) {
+export default function useCreateWhitelist(user?: any) {
+  const [address, email] = useMemo(() => {
+    if (!user) return ['', '']
+    const address = user.wallet?.address
+    let email = user.email?.address || user.google?.email
+    if (user.twitter) {
+      email = '@' + user.twitter.username
+    }
+    return [address, email]
+  }, [user])
   const service = useCallback(async () => {
     try {
-      if (!email) return false;
-      const res = await axiosInstance.get("/api/v1/user/create/whitelist", {
-        params: { email }
-      });
+      if (!email || !address) return false
 
-      return res?.data?.data?.is_whitelist;
+      const res = await axiosInstance.get('/api/v1/user/create/whitelist', {
+        params: { email, address },
+      })
+
+      return res?.data?.data?.is_whitelist
     } catch (err) {
-      return false;
+      return false
     }
-  }, [email]);
+  }, [email, address])
 
   const { data } = useRequest(service, {
-    refreshDeps: [email]
-  });
+    refreshDeps: [email, address],
+  })
 
   return {
-    isCreatedWhitelist: data
-  };
+    isCreatedWhitelist: data,
+  }
 }

@@ -18,10 +18,8 @@ export default function WinnerInfo({
       <Bg />
       <LightBg />
       <div className="relative z-[3] top-0 left-0">
-        <div className="text-[16px] font-[600] text-black pl-[26px] pt-[16px]">
-          Winner
-        </div>
-        <div className="absolute left-[50%] top-[100px] translate-x-[-50%]">
+        <div className="text-[16px] font-[600] text-black pl-[26px] pt-[16px]">Winner</div>
+        <div className="absolute left-0 top-[100px] w-full flex justify-center flex-col items-center">
           <div className="relative w-[158px] h-[158px] rounded-full p-[4px] bg-linear-to-b from-[#FFE8AC] to-[#99761C]">
             <Avatar
               className="rounded-full"
@@ -36,18 +34,15 @@ export default function WinnerInfo({
               textClassName="text-[24px]"
             />
           </div>
-          <div className="text-center text-[20px] font-[600] text-black mt-[20px]">
-            {pool?.winner_user_info?.name ||
-              formatAddress(pool?.winner_user_info?.user)}
+          <div className="text-center text-[20px] font-[600] text-black mt-[20px] truncate max-w-[400px]">
+            {pool?.winner_user_info?.name || formatAddress(pool?.winner_user_info?.user)}
           </div>
         </div>
       </div>
       <div className="absolute bottom-0 left-0 w-full px-[24px]">
         <div className="flex items-center justify-between pb-[20px]">
           <span className="text-[#A6A4B8] text-[12px]">Winner’s bid</span>
-          <span className="text-black text-[12px]">
-            ${totalBids.toLocaleString()}
-          </span>
+          <span className="text-black text-[12px]">${totalBids.toLocaleString()}</span>
         </div>
         <div className="flex items-center justify-between pb-[20px]">
           <span className="text-[#A6A4B8] text-[12px]">Bid times</span>
@@ -61,7 +56,7 @@ export default function WinnerInfo({
         </div>
       </div>
     </div>
-  );
+  )
 }
 
 const Bg = () => {
