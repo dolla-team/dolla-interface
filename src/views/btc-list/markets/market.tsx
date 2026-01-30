@@ -176,7 +176,12 @@ export default function Market({
                       src={data?.user_info?.icon}
                       className="text-[8px]"
                     />
-                    <span className="text-[10px] text-[#2B3337] w-[150px] truncate">
+                    <span
+                      className={clsx(
+                        'text-[10px] text-[#2B3337] truncate',
+                        data.status === 1 ? 'w-[178px]' : 'w-[140px]'
+                      )}
+                    >
                       {data?.user_info?.name || formatAddress(data?.user)}
                     </span>
                     <SellerLevel isSmall />

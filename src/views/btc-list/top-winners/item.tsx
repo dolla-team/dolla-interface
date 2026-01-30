@@ -49,7 +49,7 @@ export default function TopWinnersItem({
           <div className="text-[10px] text-black/30">
             {type === 'winners' ? 'Winner' : 'Lister'}
           </div>
-          <div className="text-[12px] text-black font-semibold">
+          <div className="text-[12px] text-black font-semibold truncate w-[180px]">
             {data?.user_info?.name || formatAddress(data?.user)}{' '}
           </div>
         </div>
