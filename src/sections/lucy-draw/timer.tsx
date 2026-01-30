@@ -1,47 +1,47 @@
-import useCountdown, { getTimePeriods, toTwo } from "@/hooks/use-count-down";
-import { useConfigStore } from "@/stores/use-config";
-import { useEffect, useMemo } from "react";
-import * as parser from "cron-parser";
-import clsx from "clsx";
+import useCountdown, { getTimePeriods, toTwo } from '@/hooks/use-count-down'
+import { useConfigStore } from '@/stores/use-config'
+import { useEffect, useMemo } from 'react'
+import * as parser from 'cron-parser'
+import clsx from 'clsx'
 
 export default function Timer({
   onTimeUp,
   currentRound,
   className,
-  size = 14
+  size = 14,
 }: {
-  onTimeUp: () => void;
-  currentRound: number;
-  className?: string;
-  size?: number;
+  onTimeUp: () => void
+  currentRound: number
+  className?: string
+  size?: number
 }) {
-  const configStore = useConfigStore();
+  const configStore = useConfigStore()
 
   const time = useMemo(() => {
     if (!configStore.config) return 0
 
     const interval = parser?.default.parse(configStore.config?.ticket_job_time, {
       // tz: 'America/New_York',
-      tz: 'Europe/London',
+      tz: 'UTC',
     })
     const next = interval.next().getTime()
     console.log('Lucky draw time:', new Date(next).toString())
     return next / 1000
-  }, [configStore.config, currentRound]);
+  }, [configStore.config, currentRound])
 
-  const { secondsRemaining } = useCountdown(time);
-  const { hours, minutes, seconds } = getTimePeriods(secondsRemaining);
+  const { secondsRemaining } = useCountdown(time)
+  const { hours, minutes, seconds } = getTimePeriods(secondsRemaining)
 
   useEffect(() => {
     if (secondsRemaining <= 0) {
-      onTimeUp();
+      onTimeUp()
     }
-  }, [secondsRemaining]);
+  }, [secondsRemaining])
 
   return (
     <div
       className={clsx(
-        "w-full h-full text-center px-[10px] text-white flex items-center justify-between",
+        'w-full h-full text-center px-[10px] text-white flex items-center justify-between',
         className
       )}
     >
@@ -60,9 +60,9 @@ export default function Timer({
 
       <span className="pr-[4px]">
         {secondsRemaining <= 0
-          ? "Times Up!"
+          ? 'Times Up!'
           : `${toTwo(hours)} : ${toTwo(minutes)} : ${toTwo(seconds)}`}
       </span>
     </div>
-  );
+  )
 }
