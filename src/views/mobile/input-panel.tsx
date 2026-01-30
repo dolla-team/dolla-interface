@@ -39,29 +39,31 @@ export default function InputPanel({
           className="fixed z-[5] top-[20px] left-[10px]"
         />
       )}
-      <div className="text-white text-center text-lg font-semibold leading-[130%] uppercase">
-        {data?.status === 'input' && !globalStore.isInWhitelist ? 'attemp to get access to' : ''}
+      <div className="relative z-[2]">
+        <div className="text-white text-center text-lg font-semibold leading-[130%] uppercase">
+          {data?.status === 'input' && !globalStore.isInWhitelist ? 'attemp to get access to' : ''}
+        </div>
+        <div className="flex justify-center mt-[10px] relative">
+          <DollaEye height={60} />
+          {data?.status === 'input' && !globalStore.isInWhitelist && (
+            <img
+              src="/verify/verify-labels.png"
+              className="absolute w-[26vw] object-cover top-[-10px] right-[calc(50%-180px)]"
+            />
+          )}
+        </div>
+        <div className="w-[calc(100%-40px)] mx-auto mt-[14px] text-[#D9D9D9] text-center font-[Courier] text-base leading-[120%] tracking-[-0.96px]">
+          {data?.status === 'input' && !globalStore.isInWhitelist
+            ? "and get personalized probabilistic facts that you don't even know about yourself"
+            : ''}
+        </div>
       </div>
-      <div className="flex justify-center mt-[10px] relative">
-        <DollaEye height={60} />
-        {data?.status === 'input' && !globalStore.isInWhitelist && (
-          <img
-            src="/verify/verify-labels.png"
-            className="absolute w-[107px] h-[71px] object-cover top-[-10px] right-[calc(50%-180px)]"
-          />
-        )}
-      </div>
-      <div className="w-[348px] mx-auto mt-[14px] text-[#D9D9D9] text-center font-[Courier] text-base leading-[120%] tracking-[-0.96px]">
-        {data?.status === 'input' && !globalStore.isInWhitelist
-          ? "and get personalized probabilistic facts that you don't even know about yourself"
-          : ''}
-      </div>
-      <div className="absolute bottom-[250px] w-full">
+      <div className="absolute bottom-[60vw] w-full z-[1]">
         <div className="absolute bottom-[0px] left-0 right-0 w-full h-[76px] bg-linear-to-t from-[#000] to-transparent"></div>
-        <img src="/verify/verify-woman.png" className="mx-auto w-[90%] object-cover" />
+        <img src="/verify/verify-woman.png" className="mx-auto w-[90vw] object-cover" />
         <motion.img
           src="/verify/verify-usdt.png"
-          className="absolute top-[80px] left-[10px] w-[60px] object-cover"
+          className="absolute top-[18vw] left-[2vw] w-[13vw] object-cover"
           animate={{
             y: [0, -10, 0],
           }}
@@ -73,7 +75,7 @@ export default function InputPanel({
         />
         <motion.img
           src="/verify/verify-btc.png"
-          className="absolute top-[-200px] right-[-70px] w-[200px] object-cover"
+          className="absolute top-[-38vw] right-[-14vw] w-[40vw] object-cover"
           animate={{
             y: [0, -10, 0],
           }}
@@ -83,12 +85,12 @@ export default function InputPanel({
             ease: 'easeInOut',
           }}
         />
-        <LineIcon className="absolute left-[80px] top-[-100px] w-[200px] h-[150px]" />
+        <LineIcon className="absolute left-[80px] top-[-36vw] w-[44vw]" />
       </div>
 
       {globalStore.isInWhitelist ? (
         <div
-          className="absolute z-[2] flex flex-col items-center justify-center rounded-[12px] mx-auto bottom-[100px] left-0 right-0 w-[346px] h-[163px] border border-[#FFE1AA]"
+          className="absolute z-[2] flex flex-col items-center justify-center rounded-[12px] mx-auto bottom-[40vw] py-[3vw] left-0 right-0 w-[calc(100%-40px)] border border-[#FFE1AA]"
           style={{
             background: 'linear-gradient(90deg, #FFCE52 0%, #FFE9B2 100%)',
           }}
@@ -101,7 +103,7 @@ export default function InputPanel({
       ) : (
         <>
           {data?.status === 'input' && (
-            <div className="absolute z-[2] bottom-[60px] left-0 right-0 w-[348px] mx-auto h-[210px]">
+            <div className="absolute z-[2] bottom-[60px] left-0 right-0 w-[calc(100%-40px)] mx-auto h-[210px]">
               <div className="h-[50px] rounded-[8px] bg-white backdrop-blur-[10px] p-[1px] border border-[#8A87AA4D]">
                 <input
                   value={xProfileUrl}
