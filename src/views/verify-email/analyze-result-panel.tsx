@@ -72,7 +72,7 @@ export const PredictionsPanel = ({ analysisData }: any) => {
   const { generateAndDownload } = useShare()
   const handleShareToTwitter = () => {
     const currentUrl = window.location.href
-    const text = `turns out my life has a probability curve.%0A%0Amath is kinda exposing me rn.%0A%0Aget your own probabilistic facts card at: dolla.market`
+    const text = `turns out my life has a probability curve.%0A%0Amath is kinda exposing me rn @Dollamarket.%0A%0Aget your own probabilistic facts card at: dolla.market`
     const twitterUrl = `https://twitter.com/intent/tweet?text=${text}&url=${encodeURIComponent(currentUrl)}`
     window.open(twitterUrl, '_blank', 'width=550,height=420')
   }
