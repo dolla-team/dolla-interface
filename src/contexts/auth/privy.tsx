@@ -129,7 +129,7 @@ export const AuthProvider: React.FC<{
 
   const userInfo = userInfoStore.userInfo;
 
-  const { isCreatedWhitelist } = useCreateWhitelist(userInfo?.show_email);
+  const { isCreatedWhitelist } = useCreateWhitelist(user)
 
   useCode(userInfo);
 
