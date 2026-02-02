@@ -38,15 +38,17 @@ export default function useTopBidders(params: UseTopBiddersParams) {
           `/api/v1/pool/top/bidders?${queryParams.toString()}`
         );
 
-        const _list = res.data?.list.map((item: any, index: number) => {
-          return {
+        const _list: any = []
+        res.data?.list.forEach((item: any, index: number) => {
+          if (!item.user_info) return
+          _list.push({
             rank: index + 1,
             name: item.user_info.name,
             amount: item.purchase_usd,
             avatar: item.user_info.icon,
-            address: item.user_info.user
-          };
-        });
+            address: item.user_info.user,
+          })
+        })
 
         setTopBidders(_list || []);
         setLoading(false);
