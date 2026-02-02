@@ -41,6 +41,26 @@ class DollaService {
       },
     })
   }
+
+  /**
+   * Report error
+   * @param params Error report parameters
+   */
+  async reportError(params: {
+    error_type: string
+    error_message: string
+    address?: string
+    extra?: string
+    interface_name?: string
+  }) {
+    return this.api.post('/api/v1/system/error/report', {
+      error_type: params.error_type,
+      error_message: params.error_message,
+      address: params.address,
+      extra: params.extra,
+      interface_name: params.interface_name,
+    })
+  }
 }
 
 export default new DollaService();
