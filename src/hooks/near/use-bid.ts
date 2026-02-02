@@ -5,6 +5,7 @@ import { KeyPair } from "near-api-js";
 import { viewMethod, getUserId } from "./util";
 import { QUOTE_TOKEN } from "@/config/btc";
 import useBtcDetailStore from "@/stores/use-btc-detail";
+import DollaService from '@/service/kol-anysis'
 
 
 export default function useBid(
@@ -142,6 +143,12 @@ export default function useBid(
           btcDetailStore.set({ currentHash: result.data.data.tx_hash });
           window.bidResultTimer = setTimeout(() => {
             console.log('bid fail timeout')
+            DollaService.reportError({
+              error_type: 'bid_failed',
+              error_message: 'Failed to get bid result within 20s after receiving tx_hash',
+              address: address,
+              extra: result.data.data.tx_hash,
+            })
             btcDetailStore.set({ currentHash: "" });
             onTxFail();
           }, 20000);
@@ -150,6 +157,11 @@ export default function useBid(
         if (count > 30) {
           clearTimeout(window.bidDataTimer);
           console.log('bid fail count')
+          DollaService.reportError({
+            error_type: 'bid_failed',
+            error_message: 'Failed to get tx_hash within 30s after sending bid',
+            address: address,
+          })
           onTxFail();
           return;
         }

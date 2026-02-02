@@ -1,34 +1,34 @@
-import clsx from "clsx";
-import { useMemo, useState } from "react";
-import PriceChart from "../nft-create/price-chart";
-import { BASE_TOKEN } from "@/config/btc";
-import { formatNumber } from "@/utils/format/number";
-import useTokenPrice from "@/hooks/use-token-price";
-import { motion } from "framer-motion";
-import Button from "@/components/button";
-import DoughnutChart from "./doughnut-chart";
-import { useReferenceData } from "./hooks/use-reference-data";
-import Skeleton from "@/components/skeleton";
-import Big from "big.js";
-import useIsMobile from "@/hooks/use-is-mobile";
-import SuccessModal from "./success-modal";
-import { useAuth } from "@/contexts/auth";
-import { formatAddress } from "@/utils/format/address";
-import Loading from "@/components/icons/loading";
-import useQuote from "./hooks/use-quote";
-import useWalletStore from "@/stores/use-wallet";
-import PageBack from "@/views/profile/components/page-back";
-import { AMOUNT } from "@/config/btc";
-import ConfirmModal from "./confirm-modal";
-import { useBtcCreateStore } from "@/stores/use-btc-create";
-import { useNavigate } from "@/libs/router";
-import { BTC_CREATE_FORM_URL } from "@/config";
+import clsx from 'clsx'
+import { useMemo, useState } from 'react'
+import PriceChart from '../nft-create/price-chart'
+import { BASE_TOKEN } from '@/config/btc'
+import { formatNumber } from '@/utils/format/number'
+import useTokenPrice from '@/hooks/use-token-price'
+import { motion } from 'framer-motion'
+import Button from '@/components/button'
+import DoughnutChart from './doughnut-chart'
+import { useReferenceData } from './hooks/use-reference-data'
+import Skeleton from '@/components/skeleton'
+import Big from 'big.js'
+import useIsMobile from '@/hooks/use-is-mobile'
+import SuccessModal from './success-modal'
+import { useAuth } from '@/contexts/auth'
+import { formatAddress } from '@/utils/format/address'
+import Loading from '@/components/icons/loading'
+import useQuote from './hooks/use-quote'
+import useWalletStore from '@/stores/use-wallet'
+import PageBack from '@/views/profile/components/page-back'
+import { AMOUNT } from '@/config/btc'
+import ConfirmModal from './confirm-modal'
+import { useBtcCreateStore } from '@/stores/use-btc-create'
+import { useNavigate } from '@/libs/router'
+import { BTC_CREATE_FORM_URL } from '@/config'
 
 export default function BTCCreate() {
-  const btcCreateStore = useBtcCreateStore();
-  const [successResult, setSuccessResult] = useState<any>(null);
-  const [showConfirmModal, setShowConfirmModal] = useState(false);
-  const navigate = useNavigate();
+  const btcCreateStore = useBtcCreateStore()
+  const [successResult, setSuccessResult] = useState<any>(null)
+  const [showConfirmModal, setShowConfirmModal] = useState(false)
+  const navigate = useNavigate()
   const {
     userInfo,
     isLoading,
@@ -36,41 +36,41 @@ export default function BTCCreate() {
     nearAccount,
     address,
     login,
-    isCreatedWhitelist
-  } = useAuth() || {};
-  const { token } = useQuote();
-  const tokenBalance = nearAccount?.prizeBalance;
+    isCreatedWhitelist,
+  } = useAuth() || {}
+  const { token } = useQuote()
+  const tokenBalance = nearAccount?.prizeBalance
   const {
     data: referenceData,
     loading: referenceDataLoading,
-    bidsMarket
-  } = useReferenceData({ token: BASE_TOKEN, amount: btcCreateStore.amount });
+    bidsMarket,
+  } = useReferenceData({ token: BASE_TOKEN, amount: btcCreateStore.amount })
 
-  const isMobile = useIsMobile();
+  const isMobile = useIsMobile()
 
-  const { prices } = useTokenPrice(BASE_TOKEN);
+  const { prices } = useTokenPrice(BASE_TOKEN)
 
-  const walletStore = useWalletStore();
+  const walletStore = useWalletStore()
 
   const pricePerBTC = useMemo(() => {
-    if (BASE_TOKEN.address === "usdt.tether-token.near") {
-      return 1;
+    if (BASE_TOKEN.address === 'usdt.tether-token.near') {
+      return 1
     }
-    if (!prices || prices?.length === 0) return 0;
-    const _p = prices[0].last_price;
-    return _p;
-  }, [prices]);
+    if (!prices || prices?.length === 0) return 0
+    const _p = prices[0].last_price
+    return _p
+  }, [prices])
 
   const errorTips = useMemo(() => {
     if (pricePerBTC === 0) {
-      return "Anchor price not found";
+      return 'Anchor price not found'
     }
     if (Big(btcCreateStore.amount).gt(Big(nearAccount?.prizeBalance || 0))) {
-      return `Insufficient ${BASE_TOKEN.symbol} Balance`;
+      return `Insufficient ${BASE_TOKEN.symbol} Balance`
     }
 
-    return "";
-  }, [btcCreateStore.amount, pricePerBTC, nearAccount?.prizeBalance]);
+    return ''
+  }, [btcCreateStore.amount, pricePerBTC, nearAccount?.prizeBalance])
 
   return (
     <div className="relative">
@@ -356,6 +356,7 @@ export default function BTCCreate() {
       <SuccessModal
         open={!!successResult}
         data={successResult}
+        price={pricePerBTC}
         onClose={() => setSuccessResult(null)}
       />
       <ConfirmModal
@@ -383,9 +384,7 @@ export default function BTCCreate() {
 const Title = () => {
   return (
     <div className="flex items-center justify-center gap-[10px] text-white">
-      <span className="text-[20px] font-[500]">
-        Create a {BASE_TOKEN.symbol} Market
-      </span>
+      <span className="text-[20px] font-[500]">Create a {BASE_TOKEN.symbol} Market</span>
     </div>
-  );
-};
+  )
+}
