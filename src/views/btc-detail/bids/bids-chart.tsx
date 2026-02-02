@@ -63,7 +63,7 @@ export default function BidsChart({
     setShowAvatar(false)
 
     // Transform API data to chart format
-    const chartData = volumeData.map(item => ({
+    const chartData = volumeData.slice(0, -1).map(item => ({
       x: item.timestamp,
       y: item.volume,
     }))

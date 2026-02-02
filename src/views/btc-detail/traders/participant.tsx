@@ -40,8 +40,8 @@ export default function Participant({
         return (
           <div className="flex items-center gap-[7px] cursor-pointer relative">
             <Avatar
-              src={record.user_info.icon}
-              address={record.user_info.user}
+              src={record.user_info?.icon}
+              address={record.user_info?.user}
               size={32}
               className="rounded-full"
             />
@@ -51,9 +51,7 @@ export default function Participant({
                 className="absolute top-[-22px] left-[-2px] w-[38px] h-[38px]"
               />
             )}
-            <div className="max-w-[120px] truncate">
-              {record.user_info.name}
-            </div>
+            <div className="max-w-[120px] truncate">{record.user_info?.name}</div>
             {/* <svg
               xmlns="http://www.w3.org/2000/svg"
               width="11"
@@ -69,7 +67,7 @@ export default function Participant({
               />
             </svg> */}
           </div>
-        );
+        )
       }
     },
     {
