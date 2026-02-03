@@ -74,32 +74,31 @@ export default function Normal({
         <div className="absolute top-[20px] right-[20px] z-[110]">
           <CloseBtn />
         </div>
-        {points > 0 ||
-          (tickets > 0 && (
-            <div className="relative w-[500px]">
-              <Bg />
-              {points > 0 && (
-                <PointsCardBg
-                  className={clsx(
-                    'z-[2]',
-                    points && tickets
-                      ? 'top-[-260px] right-[-60px]'
-                      : 'top-[-260px] left-[40px] rotate-[-18deg]'
-                  )}
-                  points={points}
-                />
-              )}
-              {tickets > 0 && (
-                <TicketsCardBg
-                  className={clsx(
-                    'z-[1]',
-                    points && tickets ? 'top-[-322px] left-[-100px]' : 'top-[-260px] left-[40px]'
-                  )}
-                  tickets={tickets}
-                />
-              )}
-            </div>
-          ))}
+        {(points > 0 || tickets > 0) && (
+          <div className="relative w-[500px]">
+            <Bg />
+            {points > 0 && (
+              <PointsCardBg
+                className={clsx(
+                  'z-[2]',
+                  points && tickets
+                    ? 'top-[-260px] right-[-60px]'
+                    : 'top-[-260px] left-[40px] rotate-[-18deg]'
+                )}
+                points={points}
+              />
+            )}
+            {tickets > 0 && (
+              <TicketsCardBg
+                className={clsx(
+                  'z-[1]',
+                  points && tickets ? 'top-[-322px] left-[-100px]' : 'top-[-260px] left-[40px]'
+                )}
+                tickets={tickets}
+              />
+            )}
+          </div>
+        )}
         <div className={clsx('relative h-[584px]', isMobile ? 'w-full' : 'w-[464px]')}>
           <div className="relative z-[2] flex flex-col items-center justify-center pt-[60px]">
             <div className="flex items-center gap-[24px]">
