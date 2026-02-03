@@ -29,111 +29,98 @@ import { useGlobalStore } from "@/stores/use-global";
 import LoginTimeoutModal from "@/components/modal/login-timeout";
 import { useVerifyStore } from "@/stores/use-verify";
 import { useAnalysisDataStore } from "@/stores/use-analysis-data";
+import getCurrentAccount from './get-current-account'
+
 export const AuthContext = React.createContext<any | null>(null);
 
 export const AuthProvider: React.FC<{
   children: ReactNode;
 }> = ({ children }) => {
-  const { logout: privyLogout, ready } = usePrivy();
-  const [isCompleted, setIsCompleted] = useState(false);
+  const { logout: privyLogout, ready } = usePrivy()
+  const [isCompleted, setIsCompleted] = useState(false)
   const { login: privyLogin } = usePrivyLogin({
     onComplete: async () => {
       console.log('privy login complete', wallets, user)
       setIsCompleted(true)
-    }
-  });
-  const verifyStore = useVerifyStore();
-  const analysisData = useAnalysisDataStore();
-  const { user } = useUser();
-  const nearKeyStore = useNearKeyStore();
-  const globalStore = useGlobalStore();
+    },
+  })
+  const verifyStore = useVerifyStore()
+  const analysisData = useAnalysisDataStore()
+  const { user } = useUser()
+  const nearKeyStore = useNearKeyStore()
+  const globalStore = useGlobalStore()
 
-  useConfig();
-  const { wallets } = useWallets();
+  useConfig()
+  const { wallets } = useWallets()
 
-  const { wallets: solanaWallets } = useSolanaWallets();
+  const { wallets: solanaWallets } = useSolanaWallets()
 
-  const { createWallet: createPrivyWallet } = useCreateWallet();
-  const { createWallet: createSolanaWallet } = useCreateSolanaWallet();
-  const [showTimeoutModal, setShowTimeoutModal] = useState(false);
+  const { createWallet: createPrivyWallet } = useCreateWallet()
+  const { createWallet: createSolanaWallet } = useCreateSolanaWallet()
+  const [showTimeoutModal, setShowTimeoutModal] = useState(false)
 
-  const [logining, setLogining] = useState(false);
-  const [accountRefresher, setAccountRefresher] = useState(-1);
-  const userInfoStore = useUserInfoStore();
+  const [logining, setLogining] = useState(false)
+  const [accountRefresher, setAccountRefresher] = useState(-1)
+  const userInfoStore = useUserInfoStore()
 
-  const chainType = useMemo(() => {
-    if (user?.wallet?.connectorType === "injected") {
-      return "Evm";
-    }
-    if (user?.wallet?.connectorType === "solana_adapter") {
-      return "solana";
-    }
-    return "";
-  }, [user]);
+  const { currentAccount, solanaAccount } = useMemo(() => {
+    return getCurrentAccount(user)
+  }, [user])
 
-  const loginMethod = useMemo(() => {
-    if (user?.wallet?.connectorType === "solana_adapter") {
-      return "wallet";
-    }
-    if (user?.wallet?.connectorType === "injected") {
-      return "wallet";
-    }
+  const [chainType, loginMethod] = useMemo(() => {
+    let _loginMethod = ''
+    let _chainType = ''
     if (user?.google) {
-      return "google";
+      _loginMethod = 'google'
     }
     if (user?.twitter) {
-      return "twitter";
+      _loginMethod = 'twitter'
     }
     if (user?.email) {
-      return "email";
+      _loginMethod = 'email'
     }
-    return "";
-  }, [user]);
+
+    if (currentAccount?.chainType === 'ethereum' && currentAccount?.connectorType === 'injected') {
+      _chainType = 'Evm'
+      _loginMethod = 'wallet'
+    }
+    if (
+      currentAccount?.chainType === 'solana' &&
+      currentAccount?.connectorType === 'solana_adapter'
+    ) {
+      _chainType = 'solana'
+      _loginMethod = 'wallet'
+    }
+    return [_chainType, _loginMethod]
+  }, [currentAccount])
 
   const privyEvmWallet = useMemo(() => {
-    if (!user) return { address: "" };
-    const privyItem = wallets.find((item) =>
-      chainType === "solana"
-        ? item?.connectorType === "embedded"
-        : item?.walletClientType === user?.wallet?.walletClientType
-    );
-    return privyItem || { address: "" };
-  }, [wallets, user, chainType]);
+    const privyItem = wallets?.find(item => item.address === currentAccount?.address)
+    return privyItem || { address: '' }
+  }, [currentAccount, wallets])
 
   const privySolanaWallet = useMemo(() => {
-    if (solanaWallets.length === 0) return null;
-    return solanaWallets.find((item: any) =>
-      chainType === "solana"
-        ? item.address === user?.wallet?.address
-        : item?.standardWallet?.isPrivyWallet
-    );
-  }, [solanaWallets, chainType, user?.wallet]);
+    if (solanaWallets.length === 0) return null
+    return solanaWallets.find((item: any) => item.address === solanaAccount?.address)
+  }, [solanaWallets, solanaAccount])
 
-  const signMessage = useSignMessage({ privyEvmWallet, chainType });
+  const signMessage = useSignMessage({ privyEvmWallet, chainType })
 
   const address = useMemo(() => {
-    return chainType === "solana" && user?.wallet
-      ? user.wallet.address
-      : privyEvmWallet?.address;
-  }, [chainType, user?.wallet, privyEvmWallet]);
+    return currentAccount?.address
+  }, [currentAccount])
 
-  const { account, fetchAccount: updateNearAccount } = useAccount(
-    address,
-    chainType
-  );
+  const { account, fetchAccount: updateNearAccount } = useAccount(address, chainType)
 
-  const {
-    loading: userInfoLoading,
-    onQueryUserInfo,
-  } = useUserInfo(address, user);
+  const { loading: userInfoLoading, onQueryUserInfo } = useUserInfo(address, user)
 
-  const userInfo = userInfoStore.userInfo;
+  const userInfo = userInfoStore.userInfo
 
   const { isCreatedWhitelist } = useCreateWhitelist(user)
 
-  useCode(userInfo);
+  useCode(userInfo)
 
-  const { onLogin } = useLogin();
+  const { onLogin } = useLogin()
 
   const updateAccount = async () => {
     console.log('updateAccount', address)
@@ -159,36 +146,36 @@ export const AuthProvider: React.FC<{
       console.log('chain type is', chainType)
     }
     sign()
-  };
+  }
 
   const sign = async () => {
-    console.log("signing", address);
+    console.log('signing', address)
     if (!user) {
-      login();
-      return;
+      login()
+      return
     }
-    if (!privySolanaWallet?.address && chainType !== "Evm") {
-      return;
+    if (!privySolanaWallet?.address && chainType !== 'Evm') {
+      return
     }
     try {
-      const time = Date.now();
-      const userId = user.id.split(":")[2];
+      const time = Date.now()
+      const userId = user.id.split(':')[2]
 
-      let message: string;
+      let message: string
 
-      if (chainType === "Evm") {
-        message = `login dolla, address:${address.toLowerCase()}, time:${time}`;
-      } else if (chainType === "solana") {
-        message = `login dolla, address:${address}, time:${time}`;
+      if (chainType === 'Evm') {
+        message = `login dolla, address:${address.toLowerCase()}, time:${time}`
+      } else if (chainType === 'solana') {
+        message = `login dolla, address:${address}, time:${time}`
       } else if (user.twitter) {
-        message = `login dolla, sol_address:${privySolanaWallet?.address}, wallet_id:${userId}, twitter: @${user.twitter.username}, time:${time}`;
+        message = `login dolla, sol_address:${privySolanaWallet?.address}, wallet_id:${userId}, twitter: @${user.twitter.username}, time:${time}`
       } else {
-        message = `login dolla, sol_address:${privySolanaWallet?.address}, wallet_id:${userId}, time:${time}`;
+        message = `login dolla, sol_address:${privySolanaWallet?.address}, wallet_id:${userId}, time:${time}`
       }
       window.isSigning = true
-      console.log("message", message);
-      let signature: string = await signMessage(message);
-      console.log("signature", signature);
+      console.log('message', message)
+      let signature: string = await signMessage(message)
+      console.log('signature', signature)
 
       onLogin({
         address: address,
@@ -199,29 +186,29 @@ export const AuthProvider: React.FC<{
         chainType: chainType,
         twitterId: user.twitter?.username,
         onSuccess: async () => {
-          await onQueryUserInfo();
-          setAccountRefresher(1);
-          setLogining(false);
+          await onQueryUserInfo()
+          setAccountRefresher(1)
+          setLogining(false)
           window.isSigning = false
-        }
-      });
+        },
+      })
     } catch (error: any) {
-      setLogining(false);
+      setLogining(false)
       // If signing fails, it might be an authentication issue, redirect to login
       if (
-        error?.message?.includes("authenticated") ||
-        error?.message?.includes("embedded wallet")
+        error?.message?.includes('authenticated') ||
+        error?.message?.includes('embedded wallet')
       ) {
-        login();
+        login()
       }
 
-      if (error?.message?.includes("user rejected")) {
+      if (error?.message?.includes('user rejected')) {
         setTimeout(() => {
-          sign();
-        }, 500);
+          sign()
+        }, 500)
       }
     }
-  };
+  }
 
   const login = async () => {
     if (!user) {
@@ -246,27 +233,27 @@ export const AuthProvider: React.FC<{
   const logout = useCallback(async () => {
     try {
       for (const wallet of wallets) {
-        await wallet?.disconnect();
+        await wallet?.disconnect()
       }
 
       for (const wallet of solanaWallets) {
-        await wallet?.disconnect();
+        await wallet?.disconnect()
       }
     } catch (error) {
-      console.error("Error disconnecting wallets:", error);
+      console.error('Error disconnecting wallets:', error)
     }
 
-    await privyLogout?.();
+    await privyLogout?.()
 
-    localStorage.removeItem("_AK_TOKEN_");
-    userInfoStore.set({ userInfo: null });
-    setAccountRefresher(0);
-    nearKeyStore.set({ publicKey: null, privateKey: null });
-    userInfoStore.init();
-    globalStore.init();
-    verifyStore.init();
-    analysisData.init();
-  }, [address, privyLogout, wallets, solanaWallets]);
+    localStorage.removeItem('_AK_TOKEN_')
+    userInfoStore.set({ userInfo: null })
+    setAccountRefresher(0)
+    nearKeyStore.set({ publicKey: null, privateKey: null })
+    userInfoStore.init()
+    globalStore.init()
+    verifyStore.init()
+    analysisData.init()
+  }, [address, privyLogout, wallets, solanaWallets])
 
   useEffect(() => {
     if (!user) return
@@ -283,12 +270,7 @@ export const AuthProvider: React.FC<{
     clearTimeout(window.loginTimeoutTimer)
     const embeddedWallet = wallets.find(w => w.walletClientType === 'privy')
     if (!chainType && !embeddedWallet) return
-    if (
-      loginMethod === 'wallet' &&
-      address &&
-      globalStore?.address &&
-      address !== globalStore?.address
-    ) {
+    if (loginMethod === 'wallet' && !address) {
       console.log('address not equal', address, globalStore?.address)
       logout()
       return
@@ -299,8 +281,6 @@ export const AuthProvider: React.FC<{
     updateAccount()
     ;(window as any).sign = sign
   }, [user, globalStore.isInWhitelist, isCompleted, wallets, chainType])
-
-
 
   return (
     <AuthContext.Provider
@@ -319,18 +299,18 @@ export const AuthProvider: React.FC<{
         login,
         logout,
         onQueryUserInfo,
-        signMessage
+        signMessage,
       }}
     >
       {children}
       <LoginTimeoutModal
         open={showTimeoutModal}
         onClose={() => {
-          setShowTimeoutModal(false);
+          setShowTimeoutModal(false)
         }}
       />
     </AuthContext.Provider>
-  );
+  )
 };
 
 export function useAuth() {
