@@ -16,8 +16,7 @@ import { CloseBtn } from "./share-btn";
 import Loading from "./loading";
 import Tips from "./components/tips";
 import Result from "./components/result";
-import { useMemo } from "react";
-import Confetti from "@/components/confetti";
+import { useMemo } from 'react'
 import useBtcDetailStore from "@/stores/use-btc-detail";
 
 // import ProvablyFair from "@/sections/provably-fair";
@@ -76,22 +75,22 @@ const Content = ({
   return (
     <div
       className={clsx(
-        "h-[100vh] w-full fixed top-0 left-0  z-[20]",
-        isMobile && "flex flex-col",
-        isMobile && pool?.status !== 1 ? "overflow-y-auto" : "overflow-hidden",
-        !isMobile && "bg-blend-luminosity"
+        'h-[100vh] w-full fixed top-0 left-0  z-[20]',
+        isMobile && 'flex flex-col',
+        isMobile && pool?.status !== 1 ? 'overflow-y-auto' : 'overflow-hidden',
+        !isMobile && 'bg-blend-luminosity'
       )}
       style={{
         background: isMobile
           ? "radial-gradient(108.21% 50% at 50% 50%, rgba(0, 0, 0, 0.20) 0%, #000 100%), linear-gradient(0deg, rgba(31, 19, 255, 0.20) 0%, rgba(31, 19, 255, 0.20) 100%), url('/new-btc/m-bg.gif') lightgray 50% / cover no-repeat"
-          : "radial-gradient(50% 50% at 50% 50%,rgba(0,0,0,0) 0%,#000 100%), url('/new-btc/bg.gif') lightgray 50% / cover no-repeat"
+          : "radial-gradient(50% 50% at 50% 50%,rgba(0,0,0,0) 0%,#000 100%), url('/new-btc/bg.gif') lightgray 50% / cover no-repeat",
       }}
     >
       <DollaEye
         className="absolute top-[10px] left-[30px] z-[10] button"
         height={32}
         onClick={() => {
-          navigate("/");
+          navigate('/')
         }}
       />
 
@@ -123,8 +122,8 @@ const Content = ({
           points={sumPoints}
           tickets={sumTickets}
           onClose={() => {
-            setShowDetail(true);
-            onReset();
+            setShowDetail(true)
+            onReset()
           }}
           isWinner={isWinner}
           disabled={disabled}
@@ -132,7 +131,6 @@ const Content = ({
           onBidClick={onBidClick}
         />
       )}
-      {btcDetailStore.bidResult?.is_winner && flipStatus > 4 && <Confetti />}
     </div>
-  );
+  )
 };
