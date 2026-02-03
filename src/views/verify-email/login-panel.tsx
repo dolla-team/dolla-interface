@@ -2,8 +2,9 @@ import { useAuth } from "@/contexts/auth";
 import { useGlobalStore } from "@/stores/use-global";
 import Button from "@/components/button";
 import { formatAddress } from "@/utils/format/address";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from 'react'
 import axios from "@/libs/axios";
+import getCurrentAccount from '@/contexts/auth/get-current-account'
 
 
 export default function LoginPanel({ onChangeHasAccount, setIsBgSpread }: any) {
@@ -46,6 +47,10 @@ export default function LoginPanel({ onChangeHasAccount, setIsBgSpread }: any) {
     }
   };
 
+  const currentAccount = useMemo(() => {
+    return getCurrentAccount(user)
+  }, [user])
+
   const handleSendCode = async () => {
     // if (!canSubmit) return;
 
@@ -53,7 +58,7 @@ export default function LoginPanel({ onChangeHasAccount, setIsBgSpread }: any) {
     setChecking(true);
 
     try {
-      const address = user.wallet?.address;
+      const address = currentAccount?.address
       let email = user.email?.address || user.google?.email;
       if (user.twitter) {
         email = "@" + user.twitter.username;
@@ -106,7 +111,7 @@ export default function LoginPanel({ onChangeHasAccount, setIsBgSpread }: any) {
             ) : (
               <span className="text-[16px] font-[400]">
                 {' '}
-                {formatAddress(user.wallet?.address, 5)}
+                {formatAddress(currentAccount?.address, 5)}
               </span>
             )}
             <div
