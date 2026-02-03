@@ -19,6 +19,7 @@ declare global {
     scrollTimer: NodeJS.Timeout
     bidDataTimer: NodeJS.Timeout | number
     bidResultTimer: NodeJS.Timeout | number
+    bidResultLoopTimer: NodeJS.Timeout | number
     lastBidTimer: NodeJS.Timeout | number
     accountTimer: NodeJS.Timeout | number
     autoFlipTimer: NodeJS.Timeout | number
