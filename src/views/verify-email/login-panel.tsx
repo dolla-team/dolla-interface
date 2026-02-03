@@ -48,7 +48,7 @@ export default function LoginPanel({ onChangeHasAccount, setIsBgSpread }: any) {
   };
 
   const currentAccount = useMemo(() => {
-    return getCurrentAccount(user)
+    return getCurrentAccount(user)?.currentAccount
   }, [user])
 
   const handleSendCode = async () => {

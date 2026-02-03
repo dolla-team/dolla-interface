@@ -63,7 +63,7 @@ export const AuthProvider: React.FC<{
   const [accountRefresher, setAccountRefresher] = useState(-1)
   const userInfoStore = useUserInfoStore()
 
-  const currentAccount = useMemo(() => {
+  const { currentAccount, solanaAccount } = useMemo(() => {
     return getCurrentAccount(user)
   }, [user])
 
@@ -101,14 +101,14 @@ export const AuthProvider: React.FC<{
 
   const privySolanaWallet = useMemo(() => {
     if (solanaWallets.length === 0) return null
-    return solanaWallets.find((item: any) => item.address === currentAccount?.address)
-  }, [solanaWallets, currentAccount])
+    return solanaWallets.find((item: any) => item.address === solanaAccount?.address)
+  }, [solanaWallets, solanaAccount])
 
   const signMessage = useSignMessage({ privyEvmWallet, chainType })
 
   const address = useMemo(() => {
-    return privySolanaWallet?.address || privyEvmWallet?.address
-  }, [privySolanaWallet, privyEvmWallet])
+    return currentAccount?.address
+  }, [currentAccount])
 
   const { account, fetchAccount: updateNearAccount } = useAccount(address, chainType)
 
