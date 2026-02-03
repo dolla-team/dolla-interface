@@ -1,40 +1,34 @@
-import React, {
-  useContext,
-  useEffect,
-  useState,
-  useCallback,
-  useMemo
-} from "react";
-import useUserInfo from "@/hooks/use-user-info";
-import type { ReactNode } from "react";
-import useLogin from "@/hooks/use-login";
+import React, { useContext, useEffect, useState, useCallback, useMemo } from 'react'
+import useUserInfo from '@/hooks/use-user-info'
+import type { ReactNode } from 'react'
+import useLogin from '@/hooks/use-login'
 import {
   useLogin as usePrivyLogin,
   usePrivy,
   useWallets,
   useUser,
-  useCreateWallet
-} from "@privy-io/react-auth";
+  useCreateWallet,
+} from '@privy-io/react-auth'
 // @ts-ignore
-import { useWallets as useSolanaWallets } from "@privy-io/react-auth/solana";
-import useSignMessage from "@/hooks/near/use-sign-message";
-import { useCreateWallet as useCreateSolanaWallet } from "@privy-io/react-auth/solana";
-import useConfig from "@/hooks/use-config";
-import useUserInfoStore from "@/stores/use-user-info";
-import { useNearKeyStore } from "@/stores/use-near-key";
-import useAccount from "@/hooks/near/use-account";
-import useCode from "@/hooks/airdrop/use-code";
-import useCreateWhitelist from "@/hooks/user/use-create-whitelist";
-import { useGlobalStore } from "@/stores/use-global";
-import LoginTimeoutModal from "@/components/modal/login-timeout";
-import { useVerifyStore } from "@/stores/use-verify";
-import { useAnalysisDataStore } from "@/stores/use-analysis-data";
+import { useWallets as useSolanaWallets } from '@privy-io/react-auth/solana'
+import useSignMessage from '@/hooks/near/use-sign-message'
+import { useCreateWallet as useCreateSolanaWallet } from '@privy-io/react-auth/solana'
+import useConfig from '@/hooks/use-config'
+import useUserInfoStore from '@/stores/use-user-info'
+import { useNearKeyStore } from '@/stores/use-near-key'
+import useAccount from '@/hooks/near/use-account'
+import useCode from '@/hooks/airdrop/use-code'
+import useCreateWhitelist from '@/hooks/user/use-create-whitelist'
+import { useGlobalStore } from '@/stores/use-global'
+import LoginTimeoutModal from '@/components/modal/login-timeout'
+import { useVerifyStore } from '@/stores/use-verify'
+import { useAnalysisDataStore } from '@/stores/use-analysis-data'
 import getCurrentAccount from './get-current-account'
 
-export const AuthContext = React.createContext<any | null>(null);
+export const AuthContext = React.createContext<any | null>(null)
 
 export const AuthProvider: React.FC<{
-  children: ReactNode;
+  children: ReactNode
 }> = ({ children }) => {
   const { logout: privyLogout, ready } = usePrivy()
   const [isCompleted, setIsCompleted] = useState(false)
@@ -267,6 +261,7 @@ export const AuthProvider: React.FC<{
       1000 * 60 * 2
     )
     if (!isCompleted) return
+
     clearTimeout(window.loginTimeoutTimer)
     const embeddedWallet = wallets.find(w => w.walletClientType === 'privy')
     if (!chainType && !embeddedWallet) return
@@ -275,12 +270,19 @@ export const AuthProvider: React.FC<{
       logout()
       return
     }
+    if (loginMethod === 'wallet' && address) {
+      const wallet = wallets.find(w => w.address === address)
+      if (!wallet) {
+        logout()
+        return
+      }
+    }
     globalStore.set({
       address,
     })
     updateAccount()
     ;(window as any).sign = sign
-  }, [user, globalStore.isInWhitelist, isCompleted, wallets, chainType])
+  }, [user, globalStore.isInWhitelist, isCompleted, wallets, chainType, address])
 
   return (
     <AuthContext.Provider
@@ -311,10 +313,10 @@ export const AuthProvider: React.FC<{
       />
     </AuthContext.Provider>
   )
-};
+}
 
 export function useAuth() {
-  const context = useContext(AuthContext);
+  const context = useContext(AuthContext)
 
-  return context || {};
+  return context || {}
 }
