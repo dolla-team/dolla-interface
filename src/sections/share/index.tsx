@@ -15,19 +15,19 @@ const DOWNLOAD_IMGS: Record<string, any> = {
   winner: {
     width: 375,
     height: 500,
-    backgroundColor: "transparent"
+    backgroundColor: '#000',
   },
   pool: {
     width: 375,
     height: 580,
-    backgroundColor: "transparent"
+    backgroundColor: 'transparent',
   },
   invite: {
     width: 375,
     height: 580,
-    backgroundColor: "transparent"
-  }
-};
+    backgroundColor: 'transparent',
+  },
+}
 
 const SHARE_IMGS: Record<string, any> = {
   winner: {
