@@ -95,13 +95,13 @@ export function useBidResultSubscription() {
   const { updateNearAccount } = useAuth();
   // Subscribe to WebSocket bid result updates
   useWebSocket((data: any) => {
-    console.log("data", data);
-    if (data.type === "bidResult") {
-      if (!data?.data?.length) return;
+    console.log('data', data)
+    if (data.type === 'bidResult') {
+      if (!data?.data?.length) return
       data.data.forEach((item: any) => {
-        if (!item?.pool_id) return;
-        const poolId = item.pool_id;
-        const currentPool = allMarketsStore.pools[poolId];
+        if (!item?.pool_id) return
+        const poolId = item.pool_id
+        const currentPool = allMarketsStore.pools[poolId]
         if (currentPool) {
           // Update pool data with new bid result
           allMarketsStore.set({
@@ -109,13 +109,13 @@ export function useBidResultSubscription() {
               ...allMarketsStore.pools,
               [poolId]: {
                 ...currentPool,
-                ...item // Merge new data into existing pool data
-              }
-            }
-          });
+                ...item, // Merge new data into existing pool data
+              },
+            },
+          })
         }
-      });
-      return;
+      })
+      return
     }
 
     if (
@@ -123,6 +123,7 @@ export function useBidResultSubscription() {
       btcDetailStore.currentHash === data.data?.tx_hash
     ) {
       clearTimeout(window.bidResultTimer);
+      clearTimeout(window.bidResultLoopTimer)
       btcDetailStore.set({
         bidResult: data.data,
         currentHash: "",

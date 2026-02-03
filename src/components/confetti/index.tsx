@@ -134,9 +134,9 @@ export default function Confetti() {
     (
       <canvas
         ref={canvasRef}
-        className="fixed top-0 left-0 w-full h-full z-[100] pointer-events-none"
+        className="!fixed top-0 left-0 w-full h-full !z-[600] pointer-events-none"
       />
     ) as any,
     document.body
-  ) as unknown as React.ReactPortal;
+  ) as unknown as React.ReactPortal
 }

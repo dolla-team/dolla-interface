@@ -74,54 +74,45 @@ export default function Normal({
         <div className="absolute top-[20px] right-[20px] z-[110]">
           <CloseBtn />
         </div>
-        <div className="relative w-[500px]">
-          <Bg />
-          {points > 0 && (
-            <PointsCardBg
-              className={clsx(
-                "z-[2]",
-                points && tickets
-                  ? "top-[-260px] right-[-60px]"
-                  : "top-[-260px] left-[40px] rotate-[-18deg]"
-              )}
-              points={points}
-            />
-          )}
-          {tickets > 0 && (
-            <TicketsCardBg
-              className={clsx(
-                "z-[1]",
-                points && tickets
-                  ? "top-[-322px] left-[-100px]"
-                  : "top-[-260px] left-[40px]"
-              )}
-              tickets={tickets}
-            />
-          )}
-        </div>
-        <div
-          className={clsx(
-            "relative h-[584px]",
-            isMobile ? "w-full" : "w-[464px]"
-          )}
-        >
+        {(points > 0 || tickets > 0) && (
+          <div className="relative w-[500px]">
+            <Bg />
+            {points > 0 && (
+              <PointsCardBg
+                className={clsx(
+                  'z-[2]',
+                  points && tickets
+                    ? 'top-[-260px] right-[-60px]'
+                    : 'top-[-260px] left-[40px] rotate-[-18deg]'
+                )}
+                points={points}
+              />
+            )}
+            {tickets > 0 && (
+              <TicketsCardBg
+                className={clsx(
+                  'z-[1]',
+                  points && tickets ? 'top-[-322px] left-[-100px]' : 'top-[-260px] left-[40px]'
+                )}
+                tickets={tickets}
+              />
+            )}
+          </div>
+        )}
+        <div className={clsx('relative h-[584px]', isMobile ? 'w-full' : 'w-[464px]')}>
           <div className="relative z-[2] flex flex-col items-center justify-center pt-[60px]">
             <div className="flex items-center gap-[24px]">
               <img
                 src={config.gifSrc}
                 style={{
                   height: config.gifHeight,
-                  marginTop: 30
+                  marginTop: 30,
                 }}
                 className="rounded-[12px]"
               />
               <div>
-                <div className="text-[26px] text-white font-[600] mt-[20px]">
-                  {config.title}
-                </div>
-                <div className="text-[16px] text-white font-[600] mt-[10px]">
-                  {config.desc}
-                </div>
+                <div className="text-[26px] text-white font-[600] mt-[20px]">{config.title}</div>
+                <div className="text-[16px] text-white font-[600] mt-[10px]">{config.desc}</div>
               </div>
             </div>
             <div className="mt-[30px] h-[36px] flex items-center gap-[50px]">
@@ -135,11 +126,7 @@ export default function Normal({
               )}
               {tickets > 0 && (
                 <div className="flex items-center gap-[2px]">
-                  <img
-                    src="/lucky-draw/ticket-1.png"
-                    alt="ticket"
-                    className="w-[53px] h-[32px]"
-                  />
+                  <img src="/lucky-draw/ticket-1.png" alt="ticket" className="w-[53px] h-[32px]" />
                   <span className="text-[20px] font-[900] bg-[radial-gradient(50%_50%_at_50%_50%,#FFEF43_0%,#FFC42F_100%)] bg-clip-text text-transparent">
                     +{tickets.toLocaleString()}
                   </span>
@@ -147,45 +134,43 @@ export default function Normal({
               )}
             </div>
             <Tabs
-              tabs={BID_UNITS.map((item) => ({ label: `$${item}`, key: item }))}
+              tabs={BID_UNITS.map(item => ({ label: `$${item}`, key: item }))}
               currentTab={bids}
               onChangeTab={(tab: any) => {
-                setBids(tab);
+                setBids(tab)
               }}
               className="w-[346px] h-[38px] mt-[50px] p-[2px] !gap-0 rounded-[10px] backdrop-blur-[25px] border border-[#F2F2F233] bg-[#FFFFFF1F]"
               tabClassName={clsx(
-                "text-[12px] w-[85px] text-center h-[18px] leading-[18px] text-white not-first:border-l border-[#8A87AA]/30"
+                'text-[12px] w-[85px] text-center h-[18px] leading-[18px] text-white not-first:border-l border-[#8A87AA]/30'
               )}
               activeClassName="!text-black"
               cursorClassName={clsx(
-                "!h-[32px] !w-[85px] rounded-[8px] !left-[50%] translate-x-[-50%] !bottom-[-7px] !bg-[#FFC42F]"
+                '!h-[32px] !w-[85px] rounded-[8px] !left-[50%] translate-x-[-50%] !bottom-[-7px] !bg-[#FFC42F]'
               )}
             />
             <Button
               onClick={() => {
-                if (disabled) return;
-                onBidClick();
+                if (disabled) return
+                onBidClick()
               }}
               disabled={disabled || balanceNotEnough}
               loading={flipStatus === 1}
               className={clsx(
-                "h-[44px] w-[346px] mt-[20px] button rounded-[8px] font-[600] text-[16px]",
-                flipStatus === 2
-                  ? "!bg-[#4CB100] text-white"
-                  : "!bg-[#FFC42F] text-black"
+                'h-[44px] w-[346px] mt-[20px] button rounded-[8px] font-[600] text-[16px]',
+                flipStatus === 2 ? '!bg-[#4CB100] text-white' : '!bg-[#FFC42F] text-black'
               )}
             >
               {balanceNotEnough
-                ? "Insufficient Balance"
+                ? 'Insufficient Balance'
                 : flipStatus === 1
-                ? "Bidding"
-                : flipStatus === 2
-                ? "Success"
-                : "Bid Again"}
+                  ? 'Bidding'
+                  : flipStatus === 2
+                    ? 'Success'
+                    : 'Bid Again'}
             </Button>
           </div>
         </div>
       </div>
     </>
-  );
+  )
 }
