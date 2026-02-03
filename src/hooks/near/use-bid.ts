@@ -14,7 +14,7 @@ export default function useBid(
   onTxFail: () => void,
   onTxFail2: (msg?: string,args?: any) => void
 ) {
-  const { address, chainType } = useAuth();
+  const { address, chainType, updateNearAccount } = useAuth()
   const { generateKeyPair } = useGenerateKey();
   const btcDetailStore = useBtcDetailStore();
 
@@ -141,8 +141,10 @@ export default function useBid(
         );
         if (result.data.data?.tx_hash) {
           btcDetailStore.set({ currentHash: result.data.data.tx_hash });
+          loopBidResult(result.data.data.tx_hash)
           window.bidResultTimer = setTimeout(() => {
             console.log('bid fail timeout')
+            clearTimeout(window.bidResultLoopTimer)
             DollaService.reportError({
               error_type: 'bid_failed',
               error_message: 'Failed to get bid result within 20s after receiving tx_hash',
@@ -171,6 +173,32 @@ export default function useBid(
         count++;
         window.bidDataTimer = setTimeout(loopBidData, 1000);
       };
+
+      const loopBidResult = async (hash: string) => {
+        const bidResponse = await axiosInstance.get(`/api/v1/user/prize/bid?hash=${hash}`)
+        if (bidResponse.data.data.bid !== null && bidResponse.data.data.bid.status !== 0) {
+          console.log('bidResponse', bidResponse.data.data)
+          btcDetailStore.set({
+            bidResult: {
+              winner_point: bidResponse.data.data.point?.wild_coin_ev_result,
+              winner_ticket: bidResponse.data.data.ticket?.result,
+              is_winner: bidResponse.data.data.bid.is_winner,
+            },
+            currentHash: '',
+            flipStatus: btcDetailStore.bids === 1 ? 5 : 4,
+          })
+          updateNearAccount()
+          // bidResponse.data.data.bid.is_winner = true;
+          clearTimeout(window.bidResultTimer)
+          return
+        }
+        if (window.bidResultLoopTimer) {
+          clearTimeout(window.bidResultLoopTimer)
+        }
+        window.bidResultLoopTimer = setTimeout(() => {
+          loopBidResult(hash)
+        }, 1000)
+      }
 
       loopBidData();
 
