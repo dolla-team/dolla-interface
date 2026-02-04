@@ -250,7 +250,7 @@ export const AuthProvider: React.FC<{
   }, [address, privyLogout, wallets, solanaWallets])
 
   useEffect(() => {
-    if (!user) return
+    if (!user || !address) return
     if (!globalStore.isInWhitelist) {
       return
     }
@@ -265,14 +265,20 @@ export const AuthProvider: React.FC<{
     clearTimeout(window.loginTimeoutTimer)
     const embeddedWallet = wallets.find(w => w.walletClientType === 'privy')
     if (!chainType && !embeddedWallet) return
-    if (loginMethod === 'wallet' && !address) {
-      console.log('address not equal', address, globalStore?.address)
-      logout()
+
+    if (chainType === 'Evm' && wallets.length === 0) {
       return
     }
+    if (chainType === 'solana' && solanaWallets.length === 0) {
+      return
+    }
+
     if (loginMethod === 'wallet' && address) {
-      const wallet = wallets.find(w => w.address === address)
+      const wallet = (chainType === 'Evm' ? wallets : solanaWallets).find(
+        w => w.address === address
+      )
       if (!wallet) {
+        console.log('wallet not found', address, chainType === 'Evm' ? wallets : solanaWallets)
         logout()
         return
       }
