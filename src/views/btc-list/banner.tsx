@@ -13,12 +13,12 @@ export default function Banner() {
             One Dolla $1 Infinite Exposure
           </div>
           <div className="text-[16px] text-white/60 leading-[130%] w-[350px] pt-[10px]">
-            Get exposute to bluchip assets that usually feel out of reach
+            Get exposure to bluechip assets that usually feel out of reach
           </div>
           <div
             className="flex items-center gap-[6px] button mt-[80px]"
             onClick={() => {
-              set({ showModal: true });
+              set({ showModal: true })
             }}
           >
             <svg
@@ -49,7 +49,7 @@ export default function Banner() {
         <div className="absolute left-[-30px] bottom-0 z-[2] w-[353px] h-[246px] bg-[url('/home/banner-bidder.png')] bg-cover bg-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
         <div
           onClick={() => {
-            navigate("/btc");
+            navigate('/btc')
           }}
           className="cursor-pointer absolute left-[80px] bottom-[16px] z-[3] w-[152px] h-[40px] bg-[#D9D9D9] group-hover:bg-[#FFC42F] group-hover:shadow-[0px_0px_10px_0px_#FFC42F] flex items-center justify-center rounded-[12px] text-[14px] text-[#2B3337] font-[600] group-hover:animate-[pulse-scale_1s_ease-in-out_infinite]"
         >
@@ -61,7 +61,7 @@ export default function Banner() {
         <div className="absolute right-[0px] bottom-[0px] z-[2] w-[355px] h-[300px] bg-[url('/home/banner-seller.png')] bg-cover bg-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
         <div
           onClick={() => {
-            navigate("/btc/create");
+            navigate('/btc/create')
           }}
           className="cursor-pointer absolute right-[60px] bottom-[16px] z-[3] w-[152px] h-[40px] bg-[#D9D9D9] group-hover:bg-[#00FF95] group-hover:shadow-[0px_0px_10px_0px_#00FF95] flex items-center justify-center rounded-[12px] text-[14px] text-[#2B3337] font-[600] group-hover:animate-[pulse-scale_1s_ease-in-out_infinite]"
         >
@@ -69,5 +69,5 @@ export default function Banner() {
         </div>
       </div>
     </div>
-  );
+  )
 }
