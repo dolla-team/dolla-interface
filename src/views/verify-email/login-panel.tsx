@@ -95,7 +95,7 @@ export default function LoginPanel({ onChangeHasAccount, setIsBgSpread }: any) {
          $1. Infinite Exposure.
       </div>
       <div className="mt-[8px] mb-[30px] text-white text-[12px] text-center w-[345px] leading-[130%]">
-        Get exposure to blue chip assets that's out of reach, one dolla at a time.
+        Get exposure to bluechip assets that's out of reach, one dolla at a time.
       </div>
       {user ? (
         <div className="w-[300px] relative mt-[16px]">
