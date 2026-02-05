@@ -77,6 +77,7 @@ const RewardCard = () => {
       <div className="flex mt-[18px] justify-between">
         <LabelValue label="Total volume" className="whitespace-nowrap">
           <div className="text-[16px pb-[5px]">
+            $
             {formatNumber(userInfo?.player_total_bid, 2, true, {
               isShort: Big(userInfo?.player_total_bid || 0).gt(10000),
               isShortUppercase: true,
