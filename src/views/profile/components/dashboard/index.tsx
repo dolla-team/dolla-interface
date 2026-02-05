@@ -17,18 +17,24 @@ import { formatNumber } from '@/utils/format/number'
 import Big from 'big.js'
 import useUserInfoStore from '@/stores/use-user-info'
 import ShareModal from '@/sections/share'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { formatAddress } from '@/utils/format/address'
 import InvitedEntry from './invited/entry'
 
 const Dashboard = (props: any) => {
   const { className, tab, pnlList, pnl } = props
   const globalStore = useGlobalStore()
-  const { userInfo, address, login } = useAuth()
+  const { userInfo, address, login, onQueryUserInfo } = useAuth()
 
   const { onCopy } = useCopy()
   const userInfoStore = useUserInfoStore()
   const [open, setOpen] = useState(false)
+
+  useEffect(() => {
+    if (address) {
+      onQueryUserInfo()
+    }
+  }, [address])
 
   return (
     <>

@@ -6,7 +6,7 @@ import SwitchPanel from "@/components/switch/switch-panel";
 // import { INVATE_ACTIVE } from "@/config";
 import Header from "../header";
 import Dashboard from "../components/dashboard/index";
-import { useRef, useMemo } from "react";
+import { useRef } from 'react'
 import PlayerMarkets from "./markets";
 import Records from "./records";
 import usePlayerHistory from "./hooks/use-player-history";
@@ -31,10 +31,10 @@ export default function Player() {
     joinedPoolsRefreshing,
     joinedPoolListStatus,
     onJoinedPoolListStatusChange,
-    getJoinedPoolList
-  } = usePlayerHistory();
+    getJoinedPoolList,
+  } = usePlayerHistory()
 
-  const containerRef = useRef<any>(null);
+  const containerRef = useRef<any>(null)
 
   return (
     <div
@@ -78,5 +78,5 @@ export default function Player() {
       </div>
       <Bg />
     </div>
-  );
+  )
 }
