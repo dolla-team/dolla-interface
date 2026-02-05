@@ -38,85 +38,95 @@ const LazyMobile = lazy(() => import('./views/mobile'))
 
 import("react-toastify/dist/ReactToastify.css");
 
+const DynamicDefaultRoute = () => {
+  if (window.cachedPoolId && window.cachedPoolId > 0) {
+    setTimeout(() => {
+      window.cachedPoolId = 0
+    }, 500)
+    return <Navigate to={`/btc/${window.cachedPoolId}`} replace />
+  }
+  return <BtcList />
+}
+
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: '/',
     element: <MainLayout />,
     errorElement: <ErrorPage />,
     children: [
       {
         index: true,
-        element: <BtcList />
+        element: <DynamicDefaultRoute />,
       },
       {
-        path: "nft",
-        element: <LazyNftList />
+        path: 'nft',
+        element: <LazyNftList />,
       },
       {
-        path: "nft/detail",
-        element: <LazyNft />
+        path: 'nft/detail',
+        element: <LazyNft />,
       },
       {
-        path: "nft/detail/:poolId",
-        element: <LazyNft />
+        path: 'nft/detail/:poolId',
+        element: <LazyNft />,
       },
       {
-        path: "nft/create",
-        element: <LazyNftCreate />
+        path: 'nft/create',
+        element: <LazyNftCreate />,
       },
       {
-        path: "btc/create",
-        element: <LazyBtcCreate />
+        path: 'btc/create',
+        element: <LazyBtcCreate />,
       },
       {
-        path: "btc",
+        path: 'btc',
         element: <LazyBtc />,
-        errorElement: <ErrorPage />
+        errorElement: <ErrorPage />,
       },
       {
-        path: "btc/:poolId",
+        path: 'btc/:poolId',
         element: <LazyBtc />,
-        errorElement: <ErrorPage />
+        errorElement: <ErrorPage />,
       },
       {
-        path: "portfolio/bidder",
-        element: <LazyProfilePlayer />
+        path: 'portfolio/bidder',
+        element: <LazyProfilePlayer />,
       },
       {
-        path: "portfolio/lister",
-        element: <LazyProfileSeller />
+        path: 'portfolio/lister',
+        element: <LazyProfileSeller />,
       },
       {
-        path: "terms-of-service",
-        element: <LazyTerms />
+        path: 'terms-of-service',
+        element: <LazyTerms />,
       },
       {
-        path: "privacy-policy",
-        element: <LazyPolicy />
+        path: 'privacy-policy',
+        element: <LazyPolicy />,
       },
       {
-        path: "leaderboard",
-        element: <LazyLeaderboard />
-      }
-    ]
+        path: 'leaderboard',
+        element: <LazyLeaderboard />,
+      },
+    ],
   },
   {
-    path: "/callback",
-    element: <Callback />
+    path: '/callback',
+    element: <Callback />,
   },
   {
-    path: "/docs",
-    element: <LazyDocs />
+    path: '/docs',
+    element: <LazyDocs />,
   },
   {
-    path: "/temp",
-    element: <LazyTemp />
+    path: '/temp',
+    element: <LazyTemp />,
   },
   {
-    path: "*",
-    element: <Navigate to="/" replace />
-  }
-]);
+    path: '*',
+    element: <Navigate to="/" replace />,
+  },
+])
 
 const Content = () => {
   const [isLoading, setIsLoading] = useState(true)

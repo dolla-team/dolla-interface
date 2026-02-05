@@ -27,6 +27,9 @@ export default function LoginPanel({ onChangeHasAccount, setIsBgSpread }: any) {
             code
           }
         });
+        if (res.data.data?.pool_id) {
+          window.cachedPoolId = res.data.data?.pool_id
+        }
         return res.data.data?.valid || false;
       }
       let path = "/api/v1/user/whitelist";
