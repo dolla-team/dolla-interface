@@ -4,10 +4,12 @@ import { useAuth } from "@/contexts/auth";
 import { useGlobalStore } from "@/stores/use-global";
 import LevelIcon from "@/components/icons/level-icon";
 import { QRCodeSVG } from "qrcode.react";
+import useCopy from '@/hooks/use-copy'
 
 export default function InviteDownloadCard({ cardRef }: any) {
   const { userInfo } = useAuth();
   const globalStore = useGlobalStore();
+  const { onCopy } = useCopy()
   return (
     <div
       ref={cardRef}
@@ -16,10 +18,8 @@ export default function InviteDownloadCard({ cardRef }: any) {
       <div className="absolute bottom-[-6px] left-[-4px] z-[1] w-[384px] h-[506px] bg-[url('/share/invite-card.png')] bg-cover bg-center bg-no-repeat">
         <div className="text-[10px] w-[244px] mx-auto rotate-[-3.462deg] mt-[80px]">
           <span className="text-white">
-            The first{" "}
-            <span className="text-[#FFC42F] font-[600]">
-              Trustless Probabilistic Marketplace
-            </span>{" "}
+            The first{' '}
+            <span className="text-[#FFC42F] font-[600]">Trustless Probabilistic Marketplace</span>{' '}
             for {BASE_TOKEN.symbol}
             and more
           </span>
@@ -38,14 +38,17 @@ export default function InviteDownloadCard({ cardRef }: any) {
                 </span>
               </div>
             </div>
-            <div className="text-[#C3C3CC] text-[10px]">
-              invites you to join Dolla
-            </div>
+            <div className="text-[#C3C3CC] text-[10px]">invites you to join Dolla</div>
             <div className="text-white text-[20px]">{globalStore.code}</div>
           </div>
         </div>
       </div>
-      <div className="absolute z-[5] bottom-[14px] left-[34px] h-[48px] flex items-center gap-[10px]">
+      <div
+        onClick={() => {
+          onCopy(`${window.location.origin}?code=${globalStore.code}`)
+        }}
+        className="cursor-pointer absolute z-[5] bottom-[14px] left-[34px] h-[48px] flex items-center gap-[10px]"
+      >
         <div className="w-[50px] h-[50px] rounded-[6px] bg-white p-[4px]">
           <QRCodeSVG
             value={`${window.location.origin}?code=${globalStore.code}`}
@@ -65,5 +68,5 @@ export default function InviteDownloadCard({ cardRef }: any) {
       </div>
       <div className="absolute z-[3] bottom-[-10px] left-[0px] w-[358px] h-[592px] bg-[url('/share/invite-wrapper.png')] bg-cover bg-center bg-no-repeat" />
     </div>
-  );
+  )
 }
