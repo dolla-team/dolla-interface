@@ -12,6 +12,7 @@ declare global {
       prevAnimation: Howl
     }
     cachedPoolId: number
+    isValidCode: boolean
     isSigning: boolean
     drawsUpdateTimer: NodeJS.Timeout
     poolTimer: NodeJS.Timeout

@@ -1,8 +1,4 @@
-import {
-  createBrowserRouter,
-  Navigate,
-  RouterProvider
-} from "react-router-dom";
+import { createBrowserRouter, Navigate, RouterProvider, useLocation } from 'react-router-dom'
 import { lazy, useEffect, useState } from "react";
 import WalletProvider from "./contexts/wallet";
 import { AuthProvider } from "./contexts/auth";
@@ -21,6 +17,7 @@ import MainLayout from "./layouts/main";
 import Callback from "./views/callback";
 import DollaEyeContextProvider from "./contexts/dolla-eye";
 import BtcList from "./views/btc-list";
+import axiosInstance from '@/libs/axios'
 
 const LazyNftCreate = lazy(() => import("./views/nft-create"));
 const LazyBtcCreate = lazy(() => import("./views/btc-create"));
@@ -39,11 +36,13 @@ const LazyMobile = lazy(() => import('./views/mobile'))
 import("react-toastify/dist/ReactToastify.css");
 
 const DynamicDefaultRoute = () => {
+  const location = useLocation()
   if (window.cachedPoolId && window.cachedPoolId > 0) {
     setTimeout(() => {
       window.cachedPoolId = 0
-    }, 500)
-    return <Navigate to={`/btc/${window.cachedPoolId}`} replace />
+    }, 1000)
+    const searchParams = location.search || ''
+    return <Navigate to={`/btc/${window.cachedPoolId}${searchParams}`} replace />
   }
   return <BtcList />
 }
@@ -130,6 +129,7 @@ const router = createBrowserRouter([
 
 const Content = () => {
   const [isLoading, setIsLoading] = useState(true)
+  const [checkingCode, setCheckingCode] = useState(true)
   const { ready } = usePrivy()
   const { user } = useUser()
   const globalStore = useGlobalStore()
@@ -150,11 +150,34 @@ const Content = () => {
     }, 2000)
   }, [ready, user])
 
+  useEffect(() => {
+    const init = async () => {
+      setCheckingCode(true)
+      const code = new URLSearchParams(window.location.search).get('code')
+      if (code && code?.length === 6) {
+        const res = await axiosInstance.get('/api/v1/airdrop/code/valid', {
+          params: {
+            code,
+          },
+        })
+        if (res.data.data?.pool_id) {
+          window.cachedPoolId = res.data.data?.pool_id
+        }
+        window.isValidCode = res.data.data?.valid || false
+        setCheckingCode(false)
+      } else {
+        window.isValidCode = false
+        setCheckingCode(false)
+      }
+    }
+    init()
+  }, [])
+
   if (window.location.pathname === '/docs') {
     return <RouterProvider router={router} />
   }
 
-  return isLoading ? (
+  return isLoading || checkingCode ? (
     <Loading />
   ) : !user || !globalStore.isInWhitelist ? (
     <VerifyEmail />
