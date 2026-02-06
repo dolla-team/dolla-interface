@@ -64,15 +64,6 @@ export const AuthProvider: React.FC<{
   const [chainType, loginMethod] = useMemo(() => {
     let _loginMethod = ''
     let _chainType = ''
-    if (user?.google) {
-      _loginMethod = 'google'
-    }
-    if (user?.twitter) {
-      _loginMethod = 'twitter'
-    }
-    if (user?.email) {
-      _loginMethod = 'email'
-    }
 
     if (currentAccount?.chainType === 'ethereum' && currentAccount?.connectorType === 'injected') {
       _chainType = 'Evm'
@@ -85,6 +76,17 @@ export const AuthProvider: React.FC<{
       _chainType = 'solana'
       _loginMethod = 'wallet'
     }
+
+    if (user?.google) {
+      _loginMethod = 'google'
+    }
+    if (user?.twitter) {
+      _loginMethod = 'twitter'
+    }
+    if (user?.email) {
+      _loginMethod = 'email'
+    }
+
     return [_chainType, _loginMethod]
   }, [currentAccount])
 
