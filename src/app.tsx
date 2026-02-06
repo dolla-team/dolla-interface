@@ -155,16 +155,21 @@ const Content = () => {
       setCheckingCode(true)
       const code = new URLSearchParams(window.location.search).get('code')
       if (code && code?.length === 6) {
-        const res = await axiosInstance.get('/api/v1/airdrop/code/valid', {
-          params: {
-            code,
-          },
-        })
-        if (res.data.data?.pool_id) {
-          window.cachedPoolId = res.data.data?.pool_id
-        }
-        window.isValidCode = res.data.data?.valid || false
-        setCheckingCode(false)
+       try {
+         const res = await axiosInstance.get('/api/v1/airdrop/code/valid', {
+           params: {
+             code,
+           },
+         })
+         if (res.data.data?.pool_id) {
+           window.cachedPoolId = res.data.data?.pool_id
+         }
+         window.isValidCode = res.data.data?.valid || false
+       } catch (error) {
+         console.error('Failed to check code:', error)
+       } finally {
+          setCheckingCode(false)
+       }
       } else {
         window.isValidCode = false
         setCheckingCode(false)
