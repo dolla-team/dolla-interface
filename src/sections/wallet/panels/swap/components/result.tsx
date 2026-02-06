@@ -1,5 +1,6 @@
-import Big from "big.js";
-import { useMemo, useState } from "react";
+import { formatNumber } from '@/utils/format/number'
+import Big from 'big.js'
+import { useMemo, useState } from 'react'
 
 export default function Result({
   inputCurrency,
@@ -7,31 +8,33 @@ export default function Result({
   inputCurrencyAmount,
   outputCurrencyAmount,
   priceImpactType,
-  onClose
+  onClose,
 }: any) {
-  const [reserve, setReserve] = useState(false);
+  const [reserve, setReserve] = useState(false)
 
   const priceString = useMemo(
     () =>
       reserve
         ? `1 ${outputCurrency.symbol} =
-  ${Big(inputCurrencyAmount || 0)
-    .div(Big(outputCurrencyAmount || 0).eq(0) ? 1 : outputCurrencyAmount)
-    .toFixed(4)}
+  ${formatNumber(
+    Big(inputCurrencyAmount || 0)
+      .div(Big(outputCurrencyAmount || 1).eq(0) ? 1 : outputCurrencyAmount)
+      .toString(),
+    6,
+    true
+  )}
   ${inputCurrency.symbol}`
         : `1 ${inputCurrency.symbol} =
-  ${Big(outputCurrencyAmount || 0)
-    .div(Big(inputCurrencyAmount || 0).eq(0) ? 1 : inputCurrencyAmount)
-    .toFixed(4)}
+  ${formatNumber(
+    Big(outputCurrencyAmount || 0)
+      .div(Big(inputCurrencyAmount || 1).eq(0) ? 1 : inputCurrencyAmount)
+      .toString(),
+    6,
+    true
+  )}
   ${outputCurrency.symbol}`,
-    [
-      reserve,
-      inputCurrency,
-      outputCurrency,
-      inputCurrencyAmount,
-      outputCurrencyAmount
-    ]
-  );
+    [reserve, inputCurrency, outputCurrency, inputCurrencyAmount, outputCurrencyAmount]
+  )
 
   return (
     <div className="flex items-center justify-between pt-[10px]">
@@ -40,7 +43,7 @@ export default function Result({
         <button
           className="cursor-pointer p-[5px] duration-500 hover:opacity-60 active:opacity-80"
           onClick={() => {
-            setReserve(!reserve);
+            setReserve(!reserve)
           }}
         >
           <svg
@@ -86,15 +89,10 @@ export default function Result({
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
           >
-            <path
-              d="M1 1L6 5L11 1"
-              stroke="black"
-              strokeWidth="2"
-              strokeLinecap="round"
-            />
+            <path d="M1 1L6 5L11 1" stroke="black" strokeWidth="2" strokeLinecap="round" />
           </svg>
         </button>
       </div>
     </div>
-  );
+  )
 }
