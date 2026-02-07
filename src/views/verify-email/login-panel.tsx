@@ -20,30 +20,25 @@ export default function LoginPanel({ onChangeHasAccount, setIsBgSpread }: any) {
     address?: string
   ): Promise<boolean> => {
     try {
-      const code = new URLSearchParams(window.location.search).get("code");
-      if (code && code?.length === 6) {
-        const res = await axios.get("/api/v1/airdrop/code/valid", {
-          params: {
-            code
-          }
-        });
-        return res.data.data?.valid || false;
+      const code = new URLSearchParams(window.location.search).get('code')
+      if (code && code?.length === 6 && window.isValidCode) {
+        return true
       }
-      let path = "/api/v1/user/whitelist";
-      const params = new URLSearchParams();
-      if (email) params.append("email", email);
-      if (address) params.append("address", address);
-      const queryString = params.toString();
+      let path = '/api/v1/user/whitelist'
+      const params = new URLSearchParams()
+      if (email) params.append('email', email)
+      if (address) params.append('address', address)
+      const queryString = params.toString()
       if (queryString) {
-        path += `?${queryString}`;
+        path += `?${queryString}`
       }
-      const res = await axios.get(path);
+      const res = await axios.get(path)
 
-      return res.data.data?.is_whitelist || false;
+      return res.data.data?.is_whitelist || false
     } catch (err: any) {
       // If API returns error, consider it as not whitelisted
-      console.error("Whitelist check failed:", err);
-      return false;
+      console.error('Whitelist check failed:', err)
+      return false
     }
   };
 

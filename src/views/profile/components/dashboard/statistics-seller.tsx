@@ -15,7 +15,7 @@ import PopoverCard from "../popover-card";
 import { BASE_TOKEN } from "@/config/btc";
 
 const StatisticsSeller = (props: any) => {
-  const { className, pnlList, pnl } = props;
+  const { className, pnlList, pnl } = props
 
   const { userInfo } = useAuth();
   const navigate = useNavigate();
@@ -58,14 +58,14 @@ const StatisticsSeller = (props: any) => {
 
   const PnlAmount = (
     <span>
-      {Big(userInfo?.seller_profit || 0).lt(0) ? "-" : "+"}
-      {formatNumber(Big(userInfo?.seller_profit || 0).abs(), 2, true, {
-        prefix: "$",
+      {Big(pnl).lt(0) ? '-' : '+'}
+      {formatNumber(Big(pnl).abs(), 2, true, {
+        prefix: '$',
         isShort: true,
-        isShortUppercase: true
+        isShortUppercase: true,
       })}
     </span>
-  );
+  )
 
   const ActiveListingsAmount = (
     <div
@@ -87,7 +87,7 @@ const StatisticsSeller = (props: any) => {
   return (
     <div
       className={clsx(
-        "flex items-center gap-[18px] pl-[13px] mt-[10px] max-md:mt-[13px] max-md:flex-col max-md:gap-[20px] max-md:pl-0 max-md:pb-0",
+        'flex items-center gap-[18px] pl-[13px] mt-[10px] max-md:mt-[13px] max-md:flex-col max-md:gap-[20px] max-md:pl-0 max-md:pb-0',
         className
       )}
     >
@@ -108,11 +108,8 @@ const StatisticsSeller = (props: any) => {
               }
               className=""
               valueClassName={clsx(
-                !Big(userInfo?.seller_profit || 0).eq(0) &&
-                  "border-b border-[#8A87AA] border-dotted pb-[4px] button",
-                Big(userInfo?.seller_profit || 0).lt(0)
-                  ? "text-[#FF399F]"
-                  : "text-[#27C627]"
+                !Big(pnl).eq(0) && 'border-b border-[#8A87AA] border-dotted pb-[4px] button',
+                Big(pnl).lt(0) ? 'text-[#FF399F]' : 'text-[#27C627]'
               )}
             >
               {pnlList.length === 0 ? (
@@ -138,21 +135,17 @@ const StatisticsSeller = (props: any) => {
                         {Big(userInfo?.created || 0)
                           .minus(userInfo?.cancel || 0)
                           .minus(userInfo?.ended || 0)
-                          .toFixed(0)}{" "}
+                          .toFixed(0)}{' '}
                         Live
                       </div>
                     </div>
                     <div className="inline-flex gap-[4px] mt-[10px] h-[24px] px-[10px] items-center border border-[#E4E4E4] rounded-[16px] bg-[#F2F2F299]">
                       <div className="w-[7px] h-[7px] shrink-0 rounded-full bg-[#FF399F]" />
-                      <div className="text-[10px] text-[#2B3337]">
-                        {userInfo?.cancel} Cancelled
-                      </div>
+                      <div className="text-[10px] text-[#2B3337]">{userInfo?.cancel} Cancelled</div>
                     </div>
                     <div className="inline-flex gap-[4px] mt-[10px] h-[24px] px-[10px] items-center border border-[#E4E4E4] rounded-[16px] bg-[#F2F2F299]">
                       <div className="w-[7px] h-[7px] shrink-0 rounded-full bg-[#C9C9C9]" />
-                      <div className="text-[10px] text-[#2B3337]">
-                        {userInfo?.ended} Sold
-                      </div>
+                      <div className="text-[10px] text-[#2B3337]">{userInfo?.ended} Sold</div>
                     </div>
                   </PopoverCard>
                 }
@@ -163,13 +156,13 @@ const StatisticsSeller = (props: any) => {
                 <div
                   className={clsx(
                     userInfo?.created > 0
-                      ? "button border-b border-[#8A87AA] border-dotted pb-[4px]"
-                      : ""
+                      ? 'button border-b border-[#8A87AA] border-dotted pb-[4px]'
+                      : ''
                   )}
                 >
                   {formatNumber(userInfo?.created, 0, true, {
                     isShort: true,
-                    isShortUppercase: true
+                    isShortUppercase: true,
                   })}
                 </div>
               </Popover>
@@ -189,7 +182,7 @@ const StatisticsSeller = (props: any) => {
             </LabelValue>
             <Button
               onClick={() => {
-                navigate(`/btc/create`);
+                navigate(`/btc/create`)
               }}
               className="!bg-black text-white w-[96px] h-[38px] !rounded-[8px]"
             >
@@ -199,7 +192,7 @@ const StatisticsSeller = (props: any) => {
         </div>
       </div>
     </div>
-  );
+  )
 };
 
 export default StatisticsSeller;
