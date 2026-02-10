@@ -222,7 +222,8 @@ export default function useTrade({ onSuccess }: any) {
         reportDb3({
           address: import.meta.env.VITE_NEAR_ACCOUNT_ID,
           receive_address: import.meta.env.VITE_NEAR_ACCOUNT_ID,
-          deposit_address: trade.recipientAccount
+          deposit_address: trade.recipientAccount,
+          type: 2
         });
       } else {
         console.log("Swap failed:", result);
