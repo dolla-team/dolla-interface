@@ -6,11 +6,12 @@ import Timer from "../timer";
 export default function HomeEntry({
   prizeAmount,
   currentRound,
+  nextRoundTime,
   status,
   setStatus,
   fetchResult,
   winningAmount,
-  onShowDetail
+  onShowDetail,
 }: any) {
   return (
     <div
@@ -26,27 +27,27 @@ export default function HomeEntry({
       </div>
       <div
         className={clsx(
-          "absolute z-[3]",
+          'absolute z-[3]',
           status === 2 &&
             winningAmount > 0 &&
             "w-[152px] h-[56px] bottom-[-6px] left-[-7px] rounded-[30px] bg-[url('/lucky-draw/winner-bg.png')] bg-no-repeat bg-center bg-cover",
           status === 2 &&
             winningAmount === 0 &&
-            "w-[138px] h-[36px] bottom-[4px] left-0 border border-[#FFFFFF33] bg-[#8A87AA] rounded-[30px] backdrop-blur-[25px]",
+            'w-[138px] h-[36px] bottom-[4px] left-0 border border-[#FFFFFF33] bg-[#8A87AA] rounded-[30px] backdrop-blur-[25px]',
           status !== 2 &&
-            "w-[138px] h-[36px] bottom-[4px] left-0 border border-[#FFFFFF33] bg-[#5C03C24D] rounded-[30px] backdrop-blur-[25px]"
+            'w-[138px] h-[36px] bottom-[4px] left-0 border border-[#FFFFFF33] bg-[#5C03C24D] rounded-[30px] backdrop-blur-[25px]'
         )}
       >
         {status === 0 && (
           <Timer
             onTimeUp={() => {
               if (currentRound) {
-                setStatus(1);
-                fetchResult();
+                setStatus(1)
+                fetchResult()
               }
             }}
             className="text-[12px] px-[2px]"
-            currentRound={currentRound}
+            nextRoundTime={nextRoundTime}
             size={16}
             key={currentRound}
           />
@@ -55,7 +56,7 @@ export default function HomeEntry({
           <motion.div
             className="text-[12px] text-white text-center leading-[34px]"
             animate={{ scale: [1, 1.12, 1] }}
-            transition={{ duration: 1, ease: "easeInOut", repeat: Infinity }}
+            transition={{ duration: 1, ease: 'easeInOut', repeat: Infinity }}
           >
             Drawing...
           </motion.div>
@@ -65,18 +66,16 @@ export default function HomeEntry({
             <motion.div
               className="text-[12px] text-black leading-[54px] font-[600] text-center"
               animate={{ scale: [1, 1.12, 1] }}
-              transition={{ duration: 1, ease: "easeInOut", repeat: Infinity }}
+              transition={{ duration: 1, ease: 'easeInOut', repeat: Infinity }}
             >
               You win ${winningAmount.toLocaleString()}!
             </motion.div>
           ) : (
-            <div className="text-[12px] text-white text-center leading-[34px]">
-              You Missed
-            </div>
+            <div className="text-[12px] text-white text-center leading-[34px]">You Missed</div>
           ))}
       </div>
       <div className="absolute top-[0px] left-[0px] w-[39px] h-[28px] bg-[url('/lucky-draw/one-ticket-icon.png')] bg-no-repeat bg-center bg-contain" />
       <div className="absolute bottom-[10px] right-[10px] w-[61px] h-[58px] bg-[url('/lucky-draw/two-tickets-icon.png')] bg-no-repeat bg-center bg-contain" />
     </div>
-  );
+  )
 }

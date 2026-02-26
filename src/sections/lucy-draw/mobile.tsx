@@ -1,6 +1,5 @@
 import clsx from "clsx";
-import { motion } from "framer-motion";
-import WinResult from "./win-result";
+import { motion } from 'framer-motion'
 import Timer from "./timer";
 import Avatar from "@/components/avatar";
 import { useEffect, useState } from "react";
@@ -10,14 +9,15 @@ import LucyDrawCard from "./card";
 export default function LucyDrawMobile(props: any) {
   const {
     currentRound,
+    nextRoundTime,
     prizeAmount,
     status,
     tickets,
     winningList,
     setStatus,
     fetchResult,
-    className
-  } = props;
+    className,
+  } = props
   const [open, setOpen] = useState(false);
   const [showCard, setShowCard] = useState(false);
   useEffect(() => {
@@ -30,12 +30,12 @@ export default function LucyDrawMobile(props: any) {
     <>
       <div
         className={clsx(
-          "fixed bottom-[30px] left-0 z-[10] w-[159px] h-[57px] duration-300",
-          open ? "translate-x-[0px]" : "translate-x-[-68px]",
+          'fixed bottom-[30px] left-0 z-[10] w-[159px] h-[57px] duration-300',
+          open ? 'translate-x-[0px]' : 'translate-x-[-68px]',
           className
         )}
         onClick={() => {
-          setShowCard(true);
+          setShowCard(true)
         }}
       >
         <div className="h-[12px] z-[1] flex justify-center items-center text-white text-[10px] font-[600] leading-[100%] absolute top-[-8px] left-[10px]">
@@ -50,18 +50,18 @@ export default function LucyDrawMobile(props: any) {
           <Timer
             onTimeUp={() => {
               if (currentRound) {
-                setStatus(1);
-                fetchResult();
+                setStatus(1)
+                fetchResult()
               }
             }}
-            currentRound={currentRound}
+            nextRoundTime={nextRoundTime}
             className="absolute top-[-20px] right-[-30px] !border-[#7348FF] !bg-[#000]"
             key={currentRound}
           />
         )}
         {status !== 0 && (
           <div className="absolute top-[-20px] right-[-30px] border border-[#7348FF] rounded-[20px] w-[91px] h-[30px] bg-[#000]/30 text-white text-[12px] flex items-center justify-center">
-            {status === 1 ? "Drawing..." : "Congrats!"}
+            {status === 1 ? 'Drawing...' : 'Congrats!'}
           </div>
         )}
         {status === 2 && (
@@ -69,11 +69,11 @@ export default function LucyDrawMobile(props: any) {
             <motion.div
               className="flex items-center"
               animate={{
-                x: [0, -150] // Move from right to left
+                x: [0, -150], // Move from right to left
               }}
               transition={{
                 duration: 6,
-                ease: "linear"
+                ease: 'linear',
               }}
             >
               {winningList.map((item: any, index: number) => (
@@ -107,7 +107,7 @@ export default function LucyDrawMobile(props: any) {
               font-[DelaGothicOne]
               "
           style={{
-            WebkitTextStroke: "1px #3A3A3A"
+            WebkitTextStroke: '1px #3A3A3A',
           }}
         >
           <div>${prizeAmount.toLocaleString()}</div>
@@ -121,7 +121,7 @@ export default function LucyDrawMobile(props: any) {
         </div>
       </Modal>
     </>
-  );
+  )
 }
 
 const Bg = () => {

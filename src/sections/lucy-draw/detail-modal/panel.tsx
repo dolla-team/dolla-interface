@@ -14,6 +14,7 @@ import { useMemo } from "react";
 export default function DetailModalPanel({
   onClose,
   currentRound,
+  nextRoundTime,
   setStatus,
   fetchResult,
   prizeAmount,
@@ -25,15 +26,15 @@ export default function DetailModalPanel({
   status,
   onChangePanel,
   from,
-  poolStatus
+  poolStatus,
 }: any) {
-  const taskStore = useTaskStore();
-  const navigate = useNavigate();
+  const taskStore = useTaskStore()
+  const navigate = useNavigate()
   const winRate = useMemo(() => {
-    if (totalTickets === 0 || tickets === 0) return "0";
-    const _rate = Math.min(Math.floor((tickets / totalTickets) * 100), 100);
-    return _rate < 1 ? "~ 1" : _rate;
-  }, [tickets, totalTickets]);
+    if (totalTickets === 0 || tickets === 0) return '0'
+    const _rate = Math.min(Math.floor((tickets / totalTickets) * 100), 100)
+    return _rate < 1 ? '~ 1' : _rate
+  }, [tickets, totalTickets])
   return (
     <div className="pb-[18px]">
       <div className="px-[24px] py-[18px] flex items-center justify-between">
@@ -57,12 +58,12 @@ export default function DetailModalPanel({
             <Timer
               onTimeUp={() => {
                 if (currentRound) {
-                  setStatus(1);
-                  fetchResult();
+                  setStatus(1)
+                  fetchResult()
                 }
               }}
               className="text-[12px] px-[2px] gap-[6px]"
-              currentRound={currentRound}
+              nextRoundTime={nextRoundTime}
               size={14}
               key={currentRound}
             />
@@ -94,28 +95,15 @@ export default function DetailModalPanel({
         </div>
       )}
       {status !== 2 && (
-        <div
-          className={clsx(
-            "grid grid-cols-3 mt-[30px]",
-            status === 1 && "opacity-50"
-          )}
-        >
+        <div className={clsx('grid grid-cols-3 mt-[30px]', status === 1 && 'opacity-50')}>
           <div className="flex flex-col items-center">
-            <div className="text-[18px] text-white font-[700]">
-              {totalTickets.toLocaleString()}
-            </div>
+            <div className="text-[18px] text-white font-[700]">{totalTickets.toLocaleString()}</div>
             <div className="text-[12px] text-white">Total tickets</div>
           </div>
           <div className="flex flex-col items-center">
             <div className="flex items-center gap-[8px]">
-              <div className="text-[18px] text-white font-[700]">
-                {tickets.toLocaleString()}
-              </div>
-              <img
-                src="/lucky-draw/ticket-1.png"
-                alt="ticket"
-                className="w-[39px] h-[23px]"
-              />
+              <div className="text-[18px] text-white font-[700]">{tickets.toLocaleString()}</div>
+              <img src="/lucky-draw/ticket-1.png" alt="ticket" className="w-[39px] h-[23px]" />
             </div>
             <div className="text-[12px] text-white">Your tickets</div>
           </div>
@@ -135,12 +123,12 @@ export default function DetailModalPanel({
           </button>
           <div
             onClick={() => {
-              onClose();
-              if (from === "home" || poolStatus !== 1) {
-                navigate("/");
+              onClose()
+              if (from === 'home' || poolStatus !== 1) {
+                navigate('/')
                 setTimeout(() => {
-                  taskStore.set({ isBid: true });
-                }, 300);
+                  taskStore.set({ isBid: true })
+                }, 300)
               }
             }}
             className="button w-[196px] h-[46px] leading-[46px] text-[12px] text-black font-[500] text-center rounded-[12px] shadow-[0_0_10px_0_#8465FF] bg-[url('/lucky-draw/winner-bg.png')] bg-size-[140%_160%] bg-no-repeat bg-center bg-cover"
@@ -159,24 +147,21 @@ export default function DetailModalPanel({
         <div className="w-[456px] h-[72px] py-[12px]  rounded-[12px] mx-auto mt-[20px] text-black text-center shadow-[0_0_10px_0_#8465FF] bg-[url('/lucky-draw/winner-bg.png')] bg-size-[140%_160%] bg-no-repeat bg-center bg-cover">
           <div className="text-[16px] font-[600]">Congrats!</div>
           <div className="text-[14px]">
-            You win{" "}
-            <span className="font-[600]">
-              ${winningAmount.toLocaleString()}
-            </span>{" "}
-            in this round
+            You win <span className="font-[600]">${winningAmount.toLocaleString()}</span> in this
+            round
           </div>
         </div>
       )}
       <div className="flex justify-center mt-[20px]">
         <button
-          onClick={() => onChangePanel("history")}
+          onClick={() => onChangePanel('history')}
           className="button underline text-[#D9D9D9] text-[12px]"
         >
           History
         </button>
       </div>
     </div>
-  );
+  )
 }
 
 export const LuckyInfo = () => {

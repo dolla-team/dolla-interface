@@ -7,6 +7,7 @@ import LucyDrawHistory from "../history";
 export default function BtcDetailEntry({
   prizeAmount,
   currentRound,
+  nextRoundTime,
   setStatus,
   fetchResult,
   participation,
@@ -14,9 +15,9 @@ export default function BtcDetailEntry({
   setShowBuyTicket,
   onShowDetail,
   winningAmount,
-  status
+  status,
 }: any) {
-  const lucyDrawStore = useLuckyDrawStore();
+  const lucyDrawStore = useLuckyDrawStore()
   return (
     <>
       <div
@@ -35,28 +36,25 @@ export default function BtcDetailEntry({
               <Timer
                 onTimeUp={() => {
                   if (currentRound) {
-                    setStatus(1);
-                    fetchResult();
+                    setStatus(1)
+                    fetchResult()
                   }
                 }}
                 className="text-[12px] !px-[3px] justify-center gap-[4px] !h-[32px]"
-                currentRound={currentRound}
+                nextRoundTime={nextRoundTime}
                 size={14}
                 key={currentRound}
               />
             )}
             {(status === 1 || status === 2) && (
-              <div className="text-[12px] text-white text-center leading-[30px]">
-                Drawing...
-              </div>
+              <div className="text-[12px] text-white text-center leading-[30px]">Drawing...</div>
             )}
           </div>
         </div>
         <div
           className="absolute bottom-0 left-0 z-[2] px-[8px] py-[6px] w-[250px] h-[70px] rounded-[10px] border border-[#F2F2F233]"
           style={{
-            background:
-              "linear-gradient(0deg, #7201F4 0%, #7201F4 100%), rgba(0, 0, 0, 0.10)"
+            background: 'linear-gradient(0deg, #7201F4 0%, #7201F4 100%), rgba(0, 0, 0, 0.10)',
           }}
         >
           <div className="flex items-center justify-between">
@@ -69,9 +67,9 @@ export default function BtcDetailEntry({
               </div>
             </div>
             <button
-              onClick={(e) => {
-                e.stopPropagation();
-                lucyDrawStore.set({ showHistory: true });
+              onClick={e => {
+                e.stopPropagation()
+                lucyDrawStore.set({ showHistory: true })
               }}
               className="button underline text-white text-[10px]"
             >
@@ -127,13 +125,13 @@ export default function BtcDetailEntry({
               </div>
               <button
                 className={clsx(
-                  "w-[54px] h-[26px] !bg-[#FFC42F] text-black !rounded-[8px] text-[12px] font-[500]",
-                  status === 1 ? "opacity-30 cursor-not-allowed" : "button"
+                  'w-[54px] h-[26px] !bg-[#FFC42F] text-black !rounded-[8px] text-[12px] font-[500]',
+                  status === 1 ? 'opacity-30 cursor-not-allowed' : 'button'
                 )}
-                onClick={(e) => {
-                  if (status === 1) return;
-                  e.stopPropagation();
-                  setShowBuyTicket(true);
+                onClick={e => {
+                  if (status === 1) return
+                  e.stopPropagation()
+                  setShowBuyTicket(true)
                 }}
               >
                 + Buy
@@ -154,5 +152,5 @@ export default function BtcDetailEntry({
       </div>
       <LucyDrawHistory />
     </>
-  );
+  )
 }
