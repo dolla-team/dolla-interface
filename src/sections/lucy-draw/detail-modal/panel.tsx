@@ -173,8 +173,8 @@ export const LuckyInfo = () => {
         <div className="w-[298px] text-[#5E6B7D] text-[12px] font-[300] p-[16px] bg-white rounded-[10px] border border-[#E4E4E4]">
           <div className="font-[500] text-black mb-[4px]">Lucky Draw</div>{' '}
           <div>
-            Earn tickets from your bids for a chance to win part of the 100 USDT daily pool every
-            24h — tickets reset each round. <br />
+            Earn tickets from your bids for a chance to win part of the 100 USDT every 3days —
+            tickets reset each round. <br />
             🥇1st winner: 50 USDT <br />
             🥈2nd winner: 15 USDT <br />
             🥉3rd winner: 10 USDT <br />
