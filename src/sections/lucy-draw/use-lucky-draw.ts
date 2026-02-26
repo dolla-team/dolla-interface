@@ -5,6 +5,7 @@ export default function useLucyDraw() {
   const [currentRound, setCurrentRound] = useState(0);
   const [participation, setParticipation] = useState(0);
   const [tickets, setTickets] = useState(0);
+  const [nextRoundTime, setNextRoundTime] = useState(0)
   const [isLoading, setIsLoading] = useState(false);
 
   const fetchCurrentRound = async (id?: number) => {
@@ -17,13 +18,13 @@ export default function useLucyDraw() {
       }
       const res = await axiosInstance.get(path);
       if (!id) {
-        setCurrentRound(res.data.data.ticket_prize_draw.id);
-        setTickets(res.data.data.ticket_prize_draw.number);
-        setParticipation(res.data.data.ticket_prize_draw.user_count);
-
+        setCurrentRound(res.data.data.ticket_prize_draw.id)
+        setTickets(res.data.data.ticket_prize_draw.number)
+        setParticipation(res.data.data.ticket_prize_draw.user_count)
+        setNextRoundTime(res.data.data.ticket_prize_draw.time + 259200000) // 3 × 24 × 60 × 60 × 1000
         window.updateLucyDrawTimer = setTimeout(() => {
-          fetchCurrentRound();
-        }, 5000);
+          fetchCurrentRound()
+        }, 5000)
       }
 
       setIsLoading(false);
@@ -52,6 +53,7 @@ export default function useLucyDraw() {
     participation,
     totalTickets: tickets,
     isLoading,
-    fetchCurrentRound
-  };
+    fetchCurrentRound,
+    nextRoundTime,
+  }
 }

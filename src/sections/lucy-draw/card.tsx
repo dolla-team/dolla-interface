@@ -14,6 +14,7 @@ import Round from "./round";
 
 export default function LucyDrawCard({
   currentRound,
+  nextRoundTime,
   prizeAmount,
   status,
   tickets,
@@ -21,17 +22,17 @@ export default function LucyDrawCard({
   setStatus,
   fetchResult,
   setShowBuyTicket,
-  participation
+  participation,
 }: any) {
-  const isMobile = useIsMobile();
-  const lucyDrawStore = useLuckyDrawStore();
-  const { address, login } = useAuth();
+  const isMobile = useIsMobile()
+  const lucyDrawStore = useLuckyDrawStore()
+  const { address, login } = useAuth()
   return (
     <div
       className={clsx(
-        "border border-[#F2F2F233] overflow-hidden w-full h-[126px] my-[20px] px-[20px] pt-[10px] relative",
+        'border border-[#F2F2F233] overflow-hidden w-full h-[126px] my-[20px] px-[20px] pt-[10px] relative',
         isMobile
-          ? "rounded-t-[16px] pt-[12px]"
+          ? 'rounded-t-[16px] pt-[12px]'
           : "rounded-[12px] bg-[url('/lucky-draw.png')] bg-[#1C1C23] bg-no-repeat bg-cover bg-center"
       )}
     >
@@ -41,7 +42,7 @@ export default function LucyDrawCard({
           <span
             className="text-white text-[24px] font-[800] mr-[10px]"
             style={{
-              textShadow: "0px 0px 10px #8465FF"
+              textShadow: '0px 0px 10px #8465FF',
             }}
           >
             Lucky Draw
@@ -51,16 +52,14 @@ export default function LucyDrawCard({
             #{currentRound}
           </div>
           <Timer
+            nextRoundTime={nextRoundTime}
             onTimeUp={() => {
               if (currentRound) {
-                setStatus(1);
-                fetchResult();
+                setStatus(1)
+                fetchResult()
               }
             }}
-            currentRound={currentRound}
-            className={
-              isMobile ? "w-[180px] h-[46px] px-[26px] text-[16px]" : ""
-            }
+            className={isMobile ? 'w-[180px] h-[46px] px-[26px] text-[16px]' : ''}
             size={isMobile ? 22 : 14}
             key={currentRound}
           />
@@ -74,29 +73,25 @@ export default function LucyDrawCard({
       </div>
       <div
         className={clsx(
-          "flex items-center justify-between mt-[20px] relative z-[2]",
-          status === 2 && "opacity-50"
+          'flex items-center justify-between mt-[20px] relative z-[2]',
+          status === 2 && 'opacity-50'
         )}
       >
         <div className="flex items-center">
           <span
             className="text-white text-[24px] font-[800]"
             style={{
-              textShadow: "0px 0px 10px #8465FF"
+              textShadow: '0px 0px 10px #8465FF',
             }}
           >
             ${prizeAmount.toLocaleString()}
           </span>
-          {status === 1 && (
-            <div className="text-[12px] text-white ml-[20px]">Drawing...</div>
-          )}
+          {status === 1 && <div className="text-[12px] text-white ml-[20px]">Drawing...</div>}
           {status === 2 && (
             <>
               <div className="ml-[20px]">
                 <div className="text-[12px] text-white">Winner</div>
-                <div className="text-[14px] text-white font-[500]">
-                  {winningList.length}
-                </div>
+                <div className="text-[14px] text-white font-[500]">{winningList.length}</div>
               </div>
               <div className="relative z-[2] flex items-center gap-[8px] ml-[40px]">
                 {winningList.map((item: any, index: number) => (
@@ -115,22 +110,20 @@ export default function LucyDrawCard({
         <div className="flex items-center text-white">
           <div>
             <div className="text-[10px]">Participation</div>
-            <div className="text-[14px]">
-              {formatNumber(participation, 0, true)}
-            </div>
+            <div className="text-[14px]">{formatNumber(participation, 0, true)}</div>
           </div>
           <div className="mx-[60px]">
             <div className="text-[10px]">You Auto Joined</div>
             <div className="text-[14px]">{tickets}</div>
           </div>
           <Button
-            className={clsx("w-[112px] h-[42px]")}
+            className={clsx('w-[112px] h-[42px]')}
             onClick={() => {
               if (!address) {
-                login();
-                return;
+                login()
+                return
               }
-              setShowBuyTicket(true);
+              setShowBuyTicket(true)
             }}
           >
             Buy Ticket
@@ -138,7 +131,7 @@ export default function LucyDrawCard({
         </div>
       </div>
     </div>
-  );
+  )
 }
 
 export const LuckyInfo = () => {
