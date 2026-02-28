@@ -1,19 +1,25 @@
-import Progress from "../progress";
-import { useBtcContext } from "../../../context";
-import { formatNumber } from "@/utils/format/number";
-import clsx from "clsx";
-import Avatar from "@/components/avatar";
-import SellerLevel from "@/components/seller-level";
-import { formatAddress } from "@/utils/format/address";
-import MoreIcon from "./more-icon";
-import { getAnchorPrice } from "@/utils/pool";
-import Popover, {
-  PopoverPlacement,
-  PopoverTrigger
-} from "@/components/popover";
+import Progress from '../progress'
+import { useBtcContext } from '../../../context'
+import { formatNumber } from '@/utils/format/number'
+import clsx from 'clsx'
+import Avatar from '@/components/avatar'
+import SellerLevel from '@/components/seller-level'
+import { formatAddress } from '@/utils/format/address'
+import MoreIcon from './more-icon'
+import { getAnchorPrice } from '@/utils/pool'
+import Popover, { PopoverPlacement, PopoverTrigger } from '@/components/popover'
+import { useMemo } from 'react'
+import Big from 'big.js'
 
 export default function MarketInfo() {
-  const { pool } = useBtcContext();
+  const { pool, bids } = useBtcContext()
+
+  const probability = useMemo(() => {
+    if (!pool?.anchor_price) return 0
+    const anchorPrice = getAnchorPrice(pool?.anchor_price || 0)
+    const _p = 1 - (1 - 1 / anchorPrice) ** bids
+    return formatNumber(Big(Math.min(_p, 0.9999)).mul(100), 4, true)
+  }, [pool?.anchor_price, bids])
 
   return (
     pool?.status !== 2 && (
@@ -49,27 +55,22 @@ export default function MarketInfo() {
               size={22}
               src={item.icon}
               address={item?.user}
-              className={clsx(
-                "rounded-[50%] text-[12px] shrink-0",
-                index !== 0 && "ml-[-6px]"
-              )}
+              className={clsx('rounded-[50%] text-[12px] shrink-0', index !== 0 && 'ml-[-6px]')}
             />
           ))}
 
           {pool?.degen_players?.length >= 10 && (
             <MoreIcon className="ml-[-6px] relative z-[2] shrink-0" />
           )}
-          <div className="text-[12px] text-white ml-[6px]">
-            {pool?.participants || 0}
-          </div>
+          <div className="text-[12px] text-white ml-[6px]">{pool?.participants || 0}</div>
         </div>
         <div className="mt-[10px] flex justify-between items-center">
           <div>
             <div className="text-[12px] text-white/50">Anchor Value</div>
             <div
               className={clsx(
-                "text-[16px] font-[600]",
-                pool?.status === 3 ? "text-[#C3C3C3]" : "text-white"
+                'text-[16px] font-[600]',
+                pool?.status === 3 ? 'text-[#C3C3C3]' : 'text-white'
               )}
             >
               ${formatNumber(getAnchorPrice(pool?.anchor_price), 2, true)}
@@ -82,23 +83,21 @@ export default function MarketInfo() {
         <div className="flex items-center mt-[60px] gap-[4px]">
           <span className="text-[12px] text-white/60">Dolla Probability</span>
           <ProbabilityInfo />
-          <span className="text-[12px] text-white/60">=</span>
           <div
             className="text-[16px] font-[600]"
             style={{
-              background:
-                "linear-gradient(90deg, #A2623D 0%, #FFC42F 47.6%, #FFE9B2 100%)",
-              backgroundClip: "text",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent"
+              background: 'linear-gradient(90deg, #A2623D 0%, #FFC42F 47.6%, #FFE9B2 100%)',
+              backgroundClip: 'text',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
             }}
           >
-            1/{formatNumber(getAnchorPrice(pool?.anchor_price || 0), 0, true)}
+            ≈ {probability}%
           </div>
         </div>
       </div>
     )
-  );
+  )
 }
 
 export const ProbabilityInfo = () => {
@@ -110,8 +109,8 @@ export const ProbabilityInfo = () => {
         <div className="w-[298px] text-[12px] p-[10px] bg-white rounded-[10px] border border-[#E4E4E4]">
           <div className="font-[500] text-black">Dolla Probability</div>
           <div className="text-[12px] text-[#5E6B7D] font-[300] mt-[4px] leading-[120%]">
-            Your fixed on-chain chance to win per 1 Dollar bid — calculated as 1
-            / Anchor Price, where Anchor Price = asset listing price × premium.
+            Your fixed on-chain chance to win per 1 Dollar bid — calculated as 1 / Anchor Price,
+            where Anchor Price = asset listing price × premium.
           </div>
         </div>
       }
@@ -131,5 +130,5 @@ export const ProbabilityInfo = () => {
         </svg>
       </button>
     </Popover>
-  );
-};
+  )
+}

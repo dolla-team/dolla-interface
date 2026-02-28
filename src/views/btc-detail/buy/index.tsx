@@ -9,6 +9,8 @@ import Button from "@/components/button";
 import { formatNumber } from "@/utils/format/number";
 import { getAnchorPrice } from "@/utils/pool";
 import { useAuth } from "@/contexts/auth";
+import { useMemo } from 'react'
+import Big from 'big.js'
 
 export default function Buy({
   disabled,
@@ -22,6 +24,13 @@ export default function Buy({
   const { bids, setBids, pool, poolAmount, flipStatus } = useBtcContext();
   const { nearAccount } = useAuth();
 
+  const probability = useMemo(() => {
+    if (!pool?.anchor_price) return 0
+    const anchorPrice = getAnchorPrice(pool?.anchor_price || 0)
+    const _p = 1 - (1 - 1 / anchorPrice) ** bids
+    return formatNumber(Big(Math.min(_p, 0.9999)).mul(100), 4, true)
+  }, [pool?.anchor_price, bids])
+
   return (
     <div className="bg-white border border-[#E4E4E4] rounded-[20px] px-[30px] pb-[24px]">
       <div className="text-[16px] font-[600] text-black pt-[20px]">
@@ -32,10 +41,7 @@ export default function Buy({
           <span className="text-[14px] text-black">Dolla Probability</span>
           <ProbabilityInfo />
         </div>
-        <div className="text-[14px] text-black">
-          1/
-          {formatNumber(getAnchorPrice(pool?.anchor_price || 0), 0, true)}
-        </div>
+        <div className="text-[14px] text-black">≈ {probability}%</div>
       </div>
       <div className="flex items-center h-[62px] p-[6px] bg-[#0000000D] border border-[#F2F2F233] rounded-[16px] mt-[20px]">
         {BID_UNITS.map(item => (
