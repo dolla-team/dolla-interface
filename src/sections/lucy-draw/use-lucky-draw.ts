@@ -21,7 +21,7 @@ export default function useLucyDraw() {
         setCurrentRound(res.data.data.ticket_prize_draw.id)
         setTickets(res.data.data.ticket_prize_draw.number)
         setParticipation(res.data.data.ticket_prize_draw.user_count)
-        setNextRoundTime(res.data.data.ticket_prize_draw.time + 259200000) // 3 × 24 × 60 × 60 × 1000
+        setNextRoundTime(res.data.data.ticket_prize_draw.time + 7 * 24 * 60 * 60 * 1000)
         window.updateLucyDrawTimer = setTimeout(() => {
           fetchCurrentRound()
         }, 5000)
