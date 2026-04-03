@@ -6,7 +6,6 @@ interface GlobalState {
   playBgm: boolean
   code: string
   showUserInfo: boolean
-  isInWhitelist: boolean
   loginMethod: string
   address: string
   set: (params: any) => void
@@ -18,7 +17,6 @@ const initialState = {
   playBgm: true,
   code: '',
   showUserInfo: false,
-  isInWhitelist: false,
   loginMethod: '',
   address: '',
 } as GlobalState
@@ -30,7 +28,6 @@ export const useGlobalStore = create(
       playBgm: true,
       code: '',
       showUserInfo: false,
-      isInWhitelist: false,
       loginMethod: '',
       address: '',
       set: params => set(() => ({ ...params })),

@@ -137,7 +137,7 @@ export default function MainLayout() {
       <ProfileSetting
         open={userInfoStore.showSetting}
         onClose={() => {
-          userInfoStore.set({ showSetting: false });
+          userInfoStore.set({ showSetting: false, settingFrom: '' })
         }}
       />
       <HowItWork />

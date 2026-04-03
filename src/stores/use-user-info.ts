@@ -2,21 +2,23 @@ import { create } from "zustand/index";
 import { createJSONStorage, persist } from 'zustand/middleware'
 
 interface UserInfoState {
-  userInfo: any;
-  prize: any;
-  showSetting: boolean;
-  set: (params: any) => void;
-  init: () => void;
+  userInfo: any
+  prize: any
+  showSetting: boolean
+  settingFrom: string
+  set: (params: any) => void
+  init: () => void
 }
 
 const initialState = {
   userInfo: null,
   prize: {
     points: 0,
-    tickets: 0
+    tickets: 0,
   },
-  showSetting: false
-} as UserInfoState;
+  showSetting: false,
+  settingFrom: '',
+} as UserInfoState
 
 const useUserInfoStore = create(
   persist<UserInfoState>(
@@ -27,6 +29,7 @@ const useUserInfoStore = create(
         tickets: 0,
       },
       showSetting: false,
+      settingFrom: '',
       set: params => set(() => ({ ...params })),
       init: () => set(() => initialState),
     }),
