@@ -93,18 +93,8 @@ export default function usePoolList(props?: {
   };
 
   useEffect(() => {
-    if (userInfo?.user) {
-      onQueryPoolListDebounced();
-    } else {
-      setLoading(false);
-    }
-  }, [
-    userInfo?.user,
-    sortOrder,
-    sortField,
-    collection,
-    allmarketsStore.status
-  ]);
+    onQueryPoolListDebounced()
+  }, [])
 
   useEffect(() => {
     return () => {
