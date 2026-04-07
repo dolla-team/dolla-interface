@@ -14,7 +14,7 @@ const SocialLinks = ({ className }: { className?: string }) => {
       <button
         className="button flex items-center gap-[4px]"
         onClick={() => {
-          window.open('https://t.me/+rlArBTaYhw8zNDM1', '_blank')
+          window.open('https://t.me/dollamarket', '_blank')
         }}
       >
         <TgIcon />
