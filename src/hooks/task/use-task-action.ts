@@ -79,7 +79,7 @@ export default function useTaskAction(task: any, onSuccess?: () => void) {
       return;
     }
     if (task.category === 0 && task.title === "Subscribe to TG Channel") {
-      window.open(`https://t.me/+rlArBTaYhw8zNDM1`, "_blank");
+      window.open(`https://t.me/dollamarket`, '_blank')
       await completeTask(task.id);
       return;
     }
