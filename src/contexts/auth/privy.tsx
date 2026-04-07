@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState, useCallback, useMemo } from 'react'
+import React, { useContext, useEffect, useState, useCallback, useMemo, useRef } from 'react'
 import useUserInfo from '@/hooks/use-user-info'
 import type { ReactNode } from 'react'
 import useLogin from '@/hooks/use-login'
@@ -25,6 +25,16 @@ import { useVerifyStore } from '@/stores/use-verify'
 import { useAnalysisDataStore } from '@/stores/use-analysis-data'
 import getCurrentAccount from './get-current-account'
 
+function clearLoginTimeoutTimer(timerId?: NonNullable<Window['loginTimeoutTimer']>) {
+  const id = timerId !== undefined ? timerId : window.loginTimeoutTimer
+  if (id != null) {
+    clearTimeout(id)
+  }
+  if (timerId === undefined || window.loginTimeoutTimer === timerId) {
+    window.loginTimeoutTimer = undefined
+  }
+}
+
 export const AuthContext = React.createContext<any | null>(null)
 
 export const AuthProvider: React.FC<{
@@ -35,6 +45,7 @@ export const AuthProvider: React.FC<{
   const { login: privyLogin } = usePrivyLogin({
     onComplete: async () => {
       console.log('privy login complete', wallets, user)
+      clearLoginTimeoutTimer()
       setIsCompleted(true)
     },
   })
@@ -106,6 +117,11 @@ export const AuthProvider: React.FC<{
     return currentAccount?.address
   }, [currentAccount])
 
+  const userRef = useRef(user)
+  const addressRef = useRef(address)
+  userRef.current = user
+  addressRef.current = address
+
   const { account, fetchAccount: updateNearAccount } = useAccount(address, chainType)
 
   const { loading: userInfoLoading, onQueryUserInfo } = useUserInfo(address, user)
@@ -119,7 +135,6 @@ export const AuthProvider: React.FC<{
   const { onLogin } = useLogin()
 
   const updateAccount = async () => {
-    console.log('updateAccount', address)
     if (!address) {
       return
     }
@@ -186,6 +201,7 @@ export const AuthProvider: React.FC<{
           setAccountRefresher(1)
           setLogining(false)
           window.isSigning = false
+          clearLoginTimeoutTimer()
         },
       })
     } catch (error: any) {
@@ -241,6 +257,7 @@ export const AuthProvider: React.FC<{
 
     await privyLogout?.()
 
+    clearLoginTimeoutTimer()
     localStorage.removeItem('_AK_TOKEN_')
     userInfoStore.set({ userInfo: null })
     setAccountRefresher(0)
@@ -252,19 +269,36 @@ export const AuthProvider: React.FC<{
   }, [address, privyLogout, wallets, solanaWallets])
 
   useEffect(() => {
-    if (!user || !address) return
-    if (!globalStore.isInWhitelist) {
+    if (!ready) {
       return
     }
-    window.loginTimeoutTimer = setTimeout(
+
+    if (!user || !address) {
+      const loginGraceTimer = window.setTimeout(() => {
+        if (!userRef.current || !addressRef.current) {
+          void login()
+        }
+      }, 2000)
+      return () => {
+        clearTimeout(loginGraceTimer)
+      }
+    }
+
+    const timeoutModalTimer = window.setTimeout(
       () => {
         setShowTimeoutModal(true)
       },
       1000 * 60 * 2
     )
-    if (!isCompleted) return
+    window.loginTimeoutTimer = timeoutModalTimer
 
-    clearTimeout(window.loginTimeoutTimer)
+    if (!isCompleted) {
+      return () => {
+        clearLoginTimeoutTimer(timeoutModalTimer)
+      }
+    }
+
+    clearLoginTimeoutTimer(timeoutModalTimer)
     const embeddedWallet = wallets.find(w => w.walletClientType === 'privy')
     if (!chainType && !embeddedWallet) return
 
@@ -290,7 +324,7 @@ export const AuthProvider: React.FC<{
     })
     updateAccount()
     ;(window as any).sign = sign
-  }, [user, globalStore.isInWhitelist, isCompleted, wallets, chainType, address])
+  }, [ready, user, isCompleted, wallets, chainType, address])
 
   return (
     <AuthContext.Provider

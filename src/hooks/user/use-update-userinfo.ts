@@ -4,9 +4,10 @@ import useToast from "@/hooks/use-toast";
 import useUpload from "@/hooks/use-upload";
 
 interface UpdateUserInfoParams {
-  name?: string;
-  file?: Blob | null;
-  icon?: string;
+  name?: string
+  file?: Blob | null
+  icon?: string
+  invite_code?: string
 }
 
 export default function useUpdateUserInfo(onSuccess?: () => void) {
@@ -41,6 +42,10 @@ export default function useUpdateUserInfo(onSuccess?: () => void) {
 
         if (fileUrl) {
           args.icon = fileUrl;
+        }
+
+        if (params.invite_code) {
+          args.invite_code = params.invite_code
         }
 
         await axiosInstance.post("/api/v1/account", args);

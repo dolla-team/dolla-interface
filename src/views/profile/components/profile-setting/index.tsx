@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useLocation } from 'react-router-dom'
 import Modal from "@/components/modal";
 import Button from "@/components/button";
 import AvatarUpload from "./upload";
@@ -8,6 +9,9 @@ import { useAuth } from "@/contexts/auth";
 import ModalClose from "@/components/button/modal-close";
 import Avatar from "@/components/avatar";
 import { formatAddress } from "@/utils/format/address";
+import useUserInfoStore from '@/stores/use-user-info'
+
+const INVITER_CODE_PATTERN = /^[a-zA-Z0-9]{6}$/
 
 interface ProfileSettingProps {
   open: boolean;
@@ -18,10 +22,13 @@ interface ProfileSettingProps {
 
 export default function ProfileSetting({ open, onClose }: ProfileSettingProps) {
   const { userInfo, onQueryUserInfo } = useAuth();
+  const location = useLocation()
+  const settingFrom = useUserInfoStore(s => s.settingFrom)
   const [username, setUsername] = useState("");
   const [avatarUrl, setAvatarUrl] = useState("");
   const [showAvatarUpload, setShowAvatarUpload] = useState(false);
   const [file, setFile] = useState<Blob | null>(null);
+  const [inviterCode, setInviterCode] = useState('')
   const { loading: isSaving, updateUserInfo } = useUpdateUserInfo(() => {
     onQueryUserInfo();
     onClose();
@@ -35,6 +42,20 @@ export default function ProfileSetting({ open, onClose }: ProfileSettingProps) {
     setUsername(name);
     setAvatarUrl(userInfo?.icon);
   }, [userInfo]);
+
+  useEffect(() => {
+    if (!open || settingFrom !== 'init') return
+    const raw = new URLSearchParams(location.search).get('code')
+    const code = raw?.trim() ?? ''
+    if (INVITER_CODE_PATTERN.test(code)) {
+      setInviterCode(code)
+    }
+  }, [open, settingFrom, location.search])
+
+  const showInviterField = settingFrom === 'init'
+  const trimmedInviter = inviterCode.trim()
+  const inviterInvalid =
+    showInviterField && trimmedInviter.length > 0 && !INVITER_CODE_PATTERN.test(trimmedInviter)
 
   // Handle avatar save
   const handleAvatarSave = (croppedImage: Blob) => {
@@ -78,17 +99,13 @@ export default function ProfileSetting({ open, onClose }: ProfileSettingProps) {
               )}
             </div>
             <div className="text-[14px] text-[#8A87AA] text-center mt-[6px]">
-              {userInfo?.name ||
-                userInfo?.show_email ||
-                formatAddress(userInfo?.user)}
+              {userInfo?.name || userInfo?.show_email || formatAddress(userInfo?.user)}
             </div>
             <div className="flex items-center gap-[10px] mt-[18px]">
               <Button
                 onClick={() => {
-                  const random = Math.floor(Math.random() * 45) + 1;
-                  setAvatarUrl(
-                    `https://assets.dolla.market/avatar/${random}.jpg`
-                  );
+                  const random = Math.floor(Math.random() * 45) + 1
+                  setAvatarUrl(`https://assets.dolla.market/avatar/${random}.jpg`)
                 }}
                 className="w-[160px] h-[46px] !bg-white border-black border !text-black text-[14px] gap-[8px]"
               >
@@ -133,26 +150,54 @@ export default function ProfileSetting({ open, onClose }: ProfileSettingProps) {
             <input
               className="w-full h-[56px] rounded-[10px] border border-[#F2F2F233] bg-[#F0F0F0] text-[14px] text-black px-[20px] focus:outline-none focus:border-gray-300"
               value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              onChange={e => setUsername(e.target.value)}
               placeholder="Enter your username"
               maxLength={32}
             />
           </div>
 
+          {showInviterField && (
+            <div className="mb-[12px]">
+              <div className="text-[#8A87AA] text-[12px] mb-[6px]">Your Inviter (Optional)</div>
+              <input
+                className={clsx(
+                  'w-full h-[56px] rounded-[10px] border bg-[#F0F0F0] text-[14px] text-black px-[20px] focus:outline-none',
+                  inviterInvalid
+                    ? 'border-red-400 focus:border-red-400'
+                    : 'border-[#F2F2F233] focus:border-gray-300'
+                )}
+                value={inviterCode}
+                onChange={e => setInviterCode(e.target.value)}
+                placeholder="6 letters or numbers"
+                maxLength={6}
+                autoComplete="off"
+              />
+              {inviterInvalid && (
+                <div className="text-[12px] text-red-500 mt-[6px]">
+                  Should be 6 letters and numbers{' '}
+                </div>
+              )}
+            </div>
+          )}
+
           {/* Save Button */}
           <Button
             className={clsx(
-              "w-full h-[40px] mt-[12px] !bg-black !text-white",
-              isSaving && "opacity-50 cursor-not-allowed"
+              'w-full h-[40px] mt-[12px] !bg-black !text-white',
+              isSaving && 'opacity-50 cursor-not-allowed'
             )}
             onClick={() => {
               updateUserInfo({
                 name: username?.trim(),
                 file: file,
-                icon: avatarUrl
-              });
+                icon: avatarUrl,
+                ...(showInviterField &&
+                  INVITER_CODE_PATTERN.test(trimmedInviter) && {
+                    invite_code: trimmedInviter,
+                  }),
+              })
             }}
-            disabled={isSaving || !username?.trim()}
+            disabled={isSaving || !username?.trim() || inviterInvalid}
             loading={isSaving}
           >
             Save
@@ -168,5 +213,5 @@ export default function ProfileSetting({ open, onClose }: ProfileSettingProps) {
         currentAvatar={avatarUrl}
       />
     </>
-  );
+  )
 }

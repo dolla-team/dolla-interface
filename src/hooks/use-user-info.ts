@@ -29,13 +29,15 @@ export default function useUserInfo(address?: string, user?: any) {
       _info.points_progress = progress
 
       if (!_info?.name) {
-        userInfoStore.set({ showSetting: true })
+        userInfoStore.set({ showSetting: true, settingFrom: 'init' })
         if (user.twitter) {
           _info.name = user.twitter.name
           _info.icon = user.twitter.profilePictureUrl
         }
       }
-      userInfoStore.set({ userInfo: { ..._info, user: _info.user || address } })
+      userInfoStore.set({
+        userInfo: { ..._info, user: _info.user || address },
+      })
       getUserPrize()
     } catch (err) {
       console.log('err', err)

@@ -115,7 +115,7 @@ const Dashboard = (props: any) => {
                     login()
                     return
                   }
-                  userInfoStore.set({ showSetting: true })
+                  userInfoStore.set({ showSetting: true, settingFrom: 'detail' })
                 }}
                 className="w-[92px] h-[32px] border border-[#383F47]/30 rounded-[8px] button flex gap-[6px] items-center justify-center"
               >
