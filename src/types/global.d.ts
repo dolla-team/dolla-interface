@@ -27,7 +27,7 @@ declare global {
     joinMarketTimer: NodeJS.Timeout | number
     createMarketTimer: NodeJS.Timeout | number
     allMarketsTimer: NodeJS.Timeout | number
-    loginTimeoutTimer: NodeJS.Timeout | number
+    loginTimeoutTimer?: NodeJS.Timeout | number
     updateSwapHistoryTimer: NodeJS.Timeout | number
     updateLucyDrawTimer: NodeJS.Timeout | number
     bidHintsTimer: NodeJS.Timeout | number
