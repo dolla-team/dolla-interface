@@ -158,13 +158,11 @@ const Content = () => {
           if (res.data.data?.pool_id) {
             window.cachedPoolId = res.data.data?.pool_id
           }
-          window.isValidCode = res.data.data?.valid || false
         } catch (error) {
           console.error('Failed to check code:', error)
         } finally {
         }
       } else {
-        window.isValidCode = false
       }
     }
     init()
