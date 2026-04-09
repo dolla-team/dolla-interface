@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import mock from "../mock";
 import axiosInstance from "@/libs/axios";
 import nftAbi from "@/config/abis/evm-nft";
-import { useAuth } from "@/contexts/auth";
+import { useAuth } from '@/contexts/wallet'
 import { ethers } from "ethers";
 import { useConfigStore } from "@/stores/use-config";
 import useNftsStore from "@/stores/use-nfts";

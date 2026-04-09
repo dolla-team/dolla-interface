@@ -1,6 +1,6 @@
 import clsx from 'clsx'
 import Avatar from '@/components/avatar'
-import { useAuth } from '@/contexts/auth'
+import { useAuth } from '@/contexts/wallet'
 import dayjs from 'dayjs'
 import StatisticsPlayer from './statistics-player'
 import StatisticsSeller from './statistics-seller'

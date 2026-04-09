@@ -5,7 +5,7 @@ import Button from "@/components/button";
 import AvatarUpload from "./upload";
 import clsx from "clsx";
 import useUpdateUserInfo from "@/hooks/user/use-update-userinfo";
-import { useAuth } from "@/contexts/auth";
+import { useAuth } from '@/contexts/wallet'
 import ModalClose from "@/components/button/modal-close";
 import Avatar from "@/components/avatar";
 import { formatAddress } from "@/utils/format/address";

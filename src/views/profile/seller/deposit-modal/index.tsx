@@ -6,7 +6,7 @@ import { useMemo } from "react";
 import useDeposit from "@/hooks/evm/use-deposit-reward";
 import useApprove from "@/hooks/evm/use-approve";
 import config from "@/config/bera";
-import { useAuth } from "@/contexts/auth";
+import { useAuth } from '@/contexts/wallet'
 import ButtonV2 from "@/components/button/v2";
 import useCheckNft from "@/hooks/evm/use-check-nft";
 import { getAnchorPrice } from "@/utils/pool";

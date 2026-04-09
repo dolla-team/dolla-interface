@@ -1,32 +1,28 @@
-import { useAuth } from "@/contexts/auth";
-import { formatNumber } from "@/utils/format/number";
-import Big from "big.js";
-import { BASE_TOKEN, QUOTE_TOKEN } from "@/config/btc";
-import useTokenPrice from "@/hooks/use-token-price";
-import { useMemo } from "react";
-import clsx from "clsx";
+import { useAuth } from '@/contexts/wallet'
+import { formatNumber } from '@/utils/format/number'
+import Big from 'big.js'
+import { BASE_TOKEN, QUOTE_TOKEN } from '@/config/btc'
+import useTokenPrice from '@/hooks/use-token-price'
+import { useMemo } from 'react'
+import clsx from 'clsx'
 
-export default function Tokens({
-  onClick
-}: {
-  onClick?: (token: any) => void;
-}) {
-  const { nearAccount } = useAuth() || {};
+export default function Tokens({ onClick }: { onClick?: (token: any) => void }) {
+  const { nearAccount } = useAuth() || {}
 
   const tokenIds = useMemo(() => {
     return [
       {
-        chain: "near",
-        address: QUOTE_TOKEN?.address
+        chain: 'near',
+        address: QUOTE_TOKEN?.address,
       },
       {
-        chain: "near",
-        address: BASE_TOKEN?.address
-      }
-    ];
-  }, [QUOTE_TOKEN, BASE_TOKEN]);
+        chain: 'near',
+        address: BASE_TOKEN?.address,
+      },
+    ]
+  }, [QUOTE_TOKEN, BASE_TOKEN])
 
-  const { prices } = useTokenPrice(tokenIds);
+  const { prices } = useTokenPrice(tokenIds)
 
   return (
     <div>
@@ -43,29 +39,28 @@ export default function Tokens({
         onClick={onClick}
       />
     </div>
-  );
+  )
 }
 
 const Item = ({
   balance,
   price,
   token,
-  onClick
+  onClick,
 }: {
-  balance: string;
-  price: number;
-  token: any;
-  onClick?: (token: any) => void;
+  balance: string
+  price: number
+  token: any
+  onClick?: (token: any) => void
 }) => {
   return (
     <div
       className={clsx(
-        "flex justify-between items-center rounded-[10px] p-[10px] border border-transparent",
-        onClick &&
-          "cursor-pointer hover:bg-[#FFC42F33] duration-300 hover:border-[#FFC42F]"
+        'flex justify-between items-center rounded-[10px] p-[10px] border border-transparent',
+        onClick && 'cursor-pointer hover:bg-[#FFC42F33] duration-300 hover:border-[#FFC42F]'
       )}
       onClick={() => {
-        onClick?.(token);
+        onClick?.(token)
       }}
     >
       <div className="flex items-center gap-[14px]">
@@ -76,9 +71,7 @@ const Item = ({
           <div>
             <span className="text-[14px] text-black">{token.symbol} </span>
           </div>
-          <div className="text-[12px] text-[#8A87AA]">
-            ${formatNumber(price, 2, true)}
-          </div>
+          <div className="text-[12px] text-[#8A87AA]">${formatNumber(price, 2, true)}</div>
         </div>
       </div>
       <div>
@@ -97,5 +90,5 @@ const Item = ({
         </div>
       </div>
     </div>
-  );
-};
+  )
+}

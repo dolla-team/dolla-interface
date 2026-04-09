@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import axiosInstance from "@/libs/axios";
 import useToast from "@/hooks/use-toast";
 import useGenerateKey from "@/hooks/near/use-generate-key";
-import { useAuth } from "@/contexts/auth";
+import { useAuth } from '@/contexts/wallet'
 import { useSignMessage } from "@privy-io/react-auth";
 import { getUserId } from "../near/util";
 import { useAnalysisDataStore } from "@/stores/use-analysis-data";

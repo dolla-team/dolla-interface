@@ -16,7 +16,7 @@ import { formatNumber } from "@/utils/format/number";
 import { useNavigate } from "@/libs/router";
 import { useContractConfigStore } from "@/stores/use-contract-config";
 import Empty from "@/sections/wallet/panels/info/empty";
-import { useAuth } from "@/contexts/auth";
+import { useAuth } from '@/contexts/wallet'
 import Big from "big.js";
 
 const SellerMarkets = (props: any) => {

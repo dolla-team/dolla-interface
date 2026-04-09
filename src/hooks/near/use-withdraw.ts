@@ -8,7 +8,7 @@ import useGenerateKey from "@/hooks/near/use-generate-key";
 import Big from "big.js";
 import useToast from "@/hooks/use-toast";
 import reportHash from "@/utils/report-hash";
-import { useAuth } from "@/contexts/auth";
+import { useAuth } from '@/contexts/wallet'
 
 const THIRTY_TGAS = "300000000000000";
 
@@ -31,7 +31,7 @@ export default function useWithdraw(onSuccess?: () => void) {
     isMax?: boolean;
   }) {
     const { publicKey, keyPairSigner } = await generateKeyPair();
-    if (!publicKey) return;
+    if (!publicKey || !keyPairSigner) return
     let toastId = toast.loading({ title: "Withdrawing..." });
     try {
       setLoading(true);
@@ -41,31 +41,6 @@ export default function useWithdraw(onSuccess?: () => void) {
       const _amount = Big(amount)
         .mul(10 ** fromToken.decimals)
         .toFixed(0);
-
-      // if (type === "token") {
-      //   const res = await quote({
-      //     dry: false,
-      //     swapType: "EXACT_INPUT",
-      //     slippageTolerance: 50,
-      //     originAsset: fromToken.assetId,
-      //     depositType: "ORIGIN_CHAIN",
-      //     destinationAsset: toToken.assetId,
-      //     amount: _amount,
-      //     refundTo: import.meta.env.VITE_NEAR_ACCOUNT_ID,
-      //     refundType: "ORIGIN_CHAIN",
-      //     recipient: account,
-      //     recipientType: "DESTINATION_CHAIN",
-      //     deadline: dayjs().add(1, "hour").toISOString()
-      //   });
-
-      //   recipientAccount = res.quote.depositAddress;
-      // } else {
-      //   // Remove 0x prefix and pad to 64 characters with leading zeros
-      //   recipientAccount = account.startsWith("0x")
-      //     ? account.slice(2)
-      //     : account;
-      //   recipientAccount = recipientAccount.padStart(64, "0");
-      // }
 
       const _args: any = {
         token: { FT: fromToken.address },

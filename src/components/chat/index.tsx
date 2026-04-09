@@ -7,7 +7,7 @@ import {
 import LC from "leancloud-storage";
 import { useEffect, useState, useRef } from "react";
 import ChatItem from "./chat-item";
-import { useAuth } from "@/contexts/auth";
+import { useAuth } from '@/contexts/wallet'
 import { useDebounceFn } from "ahooks";
 import useUsersInfo from "@/hooks/use-users-info";
 import { uniqBy } from "lodash-es";

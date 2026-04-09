@@ -1,6 +1,6 @@
 import axiosInstance from "@/libs/axios";
 import { useState, useEffect } from "react";
-import { useAuth } from "@/contexts/auth";
+import { useAuth } from '@/contexts/wallet'
 import Big from "big.js";
 
 const PAGE_SIZE = 20;

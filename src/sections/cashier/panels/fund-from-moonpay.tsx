@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import FundFromCex from "./fund-from-cex";
-import { useAuth } from "@/contexts/auth";
+import { useAuth } from '@/contexts/wallet'
 import useBroadcatChannel from "@/hooks/use-broadcat-channel";
 import { toast } from "react-toastify";
 import useMoonpay from "@/hooks/use-moonpay";

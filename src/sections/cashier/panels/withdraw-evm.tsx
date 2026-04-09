@@ -3,7 +3,7 @@ import ButtonWithAuth from "@/components/button/button-with-auth";
 import { formatNumber } from "@/utils/format/number";
 import { useMemo, useState } from "react";
 import clsx from "clsx";
-import { useAuth } from "@/contexts/auth";
+import { useAuth } from '@/contexts/wallet'
 import useTokenBalance from "@/hooks/evm/use-token-balance";
 import useTransfer from "@/hooks/evm/use-withdraw";
 import config from "@/config/bera";

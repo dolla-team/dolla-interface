@@ -1,14 +1,14 @@
-import Avatar from "@/components/avatar";
-import { BASE_TOKEN } from "@/config/btc";
-import { useAuth } from "@/contexts/auth";
-import { useGlobalStore } from "@/stores/use-global";
-import LevelIcon from "@/components/icons/level-icon";
-import { QRCodeSVG } from "qrcode.react";
+import Avatar from '@/components/avatar'
+import { BASE_TOKEN } from '@/config/btc'
+import { useAuth } from '@/contexts/wallet'
+import { useGlobalStore } from '@/stores/use-global'
+import LevelIcon from '@/components/icons/level-icon'
+import { QRCodeSVG } from 'qrcode.react'
 import useCopy from '@/hooks/use-copy'
 
 export default function InviteDownloadCard({ cardRef }: any) {
-  const { userInfo } = useAuth();
-  const globalStore = useGlobalStore();
+  const { userInfo } = useAuth()
+  const globalStore = useGlobalStore()
   const { onCopy } = useCopy()
   return (
     <div

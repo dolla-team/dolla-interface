@@ -1,6 +1,6 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 import axiosInstance from "@/libs/axios";
-import { useAuth } from "@/contexts/auth";
+import { useAuth } from '@/contexts/wallet'
 import { BASE_TOKEN, QUOTE_TOKEN } from "@/config/btc";
 import { formatNumber } from "@/utils/format/number";
 import { formatAddress } from "@/utils/format/address";

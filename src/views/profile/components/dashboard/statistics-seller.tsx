@@ -3,7 +3,7 @@ import LabelValue from "../label-value";
 import Button from "@/components/button";
 import { formatNumber } from "@/utils/format/number";
 import Big from "big.js";
-import { useAuth } from "@/contexts/auth";
+import { useAuth } from '@/contexts/wallet'
 import { useMemo } from "react";
 import { useNavigate } from "@/libs/router";
 import { getProfitFee } from "@/utils/pool";

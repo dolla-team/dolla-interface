@@ -1,91 +1,89 @@
-import useUserPrize from "@/hooks/use-user-prize";
-import useLucyDraw from "./use-lucky-draw";
-import { useConfigStore } from "@/stores/use-config";
-import useUserInfoStore from "@/stores/use-user-info";
-import { useEffect, useMemo, useRef, useState } from "react";
-import BuyTicket from "./buy-ticket";
-import DetailModal from "./detail-modal";
-import useLuckyDrawStore from "@/stores/use-lucky-draw";
-import HomeEntry from "./home-entry";
-import BtcDetailEntry from "./btc-detail-entry";
-import Big from "big.js";
-import { useAuth } from "@/contexts/auth";
+import useUserPrize from '@/hooks/use-user-prize'
+import useLucyDraw from './use-lucky-draw'
+import { useConfigStore } from '@/stores/use-config'
+import useUserInfoStore from '@/stores/use-user-info'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import BuyTicket from './buy-ticket'
+import DetailModal from './detail-modal'
+import useLuckyDrawStore from '@/stores/use-lucky-draw'
+import HomeEntry from './home-entry'
+import BtcDetailEntry from './btc-detail-entry'
+import Big from 'big.js'
+import { useAuth } from '@/contexts/wallet'
 
 export default function LucyDraw({
   className,
   from,
-  poolStatus
+  poolStatus,
 }: {
-  className?: string;
-  from: "home" | "detail";
-  poolStatus?: number;
+  className?: string
+  from: 'home' | 'detail'
+  poolStatus?: number
 }) {
-  const userInfoStore = useUserInfoStore();
-  const { userInfo } = useAuth();
-  const lucyDrawStore = useLuckyDrawStore();
+  const userInfoStore = useUserInfoStore()
+  const { userInfo } = useAuth()
+  const lucyDrawStore = useLuckyDrawStore()
   const { currentRound, isLoading, fetchCurrentRound, participation, totalTickets, nextRoundTime } =
     useLucyDraw()
-  const configStore = useConfigStore();
-  const [status, setStatus] = useState(0); // 0: running, 1: drawing, 2: end
-  const timerRef = useRef<any>(null);
-  const [showBuyTicket, setShowBuyTicket] = useState(false);
-  const [showDetail, setShowDetail] = useState(false);
-  const [winningList, setWinningList] = useState<any[]>([]);
-  const [winningAmount, setWinningAmount] = useState(0);
-  const { getUserPrize } = useUserPrize();
+  const configStore = useConfigStore()
+  const [status, setStatus] = useState(0) // 0: running, 1: drawing, 2: end
+  const timerRef = useRef<any>(null)
+  const [showBuyTicket, setShowBuyTicket] = useState(false)
+  const [showDetail, setShowDetail] = useState(false)
+  const [winningList, setWinningList] = useState<any[]>([])
+  const [winningAmount, setWinningAmount] = useState(0)
+  const { getUserPrize } = useUserPrize()
 
   const tickets = useMemo(() => {
-    return userInfoStore?.prize?.tickets > 99
-      ? "99+"
-      : userInfoStore?.prize?.tickets;
-  }, [userInfoStore?.prize?.tickets]);
+    return userInfoStore?.prize?.tickets > 99 ? '99+' : userInfoStore?.prize?.tickets
+  }, [userInfoStore?.prize?.tickets])
 
   const fetchResult = async () => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 5000));
-      const { winningList, number } = await fetchCurrentRound(currentRound);
+      await new Promise(resolve => setTimeout(resolve, 5000))
+      const { winningList, number } = await fetchCurrentRound(currentRound)
       if (winningList.length > 0 || number === 0) {
-        setStatus(2);
-        setWinningList(winningList);
+        setStatus(2)
+        setWinningList(winningList)
 
-        let amount = Big(0);
+        let amount = Big(0)
         winningList?.forEach((item: any) => {
           if (item.user.toLowerCase() === userInfo?.user?.toLowerCase()) {
-            amount = amount.plus(Big(item.volume));
+            amount = amount.plus(Big(item.volume))
           }
-        });
+        })
 
         if (amount.gt(0)) {
-          setWinningAmount(amount.toNumber());
+          setWinningAmount(amount.toNumber())
         }
 
-        setWinningAmount(amount.toNumber());
+        setWinningAmount(amount.toNumber())
 
         setTimeout(async () => {
-          await getUserPrize();
-          await fetchCurrentRound();
-          setStatus(0);
-        }, 3 * 1000);
+          await getUserPrize()
+          await fetchCurrentRound()
+          setStatus(0)
+        }, 3 * 1000)
       } else {
-        throw new Error("No winning list");
+        throw new Error('No winning list')
       }
     } catch (error) {
       if (timerRef.current) {
-        clearTimeout(timerRef.current);
+        clearTimeout(timerRef.current)
       }
       timerRef.current = setTimeout(() => {
-        fetchResult();
-      }, 1000);
+        fetchResult()
+      }, 1000)
     }
-  };
+  }
 
   useEffect(() => {
     return () => {
       if (timerRef.current) {
-        clearTimeout(timerRef.current);
+        clearTimeout(timerRef.current)
       }
-    };
-  }, []);
+    }
+  }, [])
   const params = {
     currentRound,
     nextRoundTime,
@@ -108,18 +106,15 @@ export default function LucyDraw({
     historyRound: lucyDrawStore.historyRound,
     isLoading,
     fetchCurrentRound,
-    currentRound
-  };
+    currentRound,
+  }
 
   return (
     <>
-      {from === "home" && <HomeEntry {...params} />}
-      {from === "detail" && <BtcDetailEntry {...params} />}
+      {from === 'home' && <HomeEntry {...params} />}
+      {from === 'detail' && <BtcDetailEntry {...params} />}
       {showBuyTicket && (
-        <BuyTicket
-          showBuyTicket={showBuyTicket}
-          onClose={() => setShowBuyTicket(false)}
-        />
+        <BuyTicket showBuyTicket={showBuyTicket} onClose={() => setShowBuyTicket(false)} />
       )}
       {showDetail && (
         <DetailModal
@@ -133,5 +128,5 @@ export default function LucyDraw({
         />
       )}
     </>
-  );
+  )
 }

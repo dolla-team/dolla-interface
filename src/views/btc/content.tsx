@@ -9,7 +9,7 @@ import useIsMobile from "@/hooks/use-is-mobile";
 import clsx from "clsx";
 import ReactDOM from "react-dom";
 // import MarketsModal from "./components/more-markets/mobile/modal";
-import { useAuth } from "@/contexts/auth";
+import { useAuth } from '@/contexts/wallet'
 import "@/libs/howl";
 import { useNavigate } from "@/libs/router";
 import { CloseBtn } from "./share-btn";

@@ -5,7 +5,7 @@ import useNfts from "./hooks/use-nfts";
 import { useMemo } from "react";
 import clsx from "clsx";
 import Nfts from "./nfts";
-import { useAuth } from "@/contexts/auth";
+import { useAuth } from '@/contexts/wallet'
 import { useNavigate } from "@/libs/router";
 
 export default function ListNFT() {

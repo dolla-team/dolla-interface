@@ -1,30 +1,30 @@
-import { useAuth } from "@/contexts/auth";
-import { useNavigate } from "@/libs/router";
-import useIsBtc from "@/hooks/use-is-btc";
-import { useGlobalStore } from "@/stores/use-global";
+import { useAuth } from '@/contexts/wallet'
+import { useNavigate } from '@/libs/router'
+import useIsBtc from '@/hooks/use-is-btc'
+import { useGlobalStore } from '@/stores/use-global'
 
 export default function Actions() {
-  const navigate = useNavigate();
-  const { logout, address } = useAuth();
-  const isBtc = useIsBtc();
-  const globalStore = useGlobalStore();
+  const navigate = useNavigate()
+  const { logout, address } = useAuth()
+  const isBtc = useIsBtc()
+  const globalStore = useGlobalStore()
 
   return (
     <div className="absolute bottom-0 right-0 border-t border-[#313038] px-[20px] pt-[12px] w-full">
-      {MENU.map((item) => (
+      {MENU.map(item => (
         <button
           key={item.key}
           className="flex button items-center gap-[8px] w-full h-[40px] mb-[10px] rounded-[10px] bg-[#F2F2F21A] backdrop-blur-[25px] pl-[12px]"
-          onClick={(e) => {
-            if (item.key === "logout") {
-              logout();
-            } else if (item.key === "invite") {
-            } else if (item.key === "portfolio") {
-              navigate("/portfolio/bidder");
-            } else if (item.key === "create-market") {
-              navigate(isBtc ? "/btc/create" : "/nft/create");
-            } else if (item.key === "claim") {
-              e.stopPropagation();
+          onClick={e => {
+            if (item.key === 'logout') {
+              logout()
+            } else if (item.key === 'invite') {
+            } else if (item.key === 'portfolio') {
+              navigate('/portfolio/bidder')
+            } else if (item.key === 'create-market') {
+              navigate(isBtc ? '/btc/create' : '/nft/create')
+            } else if (item.key === 'claim') {
+              e.stopPropagation()
               // claimTestCoin();
             }
           }}
@@ -36,9 +36,9 @@ export default function Actions() {
       <button
         className="flex button items-center gap-[8px] w-full h-[40px] mb-[10px] rounded-[10px] bg-[#F2F2F21A] backdrop-blur-[25px] pl-[12px]"
         onClick={() => {
-          navigate("/");
-          logout();
-          globalStore.set({ showUserInfo: false });
+          navigate('/')
+          logout()
+          globalStore.set({ showUserInfo: false })
         }}
       >
         {address ? (
@@ -63,12 +63,7 @@ export default function Actions() {
             viewBox="0 0 13 13"
             fill="none"
           >
-            <path
-              d="M8 1L1 1V11.5H8"
-              stroke="white"
-              strokeWidth="1.8"
-              strokeLinejoin="round"
-            />
+            <path d="M8 1L1 1V11.5H8" stroke="white" strokeWidth="1.8" strokeLinejoin="round" />
             <path
               d="M9.5 3L5.5 6M5.5 6H12.5M5.5 6L9.5 9"
               stroke="white"
@@ -77,18 +72,16 @@ export default function Actions() {
             />
           </svg>
         )}
-        <span className="text-[12px] text-white">
-          {address ? "Disconnect" : "Connect"}
-        </span>
+        <span className="text-[12px] text-white">{address ? 'Disconnect' : 'Connect'}</span>
       </button>
     </div>
-  );
+  )
 }
 
 const MENU = [
   {
-    key: "portfolio",
-    label: "Profile",
+    key: 'portfolio',
+    label: 'Profile',
     isActive: true,
     icon: (
       <svg
@@ -103,11 +96,11 @@ const MENU = [
           fill="white"
         />
       </svg>
-    )
+    ),
   },
   {
-    key: "create-market",
-    label: "Create Market",
+    key: 'create-market',
+    label: 'Create Market',
     isActive: true,
     icon: (
       <svg
@@ -122,6 +115,6 @@ const MENU = [
           fill="white"
         />
       </svg>
-    )
-  }
-];
+    ),
+  },
+]

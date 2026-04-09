@@ -3,7 +3,7 @@ import Info from "./info";
 import useDraw from "@/hooks/evm/use-draw";
 import { useNftContext } from "../context";
 import { useMemo } from "react";
-import { useAuth } from "@/contexts/auth";
+import { useAuth } from '@/contexts/wallet'
 import BidsInfo from "../components/bids-info";
 import TotalBid from "./total-bid";
 import PlayerDistribution from "./player-distribution";

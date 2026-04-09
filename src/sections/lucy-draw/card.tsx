@@ -1,16 +1,13 @@
-import Button from "@/components/button";
-import Timer from "./timer";
-import useIsMobile from "@/hooks/use-is-mobile";
-import clsx from "clsx";
-import { formatNumber } from "@/utils/format/number";
-import useLuckyDrawStore from "@/stores/use-lucky-draw";
-import Popover, {
-  PopoverPlacement,
-  PopoverTrigger
-} from "@/components/popover";
-import { useAuth } from "@/contexts/auth";
-import Avatar from "@/components/avatar";
-import Round from "./round";
+import Button from '@/components/button'
+import Timer from './timer'
+import useIsMobile from '@/hooks/use-is-mobile'
+import clsx from 'clsx'
+import { formatNumber } from '@/utils/format/number'
+import useLuckyDrawStore from '@/stores/use-lucky-draw'
+import Popover, { PopoverPlacement, PopoverTrigger } from '@/components/popover'
+import { useAuth } from '@/contexts/wallet'
+import Avatar from '@/components/avatar'
+import Round from './round'
 
 export default function LucyDrawCard({
   currentRound,
@@ -141,8 +138,8 @@ export const LuckyInfo = () => {
       placement={PopoverPlacement.Top}
       content={
         <div className="w-[360px] text-[#5E6B7D] text-[12px] font-[300] p-[10px] bg-white rounded-[10px] border border-[#E4E4E4]">
-          This is the address where your withdrawal will be sent. Double-check
-          that your destination wallet supports the selected network.
+          This is the address where your withdrawal will be sent. Double-check that your destination
+          wallet supports the selected network.
         </div>
       }
     >
@@ -161,5 +158,5 @@ export const LuckyInfo = () => {
         </svg>
       </button>
     </Popover>
-  );
-};
+  )
+}

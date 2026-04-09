@@ -6,7 +6,7 @@ import clsx from "clsx";
 import useSplWithdraw from "@/hooks/solana/use-spl-withdraw";
 // import useUserWinner from "@/hooks/use-user-winner";
 // import Loading from "@/components/icons/loading";
-import { useAuth } from "@/contexts/auth";
+import { useAuth } from '@/contexts/wallet'
 import useTokenBalance from "@/hooks/solana/use-token-balance";
 import useTransfer from "@/hooks/solana/use-transfer";
 import useToast from "@/hooks/use-toast";
