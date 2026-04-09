@@ -1,6 +1,6 @@
 import clsx from 'clsx'
 import { useMemo, useState } from 'react'
-import PriceChart from '../nft-create/price-chart'
+import PriceChart from './price-chart'
 import { BASE_TOKEN } from '@/config/btc'
 import { formatNumber } from '@/utils/format/number'
 import useTokenPrice from '@/hooks/use-token-price'
