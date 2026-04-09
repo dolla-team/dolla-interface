@@ -1,7 +1,6 @@
 import { createBrowserRouter, Navigate, RouterProvider, useLocation } from 'react-router-dom'
 import { lazy, useEffect, useState } from 'react'
 import WalletProvider from './contexts/wallet'
-import { usePrivy, useUser } from '@privy-io/react-auth'
 import { ToastContainer } from 'react-toastify'
 import Loading from '@/components/loading'
 import ErrorPage from './views/error-page'
@@ -17,12 +16,9 @@ import DollaEyeContextProvider from './contexts/dolla-eye'
 import BtcList from './views/btc-list'
 import axiosInstance from '@/libs/axios'
 
-const LazyNftCreate = lazy(() => import('./views/nft-create'))
 const LazyBtcCreate = lazy(() => import('./views/btc-create'))
 const LazyProfilePlayer = lazy(() => import('./views/profile/player'))
 const LazyProfileSeller = lazy(() => import('./views/profile/seller'))
-const LazyNft = lazy(() => import('./views/nft/index'))
-const LazyNftList = lazy(() => import('./views/nft-list'))
 const LazyBtc = lazy(() => import('./views/btc/index'))
 const LazyTerms = lazy(() => import('./views/terms'))
 const LazyPolicy = lazy(() => import('./views/policy'))
@@ -54,22 +50,6 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <DynamicDefaultRoute />,
-      },
-      {
-        path: 'nft',
-        element: <LazyNftList />,
-      },
-      {
-        path: 'nft/detail',
-        element: <LazyNft />,
-      },
-      {
-        path: 'nft/detail/:poolId',
-        element: <LazyNft />,
-      },
-      {
-        path: 'nft/create',
-        element: <LazyNftCreate />,
       },
       {
         path: 'btc/create',
