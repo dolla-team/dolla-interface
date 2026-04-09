@@ -10,7 +10,7 @@ import useToast from "@/hooks/use-toast";
 import { BASE_TOKEN } from "@/config/btc";
 import { BET_UNIT } from "@/config";
 import reportHash from "@/utils/report-hash";
-import { useAuth } from "@/contexts/auth";
+import { useAuth } from '@/contexts/wallet'
 
 const THIRTY_TGAS = "300000000000000";
 
@@ -23,7 +23,7 @@ export default function useCreate(onSuccess: (id: string) => void) {
   async function create({ amount, price }: { amount: string; price: number }) {
     try {
       const { publicKey, keyPairSigner } = await generateKeyPair();
-      if (!publicKey) return;
+      if (!publicKey || !keyPairSigner) return;
 
       setLoading(true);
 

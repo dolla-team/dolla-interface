@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState, useCallback, useMemo, useRef } from 'react'
+import React, { useEffect, useState, useCallback, useMemo, useRef } from 'react'
 import useUserInfo from '@/hooks/use-user-info'
 import type { ReactNode } from 'react'
 import useLogin from '@/hooks/use-login'
@@ -21,9 +21,8 @@ import useCode from '@/hooks/airdrop/use-code'
 import useCreateWhitelist from '@/hooks/user/use-create-whitelist'
 import { useGlobalStore } from '@/stores/use-global'
 import LoginTimeoutModal from '@/components/modal/login-timeout'
-import { useVerifyStore } from '@/stores/use-verify'
-import { useAnalysisDataStore } from '@/stores/use-analysis-data'
 import getCurrentAccount from './get-current-account'
+import useLoginStore from '@/stores/use-login'
 
 function clearLoginTimeoutTimer(timerId?: NonNullable<Window['loginTimeoutTimer']>) {
   const id = timerId !== undefined ? timerId : window.loginTimeoutTimer
@@ -35,7 +34,7 @@ function clearLoginTimeoutTimer(timerId?: NonNullable<Window['loginTimeoutTimer'
   }
 }
 
-export const AuthContext = React.createContext<any | null>(null)
+export const PrivyAuthContext = React.createContext<any | null>(null)
 
 export const AuthProvider: React.FC<{
   children: ReactNode
@@ -49,12 +48,10 @@ export const AuthProvider: React.FC<{
       setIsCompleted(true)
     },
   })
-  const verifyStore = useVerifyStore()
-  const analysisData = useAnalysisDataStore()
   const { user } = useUser()
   const nearKeyStore = useNearKeyStore()
   const globalStore = useGlobalStore()
-
+  const loginStore = useLoginStore()
   useConfig()
   const { wallets } = useWallets()
 
@@ -264,12 +261,15 @@ export const AuthProvider: React.FC<{
     nearKeyStore.set({ publicKey: null, privateKey: null })
     userInfoStore.init()
     globalStore.init()
-    verifyStore.init()
-    analysisData.init()
+    loginStore.init()
   }, [address, privyLogout, wallets, solanaWallets])
 
   useEffect(() => {
     if (!ready) {
+      return
+    }
+
+    if (loginStore.wallet !== 'privy') {
       return
     }
 
@@ -278,7 +278,7 @@ export const AuthProvider: React.FC<{
         if (!userRef.current || !addressRef.current) {
           void login()
         }
-      }, 2000)
+      }, 500)
       return () => {
         clearTimeout(loginGraceTimer)
       }
@@ -324,10 +324,10 @@ export const AuthProvider: React.FC<{
     })
     updateAccount()
     ;(window as any).sign = sign
-  }, [ready, user, isCompleted, wallets, chainType, address])
+  }, [ready, user, isCompleted, wallets, chainType, address, loginStore.wallet])
 
   return (
-    <AuthContext.Provider
+    <PrivyAuthContext.Provider
       value={{
         address: address,
         userInfo,
@@ -353,12 +353,6 @@ export const AuthProvider: React.FC<{
           setShowTimeoutModal(false)
         }}
       />
-    </AuthContext.Provider>
+    </PrivyAuthContext.Provider>
   )
-}
-
-export function useAuth() {
-  const context = useContext(AuthContext)
-
-  return context || {}
 }

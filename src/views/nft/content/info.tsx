@@ -9,7 +9,7 @@ import { formatNumber } from "@/utils/format/number";
 import { getAnchorPrice } from "@/utils/pool";
 import Button from "@/components/button";
 import RandomlyNft from "./randomly-nft";
-import { useAuth } from "@/contexts/auth";
+import { useAuth } from '@/contexts/wallet'
 
 export default function Info({
   disabled,

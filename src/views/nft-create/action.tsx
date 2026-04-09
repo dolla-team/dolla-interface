@@ -5,7 +5,7 @@ import useDeposit from "@/hooks/evm/use-deposit-reward";
 import useApprove from "@/hooks/evm/use-approve";
 import useCreate from "@/hooks/evm/use-create";
 import config from "@/config/bera";
-import { useAuth } from "@/contexts/auth";
+import { useAuth } from '@/contexts/wallet'
 
 export default function Action({
   amount,

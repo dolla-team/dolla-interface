@@ -2,7 +2,7 @@ import Modal from "@/components/modal";
 import Button from "@/components/button";
 import { GameIcon, WalletIcon, CexIcons } from "./icons";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
-import { useAuth } from "@/contexts/auth";
+import { useAuth } from '@/contexts/wallet'
 
 const Items = [
   {

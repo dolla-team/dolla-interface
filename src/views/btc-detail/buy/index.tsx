@@ -8,7 +8,7 @@ import Points from "@/sections/points";
 import Button from "@/components/button";
 import { formatNumber } from "@/utils/format/number";
 import { getAnchorPrice } from "@/utils/pool";
-import { useAuth } from "@/contexts/auth";
+import { useAuth } from '@/contexts/wallet'
 import { useMemo } from 'react'
 import Big from 'big.js'
 

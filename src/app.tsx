@@ -1,13 +1,13 @@
 import { createBrowserRouter, Navigate, RouterProvider, useLocation } from 'react-router-dom'
 import { lazy, useEffect, useState } from 'react'
 import WalletProvider from './contexts/wallet'
-import { AuthProvider } from './contexts/auth'
 import { usePrivy, useUser } from '@privy-io/react-auth'
 import { ToastContainer } from 'react-toastify'
 import Loading from '@/components/loading'
 import ErrorPage from './views/error-page'
 import { useBidResultSubscription } from '@/hooks/use-websocket'
 import useIsMobile from '@/hooks/use-is-mobile'
+import useContractConfig from '@/hooks/near/use-config'
 // import "react-toastify/dist/ReactToastify.css";
 
 import MainLayout from './layouts/main'
@@ -127,23 +127,7 @@ const router = createBrowserRouter([
 
 const Content = () => {
   const [isLoading, setIsLoading] = useState(true)
-  const { ready } = usePrivy()
-  const { user } = useUser()
-
-  useEffect(() => {
-    if (!ready) {
-      return
-    }
-
-    if (!user) {
-      setIsLoading(false)
-      return
-    }
-
-    setTimeout(() => {
-      setIsLoading(false)
-    }, 2000)
-  }, [ready, user])
+  useContractConfig()
 
   useEffect(() => {
     const init = async () => {
@@ -165,6 +149,9 @@ const Content = () => {
       } else {
       }
     }
+    setTimeout(() => {
+      setIsLoading(false)
+    }, 2000)
     init()
   }, [])
 
@@ -188,9 +175,7 @@ function App() {
         <LazyMobile />
       ) : (
         <WalletProvider>
-          <AuthProvider>
-            <Content />
-          </AuthProvider>
+          <Content />
         </WalletProvider>
       )}
       <ToastContainer

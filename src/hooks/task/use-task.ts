@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axiosInstance from "@/libs/axios";
-import { useAuth } from "@/contexts/auth";
+import { useAuth } from '@/contexts/wallet'
 
 const initProgressTasks: any = {
   "0": {

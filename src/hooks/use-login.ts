@@ -38,17 +38,24 @@ export default function useLogin() {
           address,
           signature,
           time,
-          privy_wallet_id: userId
-        };
+        }
         if (solAddress) {
           params.sol_address = solAddress;
         }
         if (chainType) {
-          params.type = chainType;
+          params.type = chainType === 'near' ? 'Evm' : chainType
         }
         if (twitterId) {
           params.twitter_id = "@" + twitterId;
           params.type = "privy_twitter";
+        }
+        if (chainType !== 'near') {
+          params.privy_wallet_id = userId
+        }
+        if (chainType === 'near') {
+          params.address = params.address?.startsWith('0x')
+            ? params.address
+            : '0x' + (params.address ?? '')
         }
         const res = await axios.get(`/api/v1/account/token`, {
           params

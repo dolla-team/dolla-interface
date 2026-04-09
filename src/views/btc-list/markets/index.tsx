@@ -16,7 +16,7 @@ import { useAllMarketsStore } from "@/stores/use-all-markets";
 import Pagination from "@/components/pagination";
 import Button from "@/components/button";
 import { BTC_CREATE_FORM_URL } from "@/config";
-import { useAuth } from "@/contexts/auth";
+import { useAuth } from '@/contexts/wallet'
 import { useMemo } from "react";
 
 export default function Markets() {

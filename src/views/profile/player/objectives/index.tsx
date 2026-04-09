@@ -4,7 +4,7 @@ import SwitchPanel from "@/components/switch/switch-panel";
 import { useState } from "react";
 import Progress from "./progress";
 import Complete from "./complete";
-import { useAuth } from "@/contexts/auth";
+import { useAuth } from '@/contexts/wallet'
 import useTaskStore from "@/stores/use-task";
 
 export default function Objectives() {

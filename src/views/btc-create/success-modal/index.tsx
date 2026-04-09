@@ -1,5 +1,5 @@
 import { BASE_TOKEN } from "@/config/btc";
-import { useAuth } from "@/contexts/auth";
+import { useAuth } from '@/contexts/wallet'
 import Big from "big.js";
 import ShareModal from "@/sections/share";
 import { useMemo } from 'react'

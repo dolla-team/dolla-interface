@@ -2,6 +2,8 @@ import { PrivyProvider } from '@privy-io/react-auth'
 import { toSolanaWalletConnectors } from '@privy-io/react-auth/solana'
 import useLoginStore from '@/stores/use-login'
 import { useMemo } from 'react'
+import { AuthProvider } from './auth'
+
 
 export default function WalletProvider({ children }: { children: React.ReactNode }) {
   const solanaConnectors = toSolanaWalletConnectors()
@@ -46,11 +48,9 @@ export default function WalletProvider({ children }: { children: React.ReactNode
         },
       }}
     >
-      {children}
+      <AuthProvider>{children}</AuthProvider>
     </PrivyProvider>
   )
 }
 
-export const useGelatoSmartWalletPrivyContext = () => {
-  return {}
-}
+

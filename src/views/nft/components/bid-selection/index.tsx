@@ -3,7 +3,7 @@ import MobileBidSelection from "./mobile";
 import LaptopBidSelection from "./laptop";
 import { useNftContext } from "../../context";
 import { useMemo } from "react";
-import { useAuth } from "@/contexts/auth";
+import { useAuth } from '@/contexts/wallet'
 import useDraw from "@/hooks/evm/use-draw";
 
 export default function BidSelection({ tokenBalance }: any) {

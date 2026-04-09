@@ -1,37 +1,27 @@
-import React, { useContext, useState, useCallback } from 'react'
+import React, { useContext } from 'react'
 import NearWalletProvider from './near'
+import { NearAuthContext } from './near/auth'
 import PrivyWalletProvider from './privy'
+import { PrivyAuthContext } from './privy/auth'
 import useLoginStore from '@/stores/use-login'
 import WalletsModal, { type LoginWallet } from '@/contexts/wallet/wallets-model'
 
-type WalletContextValue = {}
-
-const WalletContext = React.createContext<WalletContextValue | null>(null)
-
 export default function WalletProvider({ children }: { children: React.ReactNode }) {
-  const [loginMethodModalOpen, setLoginMethodModalOpen] = useState(false)
-  const closeLoginMethodModal = useCallback(() => {
-    setLoginMethodModalOpen(false)
-  }, [])
   const loginStore = useLoginStore()
-  const applyLoginMethod = useCallback(
-    (method: LoginWallet) => {
-      loginStore.set({ wallet: method })
-      setLoginMethodModalOpen(false)
-    },
-    [loginStore]
-  )
+
   return (
-    <WalletContext.Provider value={{}}>
-      <Content walletConnector={loginStore.wallet}>
-        {children}
-        <WalletsModal
-          open={loginMethodModalOpen}
-          onClose={closeLoginMethodModal}
-          onSelect={applyLoginMethod}
-        />
-      </Content>
-    </WalletContext.Provider>
+    <Content walletConnector={loginStore.wallet}>
+      {children}
+      <WalletsModal
+        open={loginStore.showWalletsModal}
+        onClose={() => {
+          loginStore.set({ showWalletsModal: false })
+        }}
+        onSelect={(method: LoginWallet) => {
+          loginStore.set({ wallet: method, showWalletsModal: false })
+        }}
+      />
+    </Content>
   )
 }
 
@@ -42,19 +32,29 @@ const Content = ({
   children: React.ReactNode
   walletConnector?: LoginWallet
 }) => {
-  if (walletConnector === 'near') {
-    return <NearWalletProvider>{children}</NearWalletProvider>
-  }
-
-  if (walletConnector === 'privy') {
-    return <PrivyWalletProvider>{children}</PrivyWalletProvider>
-  }
-
-  return children
+  return (
+    <NearWalletProvider>
+      <PrivyWalletProvider>{children}</PrivyWalletProvider>
+    </NearWalletProvider>
+  )
 }
 
-export function useWalletConnector() {
-  const context = useContext(WalletContext)
+export function useAuth() {
+  const nearContext = useContext(NearAuthContext)
+  const privyContext = useContext(PrivyAuthContext)
+  const loginStore = useLoginStore()
 
-  return context || {}
+  if (loginStore.wallet === 'privy') {
+    return privyContext || {}
+  }
+
+  if (loginStore.wallet === 'near') {
+    return nearContext || {}
+  }
+
+  return {
+    login() {
+      loginStore.set({ showWalletsModal: true })
+    },
+  }
 }

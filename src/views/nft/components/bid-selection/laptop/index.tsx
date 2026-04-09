@@ -2,7 +2,7 @@ import clsx from "clsx";
 import { Bg1, Bg10, Bg5, Bg20 } from "./bgs";
 import BidBtn from "./bid-btn";
 // import ProvablyFair from "@/sections/provably-fair";
-import { useAuth } from "@/contexts/auth";
+import { useAuth } from '@/contexts/wallet'
 import CashierEntry from "../../cashier-entery";
 import ProbabilityBar from "./probability-bar";
 import { useMemo, useState } from "react";

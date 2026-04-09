@@ -1,8 +1,8 @@
-import LevelIcon from "@/components/icons/level-icon";
-import { useAuth } from "@/contexts/auth";
+import LevelIcon from '@/components/icons/level-icon'
+import { useAuth } from '@/contexts/wallet'
 
 export default function Level() {
-  const { userInfo } = useAuth();
+  const { userInfo } = useAuth()
 
   return (
     <div className="mt-[16px] px-[20px]">
@@ -22,5 +22,5 @@ export default function Level() {
         />
       </div>
     </div>
-  );
+  )
 }

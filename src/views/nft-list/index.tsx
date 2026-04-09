@@ -3,7 +3,7 @@ import Banner from "./banner";
 import LucyDraw from "@/sections/lucy-draw";
 import TopWinners from "./top-winners";
 import Markets from "./markets";
-import { useAuth } from "@/contexts/auth";
+import { useAuth } from '@/contexts/wallet'
 
 export default function Home() {
   const { nearAccount } = useAuth();

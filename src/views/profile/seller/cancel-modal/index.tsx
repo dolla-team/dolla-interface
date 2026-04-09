@@ -5,7 +5,7 @@ import Big from "big.js";
 import Button from "@/components/button";
 import useGameAction from "@/hooks/near/use-game-action";
 import { useContractConfigStore } from "@/stores/use-contract-config";
-import { useAuth } from "@/contexts/auth";
+import { useAuth } from '@/contexts/wallet'
 
 export default function CancelModal({
   open,

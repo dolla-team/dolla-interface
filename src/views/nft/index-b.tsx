@@ -7,7 +7,7 @@ import Grand from "./grand";
 // import Music from "./components/music";
 import useIsMobile from "@/hooks/use-is-mobile";
 import clsx from "clsx";
-import { useAuth } from "@/contexts/auth";
+import { useAuth } from '@/contexts/wallet'
 import ApproveModal from "./components/approve-modal";
 
 // import ProvablyFair from "@/sections/provably-fair";

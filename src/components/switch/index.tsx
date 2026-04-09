@@ -6,6 +6,7 @@ type SwitchProps = Omit<ComponentProps<"div">, "onChange"> & {
   tabs: {
     label: string;
     value: string;
+    disabled?: boolean;
   }[];
   onChange: (value: string) => void;
   className?: string;
@@ -37,12 +38,16 @@ export default function Switch({
       {tabs.map((item, i) => (
         <button
           key={item.value}
+          type="button"
+          disabled={item.disabled}
           className={clsx(
             "px-[10px] h-full rounded-[6px] button relative",
             tabClassName,
-            tab === item.value ? activeClassName : ""
+            tab === item.value ? activeClassName : "",
+            item.disabled && "opacity-40 cursor-not-allowed"
           )}
           onClick={() => {
+            if (item.disabled) return;
             onChange(item.value);
             prevI.current.push(i);
             if (prevI.current.length > 2) prevI.current.shift();

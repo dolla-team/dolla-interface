@@ -1,25 +1,21 @@
-import { useAuth } from "@/contexts/auth";
-import { useSignMessage } from "@privy-io/react-auth";
-import useToast from "../use-toast";
-import useGenerateKey from "@/hooks/near/use-generate-key";
-import axiosInstance from "@/libs/axios";
-import { useEffect, useState } from "react";
+import { useAuth } from '@/contexts/wallet'
+import { useSignMessage } from '@privy-io/react-auth'
+import useToast from '../use-toast'
+import useGenerateKey from '@/hooks/near/use-generate-key'
+import axiosInstance from '@/libs/axios'
+import { useEffect, useState } from 'react'
 
-export default function useRegisterCode({
-  onSuccess
-}: {
-  onSuccess: () => void;
-}) {
-  const [giftCode, setGiftCode] = useState("");
-  const { userInfo } = useAuth();
-  const { signMessage } = useSignMessage();
-  const { generateKeyPair } = useGenerateKey();
-  const [binding, setBinding] = useState(false);
+export default function useRegisterCode({ onSuccess }: { onSuccess: () => void }) {
+  const [giftCode, setGiftCode] = useState('')
+  const { userInfo } = useAuth()
+  const { signMessage } = useSignMessage()
+  const { generateKeyPair } = useGenerateKey()
+  const [binding, setBinding] = useState(false)
   const [codeValidate, setCodeValidate] = useState<{
-    is_valid: boolean;
-    msg: string;
-  } | null>(null);
-  const toast = useToast();
+    is_valid: boolean
+    msg: string
+  } | null>(null)
+  const toast = useToast()
 
   const bindGiftCode = async (code: string) => {
     if (!code) {
@@ -117,17 +113,17 @@ export default function useRegisterCode({
     } finally {
       setBinding(false)
     }
-  };
+  }
 
   useEffect(() => {
-    setCodeValidate(null);
-  }, [giftCode]);
+    setCodeValidate(null)
+  }, [giftCode])
 
   return {
     binding,
     bindGiftCode,
     codeValidate,
     giftCode,
-    setGiftCode
-  };
+    setGiftCode,
+  }
 }

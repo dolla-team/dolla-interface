@@ -3,7 +3,7 @@ import Confetti from "@/components/confetti";
 import Avatar from "@/components/avatar";
 import clsx from "clsx";
 import { formatAddress } from "@/utils/format/address";
-import { useAuth } from "@/contexts/auth";
+import { useAuth } from '@/contexts/wallet'
 import gsap from "gsap";
 import { useEffect, useRef } from "react";
 import CloseIcon from "@/components/icons/close";

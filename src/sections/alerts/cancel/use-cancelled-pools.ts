@@ -1,6 +1,6 @@
 import axiosInstance from "@/libs/axios";
 import { useEffect, useState } from "react";
-import { useAuth } from "@/contexts/auth";
+import { useAuth } from '@/contexts/wallet'
 import useCancelledPoolsStore from "@/stores/use-cancelled-pools";
 
 export default function useCancelledPools() {

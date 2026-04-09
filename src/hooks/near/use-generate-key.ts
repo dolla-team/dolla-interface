@@ -1,7 +1,12 @@
 import { useNearKeyStore } from "@/stores/use-near-key";
-import { KeyPair, KeyPairSigner } from "near-api-js";
-import { getUserId, viewMethod } from "./util";
-import { useAuth } from "@/contexts/auth/privy";
+import { KeyPair } from 'near-api-js'
+import {
+  createAccessKeyTransactionSigner,
+  getUserId,
+  keyPairFromStoredSecret,
+  viewMethod,
+} from './util'
+import { useAuth } from '@/contexts/wallet'
 import { QUOTE_TOKEN } from "@/config/btc";
 import axiosInstance from "@/libs/axios";
 import Big from "big.js";
@@ -23,9 +28,9 @@ export default function useGenerateKey() {
       const contractPublicKey = res;
 
       if (publicKey && privateKey && isCorrect) {
-        const newKeyPairSigner = KeyPairSigner.fromSecretKey(
-          ("ed25519:" + privateKey) as any
-        );
+        const newKeyPairSigner = await createAccessKeyTransactionSigner(
+          keyPairFromStoredSecret(privateKey)
+        )
 
         return {
           publicKey,
@@ -38,8 +43,8 @@ export default function useGenerateKey() {
       const {
         publicKey: shortPublicKey,
         keyPairSigner: newKeyPairSigner,
-        privateKey: newPrivateKey
-      } = createKeyPair();
+        privateKey: newPrivateKey,
+      } = await createKeyPair()
 
       if (!isCorrect && contractPublicKey && !isDeposit) {
         await updateAk({ publicKey: shortPublicKey });
@@ -63,16 +68,17 @@ export default function useGenerateKey() {
     }
   }
 
-  function createKeyPair(): any {
-    const newAccountKeyPair: any = KeyPair.fromRandom("ed25519");
-    const newPublicKey = newAccountKeyPair.getPublicKey().toString();
-    const shortPublicKey = newPublicKey.split(":")[1];
-    const newKeyPairSigner = new KeyPairSigner(newAccountKeyPair);
+  async function createKeyPair() {
+    const newAccountKeyPair = KeyPair.fromRandom('ed25519')
+    const newPublicKey = newAccountKeyPair.getPublicKey().toString()
+    const shortPublicKey = newPublicKey.split(':')[1]
+    const shortPrivateKey = newAccountKeyPair.toString().split(':')[1]
+    const keyPairSigner = await createAccessKeyTransactionSigner(newAccountKeyPair)
     return {
       publicKey: shortPublicKey,
-      privateKey: newAccountKeyPair.extendedSecretKey,
-      keyPairSigner: newKeyPairSigner
-    };
+      privateKey: shortPrivateKey,
+      keyPairSigner,
+    }
   }
   function saveKeyPair(publicKey: string, privateKey: string) {
     set({ publicKey, privateKey });

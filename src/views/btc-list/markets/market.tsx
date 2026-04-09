@@ -4,7 +4,7 @@ import { formatAddress } from "@/utils/format/address";
 import { formatNumber } from "@/utils/format/number";
 import ProgressBar from "./progress-bar";
 import BtcImg from "./btc-bg";
-import { useAuth } from "@/contexts/auth";
+import { useAuth } from '@/contexts/wallet'
 import { BASE_TOKEN, AMOUNT } from "@/config/btc";
 import Avatar from "@/components/avatar";
 import { getSpilledAmount } from "@/utils/pool";

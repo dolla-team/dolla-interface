@@ -3,9 +3,13 @@ import '@near-wallet-selector/modal-ui/styles.css'
 import { map, distinctUntilChanged } from 'rxjs'
 import { NetworkId, setupWalletSelector } from '@near-wallet-selector/core'
 import { setupModal } from '@near-wallet-selector/modal-ui'
+import { setupHotWallet } from '@near-wallet-selector/hot-wallet'
 import { setupMeteorWallet } from '@near-wallet-selector/meteor-wallet'
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
+import { setupMyNearWallet } from '@near-wallet-selector/my-near-wallet'
+import { setupOKXWallet } from '@near-wallet-selector/okx-wallet'
+import { useCallback, useEffect, useState } from 'react'
 import nearChainConfig from '@/config/near-chain'
+import { NearAuthProvider } from './auth'
 
 export type NearWalletApi = {
   accountId: string
@@ -15,8 +19,6 @@ export type NearWalletApi = {
   ready: boolean
 }
 
-const NearWalletContext = createContext<NearWalletApi | null>(null)
-
 export default function NearWalletProvider({ children }: { children: React.ReactNode }) {
   const [accountId, setAccountId] = useState('')
   const [nearApi, setNearApi] = useState<{ selector: any; modal: any } | null>(null)
@@ -25,7 +27,7 @@ export default function NearWalletProvider({ children }: { children: React.React
     let cancelled = false
 
     const init = async () => {
-      const config = nearChainConfig['testnet']
+      const config = nearChainConfig['mainnet']
       const selector: any = await setupWalletSelector({
         network: {
           networkId: config.networkId as NetworkId,
@@ -33,7 +35,7 @@ export default function NearWalletProvider({ children }: { children: React.React
         } as any,
         fallbackRpcUrls: [config.nodeUrl],
         debug: false,
-        modules: [setupMeteorWallet()],
+        modules: [setupMeteorWallet(), setupHotWallet(), setupOKXWallet(), setupMyNearWallet()],
       })
       if (cancelled) return
 
@@ -50,6 +52,7 @@ export default function NearWalletProvider({ children }: { children: React.React
       const contractId = (import.meta.env.VITE_NEAR_ACCOUNT_ID as string) || 'YOUR_CONTRACT.testnet'
       const modal = setupModal(selector, { contractId })
 
+      window.selector = selector
       setNearApi({ selector, modal })
     }
 
@@ -57,6 +60,7 @@ export default function NearWalletProvider({ children }: { children: React.React
 
     return () => {
       cancelled = true
+      window.selector = undefined
     }
   }, [])
 
@@ -64,20 +68,15 @@ export default function NearWalletProvider({ children }: { children: React.React
     nearApi?.modal?.show()
   }, [nearApi])
 
-  const value = useMemo<NearWalletApi>(
-    () => ({
-      accountId,
-      selector: nearApi?.selector ?? null,
-      modal: nearApi?.modal ?? null,
-      login,
-      ready: nearApi != null,
-    }),
-    [accountId, nearApi, login]
+  return (
+    <NearAuthProvider
+      accountId={accountId}
+      selector={nearApi?.selector ?? null}
+      nearLogin={login}
+      ready={nearApi != null}
+    >
+      {children}
+    </NearAuthProvider>
   )
-
-  return <NearWalletContext.Provider value={value}>{children}</NearWalletContext.Provider>
 }
 
-export const useNearWallet = () => {
-  return useContext(NearWalletContext)
-}

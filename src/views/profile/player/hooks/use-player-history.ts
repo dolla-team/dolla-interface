@@ -1,6 +1,6 @@
 import axiosInstance from "@/libs/axios";
 import { useState, useEffect, useRef } from "react";
-import { useAuth } from "@/contexts/auth";
+import { useAuth } from '@/contexts/wallet'
 import Big from "big.js";
 import { getAnchorPrice, getPoolInfo } from "@/utils/pool";
 import useCancelledPoolsStore from "@/stores/use-cancelled-pools";

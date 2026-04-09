@@ -1,7 +1,7 @@
 import useTokenPrice from "@/hooks/use-token-price";
 import { useMemo } from "react";
 import { QUOTE_TOKEN, BASE_TOKEN } from "@/config/btc";
-import { useAuth } from "@/contexts/auth";
+import { useAuth } from '@/contexts/wallet'
 
 export default function useBalance() {
   const { nearAccount } = useAuth();

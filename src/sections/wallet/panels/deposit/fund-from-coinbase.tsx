@@ -1,47 +1,43 @@
-import { useEffect, useState } from "react";
-import useCoinBase from "@/hooks/use-coinbase";
-import FundFromCex from "./fund-from-cex";
-import { useAuth } from "@/contexts/auth";
-import useBroadcatChannel from "@/hooks/use-broadcat-channel";
-import { toast } from "react-toastify";
-import { getWindowSize } from "../../get-window-size";
+import { useEffect, useState } from 'react'
+import useCoinBase from '@/hooks/use-coinbase'
+import FundFromCex from './fund-from-cex'
+import { useAuth } from '@/contexts/wallet'
+import useBroadcatChannel from '@/hooks/use-broadcat-channel'
+import { toast } from 'react-toastify'
+import { getWindowSize } from '../../get-window-size'
 
-const minAmount = 10;
+const minAmount = 10
 export default function FundFromCoinbase({ onBack }: { onBack: () => void }) {
-  const { address, userInfo } = useAuth();
-  const [amount, setAmount] = useState("");
-  const [orderId, setOrderId] = useState("");
+  const { address, userInfo } = useAuth()
+  const [amount, setAmount] = useState('')
+  const [orderId, setOrderId] = useState('')
   const { coinBaseUrl, loading } = useCoinBase({
-    address: userInfo?.user || "",
+    address: userInfo?.user || '',
     amount: Number(amount),
     orderId,
-    minAmount
-  });
+    minAmount,
+  })
 
-  const { sendMessage, successOrderIds, addOrderId } = useBroadcatChannel();
+  const { sendMessage, successOrderIds, addOrderId } = useBroadcatChannel()
 
   useEffect(() => {
-    if (
-      successOrderIds.length > 0 &&
-      orderId &&
-      successOrderIds.includes(orderId)
-    ) {
-      toast.success("Order successful");
+    if (successOrderIds.length > 0 && orderId && successOrderIds.includes(orderId)) {
+      toast.success('Order successful')
       sendMessage(
         JSON.stringify({
           orderId,
-          type: "on-close-window",
-          status: "success"
+          type: 'on-close-window',
+          status: 'success',
         })
-      );
+      )
     }
-  }, [successOrderIds, orderId]);
+  }, [successOrderIds, orderId])
 
   useEffect(() => {
-    const orderId = Math.random().toString(36).substring(2, 15);
-    setOrderId(orderId);
-    addOrderId(orderId);
-  }, []);
+    const orderId = Math.random().toString(36).substring(2, 15)
+    setOrderId(orderId)
+    addOrderId(orderId)
+  }, [])
 
   return (
     <div>
@@ -54,11 +50,11 @@ export default function FundFromCoinbase({ onBack }: { onBack: () => void }) {
         onBack={onBack}
         onOrderIdCreated={() => {
           if (coinBaseUrl) {
-            const features = getWindowSize(800, 600);
-            window.open(coinBaseUrl, "_blank", features);
+            const features = getWindowSize(800, 600)
+            window.open(coinBaseUrl, '_blank', features)
           }
         }}
       />
     </div>
-  );
+  )
 }

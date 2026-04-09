@@ -10,7 +10,7 @@ import MultipleTag from "@/components/multiple-tag";
 import ProvablyFair from "@/sections/provably-fair";
 import { useBtcContext } from "../../context";
 import useBtcDetailStore from "@/stores/use-btc-detail";
-import { useAuth } from "@/contexts/auth";
+import { useAuth } from '@/contexts/wallet'
 
 export default function EndPanel({ data }: { data: any }) {
   const { winnerBidList, onReplay } = useBtcContext();

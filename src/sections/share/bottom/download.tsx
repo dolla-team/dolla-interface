@@ -1,17 +1,17 @@
-import { BASE_TOKEN } from "@/config/btc";
-import { QRCodeSVG } from "qrcode.react";
-import { useGlobalStore } from "@/stores/use-global";
-import clsx from "clsx";
-import { formatAddress } from "@/utils/format/address";
-import { useAuth } from "@/contexts/auth";
+import { BASE_TOKEN } from '@/config/btc'
+import { QRCodeSVG } from 'qrcode.react'
+import { useGlobalStore } from '@/stores/use-global'
+import clsx from 'clsx'
+import { formatAddress } from '@/utils/format/address'
+import { useAuth } from '@/contexts/wallet'
 import useCopy from '@/hooks/use-copy'
 
 export default function Bottom({
   className,
-  titleColor = "text-white"
+  titleColor = 'text-white',
 }: {
-  className?: string;
-  titleColor?: string;
+  className?: string
+  titleColor?: string
 }) {
   const { userInfo } = useAuth()
   const globalStore = useGlobalStore()

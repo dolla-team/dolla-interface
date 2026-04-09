@@ -1,5 +1,5 @@
 import { CannonCoinsProvider, useBtcContext } from "./context";
-import { useAuth } from "@/contexts/auth";
+import { useAuth } from '@/contexts/wallet'
 import "@/libs/howl";
 import { useEffect, useMemo } from "react";
 import useWalletStore from "@/stores/use-wallet";

@@ -5,7 +5,7 @@ import Pagination from "@/components/pagination";
 import { formatNumber } from "@/utils/format/number";
 import { useNavigate } from "@/libs/router";
 import useCopy from "@/hooks/use-copy";
-import { useAuth } from "@/contexts/auth";
+import { useAuth } from '@/contexts/wallet'
 import { BASE_TOKEN } from "@/config/btc";
 import ProvablyFair from "@/sections/provably-fair";
 import { useState } from "react";

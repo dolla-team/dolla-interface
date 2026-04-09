@@ -30,7 +30,7 @@ export default function useUserInfo(address?: string, user?: any) {
 
       if (!_info?.name) {
         userInfoStore.set({ showSetting: true, settingFrom: 'init' })
-        if (user.twitter) {
+        if (user?.twitter) {
           _info.name = user.twitter.name
           _info.icon = user.twitter.profilePictureUrl
         }

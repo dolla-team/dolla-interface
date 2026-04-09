@@ -1,93 +1,86 @@
-import BackIcon from "@/sections/wallet/back-icon";
-import Recharge from "./recharge";
-import { useState, useEffect, useMemo, useRef } from "react";
-import Big from "big.js";
-import useWalletStore from "@/stores/use-wallet";
-import { useContractConfigStore } from "@/stores/use-contract-config";
-import useReport from "@/hooks/transaction/use-report";
-import { useAuth } from "@/contexts/auth";
-import useDeposit from "@/hooks/near/use-deposit";
-import Loading from "@/components/icons/loading";
-import ChainSelector from "./chain-selector";
-import {
-  EVM_REFUND_ACCOUNT,
-  BTC_REFUND_ACCOUNT,
-  SOLANA_REFUND_ACCOUNT
-} from "@/config";
-import { useDebounceFn } from "ahooks";
-import WarningIcon from "./warning-icon";
-import { BTC_DEPOSIT_AMOUNT } from "@/config/btc";
-import { formatNumber } from "@/utils/format/number";
+import BackIcon from '@/sections/wallet/back-icon'
+import Recharge from './recharge'
+import { useState, useEffect, useMemo, useRef } from 'react'
+import Big from 'big.js'
+import useWalletStore from '@/stores/use-wallet'
+import { useContractConfigStore } from '@/stores/use-contract-config'
+import useReport from '@/hooks/transaction/use-report'
+import { useAuth } from '@/contexts/wallet'
+import useDeposit from '@/hooks/near/use-deposit'
+import Loading from '@/components/icons/loading'
+import ChainSelector from './chain-selector'
+import { EVM_REFUND_ACCOUNT, BTC_REFUND_ACCOUNT, SOLANA_REFUND_ACCOUNT } from '@/config'
+import { useDebounceFn } from 'ahooks'
+import WarningIcon from './warning-icon'
+import { BTC_DEPOSIT_AMOUNT } from '@/config/btc'
+import { formatNumber } from '@/utils/format/number'
 
 export default function RechargeFrom1click() {
-  const [quote, setQuote] = useState<any>(null);
-  const [showAddress, setShowAddress] = useState(false);
-  const [chain, setChain] = useState<any>(null);
-  const [loading, setLoading] = useState(false);
-  const { address } = useAuth();
-  const walletStore = useWalletStore();
-  const config = useContractConfigStore((state) => state.config);
-  const { generateDepositAddress } = useDeposit();
-  const { report } = useReport();
-  const chainRef = useRef(null);
-  const { nearAccount } = useAuth();
+  const [quote, setQuote] = useState<any>(null)
+  const [showAddress, setShowAddress] = useState(false)
+  const [chain, setChain] = useState<any>(null)
+  const [loading, setLoading] = useState(false)
+  const { address } = useAuth()
+  const walletStore = useWalletStore()
+  const config = useContractConfigStore(state => state.config)
+  const { generateDepositAddress } = useDeposit()
+  const { report } = useReport()
+  const chainRef = useRef(null)
+  const { nearAccount } = useAuth()
 
   const { run } = useDebounceFn(
     async () => {
-      if (!chain || !walletStore.selectedToken) return;
+      if (!chain || !walletStore.selectedToken) return
       try {
-        setQuote(null);
-        setLoading(true);
+        setQuote(null)
+        setLoading(true)
 
-        const decimals =
-          chain?.blockchain === "bsc" ? 18 : walletStore.selectedToken.decimals;
+        const decimals = chain?.blockchain === 'bsc' ? 18 : walletStore.selectedToken.decimals
 
-        chainRef.current = chain.assetId;
+        chainRef.current = chain.assetId
         const res = await generateDepositAddress({
           originAsset: chain.assetId,
           destinationAsset: walletStore.selectedToken.assetId,
           amount:
-            chain?.blockchain === "btc"
+            chain?.blockchain === 'btc'
               ? BTC_DEPOSIT_AMOUNT
-              : new Big(walletStore.selectedToken.minDepositAmount)
-                  .mul(10 ** decimals)
-                  .toString(),
+              : new Big(walletStore.selectedToken.minDepositAmount).mul(10 ** decimals).toString(),
           slippageTolerance: 50,
-          swapType: "FLEX_INPUT",
-          refundType: "ORIGIN_CHAIN",
+          swapType: 'FLEX_INPUT',
+          refundType: 'ORIGIN_CHAIN',
           refundTo:
-            chain.blockchain === "btc"
+            chain.blockchain === 'btc'
               ? BTC_REFUND_ACCOUNT
-              : chain.blockchain === "sol"
-              ? SOLANA_REFUND_ACCOUNT
-              : EVM_REFUND_ACCOUNT,
-          getFullQuote: true
-        });
+              : chain.blockchain === 'sol'
+                ? SOLANA_REFUND_ACCOUNT
+                : EVM_REFUND_ACCOUNT,
+          getFullQuote: true,
+        })
 
         if (chainRef.current === res.quoteRequest.originAsset) {
-          setQuote(res.quote);
+          setQuote(res.quote)
         }
 
-        setLoading(false);
+        setLoading(false)
       } catch (error) {
-        console.log("error", error);
-        setLoading(false);
+        console.log('error', error)
+        setLoading(false)
       }
     },
     { wait: 500 }
-  );
+  )
 
   useEffect(() => {
     if (chain && address) {
-      run();
+      run()
     }
-  }, [chain, address, config]);
+  }, [chain, address, config])
 
   const errorTips = useMemo(() => {
-    if (!chain) return "Select a chain";
+    if (!chain) return 'Select a chain'
 
-    return "";
-  }, [chain]);
+    return ''
+  }, [chain])
 
   return (
     <div className="pb-[20px] relative h-full">
@@ -236,12 +229,12 @@ const InfoPanel = ({
   minDeposit,
   maxDeposit,
   fee,
-  time
+  time,
 }: {
-  minDeposit: string;
-  maxDeposit: string;
-  fee: string;
-  time: string;
+  minDeposit: string
+  maxDeposit: string
+  fee: string
+  time: string
 }) => {
   return (
     <div className="bg-[#2F6DFF]/10 rounded-[10px] py-[8px] px-[12px] text-black text-[12px] my-[12px]">
@@ -262,5 +255,5 @@ const InfoPanel = ({
         <span>≈ {time} mins</span>
       </div>
     </div>
-  );
-};
+  )
+}

@@ -1,6 +1,6 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 import axiosInstance from "@/libs/axios";
-import { useAuth } from "@/contexts/auth";
+import { useAuth } from '@/contexts/wallet'
 import { BASE_TOKEN, QUOTE_TOKEN } from "@/config/btc";
 
 // Type definitions for the records API

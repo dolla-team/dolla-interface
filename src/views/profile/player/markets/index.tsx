@@ -3,7 +3,7 @@ import MarketItem from "./market";
 import Empty from "@/sections/wallet/panels/info/empty";
 import Loading from "@/components/icons/loading";
 import { useMemo, useState } from "react";
-import { useAuth } from "@/contexts/auth";
+import { useAuth } from '@/contexts/wallet'
 import RefreshIcon from "../../components/refresh-icon";
 import useCancelledPoolsStore from "@/stores/use-cancelled-pools";
 import PopoverCard from "../../components/popover-card";

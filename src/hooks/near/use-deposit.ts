@@ -3,7 +3,7 @@ import dayjs from "dayjs";
 import useGenerateKey from "@/hooks/near/use-generate-key";
 import { getUserId, quote } from "./util";
 import useToast from "../use-toast";
-import { useAuth } from "@/contexts/auth";
+import { useAuth } from '@/contexts/wallet'
 
 export default function useDeposit() {
   const [loading, setLoading] = useState(false);

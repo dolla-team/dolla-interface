@@ -7,7 +7,7 @@ import { base_decode } from "near-api-js/lib/utils/serialize";
 import useGenerateKey from "@/hooks/near/use-generate-key";
 import useToast from "@/hooks/use-toast";
 import reportHash from "@/utils/report-hash";
-import { useAuth } from "@/contexts/auth";
+import { useAuth } from '@/contexts/wallet'
 import useCancelledPoolsStore from "@/stores/use-cancelled-pools";
 
 const THIRTY_TGAS = "300000000000000";
@@ -24,8 +24,8 @@ export default function usePlayerRefund(
 
   async function refund() {
     const { publicKey, keyPairSigner } = await generateKeyPair();
-    if (!publicKey || !poolId) return;
-    let toastId = toast.loading({ title: "Refunding..." });
+    if (!publicKey || !keyPairSigner || !poolId) return
+    let toastId = toast.loading({ title: 'Claiming...' })
     try {
       setLoading(true);
 
