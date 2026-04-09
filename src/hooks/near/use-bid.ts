@@ -2,14 +2,7 @@ import axiosInstance from "@/libs/axios";
 import { useAuth } from '@/contexts/wallet'
 import useGenerateKey from "@/hooks/near/use-generate-key";
 import { KeyPair } from "near-api-js";
-import {
-  viewMethod,
-  getUserId,
-  getSignaturesFromBatchSignPayloadResult,
-  nearSignatureToEvmSignatureHex,
-  allReceiptsSucceeded,
-  type IFinalExecutionOutcome,
-} from './util'
+import { viewMethod, getUserId, allReceiptsSucceeded, type IFinalExecutionOutcome } from './util'
 import { QUOTE_TOKEN } from "@/config/btc";
 import useBtcDetailStore from "@/stores/use-btc-detail";
 import DollaService from '@/service/kol-anysis'

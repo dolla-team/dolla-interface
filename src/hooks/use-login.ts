@@ -19,20 +19,24 @@ export default function useLogin() {
       userId,
       chainType,
       twitterId,
-      onSuccess
+      publicKey,
+      nonce,
+      onSuccess,
     }: {
-      address: string;
-      signature: string;
-      time: number;
-      solAddress?: string;
-      userId: string;
-      chainType: string;
-      twitterId?: string | null;
-      onSuccess: () => void;
+      address: string
+      signature: string
+      time: number
+      solAddress?: string
+      userId: string
+      chainType: string
+      twitterId?: string | null
+      publicKey?: string
+      nonce?: string
+      onSuccess: () => void
     }) => {
       try {
         console.log('logining')
-        setLoging(true);
+        setLoging(true)
 
         const params: any = {
           address,
@@ -40,52 +44,45 @@ export default function useLogin() {
           time,
         }
         if (solAddress) {
-          params.sol_address = solAddress;
+          params.sol_address = solAddress
         }
         if (chainType) {
-          params.type = chainType === 'near' ? 'Evm' : chainType
+          params.type = chainType
         }
         if (twitterId) {
-          params.twitter_id = "@" + twitterId;
-          params.type = "privy_twitter";
+          params.twitter_id = '@' + twitterId
+          params.type = 'privy_twitter'
         }
         if (chainType !== 'near') {
           params.privy_wallet_id = userId
         }
         if (chainType === 'near') {
-          params.address = params.address?.startsWith('0x')
-            ? params.address
-            : '0x' + (params.address ?? '')
+          params.address = address
+          params.public_key = publicKey
+          params.recipient = 'dolla.market'
+          if (nonce) {
+            params.nonce = nonce
+          }
         }
         const res = await axios.get(`/api/v1/account/token`, {
-          params
-        });
+          params,
+        })
 
         localStorage.setItem(
-          "_AK_TOKEN_",
+          '_AK_TOKEN_',
           JSON.stringify({
             token: res.data.data,
-            address
+            address,
           })
-        );
-        onSuccess?.();
-        // const users = await axiosInstance.get("/api/v1/privy/user");
-        // const linkedAccounts = users?.data?.data?.linked_accounts;
-        // setAccounts(
-        //   linkedAccounts
-        //     ?.filter(
-        //       (item: any) =>
-        //         item.wallet_client_type === "privy" && !item.delegated
-        //     )
-        //     .map((item: any) => item.address)
-        // );
+        )
+        onSuccess?.()
       } catch (err) {
       } finally {
-        setLoging(false);
+        setLoging(false)
       }
     },
     []
-  );
+  )
 
   const onLogout = useCallback(async (onSuccess?: () => void) => {
     await axios.post("/api/logout");

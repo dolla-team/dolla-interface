@@ -7,6 +7,7 @@ import useClaimNear from '@/hooks/near/use-claim-near'
 import { BASE_TOKEN, QUOTE_TOKEN } from '@/config/btc'
 import { formatNumber } from '@/utils/format/number'
 import clsx from 'clsx'
+import Button from '@/components/button'
 
 function AssetCard({
   symbol,
@@ -45,11 +46,10 @@ function AssetCard({
 }
 
 export default function NearWalletPanel({ className }: { className?: string }) {
-  const { address, chainType, nearAccount } = useAuth()
-  const { account, fetchAccount } = useAccount(address ?? '', chainType ?? '')
+  const { address, chainType, nearAccount, updateNearAccount } = useAuth()
 
   const { claim, claimLoading } = useClaimNear(() => {
-    void fetchAccount()
+    void updateNearAccount()
   })
 
   const tokenIds = useMemo(
@@ -64,29 +64,25 @@ export default function NearWalletPanel({ className }: { className?: string }) {
   const basePrice = prices[1]?.last_price ?? 1
 
   const walletUsdt = nearAccount?.onlyQuoteBalance ?? '0'
-  const internalUsdt = account?.balance ?? '0'
-  const internalBase = account?.prizeBalance ?? '0'
-
-  const bidderTotalUsd = useMemo(
-    () => Big(internalUsdt || 0).mul(usdtPrice).plus(Big(internalBase || 0).mul(basePrice)).toNumber(),
-    [internalUsdt, internalBase, usdtPrice, basePrice]
-  )
+  const internalUsdt = nearAccount?.balance ?? '0'
+  const internalBase = nearAccount?.prizeBalance ?? '0'
+  const totalBidTimes = nearAccount?.acc_bets ?? 0
 
   const hasClaimable = useMemo(() => Big(internalUsdt || 0).gt(0) || Big(internalBase || 0).gt(0), [internalUsdt, internalBase])
 
   return (
     <div className={clsx('relative w-[319px] select-none', className)}>
       <img
-        src="/wallet-panel-near-theme.png"
+        src="/near-wallet-woman.png"
         alt=""
-        className="pointer-events-none absolute -top-5 left-3 z-[1] h-[45px] w-[81px] rounded-md border-[3px] border-[#FFC42F] object-cover"
+        className="pointer-events-none absolute -top-[45px] left-3 z-[1] h-[45px] w-[81px] object-cover"
         width={81}
         height={45}
       />
       <div
         className={clsx(
           'relative rounded-[10px] border border-[#FFC42F] bg-[#FFF9E9]',
-          'min-h-[335px] w-[318px] px-4 pb-4 pt-10'
+          'w-[318px] px-4 pb-4 pt-10'
         )}
       >
         <div className="flex items-center justify-between gap-2">
@@ -104,7 +100,7 @@ export default function NearWalletPanel({ className }: { className?: string }) {
         <div className="flex items-end justify-between gap-2">
           <span className="font-[Bungee] text-[20px] tracking-[-0.05em] text-black">BIDDER</span>
           <span className="font-[Unbounded] text-[18px] font-bold text-black">
-            ${formatNumber(bidderTotalUsd, 2, true)}
+            {formatNumber(totalBidTimes, 0, true)}
           </span>
         </div>
         <p className="mt-1 font-[Unbounded] text-[12px] text-[#8A87AA]">
@@ -134,18 +130,19 @@ export default function NearWalletPanel({ className }: { className?: string }) {
         </div>
 
         <div className="mt-3 flex justify-end">
-          <button
+          <Button
             type="button"
+            isPrimary={false}
             disabled={claimLoading || !hasClaimable}
             onClick={() => void claim()}
             className={clsx(
-              'flex h-10 w-[94px] items-center justify-center rounded-[10px] bg-black font-[Unbounded] text-[14px] font-medium text-white backdrop-blur-[25px]',
-              'disabled:cursor-not-allowed disabled:opacity-40',
+              'h-10 w-[94px] !rounded-[10px] bg-black font-[Unbounded] text-[14px] font-medium text-white backdrop-blur-[25px]',
               !claimLoading && hasClaimable && 'hover:opacity-90'
             )}
+            loading={claimLoading}
           >
-            {claimLoading ? '…' : 'Claim'}
-          </button>
+            Claim
+          </Button>
         </div>
       </div>
     </div>

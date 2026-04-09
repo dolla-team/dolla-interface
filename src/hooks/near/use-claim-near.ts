@@ -65,7 +65,7 @@ export default function useClaimNear(onSuccess?: () => void) {
       )
 
       toast.dismiss(toastId)
-
+      console.log(result)
       if (result.status === 'success' && result.txHash) {
         reportHash({
           hash: result.txHash,

@@ -194,7 +194,14 @@ export async function batchWithdrawByAk(
         txHashes.push(hash)
       }
 
-      if (!result?.status?.SuccessValue) {
+      // Empty `SuccessValue: ""` is success (void return) but falsy — do not use `if (!SuccessValue)`.
+      const st = result?.status as Record<string, unknown> | undefined
+      const ok =
+        !!st &&
+        typeof st === 'object' &&
+        !('Failure' in st) &&
+        ('SuccessValue' in st || 'SuccessReceiptId' in st)
+      if (!ok) {
         return {
           status: 'error',
           errorResult: new Error('Withdraw failed'),

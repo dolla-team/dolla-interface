@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import clsx from 'clsx'
 import Button from '@/components/button'
 import LabelValue from '../label-value'
@@ -7,12 +8,15 @@ import { useAuth } from '@/contexts/wallet'
 import useUserWinner from '@/hooks/user/use-user-winner'
 import useWalletStore from '@/stores/use-wallet'
 import useBalance from '@/hooks/near/use-balance'
+import useAccount from '@/hooks/near/use-account'
+import useClaimNear from '@/hooks/near/use-claim-near'
 import { BASE_TOKEN, QUOTE_TOKEN } from '@/config/btc'
 import { useNavigate } from '@/libs/router'
 import Popover, { PopoverPlacement, PopoverTrigger } from '@/components/popover'
 import PopoverCard from '../popover-card'
 import ReferralPanel from './referral-panel'
 import useUserWon from '@/hooks/user/use-user-won'
+import useLoginStore from '@/stores/use-login'
 
 const StatisticsPlayer = (props: any) => {
   const { className } = props
@@ -103,19 +107,31 @@ const RewardCard = () => {
 
 const BalanceCard = () => {
   const { balance } = useBalance()
-  const { nearAccount } = useAuth()
-  const { address, login } = useAuth()
+  const { address, chainType, login, nearAccount } = useAuth()
+  const { account, fetchAccount } = useAccount(address ?? '', chainType ?? '')
+  const { claim, claimLoading } = useClaimNear(() => {
+    void fetchAccount()
+  })
+  const internalUsdt = account?.balance ?? '0'
+  const internalBase = account?.prizeBalance ?? '0'
+  const hasClaimable = useMemo(
+    () => Big(internalUsdt || 0).gt(0) || Big(internalBase || 0).gt(0),
+    [internalUsdt, internalBase]
+  )
   const walletStore = useWalletStore()
+  const wallet = useLoginStore(s => s.wallet)
   return (
     <div className="w-[420px] h-[208px] border border-[#E4E4E4] bg-white rounded-[16px] px-[20px] py-[18px] shadow-[0px_0px_6px_rgba(0,_0,_0,_0.1)]">
       <div className="text-[12px]">Balance</div>
       <div className="text-[32px] font-[700] mt-[24px]">${formatNumber(balance || 0, 2, true)}</div>
-      <div className="flex items-center gap-[40px] text-black mt-[22px]">
+      <div className={clsx('flex text-black items-center gap-[40px]  mt-[22px]')}>
         <div className="flex items-center gap-[7px]">
           <img src={QUOTE_TOKEN.icon} className="w-[30px] h-[30px]" />
 
           <div className="text-[14px]">
-            <span className="font-[700]">{formatNumber(nearAccount?.balance || 0, 2, true)} </span>
+            <span className="font-[700]">
+              {formatNumber(wallet === 'near' ? balance : nearAccount?.balance || 0, 2, true)}{' '}
+            </span>
             <span className="font-[400]">{QUOTE_TOKEN.symbol}</span>
           </div>
         </div>
@@ -130,41 +146,54 @@ const BalanceCard = () => {
           </div>
         </div>
       </div>
-      <div className="flex items-center gap-[24px] mt-[14px] max-md:w-full max-md:justify-between max-md:gap-[10px]">
-        <Button
-          className="border border-[#383F47]/30 text-[#2B3337] w-[240px] h-[48px] !rounded-[12px]"
-          onClick={(ev: any) => {
-            if (!address) {
-              login()
-              return
-            }
-            ev.stopPropagation()
-            walletStore.set({
-              showWallet: true,
-              panelType: 'deposit',
-            })
-          }}
-        >
-          Deposit
-        </Button>
-        <Button
-          className="border border-[#383F47]/30 text-[#2B3337] w-[240px] h-[48px] !rounded-[12px]"
-          onClick={(ev: any) => {
-            if (!address) {
-              login()
-              return
-            }
-            ev.stopPropagation()
+      {wallet === 'privy' ? (
+        <div className="flex items-center gap-[24px] mt-[14px] max-md:w-full max-md:justify-between max-md:gap-[10px]">
+          <Button
+            className="border border-[#383F47]/30 text-[#2B3337] w-[240px] h-[48px] !rounded-[12px]"
+            onClick={(ev: any) => {
+              if (!address) {
+                login()
+                return
+              }
+              ev.stopPropagation()
+              walletStore.set({
+                showWallet: true,
+                panelType: 'deposit',
+              })
+            }}
+          >
+            Deposit
+          </Button>
+          <Button
+            className="border border-[#383F47]/30 text-[#2B3337] w-[240px] h-[48px] !rounded-[12px]"
+            onClick={(ev: any) => {
+              if (!address) {
+                login()
+                return
+              }
+              ev.stopPropagation()
 
-            walletStore.set({
-              showWallet: true,
-              panelType: 'withdraw',
-            })
-          }}
-        >
-          Withdraw
-        </Button>
-      </div>
+              walletStore.set({
+                showWallet: true,
+                panelType: 'withdraw',
+              })
+            }}
+          >
+            Withdraw
+          </Button>
+        </div>
+      ) : (
+        <div className="flex gap-[24px] mt-[14px] max-md:w-full max-md:justify-between max-md:gap-[10px]">
+          <Button
+            className="border border-[#383F47]/30 text-[#2B3337] w-full h-[48px] !rounded-[12px]"
+            disabled={claimLoading || !hasClaimable}
+            onClick={() => void claim()}
+            loading={claimLoading}
+          >
+            Claim
+          </Button>
+        </div>
+      )}
     </div>
   )
 }

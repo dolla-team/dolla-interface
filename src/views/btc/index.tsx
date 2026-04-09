@@ -9,7 +9,7 @@ import useBid from "@/hooks/near/use-bid";
 import useToast from "@/hooks/use-toast";
 import BtcContent from "./content";
 import BtcDetailContent from "../btc-detail";
-
+import useLoginStore from '@/stores/use-login'
 
 
 export default function NewBTC() {
@@ -37,6 +37,7 @@ function BTC() {
   const { userInfo } = useAuth();
   const contractConfig = useContractConfigStore((state) => state.config);
   const toast = useToast();
+  const wallet = useLoginStore(s => s.wallet)
   const { onBid } = useBid(
     pool?.pool_id,
     // (result) => {
@@ -94,17 +95,12 @@ function BTC() {
     if (!userInfo?.user) {
       return [true, false];
     }
-
-    if (
-      Number(nearAccount?.balance) <
-      bids * (Number(BET_UNIT) / 1e6) + contractConfig.play_game_fee
-    ) {
-      return [true, true];
+    const balance =
+      wallet === 'near' ? nearAccount?.onlyQuoteBalance || 0 : nearAccount?.balance || 0
+    if (Number(balance) < bids * (Number(BET_UNIT) / 1e6) + contractConfig.play_game_fee) {
+      return [true, true]
     }
-    if (flipStatus === 0 || flipStatus === 6) {
-      return [false, false];
-    }
-    return [true, false];
+    return [false, false]
   }, [flipStatus, userInfo, nearAccount?.balance, bids, pool]);
 
   return (

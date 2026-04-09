@@ -6,10 +6,10 @@ import useConfig from '@/hooks/use-config'
 import useUserInfoStore from '@/stores/use-user-info'
 import { useNearKeyStore } from '@/stores/use-near-key'
 import useNearChainOnlyQuoteBalance from '@/hooks/near/use-only-quote-balance-near'
+import useAccount from '@/hooks/near/use-account'
 import useCode from '@/hooks/airdrop/use-code'
 import useCreateWhitelist from '@/hooks/user/use-create-whitelist'
 import { useGlobalStore } from '@/stores/use-global'
-import { Buffer } from 'buffer'
 import { getUserId as fetchNearAdapterUserId } from './adapter-contract'
 import useLoginStore from '@/stores/use-login'
 import SignMessageBox from '@/libs/near/sign-message-box'
@@ -41,8 +41,8 @@ export const NearAuthProvider: React.FC<NearAuthProviderProps> = ({
   const [logining, setLogining] = useState(false)
   const [accountRefresher, setAccountRefresher] = useState(-1)
   const [address, setAddress] = useState<string | undefined>(undefined)
-  const [signMessages, setSignMessages] = useState<string[]>([])
-  const [showSignMessageBox, setShowSignMessageBox] = useState(false)
+  // const [signMessages, setSignMessages] = useState<string[]>([])
+  // const [showSignMessageBox, setShowSignMessageBox] = useState(false)
 
   const addressRef = useRef(address)
   addressRef.current = address
@@ -62,7 +62,8 @@ export const NearAuthProvider: React.FC<NearAuthProviderProps> = ({
         if (cancelled) {
           return
         }
-        setAddress(raw?.Evm?.toLowerCase())
+        const _address = raw?.Evm?.toLowerCase()
+        setAddress(_address?.startsWith('0x') ? _address : '0x' + (_address ?? ''))
       } catch (error) {
         if (!cancelled) {
           setAddress(undefined)
@@ -82,20 +83,28 @@ export const NearAuthProvider: React.FC<NearAuthProviderProps> = ({
   const { onlyQuoteBalance: chainOnlyQuoteBalance, refreshUsdtBalance } =
     useNearChainOnlyQuoteBalance(accountId || undefined)
 
+  const { account, fetchAccount: fetchNearContractAccount } = useAccount(
+    address ?? '',
+    NEAR_CHAIN_TYPE
+  )
+
   const nearAccount = useMemo(() => {
     return {
+      ...(account ?? {}),
       onlyQuoteBalance: chainOnlyQuoteBalance,
     }
-  }, [chainOnlyQuoteBalance])
+  }, [account, chainOnlyQuoteBalance])
 
   const updateNearAccount = useCallback(async () => {
-    await refreshUsdtBalance()
-  }, [refreshUsdtBalance])
+    await Promise.all([fetchNearContractAccount(), refreshUsdtBalance()])
+  }, [fetchNearContractAccount, refreshUsdtBalance])
 
   const { onLogin } = useLogin()
 
   const signWithWallet = useCallback(
-    async (message: string) => {
+    async (
+      message: string
+    ): Promise<{ signature: string; nonce: string; publicKey: string } | null> => {
       if (!selector || !accountId) {
         throw new Error('Wallet not ready')
       }
@@ -103,30 +112,36 @@ export const NearAuthProvider: React.FC<NearAuthProviderProps> = ({
         const wallet = await selector.wallet()
         if (typeof wallet.signMessage !== 'function') {
           console.error('Wallet does not support signMessage (NEP-413)')
-          return ''
+          return null
         }
-        const recipient = (import.meta.env.VITE_NEAR_ACCOUNT_ID as string) || ''
-        const nonce = Buffer.alloc(32)
-        crypto.getRandomValues(nonce)
+        const recipient = 'dolla.market'
+        const nonceBytes = Buffer.alloc(32)
+        crypto.getRandomValues(nonceBytes)
         const signed = await wallet.signMessage({
           message,
           recipient,
-          nonce,
+          nonce: nonceBytes,
         })
+        console.log('signed', signed)
+        const signature = signed.signature ?? ''
+        if (!signature) {
+          return null
+        }
+        const nonce = nonceBytes.toString('base64')
 
-        return signed.signature ?? ''
+        return { signature, nonce, publicKey: signed.publicKey }
       } catch (err) {
         console.error('Sign message failed', err)
-        return ''
+        return null
       }
     },
     [selector, accountId]
   )
 
-  const signMessage = async (messages: any) => {
-    setSignMessages(messages)
-    setShowSignMessageBox(true)
-  }
+  // const signMessage = async (messages: any) => {
+  //   setSignMessages(messages)
+  //   setShowSignMessageBox(true)
+  // }
 
   const updateAccount = async () => {
     if (!address) {
@@ -155,22 +170,23 @@ export const NearAuthProvider: React.FC<NearAuthProviderProps> = ({
     }
     try {
       const time = Date.now()
-      const userId = address
-      const message = `login, address:${address?.startsWith('0x') ? address : '0x' + (address ?? '')}, time:${time}`
+      const evmAddress = address
+      const message = `login dolla, address:${evmAddress}, time:${time}`
       window.isSigning = true
       console.log('message', message)
-      const signature = await signWithWallet(message)
-      console.log('signature', signature)
-      if (!signature) {
+      const signed = await signWithWallet(message)
+      if (!signed) {
         throw new Error('Sign message failed')
       }
 
       onLogin({
         address,
-        signature,
+        signature: signed.signature,
+        nonce: signed.nonce,
         time,
-        userId,
+        userId: evmAddress,
         chainType: NEAR_CHAIN_TYPE,
+        publicKey: signed.publicKey,
         onSuccess: async () => {
           await onQueryUserInfo()
           setAccountRefresher(1)
@@ -261,11 +277,11 @@ export const NearAuthProvider: React.FC<NearAuthProviderProps> = ({
         login,
         logout,
         onQueryUserInfo,
-        signMessage,
+        // signMessage,
       }}
     >
       {children}
-      <SignMessageBox
+      {/* <SignMessageBox
         open={showSignMessageBox}
         onClose={() => {
           setShowSignMessageBox(false)
@@ -277,7 +293,7 @@ export const NearAuthProvider: React.FC<NearAuthProviderProps> = ({
             resolve(true)
           })
         }}
-      />
+      /> */}
     </NearAuthContext.Provider>
   )
 }

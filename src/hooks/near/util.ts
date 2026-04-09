@@ -1,7 +1,6 @@
 import { serializeNep413, verifySignature as verifyNep413Signature } from '@near-wallet-selector/core'
 import { InMemorySigner } from '@near-js/signers'
-import { signTransaction, Transaction } from '@near-js/transactions'
-import { KeyPair, providers } from 'near-api-js'
+import { KeyPair, providers, transactions as nearTransactions } from 'near-api-js'
 import { KeyType, PublicKey } from 'near-api-js/lib/utils/key_pair'
 import { utils } from 'ethers'
 
@@ -108,8 +107,9 @@ export async function createAccessKeyTransactionSigner(keyPair: KeyPair) {
   const accountId = import.meta.env.VITE_NEAR_ACCOUNT_ID as string
   const signer = await InMemorySigner.fromKeyPair(NEAR_NETWORK_ID, accountId, keyPair)
   return {
-    signTransaction(tx: Transaction) {
-      return signTransaction(tx, signer, accountId, NEAR_NETWORK_ID)
+    /** Tx must come from `near-api-js` `transactions.createTransaction` so `signTransaction` sees the same `Transaction` class (bundler duplicate @near-js/transactions breaks `constructor ===`). */
+    signTransaction(tx: InstanceType<typeof nearTransactions.Transaction>) {
+      return nearTransactions.signTransaction(tx, signer, accountId, NEAR_NETWORK_ID)
     },
   }
 }

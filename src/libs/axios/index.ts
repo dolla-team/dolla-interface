@@ -57,15 +57,15 @@ axiosInstance.interceptors.response.use(
     if (error.response && error.response.status === 400) {
       return Promise.resolve(error.response);
     }
-
+    const token = JSON.parse(localStorage.getItem('_AK_TOKEN_') || '{}').token
     // Check if error has response and status is 401
-    if (error.status === 401) {
-      console.log("401 Unauthorized detected, clearing token and signing out");
+    if (error.status === 401 && !!token) {
+      console.log('401 Unauthorized detected, clearing token and signing out')
       // Clear token from localStorage
-      localStorage.removeItem("_AK_TOKEN_");
+      localStorage.removeItem('_AK_TOKEN_')
 
       // Call sign out function if available
-      signFn();
+      signFn()
     }
 
     return Promise.reject(
