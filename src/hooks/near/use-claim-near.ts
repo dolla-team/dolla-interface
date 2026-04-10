@@ -11,7 +11,15 @@ import { useContractConfigStore } from '@/stores/use-contract-config'
 import { useNearKeyStore } from '@/stores/use-near-key'
 import { QUOTE_TOKEN } from '@/config/btc'
 import { computeWithdrawTokenIdsFromAccount } from '@/libs/near/internal-balances'
-import { getUserId, viewMethod, allReceiptsSucceeded, type IFinalExecutionOutcome } from './util'
+import {
+  getUserId,
+  viewMethod,
+  allReceiptsSucceeded,
+  type IFinalExecutionOutcome,
+  nearSignatureToEvmSignatureHex,
+  getSignaturesFromBatchSignPayloadResult,
+} from './util'
+import axiosInstance from '@/libs/axios'
 
 type NearAdapterTxResult = {
   status?: string
@@ -147,10 +155,25 @@ export default function useClaimNear(onSuccess?: () => void) {
           return
         }
 
-        useNearKeyStore.getState().set({
-          publicKey: bidFlowContext.publicKey,
-          privateKey: bidFlowContext.privateKey,
-        })
+        if (plan.needReplaceAk) {
+          const signatures = await getSignaturesFromBatchSignPayloadResult(
+            txResult.successResult[0] as IFinalExecutionOutcome,
+            accountId
+          )
+          const sigEvm = nearSignatureToEvmSignatureHex(signatures[0])
+          const ak_signature = sigEvm.replace(/^0x/, '')
+          const ok = await axiosInstance.put(`/api/v1/user/publickey`, {
+            payload: plan.replaceAkPayloadString,
+            signature: ak_signature,
+          })
+
+          if (ok) {
+            useNearKeyStore
+              .getState()
+              .set({ publicKey: plan.publicKey, privateKey: plan.privateKey })
+          }
+        }
+        
         await updateNearAccount?.()
       }
 
