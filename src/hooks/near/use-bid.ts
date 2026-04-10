@@ -1,10 +1,10 @@
-import axiosInstance from "@/libs/axios";
+import axiosInstance from '@/libs/axios'
 import { useAuth } from '@/contexts/wallet'
-import useGenerateKey from "@/hooks/near/use-generate-key";
-import { KeyPair } from "near-api-js";
+import useGenerateKey from '@/hooks/near/use-generate-key'
+import { KeyPair } from 'near-api-js'
 import { viewMethod, getUserId, allReceiptsSucceeded, type IFinalExecutionOutcome } from './util'
-import { QUOTE_TOKEN } from "@/config/btc";
-import useBtcDetailStore from "@/stores/use-btc-detail";
+import { QUOTE_TOKEN } from '@/config/btc'
+import useBtcDetailStore from '@/stores/use-btc-detail'
 import DollaService from '@/service/kol-anysis'
 import useLoginStore from '@/stores/use-login'
 import {
@@ -17,47 +17,44 @@ import {
   transferToNearAdapter,
 } from '@/contexts/wallet/near/adapter-contract'
 import { useContractConfigStore } from '@/stores/use-contract-config'
+import {
+  nearSignatureToEvmSignatureHex,
+  getSignaturesFromBatchSignPayloadResult,
+} from '@/hooks/near/util'
 import { useNearKeyStore } from '@/stores/use-near-key'
-
 
 export default function useBid(
   poolId: number,
   onTxSuccess: (id: string) => void,
   onTxFail: () => void,
-  onTxFail2: (msg?: string,args?: any) => void
+  onTxFail2: (msg?: string, args?: any) => void
 ) {
   const { address, chainType, updateNearAccount, accountId } = useAuth()
-  const { generateKeyPair } = useGenerateKey();
-  const btcDetailStore = useBtcDetailStore();
+  const { generateKeyPair } = useGenerateKey()
+  const btcDetailStore = useBtcDetailStore()
 
   // Function to sign a message using NEAR private key
-  const signMessage = async (
-    message: string,
-    privateKey: any
-  ): Promise<string | null> => {
+  const signMessage = async (message: string, privateKey: any): Promise<string | null> => {
     try {
       // Create KeyPair from private key (add ed25519: prefix if not present)
-      const fullPrivateKey = privateKey.startsWith("ed25519:")
+      const fullPrivateKey = privateKey.startsWith('ed25519:')
         ? privateKey
-        : `ed25519:${privateKey}`;
-      const keyPair = KeyPair.fromString(fullPrivateKey);
+        : `ed25519:${privateKey}`
+      const keyPair = KeyPair.fromString(fullPrivateKey)
 
       // Convert message to buffer for signing
-      const messageBuffer = Buffer.from(message);
+      const messageBuffer = Buffer.from(message)
 
       // Sign the message
-      const signature = keyPair.sign(messageBuffer);
-      console.log(
-        "signature",
-        Buffer.from(signature.signature).toString("hex")
-      );
+      const signature = keyPair.sign(messageBuffer)
+      console.log('signature', Buffer.from(signature.signature).toString('hex'))
       // Return signature as hex string
-      return Buffer.from(signature.signature).toString("hex");
+      return Buffer.from(signature.signature).toString('hex')
     } catch (error) {
-      console.error("Error signing message:", error);
-      return null;
+      console.error('Error signing message:', error)
+      return null
     }
-  };
+  }
 
   const onBid = async (times: number) => {
     // onTxSuccess("800");
@@ -151,7 +148,22 @@ export default function useBid(
         }
 
         if (plan.needReplaceAk) {
-          useNearKeyStore.getState().set({ publicKey: plan.publicKey, privateKey: plan.privateKey })
+          const signatures = await getSignaturesFromBatchSignPayloadResult(
+            txResult.successResult[0] as IFinalExecutionOutcome,
+            accountId
+          )
+          const sigEvm = nearSignatureToEvmSignatureHex(signatures[0])
+          const ak_signature = sigEvm.replace(/^0x/, '')
+          const ok = await axiosInstance.put(`/api/v1/user/publickey`, {
+            payload: plan.replaceAkPayloadString,
+            signature: ak_signature,
+          })
+
+          if (ok) {
+            useNearKeyStore
+              .getState()
+              .set({ publicKey: plan.publicKey, privateKey: plan.privateKey })
+          }
         }
 
         await updateNearAccount()
@@ -293,9 +305,9 @@ export default function useBid(
       console.log('bid error', error)
       onTxFail()
     }
-  };
+  }
 
   return {
-    onBid
-  };
+    onBid,
+  }
 }
