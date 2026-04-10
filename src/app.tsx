@@ -1,13 +1,12 @@
 import { createBrowserRouter, Navigate, RouterProvider, useLocation } from 'react-router-dom'
 import { lazy, useEffect, useState } from 'react'
 import WalletProvider from './contexts/wallet'
-import { AuthProvider } from './contexts/auth'
-import { usePrivy, useUser } from '@privy-io/react-auth'
 import { ToastContainer } from 'react-toastify'
 import Loading from '@/components/loading'
 import ErrorPage from './views/error-page'
 import { useBidResultSubscription } from '@/hooks/use-websocket'
 import useIsMobile from '@/hooks/use-is-mobile'
+import useContractConfig from '@/hooks/near/use-config'
 // import "react-toastify/dist/ReactToastify.css";
 
 import MainLayout from './layouts/main'
@@ -17,12 +16,9 @@ import DollaEyeContextProvider from './contexts/dolla-eye'
 import BtcList from './views/btc-list'
 import axiosInstance from '@/libs/axios'
 
-const LazyNftCreate = lazy(() => import('./views/nft-create'))
 const LazyBtcCreate = lazy(() => import('./views/btc-create'))
 const LazyProfilePlayer = lazy(() => import('./views/profile/player'))
 const LazyProfileSeller = lazy(() => import('./views/profile/seller'))
-const LazyNft = lazy(() => import('./views/nft/index'))
-const LazyNftList = lazy(() => import('./views/nft-list'))
 const LazyBtc = lazy(() => import('./views/btc/index'))
 const LazyTerms = lazy(() => import('./views/terms'))
 const LazyPolicy = lazy(() => import('./views/policy'))
@@ -54,22 +50,6 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <DynamicDefaultRoute />,
-      },
-      {
-        path: 'nft',
-        element: <LazyNftList />,
-      },
-      {
-        path: 'nft/detail',
-        element: <LazyNft />,
-      },
-      {
-        path: 'nft/detail/:poolId',
-        element: <LazyNft />,
-      },
-      {
-        path: 'nft/create',
-        element: <LazyNftCreate />,
       },
       {
         path: 'btc/create',
@@ -127,23 +107,7 @@ const router = createBrowserRouter([
 
 const Content = () => {
   const [isLoading, setIsLoading] = useState(true)
-  const { ready } = usePrivy()
-  const { user } = useUser()
-
-  useEffect(() => {
-    if (!ready) {
-      return
-    }
-
-    if (!user) {
-      setIsLoading(false)
-      return
-    }
-
-    setTimeout(() => {
-      setIsLoading(false)
-    }, 2000)
-  }, [ready, user])
+  useContractConfig()
 
   useEffect(() => {
     const init = async () => {
@@ -158,15 +122,16 @@ const Content = () => {
           if (res.data.data?.pool_id) {
             window.cachedPoolId = res.data.data?.pool_id
           }
-          window.isValidCode = res.data.data?.valid || false
         } catch (error) {
           console.error('Failed to check code:', error)
         } finally {
         }
       } else {
-        window.isValidCode = false
       }
     }
+    setTimeout(() => {
+      setIsLoading(false)
+    }, 2000)
     init()
   }, [])
 
@@ -190,9 +155,7 @@ function App() {
         <LazyMobile />
       ) : (
         <WalletProvider>
-          <AuthProvider>
-            <Content />
-          </AuthProvider>
+          <Content />
         </WalletProvider>
       )}
       <ToastContainer

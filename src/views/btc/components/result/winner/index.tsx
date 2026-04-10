@@ -1,7 +1,7 @@
 import Avatar from "@/components/avatar";
 import { formatNumber } from "@/utils/format/number";
 import clsx from "clsx";
-import { useAuth } from "@/contexts/auth";
+import { useAuth } from '@/contexts/wallet'
 import CloseIcon from "@/components/icons/close";
 import { formatAddress } from "@/utils/format/address";
 import { useState, useEffect, useRef } from "react";

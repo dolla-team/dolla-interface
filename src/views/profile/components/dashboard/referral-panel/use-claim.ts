@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect } from "react";
 import axiosInstance from "@/libs/axios";
 import useToast from "@/hooks/use-toast";
-import { useAuth } from "@/contexts/auth";
+import { useAuth } from '@/contexts/wallet'
 import Big from "big.js";
 
 // Response interface for claimable rewards query

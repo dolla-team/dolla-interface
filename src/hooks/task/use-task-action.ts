@@ -12,7 +12,7 @@ import useToast from "@/hooks/use-toast";
 import axiosInstance from "@/libs/axios";
 import useBindSocial from "./use-bind-social";
 import { TELEGRAM_BOT, TELEGRAM_BOT_ID, TWITTER_CLIENT_ID } from "@/config";
-import { useAuth } from "@/contexts/auth";
+import { useAuth } from '@/contexts/wallet'
 
 export default function useTaskAction(task: any, onSuccess?: () => void) {
   const walletStore = useWalletStore();

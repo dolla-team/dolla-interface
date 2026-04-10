@@ -4,7 +4,7 @@ import { useLocation } from "react-router-dom";
 import { useNavigate } from "@/libs/router";
 import useIsBtc from "@/hooks/use-is-btc";
 import clsx from "clsx";
-import { useAuth } from "@/contexts/auth";
+import { useAuth } from '@/contexts/wallet'
 
 export default function PageTabs() {
   const { userInfo, login } = useAuth();

@@ -1,9 +1,9 @@
-import Avatar from "@/components/avatar";
-import { useAuth } from "@/contexts/auth";
-import { formatAddress } from "@/utils/format/address";
+import Avatar from '@/components/avatar'
+import { useAuth } from '@/contexts/wallet'
+import { formatAddress } from '@/utils/format/address'
 
 export default function Top() {
-  const { userInfo } = useAuth() || {};
+  const { userInfo } = useAuth() || {}
 
   return (
     <div className="p-[16px]">
@@ -20,9 +20,7 @@ export default function Top() {
               {userInfo?.name}
             </div>
             <div className="flex items-center gap-[6px]">
-              <span className="text-[12px]">
-                {formatAddress(userInfo?.user)}
-              </span>
+              <span className="text-[12px]">{formatAddress(userInfo?.user)}</span>
             </div>
           </div>
         </div>
@@ -32,5 +30,5 @@ export default function Top() {
         </div> */}
       </div>
     </div>
-  );
+  )
 }

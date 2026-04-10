@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import axiosInstance from "@/libs/axios";
-import { useAuth } from "@/contexts/auth";
+import { useAuth } from '@/contexts/wallet'
 import Big from "big.js";
 import { formatNumber } from "@/utils/format/number";
 import { useDebounceFn } from "ahooks";

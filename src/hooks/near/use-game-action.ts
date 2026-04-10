@@ -8,7 +8,7 @@ import { base_decode } from "near-api-js/lib/utils/serialize";
 import { QUOTE_TOKEN } from "@/config/btc";
 import useToast from "../use-toast";
 import reportHash from "@/utils/report-hash";
-import { useAuth } from "@/contexts/auth";
+import { useAuth } from '@/contexts/wallet'
 import Big from "big.js";
 
 const THIRTY_TGAS = "300000000000000";
@@ -32,7 +32,7 @@ export default function useGameAction({
 
   async function pauseGame() {
     const { publicKey, keyPairSigner } = await generateKeyPair();
-    if (!publicKey) return;
+    if (!publicKey || !keyPairSigner) return;
     let toastId = toast.loading({ title: "Pausing game..." });
     try {
       setPausing(true);
@@ -90,7 +90,7 @@ export default function useGameAction({
 
   async function resumeGame() {
     const { publicKey, keyPairSigner } = await generateKeyPair();
-    if (!publicKey) return;
+    if (!publicKey || !keyPairSigner) return;
     let toastId = toast.loading({ title: "Resuming game..." });
     try {
       setResuming(true);
@@ -146,7 +146,7 @@ export default function useGameAction({
 
   async function cancelGame(penalty: string) {
     const { publicKey, keyPairSigner } = await generateKeyPair();
-    if (!publicKey) return;
+    if (!publicKey || !keyPairSigner) return;
     let toastId = toast.loading({ title: "Canceling game..." });
     try {
       setCanceling(true);

@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { useTipsStore } from "@/stores/use-tips";
 import { motion, AnimatePresence } from "framer-motion";
 import clsx from "clsx";
-import { useAuth } from "@/contexts/auth";
+import { useAuth } from '@/contexts/wallet'
 
 // Define position types
 type TipPosition = "top" | "bottom" | "left" | "right";

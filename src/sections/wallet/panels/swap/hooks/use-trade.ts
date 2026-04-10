@@ -1,35 +1,35 @@
-import { useCallback, useRef, useState } from "react";
-import useToast from "@/hooks/use-toast";
-import { getNonce, getProvider, getUserId, quote } from "@/hooks/near/util";
-import { transactions } from "near-api-js";
-import { PublicKey } from "near-api-js/lib/utils/key_pair";
-import { functionCall } from "near-api-js/lib/transaction";
-import { base_decode } from "near-api-js/lib/utils/serialize";
-import { useSettingsStore } from "../stores/settings";
-import dayjs from "dayjs";
-import Big from "big.js";
-import useGenerateKey from "@/hooks/near/use-generate-key";
-import { useAuth } from "@/contexts/auth";
-import useReport from "@/hooks/transaction/use-report";
-import { NEAR_REFUND_ACCOUNT } from "@/config";
-import { useHistoryStore } from "@/stores/use-swap-history";
-import { report as reportDb3 } from "@/libs/db3";
+import { useCallback, useRef, useState } from 'react'
+import useToast from '@/hooks/use-toast'
+import { getNonce, getProvider, getUserId, quote } from '@/hooks/near/util'
+import { transactions } from 'near-api-js'
+import { PublicKey } from 'near-api-js/lib/utils/key_pair'
+import { functionCall } from 'near-api-js/lib/transaction'
+import { base_decode } from 'near-api-js/lib/utils/serialize'
+import { useSettingsStore } from '../stores/settings'
+import dayjs from 'dayjs'
+import Big from 'big.js'
+import useGenerateKey from '@/hooks/near/use-generate-key'
+import { useAuth } from '@/contexts/wallet'
+import useReport from '@/hooks/transaction/use-report'
+import { NEAR_REFUND_ACCOUNT } from '@/config'
+import { useHistoryStore } from '@/stores/use-swap-history'
+import { report as reportDb3 } from '@/libs/db3'
 
-const THIRTY_TGAS = "300000000000000";
+const THIRTY_TGAS = '300000000000000'
 
 export default function useTrade({ onSuccess }: any) {
-  const slippage: any = useSettingsStore((store: any) => store.slippage);
-  const [loading, setLoading] = useState(false);
-  const [trade, setTrade] = useState<any>();
-  const historyStore = useHistoryStore();
-  const toast = useToast();
-  const lastestCachedKey = useRef("");
-  const cachedTokens = useRef<any>(null);
-  const prices = {};
-  const { generateKeyPair } = useGenerateKey();
-  const { address, chainType } = useAuth();
-  const { report } = useReport();
-  const { nearAccount } = useAuth();
+  const slippage: any = useSettingsStore((store: any) => store.slippage)
+  const [loading, setLoading] = useState(false)
+  const [trade, setTrade] = useState<any>()
+  const historyStore = useHistoryStore()
+  const toast = useToast()
+  const lastestCachedKey = useRef('')
+  const cachedTokens = useRef<any>(null)
+  const prices = {}
+  const { generateKeyPair } = useGenerateKey()
+  const { address, chainType } = useAuth()
+  const { report } = useReport()
+  const { nearAccount } = useAuth()
 
   const onQuoter = useCallback(
     async ({
@@ -158,56 +158,52 @@ export default function useTrade({ onSuccess }: any) {
   )
 
   const onSwap = useCallback(async () => {
-    const { publicKey, keyPairSigner } = await generateKeyPair();
-    if (!publicKey) return;
-    setLoading(true);
-    let toastId = toast.loading({ title: "Swapping..." });
+    const { publicKey, keyPairSigner } = await generateKeyPair()
+    if (!publicKey || !keyPairSigner) return
+    setLoading(true)
+    let toastId = toast.loading({ title: 'Swapping...' })
     try {
-      const provider = getProvider();
-      const { header } = await provider.block({ finality: "final" });
+      const provider = getProvider()
+      const { header } = await provider.block({ finality: 'final' })
 
       const _args: any = {
         token: { FT: trade.inputCurrency.address },
-        recipient_account: trade.recipientAccount
-      };
+        recipient_account: trade.recipientAccount,
+      }
 
       if (!trade.isMax) {
-        _args.amount = trade.amountIn;
+        _args.amount = trade.amountIn
       }
 
       const withdrawArgs = {
         withdraw_args: {
-          ByAk: _args
-        }
-      };
+          ByAk: _args,
+        },
+      }
 
-      const nonce = await getNonce(publicKey);
-      const publicKeyObj = PublicKey.from(publicKey);
+      const nonce = await getNonce(publicKey)
+      const publicKeyObj = PublicKey.from(publicKey)
 
       const transaction = transactions.createTransaction(
         import.meta.env.VITE_NEAR_ACCOUNT_ID,
         publicKeyObj,
         import.meta.env.VITE_NEAR_ACCOUNT_ID,
         nonce,
-        [
-          functionCall("withdraw", withdrawArgs, BigInt(THIRTY_TGAS), BigInt(0))
-        ],
+        [functionCall('withdraw', withdrawArgs, BigInt(THIRTY_TGAS), BigInt(0))],
         base_decode(header.hash)
-      );
+      )
 
-      const [, signedTransaction] = await keyPairSigner.signTransaction(
-        transaction
-      );
-      console.log("signedTransaction:", signedTransaction);
-      const result: any = await provider.sendTransaction(signedTransaction);
-      toast.dismiss(toastId);
+      const [, signedTransaction] = await keyPairSigner.signTransaction(transaction)
+      console.log('signedTransaction:', signedTransaction)
+      const result: any = await provider.sendTransaction(signedTransaction)
+      toast.dismiss(toastId)
       report({
         address: trade.recipientAccount,
-        type: "swap"
-      });
+        type: 'swap',
+      })
       if (result.status.SuccessValue !== undefined) {
-        console.log("Swap success:", result);
-        toast.success({ title: "Swap success" });
+        console.log('Swap success:', result)
+        toast.success({ title: 'Swap success' })
         historyStore.addHistory({
           despoitAddress: trade.recipientAccount,
           inputCurrencyAmount: trade.inputCurrencyAmount,
@@ -215,31 +211,31 @@ export default function useTrade({ onSuccess }: any) {
           inputCurrency: trade.inputCurrency,
           outputCurrency: trade.outputCurrency,
           time: Date.now(),
-          txHash: result.transaction.hash
-        });
-        historyStore.updateStatus(trade.recipientAccount, "PENDING_DEPOSIT");
-        onSuccess?.();
+          txHash: result.transaction.hash,
+        })
+        historyStore.updateStatus(trade.recipientAccount, 'PENDING_DEPOSIT')
+        onSuccess?.()
         reportDb3({
           address: import.meta.env.VITE_NEAR_ACCOUNT_ID,
           receive_address: import.meta.env.VITE_NEAR_ACCOUNT_ID,
           deposit_address: trade.recipientAccount,
-          type: 2
-        });
+          type: 2,
+        })
       } else {
-        console.log("Swap failed:", result);
-        toast.fail({ title: "Swap failed" });
+        console.log('Swap failed:', result)
+        toast.fail({ title: 'Swap failed' })
       }
     } catch (err: any) {
-      toast.dismiss(toastId);
+      toast.dismiss(toastId)
       toast.fail({
-        title: err?.message?.includes("user rejected transaction")
-          ? "User rejected transaction"
-          : `Swap failed!`
-      });
-      console.log(err);
-      setLoading(false);
+        title: err?.message?.includes('user rejected transaction')
+          ? 'User rejected transaction'
+          : `Swap failed!`,
+      })
+      console.log(err)
+      setLoading(false)
     }
-  }, [trade]);
+  }, [trade])
 
-  return { loading, trade, onQuoter, onSwap };
+  return { loading, trade, onQuoter, onSwap }
 }

@@ -1,6 +1,6 @@
 import axiosInstance from "@/libs/axios";
 import { useState, useCallback } from "react";
-import { useAuth } from "@/contexts/auth";
+import { useAuth } from '@/contexts/wallet'
 import useToast from "../use-toast";
 
 const MAPS = {

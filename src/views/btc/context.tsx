@@ -11,7 +11,7 @@ import { useParams } from "react-router-dom";
 import usePoolInfo from "@/hooks/use-pool-info";
 import { formatNumber } from "@/utils/format/number";
 import Big from "big.js";
-import { useAuth } from "@/contexts/auth";
+import { useAuth } from '@/contexts/wallet'
 import useWinnerBidList from "./detail/use-winner-bid-list";
 import useBtcDetailStore from "@/stores/use-btc-detail";
 

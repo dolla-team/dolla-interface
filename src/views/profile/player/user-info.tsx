@@ -1,9 +1,9 @@
-import { useAuth } from "@/contexts/auth";
-import { formatAddress } from "@/utils/format/address";
-import Avatar from "@/components/avatar";
+import { useAuth } from '@/contexts/wallet'
+import { formatAddress } from '@/utils/format/address'
+import Avatar from '@/components/avatar'
 
 export default function UserInfo() {
-  const { userInfo } = useAuth();
+  const { userInfo } = useAuth()
 
   return (
     <div className="flex items-center gap-[20px]">
@@ -18,5 +18,5 @@ export default function UserInfo() {
         <div className="text-[14px]">{formatAddress(userInfo?.user)}</div>
       </div>
     </div>
-  );
+  )
 }

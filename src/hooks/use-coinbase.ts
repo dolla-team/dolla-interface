@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { getOnrampBuyUrl } from "@coinbase/onchainkit/fund";
 import axiosInstance from "@/libs/axios";
 import useDeposit from "./near/use-deposit";
-import { useAuth } from "@/contexts/auth";
+import { useAuth } from '@/contexts/wallet'
 import Big from "big.js";
 import { EVM_REFUND_ACCOUNT } from "@/config";
 

@@ -8,9 +8,10 @@ import Points from "@/sections/points";
 import Button from "@/components/button";
 import { formatNumber } from "@/utils/format/number";
 import { getAnchorPrice } from "@/utils/pool";
-import { useAuth } from "@/contexts/auth";
+import { useAuth } from '@/contexts/wallet'
 import { useMemo } from 'react'
 import Big from 'big.js'
+import useLoginStore from '@/stores/use-login'
 
 export default function Buy({
   disabled,
@@ -23,6 +24,7 @@ export default function Buy({
 }) {
   const { bids, setBids, pool, poolAmount, flipStatus } = useBtcContext();
   const { nearAccount } = useAuth();
+  const wallet = useLoginStore(s => s.wallet)
 
   const probability = useMemo(() => {
     if (!pool?.anchor_price) return 0
@@ -62,7 +64,12 @@ export default function Buy({
       <div className="flex items-center justify-between text-[14px] text-black mt-[20px]">
         <span>Balance</span>
         <span>
-          {formatNumber(nearAccount?.balance || 0, 2, true)} {QUOTE_TOKEN.symbol}
+          {formatNumber(
+            wallet === 'near' ? nearAccount?.onlyQuoteBalance || 0 : nearAccount?.balance || 0,
+            2,
+            true
+          )}{' '}
+          {QUOTE_TOKEN.symbol}
         </span>
       </div>
       <div className="flex items-center justify-between text-[14px] text-black mt-[20px]">

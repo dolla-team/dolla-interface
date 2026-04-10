@@ -1,6 +1,6 @@
 import axiosInstance from "@/libs/axios";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useAuth } from "@/contexts/auth";
+import { useAuth } from '@/contexts/wallet'
 import { useRequest } from "ahooks";
 import Big from "big.js";
 import useTokenPrice from "./use-token-price";

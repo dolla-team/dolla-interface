@@ -2,7 +2,7 @@ import { useEffect, useRef, useCallback } from "react";
 import { wsService, type MessageHandler } from "@/service/ws";
 import { useAllMarketsStore } from "@/stores/use-all-markets";
 import useBtcDetailStore from "@/stores/use-btc-detail";
-import { useAuth } from "@/contexts/auth";
+import { useAuth } from '@/contexts/wallet'
 
 /**
  * Hook for WebSocket subscription

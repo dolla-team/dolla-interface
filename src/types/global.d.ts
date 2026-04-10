@@ -11,6 +11,15 @@ declare global {
       bidSuccess: Howl
       prevAnimation: Howl
     }
+    selector?: {
+      store: {
+        getState: () => {
+          selectedWalletId: string
+          accounts?: { accountId: string; publicKey?: string }[]
+        }
+      }
+      wallet: () => Promise<import('@near-wallet-selector/core').Wallet>
+    }
     cachedPoolId: number
     isValidCode: boolean
     isSigning: boolean

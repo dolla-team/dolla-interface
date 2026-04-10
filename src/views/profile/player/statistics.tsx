@@ -2,7 +2,7 @@ import Profit from "./profit";
 import ProfitClaim from "../seller/profit-claim";
 import YourWon from "./your-won";
 // import Button from "@/components/button";
-import { useAuth } from "@/contexts/auth";
+import { useAuth } from '@/contexts/wallet'
 import dayjs from "dayjs";
 
 export default function Statistics({ from }: { from: "player" | "seller" }) {

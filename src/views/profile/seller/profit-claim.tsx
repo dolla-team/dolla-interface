@@ -1,7 +1,7 @@
 import Button from "@/components/button";
 import { formatNumber } from "@/utils/format/number";
 import useClaim from "@/hooks/evm/use-claim";
-import { useAuth } from "@/contexts/auth";
+import { useAuth } from '@/contexts/wallet'
 
 export default function ProfitClaim({ profit }: { profit: number }) {
   const { onQueryUserInfo, userInfo } = useAuth();

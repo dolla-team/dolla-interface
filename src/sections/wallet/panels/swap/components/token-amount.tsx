@@ -1,13 +1,13 @@
-"use client";
-import { useMemo, useEffect, useState } from "react";
-import Range from "@/components/range";
-import { motion } from "framer-motion";
-import Big from "big.js";
-import LazyImage from "@/components/layz-image";
-import clsx from "clsx";
-import { useAuth } from "@/contexts/auth";
-import { balanceFormated } from "../utils/balance";
-import { formatNumber } from "@/utils/format/number";
+'use client'
+import { useMemo, useEffect, useState } from 'react'
+import Range from '@/components/range'
+import { motion } from 'framer-motion'
+import Big from 'big.js'
+import LazyImage from '@/components/layz-image'
+import clsx from 'clsx'
+import { useAuth } from '@/contexts/wallet'
+import { balanceFormated } from '../utils/balance'
+import { formatNumber } from '@/utils/format/number'
 
 export default function TokenAmount({
   className,
@@ -20,88 +20,83 @@ export default function TokenAmount({
   onAmountChange,
   onUpdateCurrencyBalance,
   isPrice = true,
-  balanceLabel = "Bal.",
+  balanceLabel = 'Bal.',
   balancePercentClassName,
   balanceContainerClassName,
   inputDisabled,
   isRange = true,
-  currencyClassName
+  currencyClassName,
 }: any) {
-  const { nearAccount } = useAuth();
+  const { nearAccount } = useAuth()
   const [tokenPrice, tokenBalance] = useMemo(
     () =>
       currency
         ? [
             currency && prices ? prices[currency.address] : 0,
-            currency?.isBaseToken
-              ? nearAccount?.prizeBalance
-              : nearAccount?.onlyQuoteBalance
+            currency?.isBaseToken ? nearAccount?.prizeBalance : nearAccount?.onlyQuoteBalance,
           ]
-        : [0, "0"],
+        : [0, '0'],
     [prices, currency, nearAccount]
-  );
+  )
 
-  const [percent, setPercent] = useState<any>(0);
+  const [percent, setPercent] = useState<any>(0)
   const handleRangeChange = (e: any, isAmountChange = true) => {
-    const formatedBalance = balanceFormated(tokenBalance);
-    if (["-", "Loading", "0"].includes(formatedBalance)) return;
-    const _percent = e.target.value || 0;
-    setPercent(_percent);
+    const formatedBalance = balanceFormated(tokenBalance)
+    if (['-', 'Loading', '0'].includes(formatedBalance)) return
+    const _percent = e.target.value || 0
+    setPercent(_percent)
     isAmountChange &&
       onAmountChange?.(
-        Big(tokenBalance || "0")
+        Big(tokenBalance || '0')
           .times(Big(_percent).div(100))
           .toFixed(currency?.decimals)
-          .replace(/[.]?0+$/, "")
-      );
-  };
+          .replace(/[.]?0+$/, '')
+      )
+  }
   const setRange = (val: string) => {
-    if (type !== "in") return;
-    const formatedBalance = balanceFormated(tokenBalance);
-    if (["-", "Loading", "0"].includes(formatedBalance)) return;
+    if (type !== 'in') return
+    const formatedBalance = balanceFormated(tokenBalance)
+    if (['-', 'Loading', '0'].includes(formatedBalance)) return
     let percent: any = Big(val || 0)
       .div(formatedBalance)
       .times(100)
-      .toFixed(2);
-    percent = Math.min(Math.max(+percent, 0), 100);
-    handleRangeChange?.({ target: { value: percent } }, false);
-  };
+      .toFixed(2)
+    percent = Math.min(Math.max(+percent, 0), 100)
+    handleRangeChange?.({ target: { value: percent } }, false)
+  }
   useEffect(() => {
-    if (tokenBalance && onUpdateCurrencyBalance)
-      onUpdateCurrencyBalance(tokenBalance);
-  }, [tokenBalance]);
+    if (tokenBalance && onUpdateCurrencyBalance) onUpdateCurrencyBalance(tokenBalance)
+  }, [tokenBalance])
 
   useEffect(() => {
     if (!amount) {
-      setPercent(0);
+      setPercent(0)
     }
-  }, [amount]);
+  }, [amount])
 
   useEffect(() => {
-    setPercent(0);
-    onAmountChange?.("");
-  }, [currency]);
+    setPercent(0)
+    onAmountChange?.('')
+  }, [currency])
 
   return (
     <div
       className={clsx(
-        "border border-[#8A87AA4D] rounded-[10px] px-[6px] py-[10px] leading-[100%] bg-white",
+        'border border-[#8A87AA4D] rounded-[10px] px-[6px] py-[10px] leading-[100%] bg-white',
         className
       )}
     >
       <div className="flex items-center justify-between text-[#8A87AA]">
-        <div className="text-[14px] font-[400]">
-          {type === "in" ? "From" : "To"}
-        </div>
+        <div className="text-[14px] font-[400]">{type === 'in' ? 'From' : 'To'}</div>
         <div className="text-[12px]">
-          {balanceLabel}{" "}
+          {balanceLabel}{' '}
           <span
             className="underline button"
             onClick={() => {
-              const formatedBalance = balanceFormated(tokenBalance);
-              if (["-", "Loading", "0"].includes(formatedBalance)) return;
-              onAmountChange?.(tokenBalance);
-              setRange(tokenBalance || "0");
+              const formatedBalance = balanceFormated(tokenBalance)
+              if (['-', 'Loading', '0'].includes(formatedBalance)) return
+              onAmountChange?.(tokenBalance)
+              setRange(tokenBalance || '0')
             }}
           >
             {formatNumber(tokenBalance, currency?.decimals === 6 ? 2 : 6, true)}
@@ -113,11 +108,11 @@ export default function TokenAmount({
           <input
             className="w-[100%] h-[100%] text-[22px]"
             value={amount}
-            onChange={(ev) => {
-              if (isNaN(Number(ev.target.value))) return;
-              const val = ev.target.value.replace(/\s+/g, "");
-              onAmountChange?.(val);
-              setRange(val);
+            onChange={ev => {
+              if (isNaN(Number(ev.target.value))) return
+              const val = ev.target.value.replace(/\s+/g, '')
+              onAmountChange?.(val)
+              setRange(val)
             }}
             placeholder="0"
             disabled={inputDisabled}
@@ -125,12 +120,12 @@ export default function TokenAmount({
         </div>
         <div
           className={`${
-            outputCurrencyReadonly ? "" : "border"
+            outputCurrencyReadonly ? '' : 'border'
           } flex items-center justify-between border-[#8A87AA4D] rounded-[10px] w-[124px] h-[42px] px-[7px] cursor-pointer ${
-            currencyClassName ?? ""
+            currencyClassName ?? ''
           }`}
           onClick={() => {
-            onCurrencySelectOpen?.();
+            onCurrencySelectOpen?.()
           }}
         >
           {currency ? (
@@ -138,19 +133,17 @@ export default function TokenAmount({
               <div className="relative shrink-0">
                 {!currency.icon && currency.underlyingTokens ? (
                   <div className="flex items-center">
-                    {currency.underlyingTokens.map(
-                      (_currency: any, _index: number) => (
-                        <LazyImage
-                          key={_index}
-                          src={_currency.icon}
-                          fallbackSrc="/assets/tokens/default_icon.png"
-                          containerClassName={clsx(
-                            "!w-[26px] !h-[26px] shrink-0 rounded-full overflow-hidden",
-                            _index > 0 && "ml-[-15px]"
-                          )}
-                        />
-                      )
-                    )}
+                    {currency.underlyingTokens.map((_currency: any, _index: number) => (
+                      <LazyImage
+                        key={_index}
+                        src={_currency.icon}
+                        fallbackSrc="/assets/tokens/default_icon.png"
+                        containerClassName={clsx(
+                          '!w-[26px] !h-[26px] shrink-0 rounded-full overflow-hidden',
+                          _index > 0 && 'ml-[-15px]'
+                        )}
+                      />
+                    ))}
                   </div>
                 ) : (
                   <LazyImage
@@ -160,9 +153,7 @@ export default function TokenAmount({
                   />
                 )}
               </div>
-              <div className="text-[14px] flex-1 w-0 truncate">
-                {currency?.symbol}
-              </div>
+              <div className="text-[14px] flex-1 w-0 truncate">{currency?.symbol}</div>
             </div>
           ) : (
             <div className="text-[12px]">Select a token</div>
@@ -176,12 +167,7 @@ export default function TokenAmount({
               xmlns="http://www.w3.org/2000/svg"
               className="shrink-0"
             >
-              <path
-                d="M1 1L6 5L11 1"
-                stroke="#8A87AA"
-                strokeWidth="2"
-                strokeLinecap="round"
-              />
+              <path d="M1 1L6 5L11 1" stroke="#8A87AA" strokeWidth="2" strokeLinecap="round" />
             </svg>
           )}
         </div>
@@ -189,10 +175,7 @@ export default function TokenAmount({
 
       {isPrice && (
         <div className="text-[12px] text-[#8A87AA]">
-          $
-          {amount && tokenPrice
-            ? balanceFormated(Big(amount).mul(tokenPrice).toString())
-            : "-"}
+          ${amount && tokenPrice ? balanceFormated(Big(amount).mul(tokenPrice).toString()) : '-'}
         </div>
       )}
 
@@ -231,12 +214,12 @@ export default function TokenAmount({
         </div>
       )} */}
     </div>
-  );
+  )
 }
 
 const BalancePercentList = [
-  { value: 25, label: "25%" },
-  { value: 50, label: "50%" },
-  { value: 75, label: "75%" },
-  { value: 100, label: "Max" }
-];
+  { value: 25, label: '25%' },
+  { value: 50, label: '50%' },
+  { value: 75, label: '75%' },
+  { value: 100, label: 'Max' },
+]

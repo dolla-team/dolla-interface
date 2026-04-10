@@ -2,7 +2,7 @@ import AvatarAction from "./avatar-action";
 import { Outlet, useLocation } from "react-router-dom";
 import { useNavigate } from "@/libs/router";
 import Button from "@/components/button";
-import { useAuth } from "@/contexts/auth";
+import { useAuth } from '@/contexts/wallet'
 import DollaEye from "@/components/dolla-eye";
 import EstGas from "@/sections/est-gas";
 // import useIsMobile from "@/hooks/use-is-mobile";

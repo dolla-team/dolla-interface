@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useAuth } from "@/contexts/auth";
+import { useAuth } from '@/contexts/wallet'
 import { useSignMessage } from "@privy-io/react-auth";
 import useToast from "../use-toast";
 import useGenerateKey from "@/hooks/near/use-generate-key";

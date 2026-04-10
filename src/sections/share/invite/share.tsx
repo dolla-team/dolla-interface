@@ -1,12 +1,12 @@
-import { QRCodeSVG } from "qrcode.react";
-import { useGlobalStore } from "@/stores/use-global";
-import Avatar from "@/components/avatar";
-import { useAuth } from "@/contexts/auth";
-import LevelIcon from "@/components/icons/level-icon";
+import { QRCodeSVG } from 'qrcode.react'
+import { useGlobalStore } from '@/stores/use-global'
+import Avatar from '@/components/avatar'
+import { useAuth } from '@/contexts/wallet'
+import LevelIcon from '@/components/icons/level-icon'
 
 export default function InviteShareCard({ cardRef }: any) {
-  const globalStore = useGlobalStore();
-  const { userInfo } = useAuth();
+  const globalStore = useGlobalStore()
+  const { userInfo } = useAuth()
   return (
     <div
       ref={cardRef}
@@ -15,11 +15,9 @@ export default function InviteShareCard({ cardRef }: any) {
       <div className="flex items-center gap-[20px] pt-[20px] pl-[30px]">
         <img src="/share/share-icon.png" className="w-[112px] h-[45px]" />
         <div className="text-[12px] text-white w-[270px]">
-          The first{" "}
-          <span className="text-[#FFC42F] font-[600]">
-            Trustless Probabilistic Marketplace
-          </span>{" "}
-          for BTC and more
+          The first{' '}
+          <span className="text-[#FFC42F] font-[600]">Trustless Probabilistic Marketplace</span> for
+          BTC and more
         </div>
       </div>
       <div className="w-[154px] h-[154px] rounded-[6px] p-[20px] bg-white ml-[30px] mt-[40px]">
@@ -55,5 +53,5 @@ export default function InviteShareCard({ cardRef }: any) {
         </div>
       </div>
     </div>
-  );
+  )
 }

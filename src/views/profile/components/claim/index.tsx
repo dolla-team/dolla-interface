@@ -11,7 +11,7 @@ import useIsMobile from "@/hooks/use-is-mobile";
 import clsx from "clsx";
 import { useRequest } from "ahooks";
 import axiosInstance from "@/libs/axios";
-import { useAuth } from "@/contexts/auth";
+import { useAuth } from '@/contexts/wallet'
 import Pagination from "@/components/pagination";
 import { getAnchorPrice } from "@/utils/pool";
 

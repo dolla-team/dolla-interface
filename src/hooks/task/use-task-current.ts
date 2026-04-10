@@ -1,10 +1,11 @@
 import { useCallback } from "react";
 import axiosInstance from "@/libs/axios";
 import useTaskStore, { initProgressTasks } from "@/stores/use-task";
+import useLoginStore from '@/stores/use-login'
 
 export default function useTaskCurrent() {
   const taskStore = useTaskStore();
-
+  const loginStore = useLoginStore()
   // Fetch task list from API
   const fetchTasks = useCallback(async () => {
     try {
@@ -21,14 +22,14 @@ export default function useTaskCurrent() {
       let _tasksMap: any = {};
       [...(data.fixed_tasks || []), ...(data.ongoing_tasks || [])].forEach(
         (item: any) => {
-          if (!item.is_claimed) {
-            _tasksMap[item.id] = item;
-            _tasks.push(item.id);
+          if (item.is_claimed) return
+          if (loginStore.wallet === 'near' && [2, 4, 5].includes(item.category)) return
+          _tasksMap[item.id] = item
+          _tasks.push(item.id)
 
-            _progressTasks[
-              item.category === 6 || item.category === 7 ? 1 : item.category
-            ].list.push(item.id);
-          }
+          _progressTasks[item.category === 6 || item.category === 7 ? 1 : item.category].list.push(
+            item.id
+          )
         }
       );
 

@@ -7,7 +7,7 @@ import { base_decode } from "near-api-js/lib/utils/serialize";
 import useGenerateKey from "@/hooks/near/use-generate-key";
 import useToast from "@/hooks/use-toast";
 import { QUOTE_TOKEN } from "@/config/btc";
-import { useAuth } from "@/contexts/auth";
+import { useAuth } from '@/contexts/wallet'
 import { BET_UNIT } from "@/config";
 import Big from "big.js";
 import reportHash from "@/utils/report-hash";
@@ -22,7 +22,7 @@ export default function useBuyTicket(onSuccess?: () => void) {
 
   async function transfer(ticket: number) {
     const { publicKey, keyPairSigner } = await generateKeyPair();
-    if (!publicKey) return;
+    if (!publicKey || !keyPairSigner) return;
 
     let toastId = toast.loading({ title: "Buying ticket..." });
     try {
