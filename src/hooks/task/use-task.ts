@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axiosInstance from "@/libs/axios";
 import { useAuth } from '@/contexts/wallet'
+import useLoginStore from '@/stores/use-login'
 
 const initProgressTasks: any = {
   "0": {
@@ -33,7 +34,7 @@ export default function useTaskList() {
   const [loading, setLoading] = useState(false);
   const { userInfo } = useAuth();
   const [initialized, setInitialized] = useState(true);
-
+  const loginStore = useLoginStore()
   // Fetch task list from API
   const fetchTasks = async () => {
     try {
@@ -49,7 +50,9 @@ export default function useTaskList() {
 
       let _progressTasks = JSON.parse(JSON.stringify(initProgressTasks));
       [...data.fixed_tasks, ...data.ongoing_tasks].forEach((item: any) => {
-        if (!item.is_claimed) _progressTasks[item.category].list.push(item);
+        if (item.is_claimed) return
+        if (loginStore.wallet === 'near' && [2, 4, 5].includes(item.category)) return
+        _progressTasks[item.category].list.push(item)
       });
 
       setProgressTasks(Object.values(_progressTasks));
