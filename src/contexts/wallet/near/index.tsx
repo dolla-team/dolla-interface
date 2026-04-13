@@ -36,6 +36,11 @@ export default function NearWalletProvider({ children }: { children: React.React
   const [accountId, setAccountId] = useState('')
   const [nearApi, setNearApi] = useState<{ selector: NearSelectorLike } | null>(null)
   const connectorRef = useRef<NearConnector | null>(null)
+  const disconnectNearRef = useRef<(() => Promise<void>) | null>(null)
+
+  const disconnectNear = useCallback(async () => {
+    await disconnectNearRef.current?.()
+  }, [])
 
   useEffect(() => {
     let cancelled = false
@@ -108,6 +113,21 @@ export default function NearWalletProvider({ children }: { children: React.React
       }
     }
 
+    disconnectNearRef.current = async () => {
+      try {
+        await connector.disconnect()
+      } catch {
+        try {
+          const storage = (connector as unknown as { storage: { remove: (key: string) => Promise<void> } })
+            .storage
+          await storage.remove('selected-wallet')
+        } catch {
+          /* ignore */
+        }
+        onSignOut()
+      }
+    }
+
     void connector.whenManifestLoaded
       .then(async () => {
         if (cancelled) return
@@ -128,6 +148,7 @@ export default function NearWalletProvider({ children }: { children: React.React
 
     return () => {
       cancelled = true
+      disconnectNearRef.current = null
       connector.off('wallet:signIn', onSignIn)
       connector.off('wallet:signOut', onSignOut)
       connectorRef.current = null
@@ -135,17 +156,20 @@ export default function NearWalletProvider({ children }: { children: React.React
     }
   }, [])
 
-  const login = useCallback(() => {
+  const login = () => {
     void connectorRef.current?.connect().catch(() => {
       // User may reject the wallet picker; ignore.
     })
-  }, [])
+  }
+
+
 
   return (
     <NearAuthProvider
       accountId={accountId}
       selector={nearApi?.selector ?? null}
       nearLogin={login}
+      nearDisconnect={disconnectNear}
       ready={nearApi != null}
     >
       {children}
