@@ -221,7 +221,8 @@ export const AuthProvider: React.FC<{
 
   const login = async () => {
     if (!user) {
-      privyLogin?.()
+      // privyLogin?.()
+      loginStore.set({ showWalletsModal: true, wallet: '' })
       return
     }
 
