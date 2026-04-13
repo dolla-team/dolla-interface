@@ -1,4 +1,4 @@
-import { serializeNep413, verifySignature as verifyNep413Signature } from '@near-wallet-selector/core'
+import { serializeNep413, verifyNep413Signature } from '@/libs/near/nep413'
 import { InMemorySigner } from '@near-js/signers'
 import { KeyPair, providers, transactions as nearTransactions } from 'near-api-js'
 import { KeyType, PublicKey } from 'near-api-js/lib/utils/key_pair'
@@ -317,7 +317,7 @@ export function nearSignatureToEvmSignatureHex(signature: NearSecp256k1Signature
 
 /**
  * Converts NEP-413 SignedMessage (base64 secp256k1 compact sig) or JSON NearSecp256k1Signature to 65-byte EVM hex.
- * Uses the same sha256(borsh) preimage as verifySignature in @near-wallet-selector/core.
+ * Uses the same sha256(borsh) preimage as verifyNep413Signature in src/libs/near/nep413.ts.
  *
  * - On-chain JSON NearSecp256k1Signature: converted directly.
  * - secp256k1 full-access keys: compact 64-byte sig → EVM (tries s and n−s; resolves callbackUrl variants).

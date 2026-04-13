@@ -1,10 +1,23 @@
-import { keyStores, utils, connect } from 'near-api-js'
-import type {
-  FinalExecutionOutcome,
-  Transaction as WSTransaction,
-  Wallet,
-} from '@near-wallet-selector/core'
+import type { NearWalletBase } from '@hot-labs/near-connect'
 import BN from 'bn.js'
+import { keyStores, utils, connect } from 'near-api-js'
+import type { FinalExecutionOutcome } from 'near-api-js/lib/providers'
+
+type WSTransaction = {
+  signerId: string
+  receiverId: string
+  actions: Array<{
+    type: 'FunctionCall'
+    params: {
+      methodName: string
+      args: object
+      gas: string
+      deposit: string
+    }
+  }>
+}
+
+type Wallet = NearWalletBase
 
 export type NearBatchFunctionCall = {
   methodName: string
@@ -131,11 +144,14 @@ export const executeMultipleTransactions = async (
   })
   const selectedWalletId = getSelectedWalletId()
   ledgerTipTrigger()
-  return (await getCurrentWallet())
-    .signAndSendTransactions({
-      transactions: wstransactions,
-      callbackUrl,
-    })
+  const sendParams: Parameters<NearWalletBase['signAndSendTransactions']>[0] & { callbackUrl?: string } = {
+    signerId,
+    transactions: wstransactions.map(({ receiverId, actions }) => ({ receiverId, actions })),
+  }
+  if (callbackUrl) {
+    sendParams.callbackUrl = callbackUrl
+  }
+  return (await getCurrentWallet()).signAndSendTransactions(sendParams)
     .then((res: FinalExecutionOutcome[] | void) => {
       if (webWalletIds.includes(selectedWalletId)) return
       if (!res)
