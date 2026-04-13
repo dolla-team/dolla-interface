@@ -18,7 +18,7 @@ declare global {
           accounts?: { accountId: string; publicKey?: string }[]
         }
       }
-      wallet: () => Promise<import('@near-wallet-selector/core').Wallet>
+      wallet: () => Promise<import('@hot-labs/near-connect').NearWalletBase>
     }
     cachedPoolId: number
     isValidCode: boolean
