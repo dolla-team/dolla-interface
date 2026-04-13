@@ -23,6 +23,7 @@ export type NearAuthProviderProps = {
   accountId: string
   selector: any | null
   nearLogin: () => void
+  nearDisconnect: () => Promise<void>
   ready: boolean
 }
 
@@ -31,6 +32,7 @@ export const NearAuthProvider: React.FC<NearAuthProviderProps> = ({
   accountId,
   selector,
   nearLogin,
+  nearDisconnect,
   ready,
 }) => {
   useConfig()
@@ -101,47 +103,39 @@ export const NearAuthProvider: React.FC<NearAuthProviderProps> = ({
 
   const { onLogin } = useLogin()
 
-  const signWithWallet = useCallback(
-    async (
-      message: string
-    ): Promise<{ signature: string; nonce: string; publicKey: string } | null> => {
-      if (!selector || !accountId) {
-        throw new Error('Wallet not ready')
-      }
-      try {
-        const wallet = await selector.wallet()
-        if (typeof wallet.signMessage !== 'function') {
-          console.error('Wallet does not support signMessage (NEP-413)')
-          return null
-        }
-        const recipient = 'dolla.market'
-        const nonceBytes = Buffer.alloc(32)
-        crypto.getRandomValues(nonceBytes)
-        const signed = await wallet.signMessage({
-          message,
-          recipient,
-          nonce: nonceBytes,
-        })
-        console.log('signed', signed)
-        const signature = signed.signature ?? ''
-        if (!signature) {
-          return null
-        }
-        const nonce = nonceBytes.toString('base64')
-
-        return { signature, nonce, publicKey: signed.publicKey }
-      } catch (err) {
-        console.error('Sign message failed', err)
+  const signWithWallet = async (
+    message: string
+  ): Promise<{ signature: string; nonce: string; publicKey: string } | null> => {
+    if (!selector || !accountId) {
+      throw new Error('Wallet not ready')
+    }
+    try {
+      const wallet = await selector.wallet()
+      if (typeof wallet.signMessage !== 'function') {
+        console.error('Wallet does not support signMessage (NEP-413)')
         return null
       }
-    },
-    [selector, accountId]
-  )
+      const recipient = 'dolla.market'
+      const nonceBytes = Buffer.alloc(32)
+      crypto.getRandomValues(nonceBytes)
+      const signed = await wallet.signMessage({
+        message,
+        recipient,
+        nonce: nonceBytes,
+      })
+      console.log('signed', signed)
+      const signature = signed.signature ?? ''
+      if (!signature) {
+        return null
+      }
+      const nonce = nonceBytes.toString('base64')
 
-  // const signMessage = async (messages: any) => {
-  //   setSignMessages(messages)
-  //   setShowSignMessageBox(true)
-  // }
+      return { signature, nonce, publicKey: signed.publicKey }
+    } catch (err) {
+      console.error('Sign message failed', err)
+      return null
+    }
+  }
 
   const updateAccount = async () => {
     if (!address) {
@@ -205,19 +199,18 @@ export const NearAuthProvider: React.FC<NearAuthProviderProps> = ({
   }
 
   const login = useCallback(async () => {
-    if (!address) {
+    console.log('selector', selector, address)
+    if (!address || !selector) {
       nearLogin()
       return
     }
+
     await sign()
-  }, [address, nearLogin])
+  }, [address, nearLogin, selector])
 
   const logout = useCallback(async () => {
     try {
-      if (selector) {
-        const w = await selector.wallet()
-        await w.signOut()
-      }
+      await nearDisconnect()
     } catch (error) {
       console.error('Error signing out NEAR wallet:', error)
     }
@@ -229,7 +222,9 @@ export const NearAuthProvider: React.FC<NearAuthProviderProps> = ({
     userInfoStore.init()
     globalStore.init()
     loginStore.init()
-  }, [selector])
+    setAddress('')
+    addressRef.current = ''
+  }, [nearDisconnect])
 
   useEffect(() => {
     if (!ready) {
