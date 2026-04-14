@@ -199,9 +199,9 @@ export const NearAuthProvider: React.FC<NearAuthProviderProps> = ({
   }
 
   const login = useCallback(async () => {
-    console.log('selector', selector, address)
     if (!address || !selector) {
-      nearLogin()
+      // nearLogin()
+      loginStore.set({ showWalletsModal: true, wallet: '' })
       return
     }
 
