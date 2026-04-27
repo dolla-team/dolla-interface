@@ -175,8 +175,6 @@ export default function useClaimNear(onSuccess?: () => void) {
         }
         
         await updateNearAccount?.()
-
-        return
       }
 
       await runClaim()

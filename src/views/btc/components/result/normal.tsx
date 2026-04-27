@@ -137,9 +137,13 @@ export default function Normal({
               tabs={BID_UNITS.map(item => ({ label: `$${item}`, key: item }))}
               currentTab={bids}
               onChangeTab={(tab: any) => {
+                if (flipStatus === 1) return
                 setBids(tab)
               }}
-              className="w-[346px] h-[38px] mt-[50px] p-[2px] !gap-0 rounded-[10px] backdrop-blur-[25px] border border-[#F2F2F233] bg-[#FFFFFF1F]"
+              className={clsx(
+                'w-[346px] h-[38px] mt-[50px] p-[2px] !gap-0 rounded-[10px] backdrop-blur-[25px] border border-[#F2F2F233] bg-[#FFFFFF1F]',
+                flipStatus === 1 && 'pointer-events-none'
+              )}
               tabClassName={clsx(
                 'text-[12px] w-[85px] text-center h-[18px] leading-[18px] text-white not-first:border-l border-[#8A87AA]/30'
               )}
