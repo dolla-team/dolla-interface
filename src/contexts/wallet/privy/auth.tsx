@@ -221,7 +221,6 @@ export const AuthProvider: React.FC<{
 
   const login = async () => {
     if (!user) {
-      // privyLogin?.()
       loginStore.set({ showWalletsModal: true, wallet: '' })
       return
     }
@@ -277,7 +276,7 @@ export const AuthProvider: React.FC<{
     if (!user || !address) {
       const loginGraceTimer = window.setTimeout(() => {
         if (!userRef.current || !addressRef.current) {
-          void login()
+          privyLogin?.()
         }
       }, 500)
       return () => {
