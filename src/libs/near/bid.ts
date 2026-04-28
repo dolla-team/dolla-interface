@@ -4,11 +4,14 @@ import { viewMethod, getUserId } from '@/hooks/near/util'
 import { QUOTE_TOKEN } from '@/config/btc'
 import { BET_UNIT } from '@/config'
 import { useNearKeyStore } from '@/stores/use-near-key'
+import axiosInstance from '@/libs/axios'
 
 /** 24h bid payload deadline (ms). */
 const BID_DEADLINE_MS = 1000 * 60 * 60 * 24
 /** Replace-AK payload deadline (ms), same as use-generate-key updateAk. */
 const REPLACE_AK_DEADLINE_MS = 1000 * 60 * 60 * 6
+const AK_POLL_INTERVAL_MS = 1000
+const AK_POLL_MAX_ATTEMPTS = 15
 
 export type NearBidPostBody = {
   payload: string
@@ -21,6 +24,47 @@ export type BuildNearBidPostBodyParams = {
   times: number
   address: string
   chainType: string
+}
+
+export async function getOnChainUserAk(address: string, chainType: string): Promise<string | null> {
+  const user_id = getUserId(address, chainType)
+  const onChainAk = await viewMethod({
+    method: 'get_user_id_ak',
+    args: { user_id },
+  })
+  return onChainAk ?? null
+}
+
+type UpdateUserAkAndWaitForSyncParams = {
+  address: string
+  chainType: string
+  payload: string
+  signature: string
+  expectedPublicKey: string
+}
+
+export async function updateUserAkAndWaitForSync(
+  params: UpdateUserAkAndWaitForSyncParams
+): Promise<void> {
+  const { address, chainType, payload, signature, expectedPublicKey } = params
+  const response = await axiosInstance.put(`/api/v1/user/publickey`, {
+    payload,
+    signature,
+  })
+  if (!response || response.status < 200 || response.status >= 300) {
+    throw new Error('AK_UPDATE_REQUEST_FAILED')
+  }
+
+  const expectedAk = `ed25519:${expectedPublicKey}`
+  for (let attempt = 0; attempt < AK_POLL_MAX_ATTEMPTS; attempt += 1) {
+    const onChainAk = await getOnChainUserAk(address, chainType)
+    if (onChainAk === expectedAk) {
+      return
+    }
+    await new Promise(resolve => setTimeout(resolve, AK_POLL_INTERVAL_MS))
+  }
+  console.error('AK_UPDATE_SYNC_TIMEOUT')
+  throw new Error('AK_UPDATE_SYNC_TIMEOUT')
 }
 
 /** Plan signing keys + whether adapter must replace AK (useDollaBidFlow runBidFlow parity). */
@@ -62,10 +106,7 @@ export async function planNearBidKeyAndReplace(
     set({ publicKey, privateKey })
   }
 
-  const onChainAk = await viewMethod({
-    method: 'get_user_id_ak',
-    args: { user_id },
-  })
+  const onChainAk = await getOnChainUserAk(address, chainType)
 
   const needReplaceAk = !!(onChainAk && onChainAk !== `ed25519:${publicKey}`)
 
@@ -138,10 +179,7 @@ export async function buildNearBidPostBody(
   }
 
   const user_id = getUserId(params.address, params.chainType)
-  const onChainAk = await viewMethod({
-    method: 'get_user_id_ak',
-    args: { user_id },
-  })
+  const onChainAk = await getOnChainUserAk(params.address, params.chainType)
   if (onChainAk && onChainAk !== `ed25519:${publicKey}`) {
     return null
   }
