@@ -35,3 +35,7 @@ export const TELEGRAM_BOT_ID = "8234415143";
 export const BTC_CREATE_FORM_URL = "https://tally.so/r/3q0QqY";
 
 export const BID_UNITS = [1, 10, 50, 100];
+
+export const BUY_TICKET_RECIPIENT = IS_TEST
+  ? 'dbf30dc7bca13c69c9630765fa66d4a53e5f29ce' // testnet recipient
+  : 'd0f9da85ca8dbc1586067c659280084036913766' // mainnet recipient

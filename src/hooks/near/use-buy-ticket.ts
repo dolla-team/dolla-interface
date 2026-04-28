@@ -16,16 +16,19 @@ import useGenerateKey from "@/hooks/near/use-generate-key";
 import useToast from "@/hooks/use-toast";
 import { QUOTE_TOKEN } from "@/config/btc";
 import { useAuth } from '@/contexts/wallet'
-import { BET_UNIT } from "@/config";
+import { BET_UNIT, BUY_TICKET_RECIPIENT } from '@/config'
 import Big from "big.js";
 import reportHash from "@/utils/report-hash";
 import useLoginStore from '@/stores/use-login'
-import { nearBidAdapterDepositAmountMicro, planNearBidKeyAndReplace } from '@/libs/near/bid'
+import {
+  nearBidAdapterDepositAmountMicro,
+  planNearBidKeyAndReplace,
+  updateUserAkAndWaitForSync,
+} from '@/libs/near/bid'
 import {
   executeBidSignAndTransfer,
   transferToNearAdapter,
 } from '@/contexts/wallet/near/adapter-contract'
-import axiosInstance from '@/libs/axios'
 import { useNearKeyStore } from '@/stores/use-near-key'
 import { useContractConfigStore } from '@/stores/use-contract-config'
 
@@ -82,20 +85,28 @@ export default function useBuyTicket(onSuccess?: () => void) {
     }
 
     if (plan.needReplaceAk) {
+      if (!plan.replaceAkPayloadString) {
+        return ''
+      }
       const signatures = await getSignaturesFromBatchSignPayloadResult(
         txResult.successResult[0],
         accountId
       )
       const sigEvm = nearSignatureToEvmSignatureHex(signatures[0])
       const ak_signature = sigEvm.replace(/^0x/, '')
-      const ok = await axiosInstance.put(`/api/v1/user/publickey`, {
-        payload: plan.replaceAkPayloadString,
-        signature: ak_signature,
-      })
-
-      if (ok) {
-        useNearKeyStore.getState().set({ publicKey: plan.publicKey, privateKey: plan.privateKey })
+      try {
+        await updateUserAkAndWaitForSync({
+          address,
+          chainType,
+          payload: plan.replaceAkPayloadString,
+          signature: ak_signature,
+          expectedPublicKey: plan.publicKey,
+        })
+      } catch (error) {
+        toast.fail({ title: 'Update access key failed, please try again later' })
+        throw error
       }
+      useNearKeyStore.getState().set({ publicKey: plan.publicKey, privateKey: plan.privateKey })
     }
 
     await updateNearAccount()
@@ -147,9 +158,7 @@ export default function useBuyTicket(onSuccess?: () => void) {
             // amount: "1000",
             token: { FT: QUOTE_TOKEN.address },
             recipient: {
-              // Evm: "43fe6fcbc6eb7d4735589d2c2951d366d968fe75"
-              // Evm: "9e80a8e261d2ac69777d854b21592729d6766709"
-              Evm: 'd0f9da85ca8dbc1586067c659280084036913766',
+              Evm: BUY_TICKET_RECIPIENT,
             },
             as_gift: false,
           },

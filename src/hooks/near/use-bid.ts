@@ -1,6 +1,7 @@
 import axiosInstance from '@/libs/axios'
 import { useAuth } from '@/contexts/wallet'
 import useGenerateKey from '@/hooks/near/use-generate-key'
+import useToast from '@/hooks/use-toast'
 import { KeyPair } from 'near-api-js'
 import { viewMethod, getUserId, allReceiptsSucceeded, type IFinalExecutionOutcome } from './util'
 import { QUOTE_TOKEN } from '@/config/btc'
@@ -11,6 +12,7 @@ import {
   buildNearBidPostBody,
   nearBidAdapterDepositAmountMicro,
   planNearBidKeyAndReplace,
+  updateUserAkAndWaitForSync,
 } from '@/libs/near/bid'
 import {
   executeBidSignAndTransfer,
@@ -32,6 +34,7 @@ export default function useBid(
   const { address, chainType, updateNearAccount, accountId } = useAuth()
   const { generateKeyPair } = useGenerateKey()
   const btcDetailStore = useBtcDetailStore()
+  const toast = useToast()
 
   // Function to sign a message using NEAR private key
   const signMessage = async (message: string, privateKey: any): Promise<string | null> => {
@@ -73,7 +76,7 @@ export default function useBid(
     // return;
 
     if (!address) {
-      onTxFail2()
+      onTxFail()
       return
     }
 
@@ -101,7 +104,7 @@ export default function useBid(
 
       if (loginWallet === 'near') {
         if (!accountId) {
-          onTxFail2()
+          onTxFail()
           return
         }
         const contractConfig = useContractConfigStore.getState().config
@@ -148,22 +151,31 @@ export default function useBid(
         }
 
         if (plan.needReplaceAk) {
+          if (!plan.replaceAkPayloadString) {
+            onTxFail()
+            toast.fail({ title: 'Update access key failed, please try again later' })
+            return
+          }
           const signatures = await getSignaturesFromBatchSignPayloadResult(
             txResult.successResult[0] as IFinalExecutionOutcome,
             accountId
           )
           const sigEvm = nearSignatureToEvmSignatureHex(signatures[0])
           const ak_signature = sigEvm.replace(/^0x/, '')
-          const ok = await axiosInstance.put(`/api/v1/user/publickey`, {
-            payload: plan.replaceAkPayloadString,
-            signature: ak_signature,
-          })
-
-          if (ok) {
-            useNearKeyStore
-              .getState()
-              .set({ publicKey: plan.publicKey, privateKey: plan.privateKey })
+          try {
+            await updateUserAkAndWaitForSync({
+              address,
+              chainType,
+              payload: plan.replaceAkPayloadString,
+              signature: ak_signature,
+              expectedPublicKey: plan.publicKey,
+            })
+          } catch (error) {
+            onTxFail()
+            toast.fail({ title: 'Update access key failed, please try again later' })
+            return
           }
+          useNearKeyStore.getState().set({ publicKey: plan.publicKey, privateKey: plan.privateKey })
         }
 
         await updateNearAccount()
@@ -175,7 +187,7 @@ export default function useBid(
           chainType,
         })
         if (!body) {
-          onTxFail2()
+          onTxFail()
           return
         }
         payloadString = body.payload
@@ -185,7 +197,7 @@ export default function useBid(
         const { publicKey, privateKey } = await generateKeyPair()
 
         if (!publicKey) {
-          onTxFail2()
+          onTxFail()
           return
         }
         const res = await viewMethod({
