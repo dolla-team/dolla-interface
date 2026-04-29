@@ -23,6 +23,8 @@ import ConfirmModal from './confirm-modal'
 import { useBtcCreateStore } from '@/stores/use-btc-create'
 import { useNavigate } from '@/libs/router'
 import { BTC_CREATE_FORM_URL } from '@/config'
+import useLoginStore from '@/stores/use-login'
+import useNearChainOnlyPrizeBalance from '@/hooks/near/use-only-prize-balance-near'
 
 export default function BTCCreate() {
   const btcCreateStore = useBtcCreateStore()
@@ -34,12 +36,16 @@ export default function BTCCreate() {
     isLoading,
     updateNearAccount,
     nearAccount,
+    accountId,
     address,
     login,
     isCreatedWhitelist,
   } = useAuth() || {}
+  const { wallet: loginWallet } = useLoginStore()
+
   const { token } = useQuote()
-  const tokenBalance = nearAccount?.prizeBalance
+  const { onlyPrizeBalance } = useNearChainOnlyPrizeBalance(accountId)
+  const tokenBalance = loginWallet === 'near' ? onlyPrizeBalance : nearAccount?.prizeBalance
   const {
     data: referenceData,
     loading: referenceDataLoading,
@@ -65,12 +71,12 @@ export default function BTCCreate() {
     if (pricePerBTC === 0) {
       return 'Anchor price not found'
     }
-    if (Big(btcCreateStore.amount).gt(Big(nearAccount?.prizeBalance || 0))) {
+    if (Big(btcCreateStore.amount).gt(Big(tokenBalance || 0))) {
       return `Insufficient ${BASE_TOKEN.symbol} Balance`
     }
 
     return ''
-  }, [btcCreateStore.amount, pricePerBTC, nearAccount?.prizeBalance])
+  }, [btcCreateStore.amount, pricePerBTC, tokenBalance])
 
   return (
     <div className="relative">
@@ -172,29 +178,31 @@ export default function BTCCreate() {
                     `${formatNumber(tokenBalance, 6, true)} ${token.symbol}`
                   )}
                 </div>
-                <button
-                  onClick={(ev: any) => {
-                    if (!isCreatedWhitelist) {
-                      window.open(BTC_CREATE_FORM_URL, '_blank')
-                      return
-                    }
-                    if (!address) {
-                      login()
-                      return
-                    }
-                    ev.stopPropagation()
-                    walletStore.set({
-                      showWallet: true,
-                      panelType: 'deposit',
-                      depositPanelType: 'input',
-                      selectedToken: token,
-                      defaultDepositAmount: btcCreateStore.amount,
-                    })
-                  }}
-                  className="absolute top-[-10px] right-0 w-[86px] h-[30px] button rounded-[8px] border border-[#A2A2A2] bg-[#FFFFFF1A] text-white text-[12px] text-center"
-                >
-                  Deposit
-                </button>
+                {loginWallet !== 'near' && (
+                  <button
+                    onClick={(ev: any) => {
+                      if (!isCreatedWhitelist) {
+                        window.open(BTC_CREATE_FORM_URL, '_blank')
+                        return
+                      }
+                      if (!address) {
+                        login()
+                        return
+                      }
+                      ev.stopPropagation()
+                      walletStore.set({
+                        showWallet: true,
+                        panelType: 'deposit',
+                        depositPanelType: 'input',
+                        selectedToken: token,
+                        defaultDepositAmount: btcCreateStore.amount,
+                      })
+                    }}
+                    className="absolute top-[-10px] right-0 w-[86px] h-[30px] button rounded-[8px] border border-[#A2A2A2] bg-[#FFFFFF1A] text-white text-[12px] text-center"
+                  >
+                    Deposit
+                  </button>
+                )}
                 <div className="text-center text-[14px] text-white mt-[10px]">Balance</div>
                 <Button
                   disabled={!!errorTips}

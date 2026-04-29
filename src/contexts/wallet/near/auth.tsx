@@ -79,7 +79,10 @@ export const NearAuthProvider: React.FC<NearAuthProviderProps> = ({
 
   const { loading: userInfoLoading, onQueryUserInfo } = useUserInfo(address, undefined)
   const userInfo = userInfoStore.userInfo
-  const { isCreatedWhitelist } = useCreateWhitelist(undefined)
+
+  const user = useMemo(() => ({ email: { address: accountId } }), [accountId])
+
+  const { isCreatedWhitelist } = useCreateWhitelist(user)
   useCode(userInfo)
 
   const { onlyQuoteBalance: chainOnlyQuoteBalance, refreshUsdtBalance } =

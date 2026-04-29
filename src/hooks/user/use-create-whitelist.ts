@@ -3,6 +3,7 @@ import { useRequest } from 'ahooks'
 import axiosInstance from '@/libs/axios'
 
 export default function useCreateWhitelist(user?: any) {
+
   const [address, email] = useMemo(() => {
     if (!user) return ['', '']
     const address = user.wallet?.address
@@ -12,9 +13,10 @@ export default function useCreateWhitelist(user?: any) {
     }
     return [address, email]
   }, [user])
+
   const service = useCallback(async () => {
     try {
-      if (!email || !address) return false
+      if (!email && !address) return false
 
       const res = await axiosInstance.get('/api/v1/user/create/whitelist', {
         params: { email, address },
@@ -27,7 +29,7 @@ export default function useCreateWhitelist(user?: any) {
   }, [email, address])
 
   const { data } = useRequest(service, {
-    refreshDeps: [email, address],
+    refreshDeps: [email, address, user],
   })
 
   return {
