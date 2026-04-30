@@ -4,8 +4,7 @@ import Market from "./market";
 import usePoolList from "@/hooks/use-pool-list";
 import Loading from "@/components/icons/loading";
 import { useNavigate } from "@/libs/router";
-import clsx from "clsx";
-import { BASE_TOKEN, AMOUNT } from "@/config/btc";
+import clsx from 'clsx'
 import useTaskStore from "@/stores/use-task";
 import Empty from "@/sections/wallet/panels/info/empty";
 import Popover, {

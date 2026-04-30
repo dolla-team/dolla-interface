@@ -9,6 +9,9 @@ import {
   getProvider,
   keyPairFromStoredSecret,
 } from '@/hooks/near/util'
+import { nearBidAdapterDepositAmountMicro } from '@/libs/near/bid'
+import { useContractConfigStore } from '@/stores/use-contract-config'
+import { QUOTE_TOKEN } from '@/config/btc'
 
 const NEAR_ADAPTER_CONTRACT_ID = import.meta.env.VITE_NEAR_ADAPTER_CONTRACT_ID
 const GAME_CONTRACT_ID = import.meta.env.VITE_NEAR_ACCOUNT_ID as string
@@ -122,6 +125,65 @@ export async function executeBidSignAndTransfer(params: {
     ],
   }
   return executeMultipleTransactions([signTx, transferTx], false)
+}
+
+export async function executeCreateGameAndTransfer(params: {
+  messages: string[]
+  transferParams: { tokenId: string; amount: string; operationKey: string }
+}) {
+  const { messages, transferParams } = params
+  const { tokenId, amount, operationKey } = transferParams
+  const signTx = {
+    receiverId: NEAR_ADAPTER_CONTRACT_ID,
+    functionCalls: messages.map(message => ({
+      methodName: 'sign_payload',
+      args: { message },
+      gas: '100000000000000',
+      amount: ONE_YOCTO_NEAR,
+    })),
+  }
+  const contractConfig = useContractConfigStore.getState().config
+  const depositAmount = nearBidAdapterDepositAmountMicro(
+    0,
+    0,
+    Number(contractConfig?.change_ak_fee ?? 0),
+    true
+  )
+  const transferFeeTx = {
+    receiverId: QUOTE_TOKEN.address,
+    functionCalls: [
+      {
+        methodName: 'ft_transfer_call',
+        args: {
+          receiver_id: NEAR_ADAPTER_CONTRACT_ID,
+          amount: depositAmount,
+          msg: JSON.stringify({
+            Deposit: { operation_key: operationKey },
+          }),
+        },
+        gas: '300000000000000',
+        amount: ONE_YOCTO_NEAR,
+      },
+    ],
+  }
+  const transferTx = {
+    receiverId: tokenId,
+    functionCalls: [
+      {
+        methodName: 'ft_transfer_call',
+        args: {
+          receiver_id: NEAR_ADAPTER_CONTRACT_ID,
+          amount,
+          msg: JSON.stringify({
+            Deposit: { operation_key: operationKey },
+          }),
+        },
+        gas: '300000000000000',
+        amount: ONE_YOCTO_NEAR,
+      },
+    ],
+  }
+  return executeMultipleTransactions([signTx, transferFeeTx, transferTx], false)
 }
 
 export type BatchWithdrawParams = {
