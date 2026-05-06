@@ -16,22 +16,78 @@ function dataURLtoBlob(dataURL: string): Blob {
   return new Blob([u8arr], { type: mime })
 }
 
-// Helper function to wait for all images to load
+function extractUrlsFromCssUrl(value: string): string[] {
+  const urls: string[] = []
+  const re = /url\(["']?([^"')]+)["']?\)/g
+  let match: RegExpExecArray | null
+  while ((match = re.exec(value)) !== null) {
+    const u = match[1]?.trim()
+    if (u && !u.startsWith('data:')) urls.push(u)
+  }
+  return urls
+}
+
+function collectBackgroundImageUrls(el: Element): string[] {
+  const urls: string[] = []
+  const pushBg = (raw: string) => {
+    if (raw && raw !== 'none') urls.push(...extractUrlsFromCssUrl(raw))
+  }
+  pushBg(window.getComputedStyle(el).backgroundImage)
+  for (const pseudo of ['::before', '::after'] as const) {
+    try {
+      pushBg(window.getComputedStyle(el, pseudo).backgroundImage)
+    } catch {
+      /* unsupported */
+    }
+  }
+  return urls
+}
+
+async function preloadImageUrl(url: string, timeoutMs: number): Promise<void> {
+  const absolute = new URL(url, window.location.href).href
+  await new Promise<void>(resolve => {
+    const img = new Image()
+    const timeoutId = window.setTimeout(() => resolve(), timeoutMs)
+    img.onload = () => {
+      window.clearTimeout(timeoutId)
+      resolve()
+    }
+    img.onerror = () => {
+      window.clearTimeout(timeoutId)
+      resolve()
+    }
+    if (absolute.startsWith('http://') || absolute.startsWith('https://')) {
+      img.crossOrigin = 'anonymous'
+    }
+    img.src = absolute
+  })
+}
+
+async function waitForBackgroundImages(root: HTMLElement, timeout: number = 10000): Promise<void> {
+  const urls = new Set<string>()
+  collectBackgroundImageUrls(root).forEach(u => urls.add(u))
+  root.querySelectorAll('*').forEach(el => {
+    collectBackgroundImageUrls(el).forEach(u => urls.add(u))
+  })
+  await Promise.all([...urls].map(u => preloadImageUrl(u, timeout)))
+}
+
 async function waitForImages(node: HTMLElement, timeout: number = 10000): Promise<void> {
   const images = node.querySelectorAll<HTMLImageElement>('img')
   const imagePromises: Promise<void>[] = []
 
   images.forEach(img => {
-    // If image is already loaded, skip
     if (img.complete && img.naturalHeight !== 0) {
+      if (img.decode) {
+        imagePromises.push(img.decode().catch(() => undefined))
+      }
       return
     }
 
-    // Create a promise that resolves when the image loads or times out
     const imagePromise = new Promise<void>(resolve => {
       const timeoutId = setTimeout(() => {
         console.warn(`Image loading timeout: ${img.src}`)
-        resolve() // Resolve anyway to not block the process
+        resolve()
       }, timeout)
 
       const onLoad = () => {
@@ -42,17 +98,15 @@ async function waitForImages(node: HTMLElement, timeout: number = 10000): Promis
       const onError = () => {
         clearTimeout(timeoutId)
         console.warn(`Image failed to load: ${img.src}`)
-        resolve() // Resolve anyway to not block the process
+        resolve()
       }
 
       img.addEventListener('load', onLoad, { once: true })
       img.addEventListener('error', onError, { once: true })
 
-      // If image has a src and is not complete, wait for it
       if (img.src && !img.complete) {
-        // Image is loading, wait for load/error event
+        /* wait for load/error */
       } else {
-        // Image might be complete but naturalHeight is 0, or no src
         clearTimeout(timeoutId)
         resolve()
       }
@@ -61,8 +115,21 @@ async function waitForImages(node: HTMLElement, timeout: number = 10000): Promis
     imagePromises.push(imagePromise)
   })
 
-  // Wait for all images to load or timeout
   await Promise.all(imagePromises)
+}
+
+function waitForNextPaint(): Promise<void> {
+  return new Promise(resolve => {
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => resolve())
+    })
+  })
+}
+
+async function waitForFonts(): Promise<void> {
+  if (typeof document !== 'undefined' && document.fonts?.ready) {
+    await document.fonts.ready.catch(() => undefined)
+  }
 }
 
 export interface ImageGenerationOptions {
@@ -100,8 +167,6 @@ export function useShare() {
    */
   const generateImage = useCallback(
     async (node: HTMLElement | string, options: ImageGenerationOptions = {}): Promise<string> => {
-      await new Promise(resolve => setTimeout(resolve, 500))
-
       const { width, height, quality = 3, backgroundColor = '#ffffff', pixelRatio = 2 } = options
 
       const targetNode =
@@ -117,18 +182,28 @@ export function useShare() {
         pixelRatio,
         width,
         height,
+        cacheBust: true,
       }
 
+      const captureOnce = () =>
+        waitForFonts()
+          .then(() => waitForImages(targetNode))
+          .then(() => waitForBackgroundImages(targetNode))
+          .then(() => waitForNextPaint())
+          .then(() => domtoimage.toPng(targetNode, config))
+
       try {
-        // Wait for all images to load before generating the image
-        await waitForImages(targetNode)
-
-        const dataUrl = await domtoimage.toPng(targetNode, config)
-
-        return dataUrl
+        try {
+          return await captureOnce()
+        } catch (firstError) {
+          console.warn('dom-to-image first attempt failed, retrying once', firstError)
+          await new Promise(r => setTimeout(r, 200))
+          return await captureOnce()
+        }
       } catch (error) {
         console.error('Failed to generate image:', error)
-        throw new Error('Failed to generate image from DOM node')
+        const detail = error instanceof Error ? error.message : String(error)
+        throw new Error(`Failed to generate image from DOM node: ${detail}`)
       }
     },
     []
