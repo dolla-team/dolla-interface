@@ -1,11 +1,8 @@
 import Switch from "@/components/switch";
-import { useNavigate } from "@/libs/router";
-import useLoginStore from '@/stores/use-login'
+import { useNavigate } from '@/libs/router'
 
 export default function Tabs({ tab }: { tab: string }) {
-  const navigate = useNavigate();
-  const wallet = useLoginStore(s => s.wallet)
-  const listerDisabled = wallet === 'near'
+  const navigate = useNavigate()
 
   return (
     <div className="flex justify-end mt-[20px]">
@@ -13,7 +10,7 @@ export default function Tabs({ tab }: { tab: string }) {
         tab={tab}
         tabs={[
           { label: 'Bidder', value: 'bidder' },
-          { label: 'Lister', value: 'lister', disabled: listerDisabled },
+          { label: 'Lister', value: 'lister' },
         ]}
         onChange={value => {
           navigate(`/portfolio/${value}`)
