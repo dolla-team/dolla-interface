@@ -1,90 +1,87 @@
-import domtoimage from "dom-to-image";
-import { useCallback, useState } from "react";
-import useUpload from "@/hooks/use-upload";
-import axiosInstance from "@/libs/axios";
+import domtoimage from 'dom-to-image'
+import { useCallback, useState } from 'react'
+import useUpload from '@/hooks/use-upload'
+import axiosInstance from '@/libs/axios'
 
 // Helper function to convert dataURL to Blob (CSP-safe method)
 function dataURLtoBlob(dataURL: string): Blob {
-  const arr = dataURL.split(",");
-  const mime = arr[0].match(/:(.*?);/)?.[1] || "image/png";
-  const bstr = atob(arr[1]);
-  let n = bstr.length;
-  const u8arr = new Uint8Array(n);
+  const arr = dataURL.split(',')
+  const mime = arr[0].match(/:(.*?);/)?.[1] || 'image/png'
+  const bstr = atob(arr[1])
+  let n = bstr.length
+  const u8arr = new Uint8Array(n)
   while (n--) {
-    u8arr[n] = bstr.charCodeAt(n);
+    u8arr[n] = bstr.charCodeAt(n)
   }
-  return new Blob([u8arr], { type: mime });
+  return new Blob([u8arr], { type: mime })
 }
 
 // Helper function to wait for all images to load
-async function waitForImages(
-  node: HTMLElement,
-  timeout: number = 10000
-): Promise<void> {
-  const images = node.querySelectorAll<HTMLImageElement>("img");
-  const imagePromises: Promise<void>[] = [];
+async function waitForImages(node: HTMLElement, timeout: number = 10000): Promise<void> {
+  const images = node.querySelectorAll<HTMLImageElement>('img')
+  const imagePromises: Promise<void>[] = []
 
-  images.forEach((img) => {
+  images.forEach(img => {
     // If image is already loaded, skip
     if (img.complete && img.naturalHeight !== 0) {
-      return;
+      return
     }
 
     // Create a promise that resolves when the image loads or times out
-    const imagePromise = new Promise<void>((resolve) => {
+    const imagePromise = new Promise<void>(resolve => {
       const timeoutId = setTimeout(() => {
-        console.warn(`Image loading timeout: ${img.src}`);
-        resolve(); // Resolve anyway to not block the process
-      }, timeout);
+        console.warn(`Image loading timeout: ${img.src}`)
+        resolve() // Resolve anyway to not block the process
+      }, timeout)
 
       const onLoad = () => {
-        clearTimeout(timeoutId);
-        resolve();
-      };
+        clearTimeout(timeoutId)
+        resolve()
+      }
 
       const onError = () => {
-        clearTimeout(timeoutId);
-        console.warn(`Image failed to load: ${img.src}`);
-        resolve(); // Resolve anyway to not block the process
-      };
+        clearTimeout(timeoutId)
+        console.warn(`Image failed to load: ${img.src}`)
+        resolve() // Resolve anyway to not block the process
+      }
 
-      img.addEventListener("load", onLoad, { once: true });
-      img.addEventListener("error", onError, { once: true });
+      img.addEventListener('load', onLoad, { once: true })
+      img.addEventListener('error', onError, { once: true })
 
       // If image has a src and is not complete, wait for it
       if (img.src && !img.complete) {
         // Image is loading, wait for load/error event
       } else {
         // Image might be complete but naturalHeight is 0, or no src
-        clearTimeout(timeoutId);
-        resolve();
+        clearTimeout(timeoutId)
+        resolve()
       }
-    });
+    })
 
-    imagePromises.push(imagePromise);
-  });
+    imagePromises.push(imagePromise)
+  })
 
   // Wait for all images to load or timeout
-  await Promise.all(imagePromises);
+  await Promise.all(imagePromises)
 }
 
 export interface ImageGenerationOptions {
-  width?: number;
-  height?: number;
-  quality?: number;
-  format?: "png" | "jpeg" | "webp";
-  backgroundColor?: string;
-  pixelRatio?: number;
+  width?: number
+  height?: number
+  quality?: number
+  format?: 'png' | 'jpeg' | 'webp'
+  backgroundColor?: string
+  pixelRatio?: number
 }
 
 export interface ShareOptions {
-  title?: string;
-  description?: string;
-  text?: string;
-  url?: string;
-  imageUrl?: string;
-  hashtags?: string[];
-  via?: string;
+  title?: string
+  description?: string
+  text?: string
+  url?: string
+  imageUrl?: string
+  hashtags?: string[]
+  via?: string
 }
 
 /**
@@ -92,9 +89,9 @@ export interface ShareOptions {
  * Supports download and share functionality
  */
 export function useShare() {
-  const { uploadFile } = useUpload();
-  const [downloading, setDownloading] = useState(false);
-  const [sharing, setSharing] = useState(false);
+  const { uploadFile } = useUpload()
+  const [downloading, setDownloading] = useState(false)
+  const [sharing, setSharing] = useState(false)
   /**
    * Convert DOM node to image
    * @param node DOM node or selector
@@ -102,25 +99,16 @@ export function useShare() {
    * @returns Promise<string> Returns base64 image data
    */
   const generateImage = useCallback(
-    async (
-      node: HTMLElement | string,
-      options: ImageGenerationOptions = {}
-    ): Promise<string> => {
-      const {
-        width,
-        height,
-        quality = 3,
-        backgroundColor = "#ffffff",
-        pixelRatio = 2
-      } = options;
+    async (node: HTMLElement | string, options: ImageGenerationOptions = {}): Promise<string> => {
+      await new Promise(resolve => setTimeout(resolve, 500))
+
+      const { width, height, quality = 3, backgroundColor = '#ffffff', pixelRatio = 2 } = options
 
       const targetNode =
-        typeof node === "string"
-          ? (document.querySelector(node) as HTMLElement)
-          : node;
+        typeof node === 'string' ? (document.querySelector(node) as HTMLElement) : node
 
       if (!targetNode) {
-        throw new Error("Target DOM node not found");
+        throw new Error('Target DOM node not found')
       }
 
       const config = {
@@ -128,45 +116,42 @@ export function useShare() {
         bgcolor: backgroundColor,
         pixelRatio,
         width,
-        height
-      };
+        height,
+      }
 
       try {
         // Wait for all images to load before generating the image
-        await waitForImages(targetNode);
+        await waitForImages(targetNode)
 
-        const dataUrl = await domtoimage.toPng(targetNode, config);
+        const dataUrl = await domtoimage.toPng(targetNode, config)
 
-        return dataUrl;
+        return dataUrl
       } catch (error) {
-        console.error("Failed to generate image:", error);
-        throw new Error("Failed to generate image from DOM node");
+        console.error('Failed to generate image:', error)
+        throw new Error('Failed to generate image from DOM node')
       }
     },
     []
-  );
+  )
 
   /**
    * Download image
    * @param dataUrl Base64 image data
    * @param filename Filename (without extension)
    */
-  const downloadImage = useCallback(
-    (dataUrl: string, filename: string = "image") => {
-      try {
-        const link = document.createElement("a");
-        link.download = `${filename}.png`;
-        link.href = dataUrl;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-      } catch (error) {
-        console.error("Failed to download image:", error);
-        throw new Error("Failed to download image");
-      }
-    },
-    []
-  );
+  const downloadImage = useCallback((dataUrl: string, filename: string = 'image') => {
+    try {
+      const link = document.createElement('a')
+      link.download = `${filename}.png`
+      link.href = dataUrl
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+    } catch (error) {
+      console.error('Failed to download image:', error)
+      throw new Error('Failed to download image')
+    }
+  }, [])
 
   /**
    * Share image via Twitter with Twitter Card
@@ -174,30 +159,30 @@ export function useShare() {
    */
   const shareImage = useCallback(
     async (options: ShareOptions = {}) => {
-      const { title, description, imageUrl } = options;
+      const { title, description, imageUrl } = options
 
       try {
-        const res = await axiosInstance.post("/api/v1/share/create", {
+        const res = await axiosInstance.post('/api/v1/share/create', {
           title,
           description,
-          image: imageUrl
-        });
-        const url = res.data.data.share_url;
+          image: imageUrl,
+        })
+        const url = res.data.data.share_url
 
-        const twitterText = encodeURIComponent(`${title}\n${description}`);
+        const twitterText = encodeURIComponent(`${title}\n${description}`)
 
-        const twitterShareUrl = `https://twitter.com/intent/tweet?text=${twitterText}&url=${url}`;
+        const twitterShareUrl = `https://twitter.com/intent/tweet?text=${twitterText}&url=${url}`
         // Open Twitter in new window
-        window.open(twitterShareUrl, "_blank");
+        window.open(twitterShareUrl, '_blank')
       } catch (error) {
-        console.error("Failed to share image:", error);
+        console.error('Failed to share image:', error)
         // Fallback to download only
         // downloadImage(dataUrl, "shared-image");
-        throw new Error("Failed to share image, downloaded instead");
+        throw new Error('Failed to share image, downloaded instead')
       }
     },
     [downloadImage]
-  );
+  )
 
   /**
    * Generate and download image in one step
@@ -208,23 +193,23 @@ export function useShare() {
   const generateAndDownload = useCallback(
     async (
       node: HTMLElement | string,
-      filename: string = "image",
+      filename: string = 'image',
       options: ImageGenerationOptions = {}
     ) => {
-      setDownloading(true);
+      setDownloading(true)
       try {
-        const dataUrl = await generateImage(node, options);
-        downloadImage(dataUrl, filename);
-        return dataUrl;
+        const dataUrl = await generateImage(node, options)
+        downloadImage(dataUrl, filename)
+        return dataUrl
       } catch (error) {
-        console.error("Failed to generate and download image:", error);
-        throw error;
+        console.error('Failed to generate and download image:', error)
+        throw error
       } finally {
-        setDownloading(false);
+        setDownloading(false)
       }
     },
     [generateImage, downloadImage]
-  );
+  )
 
   /**
    * Generate and share image in one step
@@ -239,45 +224,45 @@ export function useShare() {
       options: ImageGenerationOptions = {},
       shareOptions: ShareOptions = {}
     ) => {
-      setSharing(true);
+      setSharing(true)
       try {
         // Generate image from DOM node
         const dataUrl = await generateImage(node, {
-          format: "png",
+          format: 'png',
           quality: 1,
           pixelRatio: 1,
-          ...options
-        });
+          ...options,
+        })
 
         // Use CSP-safe method to convert dataURL to Blob
         // This avoids CSP issues with data: protocol
-        const blob = dataURLtoBlob(dataUrl);
+        const blob = dataURLtoBlob(dataUrl)
 
         const imageUrl = await uploadFile({
-          dir: "share",
-          file: blob
-        });
+          dir: 'share',
+          file: blob,
+        })
 
         // downloadImage(dataUrl, "share-image");
 
         // return;
 
-        if (!imageUrl) return;
+        if (!imageUrl) return
 
         // Share with uploaded image URL
         await shareImage({
           ...shareOptions,
-          imageUrl
-        });
+          imageUrl,
+        })
       } catch (error) {
-        console.error("Failed to generate and share image:", error);
-        throw error;
+        console.error('Failed to generate and share image:', error)
+        throw error
       } finally {
-        setSharing(false);
+        setSharing(false)
       }
     },
     [generateImage, shareImage]
-  );
+  )
 
   return {
     downloading,
@@ -286,6 +271,6 @@ export function useShare() {
     downloadImage,
     shareImage,
     generateAndDownload,
-    generateAndShare
-  };
+    generateAndShare,
+  }
 }
