@@ -166,7 +166,7 @@ export default function useBuyTicket(onSuccess?: () => void) {
         memo: JSON.stringify({
           type: 'dolla_buy_ticket',
           address: address,
-          address_chain: chainType,
+          address_chain: chainType === 'near' ? 'Evm' : chainType,
         }),
       }
 
