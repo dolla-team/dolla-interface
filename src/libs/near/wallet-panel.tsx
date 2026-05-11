@@ -1,9 +1,9 @@
 import { useMemo } from 'react'
 import Big from 'big.js'
 import { useAuth } from '@/contexts/wallet'
-import useAccount from '@/hooks/near/use-account'
 import useTokenPrice from '@/hooks/use-token-price'
 import useClaimNear from '@/hooks/near/use-claim-near'
+import useNearChainOnlyPrizeBalance from '@/hooks/near/use-only-prize-balance-near'
 import { BASE_TOKEN, QUOTE_TOKEN } from '@/config/btc'
 import { formatNumber } from '@/utils/format/number'
 import clsx from 'clsx'
@@ -46,7 +46,10 @@ function AssetCard({
 }
 
 export default function NearWalletPanel({ className }: { className?: string }) {
-  const { address, chainType, nearAccount, updateNearAccount } = useAuth()
+  const { nearAccount, updateNearAccount, accountId } = useAuth()
+  const { onlyPrizeBalance: walletBase } = useNearChainOnlyPrizeBalance(
+    typeof accountId === 'string' ? accountId : undefined
+  )
 
   const { claim, claimLoading } = useClaimNear(() => {
     void updateNearAccount()
@@ -82,67 +85,78 @@ export default function NearWalletPanel({ className }: { className?: string }) {
       <div
         className={clsx(
           'relative rounded-[10px] border border-[#FFC42F] bg-[#FFF9E9]',
-          'w-[318px] px-4 pb-4 pt-10'
+          'w-[318px] pb-4 pt-3'
         )}
       >
-        <div className="flex items-center justify-between gap-2">
-          <span className="font-[Unbounded] text-[12px] text-[#8A87AA]">Wallet Balance</span>
-          <div className="flex items-center gap-1">
-            <img src={QUOTE_TOKEN.icon} alt="" className="h-4 w-4 rounded-full object-cover" />
-            <span className="font-[Unbounded] text-[14px] text-black">
-              {formatNumber(walletUsdt, 2, true)}
+        <div className="px-4">
+          <div className="flex items-end justify-between gap-2">
+            <span className="font-[Bungee] text-[20px] tracking-[-0.05em] text-black">BIDDER</span>
+            <span className="font-[Unbounded] text-[18px] font-bold text-black">
+              {formatNumber(totalBidTimes, 0, true)}
             </span>
+          </div>
+          <p className="mt-1 font-[Unbounded] text-[12px] text-[#8A87AA]">
+            Not supported by nearwallet for Sellers
+          </p>
+
+          <div className="mt-3 flex items-center justify-between gap-2">
+            <span className="font-[Unbounded] text-[12px] text-[#8A87AA]">Dolla Winning</span>
+            <span className="font-[Unbounded] text-[12px] text-[#8A87AA]">1Bid = 1 USDT</span>
+          </div>
+
+          <div className="mt-2 flex flex-col gap-2">
+            <AssetCard
+              symbol={QUOTE_TOKEN.symbol}
+              icon={QUOTE_TOKEN.icon}
+              priceUsd={usdtPrice}
+              balance={internalUsdt}
+              balanceDecimals={QUOTE_TOKEN.decimals > 6 ? 6 : 2}
+            />
+            <AssetCard
+              symbol={BASE_TOKEN.symbol}
+              icon={BASE_TOKEN.icon}
+              priceUsd={basePrice}
+              balance={internalBase}
+              balanceDecimals={BASE_TOKEN.decimals > 6 ? 6 : 4}
+            />
+          </div>
+
+          <div className="mt-3 flex justify-end">
+            <Button
+              type="button"
+              isPrimary={false}
+              disabled={claimLoading || !hasClaimable}
+              onClick={() => void claim()}
+              className={clsx(
+                'h-10 w-[94px] !rounded-[10px] bg-black font-[Unbounded] text-[14px] font-medium text-white backdrop-blur-[25px]',
+                !claimLoading && hasClaimable && 'hover:opacity-90'
+              )}
+              loading={claimLoading}
+            >
+              Claim
+            </Button>
           </div>
         </div>
 
         <div className="my-3 h-px w-full bg-[#FFC42F]/20" />
-
-        <div className="flex items-end justify-between gap-2">
-          <span className="font-[Bungee] text-[20px] tracking-[-0.05em] text-black">BIDDER</span>
-          <span className="font-[Unbounded] text-[18px] font-bold text-black">
-            {formatNumber(totalBidTimes, 0, true)}
+        <div className="flex justify-between gap-2 px-4">
+          <span className="font-[Unbounded] shrink-0 text-[12px] text-[#8A87AA]">
+            Wallet Balance
           </span>
-        </div>
-        <p className="mt-1 font-[Unbounded] text-[12px] text-[#8A87AA]">
-          Not supported by nearwallet for Sellers
-        </p>
-
-        <div className="mt-3 flex items-center justify-between gap-2">
-          <span className="font-[Unbounded] text-[12px] text-[#8A87AA]">Dolla Winning</span>
-          <span className="font-[Unbounded] text-[12px] text-[#8A87AA]">1Bid = 1 USDT</span>
-        </div>
-
-        <div className="mt-2 flex flex-col gap-2">
-          <AssetCard
-            symbol={QUOTE_TOKEN.symbol}
-            icon={QUOTE_TOKEN.icon}
-            priceUsd={usdtPrice}
-            balance={internalUsdt}
-            balanceDecimals={QUOTE_TOKEN.decimals > 6 ? 6 : 2}
-          />
-          <AssetCard
-            symbol={BASE_TOKEN.symbol}
-            icon={BASE_TOKEN.icon}
-            priceUsd={basePrice}
-            balance={internalBase}
-            balanceDecimals={BASE_TOKEN.decimals > 6 ? 6 : 4}
-          />
-        </div>
-
-        <div className="mt-3 flex justify-end">
-          <Button
-            type="button"
-            isPrimary={false}
-            disabled={claimLoading || !hasClaimable}
-            onClick={() => void claim()}
-            className={clsx(
-              'h-10 w-[94px] !rounded-[10px] bg-black font-[Unbounded] text-[14px] font-medium text-white backdrop-blur-[25px]',
-              !claimLoading && hasClaimable && 'hover:opacity-90'
-            )}
-            loading={claimLoading}
-          >
-            Claim
-          </Button>
+          <div className="flex justify-end flex-wrap gap-1">
+            <div className="flex items-center gap-1">
+              <img src={QUOTE_TOKEN.icon} alt="" className="h-4 w-4 rounded-full object-cover" />
+              <span className="font-[Unbounded] text-[14px] text-black">
+                {formatNumber(walletUsdt, 2, true)}
+              </span>
+            </div>
+            <div className="flex items-center gap-1">
+              <img src={BASE_TOKEN.icon} alt="" className="h-4 w-4 rounded-full object-cover" />
+              <span className="font-[Unbounded] text-[14px] text-black">
+                {formatNumber(walletBase, BASE_TOKEN.decimals > 6 ? 6 : 4, true)}
+              </span>
+            </div>
+          </div>
         </div>
       </div>
     </div>

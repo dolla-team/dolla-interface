@@ -12,7 +12,6 @@ import useCreateWhitelist from '@/hooks/user/use-create-whitelist'
 import { useGlobalStore } from '@/stores/use-global'
 import { getUserId as fetchNearAdapterUserId } from './adapter-contract'
 import useLoginStore from '@/stores/use-login'
-import SignMessageBox from '@/libs/near/sign-message-box'
 
 const NEAR_CHAIN_TYPE = 'near'
 
