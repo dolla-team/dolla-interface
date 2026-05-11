@@ -69,7 +69,15 @@ export default function NearWalletPanel({ className }: { className?: string }) {
   const walletUsdt = nearAccount?.onlyQuoteBalance ?? '0'
   const internalUsdt = nearAccount?.balance ?? '0'
   const internalBase = nearAccount?.prizeBalance ?? '0'
-  const totalBidTimes = nearAccount?.acc_bets ?? 0
+
+  const dollaWinningUsd = useMemo(
+    () =>
+      Big(internalUsdt || 0)
+        .mul(usdtPrice || 0)
+        .plus(Big(internalBase || 0).mul(basePrice || 0))
+        .toNumber(),
+    [internalUsdt, internalBase, usdtPrice, basePrice]
+  )
 
   const hasClaimable = useMemo(() => Big(internalUsdt || 0).gt(0) || Big(internalBase || 0).gt(0), [internalUsdt, internalBase])
 
@@ -92,7 +100,7 @@ export default function NearWalletPanel({ className }: { className?: string }) {
           <div className="flex items-end justify-between gap-2">
             <span className="font-[Bungee] text-[20px] tracking-[-0.05em] text-black">BIDDER</span>
             <span className="font-[Unbounded] text-[18px] font-bold text-black">
-              {formatNumber(totalBidTimes, 0, true)}
+              ${formatNumber(dollaWinningUsd, 2, true)}
             </span>
           </div>
           <p className="mt-1 font-[Unbounded] text-[12px] text-[#8A87AA]">
